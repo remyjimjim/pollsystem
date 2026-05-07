@@ -1,0 +1,16 @@
+# Test profile config. Datasource is overridden by @ServiceConnection in
+# AbstractIntegrationTest, so we only need values that don't depend on the DB.
+
+spring:
+  jpa:
+    show-sql: false
+
+app:
+  jwt:
+    # Deterministic 32+ byte key for HS256 in tests
+    secret: test-secret-key-must-be-at-least-32-characters
+    expiration-ms: 3600000
+  results:
+    k-anonymity-threshold: 3  # lower threshold makes results tests easier
+  creator-requests:
+    sweep-interval-ms: 3600000  # don't run the sweep cron during tests

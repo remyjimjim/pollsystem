@@ -1,0 +1,93 @@
+@startuml
+title Poll Completion by a User
+
+actor "User" as user
+participant "Browser" as browser
+participant "Server" as server
+database "Database" as db
+
+== Search ==
+
+user -> browser : Log in
+user -> browser : Navigate to poll search
+browser -> server : GET /polls/search
+server --> browser : Display search form with filters\n(Zipcode, Candidate, Referendum Title,\nPoll Title, Creator)
+
+user -> browser : Enter search criteria
+browser -> server : GET /polls/search?filters=...
+server -> db : Query published polls\nmatching filters\nWHERE status=PUBLISHED\nAND close_date > now
+db --> server : Matching polls
+server --> browser : Display results\n(title, type, creator, close_date)
+
+== Poll Selection ==
+
+user -> browser : Select a poll
+browser -> server : GET /poll?id=X
+
+server -> db : Verify poll status=PUBLISHED\nAND close_date > now
+
+alt Poll closed or invalid
+    server --> browser : "This poll is no longer\navailable for responses"
+else Poll is active
+    server -> db : Check if User has existing\nresponses for this poll
+    
+    alt Already responded
+        server -> db : Fetch User's previous responses
+        db --> server : Previous response data
+        server --> browser : "You submitted answers on\nXX/XX/XXXX. Would you like\nto change your responses?"
+        
+        alt User says Yes
+            server --> browser : Load poll form with\nprevious responses\nin editable mode
+            note right : Continue to\nForm Completion
+        else User says No
+            server --> browser : Display poll form with\nprevious responses\nin read-only mode
+        end
+    
+    else First time responding
+        server --> browser : Display poll form\n(candidates, ballot measures,\nor questions)
+    end
+end
+
+== Form Completion ==
+
+user -> browser : Fill out responses
+user -> browser : Click Submit
+
+browser -> server : POST /poll/submit
+
+server -> server : Validate all required\nfields completed
+
+alt Valid
+    alt First submission
+        server -> db : INSERT response records\n(CandidateResponse /\nBallotResponse /\nQuestionResponse)\ndate_submitted=now
+    else Updating previous responses
+        server -> db : UPDATE existing response records\nSET new values,\nlast_modified=now
+    end
+    server --> browser : "Responses submitted successfully!"
+    
+    == Results Display ==
+    
+    browser -> server : GET /poll/results?id=X
+    server -> db : Fetch aggregate results\n(counts, percentages)
+    db --> server : Aggregate data
+    server --> browser : Display results chart/graph\nwith filter dropdown
+    
+    user -> browser : Apply filter\n(by zipcode, county, etc.)
+    browser -> server : GET /poll/results?id=X&filter=...
+    server -> db : Fetch filtered aggregate results
+    
+    alt Filtered group >= minimum threshold
+        db --> server : Filtered results
+        server --> browser : Display filtered results
+    else Filtered group too small
+        server --> browser : "Not enough responses\nin this group to display\n(privacy protection)"
+    end
+    note right : k-anonymity threshold\n(e.g. k >= 10) — define\nin server config
+
+else Invalid
+    server --> browser : Highlight missing/invalid fields
+    user -> browser : Correct and resubmit
+    note right : Return to\nForm Completion
+end
+
+@enduml

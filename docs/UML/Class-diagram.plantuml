@@ -1,0 +1,254 @@
+@startuml
+skinparam classAttributeIconSize 0
+left to right direction
+
+enum AccessLevel {
+  VIEWER
+  USER
+  CREATOR
+  ADMIN
+  SUPER
+}
+note right of AccessLevel
+  Stored as int 0..4
+  in declaration order
+end note
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PollStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  ARCHIVED
+}
+
+class User {
+  +id: int
+  +email: string
+  +phone: string <<unique>>
+  +zipcode: string
+  +password_hash: string
+  +access: AccessLevel
+  +isEnabled: boolean
+}
+
+class RoleAssignment {
+  +id: int
+  +user_id: int
+  +role: AccessLevel
+  +poll_type_id: int <<nullable>>
+  +state_id: int
+  +county_id: int
+  +zipcode: string
+  +enabled: boolean
+  +assigned_at: timestamp
+}
+
+class CreatorRequest {
+  +id: int
+  +user_id: int
+  +assigned_admin_id: int <<nullable>>
+  +status: RequestStatus
+  +reason: string
+  +submitted_at: timestamp
+  +processed_at: timestamp <<nullable>>
+}
+
+class PollType {
+  +id: int
+  +poll_type: int
+  +name: string
+}
+
+class CountyZips {
+  +id: int
+  +county_id: int
+  +zipcode: string
+}
+
+class County {
+  +id: int
+  +state_id: int
+  +name: string
+}
+
+class State {
+  +id: int
+  +name: string
+  +initial: string
+}
+
+class Office {
+  +id: int
+  +name: string
+  +desc: string
+  +date_created: timestamp
+  +last_updated: timestamp
+}
+
+class Candidate {
+  +id: int
+  +name: string
+  +affiliation: string
+  +office_id: int
+  +election_id: int
+  +date_created: timestamp
+}
+
+class CandidateResponse {
+  +id: int
+  +user_id: int
+  +candidate_id: int
+  +response: boolean
+  +comment: string
+  +date_submitted: timestamp
+  +last_modified: timestamp <<nullable>>
+}
+
+class Election {
+  +id: int
+  +creator_id: int
+  +title: string
+  +date: date
+  +zipcode: string
+  +status: PollStatus
+  +close_date: timestamp <<nullable>>
+  +date_submitted: timestamp
+}
+note bottom of Election
+  Geographic scope is a single zipcode.
+  Unlike Questionnaire (which uses
+  QuestionnaireDomain for multi-zip scope),
+  Elections are scoped to one zipcode only.
+  Revisit if multi-zip elections are needed.
+end note
+
+class BallotMeasure {
+  +id: int
+  +creator_id: int
+  +title: string
+  +summary: string
+  +election_id: int
+  +effective_date: date
+  +status: PollStatus
+  +close_date: timestamp <<nullable>>
+  +date_created: timestamp
+  +last_updated: timestamp
+}
+
+class BallotResponse {
+  +id: int
+  +measure_id: int
+  +user_id: int
+  +response: boolean
+  +comment: string
+  +date_submitted: timestamp
+  +last_modified: timestamp <<nullable>>
+}
+
+class Questionnaire {
+  +id: int
+  +creator_id: int
+  +title: string
+  +summary: string
+  +status: PollStatus
+  +close_date: timestamp <<nullable>>
+  +create_date: date
+  +submit_date: timestamp
+}
+
+class QuestionnaireDomain {
+  +id: int
+  +questionnaire_id: int
+  +state_id: int
+  +county_id: int
+  +zipcode: string
+}
+
+class Question {
+  +id: int
+  +questionnaire_id: int
+  +question: string
+}
+
+class QuestionResponse {
+  +id: int
+  +question_id: int
+  +response: string
+  +user_id: int
+  +comment: string
+  +date_submitted: timestamp
+  +last_modified: timestamp <<nullable>>
+}
+
+' === Relationships ===
+
+' User relationships
+User "1" -- "0..*" RoleAssignment : has >
+User "1" -- "0..*" CreatorRequest : submits >
+User "1" -- "0..*" CandidateResponse : submits >
+User "1" -- "0..*" BallotResponse : submits >
+User "1" -- "0..*" QuestionResponse : submits >
+
+' Admin assignment
+User "0..1" -- "0..*" CreatorRequest : assigned admin >
+
+' Creator linkage
+User "1" -- "0..*" Election : creates >
+User "1" -- "0..*" BallotMeasure : creates >
+User "1" -- "0..*" Questionnaire : creates >
+
+' RoleAssignment relationships
+RoleAssignment "0..*" -- "1" PollType : references >
+RoleAssignment "0..*" -- "1" State : scoped to >
+RoleAssignment "0..*" -- "1" County : scoped to >
+
+' Geographic hierarchy
+State "1" -- "1..*" County : contains >
+County "1" -- "1..*" CountyZips : contains >
+
+' Election relationships
+Election "0..*" -- "1" PollType : typed as >
+Election "1" -- "0..*" BallotMeasure : contains >
+Election "1" -- "0..*" Candidate : includes >
+
+' Candidate relationships
+Candidate "1" -- "1" Office : seeks >
+Candidate "1" -- "0..*" CandidateResponse : receives >
+
+' BallotMeasure relationships
+BallotMeasure "0..*" -- "1" PollType : typed as >
+BallotMeasure "1" -- "0..*" BallotResponse : receives >
+
+' Questionnaire relationships
+Questionnaire "0..*" -- "1" PollType : typed as >
+Questionnaire "1" -- "1..*" QuestionnaireDomain : scoped by >
+Questionnaire "1" -- "1..*" Question : contains >
+QuestionnaireDomain "0..*" -- "1" State : references >
+QuestionnaireDomain "0..*" -- "1" County : references >
+
+' Question relationships
+Question "1" -- "0..*" QuestionResponse : receives >
+
+' Unique constraints (noted)
+note bottom of CandidateResponse
+  Unique constraint on
+  user_id + candidate_id
+end note
+
+note bottom of BallotResponse
+  Unique constraint on
+  user_id + measure_id
+end note
+
+note bottom of QuestionResponse
+  Unique constraint on
+  user_id + question_id
+end note
+
+@enduml

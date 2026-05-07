@@ -1,0 +1,79 @@
+@startuml
+title Poll Creation Flow
+
+actor "Creator" as creator
+participant "Browser" as browser
+participant "Server" as server
+database "Database" as db
+
+== Poll Type Selection ==
+
+creator -> browser : Log in, open Creator drawer
+creator -> browser : Click "Create New Poll"
+browser -> server : GET /create/poll
+server -> db : Fetch PollTypes available\nto this Creator
+db --> server : PollType list
+server --> browser : Display poll type selection
+
+creator -> browser : Select poll type\n(Election / Questionnaire / Ballot Measure)
+
+== Template Loading ==
+
+browser -> server : GET /poll/template?type=X
+server -> db : Fetch base JSON template\n(defined by Super Admin)
+db --> server : Base template schema
+server --> browser : Render editable form\nfrom base template
+
+== Form Completion ==
+
+creator -> browser : Fill in required fields\n(title, summary, candidates, questions, etc.)
+creator -> browser : Add optional/extended fields
+creator -> browser : Use zip-setter to define\ngeographic scope
+
+browser -> server : GET /counties?state_id=X
+server -> db : Fetch Counties
+db --> server : County list
+server --> browser : Populate County checkboxes
+
+creator -> browser : Select Counties and Zipcodes
+
+== Save Draft (Optional) ==
+
+creator -> browser : Click "Save Draft"
+browser -> server : POST /poll/save-draft
+server -> db : Create poll record\n(status=DRAFT, creator_id=User.id)
+server -> db : Create geographic scope records\n(QuestionnaireDomain / Election zipcodes)
+db --> server : Saved
+server --> browser : "Draft saved successfully"
+
+== Preview and Publish ==
+
+creator -> browser : Click "Preview"
+browser -> server : GET /poll/preview?id=X
+server --> browser : Render poll as User would see it
+
+creator -> browser : Click "Publish"
+browser -> server : POST /poll/publish?id=X
+
+server -> server : Validate against base\ntemplate schema
+
+alt Valid
+    alt close_date < 5 days from now
+        server --> browser : Warning: "This poll will close\non XX/XX/XXXX. Is that satisfactory?"
+        alt Confirm Yes
+            creator -> browser : Confirm Yes
+            browser -> server : POST /poll/publish?id=X&confirmed=true
+        else Confirm No
+            creator -> browser : Cancel
+            note right : Return to Form Completion\nto adjust close_date
+        end
+    end
+    server -> db : UPDATE poll\nSET status=PUBLISHED
+    server --> browser : "Poll published successfully!\nNow searchable by Users"
+else Invalid
+    server --> browser : Return validation errors
+    creator -> browser : Correct errors
+    note right : Return to Form Completion
+end
+
+@enduml

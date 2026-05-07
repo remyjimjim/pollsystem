@@ -1,0 +1,75 @@
+@startuml
+left to right direction
+skinparam usecase {
+  BackgroundColor LightBlue
+  BorderColor Black
+}
+
+actor "Viewer" as viewer
+actor "Registered User" as registered_user
+actor "Creator" as creator
+actor "Admin" as admin
+actor "Super" as super
+
+rectangle "Poll System" {
+
+  viewer --> (View Poll Results)
+  viewer --> (Login)
+  viewer --> (Register)
+
+  (Login) --> (Find and Complete Polls)
+  (Register) --> (Login)
+
+  registered_user --> (Find and Complete Polls)
+  registered_user --> (Create Creator Request)
+
+  (Find and Complete Polls) --> (Search Polls)
+  (Search Polls) --> (Complete Poll)
+
+  (Create Creator Request) --> (Submit Creator Request)
+  (Submit Creator Request) --> (Receive Confirmation Email)
+
+  creator --> (Create Poll)
+
+  (Create Poll) --> (Select Poll Type and Domain)
+  (Select Poll Type and Domain) --> (Questionnaire)
+  (Select Poll Type and Domain) --> (Election)
+  (Select Poll Type and Domain) --> (Referendum/Ballot Measure)
+
+  creator --> (Submit Admin Request)
+  (Submit Admin Request) --> (Receive Admin Confirmation Email)
+
+  admin --> (Approve Creator)
+  admin --> (Manage Creators)
+  admin --> (Manage Polls)
+
+  super --> (Manage IP allow/disallow lists)
+  super --> (Create/Edit Poll Types along with json template)
+  super --> (Approve Admin Request)
+  super --> (Manage Admins)
+}
+
+note right of creator
+  Inherits all Registered User
+  and Viewer capabilities
+end note
+
+note right of (Submit Creator Request)
+  Email sent to Admin with user's
+  contact info. After approval,
+  creator receives setup email.
+end note
+
+note right of (Submit Admin Request)
+  Email sent to Admin. Admin reviews
+  and sets access to 'ADMIN'. Creator
+  notified via email.
+end note
+
+' Actor generalization (each actor inherits the prior's capabilities)
+registered_user --|> viewer
+creator --|> registered_user
+admin --|> creator
+super --|> admin
+
+@enduml

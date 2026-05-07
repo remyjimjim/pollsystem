@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: pollsystem
+
+  # Database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pollsystem
+    username: polladmin
+    password: pollpass123
+    driver-class-name: org.postgresql.Driver
+
+  # JPA / Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Flyway Database Migration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # Mail (SendGrid or SMTP)
+  mail:
+    host: smtp.sendgrid.net
+    port: 587
+    username: apikey
+    password: ${SENDGRID_API_KEY:your-sendgrid-api-key}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# JWT Configuration
+app:
+  jwt:
+    secret: ${JWT_SECRET:your-super-secret-jwt-key-change-in-production}
+    expiration-ms: 86400000  # 24 hours
+  results:
+    k-anonymity-threshold: 10  # min responses to show filtered aggregates
+
+# Server
+server:
+  port: 8080

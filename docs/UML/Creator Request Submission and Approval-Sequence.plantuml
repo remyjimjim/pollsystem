@@ -1,0 +1,89 @@
+@startuml
+title Creator Request Submission and Approval
+
+actor "Registered User" as user
+participant "Browser" as browser
+participant "Server" as server
+database "Database" as db
+participant "Email Service" as email
+participant "Scheduler" as cron
+actor "Admin" as admin
+
+== Submission ==
+
+user -> browser : Navigate to /create/poll/request
+browser -> server : GET /create/poll/request
+server -> db : Fetch PollTypes, States
+db --> server : PollType and State data
+server --> browser : Render Creator Request Form with zip-setter
+
+user -> browser : Select poll type(s)
+user -> browser : Select State
+browser -> server : GET /counties?state_id=X
+server -> db : Fetch Counties for State
+db --> server : County list
+server --> browser : Populate County checkboxes
+
+user -> browser : Select County(s)
+browser -> server : GET /zipcodes?county_ids=X,Y,Z
+server -> db : Fetch Zipcodes for Counties
+db --> server : Zipcode list
+server --> browser : Populate Zipcode checkboxes
+
+user -> browser : Select Zipcode(s)
+user -> browser : Enter reason/description
+user -> browser : Click Submit
+
+browser -> server : POST /api/creator-requests
+server -> db : Create CreatorRequest\n(status=PENDING, submitted_at=now)
+server -> db : Create RoleAssignment rows\n(one per zipcode, role=CREATOR, enabled=false)
+
+== Admin Routing ==
+
+server -> db : Query RoleAssignment\nWHERE role=ADMIN\nAND zipcode IN (requested zips)\nAND enabled=true
+db --> server : Matching Admins
+server -> db : Count pending CreatorRequests\nper matching Admin
+db --> server : Pending counts
+server -> server : Sort by least loaded,\nassign to top Admin
+server -> db : UPDATE CreatorRequest\nSET assigned_admin_id
+
+server -> email : Send confirmation to User\n"Your request is being processed"
+email --> user : Confirmation email
+server -> email : Send notification to assigned Admin\nwith request details
+email --> admin : New Creator Request notification
+
+== Approval (Batch) ==
+
+admin -> browser : Log in, open Admin drawer
+browser -> server : GET /admin/creator-requests
+server -> db : Fetch pending CreatorRequests\nfor this Admin
+db --> server : Request list
+server --> browser : Display Creator Requests queue
+
+admin -> browser : Select multiple requests
+admin -> browser : Click Approve / Reject
+
+alt Approved
+    browser -> server : POST /admin/creator-requests/batch-approve
+    server -> db : UPDATE CreatorRequests\nSET status=APPROVED,\nprocessed_at=now
+    server -> db : UPDATE RoleAssignment rows\nSET enabled=true
+    server -> db : UPDATE User.access = CREATOR\n(only if access < CREATOR)
+    server -> email : Send success email to each User\nwith link to /home
+    email --> user : "You are now a Creator!"
+else Rejected
+    browser -> server : POST /admin/creator-requests/batch-reject
+    server -> db : UPDATE CreatorRequests\nSET status=REJECTED,\nprocessed_at=now
+    server -> db : UPDATE RoleAssignment rows\nSET enabled=false
+    server -> email : Send rejection email to each User
+    email --> user : Rejection notification
+end
+
+== Stale Request Fallback ==
+
+cron -> server : Trigger stale-request sweep\n(every N minutes)
+server -> db : Query CreatorRequests\nWHERE status=PENDING\nAND submitted_at < (now - 48hrs)
+db --> server : Stale requests
+server -> db : Flag as stale
+note right : Any Admin can now\nclaim/reassign from dashboard
+
+@enduml
