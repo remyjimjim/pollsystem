@@ -10,26 +10,32 @@ actor "Registered User" as registered_user
 actor "Creator" as creator
 actor "Admin" as admin
 actor "Super" as super
+actor "Stripe" as stripe
 
 rectangle "Poll System" {
 
   viewer --> (View Poll Results)
-  viewer --> (Login)
-  viewer --> (Register)
+  viewer --> (Complete Poll via Link)
+  viewer --> (Sign In via Magic Link)
+  viewer --> (Subscribe via Stripe)
 
-  (Login) --> (Find and Complete Polls)
-  (Register) --> (Login)
+  (Sign In via Magic Link) --> (Find and Complete Polls)
+  (Subscribe via Stripe) --> (Stripe Checkout)
+  (Stripe Checkout) --> (Stripe Webhook: checkout.session.completed)
+  (Stripe Webhook: checkout.session.completed) --> (Provision Paid User)
+  (Provision Paid User) --> (Send Magic Link)
 
   registered_user --> (Find and Complete Polls)
+  registered_user --> (Subscribe via Stripe)
   registered_user --> (Create Creator Request)
 
   (Find and Complete Polls) --> (Search Polls)
   (Search Polls) --> (Complete Poll)
 
   (Create Creator Request) --> (Submit Creator Request)
-  (Submit Creator Request) --> (Receive Confirmation Email)
 
   creator --> (Create Poll)
+  creator --> (Generate Respondent Link)
 
   (Create Poll) --> (Select Poll Type and Domain)
   (Select Poll Type and Domain) --> (Questionnaire)
@@ -37,7 +43,6 @@ rectangle "Poll System" {
   (Select Poll Type and Domain) --> (Referendum/Ballot Measure)
 
   creator --> (Submit Admin Request)
-  (Submit Admin Request) --> (Receive Admin Confirmation Email)
 
   admin --> (Approve Creator)
   admin --> (Manage Creators)
@@ -47,23 +52,48 @@ rectangle "Poll System" {
   super --> (Create/Edit Poll Types along with json template)
   super --> (Approve Admin Request)
   super --> (Manage Admins)
+
+  stripe --> (Stripe Webhook: checkout.session.completed)
+  stripe --> (Stripe Webhook: subscription.updated)
+  stripe --> (Stripe Webhook: subscription.deleted)
+  (Stripe Webhook: subscription.updated) --> (Update paid_until)
+  (Stripe Webhook: subscription.deleted) --> (Revoke Paid Access)
 }
+
+note right of (Sign In via Magic Link)
+  Email + phone collected; formatting-
+  validated only. First successful link
+  click provisions the user; subsequent
+  clicks log them in. No passwords.
+end note
+
+note right of (Subscribe via Stripe)
+  Substack hosts free content only.
+  Paid tier link in Substack posts goes
+  to our Stripe Checkout. On payment,
+  webhook provisions the user as paid
+  and emails a magic link.
+end note
+
+note right of (Generate Respondent Link)
+  Respondents receive an opaque
+  /poll/<token> URL. They do not
+  authenticate; the token is the
+  capability to submit a response.
+end note
 
 note right of creator
   Inherits all Registered User
-  and Viewer capabilities
+  and Viewer capabilities. Creator
+  status is granted automatically
+  when paid_until is in the future.
 end note
 
 note right of (Submit Creator Request)
-  Email sent to Admin with user's
-  contact info. After approval,
-  creator receives setup email.
-end note
-
-note right of (Submit Admin Request)
-  Email sent to Admin. Admin reviews
-  and sets access to 'ADMIN'. Creator
-  notified via email.
+  Used only when a registered user
+  needs creator privileges without
+  going through Stripe (e.g. comp'd
+  account). Admin reviews and grants.
 end note
 
 ' Actor generalization (each actor inherits the prior's capabilities)

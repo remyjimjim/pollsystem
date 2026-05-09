@@ -1,262 +1,218 @@
 # CivicChain — Spring Boot Architecture Cost Forecast
 
-> This document is a **comparison companion** to `COSTS.md`. It estimates the cost of an
-> alternative architecture: a **Spring Boot / Java 21** backend on top of **PostgreSQL**,
-> implementing the domain model described in `docs/UML/Class-diagram.plantuml` —
+> Cost forecast for the **Spring Boot 3 / Kotlin / Java 17** backend on **PostgreSQL**
+> that implements the domain model in `docs/UML/Class-diagram.plantuml` —
 > a multi-tenant poll-creation platform with users, roles, drafts, and approvals.
 >
-> The current production system (`COSTS.md`) is **not** the same product as this one.
-> See the "Architecture Comparison" section below for what changes between them.
+> The headline target is a **staging deployment that scales to 5,000 concurrent
+> users and a maximum registered user pool of 200,000**, on the **lowest-cost
+> credible path**. Auth is **magic-link only** (no passwords, no SMS); paid access
+> is gated by **Stripe** subscriptions originating from a Substack-driven funnel.
 > Estimates are in USD and reflect public pricing as of early 2026.
 
 ---
 
-## Architecture Comparison
+## TL;DR — Lowest-cost staging path
 
-| Concern | Current (Node + Irys) | Spring Boot model (this doc) |
+| Layer | Choice | Monthly |
 |---|---|---|
-| Domain | Single ballot, anonymous submissions | Multi-tenant poll platform: users create polls, others respond |
-| Identity | None — phone+email dedup only | `User` table, `RoleAssignment`, `AccessLevel` (VIEWER → SUPER) |
-| Auth | Stateless dedup keys; HTTP Basic on `/admin` | Sessions / JWTs; password-hashed login; admin approval workflow |
-| Storage | Redis (state) + Irys/Arweave (encrypted payload) | PostgreSQL primary; Redis for cache/sessions only |
-| Workflow | Submit form → encrypt → upload | Creator drafts poll → admin approves → publish → respondents answer |
-| Stack | Node 20 + Express + TypeScript | Java 21 + Spring Boot 3 + Spring Data JPA + Hibernate |
-| Frontend | React/Vite (kept as-is in either model) | React/Vite (kept as-is in either model) |
-| Hosting | Fly.io shared-cpu-1x (256–512 MB) | Fly.io / AWS / Render — **min 1 GB RAM** per Java instance |
-| Cold start | ~1–3s | ~10–30s (JVM warm-up) |
-| Per-request CPU at idle | Very low (event loop) | Higher (thread-per-request, JIT warm-up cost) |
-| Steady-state throughput | Excellent for I/O-bound | Excellent once warm; scales linearly with cores |
+| Backend (JVM) | Spring Boot compiled with **GraalVM native image**, 3–5× Fly.io shared-cpu-1x @ 512 MB, autoscale | ~$15–$25 |
+| Frontend | 1× Fly.io shared-cpu-1x @ 256 MB, auto-stop | ~$3 |
+| Database | **Neon Postgres — Launch plan** (10 GB, autoscaling compute) | ~$19 |
+| Cache / sessions / magic-link tokens | **Upstash Redis** pay-as-you-go (~3–5 M cmds/mo) | ~$5–$10 |
+| Email (magic-link delivery + transactional) | **SendGrid** free tier (3 k/mo) — sufficient for staging | $0 |
+| Phone / SMS | **None** — phone is collected and formatting-validated only | $0 |
+| Payments | **Stripe** — no flat fee, per-transaction only (see below) | $0 fixed |
+| CI | GitHub Actions free tier | $0 |
+| **Recurring infrastructure total** | | **~$42–$57 / month** |
 
-**The key takeaway**: the Spring model is more expensive at every scale tier because the JVM
-needs more RAM, you add a real database, and the platform model has more features to host.
-What you buy with that cost is a product that can have many polls, many users, role-based
-features, audit history, and admin workflows — none of which the current architecture supports
-without a substantial rewrite.
+This config will hold 5,000 concurrent users and a 200 k registered-user pool with
+headroom on autoscale. Stripe takes a per-transaction cut on the revenue side
+rather than the cost side — see the **Stripe fees** section.
 
 ---
 
 ## Local Environment
 
-> Target: 10 concurrent users, 100 total users, 5–10 polls. Runs entirely on your own machine.
+> Target: 10 concurrent users, 100 total users, 5–10 polls. Runs entirely on the developer machine.
 
 | Service | Usage | Cost |
 |---|---|---|
-| Docker Desktop | Local containers (Postgres, Redis, backend, frontend, nginx) | $0 |
-| PostgreSQL (container) | Local DB with seed data | $0 |
-| Redis (container) | Cache + session store | $0 |
-| Mailpit / Ethereal | Fake SMTP for local testing | $0 |
-| Twilio (mocked) | SMS codes logged to console in `SPRING_PROFILES_ACTIVE=local` | $0 |
+| Docker Desktop | Local containers (Postgres, optional Redis) | $0 |
+| PostgreSQL (container) | Local DB with seed data; provisioned by `docker compose up db` | $0 |
+| Redis (container, optional) | Magic-link token store + cache; in-memory map is fine for unit dev | $0 |
+| Mailpit / MailHog | Fake SMTP for local magic-link testing — clicks resolve to `http://localhost:3000` | $0 |
+| Stripe CLI | Forwards real Stripe webhooks to `localhost:8080/webhooks/stripe` for local dev | $0 |
 | Electricity / hardware | Developer machine (JVM uses ~1 GB RAM idle) | negligible |
 | **Monthly total** | | **$0** |
 
-**Notes:**
-- A laptop with ≥ 8 GB RAM is comfortable; ≥ 16 GB is strongly recommended once frontend, backend, Postgres, and Redis are all running.
-- Spring Boot DevTools live-reload covers JPA entity changes; bigger schema changes require a Postgres recreate.
+Notes:
+- A laptop with ≥ 8 GB RAM is comfortable; ≥ 16 GB is recommended once frontend, backend, Postgres, and Redis are all running.
+- Spring Boot DevTools live-reload covers JPA entity changes; bigger schema changes go through Flyway migrations.
+- Use a **Stripe test-mode** key locally; real money never moves. The Stripe CLI tunnels webhook events to your localhost without exposing your machine to the internet.
 
 ---
 
 ## Staging Environment
 
-> Target: 50 concurrent users, 1,000 total users, ~50 polls. Hosted on Fly.io.
+> Target: **5,000 concurrent users**, **up to 200,000 registered users**, ~500 active polls.
+> Hosted on Fly.io, with managed Postgres and Redis.
 
-### Recurring Monthly Costs
+Two configurations are presented:
 
-| Service | Tier / Config | Monthly Estimate |
-|---|---|---|
-| **Fly.io — backend (JVM)** | 1× shared-cpu-2x, **1 GB RAM**, always-on | ~$15.00 |
-| **Fly.io — frontend** | 1× shared-cpu-1x, 256 MB RAM, auto-stop | ~$3.00 |
-| **Fly Postgres (managed)** | shared-cpu-1x, 1 GB volume | ~$5.00 |
-| **Upstash Redis** | Free tier (10k commands/day) | $0 |
-| **SendGrid** | Free tier (100 emails/day) | $0 |
-| **Twilio** | Trial credit ~$15.50 | ~$0–$1.50 |
-| **GitHub Actions** | Free tier (2,000 min/month) | $0 |
-| **Monthly total** | | **~$23–$25/month** |
+1. **Conservative baseline** — plain Spring Boot on the JVM, managed Fly Postgres. Easy to operate, no native-image build, but ~2× the recurring cost.
+2. **Lowest-cost path (recommended)** — GraalVM native image, Neon Postgres, Upstash Redis. Slightly more upfront engineering, dramatically smaller monthly bill. This is the configuration in the TL;DR above.
 
-### One-Time / Per-Run Costs (1,000 user demo)
+### Sizing assumptions (both configs)
 
-| Event | Cost |
-|---|---|
-| SMS verifications (1,000 × $0.0079) | ~$7.90 |
-| Email sends (≤3,000) | $0 (within free tier) |
-| **One-time demo run total** | **~$7.90** |
+- **5,000 concurrent users** ≈ 5,000 open HTTP connections, peak ~1,000–2,000 req/s assuming typical poll-response interaction patterns.
+- **200,000 registered users** ≈ 1–3 GB of relational data (users, role assignments, polls, responses, audit rows) over the life of staging.
+- Sessions and magic-link tokens kept in Redis so backend instances stay stateless and can autoscale freely.
+- Magic-link email volume at staging: ~1–4 sign-ins per active user per month. With ~500 active users in staging, that's ~500–2,000 emails/month — comfortably inside SendGrid free.
+- Backend handles ~1,000 concurrent connections per shared-cpu-1x instance with virtual threads (Spring Boot 3.2+ on Java 17), so 3–5 instances cover peak with headroom.
 
-**Comparison to current architecture (Node):**
-- Current staging: ~$8–$10/month → Spring staging: ~$23–$25/month
-- The delta (~$15) is JVM RAM (+$10) and managed Postgres (+$5).
-
----
-
-## Production Environment
-
-> Target: 5,000 concurrent users, 80,000 total responses, ~500 active polls.
-> Hosted on Fly.io with autoscaling. Numbers below assume the platform supports
-> creator/admin workflows, not just response collection.
-
-### Recurring Monthly Costs
+### 1. Conservative baseline (no native image)
 
 | Service | Tier / Config | Monthly Estimate |
 |---|---|---|
-| **Fly.io — backend (JVM)** | 2–6× shared-cpu-2x, **2 GB RAM**, autoscale | $80–$240 |
-| **Fly.io — frontend** | 2× shared-cpu-1x, 256 MB RAM | ~$6 |
-| **Fly Postgres (managed)** | dedicated-cpu-1x, 10 GB volume, daily snapshots | ~$30 |
-| **Postgres replica (read)** | optional read replica for reports queries | ~$30 |
-| **Upstash Redis** | Pay-as-you-go (~5M commands/month) | ~$10 |
-| **SendGrid** | Essentials 100k plan | ~$15 |
-| **Object storage (S3/R2)** | Static assets, JSON exports, ~10 GB | ~$2 |
-| **Backup storage** | Off-site Postgres snapshots, ~30 GB retained | ~$3 |
-| **GitHub Actions** | Likely Team plan to handle longer Java build/test cycles | ~$4 |
-| **Monthly total (infrastructure)** | | **~$180–$340/month** |
+| Fly.io — backend (JVM) | 3–5× shared-cpu-2x, **2 GB RAM**, autoscale | $60–$120 |
+| Fly.io — frontend | 1× shared-cpu-1x, 256 MB RAM, auto-stop | ~$3 |
+| Fly Postgres (managed) | dedicated-cpu-1x, 10 GB volume, daily snapshots | ~$30 |
+| Upstash Redis | Pay-as-you-go (~3–5 M commands/month) | ~$5–$10 |
+| SendGrid | Free tier (≤ 3,000 emails/month) | $0 |
+| Object storage (R2 / S3) | Static assets, JSON exports, ~5 GB | ~$1 |
+| Backup storage | Off-site Postgres snapshots, ~10 GB retained | ~$1 |
+| GitHub Actions | Free tier (longer Java builds may push into paid mins) | $0–$4 |
+| **Monthly total** | | **~$100–$170 / month** |
 
-### One-Time / Per-Run Costs (80,000 user demo)
+### 2. Lowest-cost path (recommended)
 
-| Service | Calculation | One-Time Cost |
+| Service | Tier / Config | Monthly Estimate |
 |---|---|---|
-| **Twilio SMS** | 80,000 verifications × $0.0079/SMS | ~$632 |
-| **SendGrid** | 160,000 emails (2 per user) | ~$10 |
-| **One-time demo run total** | | **~$642** |
+| Fly.io — backend (GraalVM native image) | 3–5× shared-cpu-1x, **512 MB RAM**, autoscale | ~$15–$25 |
+| Fly.io — frontend | 1× shared-cpu-1x, 256 MB RAM, auto-stop | ~$3 |
+| Neon Postgres — Launch | 10 GB storage, autoscaling compute, branching | ~$19 |
+| Upstash Redis | Pay-as-you-go (~3–5 M commands/month) | ~$5–$10 |
+| SendGrid | Free tier (≤ 3,000 emails/month) | $0 |
+| GitHub Actions | Free tier; native-image build cached between runs | $0 |
+| **Monthly total** | | **~$42–$57 / month** |
 
-> **Why no Irys/Arweave line item?** The Spring model uses PostgreSQL as the system of
-> record. Permanent decentralized storage is *optional* in this architecture — you could
-> still write encrypted snapshots to Irys for auditability, but it's no longer a hard
-> dependency. If added back, the cost is the same as the Node architecture (~$0.32 per
-> 80k records on Irys mainnet).
+### Per-run / one-time costs (full 200,000-user demo)
 
----
+With magic-link auth and no SMS, the only meaningful per-event cost is email
+delivery. Stripe fees scale with paid conversions, not registrations.
 
-## Cost Summary Table
+| Service | Calculation | One-Time / Variable Cost |
+|---|---|---|
+| SendGrid (overage past free tier) | ~200 k login emails over the demo on **Essentials 100 k** tier ($19.95/mo) | ~$20 |
+| Stripe fees | Only on actual paid conversions — see next section | variable |
+| **One-time demo total (excluding Stripe)** | | **~$20** |
 
-| Environment | Monthly (infrastructure) | One-Time (full run) | Total (first month) |
-|---|---|---|---|
-| **Local** | $0 | $0 | $0 |
-| **Staging** | ~$24 | ~$8 | ~$32 |
-| **Production** | ~$180–$340 | ~$642 | ~$822–$982 |
-
-### Side-by-side with current architecture
-
-| Tier | Node + Irys (current) | Spring + Postgres (this doc) | Delta |
-|---|---|---|---|
-| Local | $0 | $0 | — |
-| Staging monthly | ~$9 | ~$24 | **+$15** |
-| Production monthly | ~$80–$185 | ~$180–$340 | **+$100–$155** |
-| Production one-time | ~$642 | ~$642 | — *(same SMS/email costs)* |
-
-The recurring delta (~$100–$155/mo at production scale) is the price of supporting a
-multi-tenant platform — JVM memory, managed Postgres, replicas, and richer build/CI.
+Compared with the previous SMS-based design, dropping phone verification removed
+**~$1,580** of one-time SMS cost from a full-population demo. That saving is
+permanent: there is no scenario in this architecture where Twilio is needed.
 
 ---
 
-## Scalability Assessment
+## Stripe fees
 
-This is the part that matters most for your "which model scales better?" question. There
-are three different scalability axes, and they don't all favor the same architecture.
+Stripe charges per successful payment, not per month. There is no fixed
+infrastructure cost — fees come out of revenue.
 
-### Axis 1: Cost-per-response at fixed scale
+**US standard pricing** (as of early 2026): **2.9 % + $0.30** per successful card
+charge. Fees scale linearly with paid conversions.
 
-**Current architecture wins.** A stateless event-loop API serving a single form is the
-cheapest possible shape for a high-volume submission workload. Redis is faster than any
-relational DB for the dedup keys, Irys absorbs the durable-storage cost at fractions of
-a cent per record, and Node instances stay small (256–512 MB).
+| Plan price | Stripe fee per payment | Net to you per payment |
+|---|---|---|
+| $5 / month | ~$0.45 | ~$4.55 (91 %) |
+| $10 / month | ~$0.59 | ~$9.41 (94 %) |
+| $25 / month | ~$1.03 | ~$23.97 (96 %) |
+| $50 / month | ~$1.75 | ~$48.25 (97 %) |
 
-At 80k responses, the Node architecture costs roughly **$80–$185/mo**. Spring Boot
-serving the same 80k responses against Postgres would cost **$180–$340/mo** — about
-2× — because of JVM memory and database overhead.
+Two implications for the cost picture:
 
-### Axis 2: Cost of growing the product surface
+1. **Stripe is revenue-side, not cost-side.** It does not affect the recurring
+   $42–$57 staging total; it just reduces gross margin on each paid sub.
+2. **Higher price points are dramatically more efficient.** A $5/mo plan loses 9 %
+   to Stripe; a $25/mo plan loses 4 %. If the early product is "$25/mo for creator
+   features," every paid sub nets ~$24 against an infrastructure cost that doesn't
+   move when you add the 51st sub.
 
-**Spring architecture wins.** Adding new features to the current architecture is hard:
-there is no `User` table, no concept of who can do what, no audit trail of edits, no
-draft state, no approval workflow. Building any of these into the current Node
-architecture would mean adding Postgres anyway and substantially refactoring submission
-flow. At that point you are paying the Node→Spring cost delta *and* doing the rewrite.
-
-If the roadmap includes any of: user accounts, multiple polls per cycle, creator
-dashboards, admin moderation, response history, edit-with-audit, role-based access,
-analytics across polls — the Spring architecture is the cheaper path because those
-features are native to the model.
-
-### Axis 3: Operational scalability under load spikes
-
-**Current architecture wins.** Node containers boot in 1–3 seconds. Fly.io can scale
-from 2 instances to 10 in under a minute. JVM containers boot in 10–30 seconds, so
-autoscaling responds more slowly and you typically run 1–2 extra warm instances as
-buffer (which costs extra). For traffic with sharp election-night spikes, the Node
-shape is more responsive per dollar.
-
-A Spring Boot deployment can mitigate this with GraalVM native-image compilation
-(boots in ~100 ms, uses ~150 MB RAM). That closes the gap considerably but adds build
-complexity and limits some Spring features (reflection-heavy libraries need explicit
-hints).
-
-### Scoring
-
-| Question | Winner |
-|---|---|
-| "We just need to handle one big election night, lowest cost" | **Node + Irys** |
-| "We want to ship 50 polls a year with creator/admin workflows" | **Spring + Postgres** |
-| "We want fast autoscale on traffic spikes" | **Node + Irys** (or Spring + GraalVM) |
-| "We want to add user accounts, history, and roles next quarter" | **Spring + Postgres** |
-| "Decentralized immutability is a core differentiator" | **Node + Irys** (Spring can opt-in but doesn't require it) |
+**Optional add-ons** (skip unless needed):
+- **Stripe Tax** — automatic VAT/sales-tax calculation. 0.5 % per transaction. Only relevant once you have EU/UK customers or pass US state economic-nexus thresholds.
+- **Radar for Fraud Teams** — $0.07 per screened transaction. Default Radar is included free.
+- **Billing** — Stripe's hosted invoicing/portal is free for the standard subscription model used here.
 
 ---
 
-## Cost Reduction Options
+## Why GraalVM is the lever
 
-### Option A — Drop Postgres replica (save ~$30/mo)
-A read replica is only needed if reports queries hurt write performance. Until you
-see DB CPU > 70% in steady state, skip it.
+The conservative baseline is dominated by JVM RAM. A plain Spring Boot service needs
+~1–2 GB RAM per instance for comfortable headroom; 3–5 instances at that size on
+Fly.io land in the $60–$120/mo range.
 
-### Option B — GraalVM native image (save ~$60–$120/mo at production)
-Compile the Spring backend to a native binary. Boot time drops to ~100 ms, memory
-drops to ~150–250 MB, and you can run on shared-cpu-1x instances instead of
-shared-cpu-2x. Pays back the engineering effort within 2–3 months at production scale.
+A native image compiled with GraalVM:
 
-### Option C — Move SMS verification off the critical path (save ~$632)
-Same as Option A in `COSTS.md`: replace Twilio SMS with format-only validation. This
-applies equally to either architecture.
+- Boots in ~100 ms (vs ~10–30 s for the JVM), so autoscaling reacts to spikes instead of running warm spares.
+- Uses ~150–250 MB RAM per instance, letting you run on shared-cpu-1x.
+- Runs the same Spring Boot code, with caveats: reflection-heavy libraries need explicit hints, and the build itself takes 3–10 minutes per release.
 
-### Option D — Use Supabase / Neon for Postgres (save ~$15/mo)
-Free tiers cover up to ~500 MB and modest connection counts. Suitable for staging or
-low-volume production. Not recommended above ~10k active users.
+For staging at 5 k concurrent / 200 k registered, GraalVM saves roughly **$45–$95/month**
+in recurring spend. The break-even point on engineering effort is typically 2–3 months.
 
-### Revised Production Demo Budget (Spring, all reductions applied)
-
-| Item | Revised Cost |
-|---|---|
-| Fly.io backend (GraalVM, 2 small machines) | ~$30 |
-| Fly.io frontend (2 machines) | ~$6 |
-| Neon Postgres (free tier) | $0 |
-| Upstash Redis | ~$5 |
-| SendGrid | ~$15 |
-| Twilio (mocked or skipped) | $0 |
-| **Revised total** | **~$56 for a full demo month** |
-
-Compared with the Node revised demo (~$45/mo), the optimized Spring stack is only
-~$10/mo more — and you get the platform features for that price.
+If the team can't take on the native-image build today, ship the conservative baseline
+first and cut over later — the application code is identical, and Spring Boot 3 ships
+with AOT support out of the box (the GraalVM Native Build Tools Gradle plugin is the
+only addition).
 
 ---
 
-## Recommendation
+## Cost reduction options
 
-**If the goal is the cheapest possible deployment of the current single-form
-submission system**, stay on the current architecture (`COSTS.md`).
+### A. GraalVM native image (save ~$45–$95/mo)
+Already the recommended path. Listed here for completeness — this is the dominant lever.
 
-**If the roadmap includes any of: multiple polls, user accounts, creator/admin
-workflows, response history, role-based access, or any of the entities described in
-`docs/UML/Class-diagram.plantuml`**, migrate to Spring Boot + Postgres. The cost
-delta (~$100–$155/mo at production scale, or ~$10/mo with the reductions in Option B)
-is small relative to the engineering cost of bolting those features onto the current
-architecture.
+### B. Drop Postgres replicas
+The recommended config already excludes a read replica. Only add one when you observe
+DB CPU > 70 % in steady state or reports queries demonstrably slowing writes.
 
-A pragmatic middle path also exists: keep the current Node architecture for the
-single-ballot submission flow, and build the platform layer (poll creation,
-user management, admin workflow) as a separate Spring Boot service that hands off
-the *response collection* to the Node service. This is more complex operationally
-but lets you preserve the cost profile of the high-volume path while still building
-the multi-tenant features in the model that suits them best.
+### C. Use Neon's free tier instead of Launch (save ~$19/mo)
+Neon Free covers up to 500 MB of storage and limited compute hours. A 200 k-user pool
+will exceed 500 MB once polls and responses accumulate, but for an empty / lightly seeded
+staging environment in early development, Free is fine. Plan to upgrade before any load test.
+
+### D. Auto-stop frontend and backend overnight
+Fly machines can auto-stop on idle. For staging used during business hours only, this
+roughly halves backend recurring spend. Native-image cold start is fast (~100 ms)
+so auto-stop is essentially free in UX terms; on the JVM it adds 10–30 s to the first
+request after wake-up.
+
+### E. Self-host Postgres on a Fly volume
+Skip managed Postgres entirely and run vanilla `postgres:16` on a Fly machine with a
+volume. Saves ~$15–$30/mo but you own backups, point-in-time recovery, and version
+upgrades. Not recommended above the local-development tier.
+
+### F. Stay on SendGrid free
+3,000 emails/month covers staging-scale magic-link traffic indefinitely. Only move to
+SendGrid Essentials (100 k for $19.95/mo) when steady-state login volume exceeds the
+free tier — which, for this product, won't happen until thousands of monthly active users.
 
 ---
 
-## Pricing Sources
+## When to leave the lowest-cost staging configuration
+
+The recommended config is sized for **staging-at-scale**, not production. Move up when:
+
+- The 200 k user pool is exceeded by ≥ 2× and Neon Launch's storage is filling up.
+- Steady-state DB CPU on Neon exceeds the Launch plan's autoscale ceiling.
+- Magic-link email volume exceeds SendGrid's free tier sustainably.
+- Compliance, audit, or uptime SLAs are introduced — at that point you want Fly Postgres dedicated, off-site backups, and a read replica.
+
+For most teams the migration path is: **lowest-cost staging → conservative baseline (still on staging) → production tier with HA Postgres and a read replica**. Each step is a config change, not a rewrite.
+
+---
+
+## Pricing sources
 
 | Service | Pricing page |
 |---|---|
@@ -264,9 +220,10 @@ the multi-tenant features in the model that suits them best.
 | Fly Postgres | https://fly.io/docs/postgres/managing/pricing/ |
 | Upstash Redis | https://upstash.com/pricing |
 | Neon Postgres | https://neon.tech/pricing |
-| Supabase | https://supabase.com/pricing |
-| Twilio SMS | https://www.twilio.com/en-us/sms/pricing/us |
+| Supabase (alternative DB) | https://supabase.com/pricing |
 | SendGrid | https://sendgrid.com/en-us/pricing |
+| Stripe pricing | https://stripe.com/pricing |
+| Stripe Tax | https://stripe.com/tax |
 | GraalVM native image | https://www.graalvm.org/native-image/ |
 
 > Prices were last verified in early 2026 and may have changed. Always check the

@@ -29,13 +29,25 @@ enum PollStatus {
 
 class User {
   +id: int
-  +email: string
+  +email: string <<unique>>
   +phone: string <<unique>>
   +zipcode: string
-  +password_hash: string
   +access: AccessLevel
   +isEnabled: boolean
+  +stripe_customer_id: string <<nullable>>
+  +stripe_subscription_id: string <<nullable>>
+  +paid_until: timestamp <<nullable>>
 }
+note right of User
+  Auth is magic-link only (no password).
+  Email and phone are formatting-validated;
+  not verified by send/click or SMS.
+  paid_until is authoritative for paid access
+  and is maintained by Stripe webhooks
+  (checkout.session.completed,
+   customer.subscription.updated/deleted,
+   invoice.paid/payment_failed).
+end note
 
 class RoleAssignment {
   +id: int
