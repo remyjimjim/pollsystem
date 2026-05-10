@@ -16,7 +16,9 @@ data class Office(
     @Column(nullable = false)
     val name: String,
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    // `desc` is a Postgres reserved keyword. The schema has it quoted; the
+    // backticks here tell Hibernate to emit it quoted on every read/write.
+    @Column(name = "`desc`", nullable = false, columnDefinition = "TEXT")
     val desc: String,
 
     @Column(name = "date_created", nullable = false)
