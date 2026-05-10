@@ -13,6 +13,18 @@ interface UserRepository : JpaRepository<User, Long> {
     fun existsByEmail(email: String): Boolean
     fun existsByPhone(phone: String): Boolean
     fun findByAccess(access: AccessLevel): List<User>
+    fun findByStripeCustomerId(stripeCustomerId: String): User?
+    fun findByStripeSubscriptionId(stripeSubscriptionId: String): User?
+}
+
+@Repository
+interface MagicLinkTokenRepository : JpaRepository<MagicLinkToken, Long> {
+    fun findByTokenHash(tokenHash: String): MagicLinkToken?
+}
+
+@Repository
+interface StripeEventRepository : JpaRepository<StripeEvent, Long> {
+    fun existsByStripeEventId(stripeEventId: String): Boolean
 }
 
 @Repository

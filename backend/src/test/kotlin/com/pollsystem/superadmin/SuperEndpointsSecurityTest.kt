@@ -15,12 +15,10 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-/**
- * Validates that the role-hierarchy enforcement on /api/super/** locks out
- * anyone below SUPER, and that /api/admin/** locks out anyone below ADMIN.
- * One JWT-driven test per protected path covers the security wiring;
- * functional tests for each controller live in their own files.
- */
+// Validates that the role-hierarchy enforcement on /api/super/** locks out
+// anyone below SUPER, and that /api/admin/** locks out anyone below ADMIN.
+// One JWT-driven test per protected path covers the security wiring;
+// functional tests for each controller live in their own files.
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SuperEndpointsSecurityTest : AbstractIntegrationTest() {

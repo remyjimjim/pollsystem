@@ -1,6 +1,8 @@
 package com.pollsystem.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.time.Instant
 import java.time.LocalDate
 
@@ -33,7 +35,8 @@ data class BallotMeasure(
     val effectiveDate: LocalDate,
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "poll_status")
     val status: PollStatus = PollStatus.DRAFT,
 
     @Column(name = "close_date")

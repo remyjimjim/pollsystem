@@ -1,6 +1,8 @@
 package com.pollsystem.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.time.Instant
 
 @Entity
@@ -15,7 +17,8 @@ data class RoleAssignment(
     val user: User,
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "access_level")
     val role: AccessLevel,
 
     @ManyToOne(fetch = FetchType.LAZY)

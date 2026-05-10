@@ -24,72 +24,64 @@ class AuthValidationTest : AbstractIntegrationTest() {
     @Autowired private lateinit var mockMvc: MockMvc
     @Autowired private lateinit var json: ObjectMapper
 
-    private fun validRegister(): MutableMap<String, Any?> = mutableMapOf(
+    private fun validRequest(): MutableMap<String, Any?> = mutableMapOf(
         "email" to "valid@test.local",
         "phone" to "+15551234567",
-        "zipcode" to "90001",
-        "passcode" to "password123"
+        "zipcode" to "90001"
     )
 
-    private fun validLogin(): MutableMap<String, Any?> = mutableMapOf(
-        "email" to "valid@test.local",
-        "passcode" to "password123"
+    private fun validRedeem(): MutableMap<String, Any?> = mutableMapOf(
+        "token" to "abcdef0123456789"
     )
 
-    @ParameterizedTest(name = "[register] {0}")
-    @MethodSource("invalidRegisterPayloads")
-    fun `register returns 400 for invalid payload`(@Suppress("UNUSED_PARAMETER") name: String, body: Map<String, Any?>) {
+    @ParameterizedTest(name = "[request] {0}")
+    @MethodSource("invalidRequestPayloads")
+    fun `request returns 400 for invalid payload`(@Suppress("UNUSED_PARAMETER") name: String, body: Map<String, Any?>) {
         mockMvc.perform(
-            post("/api/auth/register")
+            post("/api/auth/magic-link/request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.writeValueAsString(body))
         ).andExpect(status().isBadRequest)
     }
 
-    @ParameterizedTest(name = "[login] {0}")
-    @MethodSource("invalidLoginPayloads")
-    fun `login returns 400 for invalid payload`(@Suppress("UNUSED_PARAMETER") name: String, body: Map<String, Any?>) {
+    @ParameterizedTest(name = "[redeem] {0}")
+    @MethodSource("invalidRedeemPayloads")
+    fun `redeem returns 400 for invalid payload`(@Suppress("UNUSED_PARAMETER") name: String, body: Map<String, Any?>) {
         mockMvc.perform(
-            post("/api/auth/login")
+            post("/api/auth/magic-link/redeem")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.writeValueAsString(body))
         ).andExpect(status().isBadRequest)
     }
 
     @Suppress("unused")
-    private fun invalidRegisterPayloads(): List<Arguments> = listOf(
-        register("malformed email")    { it["email"] = "not-an-email" },
-        register("blank email")        { it["email"] = "" },
-        register("missing email")      { it.remove("email") },
-        register("phone too short")    { it["phone"] = "12345" },
-        register("phone with letters") { it["phone"] = "555-CALL-NOW" },
-        register("phone too long")     { it["phone"] = "1".repeat(21) },
-        register("blank phone")        { it["phone"] = "" },
-        register("zipcode 4 digits")   { it["zipcode"] = "9000" },
-        register("zipcode 6 digits")   { it["zipcode"] = "900012" },
-        register("zipcode letters")    { it["zipcode"] = "ABCDE" },
-        register("blank zipcode")      { it["zipcode"] = "" },
-        register("passcode too short") { it["passcode"] = "short" },
-        register("passcode too long")  { it["passcode"] = "x".repeat(101) },
-        register("blank passcode")     { it["passcode"] = "" }
+    private fun invalidRequestPayloads(): List<Arguments> = listOf(
+        request("malformed email")    { it["email"] = "not-an-email" },
+        request("blank email")        { it["email"] = "" },
+        request("missing email")      { it.remove("email") },
+        request("phone too short")    { it["phone"] = "12345" },
+        request("phone with letters") { it["phone"] = "555-CALL-NOW" },
+        request("phone too long")     { it["phone"] = "1".repeat(21) },
+        request("blank phone")        { it["phone"] = "" },
+        request("zipcode 4 digits")   { it["zipcode"] = "9000" },
+        request("zipcode 6 digits")   { it["zipcode"] = "900012" },
+        request("zipcode letters")    { it["zipcode"] = "ABCDE" },
+        request("blank zipcode")      { it["zipcode"] = "" }
     )
 
     @Suppress("unused")
-    private fun invalidLoginPayloads(): List<Arguments> = listOf(
-        login("malformed email")  { it["email"] = "not-an-email" },
-        login("blank email")      { it["email"] = "" },
-        login("missing email")    { it.remove("email") },
-        login("blank passcode")   { it["passcode"] = "" },
-        login("missing passcode") { it.remove("passcode") }
+    private fun invalidRedeemPayloads(): List<Arguments> = listOf(
+        redeem("blank token")   { it["token"] = "" },
+        redeem("missing token") { it.remove("token") }
     )
 
-    private fun register(name: String, modify: (MutableMap<String, Any?>) -> Unit): Arguments {
-        val body = validRegister().also(modify)
+    private fun request(name: String, modify: (MutableMap<String, Any?>) -> Unit): Arguments {
+        val body = validRequest().also(modify)
         return Arguments.of(name, body)
     }
 
-    private fun login(name: String, modify: (MutableMap<String, Any?>) -> Unit): Arguments {
-        val body = validLogin().also(modify)
+    private fun redeem(name: String, modify: (MutableMap<String, Any?>) -> Unit): Arguments {
+        val body = validRedeem().also(modify)
         return Arguments.of(name, body)
     }
 }

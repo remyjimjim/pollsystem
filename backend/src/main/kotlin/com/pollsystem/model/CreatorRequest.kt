@@ -1,6 +1,8 @@
 package com.pollsystem.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.time.Instant
 
 @Entity
@@ -19,7 +21,8 @@ data class CreatorRequest(
     val assignedAdmin: User? = null,
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "request_status")
     val status: RequestStatus = RequestStatus.PENDING,
 
     @Column(nullable = false, columnDefinition = "TEXT")

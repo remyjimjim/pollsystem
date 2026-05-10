@@ -38,13 +38,19 @@ spring:
           starttls:
             enable: true
 
-# JWT Configuration
+# Application config
 app:
   jwt:
     secret: ${JWT_SECRET:your-super-secret-jwt-key-change-in-production}
     expiration-ms: 86400000  # 24 hours
   results:
     k-anonymity-threshold: 10  # min responses to show filtered aggregates
+  magic-link:
+    ttl-minutes: 15
+    base-url: ${APP_BASE_URL:http://localhost:3000}
+  stripe:
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
+    tolerance-seconds: 300
 
 # Server
 server:

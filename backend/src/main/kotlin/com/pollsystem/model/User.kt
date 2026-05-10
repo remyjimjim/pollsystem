@@ -1,6 +1,9 @@
 package com.pollsystem.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
+import java.time.Instant
 
 @Entity
 @Table(name = "users")
@@ -18,13 +21,20 @@ data class User(
     @Column(nullable = false, length = 5)
     val zipcode: String,
 
-    @Column(nullable = false)
-    val passcode: String,
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "access_level")
     val access: AccessLevel = AccessLevel.VIEWER,
 
     @Column(name = "is_enabled", nullable = false)
-    val isEnabled: Boolean = true
+    val isEnabled: Boolean = true,
+
+    @Column(name = "stripe_customer_id", length = 64)
+    val stripeCustomerId: String? = null,
+
+    @Column(name = "stripe_subscription_id", length = 64)
+    val stripeSubscriptionId: String? = null,
+
+    @Column(name = "paid_until")
+    val paidUntil: Instant? = null
 )

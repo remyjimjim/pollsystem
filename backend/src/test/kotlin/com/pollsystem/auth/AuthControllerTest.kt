@@ -2,6 +2,11 @@ package com.pollsystem.auth
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pollsystem.AbstractIntegrationTest
+import com.pollsystem.model.User
+import com.pollsystem.repository.MagicLinkTokenRepository
+import com.pollsystem.repository.UserRepository
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -11,83 +16,137 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.time.Duration
+import java.time.Instant
 
 @AutoConfigureMockMvc
 class AuthControllerTest : AbstractIntegrationTest() {
 
     @Autowired private lateinit var mockMvc: MockMvc
     @Autowired private lateinit var json: ObjectMapper
+    @Autowired private lateinit var users: UserRepository
+    @Autowired private lateinit var magicLinks: MagicLinkService
+    @Autowired private lateinit var tokens: MagicLinkTokenRepository
 
     @Test
-    fun `register issues a token and creates a USER`() {
+    fun `request creates a new USER and returns 202`() {
         val body = mapOf(
             "email" to "alice@test.local",
             "phone" to "+15551234001",
-            "zipcode" to "90001",
-            "passcode" to "password123"
+            "zipcode" to "90001"
         )
-
         mockMvc.perform(
-            post("/api/auth/register")
+            post("/api/auth/magic-link/request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.writeValueAsString(body))
-        )
-            .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.token").isNotEmpty)
-            .andExpect(jsonPath("$.user.email").value("alice@test.local"))
-            .andExpect(jsonPath("$.user.access").value("USER"))
-            .andExpect(jsonPath("$.user.zipcode").value("90001"))
+        ).andExpect(status().isAccepted)
+
+        val created = users.findByEmail("alice@test.local")
+        assertNotNull(created)
+        assertEquals("90001", created!!.zipcode)
     }
 
     @Test
-    fun `register rejects duplicate email`() {
+    fun `request for existing email reuses the user`() {
         val body = mapOf(
-            "email" to "dup@test.local",
-            "phone" to "+15551234100",
-            "zipcode" to "90001",
-            "passcode" to "password123"
+            "email" to "carol@test.local",
+            "phone" to "+15551234050",
+            "zipcode" to "90001"
         )
         mockMvc.perform(
-            post("/api/auth/register").contentType(MediaType.APPLICATION_JSON)
+            post("/api/auth/magic-link/request")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(json.writeValueAsString(body))
-        ).andExpect(status().isCreated)
+        ).andExpect(status().isAccepted)
 
-        // second registration with same email
-        val collide = body + ("phone" to "+15551234101")
+        // Same email, different phone — should NOT create a second user
+        val again = body + ("phone" to "+15551234051")
         mockMvc.perform(
-            post("/api/auth/register").contentType(MediaType.APPLICATION_JSON)
+            post("/api/auth/magic-link/request")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(again))
+        ).andExpect(status().isAccepted)
+
+        val matches = users.findAll().filter { it.email == "carol@test.local" }
+        assertEquals(1, matches.size)
+    }
+
+    @Test
+    fun `request rejects new email with phone already used by another account`() {
+        val first = mapOf(
+            "email" to "first@test.local",
+            "phone" to "+15551234100",
+            "zipcode" to "90001"
+        )
+        mockMvc.perform(
+            post("/api/auth/magic-link/request")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(first))
+        ).andExpect(status().isAccepted)
+
+        val collide = mapOf(
+            "email" to "second@test.local",
+            "phone" to "+15551234100", // same phone, different email -> conflict
+            "zipcode" to "90001"
+        )
+        mockMvc.perform(
+            post("/api/auth/magic-link/request")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(json.writeValueAsString(collide))
         ).andExpect(status().isConflict)
     }
 
     @Test
-    fun `login returns a token and me echoes the principal`() {
-        val email = "bob@test.local"
-        val password = "password123"
-        val register = mapOf(
-            "email" to email,
-            "phone" to "+15551234200",
-            "zipcode" to "90001",
-            "passcode" to password
-        )
-        mockMvc.perform(
-            post("/api/auth/register").contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(register))
-        ).andExpect(status().isCreated)
+    fun `redeem returns a JWT consumes the token and me echoes the principal`() {
+        val user = saveUser("bob@test.local", "+15551234200")
+        val rawToken = magicLinks.issueToken(user)
 
-        val loginResp = mockMvc.perform(
-            post("/api/auth/login").contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(mapOf("email" to email, "passcode" to password)))
+        val resp = mockMvc.perform(
+            post("/api/auth/magic-link/redeem")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(mapOf("token" to rawToken)))
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.token").isNotEmpty)
+            .andExpect(jsonPath("$.user.email").value("bob@test.local"))
             .andReturn()
             .response.contentAsString
-        val token = json.readTree(loginResp).get("token").asText()
 
-        mockMvc.perform(get("/api/auth/me").header("Authorization", "Bearer $token"))
+        val jwt = json.readTree(resp).get("token").asText()
+        mockMvc.perform(get("/api/auth/me").header("Authorization", "Bearer $jwt"))
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.email").value(email))
+            .andExpect(jsonPath("$.email").value("bob@test.local"))
+
+        // Replay the same magic-link — must fail.
+        mockMvc.perform(
+            post("/api/auth/magic-link/redeem")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(mapOf("token" to rawToken)))
+        ).andExpect(status().isUnauthorized)
+    }
+
+    @Test
+    fun `redeem rejects unknown token`() {
+        mockMvc.perform(
+            post("/api/auth/magic-link/redeem")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(mapOf("token" to "deadbeef".repeat(8))))
+        ).andExpect(status().isUnauthorized)
+    }
+
+    @Test
+    fun `redeem rejects expired token`() {
+        val user = saveUser("dave@test.local", "+15551234300")
+        // Issue normally, then rewind expiry past now.
+        val rawToken = magicLinks.issueToken(user)
+        val record = tokens.findAll().last { it.userId == user.id }
+        tokens.save(record.copy(expiresAt = Instant.now().minus(Duration.ofMinutes(1))))
+
+        mockMvc.perform(
+            post("/api/auth/magic-link/redeem")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(mapOf("token" to rawToken)))
+        ).andExpect(status().isUnauthorized)
     }
 
     @Test
@@ -96,25 +155,13 @@ class AuthControllerTest : AbstractIntegrationTest() {
             .andExpect(status().isUnauthorized)
     }
 
-    @Test
-    fun `login with wrong password returns 401`() {
-        val email = "wrong@test.local"
-        mockMvc.perform(
-            post("/api/auth/register").contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(mapOf(
-                    "email" to email,
-                    "phone" to "+15551234300",
-                    "zipcode" to "90001",
-                    "passcode" to "rightpass1"
-                )))
-        ).andExpect(status().isCreated)
-
-        mockMvc.perform(
-            post("/api/auth/login").contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(mapOf(
-                    "email" to email,
-                    "passcode" to "wrongpass1"
-                )))
-        ).andExpect(status().isUnauthorized)
-    }
+    private fun saveUser(email: String, phone: String): User =
+        users.save(
+            User(
+                email = email,
+                phone = phone,
+                zipcode = "90001",
+                isEnabled = true
+            )
+        )
 }

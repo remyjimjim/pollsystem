@@ -8,7 +8,6 @@ import com.pollsystem.repository.RoleAssignmentRepository
 import com.pollsystem.repository.StateRepository
 import com.pollsystem.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.util.concurrent.atomic.AtomicLong
 
@@ -21,15 +20,13 @@ class TestFixtures @Autowired constructor(
     private val users: UserRepository,
     private val states: StateRepository,
     private val counties: CountyRepository,
-    private val roleAssignments: RoleAssignmentRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val roleAssignments: RoleAssignmentRepository
 ) {
     private val seq = AtomicLong(System.nanoTime())
 
     fun createUser(
         access: AccessLevel = AccessLevel.USER,
         zipcode: String = "90001",
-        passcode: String = "password123",
         emailPrefix: String = "user"
     ): User {
         val n = seq.incrementAndGet()
@@ -38,7 +35,6 @@ class TestFixtures @Autowired constructor(
                 email = "$emailPrefix-$n@test.local",
                 phone = "+1555${n.toString().padStart(7, '0').takeLast(7)}",
                 zipcode = zipcode,
-                passcode = passwordEncoder.encode(passcode),
                 access = access,
                 isEnabled = true
             )

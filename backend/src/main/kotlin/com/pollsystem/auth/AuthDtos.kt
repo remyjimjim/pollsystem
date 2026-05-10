@@ -5,18 +5,16 @@ import com.pollsystem.model.User
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
+import java.time.Instant
 
-data class LoginRequest(
-    @field:Email @field:NotBlank val email: String,
-    @field:NotBlank val passcode: String
-)
-
-data class RegisterRequest(
+data class MagicLinkRequest(
     @field:Email @field:NotBlank val email: String,
     @field:NotBlank @field:Pattern(regexp = "^[0-9+\\-() ]{7,20}$") val phone: String,
-    @field:NotBlank @field:Pattern(regexp = "^[0-9]{5}$") val zipcode: String,
-    @field:NotBlank @field:Size(min = 8, max = 100) val passcode: String
+    @field:NotBlank @field:Pattern(regexp = "^[0-9]{5}$") val zipcode: String
+)
+
+data class MagicLinkRedeemRequest(
+    @field:NotBlank val token: String
 )
 
 data class UserDto(
@@ -25,7 +23,8 @@ data class UserDto(
     val phone: String,
     val zipcode: String,
     val access: AccessLevel,
-    val isEnabled: Boolean
+    val isEnabled: Boolean,
+    val paidUntil: Instant?
 ) {
     companion object {
         fun from(user: User) = UserDto(
@@ -34,7 +33,8 @@ data class UserDto(
             phone = user.phone,
             zipcode = user.zipcode,
             access = user.access,
-            isEnabled = user.isEnabled
+            isEnabled = user.isEnabled,
+            paidUntil = user.paidUntil
         )
     }
 }
