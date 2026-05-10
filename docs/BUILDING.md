@@ -9,21 +9,16 @@ the other.
 | Tool | Version | Used for |
 |---|---|---|
 | JDK | **17** (Temurin/Adoptium recommended) | Backend compile + test |
-| Gradle | **8.10.2** | Backend build (matches `gradle-wrapper.properties`) |
 | Node.js | **20.x** | Frontend build + test |
 | npm | bundled with Node 20 | Frontend dependency install |
 | Docker | latest | Local Postgres, Testcontainers integration tests |
 
-The backend currently does **not** ship the `gradlew` wrapper script in the repo
-(only `gradle/wrapper/gradle-wrapper.properties`). You can either:
-
-- **Use a system Gradle** matching the version in `gradle-wrapper.properties`
-  (CI does this), or
-- **Generate the wrapper once locally:** `cd backend && gradle wrapper --gradle-version 8.10.2`,
-  then commit the generated `gradlew`, `gradlew.bat`, and `gradle/wrapper/gradle-wrapper.jar`
-  if you want them in the repo. After that, all examples below work with `./gradlew` instead of `gradle`.
-
-The instructions below use `gradle` to match the current state of the repo.
+The backend uses the **Gradle wrapper** (`gradlew`), which is committed to the
+repo together with `gradle/wrapper/gradle-wrapper.jar` and pins Gradle 8.10.2.
+You don't need a system Gradle install — the wrapper downloads its own
+distribution into `~/.gradle/` on first run. Just make sure you have a JDK 17
+on `JAVA_HOME` (a system Java 25 will run the wrapper too, but the build
+targets bytecode for 17 and Gradle 8.10.2 only officially supports up to 23).
 
 ---
 
@@ -31,7 +26,7 @@ The instructions below use `gradle` to match the current state of the repo.
 
 ```bash
 cd backend
-gradle build
+./gradlew build
 ```
 
 What this does:
@@ -42,7 +37,7 @@ What this does:
 **Skip tests during a build** (e.g. for fast iteration):
 
 ```bash
-gradle build -x test
+./gradlew build -x test
 ```
 
 **Run from the JAR**:
@@ -58,7 +53,7 @@ custom `application.yml` on the classpath. See `docs/DEPLOYING-LOCAL.md`.
 
 ### Database migrations
 
-Migrations live in `backend/src/main/resources/db/migration/` (Flyway, `V1__…` … `V6__…`).
+Migrations live in `backend/src/main/resources/db/migration/` (Flyway, `V1__…` … `V7__…`).
 They run automatically on backend startup (`spring.flyway.enabled: true`) against
 whichever Postgres the datasource points at. There is no separate migration
 command — booting the backend applies any pending migrations.
@@ -112,7 +107,7 @@ time or runtime), or is served behind a reverse proxy that handles the routing.
 For a deployable artifact set:
 
 ```bash
-( cd backend && gradle build )
+( cd backend && ./gradlew build )
 ( cd frontend && npm install && npm run build )
 ```
 
