@@ -12,7 +12,13 @@ group = "com.pollsystem"
 version = "0.0.1-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    // Gradle provisions a JDK 17 to compile and run the build, regardless of
+    // which JVM launched the wrapper. With the foojay-resolver plugin in
+    // settings.gradle.kts, Gradle auto-downloads JDK 17 from Foojay if no
+    // suitable installation is detected locally.
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {

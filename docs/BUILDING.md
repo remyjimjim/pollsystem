@@ -8,7 +8,7 @@ the other.
 
 | Tool | Version | Used for |
 |---|---|---|
-| JDK | **17** (Temurin/Adoptium recommended) | Backend compile + test |
+| JDK | **8 through 23** to launch `gradlew`; toolchain provisions JDK 17 for the build | Backend compile + test |
 | Node.js | **20.x** | Frontend build + test |
 | npm | bundled with Node 20 | Frontend dependency install |
 | Docker | latest | Local Postgres, Testcontainers integration tests |
@@ -16,9 +16,25 @@ the other.
 The backend uses the **Gradle wrapper** (`gradlew`), which is committed to the
 repo together with `gradle/wrapper/gradle-wrapper.jar` and pins Gradle 8.10.2.
 You don't need a system Gradle install — the wrapper downloads its own
-distribution into `~/.gradle/` on first run. Just make sure you have a JDK 17
-on `JAVA_HOME` (a system Java 25 will run the wrapper too, but the build
-targets bytecode for 17 and Gradle 8.10.2 only officially supports up to 23).
+distribution into `~/.gradle/` on first run.
+
+The build is configured with a **Gradle toolchain** targeting JDK 17 plus the
+`foojay-resolver-convention` plugin, so Gradle finds or auto-downloads a JDK 17
+for compilation and test forks. You don't need a JDK 17 of your own; Gradle
+will fetch one to `~/.gradle/jdks/` on first build.
+
+**Caveat on the launching JVM:** Gradle 8.10.2 itself only runs on Java 8
+through 23. If your default `java` is 24 or newer (e.g. Microsoft OpenJDK 25
+shipping with WSL/Ubuntu 26.04), `./gradlew` exits with a single-line failure
+that just prints the JVM version (`25.0.2`). Two ways out:
+
+```bash
+# Per-shell: launch with a supported JDK; toolchain still provisions 17 for the build.
+export JAVA_HOME=/path/to/jdk-17-or-21-or-23
+./gradlew build
+
+# Or persistent: add the export to ~/.bashrc / ~/.zshrc.
+```
 
 ---
 
