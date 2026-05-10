@@ -20,7 +20,10 @@ import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
 data class SubmitBallotResponseRequest(
-    @field:NotNull val response: Boolean,
+    // Nullable so Jackson lets through `null` and missing fields, then @NotNull
+    // catches them in Bean Validation. With non-nullable Boolean, Kotlin/Jackson
+    // defaults missing fields to false and @NotNull never fires.
+    @field:NotNull val response: Boolean?,
     val comment: String? = null
 )
 
@@ -94,7 +97,7 @@ class BallotMeasureResponseController(
         val saved = if (existing != null) {
             responses.save(
                 existing.copy(
-                    response = body.response,
+                    response = body.response!!,
                     comment = body.comment?.trim(),
                     lastModified = now
                 )
@@ -104,7 +107,7 @@ class BallotMeasureResponseController(
                 BallotResponse(
                     measure = measure,
                     user = principal.user,
-                    response = body.response,
+                    response = body.response!!,
                     comment = body.comment?.trim(),
                     dateSubmitted = now
                 )

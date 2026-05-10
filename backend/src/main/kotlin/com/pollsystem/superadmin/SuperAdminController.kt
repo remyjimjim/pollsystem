@@ -102,7 +102,24 @@ class SuperAdminController(
         }
         val updated = users.save(u.copy(access = AccessLevel.CREATOR))
         val rows = roleAssignments.findByUserIdAndRole(userId, AccessLevel.ADMIN)
-        roleAssignments.saveAll(rows.map { it.copy(enabled = false) })
-        return list().first { it.id == updated.id }
+        val savedRows = roleAssignments.saveAll(rows.map { it.copy(enabled = false) })
+        // Build the DTO directly: list() filters to ADMIN+SUPER, and we just
+        // demoted this user out of that set.
+        return AdminUserDto(
+            id = updated.id,
+            email = updated.email,
+            phone = updated.phone,
+            isEnabled = updated.isEnabled,
+            access = updated.access,
+            roleAssignments = savedRows.sortedBy { it.zipcode }.map {
+                AdminRoleAssignmentDto(
+                    id = it.id,
+                    zipcode = it.zipcode,
+                    countyName = it.county.name,
+                    stateInitial = it.state.initial,
+                    enabled = it.enabled
+                )
+            }
+        )
     }
 }
