@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
@@ -93,7 +93,20 @@ const scopeSummary = computed(() => {
   return `${zips.slice(0, 3).join(', ')} +${zips.length - 3} more`
 })
 
-onMounted(load)
+// Refetch when the page is restored from the browser's bfcache (e.g. user
+// hits Back after flipping a decision in the detail view). Plain onMounted
+// doesn't fire on bfcache restore, so the stale snapshot would otherwise
+// stick around.
+function onPageShow(e: PageTransitionEvent) {
+  if (e.persisted) load()
+}
+onMounted(() => {
+  load()
+  window.addEventListener('pageshow', onPageShow)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('pageshow', onPageShow)
+})
 </script>
 
 <template>
