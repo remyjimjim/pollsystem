@@ -117,8 +117,7 @@ class RequestValidationTest : AbstractIntegrationTest() {
     private fun invalidAdminRequests(): List<Arguments> = listOf(
         case("empty zipcodes",   validAdminRequest()) { it["zipcodes"] = emptyList<String>() },
         case("missing zipcodes", validAdminRequest()) { it.remove("zipcodes") },
-        case("blank reason",     validAdminRequest()) { it["reason"] = "" },
-        case("missing reason",   validAdminRequest()) { it.remove("reason") },
+        // Reason is optional now; only "too long" remains a 400.
         case("reason too long",  validAdminRequest()) { it["reason"] = "x".repeat(2001) }
     )
 
