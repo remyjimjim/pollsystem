@@ -2,6 +2,10 @@
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import type { PollStatus } from '@/types'
+import { AccessLevel } from '@/types'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
 
 interface CreatorPollSummary {
   id: number
@@ -55,6 +59,7 @@ onMounted(load)
       <h1 class="m-0 text-2xl font-semibold text-slate-800">Creator Dashboard</h1>
       <div class="flex gap-2">
         <router-link
+          v-if="!auth.hasAccess(AccessLevel.ADMIN)"
           to="/admin-request"
           class="rounded border border-slate-800 bg-white px-4 py-2 text-sm text-slate-800 no-underline hover:bg-slate-50"
         >
