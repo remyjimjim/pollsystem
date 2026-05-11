@@ -32,13 +32,15 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/PollResultsView.vue')
   },
 
-  // User routes (requires USER+)
+  // Poll search is public — anonymous users see results-only links per row;
+  // signed-in users also get a "Vote / Open" link into the detail page.
   {
     path: '/polls/search',
     name: 'PollSearch',
-    component: () => import('@/views/PollSearchView.vue'),
-    meta: { requiresAuth: true, minAccess: AccessLevel.USER }
+    component: () => import('@/views/PollSearchView.vue')
   },
+
+  // User routes (requires USER+)
   {
     path: '/polls/:type/:id',
     name: 'PollDetail',

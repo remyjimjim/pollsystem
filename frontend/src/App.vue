@@ -27,8 +27,8 @@ function handleLogout() {
           <RouterLink to="/">Poll System</RouterLink>
         </div>
         <div class="nav-links">
-          <RouterLink to="/polls/search" v-if="authStore.hasAccess(AccessLevel.USER)">
-            Search Polls
+          <RouterLink to="/polls/search">
+            {{ authStore.isAuthenticated ? 'Search Polls' : 'View Results' }}
           </RouterLink>
 
           <!-- Creator Drawer Link -->

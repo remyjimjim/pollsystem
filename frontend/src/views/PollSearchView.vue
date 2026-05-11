@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import axios from 'axios'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
 
 interface PollSearchResult {
   id: number
@@ -56,7 +59,11 @@ async function search() {
 
 <template>
   <div class="view">
-    <h1>Find a Poll</h1>
+    <h1>{{ auth.isAuthenticated ? 'Find a Poll' : 'Browse Poll Results' }}</h1>
+    <p v-if="!auth.isAuthenticated" class="hint">
+      Search and view results for any published poll.
+      <router-link to="/login">Sign in</router-link> to vote.
+    </p>
 
     <form @submit.prevent="search" class="filters">
       <label>
@@ -113,8 +120,16 @@ async function search() {
           <td>{{ r.creatorEmail }}</td>
           <td class="zips">{{ r.zipcodes.join(', ') }}</td>
           <td>{{ r.closeDate ? new Date(r.closeDate).toLocaleString() : 'No close date' }}</td>
-          <td>
-            <router-link :to="`/polls/${routeMap(r.type)}/${r.id}`">Open →</router-link>
+          <td class="actions">
+            <router-link :to="`/polls/${routeMap(r.type)}/${r.id}/results`">
+              View results
+            </router-link>
+            <router-link
+              v-if="auth.isAuthenticated"
+              :to="`/polls/${routeMap(r.type)}/${r.id}`"
+            >
+              Vote →
+            </router-link>
           </td>
         </tr>
       </tbody>
@@ -129,8 +144,18 @@ async function search() {
   margin: 0 auto;
 }
 h1 {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   color: #1a365d;
+}
+.hint {
+  margin: 0 0 1.5rem;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  white-space: nowrap;
 }
 .filters {
   display: grid;

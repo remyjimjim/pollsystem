@@ -58,6 +58,7 @@ class SecurityConfig(
                     "/api/counties/**",
                     "/api/zipcodes/**",
                     "/api/poll-types/**",
+                    "/api/polls/search",
                     "/api/polls/*/*/results/**"
                 ).permitAll()
                 it.requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER")
