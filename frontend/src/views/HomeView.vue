@@ -16,7 +16,6 @@ const cards = computed<ActionCard[]>(() => {
   if (!auth.isAuthenticated) return []
   const out: ActionCard[] = []
 
-  // Every signed-in user
   out.push({
     title: 'Find polls and view results',
     description:
@@ -51,8 +50,7 @@ const cards = computed<ActionCard[]>(() => {
   if (auth.hasAccess(AccessLevel.ADMIN)) {
     out.push({
       title: 'Admin dashboard',
-      description:
-        'Review pending Creator requests, manage creators and their polls.',
+      description: 'Review pending Creator requests, manage creators and their polls.',
       to: '/admin/dashboard',
       cta: 'Open admin'
     })
@@ -81,108 +79,80 @@ const cards = computed<ActionCard[]>(() => {
 </script>
 
 <template>
-  <div class="view">
-    <h1>Poll System</h1>
+  <div class="py-4">
+    <h1 class="mb-2 text-3xl font-semibold text-slate-800">Poll System</h1>
 
     <template v-if="auth.isAuthenticated">
-      <p class="welcome">
-        Welcome back, <strong>{{ auth.user?.email }}</strong>
-        <span class="badge">{{ auth.user?.access }}</span>
+      <p class="mb-6 text-base text-slate-600">
+        Welcome back, <strong class="font-semibold text-slate-900">{{ auth.user?.email }}</strong>
+        <span
+          class="ml-2 inline-block rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-slate-800"
+        >
+          {{ auth.user?.access }}
+        </span>
       </p>
 
-      <div class="card-grid">
-        <article v-for="card in cards" :key="card.to" class="card">
-          <h2>{{ card.title }}</h2>
-          <p>{{ card.description }}</p>
-          <router-link :to="card.to" class="btn">{{ card.cta }} →</router-link>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <article
+          v-for="card in cards"
+          :key="card.to"
+          class="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-5"
+        >
+          <h2 class="text-lg font-semibold text-slate-800">{{ card.title }}</h2>
+          <p class="flex-1 text-sm text-slate-600">{{ card.description }}</p>
+          <router-link
+            :to="card.to"
+            class="self-start text-sm font-semibold text-slate-800 hover:underline"
+          >
+            {{ card.cta }} →
+          </router-link>
         </article>
       </div>
     </template>
 
     <template v-else>
-      <p class="welcome">
+      <p class="mb-6 text-base text-slate-600">
         Anonymous polling and elections. Create an account to vote on published
         polls; apply for Creator access to publish your own.
       </p>
-      <div class="card-grid">
-        <article class="card">
-          <h2>View poll results</h2>
-          <p>Browse every published poll and open its results page. No account required.</p>
-          <router-link to="/polls/search" class="btn">View results →</router-link>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <article class="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-5">
+          <h2 class="text-lg font-semibold text-slate-800">View poll results</h2>
+          <p class="flex-1 text-sm text-slate-600">
+            Browse every published poll and open its results page. No account required.
+          </p>
+          <router-link
+            to="/polls/search"
+            class="self-start text-sm font-semibold text-slate-800 hover:underline"
+          >
+            View results →
+          </router-link>
         </article>
-        <article class="card">
-          <h2>Sign in</h2>
-          <p>Already have an account? We'll email you a one-time sign-in link.</p>
-          <router-link to="/login" class="btn">Sign in →</router-link>
+        <article class="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-5">
+          <h2 class="text-lg font-semibold text-slate-800">Sign in</h2>
+          <p class="flex-1 text-sm text-slate-600">
+            Already have an account? We'll email you a one-time sign-in link.
+          </p>
+          <router-link
+            to="/login"
+            class="self-start text-sm font-semibold text-slate-800 hover:underline"
+          >
+            Sign in →
+          </router-link>
         </article>
-        <article class="card">
-          <h2>Create an account</h2>
-          <p>Email + phone + zipcode is all it takes. No passwords.</p>
-          <router-link to="/register" class="btn">Register →</router-link>
+        <article class="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-5">
+          <h2 class="text-lg font-semibold text-slate-800">Create an account</h2>
+          <p class="flex-1 text-sm text-slate-600">
+            Email + phone + zipcode is all it takes. No passwords.
+          </p>
+          <router-link
+            to="/register"
+            class="self-start text-sm font-semibold text-slate-800 hover:underline"
+          >
+            Register →
+          </router-link>
         </article>
       </div>
     </template>
   </div>
 </template>
-
-<style scoped>
-.view {
-  padding: 1rem 0 2rem;
-}
-h1 {
-  margin: 0 0 0.5rem;
-  color: #1a365d;
-  font-size: 2rem;
-}
-.welcome {
-  font-size: 1rem;
-  color: #4a5568;
-  margin: 0 0 1.5rem;
-}
-.badge {
-  display: inline-block;
-  margin-left: 0.5rem;
-  padding: 0.15rem 0.5rem;
-  background: #bee3f8;
-  color: #1a365d;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-}
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
-}
-.card {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.card h2 {
-  font-size: 1.1rem;
-  color: #1a365d;
-  margin: 0;
-}
-.card p {
-  font-size: 0.9rem;
-  color: #4a5568;
-  margin: 0 0 0.5rem;
-  flex: 1;
-}
-.btn {
-  align-self: flex-start;
-  font-size: 0.9rem;
-  color: #1a365d;
-  text-decoration: none;
-  font-weight: 600;
-}
-.btn:hover {
-  text-decoration: underline;
-}
-</style>

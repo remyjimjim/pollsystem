@@ -3,18 +3,8 @@
 </script>
 
 <template>
-  <div class="view">
-    <h1>Not Found</h1>
-    <p>Page not found</p>
+  <div class="py-8">
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Not Found</h1>
+    <p class="text-slate-600">Page not found</p>
   </div>
 </template>
-
-<style scoped>
-.view {
-  padding: 2rem 0;
-}
-h1 {
-  margin-bottom: 1rem;
-  color: #1a365d;
-}
-</style>

@@ -19,7 +19,6 @@ onMounted(async () => {
   }
   try {
     await auth.redeemMagicLink(token)
-    // Land authenticated users wherever they were headed, or the home page.
     const redirect = (route.query.redirect as string) || '/'
     router.replace(redirect)
   } catch (e: any) {
@@ -33,43 +32,21 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="view">
-    <div v-if="status === 'pending'" class="pending">
-      <p>Signing you in…</p>
-    </div>
-    <div v-else class="error-box">
-      <h1>Sign-in failed</h1>
-      <p>{{ error }}</p>
+  <div class="mx-auto max-w-md py-8">
+    <p v-if="status === 'pending'" class="text-center text-base text-slate-600">
+      Signing you in…
+    </p>
+    <div
+      v-else
+      class="rounded border border-red-200 bg-red-50 p-4 text-red-900"
+    >
+      <h1 class="mb-2 text-xl font-semibold">Sign-in failed</h1>
+      <p class="mb-2">{{ error }}</p>
       <p>
-        <router-link to="/login">Request a new sign-in link</router-link>
+        <router-link to="/login" class="font-semibold text-red-900 underline">
+          Request a new sign-in link
+        </router-link>
       </p>
     </div>
   </div>
 </template>
-
-<style scoped>
-.view {
-  padding: 2rem 0;
-  max-width: 480px;
-  margin: 0 auto;
-}
-.pending {
-  text-align: center;
-  color: #4a5568;
-  font-size: 1rem;
-}
-.error-box {
-  padding: 1rem;
-  border: 1px solid #feb2b2;
-  background: #fff5f5;
-  border-radius: 4px;
-  color: #742a2a;
-}
-.error-box h1 {
-  font-size: 1.25rem;
-  margin: 0 0 0.5rem;
-}
-.error-box p {
-  margin: 0 0 0.5rem;
-}
-</style>

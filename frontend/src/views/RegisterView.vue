@@ -32,34 +32,51 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="view">
-    <h1>Create an account</h1>
+  <div class="mx-auto max-w-sm py-8">
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Create an account</h1>
 
-    <div v-if="sentTo" class="confirm">
-      <p><strong>Check your email.</strong></p>
-      <p>
-        We've sent a one-time sign-in link to <strong>{{ sentTo }}</strong>.
+    <div
+      v-if="sentTo"
+      class="rounded border border-green-200 bg-green-50 p-4 text-sm text-green-900"
+    >
+      <p class="mb-2"><strong class="font-semibold">Check your email.</strong></p>
+      <p class="mb-2">
+        We've sent a one-time sign-in link to
+        <strong class="font-semibold">{{ sentTo }}</strong>.
         Click the link to finish creating your account. The link expires in 15 minutes.
       </p>
-      <p class="alt">
-        Wrong address? <a href="#" @click.prevent="sentTo = null">Try again</a>
+      <p class="mt-3 text-center">
+        Wrong address?
+        <a href="#" @click.prevent="sentTo = null" class="text-slate-700 underline">Try again</a>
       </p>
     </div>
 
-    <form v-else @submit.prevent="onSubmit" class="form">
-      <p class="hint">
-        We use one-time email links instead of passwords. Enter your details
-        and we'll send a sign-in link to your inbox.
+    <form v-else @submit.prevent="onSubmit" class="flex flex-col gap-3">
+      <p class="mb-1 text-sm text-slate-600">
+        We use one-time email links instead of passwords. Enter your details and
+        we'll send a sign-in link to your inbox.
       </p>
-      <label>
+      <label class="flex flex-col gap-1 text-sm text-slate-700">
         Email
-        <input v-model="form.email" type="email" required autocomplete="email" />
+        <input
+          v-model="form.email"
+          type="email"
+          required
+          autocomplete="email"
+          class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
+        />
       </label>
-      <label>
+      <label class="flex flex-col gap-1 text-sm text-slate-700">
         Phone
-        <input v-model="form.phone" type="tel" required autocomplete="tel" />
+        <input
+          v-model="form.phone"
+          type="tel"
+          required
+          autocomplete="tel"
+          class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
+        />
       </label>
-      <label>
+      <label class="flex flex-col gap-1 text-sm text-slate-700">
         Zipcode
         <input
           v-model="form.zipcode"
@@ -69,84 +86,21 @@ async function onSubmit() {
           maxlength="5"
           inputmode="numeric"
           autocomplete="postal-code"
+          class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
       </label>
-      <p v-if="error" class="error">{{ error }}</p>
-      <button type="submit" :disabled="submitting">
+      <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
+      <button
+        type="submit"
+        :disabled="submitting"
+        class="rounded bg-slate-800 px-4 py-2 text-base text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         {{ submitting ? 'Sending link…' : 'Email me a sign-in link' }}
       </button>
-      <p class="alt">Already have an account? <router-link to="/login">Sign in</router-link></p>
+      <p class="text-center text-sm text-slate-600">
+        Already have an account?
+        <router-link to="/login" class="text-slate-800 underline">Sign in</router-link>
+      </p>
     </form>
   </div>
 </template>
-
-<style scoped>
-.view {
-  padding: 2rem 0;
-  max-width: 360px;
-  margin: 0 auto;
-}
-h1 {
-  margin-bottom: 1rem;
-  color: #1a365d;
-}
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.hint {
-  font-size: 0.9rem;
-  color: #4a5568;
-  margin: 0 0 0.5rem;
-}
-label {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.9rem;
-  gap: 0.25rem;
-}
-input {
-  padding: 0.5rem;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-button {
-  padding: 0.6rem;
-  background: #1a365d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-.error {
-  color: #c53030;
-  font-size: 0.9rem;
-  margin: 0;
-}
-.alt {
-  font-size: 0.9rem;
-  text-align: center;
-  margin: 0;
-}
-.confirm {
-  padding: 1rem;
-  border: 1px solid #c6f6d5;
-  background: #f0fff4;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  color: #22543d;
-}
-.confirm p {
-  margin: 0 0 0.5rem;
-}
-.confirm p:last-child {
-  margin: 0.75rem 0 0;
-}
-</style>
