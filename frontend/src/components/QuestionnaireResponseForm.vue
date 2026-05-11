@@ -176,15 +176,31 @@ onMounted(load)
       class="rounded-md border border-slate-200 p-4 disabled:opacity-90"
     >
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ q.text }}</legend>
-      <label class="mb-2 flex flex-col gap-1 text-sm text-slate-600">
-        Answer
-        <textarea
-          v-model="answers[q.id].response"
-          rows="2"
-          required
-          class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
-        />
-      </label>
+      <div class="mb-2 flex flex-col gap-1 text-sm text-slate-600">
+        <span>Answer</span>
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2 text-base text-slate-700">
+            <input
+              type="radio"
+              :name="`q-${q.id}`"
+              value="Yes"
+              v-model="answers[q.id].response"
+              required
+            />
+            Yes
+          </label>
+          <label class="flex items-center gap-2 text-base text-slate-700">
+            <input
+              type="radio"
+              :name="`q-${q.id}`"
+              value="No"
+              v-model="answers[q.id].response"
+              required
+            />
+            No
+          </label>
+        </div>
+      </div>
       <label class="mb-2 flex flex-col gap-1 text-sm text-slate-600">
         Comment (optional)
         <input
