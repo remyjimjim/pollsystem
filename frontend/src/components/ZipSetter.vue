@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import axios from 'axios'
 import type { State, County, CountyZip } from '@/types'
 
@@ -81,6 +81,17 @@ function onStateChange(e: Event) {
   selectedStateId.value = raw === '' ? null : Number(raw)
 }
 
+const allCountiesSelected = computed(() =>
+  counties.value.length > 0 &&
+  selectedCountyIds.value.length === counties.value.length
+)
+
+function toggleAllCounties() {
+  selectedCountyIds.value = allCountiesSelected.value
+    ? []
+    : counties.value.map(c => c.id)
+}
+
 watch(selectedStateId, (id) => {
   if (id != null) loadCounties(id)
 })
@@ -116,7 +127,20 @@ loadStates()
     </div>
 
     <div class="flex flex-col gap-2" v-if="selectedStateId != null">
-      <label class="text-sm font-semibold text-slate-700">Counties</label>
+      <div class="flex items-center justify-between gap-3">
+        <label class="text-sm font-semibold text-slate-700">Counties</label>
+        <label
+          v-if="!loadingCounties && counties.length > 0"
+          class="flex items-center gap-2 text-xs text-slate-600"
+        >
+          <input
+            type="checkbox"
+            :checked="allCountiesSelected"
+            @change="toggleAllCounties"
+          />
+          Select all ({{ counties.length }})
+        </label>
+      </div>
       <p v-if="loadingCounties" class="m-0 text-sm text-slate-500">Loading…</p>
       <div
         v-else-if="counties.length === 0"
