@@ -133,8 +133,10 @@ class CreatorRequestService(
         decidedBy: User
     ): List<CreatorRequest> {
         val now = Instant.now()
+        // Skip rows already in the target status (no-op). Allows flipping
+        // PENDING↔APPROVED↔REJECTED so admins can revise a decision later.
         val targets = creatorRequests.findAllById(requestIds.distinct())
-            .filter { it.status == RequestStatus.PENDING }
+            .filter { it.status != decision }
         if (targets.isEmpty()) return emptyList()
 
         val rowsByRequest = roleAssignments
@@ -143,6 +145,7 @@ class CreatorRequestService(
 
         val results = mutableListOf<CreatorRequest>()
         for (req in targets) {
+            val previous = req.status
             val updated = creatorRequests.save(
                 req.copy(status = decision, processedAt = now, processedBy = decidedBy)
             )
@@ -158,7 +161,13 @@ class CreatorRequestService(
                     body = "Your creator request was approved. Visit /home to start creating polls."
                 )
             } else {
-                // role assignments stay enabled=false; leave them as audit trail
+                // On flip-from-APPROVED, disable the rows that approval enabled.
+                // On fresh PENDING→REJECTED the rows are already disabled — no-op.
+                // We deliberately do NOT downgrade user.access: they may hold
+                // enabled CREATOR rows from other approved requests.
+                if (previous == RequestStatus.APPROVED) {
+                    roleAssignments.saveAll(rows.map { it.copy(enabled = false) })
+                }
                 email.send(
                     to = req.user.email,
                     subject = "Your creator request was not approved",

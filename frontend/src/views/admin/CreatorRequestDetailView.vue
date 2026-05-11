@@ -115,8 +115,9 @@ onMounted(load)
         </dd>
       </dl>
 
-      <div v-if="data.status === 'PENDING'" class="flex gap-2">
+      <div class="flex gap-2">
         <button
+          v-if="data.status !== 'APPROVED'"
           @click="act('batch-approve')"
           :disabled="acting"
           class="rounded bg-green-700 px-4 py-2 text-sm text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-60"
@@ -124,6 +125,7 @@ onMounted(load)
           {{ acting ? 'Working…' : '✓ Approve' }}
         </button>
         <button
+          v-if="data.status !== 'REJECTED'"
           @click="act('batch-reject')"
           :disabled="acting"
           class="rounded bg-red-700 px-4 py-2 text-sm text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-60"
@@ -131,9 +133,6 @@ onMounted(load)
           {{ acting ? 'Working…' : '✗ Reject' }}
         </button>
       </div>
-      <p v-else class="text-sm text-slate-500">
-        This request has already been decided.
-      </p>
     </template>
   </div>
 </template>
