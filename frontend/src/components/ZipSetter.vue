@@ -118,9 +118,13 @@ loadStates()
     <div class="flex flex-col gap-2" v-if="selectedStateId != null">
       <label class="text-sm font-semibold text-slate-700">Counties</label>
       <p v-if="loadingCounties" class="m-0 text-sm text-slate-500">Loading…</p>
-      <p v-else-if="counties.length === 0" class="m-0 text-sm text-slate-500">
-        No counties available
-      </p>
+      <div
+        v-else-if="counties.length === 0"
+        class="rounded-md border border-orange-400 bg-orange-50 p-3 text-sm text-orange-900"
+      >
+        No counties seeded for this state yet. Pick a different state, or extend
+        the seed data in <code class="font-mono">backend/src/main/resources/db/migration/</code>.
+      </div>
       <div
         v-else
         class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"
