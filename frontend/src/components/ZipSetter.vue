@@ -92,6 +92,18 @@ function toggleAllCounties() {
     : counties.value.map(c => c.id)
 }
 
+const allZipcodesSelected = computed(() =>
+  zips.value.length > 0 &&
+  selectedZipcodes.value.length === zips.value.length &&
+  zips.value.every(z => selectedZipcodes.value.includes(z.zipcode))
+)
+
+function toggleAllZipcodes() {
+  selectedZipcodes.value = allZipcodesSelected.value
+    ? []
+    : zips.value.map(z => z.zipcode)
+}
+
 watch(selectedStateId, (id) => {
   if (id != null) loadCounties(id)
 })
@@ -161,7 +173,20 @@ loadStates()
     </div>
 
     <div class="flex flex-col gap-2" v-if="selectedCountyIds.length > 0">
-      <label class="text-sm font-semibold text-slate-700">Zipcodes</label>
+      <div class="flex items-center justify-between gap-3">
+        <label class="text-sm font-semibold text-slate-700">Zipcodes</label>
+        <label
+          v-if="!loadingZips && zips.length > 0"
+          class="flex items-center gap-2 text-xs text-slate-600"
+        >
+          <input
+            type="checkbox"
+            :checked="allZipcodesSelected"
+            @change="toggleAllZipcodes"
+          />
+          Select all ({{ zips.length }})
+        </label>
+      </div>
       <p v-if="loadingZips" class="m-0 text-sm text-slate-500">Loading…</p>
       <p v-else-if="zips.length === 0" class="m-0 text-sm text-slate-500">
         No zipcodes available
