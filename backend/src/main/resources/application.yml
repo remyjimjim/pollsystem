@@ -42,7 +42,7 @@ spring:
 app:
   jwt:
     secret: ${JWT_SECRET:your-super-secret-jwt-key-change-in-production}
-    expiration-ms: 86400000  # 24 hours
+    expiration-ms: 7776000000  # 90 days — cuts repeat magic-link emails by ~95%. Tradeoff: a leaked JWT is valid for the full window (no server-side revocation).
   results:
     k-anonymity-threshold: 10  # min responses to show filtered aggregates
   magic-link:
