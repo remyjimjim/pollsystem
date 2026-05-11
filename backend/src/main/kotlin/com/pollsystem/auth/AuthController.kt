@@ -62,14 +62,20 @@ class AuthController(
     }
 
     private fun provision(req: MagicLinkRequest): User {
-        if (users.existsByPhone(req.phone)) {
+        val phone = req.phone ?: throw ResponseStatusException(
+            HttpStatus.BAD_REQUEST, "Phone is required to create an account"
+        )
+        val zipcode = req.zipcode ?: throw ResponseStatusException(
+            HttpStatus.BAD_REQUEST, "Zipcode is required to create an account"
+        )
+        if (users.existsByPhone(phone)) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Phone already registered to another account")
         }
         return users.save(
             User(
                 email = req.email,
-                phone = req.phone,
-                zipcode = req.zipcode,
+                phone = phone,
+                zipcode = zipcode,
                 access = AccessLevel.USER,
                 isEnabled = true
             )

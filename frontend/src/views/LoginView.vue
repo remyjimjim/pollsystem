@@ -1,25 +1,27 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
-const router = useRouter()
-const route = useRoute()
 
-const form = reactive({ email: '', passcode: '' })
+const form = reactive({ email: '' })
 const error = ref<string | null>(null)
 const submitting = ref(false)
+const sentTo = ref<string | null>(null)
 
 async function onSubmit() {
   error.value = null
   submitting.value = true
   try {
-    await auth.login({ email: form.email, passcode: form.passcode })
-    const redirect = (route.query.redirect as string) || '/'
-    router.push(redirect)
+    await auth.requestMagicLink({ email: form.email })
+    sentTo.value = form.email
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Invalid email or password'
+    const status = e?.response?.status
+    if (status === 400) {
+      error.value = "We don't have an account for that email. Please register first."
+    } else {
+      error.value = e?.response?.data?.message ?? 'Could not send the sign-in link'
+    }
   } finally {
     submitting.value = false
   }
@@ -28,19 +30,30 @@ async function onSubmit() {
 
 <template>
   <div class="view">
-    <h1>Login</h1>
-    <form @submit.prevent="onSubmit" class="form">
+    <h1>Sign in</h1>
+
+    <div v-if="sentTo" class="confirm">
+      <p><strong>Check your email.</strong></p>
+      <p>
+        We've sent a one-time sign-in link to <strong>{{ sentTo }}</strong>.
+        The link expires in 15 minutes and can only be used once.
+      </p>
+      <p class="alt">
+        Wrong address? <a href="#" @click.prevent="sentTo = null">Try again</a>
+      </p>
+    </div>
+
+    <form v-else @submit.prevent="onSubmit" class="form">
+      <p class="hint">
+        Enter the email on your account and we'll send you a one-time sign-in link.
+      </p>
       <label>
         Email
         <input v-model="form.email" type="email" required autocomplete="email" />
       </label>
-      <label>
-        Password
-        <input v-model="form.passcode" type="password" required autocomplete="current-password" />
-      </label>
       <p v-if="error" class="error">{{ error }}</p>
       <button type="submit" :disabled="submitting">
-        {{ submitting ? 'Signing in…' : 'Sign in' }}
+        {{ submitting ? 'Sending link…' : 'Email me a sign-in link' }}
       </button>
       <p class="alt">No account? <router-link to="/register">Register</router-link></p>
     </form>
@@ -61,6 +74,11 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+.hint {
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin: 0 0 0.5rem;
 }
 label {
   display: flex;
@@ -96,5 +114,19 @@ button:disabled {
   font-size: 0.9rem;
   text-align: center;
   margin: 0;
+}
+.confirm {
+  padding: 1rem;
+  border: 1px solid #c6f6d5;
+  background: #f0fff4;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #22543d;
+}
+.confirm p {
+  margin: 0 0 0.5rem;
+}
+.confirm p:last-child {
+  margin: 0.75rem 0 0;
 }
 </style>

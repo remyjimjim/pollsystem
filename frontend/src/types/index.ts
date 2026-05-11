@@ -28,6 +28,7 @@ export interface User {
   zipcode: string
   access: AccessLevel
   isEnabled: boolean
+  paidUntil: string | null
 }
 
 export interface RoleAssignment {
@@ -188,20 +189,19 @@ export interface PollSearchFilters {
   creatorName?: string
 }
 
-// Auth Types
-export interface LoginRequest {
+// Auth Types — magic-link sign-in (no passwords)
+// phone + zipcode are only required when registering a new email.
+export interface MagicLinkRequest {
   email: string
-  passcode: string
+  phone?: string
+  zipcode?: string
+}
+
+export interface MagicLinkRedeemRequest {
+  token: string
 }
 
 export interface AuthResponse {
   token: string
   user: User
-}
-
-export interface RegisterRequest {
-  email: string
-  phone: string
-  zipcode: string
-  passcode: string
 }

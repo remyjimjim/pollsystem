@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import axios from 'axios'
-import type { User, LoginRequest, RegisterRequest, AuthResponse, AccessLevel } from '@/types'
+import type { User, MagicLinkRequest, AuthResponse, AccessLevel } from '@/types'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
@@ -22,16 +22,24 @@ export const useAuthStore = defineStore('auth', () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
   }
 
-  async function login(credentials: LoginRequest): Promise<void> {
-    const response = await axios.post<AuthResponse>('/api/auth/login', credentials)
-    token.value = response.data.token
-    user.value = response.data.user
-    localStorage.setItem('token', response.data.token)
-    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
+  /**
+   * Request a magic-link sign-in. Backend creates the user if email is new
+   * (formatting-validated phone + zipcode) and emails a one-shot token.
+   * Returns 202 regardless of whether the email pre-existed.
+   */
+  async function requestMagicLink(data: MagicLinkRequest): Promise<void> {
+    await axios.post('/api/auth/magic-link/request', data)
   }
 
-  async function register(data: RegisterRequest): Promise<void> {
-    const response = await axios.post<AuthResponse>('/api/auth/register', data)
+  /**
+   * Redeem the token from the magic-link URL. On success, store the JWT and
+   * load the user; subsequent /api calls are authenticated.
+   */
+  async function redeemMagicLink(rawToken: string): Promise<void> {
+    const response = await axios.post<AuthResponse>(
+      '/api/auth/magic-link/redeem',
+      { token: rawToken }
+    )
     token.value = response.data.token
     user.value = response.data.user
     localStorage.setItem('token', response.data.token)
@@ -60,8 +68,8 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     isAuthenticated,
     hasAccess,
-    login,
-    register,
+    requestMagicLink,
+    redeemMagicLink,
     fetchUser,
     logout
   }

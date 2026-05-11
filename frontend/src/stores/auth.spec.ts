@@ -14,7 +14,8 @@ function makeUser(access: AccessLevel = AccessLevel.USER): User {
     phone: '+15551234567',
     zipcode: '90001',
     access,
-    isEnabled: true
+    isEnabled: true,
+    paidUntil: null
   }
 }
 
@@ -37,13 +38,13 @@ describe('useAuthStore', () => {
       expect(auth.isAuthenticated).toBe(false)
     })
 
-    it('is true after a successful login', async () => {
+    it('is true after a successful magic-link redeem', async () => {
       mockedAxios.post.mockResolvedValueOnce({
         data: { token: 'tok', user: makeUser() }
       })
 
       const auth = useAuthStore()
-      await auth.login({ email: 'alice@test.local', passcode: 'password123' })
+      await auth.redeemMagicLink('raw-token')
 
       expect(auth.isAuthenticated).toBe(true)
       expect(auth.user?.email).toBe('alice@test.local')
@@ -70,28 +71,59 @@ describe('useAuthStore', () => {
         data: { token: 'tok', user: makeUser(userLevel) }
       })
       const auth = useAuthStore()
-      await auth.login({ email: 'x@x', passcode: 'pw' })
+      await auth.redeemMagicLink('raw')
       expect(auth.hasAccess(required)).toBe(expected)
     })
   })
 
-  describe('login', () => {
+  describe('requestMagicLink', () => {
+    it('POSTs to the magic-link request endpoint', async () => {
+      mockedAxios.post.mockResolvedValueOnce({ status: 202, data: {} })
+      const auth = useAuthStore()
+      await auth.requestMagicLink({
+        email: 'alice@test.local',
+        phone: '+15551234567',
+        zipcode: '90001'
+      })
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        '/api/auth/magic-link/request',
+        { email: 'alice@test.local', phone: '+15551234567', zipcode: '90001' }
+      )
+      // Issuing a link does not authenticate the user.
+      expect(auth.isAuthenticated).toBe(false)
+      expect(localStorage.getItem('token')).toBeNull()
+    })
+
+    it('propagates server errors', async () => {
+      mockedAxios.post.mockRejectedValueOnce(new Error('409'))
+      const auth = useAuthStore()
+      await expect(
+        auth.requestMagicLink({ email: 'a@b' })
+      ).rejects.toThrow()
+    })
+  })
+
+  describe('redeemMagicLink', () => {
     it('persists token to localStorage and sets the Authorization header', async () => {
       mockedAxios.post.mockResolvedValueOnce({
         data: { token: 'tok-123', user: makeUser() }
       })
 
       const auth = useAuthStore()
-      await auth.login({ email: 'a@b', passcode: 'pw' })
+      await auth.redeemMagicLink('raw-token')
 
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        '/api/auth/magic-link/redeem',
+        { token: 'raw-token' }
+      )
       expect(localStorage.getItem('token')).toBe('tok-123')
       expect(mockedAxios.defaults.headers.common['Authorization']).toBe('Bearer tok-123')
     })
 
-    it('propagates server errors', async () => {
+    it('propagates server errors and leaves state unauthenticated', async () => {
       mockedAxios.post.mockRejectedValueOnce(new Error('401'))
       const auth = useAuthStore()
-      await expect(auth.login({ email: 'a@b', passcode: 'wrong' })).rejects.toThrow()
+      await expect(auth.redeemMagicLink('expired')).rejects.toThrow()
       expect(auth.isAuthenticated).toBe(false)
       expect(localStorage.getItem('token')).toBeNull()
     })
@@ -103,7 +135,7 @@ describe('useAuthStore', () => {
         data: { token: 'tok', user: makeUser() }
       })
       const auth = useAuthStore()
-      await auth.login({ email: 'a@b', passcode: 'pw' })
+      await auth.redeemMagicLink('raw')
       expect(auth.isAuthenticated).toBe(true)
 
       auth.logout()

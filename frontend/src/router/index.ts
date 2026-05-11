@@ -21,6 +21,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/RegisterView.vue')
   },
   {
+    // Redemption landing page — Mailpit/SendGrid magic-link URLs point here.
+    path: '/auth/magic-link',
+    name: 'MagicLink',
+    component: () => import('@/views/MagicLinkView.vue')
+  },
+  {
     path: '/polls/:type/:id/results',
     name: 'PollResults',
     component: () => import('@/views/PollResultsView.vue')

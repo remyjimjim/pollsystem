@@ -4,9 +4,8 @@ import { createTestingPinia } from '@pinia/testing'
 import { useAuthStore } from '@/stores/auth'
 import LoginView from './LoginView.vue'
 
-const push = vi.fn()
 vi.mock('vue-router', () => ({
-  useRouter: () => ({ push }),
+  useRouter: () => ({ push: vi.fn() }),
   useRoute: () => ({ query: {} })
 }))
 
@@ -19,73 +18,49 @@ function mountLogin() {
   })
 }
 
-describe('LoginView', () => {
+describe('LoginView (magic-link)', () => {
   beforeEach(() => {
-    push.mockClear()
+    vi.clearAllMocks()
   })
   afterEach(() => {
     vi.restoreAllMocks()
   })
 
-  it('submits credentials to the auth store and redirects on success', async () => {
+  it('calls requestMagicLink with the entered email and shows a confirmation', async () => {
     const wrapper = mountLogin()
     const auth = useAuthStore()
-    // createTestingPinia stubs actions; default mock returns undefined (resolves)
+    // createTestingPinia stubs actions; default returns undefined (resolves)
 
     await wrapper.find('input[type="email"]').setValue('alice@test.local')
-    await wrapper.find('input[type="password"]').setValue('password123')
     await wrapper.find('form').trigger('submit.prevent')
     await flushPromises()
 
-    expect(auth.login).toHaveBeenCalledWith({
-      email: 'alice@test.local',
-      passcode: 'password123'
-    })
-    expect(push).toHaveBeenCalledWith('/')
+    expect(auth.requestMagicLink).toHaveBeenCalledWith({ email: 'alice@test.local' })
+    expect(wrapper.text()).toContain('Check your email')
+    expect(wrapper.text()).toContain('alice@test.local')
   })
 
-  it('redirects to the ?redirect query param when present', async () => {
-    // Override the route mock for this test only
-    const routerMock = await import('vue-router')
-    vi.spyOn(routerMock, 'useRoute').mockReturnValue(
-      { query: { redirect: '/creator/dashboard' } } as never
-    )
-
-    const wrapper = mountLogin()
-    await wrapper.find('input[type="email"]').setValue('a@b')
-    await wrapper.find('input[type="password"]').setValue('pw')
-    await wrapper.find('form').trigger('submit.prevent')
-    await flushPromises()
-
-    expect(push).toHaveBeenCalledWith('/creator/dashboard')
-  })
-
-  it('shows an error message when login throws', async () => {
+  it('shows a "no account" message when the backend returns 400', async () => {
     const wrapper = mountLogin()
     const auth = useAuthStore()
-    vi.mocked(auth.login).mockRejectedValueOnce({
-      response: { data: { message: 'Invalid email or password' } }
-    })
+    vi.mocked(auth.requestMagicLink).mockRejectedValueOnce({ response: { status: 400 } })
 
-    await wrapper.find('input[type="email"]').setValue('a@b')
-    await wrapper.find('input[type="password"]').setValue('wrong')
+    await wrapper.find('input[type="email"]').setValue('nobody@test.local')
     await wrapper.find('form').trigger('submit.prevent')
     await flushPromises()
 
-    expect(wrapper.text()).toContain('Invalid email or password')
-    expect(push).not.toHaveBeenCalled()
+    expect(wrapper.text()).toContain("don't have an account for that email")
   })
 
-  it('falls back to a generic message when the server response has no body', async () => {
+  it('falls back to a generic message on other errors', async () => {
     const wrapper = mountLogin()
     const auth = useAuthStore()
-    vi.mocked(auth.login).mockRejectedValueOnce(new Error('network'))
+    vi.mocked(auth.requestMagicLink).mockRejectedValueOnce(new Error('network'))
 
     await wrapper.find('input[type="email"]').setValue('a@b')
-    await wrapper.find('input[type="password"]').setValue('pw')
     await wrapper.find('form').trigger('submit.prevent')
     await flushPromises()
 
-    expect(wrapper.text()).toContain('Invalid email or password')
+    expect(wrapper.text()).toContain('Could not send the sign-in link')
   })
 })
