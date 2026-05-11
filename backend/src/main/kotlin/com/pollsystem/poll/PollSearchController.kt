@@ -2,6 +2,7 @@ package com.pollsystem.poll
 
 import com.pollsystem.repository.BallotMeasureRepository
 import com.pollsystem.repository.CandidateRepository
+import com.pollsystem.repository.CountyZipsRepository
 import com.pollsystem.repository.ElectionRepository
 import com.pollsystem.repository.QuestionnaireDomainRepository
 import com.pollsystem.repository.QuestionnaireRepository
@@ -11,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
 
+/** A zipcode paired with its 2-letter state initial. */
+data class ZipState(val code: String, val state: String)
+
 data class PollSearchResult(
     val id: Long,
     val type: String,
     val title: String,
     val creatorEmail: String,
     val closeDate: Instant?,
-    val zipcodes: List<String>
+    val zipcodes: List<ZipState>
 )
 
 @RestController
@@ -27,7 +31,8 @@ class PollSearchController(
     private val domains: QuestionnaireDomainRepository,
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
-    private val candidates: CandidateRepository
+    private val candidates: CandidateRepository,
+    private val countyZips: CountyZipsRepository
 ) {
 
     @GetMapping
@@ -54,15 +59,18 @@ class PollSearchController(
             for (q in questionnaires.findActive(now)) {
                 if (!matches(q.title, title)) continue
                 if (!matches(q.creator.email, creatorEmail)) continue
-                val zips = domains.findByQuestionnaireId(q.id).map { it.zipcode }.distinct().sorted()
-                if (zipcode != null && zipcode !in zips) continue
+                val zipStates = domains.findByQuestionnaireId(q.id)
+                    .map { ZipState(it.zipcode, it.state.initial) }
+                    .distinctBy { it.code }
+                    .sortedBy { it.code }
+                if (zipcode != null && zipStates.none { it.code == zipcode }) continue
                 results += PollSearchResult(
                     id = q.id,
                     type = "Questionnaire",
                     title = q.title,
                     creatorEmail = q.creator.email,
                     closeDate = q.closeDate,
-                    zipcodes = zips
+                    zipcodes = zipStates
                 )
             }
         }
@@ -79,7 +87,7 @@ class PollSearchController(
                     title = e.title,
                     creatorEmail = e.creator.email,
                     closeDate = e.closeDate,
-                    zipcodes = listOf(e.zipcode)
+                    zipcodes = listOf(ZipState(e.zipcode, lookupState(e.zipcode)))
                 )
             }
         }
@@ -98,7 +106,7 @@ class PollSearchController(
                     title = bm.title,
                     creatorEmail = bm.creator.email,
                     closeDate = bm.closeDate,
-                    zipcodes = listOf(zip)
+                    zipcodes = listOf(ZipState(zip, lookupState(zip)))
                 )
             }
         }
@@ -107,6 +115,14 @@ class PollSearchController(
             compareBy({ it.closeDate ?: Instant.MAX }, { it.title })
         )
     }
+
+    /**
+     * Resolves a 5-digit zip to its state initial via the seeded county_zips
+     * table. Returns "??" if no match — shouldn't happen for any poll that
+     * was created through our forms, but the column is non-null in the DTO.
+     */
+    private fun lookupState(zip: String): String =
+        countyZips.findByZipcode(zip).firstOrNull()?.county?.state?.initial ?: "??"
 
     private fun matches(field: String, query: String?): Boolean =
         query.isNullOrBlank() || field.contains(query, ignoreCase = true)
