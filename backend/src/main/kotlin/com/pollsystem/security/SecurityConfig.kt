@@ -1,5 +1,6 @@
 package com.pollsystem.security
 
+import jakarta.servlet.DispatcherType
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -44,6 +45,11 @@ class SecurityConfig(
                 it.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
             }
             .authorizeHttpRequests {
+                // Spring Security 6 reapplies the filter chain to internal
+                // ERROR/FORWARD dispatches, which overwrites the controller's
+                // real status (e.g. 409) with a 401. Permit those dispatch
+                // types so error responses surface unchanged.
+                it.dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.FORWARD).permitAll()
                 it.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 it.requestMatchers(
                     "/api/auth/magic-link/**",
