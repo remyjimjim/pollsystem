@@ -13,7 +13,6 @@ interface PollSearchResult {
   id: number
   type: 'Questionnaire' | 'Election' | 'BallotMeasure'
   title: string
-  creatorEmail: string
   closeDate: string | null
   zipcodes: ZipState[]
 }
@@ -51,7 +50,6 @@ onBeforeUnmount(() => {
 const filters = reactive({
   title: '',
   zipcode: '',
-  creatorEmail: '',
   candidateName: '',
   type: ''
 })
@@ -77,7 +75,6 @@ async function search() {
     const params: Record<string, string> = {}
     if (filters.title.trim()) params.title = filters.title.trim()
     if (filters.zipcode.trim()) params.zipcode = filters.zipcode.trim()
-    if (filters.creatorEmail.trim()) params.creatorEmail = filters.creatorEmail.trim()
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
     if (filters.type) params.type = filters.type
     const res = await axios.get<PollSearchResult[]>('/api/polls/search', { params })
@@ -125,14 +122,6 @@ async function search() {
         />
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        Creator email
-        <input
-          v-model="filters.creatorEmail"
-          type="text"
-          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
-        />
-      </label>
-      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         Candidate name (Election only)
         <input
           v-model="filters.candidateName"
@@ -172,7 +161,6 @@ async function search() {
         <tr class="bg-slate-50 text-left">
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Title</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Type</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Creator</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Zipcodes</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Closes</th>
           <th class="border-b border-slate-200 p-2"></th>
@@ -182,7 +170,6 @@ async function search() {
         <tr v-for="r in results" :key="`${r.type}-${r.id}`">
           <td class="border-b border-slate-100 p-2">{{ r.title }}</td>
           <td class="border-b border-slate-100 p-2">{{ r.type }}</td>
-          <td class="border-b border-slate-100 p-2">{{ r.creatorEmail }}</td>
           <td class="border-b border-slate-100 p-2 font-mono text-xs">
             <template v-if="r.zipcodes.length === 0">—</template>
             <template v-else-if="r.zipcodes.length === 1">
