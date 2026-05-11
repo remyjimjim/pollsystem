@@ -94,6 +94,12 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, minAccess: AccessLevel.ADMIN }
   },
   {
+    path: '/admin/creator-requests/:id',
+    name: 'CreatorRequestDetail',
+    component: () => import('@/views/admin/CreatorRequestDetailView.vue'),
+    meta: { requiresAuth: true, minAccess: AccessLevel.ADMIN }
+  },
+  {
     path: '/admin/manage-creators',
     name: 'ManageCreators',
     component: () => import('@/views/admin/ManageCreatorsView.vue'),

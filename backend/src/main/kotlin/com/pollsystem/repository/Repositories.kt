@@ -67,10 +67,32 @@ interface CreatorRequestRepository : JpaRepository<CreatorRequest, Long> {
     fun findByAssignedAdminAndStatus(admin: User, status: RequestStatus): List<CreatorRequest>
     fun findByUserId(userId: Long): List<CreatorRequest>
     fun countByAssignedAdminAndStatus(admin: User, status: RequestStatus): Long
+    fun countByStatus(status: RequestStatus): Long
+
+    /** Recent decisions made by `admin`, newest first. Used by the admin audit log. */
+    @Query("""
+        SELECT cr FROM CreatorRequest cr
+        WHERE cr.processedBy = :admin
+        AND cr.status <> 'PENDING'
+        ORDER BY cr.processedAt DESC
+    """)
+    fun findRecentDecisionsBy(
+        @Param("admin") admin: User,
+        pageable: org.springframework.data.domain.Pageable
+    ): List<CreatorRequest>
+
+    /** Per-admin pending counts, used by the Super admin-workload view. */
+    @Query("""
+        SELECT cr.assignedAdmin.id AS adminId, COUNT(cr.id) AS pending
+        FROM CreatorRequest cr
+        WHERE cr.status = 'PENDING' AND cr.assignedAdmin IS NOT NULL
+        GROUP BY cr.assignedAdmin.id
+    """)
+    fun pendingCountsByAdmin(): List<Array<Any>>
 
     @Query("""
-        SELECT cr FROM CreatorRequest cr 
-        WHERE cr.status = 'PENDING' 
+        SELECT cr FROM CreatorRequest cr
+        WHERE cr.status = 'PENDING'
         AND cr.submittedAt < :threshold
     """)
     fun findStaleRequests(@Param("threshold") threshold: java.time.Instant): List<CreatorRequest>

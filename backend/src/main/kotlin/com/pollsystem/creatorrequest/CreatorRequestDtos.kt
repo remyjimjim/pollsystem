@@ -22,7 +22,8 @@ data class CreatorRequestDto(
     val zipcodes: List<String>,
     val pollTypeIds: List<Long>,
     val submittedAt: Instant,
-    val processedAt: Instant?
+    val processedAt: Instant?,
+    val processedByEmail: String?
 ) {
     companion object {
         fun from(
@@ -39,7 +40,8 @@ data class CreatorRequestDto(
             zipcodes = zipcodes,
             pollTypeIds = pollTypeIds,
             submittedAt = req.submittedAt,
-            processedAt = req.processedAt
+            processedAt = req.processedAt,
+            processedByEmail = req.processedBy?.email
         )
     }
 }

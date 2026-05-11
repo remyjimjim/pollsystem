@@ -120,14 +120,18 @@ class CreatorRequestService(
     }
 
     @Transactional
-    fun batchApprove(requestIds: List<Long>): List<CreatorRequest> =
-        decide(requestIds, RequestStatus.APPROVED)
+    fun batchApprove(requestIds: List<Long>, decidedBy: User): List<CreatorRequest> =
+        decide(requestIds, RequestStatus.APPROVED, decidedBy)
 
     @Transactional
-    fun batchReject(requestIds: List<Long>): List<CreatorRequest> =
-        decide(requestIds, RequestStatus.REJECTED)
+    fun batchReject(requestIds: List<Long>, decidedBy: User): List<CreatorRequest> =
+        decide(requestIds, RequestStatus.REJECTED, decidedBy)
 
-    private fun decide(requestIds: List<Long>, decision: RequestStatus): List<CreatorRequest> {
+    private fun decide(
+        requestIds: List<Long>,
+        decision: RequestStatus,
+        decidedBy: User
+    ): List<CreatorRequest> {
         val now = Instant.now()
         val targets = creatorRequests.findAllById(requestIds.distinct())
             .filter { it.status == RequestStatus.PENDING }
@@ -140,7 +144,7 @@ class CreatorRequestService(
         val results = mutableListOf<CreatorRequest>()
         for (req in targets) {
             val updated = creatorRequests.save(
-                req.copy(status = decision, processedAt = now)
+                req.copy(status = decision, processedAt = now, processedBy = decidedBy)
             )
             val rows = rowsByRequest[req.id].orEmpty()
             if (decision == RequestStatus.APPROVED) {

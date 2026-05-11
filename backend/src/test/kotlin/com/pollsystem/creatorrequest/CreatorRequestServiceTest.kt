@@ -59,11 +59,12 @@ class CreatorRequestServiceTest : AbstractIntegrationTest() {
             )
         )
 
-        service.batchApprove(listOf(req.id))
+        service.batchApprove(listOf(req.id), admin)
 
         val updated = creatorRequests.findById(req.id).orElseThrow()
         assertThat(updated.status).isEqualTo(RequestStatus.APPROVED)
         assertThat(updated.processedAt).isNotNull
+        assertThat(updated.processedBy?.id).isEqualTo(admin.id)
 
         val rows = roleAssignments.findByCreatorRequestId(req.id)
         assertThat(rows).allMatch { it.enabled }
@@ -87,10 +88,11 @@ class CreatorRequestServiceTest : AbstractIntegrationTest() {
             )
         )
 
-        service.batchReject(listOf(req.id))
+        service.batchReject(listOf(req.id), admin)
 
         val updated = creatorRequests.findById(req.id).orElseThrow()
         assertThat(updated.status).isEqualTo(RequestStatus.REJECTED)
+        assertThat(updated.processedBy?.id).isEqualTo(admin.id)
 
         val rows = roleAssignments.findByCreatorRequestId(req.id)
         assertThat(rows).allMatch { !it.enabled }

@@ -32,5 +32,9 @@ data class CreatorRequest(
     val submittedAt: Instant = Instant.now(),
 
     @Column(name = "processed_at")
-    val processedAt: Instant? = null
+    val processedAt: Instant? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "processed_by_id")
+    val processedBy: User? = null
 )
