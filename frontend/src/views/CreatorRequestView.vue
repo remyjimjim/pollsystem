@@ -36,10 +36,6 @@ async function onSubmit() {
     error.value = 'Select at least one zipcode'
     return
   }
-  if (reason.value.trim().length === 0) {
-    error.value = 'Reason is required'
-    return
-  }
   submitting.value = true
   try {
     await axios.post('/api/creator-requests', {
@@ -98,7 +94,7 @@ async function onSubmit() {
       </fieldset>
 
       <fieldset class="rounded-md border border-slate-200 p-4">
-        <legend class="px-2 text-sm font-semibold text-slate-700">Reason</legend>
+        <legend class="px-2 text-sm font-semibold text-slate-700">Reason (optional)</legend>
         <textarea
           v-model="reason"
           rows="5"

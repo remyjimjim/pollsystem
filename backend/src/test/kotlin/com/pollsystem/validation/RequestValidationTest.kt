@@ -109,8 +109,7 @@ class RequestValidationTest : AbstractIntegrationTest() {
         case("missing pollTypeIds", validCreatorRequest()) { it.remove("pollTypeIds") },
         case("empty zipcodes",     validCreatorRequest()) { it["zipcodes"] = emptyList<String>() },
         case("missing zipcodes",   validCreatorRequest()) { it.remove("zipcodes") },
-        case("blank reason",       validCreatorRequest()) { it["reason"] = "" },
-        case("missing reason",     validCreatorRequest()) { it.remove("reason") },
+        // Reason is optional now; only "too long" remains a 400.
         case("reason too long",    validCreatorRequest()) { it["reason"] = "x".repeat(2001) }
     )
 

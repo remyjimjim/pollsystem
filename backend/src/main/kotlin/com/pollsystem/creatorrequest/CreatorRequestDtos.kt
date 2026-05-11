@@ -2,7 +2,6 @@ package com.pollsystem.creatorrequest
 
 import com.pollsystem.model.CreatorRequest
 import com.pollsystem.model.RequestStatus
-import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
 import java.time.Instant
@@ -10,7 +9,7 @@ import java.time.Instant
 data class SubmitCreatorRequest(
     @field:NotEmpty val pollTypeIds: List<Long>,
     @field:NotEmpty val zipcodes: List<String>,
-    @field:NotBlank @field:Size(max = 2000) val reason: String
+    @field:Size(max = 2000) val reason: String = ""
 )
 
 data class CreatorRequestDto(
