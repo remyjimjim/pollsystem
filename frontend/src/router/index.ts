@@ -167,8 +167,15 @@ const accessHierarchy: Record<AccessLevel, number> = {
 }
 
 // Navigation guard for auth and role checking
-router.beforeEach((to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
+
+  // On a hard refresh, the token is rehydrated from localStorage but the
+  // user object isn't — fetch it before deciding, otherwise isAuthenticated
+  // is false on the very first navigation and the guard bounces to /login.
+  if (authStore.token && !authStore.user) {
+    await authStore.fetchUser()
+  }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'Login', query: { redirect: to.fullPath } })
