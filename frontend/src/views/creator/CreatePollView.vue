@@ -38,29 +38,32 @@ function reset() {
 </script>
 
 <template>
-  <div class="view">
-    <h1>Create New Poll</h1>
+  <div class="mx-auto max-w-3xl py-8">
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Create New Poll</h1>
 
-    <p v-if="error" class="error">{{ error }}</p>
+    <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
 
     <section v-if="!selected">
-      <h2>Choose a poll type</h2>
-      <div class="cards">
+      <h2 class="mb-3 text-lg font-semibold text-slate-700">Choose a poll type</h2>
+      <div class="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
         <button
           v-for="pt in pollTypes"
           :key="pt.id"
-          class="card"
           @click="pickType(pt)"
+          class="rounded-lg border-2 border-slate-200 bg-white px-4 py-6 transition-colors hover:border-slate-800"
         >
-          <strong>{{ pt.name }}</strong>
+          <strong class="font-semibold text-slate-800">{{ pt.name }}</strong>
         </button>
       </div>
     </section>
 
     <section v-else>
-      <div class="header-row">
-        <h2>{{ selected.name }}</h2>
-        <button @click="reset" class="link">Change type</button>
+      <div class="mb-4 flex items-center justify-between">
+        <h2 class="m-0 text-lg font-semibold text-slate-700">{{ selected.name }}</h2>
+        <button
+          @click="reset"
+          class="text-sm text-slate-800 underline"
+        >Change type</button>
       </div>
 
       <QuestionnaireForm
@@ -78,70 +81,11 @@ function reset() {
         :poll-type-id="selected.id"
       />
 
-      <div v-else class="todo">
-        <p>The <strong>{{ selected.name }}</strong> form is not implemented yet.</p>
+      <div v-else class="rounded-md border border-orange-400 bg-orange-50 p-4">
+        <p class="m-0 text-sm text-slate-700">
+          The <strong class="font-semibold">{{ selected.name }}</strong> form is not implemented yet.
+        </p>
       </div>
     </section>
   </div>
 </template>
-
-<style scoped>
-.view {
-  padding: 2rem 0;
-  max-width: 720px;
-  margin: 0 auto;
-}
-h1 {
-  margin-bottom: 1rem;
-  color: #1a365d;
-}
-h2 {
-  color: #2d3748;
-  margin-bottom: 0.75rem;
-}
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0.75rem;
-}
-.card {
-  padding: 1.5rem 1rem;
-  background: white;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: border-color 120ms;
-}
-.card:hover {
-  border-color: #1a365d;
-}
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-.link {
-  background: none;
-  border: none;
-  color: #1a365d;
-  cursor: pointer;
-  text-decoration: underline;
-  font-size: 0.9rem;
-}
-.todo {
-  padding: 1rem;
-  background: #fffaf0;
-  border: 1px solid #ed8936;
-  border-radius: 6px;
-}
-.todo code {
-  background: white;
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
-  font-size: 0.85rem;
-}
-.error {
-  color: #c53030;
-}
-</style>

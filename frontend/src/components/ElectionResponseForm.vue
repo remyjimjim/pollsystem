@@ -47,7 +47,6 @@ const error = ref<string | null>(null)
 const closedReason = ref<string | null>(null)
 const message = ref<string | null>(null)
 
-// Per-candidate model: response is null until user picks; comment optional
 const answers = reactive<Record<number, { response: boolean | null; comment: string }>>({})
 
 type Mode = 'fresh' | 'editing' | 'readonly' | 'choosing'
@@ -127,7 +126,6 @@ async function submit() {
   }
 }
 
-// Group candidates by office for nicer display
 const groupedByOffice = computed(() => {
   const map = new Map<string, CandidateDto[]>()
   for (const c of election.value?.candidates ?? []) {
@@ -142,17 +140,22 @@ onMounted(load)
 </script>
 
 <template>
-  <div v-if="loading">Loading…</div>
-  <div v-else-if="error" class="error">{{ error }}</div>
-  <div v-else-if="closedReason" class="notice">
-    <p>{{ closedReason }}</p>
-    <router-link :to="`/polls/election/${props.id}/results`">View results</router-link>
+  <div v-if="loading" class="text-sm text-slate-600">Loading…</div>
+  <div v-else-if="error" class="text-sm text-red-700">{{ error }}</div>
+  <div v-else-if="closedReason" class="rounded-md border border-orange-400 bg-orange-50 p-4">
+    <p class="mb-2 text-sm text-orange-900">{{ closedReason }}</p>
+    <router-link
+      :to="`/polls/election/${props.id}/results`"
+      class="text-sm font-semibold text-slate-800 underline"
+    >
+      View results
+    </router-link>
   </div>
 
-  <div v-else-if="election" class="form">
-    <header>
-      <h2>{{ election.title }}</h2>
-      <p class="hint">
+  <div v-else-if="election" class="flex flex-col gap-4">
+    <header class="mb-2">
+      <h2 class="mb-1 text-xl font-semibold text-slate-800">{{ election.title }}</h2>
+      <p class="m-0 text-sm text-slate-500">
         Election date: {{ new Date(election.date).toLocaleDateString() }}
         · Zipcode {{ election.zipcode }}
         <template v-if="election.closeDate">
@@ -161,19 +164,28 @@ onMounted(load)
       </p>
     </header>
 
-    <div v-if="mode === 'choosing' && mine" class="prompt">
-      <p>
+    <div v-if="mode === 'choosing' && mine" class="rounded-md border border-sky-300 bg-sky-50 p-4">
+      <p class="mb-2 text-sm text-slate-700">
         You voted on
-        <strong>{{ new Date(mine.firstSubmittedAt!).toLocaleDateString() }}</strong>.
+        <strong class="font-semibold">{{ new Date(mine.firstSubmittedAt!).toLocaleDateString() }}</strong>.
         Would you like to change your responses?
       </p>
-      <div class="row">
-        <button @click="chooseEdit" class="primary">Yes, edit</button>
-        <button @click="chooseReadonly">No, just review</button>
+      <div class="flex gap-2">
+        <button
+          @click="chooseEdit"
+          class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900"
+        >Yes, edit</button>
+        <button
+          @click="chooseReadonly"
+          class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50"
+        >No, just review</button>
       </div>
     </div>
 
-    <div v-if="mode === 'readonly'" class="readonly-banner">
+    <div
+      v-if="mode === 'readonly'"
+      class="rounded-md border border-slate-300 bg-slate-50 p-3 text-sm text-slate-600"
+    >
       Your previous votes are shown below. They cannot be modified here.
     </div>
 
@@ -181,19 +193,24 @@ onMounted(load)
       v-for="[officeName, group] in groupedByOffice"
       :key="officeName"
       :disabled="mode === 'readonly'"
+      class="rounded-md border border-slate-200 p-4 disabled:opacity-90"
     >
-      <legend>{{ officeName }}</legend>
-      <div v-for="c in group" :key="c.id" class="candidate">
-        <div class="candidate-info">
-          <strong>{{ c.name }}</strong>
-          <span class="affiliation">{{ c.affiliation }}</span>
+      <legend class="px-2 text-sm font-semibold text-slate-700">{{ officeName }}</legend>
+      <div
+        v-for="c in group"
+        :key="c.id"
+        class="grid grid-cols-[2fr_1fr] gap-2 border-b border-slate-100 py-2 last:border-b-0"
+      >
+        <div class="flex flex-col">
+          <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
+          <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
         </div>
-        <div class="vote">
-          <label class="vote-option">
+        <div class="flex gap-3">
+          <label class="flex items-center gap-1 text-sm">
             <input type="radio" :name="`c-${c.id}`" :value="true" v-model="answers[c.id].response" />
             Yes
           </label>
-          <label class="vote-option">
+          <label class="flex items-center gap-1 text-sm">
             <input type="radio" :name="`c-${c.id}`" :value="false" v-model="answers[c.id].response" />
             No
           </label>
@@ -202,98 +219,21 @@ onMounted(load)
           v-model="answers[c.id].comment"
           type="text"
           placeholder="Comment (optional)"
-          class="comment"
+          class="col-span-2 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
         />
       </div>
     </fieldset>
 
-    <p v-if="message" class="success">{{ message }}</p>
+    <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
 
-    <div v-if="mode !== 'readonly' && mode !== 'choosing'" class="row">
-      <button @click="submit" :disabled="submitting" class="primary">
+    <div v-if="mode !== 'readonly' && mode !== 'choosing'" class="flex gap-2">
+      <button
+        @click="submit"
+        :disabled="submitting"
+        class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         {{ submitting ? 'Submitting…' : (mine?.hasResponses ? 'Update votes' : 'Submit votes') }}
       </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.form { display: flex; flex-direction: column; gap: 1rem; }
-header { margin-bottom: 0.5rem; }
-h2 { color: #1a365d; margin: 0 0 0.5rem; }
-.hint { color: #718096; font-size: 0.85rem; margin: 0; }
-.prompt {
-  background: #ebf8ff;
-  border: 1px solid #4299e1;
-  padding: 1rem;
-  border-radius: 6px;
-}
-.readonly-banner {
-  background: #f7fafc;
-  border: 1px solid #cbd5e0;
-  padding: 0.75rem;
-  border-radius: 6px;
-  color: #4a5568;
-}
-.notice {
-  background: #fffaf0;
-  border: 1px solid #ed8936;
-  padding: 1rem;
-  border-radius: 6px;
-}
-fieldset {
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 1rem;
-}
-legend {
-  padding: 0 0.5rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-.candidate {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #edf2f7;
-}
-.candidate:last-child { border-bottom: none; }
-.candidate-info {
-  display: flex;
-  flex-direction: column;
-}
-.affiliation { color: #4a5568; font-size: 0.85rem; }
-.vote { display: flex; gap: 0.75rem; }
-.vote-option {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-weight: 400;
-  font-size: 0.9rem;
-}
-.comment {
-  grid-column: 1 / -1;
-  padding: 0.4rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-  font: inherit;
-  font-size: 0.85rem;
-}
-.row { display: flex; gap: 0.5rem; }
-button {
-  padding: 0.5rem 1rem;
-  border: 1px solid #cbd5e0;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button.primary {
-  background: #1a365d;
-  color: white;
-  border-color: #1a365d;
-}
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-.error { color: #c53030; }
-.success { color: #2f855a; }
-</style>

@@ -70,87 +70,56 @@ onMounted(load)
 </script>
 
 <template>
-  <div class="view">
-    <h1>Poll Type Templates</h1>
-    <p class="lead">
+  <div class="mx-auto max-w-4xl py-8">
+    <h1 class="mb-2 text-2xl font-semibold text-slate-800">Poll Type Templates</h1>
+    <p class="mb-6 text-sm text-slate-600">
       Edit the JSON template that defines what fields each poll type expects.
       Validation in the backend services is currently imperative — these templates
       are advisory until a schema-driven validator is wired up.
     </p>
 
-    <article v-for="t in types" :key="t.id" class="card">
-      <header>
-        <strong>{{ t.name }}</strong>
-        <span class="muted">id={{ t.id }}, code={{ t.pollType }}</span>
-        <span class="spacer" />
-        <button v-if="editing !== t.id" @click="startEdit(t)" class="primary">Edit</button>
+    <article
+      v-for="t in types"
+      :key="t.id"
+      class="mb-4 rounded-md border border-slate-200 p-4"
+    >
+      <header class="mb-2 flex items-center gap-2">
+        <strong class="font-semibold text-slate-800">{{ t.name }}</strong>
+        <span class="text-sm text-slate-500">id={{ t.id }}, code={{ t.pollType }}</span>
+        <span class="flex-1" />
+        <button
+          v-if="editing !== t.id"
+          @click="startEdit(t)"
+          class="rounded bg-slate-800 px-3 py-1.5 text-sm text-white hover:bg-slate-900"
+        >Edit</button>
       </header>
 
-      <pre v-if="editing !== t.id" class="json">{{ JSON.stringify(t.template, null, 2) }}</pre>
+      <pre
+        v-if="editing !== t.id"
+        class="m-0 overflow-auto rounded bg-slate-900 p-3 text-xs text-slate-50"
+      >{{ JSON.stringify(t.template, null, 2) }}</pre>
 
-      <div v-else class="editor">
-        <textarea v-model="drafts[t.id]" rows="20" spellcheck="false" />
-        <p v-if="errors[t.id]" class="error">{{ errors[t.id] }}</p>
-        <div class="row">
-          <button @click="save(t)" class="primary">Save</button>
-          <button @click="cancel(t)">Cancel</button>
+      <div v-else class="flex flex-col gap-2">
+        <textarea
+          v-model="drafts[t.id]"
+          rows="20"
+          spellcheck="false"
+          class="resize-y rounded border border-slate-300 p-2 font-mono text-xs focus:border-slate-500 focus:outline-none"
+        />
+        <p v-if="errors[t.id]" class="m-0 text-sm text-red-700">{{ errors[t.id] }}</p>
+        <div class="flex gap-2">
+          <button
+            @click="save(t)"
+            class="rounded bg-slate-800 px-3 py-1.5 text-sm text-white hover:bg-slate-900"
+          >Save</button>
+          <button
+            @click="cancel(t)"
+            class="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm hover:bg-slate-50"
+          >Cancel</button>
         </div>
       </div>
 
-      <p v-if="messages[t.id]" class="success">{{ messages[t.id] }}</p>
+      <p v-if="messages[t.id]" class="mt-2 text-sm text-green-700">{{ messages[t.id] }}</p>
     </article>
   </div>
 </template>
-
-<style scoped>
-.view { padding: 2rem 0; max-width: 900px; margin: 0 auto; }
-h1 { color: #1a365d; margin-bottom: 0.5rem; }
-.lead { color: #4a5568; margin-bottom: 1.5rem; font-size: 0.9rem; }
-.card {
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-.card header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.muted { color: #718096; font-size: 0.85rem; }
-.spacer { flex: 1; }
-.json {
-  background: #1a202c;
-  color: #f7fafc;
-  padding: 0.75rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  overflow: auto;
-  margin: 0;
-}
-.editor {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-textarea {
-  font-family: ui-monospace, monospace;
-  font-size: 0.85rem;
-  padding: 0.5rem;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  resize: vertical;
-}
-.row { display: flex; gap: 0.5rem; }
-button {
-  padding: 0.4rem 0.9rem;
-  background: white;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button.primary { background: #1a365d; color: white; border-color: #1a365d; }
-.error { color: #c53030; margin: 0; font-size: 0.9rem; }
-.success { color: #2f855a; margin-top: 0.5rem; font-size: 0.9rem; }
-</style>

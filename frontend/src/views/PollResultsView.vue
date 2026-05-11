@@ -144,21 +144,29 @@ onMounted(load)
 </script>
 
 <template>
-  <div class="view">
-    <div v-if="!isSupported" class="todo">
-      <h1>Results</h1>
-      <p>Results for <strong>{{ type }}</strong> are not yet supported.</p>
+  <div class="mx-auto max-w-3xl py-8">
+    <div v-if="!isSupported" class="rounded-md border border-orange-400 bg-orange-50 p-4">
+      <h1 class="mb-2 text-xl font-semibold text-slate-800">Results</h1>
+      <p class="text-sm text-slate-700">
+        Results for <strong class="font-semibold">{{ type }}</strong> are not yet supported.
+      </p>
     </div>
 
     <template v-else>
-      <h1 v-if="data">{{ data.title }} — Results</h1>
-      <h1 v-else>Results</h1>
+      <h1 v-if="data" class="mb-4 text-2xl font-semibold text-slate-800">
+        {{ data.title }} — Results
+      </h1>
+      <h1 v-else class="mb-4 text-2xl font-semibold text-slate-800">Results</h1>
 
-      <p v-if="error" class="error">{{ error }}</p>
-      <p v-if="loading">Loading…</p>
+      <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
+      <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
 
-      <form v-if="data" @submit.prevent="load" class="filter-bar">
-        <label>
+      <form
+        v-if="data"
+        @submit.prevent="load"
+        class="mb-4 flex items-end gap-2 rounded-md bg-slate-50 p-3"
+      >
+        <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
           Filter by zipcode
           <input
             v-model="zipFilter"
@@ -166,18 +174,35 @@ onMounted(load)
             maxlength="5"
             pattern="[0-9]{5}"
             placeholder="e.g. 90001"
+            class="rounded border border-slate-300 p-2 text-sm font-normal focus:border-slate-500 focus:outline-none"
           />
         </label>
-        <button type="submit" :disabled="loading" class="primary">Apply</button>
-        <button v-if="zipFilter" type="button" @click="clearFilter">Clear</button>
+        <button
+          type="submit"
+          :disabled="loading"
+          class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Apply
+        </button>
+        <button
+          v-if="zipFilter"
+          type="button"
+          @click="clearFilter"
+          class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50"
+        >
+          Clear
+        </button>
       </form>
 
-      <div v-if="data?.suppressed" class="suppressed">
-        <p>{{ data.suppressionMessage }}</p>
+      <div
+        v-if="data?.suppressed"
+        class="rounded-md border border-orange-400 bg-orange-50 p-4"
+      >
+        <p class="m-0 text-sm text-orange-900">{{ data.suppressionMessage }}</p>
       </div>
 
       <template v-else-if="data">
-        <p class="hint">
+        <p class="m-0 text-sm text-slate-500">
           {{ data.totalRespondents }} respondent(s)
           <span v-if="data.filterApplied">
             · filter: {{ Object.entries(data.filterApplied).map(([k, v]) => `${k}=${v}`).join(', ') }}
@@ -186,82 +211,116 @@ onMounted(load)
 
         <!-- Questionnaire results -->
         <template v-if="qData">
-          <section v-for="q in qData.perQuestion" :key="q.questionId" class="block">
-            <h3>{{ q.text }}</h3>
-            <p class="hint">{{ q.totalResponses }} responses</p>
-            <table v-if="q.totalResponses > 0" class="bars">
+          <section
+            v-for="q in qData.perQuestion"
+            :key="q.questionId"
+            class="mt-4 rounded-md border border-slate-200 p-4"
+          >
+            <h3 class="mb-1 text-base font-semibold text-slate-700">{{ q.text }}</h3>
+            <p class="m-0 text-sm text-slate-500">{{ q.totalResponses }} responses</p>
+            <table v-if="q.totalResponses > 0" class="mt-2 w-full border-collapse">
               <tbody>
                 <tr v-for="[answer, count] in Object.entries(q.byAnswer)" :key="answer">
-                  <td class="label">{{ answer }}</td>
-                  <td class="bar-cell">
-                    <div class="bar" :style="{ width: pct(count, q.totalResponses) }">
+                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">
+                    {{ answer }}
+                  </td>
+                  <td class="rounded bg-slate-100 py-1 align-middle">
+                    <div
+                      class="rounded bg-sky-500 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                      style="min-width: 2rem"
+                      :style="{ width: pct(count, q.totalResponses) }"
+                    >
                       <span>{{ count }} ({{ pct(count, q.totalResponses) }})</span>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <p v-else class="hint">No responses yet.</p>
+            <p v-else class="m-0 mt-1 text-sm text-slate-500">No responses yet.</p>
           </section>
         </template>
 
         <!-- Ballot measure results -->
         <template v-if="bData">
-          <section class="block">
-            <table v-if="bData.totalRespondents > 0" class="bars">
+          <section class="mt-4 rounded-md border border-slate-200 p-4">
+            <table v-if="bData.totalRespondents > 0" class="w-full border-collapse">
               <tbody>
                 <tr>
-                  <td class="label">Yes</td>
-                  <td class="bar-cell">
-                    <div class="bar yes" :style="{ width: pct(bData.yes, bData.totalRespondents) }">
+                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">Yes</td>
+                  <td class="rounded bg-slate-100 py-1 align-middle">
+                    <div
+                      class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                      style="min-width: 2rem"
+                      :style="{ width: pct(bData.yes, bData.totalRespondents) }"
+                    >
                       <span>{{ bData.yes }} ({{ pct(bData.yes, bData.totalRespondents) }})</span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td class="label">No</td>
-                  <td class="bar-cell">
-                    <div class="bar no" :style="{ width: pct(bData.no, bData.totalRespondents) }">
+                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">No</td>
+                  <td class="rounded bg-slate-100 py-1 align-middle">
+                    <div
+                      class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                      style="min-width: 2rem"
+                      :style="{ width: pct(bData.no, bData.totalRespondents) }"
+                    >
                       <span>{{ bData.no }} ({{ pct(bData.no, bData.totalRespondents) }})</span>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <p v-else class="hint">No votes yet.</p>
+            <p v-else class="m-0 text-sm text-slate-500">No votes yet.</p>
           </section>
         </template>
 
         <!-- Election results -->
         <template v-if="eData">
-          <section v-for="[officeName, group] in groupedCandidates" :key="officeName" class="block">
-            <h3>{{ officeName }}</h3>
-            <div v-for="c in group" :key="c.candidateId" class="candidate-result">
-              <div class="candidate-info">
-                <strong>{{ c.name }}</strong>
-                <span class="affiliation">{{ c.affiliation }}</span>
+          <section
+            v-for="[officeName, group] in groupedCandidates"
+            :key="officeName"
+            class="mt-4 rounded-md border border-slate-200 p-4"
+          >
+            <h3 class="mb-1 text-base font-semibold text-slate-700">{{ officeName }}</h3>
+            <div
+              v-for="c in group"
+              :key="c.candidateId"
+              class="border-b border-slate-100 py-3 last:border-b-0"
+            >
+              <div class="mb-1 flex flex-col">
+                <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
+                <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
               </div>
-              <table v-if="c.total > 0" class="bars">
+              <table v-if="c.total > 0" class="mt-2 w-full border-collapse">
                 <tbody>
                   <tr>
-                    <td class="label">Yes</td>
-                    <td class="bar-cell">
-                      <div class="bar yes" :style="{ width: pct(c.yes, c.total) }">
+                    <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">Yes</td>
+                    <td class="rounded bg-slate-100 py-1 align-middle">
+                      <div
+                        class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        style="min-width: 2rem"
+                        :style="{ width: pct(c.yes, c.total) }"
+                      >
                         <span>{{ c.yes }} ({{ pct(c.yes, c.total) }})</span>
                       </div>
                     </td>
                   </tr>
                   <tr>
-                    <td class="label">No</td>
-                    <td class="bar-cell">
-                      <div class="bar no" :style="{ width: pct(c.no, c.total) }">
+                    <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">No</td>
+                    <td class="rounded bg-slate-100 py-1 align-middle">
+                      <div
+                        class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        style="min-width: 2rem"
+                        :style="{ width: pct(c.no, c.total) }"
+                      >
                         <span>{{ c.no }} ({{ pct(c.no, c.total) }})</span>
                       </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <p v-else class="hint">No votes yet.</p>
+              <p v-else class="m-0 text-sm text-slate-500">No votes yet.</p>
             </div>
           </section>
         </template>
@@ -269,107 +328,3 @@ onMounted(load)
     </template>
   </div>
 </template>
-
-<style scoped>
-.view { padding: 2rem 0; max-width: 800px; margin: 0 auto; }
-h1 { color: #1a365d; margin-bottom: 1rem; }
-h3 { color: #2d3748; margin: 0 0 0.25rem; }
-.filter-bar {
-  display: flex;
-  gap: 0.5rem;
-  align-items: end;
-  background: #f7fafc;
-  padding: 0.75rem;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-}
-label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-input {
-  padding: 0.4rem;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  font: inherit;
-  font-weight: 400;
-}
-button {
-  padding: 0.5rem 1rem;
-  background: white;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button.primary {
-  background: #1a365d;
-  color: white;
-  border-color: #1a365d;
-}
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-.suppressed {
-  background: #fffaf0;
-  border: 1px solid #ed8936;
-  padding: 1rem;
-  border-radius: 6px;
-}
-.block {
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-.candidate-result {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #edf2f7;
-}
-.candidate-result:last-child { border-bottom: none; }
-.candidate-info {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0.4rem;
-}
-.affiliation { color: #4a5568; font-size: 0.85rem; }
-.bars {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.5rem;
-}
-.bars td {
-  padding: 0.25rem 0;
-  vertical-align: middle;
-}
-.bars td.label {
-  font-family: monospace;
-  width: 30%;
-  padding-right: 0.75rem;
-  font-size: 0.85rem;
-}
-.bar-cell {
-  background: #edf2f7;
-  border-radius: 4px;
-}
-.bar {
-  background: #4299e1;
-  color: white;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  min-width: 2rem;
-  font-size: 0.8rem;
-  white-space: nowrap;
-}
-.bar.yes { background: #2f855a; }
-.bar.no { background: #c53030; }
-.hint { color: #718096; font-size: 0.9rem; margin: 0; }
-.error { color: #c53030; }
-.todo {
-  padding: 1rem;
-  background: #fffaf0;
-  border: 1px solid #ed8936;
-  border-radius: 6px;
-}
-</style>

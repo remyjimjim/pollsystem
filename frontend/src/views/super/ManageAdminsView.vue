@@ -58,69 +58,94 @@ async function demote(user: AdminUserDto) {
   }
 }
 
+function accessBadgeClasses(access: 'ADMIN' | 'SUPER'): string {
+  return access === 'ADMIN'
+    ? 'bg-sky-200 text-sky-900'
+    : 'bg-purple-200 text-purple-900'
+}
+
 onMounted(load)
 </script>
 
 <template>
-  <div class="view">
-    <h1>Manage Admins</h1>
+  <div class="mx-auto max-w-5xl py-8">
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Manage Admins</h1>
 
-    <div class="bar">
-      <button @click="load" :disabled="loading">
+    <div class="mb-4">
+      <button
+        @click="load"
+        :disabled="loading"
+        class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         {{ loading ? 'Loading…' : 'Refresh' }}
       </button>
     </div>
 
-    <p v-if="error" class="error">{{ error }}</p>
-    <p v-if="message" class="success">{{ message }}</p>
+    <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
+    <p v-if="message" class="text-sm text-green-700">{{ message }}</p>
 
-    <p v-if="!loading && admins.length === 0" class="hint">No admins yet.</p>
+    <p v-if="!loading && admins.length === 0" class="text-sm text-slate-500">No admins yet.</p>
 
-    <div v-else class="admins">
-      <article v-for="a in admins" :key="a.id" class="card">
-        <header>
-          <div>
-            <strong>{{ a.email }}</strong>
-            <span class="phone">{{ a.phone }}</span>
+    <div v-else class="flex flex-col gap-4">
+      <article
+        v-for="a in admins"
+        :key="a.id"
+        class="rounded-md border border-slate-200 p-4"
+      >
+        <header class="mb-3 flex items-center gap-3">
+          <div class="flex-1">
+            <strong class="font-semibold text-slate-800">{{ a.email }}</strong>
+            <span class="ml-2 text-sm text-slate-500">{{ a.phone }}</span>
           </div>
-          <div class="badges">
-            <span :class="['access', `access-${a.access}`]">{{ a.access }}</span>
-            <span v-if="!a.isEnabled" class="badge disabled">disabled</span>
+          <div class="flex gap-2">
+            <span
+              :class="['rounded px-2 py-0.5 text-xs font-semibold', accessBadgeClasses(a.access)]"
+            >{{ a.access }}</span>
+            <span
+              v-if="!a.isEnabled"
+              class="rounded bg-red-100 px-2 py-0.5 text-xs text-red-900"
+            >disabled</span>
           </div>
           <button
             v-if="a.access === 'ADMIN'"
             @click="demote(a)"
-            class="demote"
+            class="rounded border border-red-700 bg-white px-3 py-1.5 text-sm text-red-700 hover:bg-red-50"
           >Demote to Creator</button>
         </header>
 
         <section>
-          <h4>Role Assignments</h4>
-          <p v-if="a.roleAssignments.length === 0" class="hint">No zipcode assignments.</p>
-          <table v-else class="grid">
+          <h4 class="mb-2 text-sm font-semibold text-slate-700">Role Assignments</h4>
+          <p v-if="a.roleAssignments.length === 0" class="text-sm text-slate-500">
+            No zipcode assignments.
+          </p>
+          <table v-else class="w-full border-collapse text-sm">
             <thead>
-              <tr>
-                <th>State</th>
-                <th>County</th>
-                <th>Zipcode</th>
-                <th>Enabled</th>
-                <th></th>
+              <tr class="bg-slate-50 text-left">
+                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">State</th>
+                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">County</th>
+                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Zipcode</th>
+                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Enabled</th>
+                <th class="border-b border-slate-200 p-2"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="ra in a.roleAssignments" :key="ra.id">
-                <td>{{ ra.stateInitial }}</td>
-                <td>{{ ra.countyName }}</td>
-                <td class="zip">{{ ra.zipcode }}</td>
-                <td>
-                  <span :class="['pill', ra.enabled ? 'on' : 'off']">
-                    {{ ra.enabled ? 'on' : 'off' }}
-                  </span>
+                <td class="border-b border-slate-100 p-2">{{ ra.stateInitial }}</td>
+                <td class="border-b border-slate-100 p-2">{{ ra.countyName }}</td>
+                <td class="border-b border-slate-100 p-2 font-mono">{{ ra.zipcode }}</td>
+                <td class="border-b border-slate-100 p-2">
+                  <span
+                    :class="[
+                      'rounded px-2 py-0.5 text-xs',
+                      ra.enabled ? 'bg-green-100 text-green-900' : 'bg-slate-200 text-slate-600'
+                    ]"
+                  >{{ ra.enabled ? 'on' : 'off' }}</span>
                 </td>
-                <td>
-                  <button @click="toggle(ra.id)" class="link">
-                    {{ ra.enabled ? 'Disable' : 'Enable' }}
-                  </button>
+                <td class="border-b border-slate-100 p-2">
+                  <button
+                    @click="toggle(ra.id)"
+                    class="text-sm text-slate-800 underline"
+                  >{{ ra.enabled ? 'Disable' : 'Enable' }}</button>
                 </td>
               </tr>
             </tbody>
@@ -130,83 +155,3 @@ onMounted(load)
     </div>
   </div>
 </template>
-
-<style scoped>
-.view { padding: 2rem 0; max-width: 1000px; margin: 0 auto; }
-h1 { margin-bottom: 1rem; color: #1a365d; }
-.bar { margin-bottom: 1rem; }
-button {
-  padding: 0.5rem 1rem;
-  background: white;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-.admins {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.card {
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 1rem;
-}
-.card header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-.card header > div:first-child { flex: 1; }
-.phone { color: #718096; margin-left: 0.5rem; font-size: 0.9rem; }
-.badges { display: flex; gap: 0.4rem; }
-.access {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
-}
-.access-ADMIN { background: #bee3f8; color: #2c5282; }
-.access-SUPER { background: #d6bcfa; color: #553c9a; }
-.badge.disabled {
-  font-size: 0.75rem;
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
-  background: #fed7d7;
-  color: #742a2a;
-}
-.demote {
-  background: white;
-  border-color: #c53030;
-  color: #c53030;
-}
-h4 { margin: 0 0 0.5rem; color: #2d3748; font-size: 0.95rem; }
-.grid { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-.grid th, .grid td {
-  padding: 0.4rem 0.5rem;
-  border-bottom: 1px solid #edf2f7;
-  text-align: left;
-}
-.grid th { background: #f7fafc; }
-.zip { font-family: monospace; }
-.pill {
-  font-size: 0.75rem;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-}
-.pill.on { background: #c6f6d5; color: #22543d; }
-.pill.off { background: #edf2f7; color: #4a5568; }
-.link {
-  background: none;
-  border: none;
-  color: #1a365d;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-}
-.error { color: #c53030; }
-.success { color: #2f855a; }
-.hint { color: #718096; }
-</style>

@@ -24,7 +24,6 @@ const router = useRouter()
 function toLocalInput(iso: string | null): string {
   if (!iso) return ''
   const d = new Date(iso)
-  // datetime-local expects YYYY-MM-DDTHH:mm in local time
   const pad = (n: number) => String(n).padStart(2, '0')
   return (
     `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` +
@@ -128,151 +127,111 @@ async function publish(confirmed = false) {
 </script>
 
 <template>
-  <div class="form">
-    <label>
+  <div class="flex flex-col gap-4">
+    <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       Title
-      <input v-model="form.title" maxlength="500" required />
+      <input
+        v-model="form.title"
+        maxlength="500"
+        required
+        class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
+      />
     </label>
 
-    <label>
+    <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       Summary
-      <textarea v-model="form.summary" rows="3" required />
+      <textarea
+        v-model="form.summary"
+        rows="3"
+        required
+        class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
+      />
     </label>
 
-    <label>
+    <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       Close date (optional)
-      <input v-model="form.closeDate" type="datetime-local" />
+      <input
+        v-model="form.closeDate"
+        type="datetime-local"
+        class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
+      />
     </label>
 
-    <fieldset>
-      <legend>Geographic Scope</legend>
+    <fieldset class="rounded-md border border-slate-200 p-4">
+      <legend class="px-2 text-sm font-semibold text-slate-700">Geographic Scope</legend>
       <ZipSetter v-model="form.zipcodes" />
     </fieldset>
 
-    <fieldset>
-      <legend>Questions</legend>
-      <div v-for="(q, i) in form.questions" :key="i" class="question-row">
+    <fieldset class="rounded-md border border-slate-200 p-4">
+      <legend class="px-2 text-sm font-semibold text-slate-700">Questions</legend>
+      <div
+        v-for="(q, i) in form.questions"
+        :key="i"
+        class="mb-2 flex gap-1"
+      >
         <input
           v-model="q.text"
           :placeholder="`Question ${i + 1}`"
           maxlength="1000"
+          class="flex-1 rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
         <button
           type="button"
           @click="removeQuestion(i)"
           :disabled="form.questions.length === 1"
-          class="remove"
+          class="w-8 rounded border border-slate-300 bg-white hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
           aria-label="Remove question"
         >×</button>
       </div>
-      <button type="button" @click="addQuestion" class="add">+ Add question</button>
+      <button
+        type="button"
+        @click="addQuestion"
+        class="self-start rounded border border-dashed border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
+      >+ Add question</button>
     </fieldset>
 
-    <p v-if="error" class="error">{{ error }}</p>
-    <p v-if="message" class="success">{{ message }}</p>
+    <p v-if="error" class="m-0 text-sm text-red-700">{{ error }}</p>
+    <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
 
-    <div v-if="closeWarning" class="warning">
-      <p>{{ closeWarning }}</p>
-      <div class="row">
-        <button type="button" class="primary" @click="publish(true)" :disabled="submitting">
+    <div v-if="closeWarning" class="rounded-md border border-orange-400 bg-orange-50 p-4">
+      <p class="mb-2 text-sm text-orange-900">{{ closeWarning }}</p>
+      <div class="flex gap-2">
+        <button
+          type="button"
+          @click="publish(true)"
+          :disabled="submitting"
+          class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+        >
           Confirm and publish
         </button>
-        <button type="button" @click="closeWarning = null" :disabled="submitting">
+        <button
+          type="button"
+          @click="closeWarning = null"
+          :disabled="submitting"
+          class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+        >
           Cancel
         </button>
       </div>
     </div>
 
-    <div v-else class="row">
-      <button type="button" @click="saveDraft" :disabled="submitting">
+    <div v-else class="flex gap-2">
+      <button
+        type="button"
+        @click="saveDraft"
+        :disabled="submitting"
+        class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         {{ submitting ? 'Saving…' : (draftId ? 'Save changes' : 'Save draft') }}
       </button>
-      <button type="button" class="primary" @click="publish(false)" :disabled="submitting">
+      <button
+        type="button"
+        @click="publish(false)"
+        :disabled="submitting"
+        class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         Publish
       </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-input,
-textarea {
-  padding: 0.5rem;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  font: inherit;
-  font-weight: 400;
-}
-fieldset {
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 1rem;
-}
-legend {
-  padding: 0 0.5rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-.question-row {
-  display: flex;
-  gap: 0.4rem;
-  margin-bottom: 0.4rem;
-}
-.question-row input {
-  flex: 1;
-}
-.remove {
-  width: 2rem;
-  background: white;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.remove:disabled { opacity: 0.4; cursor: not-allowed; }
-.add {
-  background: white;
-  border: 1px dashed #cbd5e0;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
-  cursor: pointer;
-  align-self: flex-start;
-}
-.row {
-  display: flex;
-  gap: 0.5rem;
-}
-button {
-  padding: 0.5rem 1rem;
-  border: 1px solid #cbd5e0;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button.primary {
-  background: #1a365d;
-  color: white;
-  border-color: #1a365d;
-}
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-.error { color: #c53030; margin: 0; }
-.success { color: #2f855a; margin: 0; }
-.warning {
-  background: #fffaf0;
-  border: 1px solid #ed8936;
-  border-radius: 6px;
-  padding: 1rem;
-}
-</style>

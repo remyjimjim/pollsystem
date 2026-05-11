@@ -66,7 +66,6 @@ async function loadZips(countyIds: number[]) {
       params: { county_ids: countyIds.join(',') }
     })
     zips.value = res.data
-    // drop selections that are no longer available
     selectedZipcodes.value = selectedZipcodes.value.filter(z =>
       res.data.some(cz => cz.zipcode === z)
     )
@@ -93,10 +92,14 @@ loadStates()
 </script>
 
 <template>
-  <div class="zip-setter">
-    <div class="step">
-      <label>State</label>
-      <select v-model="selectedStateId" :disabled="loadingStates">
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-semibold text-slate-700">State</label>
+      <select
+        v-model="selectedStateId"
+        :disabled="loadingStates"
+        class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none disabled:opacity-60"
+      >
         <option :value="null" disabled>
           {{ loadingStates ? 'Loading…' : 'Select a state' }}
         </option>
@@ -106,74 +109,40 @@ loadStates()
       </select>
     </div>
 
-    <div class="step" v-if="selectedStateId != null">
-      <label>Counties</label>
-      <p v-if="loadingCounties" class="hint">Loading…</p>
-      <p v-else-if="counties.length === 0" class="hint">No counties available</p>
-      <div v-else class="checkbox-grid">
-        <label v-for="c in counties" :key="c.id" class="check">
+    <div class="flex flex-col gap-2" v-if="selectedStateId != null">
+      <label class="text-sm font-semibold text-slate-700">Counties</label>
+      <p v-if="loadingCounties" class="m-0 text-sm text-slate-500">Loading…</p>
+      <p v-else-if="counties.length === 0" class="m-0 text-sm text-slate-500">
+        No counties available
+      </p>
+      <div
+        v-else
+        class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"
+      >
+        <label v-for="c in counties" :key="c.id" class="flex items-center gap-2 text-sm text-slate-700">
           <input type="checkbox" :value="c.id" v-model="selectedCountyIds" />
           {{ c.name }}
         </label>
       </div>
     </div>
 
-    <div class="step" v-if="selectedCountyIds.length > 0">
-      <label>Zipcodes</label>
-      <p v-if="loadingZips" class="hint">Loading…</p>
-      <p v-else-if="zips.length === 0" class="hint">No zipcodes available</p>
-      <div v-else class="checkbox-grid">
-        <label v-for="z in zips" :key="z.id" class="check">
+    <div class="flex flex-col gap-2" v-if="selectedCountyIds.length > 0">
+      <label class="text-sm font-semibold text-slate-700">Zipcodes</label>
+      <p v-if="loadingZips" class="m-0 text-sm text-slate-500">Loading…</p>
+      <p v-else-if="zips.length === 0" class="m-0 text-sm text-slate-500">
+        No zipcodes available
+      </p>
+      <div
+        v-else
+        class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"
+      >
+        <label v-for="z in zips" :key="z.id" class="flex items-center gap-2 text-sm text-slate-700">
           <input type="checkbox" :value="z.zipcode" v-model="selectedZipcodes" />
           {{ z.zipcode }}
         </label>
       </div>
     </div>
 
-    <p v-if="error" class="error">{{ error }}</p>
+    <p v-if="error" class="m-0 text-sm text-red-700">{{ error }}</p>
   </div>
 </template>
-
-<style scoped>
-.zip-setter {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.step {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-.step > label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #2d3748;
-}
-select {
-  padding: 0.5rem;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-.checkbox-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 0.4rem;
-}
-.check {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-}
-.hint {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #718096;
-}
-.error {
-  color: #c53030;
-  margin: 0;
-}
-</style>

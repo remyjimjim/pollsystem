@@ -140,10 +140,15 @@ onMounted(loadElections)
 </script>
 
 <template>
-  <div class="form">
-    <label>
+  <div class="flex flex-col gap-4">
+    <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       Parent Election
-      <select v-model="form.electionId" :disabled="loadingElections" required>
+      <select
+        v-model="form.electionId"
+        :disabled="loadingElections"
+        required
+        class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none disabled:opacity-60"
+      >
         <option :value="null" disabled>
           {{ loadingElections ? 'Loading…' : 'Select an Election' }}
         </option>
@@ -152,102 +157,92 @@ onMounted(loadElections)
         </option>
       </select>
     </label>
-    <p v-if="!loadingElections && elections.length === 0" class="hint">
+    <p v-if="!loadingElections && elections.length === 0" class="m-0 text-sm text-slate-500">
       You haven't created any Elections yet. Create one first, then attach a measure to it.
     </p>
 
-    <label>
+    <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       Title
-      <input v-model="form.title" maxlength="500" required />
+      <input
+        v-model="form.title"
+        maxlength="500"
+        required
+        class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
+      />
     </label>
 
-    <label>
+    <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       Summary
-      <textarea v-model="form.summary" rows="4" required />
+      <textarea
+        v-model="form.summary"
+        rows="4"
+        required
+        class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
+      />
     </label>
 
-    <div class="row-fields">
-      <label>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
         Effective date
-        <input v-model="form.effectiveDate" type="date" required />
+        <input
+          v-model="form.effectiveDate"
+          type="date"
+          required
+          class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
+        />
       </label>
-      <label>
+      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
         Close date (optional)
-        <input v-model="form.closeDate" type="datetime-local" />
+        <input
+          v-model="form.closeDate"
+          type="datetime-local"
+          class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
+        />
       </label>
     </div>
 
-    <p v-if="error" class="error">{{ error }}</p>
-    <p v-if="message" class="success">{{ message }}</p>
+    <p v-if="error" class="m-0 text-sm text-red-700">{{ error }}</p>
+    <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
 
-    <div v-if="closeWarning" class="warning">
-      <p>{{ closeWarning }}</p>
-      <div class="row">
-        <button type="button" class="primary" @click="publish(true)" :disabled="submitting">
+    <div v-if="closeWarning" class="rounded-md border border-orange-400 bg-orange-50 p-4">
+      <p class="mb-2 text-sm text-orange-900">{{ closeWarning }}</p>
+      <div class="flex gap-2">
+        <button
+          type="button"
+          @click="publish(true)"
+          :disabled="submitting"
+          class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+        >
           Confirm and publish
         </button>
-        <button type="button" @click="closeWarning = null" :disabled="submitting">
+        <button
+          type="button"
+          @click="closeWarning = null"
+          :disabled="submitting"
+          class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+        >
           Cancel
         </button>
       </div>
     </div>
 
-    <div v-else class="row">
-      <button type="button" @click="saveDraft" :disabled="submitting">
+    <div v-else class="flex gap-2">
+      <button
+        type="button"
+        @click="saveDraft"
+        :disabled="submitting"
+        class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         {{ submitting ? 'Saving…' : (draftId ? 'Save changes' : 'Save draft') }}
       </button>
-      <button type="button" class="primary" @click="publish(false)" :disabled="submitting">
+      <button
+        type="button"
+        @click="publish(false)"
+        :disabled="submitting"
+        class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         Publish
       </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.form { display: flex; flex-direction: column; gap: 1rem; }
-label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-input,
-textarea,
-select {
-  padding: 0.5rem;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  font: inherit;
-  font-weight: 400;
-}
-.row-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-.row { display: flex; gap: 0.5rem; }
-button {
-  padding: 0.5rem 1rem;
-  border: 1px solid #cbd5e0;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button.primary {
-  background: #1a365d;
-  color: white;
-  border-color: #1a365d;
-}
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-.hint { color: #718096; font-size: 0.85rem; margin: 0; }
-.error { color: #c53030; margin: 0; }
-.success { color: #2f855a; margin: 0; }
-.warning {
-  background: #fffaf0;
-  border: 1px solid #ed8936;
-  border-radius: 6px;
-  padding: 1rem;
-}
-</style>

@@ -95,10 +95,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="view">
-    <h1>Edit Draft</h1>
-    <p v-if="loading">Loading…</p>
-    <p v-else-if="error" class="error">{{ error }}</p>
+  <div class="mx-auto max-w-3xl py-8">
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Edit Draft</h1>
+    <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
+    <p v-else-if="error" class="text-sm text-red-700">{{ error }}</p>
 
     <QuestionnaireForm
       v-else-if="questionnaire"
@@ -147,9 +147,3 @@ onMounted(async () => {
     />
   </div>
 </template>
-
-<style scoped>
-.view { padding: 2rem 0; max-width: 720px; margin: 0 auto; }
-h1 { margin-bottom: 1rem; color: #1a365d; }
-.error { color: #c53030; }
-</style>

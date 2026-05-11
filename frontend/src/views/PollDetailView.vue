@@ -11,7 +11,7 @@ const id = computed(() => Number(route.params.id))
 </script>
 
 <template>
-  <div class="view">
+  <div class="mx-auto max-w-3xl py-8">
     <QuestionnaireResponseForm
       v-if="type === 'questionnaire'"
       :id="id"
@@ -24,28 +24,12 @@ const id = computed(() => Number(route.params.id))
       v-else-if="type === 'ballot-measure'"
       :id="id"
     />
-    <div v-else class="todo">
-      <h1>{{ type }}</h1>
-      <p>Unknown poll type.</p>
-      <router-link to="/polls/search">Back to search</router-link>
+    <div v-else class="rounded-md border border-orange-400 bg-orange-50 p-4">
+      <h1 class="mb-2 text-xl font-semibold text-slate-800">{{ type }}</h1>
+      <p class="mb-2 text-sm text-slate-700">Unknown poll type.</p>
+      <router-link to="/polls/search" class="text-sm font-semibold text-slate-800 underline">
+        Back to search
+      </router-link>
     </div>
   </div>
 </template>
-
-<style scoped>
-.view {
-  padding: 2rem 0;
-  max-width: 720px;
-  margin: 0 auto;
-}
-.todo {
-  padding: 1rem;
-  background: #fffaf0;
-  border: 1px solid #ed8936;
-  border-radius: 6px;
-}
-h1 {
-  margin: 0 0 0.5rem;
-  color: #1a365d;
-}
-</style>

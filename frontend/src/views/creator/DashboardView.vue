@@ -24,6 +24,15 @@ function editSlug(type: 'Questionnaire' | 'Election' | 'BallotMeasure'): string 
   }
 }
 
+function statusClasses(status: PollStatus): string {
+  switch (status) {
+    case 'PUBLISHED' as PollStatus: return 'bg-green-100 text-green-900'
+    case 'DRAFT'     as PollStatus: return 'bg-yellow-100 text-yellow-900'
+    case 'CLOSED'    as PollStatus: return 'bg-red-100 text-red-900'
+    default: return 'bg-slate-200 text-slate-700'
+  }
+}
+
 async function load() {
   loading.value = true
   error.value = null
@@ -41,44 +50,61 @@ onMounted(load)
 </script>
 
 <template>
-  <div class="view">
-    <div class="header-row">
-      <h1>Creator Dashboard</h1>
-      <div class="header-actions">
-        <router-link to="/admin-request" class="secondary">Request admin access</router-link>
-        <router-link to="/creator/polls/new" class="primary">+ New Poll</router-link>
+  <div class="mx-auto max-w-5xl py-8">
+    <div class="mb-4 flex items-center justify-between">
+      <h1 class="m-0 text-2xl font-semibold text-slate-800">Creator Dashboard</h1>
+      <div class="flex gap-2">
+        <router-link
+          to="/admin-request"
+          class="rounded border border-slate-800 bg-white px-4 py-2 text-sm text-slate-800 no-underline hover:bg-slate-50"
+        >
+          Request admin access
+        </router-link>
+        <router-link
+          to="/creator/polls/new"
+          class="rounded bg-slate-800 px-4 py-2 text-sm text-white no-underline hover:bg-slate-900"
+        >
+          + New Poll
+        </router-link>
       </div>
     </div>
 
-    <p v-if="error" class="error">{{ error }}</p>
-    <p v-if="loading">Loading…</p>
+    <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
+    <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
 
-    <p v-else-if="polls.length === 0" class="hint">
+    <p v-else-if="polls.length === 0" class="text-sm text-slate-500">
       You haven't created any polls yet.
     </p>
 
-    <table v-else class="grid">
+    <table v-else class="w-full border-collapse text-sm">
       <thead>
-        <tr>
-          <th>Title</th>
-          <th>Type</th>
-          <th>Status</th>
-          <th>Close date</th>
-          <th></th>
+        <tr class="bg-slate-50 text-left">
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Title</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Type</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Status</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Close date</th>
+          <th class="border-b border-slate-200 p-2"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="p in polls" :key="`${p.type}-${p.id}`">
-          <td>{{ p.title }}</td>
-          <td>{{ p.type }}</td>
-          <td>
-            <span :class="['status', `status-${p.status}`]">{{ p.status }}</span>
+          <td class="border-b border-slate-100 p-2">{{ p.title }}</td>
+          <td class="border-b border-slate-100 p-2">{{ p.type }}</td>
+          <td class="border-b border-slate-100 p-2">
+            <span
+              :class="['inline-block rounded px-2 py-0.5 text-xs', statusClasses(p.status)]"
+            >
+              {{ p.status }}
+            </span>
           </td>
-          <td>{{ p.closeDate ? new Date(p.closeDate).toLocaleString() : '—' }}</td>
-          <td>
+          <td class="border-b border-slate-100 p-2">
+            {{ p.closeDate ? new Date(p.closeDate).toLocaleString() : '—' }}
+          </td>
+          <td class="border-b border-slate-100 p-2">
             <router-link
               v-if="p.status === 'DRAFT'"
               :to="`/creator/polls/${editSlug(p.type)}/${p.id}/edit`"
+              class="text-slate-800 underline"
             >Edit</router-link>
           </td>
         </tr>
@@ -86,76 +112,3 @@ onMounted(load)
     </table>
   </div>
 </template>
-
-<style scoped>
-.view {
-  padding: 2rem 0;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-h1 {
-  color: #1a365d;
-  margin: 0;
-}
-.header-actions { display: flex; gap: 0.5rem; }
-.primary {
-  background: #1a365d;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  text-decoration: none;
-}
-.secondary {
-  background: white;
-  color: #1a365d;
-  padding: 0.5rem 1rem;
-  border: 1px solid #1a365d;
-  border-radius: 4px;
-  text-decoration: none;
-}
-.grid {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-.grid th,
-.grid td {
-  padding: 0.5rem;
-  border-bottom: 1px solid #edf2f7;
-  text-align: left;
-}
-.grid th {
-  background: #f7fafc;
-}
-.status {
-  font-size: 0.75rem;
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
-  background: #e2e8f0;
-  color: #2d3748;
-}
-.status-PUBLISHED {
-  background: #c6f6d5;
-  color: #22543d;
-}
-.status-DRAFT {
-  background: #fefcbf;
-  color: #744210;
-}
-.status-CLOSED {
-  background: #fed7d7;
-  color: #742a2a;
-}
-.error {
-  color: #c53030;
-}
-.hint {
-  color: #718096;
-}
-</style>

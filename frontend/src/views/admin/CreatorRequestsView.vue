@@ -75,150 +75,88 @@ onMounted(load)
 </script>
 
 <template>
-  <div class="view">
-    <h1>Creator Requests</h1>
+  <div class="mx-auto max-w-6xl py-8">
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Creator Requests</h1>
 
-    <div class="bar">
-      <button @click="load" :disabled="loading">
+    <div class="mb-4 flex items-center gap-2">
+      <button
+        @click="load"
+        :disabled="loading"
+        class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+      >
         {{ loading ? 'Loading…' : 'Refresh' }}
       </button>
-      <span class="spacer" />
+      <span class="flex-1" />
       <button
-        class="approve"
         :disabled="acting || selected.size === 0"
         @click="decide('batch-approve', 'approved')"
+        class="rounded bg-green-700 px-4 py-2 text-sm text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Approve selected ({{ selected.size }})
       </button>
       <button
-        class="reject"
         :disabled="acting || selected.size === 0"
         @click="decide('batch-reject', 'rejected')"
+        class="rounded bg-red-700 px-4 py-2 text-sm text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Reject selected ({{ selected.size }})
       </button>
     </div>
 
-    <p v-if="error" class="error">{{ error }}</p>
-    <p v-if="message" class="success">{{ message }}</p>
+    <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
+    <p v-if="message" class="text-sm text-green-700">{{ message }}</p>
 
-    <p v-if="!loading && requests.length === 0" class="hint">
+    <p v-if="!loading && requests.length === 0" class="text-sm text-slate-500">
       No pending requests.
     </p>
 
-    <table v-else-if="requests.length > 0" class="grid">
+    <table v-else-if="requests.length > 0" class="w-full border-collapse text-sm">
       <thead>
-        <tr>
-          <th><input type="checkbox" :checked="allChecked" @change="toggleAll" /></th>
-          <th>User</th>
-          <th>Zipcodes</th>
-          <th>Reason</th>
-          <th>Submitted</th>
-          <th>Status</th>
+        <tr class="bg-slate-50 text-left">
+          <th class="border-b border-slate-200 p-2">
+            <input type="checkbox" :checked="allChecked" @change="toggleAll" />
+          </th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">User</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Zipcodes</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Reason</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Submitted</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Status</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="r in requests" :key="r.id" :class="{ stale: r.assignedAdminId == null }">
-          <td>
+        <tr
+          v-for="r in requests"
+          :key="r.id"
+          :class="r.assignedAdminId == null ? 'bg-orange-50' : ''"
+        >
+          <td class="border-b border-slate-100 p-2 align-top">
             <input
               type="checkbox"
               :checked="selected.has(r.id)"
               @change="toggle(r.id)"
             />
           </td>
-          <td>{{ r.userEmail }}</td>
-          <td class="zips">{{ r.zipcodes.join(', ') }}</td>
-          <td class="reason">{{ r.reason }}</td>
-          <td>{{ new Date(r.submittedAt).toLocaleString() }}</td>
-          <td>
+          <td class="border-b border-slate-100 p-2 align-top">{{ r.userEmail }}</td>
+          <td class="border-b border-slate-100 p-2 align-top font-mono text-xs">
+            {{ r.zipcodes.join(', ') }}
+          </td>
+          <td class="border-b border-slate-100 p-2 align-top" style="max-width: 360px">
+            {{ r.reason }}
+          </td>
+          <td class="border-b border-slate-100 p-2 align-top">
+            {{ new Date(r.submittedAt).toLocaleString() }}
+          </td>
+          <td class="border-b border-slate-100 p-2 align-top">
             {{ r.status }}
-            <span v-if="r.assignedAdminId == null" class="badge">unassigned</span>
+            <span
+              v-if="r.assignedAdminId == null"
+              class="ml-2 inline-block rounded bg-orange-500 px-1.5 py-0.5 text-xs text-white"
+            >
+              unassigned
+            </span>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
-
-<style scoped>
-.view {
-  padding: 2rem 0;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-h1 {
-  margin-bottom: 1rem;
-  color: #1a365d;
-}
-.bar {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-.spacer {
-  flex: 1;
-}
-button {
-  padding: 0.5rem 1rem;
-  border: 1px solid #cbd5e0;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-button.approve {
-  background: #2f855a;
-  color: white;
-  border-color: #2f855a;
-}
-button.reject {
-  background: #c53030;
-  color: white;
-  border-color: #c53030;
-}
-.grid {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-.grid th,
-.grid td {
-  padding: 0.5rem;
-  border-bottom: 1px solid #edf2f7;
-  text-align: left;
-  vertical-align: top;
-}
-.grid th {
-  background: #f7fafc;
-}
-.zips {
-  font-family: monospace;
-}
-.reason {
-  max-width: 360px;
-}
-tr.stale {
-  background: #fffaf0;
-}
-.badge {
-  margin-left: 0.5rem;
-  font-size: 0.75rem;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-  background: #ed8936;
-  color: white;
-}
-.error {
-  color: #c53030;
-}
-.success {
-  color: #2f855a;
-}
-.hint {
-  color: #718096;
-}
-</style>
