@@ -33,7 +33,10 @@ data class RecentDecisionDto(
 data class AdminDashboardDto(
     val scope: List<AdminZipcodeScope>,
     val pendingAssignedToMe: List<CreatorRequestDto>,
-    val staleInScope: List<CreatorRequestDto>,
+    /** Unassigned PENDING requests in my scope, claimable by any admin in scope. */
+    val unassignedInScope: List<CreatorRequestDto>,
+    /** Count of unassignedInScope rows older than the stale threshold (48h). */
+    val staleCount: Int,
     val creatorsInScopeCount: Int,
     val recentDecisions: List<RecentDecisionDto>
 )
@@ -69,12 +72,18 @@ class AdminDashboardController(
         val mine = creatorRequests.findByAssignedAdminAndStatus(me, RequestStatus.PENDING)
         val pending = mine.sortedByDescending { it.submittedAt }.map(service::toDto)
 
-        // Stale unassigned requests anywhere in my scope
+        // All unassigned PENDING requests intersecting my scope — claimable by
+        // any admin in scope, regardless of age. (Routing returns null when no
+        // admin covered the zipcode at submit time; once a scope-matching admin
+        // exists, they should see those requests immediately.) Stale rows are
+        // a per-row visual badge driven off submittedAt, not a separate bucket.
         val staleCutoff = Instant.now().minus(staleThresholdHours, ChronoUnit.HOURS)
-        val staleRequests = creatorRequests.findStaleRequests(staleCutoff)
+        val unassigned = creatorRequests.findByStatus(RequestStatus.PENDING)
             .filter { it.assignedAdmin == null }
             .map(service::toDto)
             .filter { dto -> dto.zipcodes.any { it in myZipcodes } }
+            .sortedByDescending { it.submittedAt }
+        val staleCount = unassigned.count { it.submittedAt.isBefore(staleCutoff) }
 
         // Creators with enabled CREATOR role assignments in my scope
         val creatorsInScopeCount = if (myZipcodes.isEmpty()) {
@@ -103,7 +112,8 @@ class AdminDashboardController(
         return AdminDashboardDto(
             scope = scope,
             pendingAssignedToMe = pending,
-            staleInScope = staleRequests,
+            unassignedInScope = unassigned,
+            staleCount = staleCount,
             creatorsInScopeCount = creatorsInScopeCount,
             recentDecisions = recent
         )

@@ -30,7 +30,8 @@ interface RecentDecisionRow {
 interface AdminDashboardDto {
   scope: AdminZipcodeScope[]
   pendingAssignedToMe: CreatorRequestRow[]
-  staleInScope: CreatorRequestRow[]
+  unassignedInScope: CreatorRequestRow[]
+  staleCount: number
   creatorsInScopeCount: number
   recentDecisions: RecentDecisionRow[]
 }
@@ -124,15 +125,20 @@ onMounted(load)
         </article>
         <article class="rounded-md border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Stale (&gt;48h)
+            Unassigned in scope
           </p>
           <p
             class="my-1 text-3xl font-semibold"
-            :class="data.staleInScope.length > 0 ? 'text-orange-700' : 'text-slate-800'"
+            :class="data.unassignedInScope.length > 0 ? 'text-orange-700' : 'text-slate-800'"
           >
-            {{ data.staleInScope.length }}
+            {{ data.unassignedInScope.length }}
           </p>
-          <p class="text-xs text-slate-500">unassigned in my scope</p>
+          <p class="text-xs text-slate-500">
+            claimable
+            <template v-if="data.staleCount > 0">
+              · <span class="font-semibold text-orange-700">{{ data.staleCount }} stale (&gt;48h)</span>
+            </template>
+          </p>
         </article>
         <article class="rounded-md border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -150,11 +156,11 @@ onMounted(load)
         <div class="mb-2 flex items-center justify-between">
           <h2 class="text-lg font-semibold text-slate-700">Pending Creator Requests</h2>
           <router-link to="/admin/creator-requests" class="text-sm text-slate-800 underline">
-            View all ({{ data.pendingAssignedToMe.length + data.staleInScope.length }}) →
+            View all ({{ data.pendingAssignedToMe.length + data.unassignedInScope.length }}) →
           </router-link>
         </div>
         <p
-          v-if="data.pendingAssignedToMe.length === 0 && data.staleInScope.length === 0"
+          v-if="data.pendingAssignedToMe.length === 0 && data.unassignedInScope.length === 0"
           class="text-sm text-slate-500"
         >
           No pending requests in your scope.
@@ -172,7 +178,7 @@ onMounted(load)
           </thead>
           <tbody>
             <tr
-              v-for="r in [...data.pendingAssignedToMe, ...data.staleInScope]"
+              v-for="r in [...data.pendingAssignedToMe, ...data.unassignedInScope]"
               :key="r.id"
               :class="isStale(r.submittedAt) ? 'bg-orange-50' : ''"
             >
