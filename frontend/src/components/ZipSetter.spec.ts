@@ -6,6 +6,21 @@ import ZipSetter from './ZipSetter.vue'
 vi.mock('axios')
 const mockedAxios = vi.mocked(axios, true)
 
+/**
+ * Picks an <option> by its value attribute and dispatches a `change` event,
+ * which is what real browsers do when the user opens a <select> and clicks an
+ * option. `wrapper.find('select').setValue(x)` is unreliable here because the
+ * select binds its `:value` to a Vue ref — setValue mutates the DOM directly
+ * and Vue's re-render snaps it back before the event flows through.
+ */
+async function pickOption(wrapper: any, selector: string, optionValue: string) {
+  const select = wrapper.find(selector).element as HTMLSelectElement
+  const opt = select.querySelector(`option[value="${optionValue}"]`) as HTMLOptionElement | null
+  if (!opt) throw new Error(`No option with value=${optionValue} in ${selector}`)
+  opt.selected = true
+  await wrapper.find(selector).trigger('change')
+}
+
 describe('ZipSetter', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -41,7 +56,7 @@ describe('ZipSetter', () => {
     const wrapper = mount(ZipSetter, { props: { modelValue: [] } })
     await flushPromises()
 
-    await wrapper.find('select').setValue(5)
+    await pickOption(wrapper, 'select', '5')
     await flushPromises()
 
     expect(mockedAxios.get).toHaveBeenNthCalledWith(2, '/api/counties', {
@@ -65,7 +80,7 @@ describe('ZipSetter', () => {
     const wrapper = mount(ZipSetter, { props: { modelValue: [] } })
     await flushPromises()
 
-    await wrapper.find('select').setValue(5)
+    await pickOption(wrapper, 'select', '5')
     await flushPromises()
 
     // Tick the county checkbox

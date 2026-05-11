@@ -76,6 +76,11 @@ async function loadZips(countyIds: number[]) {
   }
 }
 
+function onStateChange(e: Event) {
+  const raw = (e.target as HTMLSelectElement).value
+  selectedStateId.value = raw === '' ? null : Number(raw)
+}
+
 watch(selectedStateId, (id) => {
   if (id != null) loadCounties(id)
 })
@@ -96,11 +101,12 @@ loadStates()
     <div class="flex flex-col gap-2">
       <label class="text-sm font-semibold text-slate-700">State</label>
       <select
-        v-model="selectedStateId"
+        :value="selectedStateId ?? ''"
+        @change="onStateChange"
         :disabled="loadingStates"
         class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none disabled:opacity-60"
       >
-        <option :value="null" disabled>
+        <option value="" disabled>
           {{ loadingStates ? 'Loading…' : 'Select a state' }}
         </option>
         <option v-for="s in states" :key="s.id" :value="s.id">
