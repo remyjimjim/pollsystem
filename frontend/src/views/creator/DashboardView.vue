@@ -29,6 +29,13 @@ function editSlug(type: 'Questionnaire' | 'Election' | 'BallotMeasure'): string 
   }
 }
 
+function closeDatePast(iso: string | null): boolean {
+  if (!iso) return false
+  const end = new Date()
+  end.setHours(23, 59, 59, 999)
+  return new Date(iso).getTime() <= end.getTime()
+}
+
 function statusClasses(status: PollStatus): string {
   switch (status) {
     case 'PUBLISHED' as PollStatus: return 'bg-green-100 text-green-900'
@@ -59,15 +66,15 @@ function toggleArchived() {
 }
 
 const acting = ref<number | null>(null)
-async function del(p: CreatorPollSummary) {
-  if (!window.confirm(`Delete "${p.title}"? This removes it from the dashboard, search, and voting. You can restore it later via "Show archived".`)) return
+async function archive(p: CreatorPollSummary) {
+  if (!window.confirm(`Archive "${p.title}"? This removes it from the dashboard, search, and voting. You can restore it later via "Show archived".`)) return
   acting.value = p.id
   error.value = null
   try {
     await axios.delete(`/api/creator/polls/${editSlug(p.type)}/${p.id}`)
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Delete failed'
+    error.value = e?.response?.data?.message ?? 'Archive failed'
   } finally {
     acting.value = null
   }
@@ -147,7 +154,10 @@ onMounted(load)
               {{ p.status }}
             </span>
           </td>
-          <td class="border-b border-slate-100 p-2">
+          <td
+            class="border-b border-slate-100 p-2"
+            :class="closeDatePast(p.closeDate) ? 'bg-orange-50 text-orange-900' : ''"
+          >
             {{ p.closeDate ? new Date(p.closeDate).toLocaleString() : '—' }}
           </td>
           <td class="border-b border-slate-100 p-2">
@@ -160,10 +170,10 @@ onMounted(load)
           <td class="border-b border-slate-100 p-2">
             <button
               v-if="p.status !== 'ARCHIVED'"
-              @click="del(p)"
+              @click="archive(p)"
               :disabled="acting === p.id"
-              class="text-red-700 underline hover:text-red-900 disabled:cursor-not-allowed disabled:opacity-50"
-            >{{ acting === p.id ? 'Deleting…' : 'Delete' }}</button>
+              class="text-slate-800 underline hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
+            >{{ acting === p.id ? 'Archiving…' : 'Archive' }}</button>
             <button
               v-else
               @click="restore(p)"
