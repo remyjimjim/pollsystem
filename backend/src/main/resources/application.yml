@@ -55,3 +55,7 @@ app:
 # Server
 server:
   port: 8080
+  # Surface ResponseStatusException.reason in the JSON error body so the
+  # frontend can show real validation messages instead of a generic fallback.
+  error:
+    include-message: always
