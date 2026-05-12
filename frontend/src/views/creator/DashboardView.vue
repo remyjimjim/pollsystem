@@ -19,6 +19,7 @@ interface CreatorPollSummary {
 const polls = ref<CreatorPollSummary[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
+const showArchived = ref(false)
 
 function editSlug(type: 'Questionnaire' | 'Election' | 'BallotMeasure'): string {
   switch (type) {
@@ -41,7 +42,9 @@ async function load() {
   loading.value = true
   error.value = null
   try {
-    const res = await axios.get<CreatorPollSummary[]>('/api/creator/polls')
+    const res = await axios.get<CreatorPollSummary[]>('/api/creator/polls', {
+      params: showArchived.value ? { showArchived: true } : {}
+    })
     polls.value = res.data
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? 'Failed to load polls'
@@ -50,10 +53,15 @@ async function load() {
   }
 }
 
-const deleting = ref<number | null>(null)
+function toggleArchived() {
+  showArchived.value = !showArchived.value
+  load()
+}
+
+const acting = ref<number | null>(null)
 async function del(p: CreatorPollSummary) {
-  if (!window.confirm(`Delete "${p.title}"? This removes it from the dashboard, search, and voting.`)) return
-  deleting.value = p.id
+  if (!window.confirm(`Delete "${p.title}"? This removes it from the dashboard, search, and voting. You can restore it later via "Show archived".`)) return
+  acting.value = p.id
   error.value = null
   try {
     await axios.delete(`/api/creator/polls/${editSlug(p.type)}/${p.id}`)
@@ -61,7 +69,20 @@ async function del(p: CreatorPollSummary) {
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? 'Delete failed'
   } finally {
-    deleting.value = null
+    acting.value = null
+  }
+}
+
+async function restore(p: CreatorPollSummary) {
+  acting.value = p.id
+  error.value = null
+  try {
+    await axios.post(`/api/creator/polls/${editSlug(p.type)}/${p.id}/restore`)
+    await load()
+  } catch (e: any) {
+    error.value = e?.response?.data?.message ?? 'Restore failed'
+  } finally {
+    acting.value = null
   }
 }
 
@@ -89,11 +110,19 @@ onMounted(load)
       </div>
     </div>
 
+    <div class="mb-3 flex justify-end">
+      <button
+        type="button"
+        @click="toggleArchived"
+        class="text-sm text-slate-600 underline hover:text-slate-900"
+      >{{ showArchived ? 'Hide archived' : 'Show archived' }}</button>
+    </div>
+
     <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
     <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
 
     <p v-else-if="polls.length === 0" class="text-sm text-slate-500">
-      You haven't created any polls yet.
+      {{ showArchived ? 'No polls (archived or otherwise).' : "You haven't created any polls yet." }}
     </p>
 
     <table v-else class="w-full border-collapse text-sm">
@@ -130,10 +159,17 @@ onMounted(load)
           </td>
           <td class="border-b border-slate-100 p-2">
             <button
+              v-if="p.status !== 'ARCHIVED'"
               @click="del(p)"
-              :disabled="deleting === p.id"
+              :disabled="acting === p.id"
               class="text-red-700 underline hover:text-red-900 disabled:cursor-not-allowed disabled:opacity-50"
-            >{{ deleting === p.id ? 'Deleting…' : 'Delete' }}</button>
+            >{{ acting === p.id ? 'Deleting…' : 'Delete' }}</button>
+            <button
+              v-else
+              @click="restore(p)"
+              :disabled="acting === p.id"
+              class="text-slate-800 underline hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
+            >{{ acting === p.id ? 'Restoring…' : 'Restore' }}</button>
           </td>
         </tr>
       </tbody>
