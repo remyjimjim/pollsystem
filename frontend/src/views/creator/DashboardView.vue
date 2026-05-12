@@ -50,6 +50,21 @@ async function load() {
   }
 }
 
+const deleting = ref<number | null>(null)
+async function del(p: CreatorPollSummary) {
+  if (!window.confirm(`Delete "${p.title}"? This removes it from the dashboard, search, and voting.`)) return
+  deleting.value = p.id
+  error.value = null
+  try {
+    await axios.delete(`/api/creator/polls/${editSlug(p.type)}/${p.id}`)
+    await load()
+  } catch (e: any) {
+    error.value = e?.response?.data?.message ?? 'Delete failed'
+  } finally {
+    deleting.value = null
+  }
+}
+
 onMounted(load)
 </script>
 
@@ -89,6 +104,7 @@ onMounted(load)
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Status</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Close date</th>
           <th class="border-b border-slate-200 p-2"></th>
+          <th class="border-b border-slate-200 p-2"></th>
         </tr>
       </thead>
       <tbody>
@@ -111,6 +127,13 @@ onMounted(load)
               :to="`/creator/polls/${editSlug(p.type)}/${p.id}/edit`"
               class="text-slate-800 underline"
             >Edit</router-link>
+          </td>
+          <td class="border-b border-slate-100 p-2">
+            <button
+              @click="del(p)"
+              :disabled="deleting === p.id"
+              class="text-red-700 underline hover:text-red-900 disabled:cursor-not-allowed disabled:opacity-50"
+            >{{ deleting === p.id ? 'Deleting…' : 'Delete' }}</button>
           </td>
         </tr>
       </tbody>

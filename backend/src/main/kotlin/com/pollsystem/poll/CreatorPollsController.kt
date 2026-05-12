@@ -5,10 +5,15 @@ import com.pollsystem.repository.BallotMeasureRepository
 import com.pollsystem.repository.ElectionRepository
 import com.pollsystem.repository.QuestionnaireRepository
 import com.pollsystem.security.AppUserDetails
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
 data class CreatorPollSummary(
@@ -51,6 +56,45 @@ class CreatorPollsController(
                     it.closeDate, it.dateCreated
                 )
             }
-        return (q + e + b).sortedByDescending { it.createdAt }
+        return (q + e + b)
+            .filterNot { it.status == PollStatus.ARCHIVED }
+            .sortedByDescending { it.createdAt }
     }
+
+    /**
+     * Soft-deletes the creator's own poll by setting status=ARCHIVED. Archived
+     * polls disappear from the dashboard listing and from search/voting (every
+     * voter-facing query filters on PUBLISHED), but rows and any cast responses
+     * are preserved so the deletion is recoverable by a Super if needed.
+     */
+    @DeleteMapping("/{type}/{id}")
+    @Transactional
+    fun delete(
+        @AuthenticationPrincipal principal: AppUserDetails,
+        @PathVariable type: String,
+        @PathVariable id: Long
+    ) {
+        val callerId = principal.user.id
+        when (type) {
+            "questionnaire" -> {
+                val q = questionnaires.findById(id).orElseThrow { notFound() }
+                if (q.creator.id != callerId) throw forbidden()
+                questionnaires.save(q.copy(status = PollStatus.ARCHIVED))
+            }
+            "election" -> {
+                val e = elections.findById(id).orElseThrow { notFound() }
+                if (e.creator.id != callerId) throw forbidden()
+                elections.save(e.copy(status = PollStatus.ARCHIVED))
+            }
+            "ballot-measure" -> {
+                val bm = ballotMeasures.findById(id).orElseThrow { notFound() }
+                if (bm.creator.id != callerId) throw forbidden()
+                ballotMeasures.save(bm.copy(status = PollStatus.ARCHIVED))
+            }
+            else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
+        }
+    }
+
+    private fun notFound() = ResponseStatusException(HttpStatus.NOT_FOUND, "Poll not found")
+    private fun forbidden() = ResponseStatusException(HttpStatus.FORBIDDEN, "Not your poll")
 }
