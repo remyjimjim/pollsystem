@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import axios from 'axios'
+
+const { t } = useI18n()
 
 interface CreatorRequestDto {
   id: number
@@ -33,8 +36,8 @@ async function load() {
     data.value = res.data
   } catch (e: any) {
     error.value = e?.response?.status === 404
-      ? 'Creator request not found.'
-      : (e?.response?.data?.message ?? 'Failed to load request')
+      ? t('admin.creatorRequestDetail.notFound')
+      : (e?.response?.data?.message ?? t('admin.creatorRequestDetail.loadFailed'))
   } finally {
     loading.value = false
   }
@@ -47,7 +50,7 @@ async function act(path: 'batch-approve' | 'batch-reject') {
     await axios.post(`/api/admin/creator-requests/${path}`, { requestIds: [id.value] })
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Action failed'
+    error.value = e?.response?.data?.message ?? t('admin.creatorRequestDetail.actionFailed')
   } finally {
     acting.value = false
   }
@@ -67,51 +70,51 @@ onMounted(load)
 <template>
   <div class="mx-auto max-w-3xl py-8">
     <p class="mb-2 text-sm">
-      <router-link to="/admin/dashboard" class="text-slate-800 underline">← Dashboard</router-link>
+      <router-link to="/admin/dashboard" class="text-slate-800 underline">{{ $t('admin.creatorRequestDetail.dashboardLink') }}</router-link>
     </p>
 
-    <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
+    <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
     <p v-else-if="error" class="text-sm text-red-700">{{ error }}</p>
 
     <template v-else-if="data">
       <h1 class="mb-2 text-2xl font-semibold text-slate-800">
-        Creator Request #{{ data.id }}
+        {{ $t('admin.creatorRequestDetail.heading', { id: data.id }) }}
       </h1>
       <p class="mb-6 flex items-center gap-2">
         <span
           :class="['rounded px-2 py-0.5 text-xs font-semibold', statusClasses(data.status)]"
         >{{ data.status }}</span>
         <span class="text-sm text-slate-600">
-          submitted {{ new Date(data.submittedAt).toLocaleString() }}
+          {{ $t('admin.creatorRequestDetail.submittedOn', { date: new Date(data.submittedAt).toLocaleString() }) }}
         </span>
       </p>
 
       <dl class="mb-6 grid grid-cols-[140px_1fr] gap-y-2 text-sm">
-        <dt class="font-semibold text-slate-700">Requester</dt>
+        <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.requester') }}</dt>
         <dd>{{ data.userEmail }}</dd>
 
-        <dt class="font-semibold text-slate-700">Zipcodes</dt>
+        <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.zipcodes') }}</dt>
         <dd class="font-mono text-xs">{{ data.zipcodes.join(', ') }}</dd>
 
-        <dt class="font-semibold text-slate-700">Poll Types</dt>
+        <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.pollTypes') }}</dt>
         <dd>{{ data.pollTypeIds.join(', ') }}</dd>
 
-        <dt class="font-semibold text-slate-700">Assigned admin</dt>
-        <dd>{{ data.assignedAdminId ?? '— unassigned —' }}</dd>
+        <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.assignedAdmin') }}</dt>
+        <dd>{{ data.assignedAdminId ?? $t('admin.creatorRequestDetail.unassignedLabel') }}</dd>
 
         <template v-if="data.processedAt">
-          <dt class="font-semibold text-slate-700">Decided</dt>
+          <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.decided') }}</dt>
           <dd>
             {{ new Date(data.processedAt).toLocaleString() }}
             <span v-if="data.processedByEmail" class="text-slate-500">
-              by {{ data.processedByEmail }}
+              {{ $t('admin.creatorRequestDetail.by') }} {{ data.processedByEmail }}
             </span>
           </dd>
         </template>
 
-        <dt class="font-semibold text-slate-700 self-start pt-1">Reason</dt>
+        <dt class="font-semibold text-slate-700 self-start pt-1">{{ $t('admin.creatorRequestDetail.reason') }}</dt>
         <dd class="whitespace-pre-wrap rounded bg-slate-50 p-2 text-slate-700">
-          {{ data.reason || '— no reason provided —' }}
+          {{ data.reason || $t('admin.creatorRequestDetail.noReason') }}
         </dd>
       </dl>
 
@@ -122,7 +125,7 @@ onMounted(load)
           :disabled="acting"
           class="rounded bg-green-700 px-4 py-2 text-sm text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {{ acting ? 'Working…' : '✓ Approve' }}
+          {{ acting ? $t('admin.creatorRequestDetail.working') : $t('admin.creatorRequestDetail.approve') }}
         </button>
         <button
           v-if="data.status !== 'REJECTED'"
@@ -130,7 +133,7 @@ onMounted(load)
           :disabled="acting"
           class="rounded bg-red-700 px-4 py-2 text-sm text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {{ acting ? 'Working…' : '✗ Reject' }}
+          {{ acting ? $t('admin.creatorRequestDetail.working') : $t('admin.creatorRequestDetail.reject') }}
         </button>
       </div>
     </template>

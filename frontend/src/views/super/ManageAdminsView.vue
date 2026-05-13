@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface AdminRoleAssignmentDto {
   id: number
@@ -30,7 +33,7 @@ async function load() {
     const res = await axios.get<AdminUserDto[]>('/api/super/admins')
     admins.value = res.data
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Failed to load admins'
+    error.value = e?.response?.data?.message ?? t('super.manageAdmins.errorLoad')
   } finally {
     loading.value = false
   }
@@ -42,19 +45,19 @@ async function toggle(raId: number) {
     await axios.post(`/api/super/admins/role-assignments/${raId}/toggle`)
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Toggle failed'
+    error.value = e?.response?.data?.message ?? t('super.manageAdmins.errorToggle')
   }
 }
 
 async function demote(user: AdminUserDto) {
-  if (!confirm(`Demote ${user.email} to CREATOR? All their admin assignments will be disabled.`)) return
+  if (!confirm(t('super.manageAdmins.demoteConfirm', { email: user.email }))) return
   error.value = null
   try {
     await axios.post(`/api/super/admins/${user.id}/demote`)
-    message.value = `${user.email} demoted to CREATOR.`
+    message.value = t('super.manageAdmins.demoted', { email: user.email })
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Demote failed'
+    error.value = e?.response?.data?.message ?? t('super.manageAdmins.errorDemote')
   }
 }
 
@@ -69,7 +72,7 @@ onMounted(load)
 
 <template>
   <div class="mx-auto max-w-5xl py-8">
-    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Manage Admins</h1>
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('super.manageAdmins.heading') }}</h1>
 
     <div class="mb-4">
       <button
@@ -77,14 +80,14 @@ onMounted(load)
         :disabled="loading"
         class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {{ loading ? 'Loading…' : 'Refresh' }}
+        {{ loading ? $t('common.loading') : $t('super.manageAdmins.refresh') }}
       </button>
     </div>
 
     <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
     <p v-if="message" class="text-sm text-green-700">{{ message }}</p>
 
-    <p v-if="!loading && admins.length === 0" class="text-sm text-slate-500">No admins yet.</p>
+    <p v-if="!loading && admins.length === 0" class="text-sm text-slate-500">{{ $t('super.manageAdmins.none') }}</p>
 
     <div v-else class="flex flex-col gap-4">
       <article
@@ -104,27 +107,27 @@ onMounted(load)
             <span
               v-if="!a.isEnabled"
               class="rounded bg-red-100 px-2 py-0.5 text-xs text-red-900"
-            >disabled</span>
+            >{{ $t('super.manageAdmins.badgeDisabled') }}</span>
           </div>
           <button
             v-if="a.access === 'ADMIN'"
             @click="demote(a)"
             class="rounded border border-red-700 bg-white px-3 py-1.5 text-sm text-red-700 hover:bg-red-50"
-          >Demote to Creator</button>
+          >{{ $t('super.manageAdmins.demote') }}</button>
         </header>
 
         <section>
-          <h4 class="mb-2 text-sm font-semibold text-slate-700">Role Assignments</h4>
+          <h4 class="mb-2 text-sm font-semibold text-slate-700">{{ $t('super.manageAdmins.roleAssignments') }}</h4>
           <p v-if="a.roleAssignments.length === 0" class="text-sm text-slate-500">
-            No zipcode assignments.
+            {{ $t('super.manageAdmins.noAssignments') }}
           </p>
           <table v-else class="w-full border-collapse text-sm">
             <thead>
               <tr class="bg-slate-50 text-left">
-                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">State</th>
-                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">County</th>
-                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Zipcode</th>
-                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Enabled</th>
+                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageAdmins.colState') }}</th>
+                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageAdmins.colCounty') }}</th>
+                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageAdmins.colZipcode') }}</th>
+                <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageAdmins.colEnabled') }}</th>
                 <th class="border-b border-slate-200 p-2"></th>
               </tr>
             </thead>
@@ -139,13 +142,13 @@ onMounted(load)
                       'rounded px-2 py-0.5 text-xs',
                       ra.enabled ? 'bg-green-100 text-green-900' : 'bg-slate-200 text-slate-600'
                     ]"
-                  >{{ ra.enabled ? 'on' : 'off' }}</span>
+                  >{{ ra.enabled ? $t('super.manageAdmins.on') : $t('super.manageAdmins.off') }}</span>
                 </td>
                 <td class="border-b border-slate-100 p-2">
                   <button
                     @click="toggle(ra.id)"
                     class="text-sm text-slate-800 underline"
-                  >{{ ra.enabled ? 'Disable' : 'Enable' }}</button>
+                  >{{ ra.enabled ? $t('super.manageAdmins.disable') : $t('super.manageAdmins.enable') }}</button>
                 </td>
               </tr>
             </tbody>

@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 import type { RequestStatus } from '@/types'
+
+const { t } = useI18n()
 
 interface CreatorRequestDto {
   id: number
@@ -35,7 +38,7 @@ async function load() {
     requests.value = res.data
     selected.value = new Set()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Failed to load requests'
+    error.value = e?.response?.data?.message ?? t('admin.creatorRequests.errorLoad')
   } finally {
     loading.value = false
   }
@@ -62,10 +65,10 @@ async function decide(path: 'batch-approve' | 'batch-reject', verb: string) {
   try {
     const ids = Array.from(selected.value)
     await axios.post(`/api/admin/creator-requests/${path}`, { requestIds: ids })
-    message.value = `${ids.length} request(s) ${verb}.`
+    message.value = t('admin.creatorRequests.countMessage', { n: ids.length, verb })
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? `Failed to ${verb}`
+    error.value = e?.response?.data?.message ?? t('admin.creatorRequests.failedTo', { verb })
   } finally {
     acting.value = false
   }
@@ -76,7 +79,7 @@ onMounted(load)
 
 <template>
   <div class="mx-auto max-w-6xl py-8">
-    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Creator Requests</h1>
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('admin.creatorRequests.heading') }}</h1>
 
     <div class="mb-4 flex items-center gap-2">
       <button
@@ -84,22 +87,22 @@ onMounted(load)
         :disabled="loading"
         class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {{ loading ? 'Loading…' : 'Refresh' }}
+        {{ loading ? $t('common.loading') : $t('admin.creatorRequests.refresh') }}
       </button>
       <span class="flex-1" />
       <button
         :disabled="acting || selected.size === 0"
-        @click="decide('batch-approve', 'approved')"
+        @click="decide('batch-approve', $t('admin.creatorRequests.approvedVerb'))"
         class="rounded bg-green-700 px-4 py-2 text-sm text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Approve selected ({{ selected.size }})
+        {{ $t('admin.creatorRequests.approveSelected', { n: selected.size }) }}
       </button>
       <button
         :disabled="acting || selected.size === 0"
-        @click="decide('batch-reject', 'rejected')"
+        @click="decide('batch-reject', $t('admin.creatorRequests.rejectedVerb'))"
         class="rounded bg-red-700 px-4 py-2 text-sm text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Reject selected ({{ selected.size }})
+        {{ $t('admin.creatorRequests.rejectSelected', { n: selected.size }) }}
       </button>
     </div>
 
@@ -107,7 +110,7 @@ onMounted(load)
     <p v-if="message" class="text-sm text-green-700">{{ message }}</p>
 
     <p v-if="!loading && requests.length === 0" class="text-sm text-slate-500">
-      No pending requests.
+      {{ $t('admin.creatorRequests.noPending') }}
     </p>
 
     <table v-else-if="requests.length > 0" class="w-full border-collapse text-sm">
@@ -116,11 +119,11 @@ onMounted(load)
           <th class="border-b border-slate-200 p-2">
             <input type="checkbox" :checked="allChecked" @change="toggleAll" />
           </th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">User</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Zipcodes</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Reason</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Submitted</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Status</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.creatorRequests.colUser') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.creatorRequests.colZipcodes') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.creatorRequests.colReason') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.creatorRequests.colSubmitted') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.creatorRequests.colStatus') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -152,7 +155,7 @@ onMounted(load)
               v-if="r.assignedAdminId == null"
               class="ml-2 inline-block rounded bg-orange-500 px-1.5 py-0.5 text-xs text-white"
             >
-              unassigned
+              {{ $t('admin.creatorRequests.badgeUnassigned') }}
             </span>
           </td>
         </tr>

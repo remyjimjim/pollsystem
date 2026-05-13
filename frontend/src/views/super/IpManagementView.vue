@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface IpRuleDto {
   id: number
@@ -31,7 +34,7 @@ async function load() {
     const res = await axios.get<IpRuleDto[]>('/api/super/ip-rules')
     rules.value = res.data
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Failed to load rules'
+    error.value = e?.response?.data?.message ?? t('super.ipManagement.errorLoad')
   } finally {
     loading.value = false
   }
@@ -49,10 +52,10 @@ async function add() {
     })
     form.value = ''
     form.note = ''
-    message.value = 'Rule added.'
+    message.value = t('super.ipManagement.ruleAdded')
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Add failed'
+    error.value = e?.response?.data?.message ?? t('super.ipManagement.errorAdd')
   }
 }
 
@@ -62,18 +65,18 @@ async function toggle(id: number) {
     await axios.post(`/api/super/ip-rules/${id}/toggle`)
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Toggle failed'
+    error.value = e?.response?.data?.message ?? t('super.ipManagement.errorToggle')
   }
 }
 
 async function remove(id: number) {
-  if (!confirm('Delete this rule?')) return
+  if (!confirm(t('super.ipManagement.deleteConfirm'))) return
   error.value = null
   try {
     await axios.delete(`/api/super/ip-rules/${id}`)
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Delete failed'
+    error.value = e?.response?.data?.message ?? t('super.ipManagement.errorDelete')
   }
 }
 
@@ -82,11 +85,10 @@ onMounted(load)
 
 <template>
   <div class="mx-auto max-w-6xl py-8">
-    <h1 class="mb-2 text-2xl font-semibold text-slate-800">IP Allow / Deny Rules</h1>
+    <h1 class="mb-2 text-2xl font-semibold text-slate-800">{{ $t('super.ipManagement.heading') }}</h1>
     <p class="mb-6 rounded-md border border-orange-400 bg-orange-50 p-3 text-sm text-orange-900">
-      <strong class="font-semibold">Note:</strong>
-      these rules are stored but not enforced. Wiring up the request filter is
-      intentionally deferred to avoid locking yourself out in dev.
+      <strong class="font-semibold">{{ $t('super.ipManagement.note') }}</strong>
+      {{ $t('super.ipManagement.noteBody') }}
     </p>
 
     <form
@@ -94,18 +96,18 @@ onMounted(load)
       class="mb-4 grid grid-cols-[2fr_1fr_2fr_auto_auto] items-end gap-2 rounded-md bg-slate-50 p-4"
     >
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        Value (IP or CIDR)
+        {{ $t('super.ipManagement.valueLabel') }}
         <input
           v-model="form.value"
           type="text"
           required
           maxlength="64"
-          placeholder="e.g. 10.0.0.0/8"
+          :placeholder="$t('super.ipManagement.valuePlaceholder')"
           class="rounded border border-slate-300 p-2 text-sm font-normal focus:border-slate-500 focus:outline-none"
         />
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        Type
+        {{ $t('super.ipManagement.typeLabel') }}
         <select
           v-model="form.type"
           class="rounded border border-slate-300 p-2 text-sm font-normal focus:border-slate-500 focus:outline-none"
@@ -115,40 +117,40 @@ onMounted(load)
         </select>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        Note
+        {{ $t('super.ipManagement.noteLabel') }}
         <input
           v-model="form.note"
           type="text"
-          placeholder="optional"
+          :placeholder="$t('super.ipManagement.noteOptional')"
           class="rounded border border-slate-300 p-2 text-sm font-normal focus:border-slate-500 focus:outline-none"
         />
       </label>
       <label class="flex items-center gap-2 text-xs font-semibold text-slate-700">
         <input v-model="form.enabled" type="checkbox" />
-        Enabled
+        {{ $t('super.ipManagement.enabledLabel') }}
       </label>
       <button
         type="submit"
         class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900"
       >
-        Add rule
+        {{ $t('super.ipManagement.addRule') }}
       </button>
     </form>
 
     <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
     <p v-if="message" class="text-sm text-green-700">{{ message }}</p>
 
-    <p v-if="!loading && rules.length === 0" class="text-sm text-slate-500">No rules yet.</p>
+    <p v-if="!loading && rules.length === 0" class="text-sm text-slate-500">{{ $t('super.ipManagement.none') }}</p>
 
     <table v-else-if="rules.length > 0" class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Value</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Type</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Note</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Enabled</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Created</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">By</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.ipManagement.colValue') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.ipManagement.colType') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.ipManagement.colNote') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.ipManagement.colEnabled') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.ipManagement.colCreated') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.ipManagement.colBy') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
         </tr>
       </thead>
@@ -163,29 +165,29 @@ onMounted(load)
               ]"
             >{{ r.type }}</span>
           </td>
-          <td class="border-b border-slate-100 p-2">{{ r.note ?? '—' }}</td>
+          <td class="border-b border-slate-100 p-2">{{ r.note ?? $t('super.ipManagement.dashLabel') }}</td>
           <td class="border-b border-slate-100 p-2">
             <span
               :class="[
                 'rounded px-2 py-0.5 text-xs',
                 r.enabled ? 'bg-green-100 text-green-900' : 'bg-slate-200 text-slate-600'
               ]"
-            >{{ r.enabled ? 'on' : 'off' }}</span>
+            >{{ r.enabled ? $t('super.ipManagement.on') : $t('super.ipManagement.off') }}</span>
           </td>
           <td class="border-b border-slate-100 p-2">
             {{ new Date(r.createdAt).toLocaleString() }}
           </td>
-          <td class="border-b border-slate-100 p-2">{{ r.createdByEmail ?? '—' }}</td>
+          <td class="border-b border-slate-100 p-2">{{ r.createdByEmail ?? $t('super.ipManagement.dashLabel') }}</td>
           <td class="border-b border-slate-100 p-2">
             <div class="flex gap-3">
               <button
                 @click="toggle(r.id)"
                 class="text-slate-800 underline"
-              >{{ r.enabled ? 'Disable' : 'Enable' }}</button>
+              >{{ r.enabled ? $t('super.ipManagement.disable') : $t('super.ipManagement.enable') }}</button>
               <button
                 @click="remove(r.id)"
                 class="text-red-700 underline"
-              >Delete</button>
+              >{{ $t('super.ipManagement.deleteAction') }}</button>
             </div>
           </td>
         </tr>

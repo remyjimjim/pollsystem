@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+
+const { t } = useI18n()
 
 interface AdminZipcodeScope {
   stateInitial: string
@@ -51,7 +54,7 @@ async function load() {
     const res = await axios.get<AdminDashboardDto>('/api/admin/dashboard')
     data.value = res.data
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Failed to load dashboard'
+    error.value = e?.response?.data?.message ?? t('admin.dashboard.errorLoad')
   } finally {
     loading.value = false
   }
@@ -64,7 +67,7 @@ async function act(id: number, path: 'batch-approve' | 'batch-reject') {
     await axios.post(`/api/admin/creator-requests/${path}`, { requestIds: [id] })
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Action failed'
+    error.value = e?.response?.data?.message ?? t('admin.dashboard.errorAction')
   } finally {
     acting.value = null
   }
@@ -74,11 +77,11 @@ function relative(iso: string | null): string {
   if (!iso) return '—'
   const diffMs = Date.now() - new Date(iso).getTime()
   const minutes = Math.round(diffMs / 60_000)
-  if (minutes < 60) return `${minutes}m ago`
+  if (minutes < 60) return t('admin.dashboard.timeAgoMinutes', { n: minutes })
   const hours = Math.round(diffMs / 3_600_000)
-  if (hours < 24) return `${hours}h ago`
+  if (hours < 24) return t('admin.dashboard.timeAgoHours', { n: hours })
   const days = Math.round(diffMs / 86_400_000)
-  return `${days}d ago`
+  return t('admin.dashboard.timeAgoDays', { n: days })
 }
 
 function isStale(iso: string): boolean {
@@ -88,9 +91,9 @@ function isStale(iso: string): boolean {
 const scopeSummary = computed(() => {
   if (!data.value) return ''
   const zips = data.value.scope.map(s => s.zipcode)
-  if (zips.length === 0) return 'no zipcodes (no role assignments yet)'
+  if (zips.length === 0) return t('admin.dashboard.noZipcodes')
   if (zips.length <= 4) return zips.join(', ')
-  return `${zips.slice(0, 3).join(', ')} +${zips.length - 3} more`
+  return `${zips.slice(0, 3).join(', ')} ${t('admin.dashboard.moreZips', { n: zips.length - 3 })}`
 })
 
 // Refetch when the page is restored from the browser's bfcache (e.g. user
@@ -112,33 +115,33 @@ onBeforeUnmount(() => {
 <template>
   <div class="py-8">
     <header class="mb-6">
-      <h1 class="text-2xl font-semibold text-slate-800">Admin Dashboard</h1>
+      <h1 class="text-2xl font-semibold text-slate-800">{{ $t('admin.dashboard.heading') }}</h1>
       <p class="mt-1 text-sm text-slate-600">
         <template v-if="auth.user">
-          Signed in as <strong>{{ auth.user.email }}</strong> ·
+          {{ $t('admin.dashboard.signedInAs') }} <strong>{{ auth.user.email }}</strong> ·
         </template>
-        Reviewing requests for: <span class="font-mono">{{ scopeSummary }}</span>
+        {{ $t('admin.dashboard.reviewingFor') }} <span class="font-mono">{{ scopeSummary }}</span>
       </p>
     </header>
 
     <p v-if="error" class="mb-4 text-sm text-red-700">{{ error }}</p>
-    <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
+    <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
 
     <template v-if="data">
       <!-- KPI cards -->
       <div class="mb-6 grid gap-4 sm:grid-cols-3">
         <article class="rounded-md border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Pending review
+            {{ $t('admin.dashboard.kpiPendingReview') }}
           </p>
           <p class="my-1 text-3xl font-semibold text-slate-800">
             {{ data.pendingAssignedToMe.length }}
           </p>
-          <p class="text-xs text-slate-500">assigned to me</p>
+          <p class="text-xs text-slate-500">{{ $t('admin.dashboard.kpiAssignedToMe') }}</p>
         </article>
         <article class="rounded-md border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Unassigned in scope
+            {{ $t('admin.dashboard.kpiUnassignedInScope') }}
           </p>
           <p
             class="my-1 text-3xl font-semibold"
@@ -147,46 +150,46 @@ onBeforeUnmount(() => {
             {{ data.unassignedInScope.length }}
           </p>
           <p class="text-xs text-slate-500">
-            claimable
+            {{ $t('admin.dashboard.kpiClaimable') }}
             <template v-if="data.staleCount > 0">
-              · <span class="font-semibold text-orange-700">{{ data.staleCount }} stale (&gt;48h)</span>
+              · <span class="font-semibold text-orange-700">{{ data.staleCount }} {{ $t('admin.dashboard.kpiStaleSuffix') }}</span>
             </template>
           </p>
         </article>
         <article class="rounded-md border border-slate-200 bg-white p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Creators in scope
+            {{ $t('admin.dashboard.kpiCreatorsInScope') }}
           </p>
           <p class="my-1 text-3xl font-semibold text-slate-800">
             {{ data.creatorsInScopeCount }}
           </p>
-          <p class="text-xs text-slate-500">in your zipcodes</p>
+          <p class="text-xs text-slate-500">{{ $t('admin.dashboard.kpiInYourZipcodes') }}</p>
         </article>
       </div>
 
       <!-- Pending requests table -->
       <section class="mb-6">
         <div class="mb-2 flex items-center justify-between">
-          <h2 class="text-lg font-semibold text-slate-700">Pending Creator Requests</h2>
+          <h2 class="text-lg font-semibold text-slate-700">{{ $t('admin.dashboard.pendingHeading') }}</h2>
           <router-link to="/admin/creator-requests" class="text-sm text-slate-800 underline">
-            View all ({{ data.pendingAssignedToMe.length + data.unassignedInScope.length }}) →
+            {{ $t('admin.dashboard.viewAll', { n: data.pendingAssignedToMe.length + data.unassignedInScope.length }) }}
           </router-link>
         </div>
         <p
           v-if="data.pendingAssignedToMe.length === 0 && data.unassignedInScope.length === 0"
           class="text-sm text-slate-500"
         >
-          No pending requests in your scope.
+          {{ $t('admin.dashboard.noPending') }}
         </p>
         <table v-else class="w-full border-collapse text-sm">
           <thead>
             <tr class="bg-slate-50 text-left">
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">#ID</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">User</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Zipcodes</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Poll Types</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Submitted</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Actions</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colId') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colUser') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colZipcodes') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colPollTypes') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colSubmitted') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colActions') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -213,11 +216,11 @@ onBeforeUnmount(() => {
                 <span
                   v-if="isStale(r.submittedAt)"
                   class="ml-1 rounded bg-orange-500 px-1.5 py-0.5 text-xs text-white"
-                >stale</span>
+                >{{ $t('admin.dashboard.badgeStale') }}</span>
                 <span
                   v-if="r.assignedAdminId == null"
                   class="ml-1 rounded bg-slate-200 px-1.5 py-0.5 text-xs text-slate-700"
-                >unassigned</span>
+                >{{ $t('admin.dashboard.badgeUnassigned') }}</span>
               </td>
               <td class="border-b border-slate-100 p-2 align-top">
                 <div class="flex gap-2">
@@ -225,14 +228,14 @@ onBeforeUnmount(() => {
                     @click="act(r.id, 'batch-approve')"
                     :disabled="acting === r.id"
                     class="rounded bg-green-700 px-2.5 py-1 text-xs text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
-                    title="Approve"
-                  >✓ Approve</button>
+                    :title="$t('admin.dashboard.approveTitle')"
+                  >{{ $t('admin.dashboard.approve') }}</button>
                   <button
                     @click="act(r.id, 'batch-reject')"
                     :disabled="acting === r.id"
                     class="rounded bg-red-700 px-2.5 py-1 text-xs text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
-                    title="Reject"
-                  >✗ Reject</button>
+                    :title="$t('admin.dashboard.rejectTitle')"
+                  >{{ $t('admin.dashboard.reject') }}</button>
                 </div>
               </td>
             </tr>
@@ -243,20 +246,20 @@ onBeforeUnmount(() => {
       <!-- Recent decisions audit log -->
       <section class="mb-6">
         <h2 class="mb-2 text-lg font-semibold text-slate-700">
-          Recent Decisions
-          <span class="text-sm font-normal text-slate-500">(last {{ data.recentDecisions.length }} by you)</span>
+          {{ $t('admin.dashboard.recentHeading') }}
+          <span class="text-sm font-normal text-slate-500">{{ $t('admin.dashboard.recentSubtitle', { n: data.recentDecisions.length }) }}</span>
         </h2>
         <p v-if="data.recentDecisions.length === 0" class="text-sm text-slate-500">
-          You haven't decided on any requests yet.
+          {{ $t('admin.dashboard.noDecisions') }}
         </p>
         <table v-else class="w-full border-collapse text-sm">
           <thead>
             <tr class="bg-slate-50 text-left">
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">When</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Action</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">#ID</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">User</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Zipcodes</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colWhen') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colAction') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colId') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colUser') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colZipcodes') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -289,28 +292,28 @@ onBeforeUnmount(() => {
 
       <!-- Quick links -->
       <section>
-        <h2 class="mb-2 text-lg font-semibold text-slate-700">Quick links</h2>
+        <h2 class="mb-2 text-lg font-semibold text-slate-700">{{ $t('admin.dashboard.quickLinks') }}</h2>
         <div class="grid gap-3 sm:grid-cols-3">
           <router-link
             to="/admin/manage-creators"
             class="rounded-md border border-slate-200 bg-white p-4 no-underline transition-colors hover:border-slate-800"
           >
-            <p class="font-semibold text-slate-800">Manage Creators</p>
-            <p class="text-xs text-slate-600">List, edit, and disable creators in your scope.</p>
+            <p class="font-semibold text-slate-800">{{ $t('admin.dashboard.qlManageCreatorsTitle') }}</p>
+            <p class="text-xs text-slate-600">{{ $t('admin.dashboard.qlManageCreatorsDesc') }}</p>
           </router-link>
           <router-link
             to="/admin/manage-polls"
             class="rounded-md border border-slate-200 bg-white p-4 no-underline transition-colors hover:border-slate-800"
           >
-            <p class="font-semibold text-slate-800">Manage Polls</p>
-            <p class="text-xs text-slate-600">Moderate polls in your zipcodes.</p>
+            <p class="font-semibold text-slate-800">{{ $t('admin.dashboard.qlManagePollsTitle') }}</p>
+            <p class="text-xs text-slate-600">{{ $t('admin.dashboard.qlManagePollsDesc') }}</p>
           </router-link>
           <router-link
             to="/admin-request"
             class="rounded-md border border-slate-200 bg-white p-4 no-underline transition-colors hover:border-slate-800"
           >
-            <p class="font-semibold text-slate-800">Request Super upgrade</p>
-            <p class="text-xs text-slate-600">Apply for additional admin / Super zipcodes.</p>
+            <p class="font-semibold text-slate-800">{{ $t('admin.dashboard.qlRequestSuperTitle') }}</p>
+            <p class="text-xs text-slate-600">{{ $t('admin.dashboard.qlRequestSuperDesc') }}</p>
           </router-link>
         </div>
       </section>
