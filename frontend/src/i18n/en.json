@@ -1,0 +1,42 @@
+{
+  "brand": "Poll System",
+  "nav": {
+    "searchPolls": "Search Polls",
+    "viewResults": "View Results",
+    "creator": "Creator",
+    "admin": "Admin",
+    "superAdmin": "Super Admin",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "common": {
+    "loading": "Loading…",
+    "submitting": "Submitting…",
+    "yes": "Yes",
+    "no": "No",
+    "comment": "Comment (optional)",
+    "select": "— select —"
+  },
+  "election": {
+    "dateLabel": "Election date:",
+    "zipcodeLabel": "Zipcode",
+    "closesLabel": "Closes",
+    "votedOn": "You voted on",
+    "wouldYouChange": "Would you like to change your responses?",
+    "yesEdit": "Yes, edit",
+    "noReview": "No, just review",
+    "readonlyNote": "Your previous votes are shown below. They cannot be modified here.",
+    "submitVotes": "Submit votes",
+    "updateVotes": "Update votes",
+    "submittedOk": "Responses submitted successfully!",
+    "closedNote": "This poll is no longer available for responses.",
+    "loadFailed": "Failed to load election",
+    "submissionFailed": "Submission failed",
+    "validation": {
+      "yesNoFor": "Please answer Yes or No for: {name}",
+      "selectionFor": "Please make a selection for: {office}"
+    }
+  }
+}

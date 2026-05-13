@@ -1,0 +1,42 @@
+{
+  "brand": "投票系统",
+  "nav": {
+    "searchPolls": "搜索投票",
+    "viewResults": "查看结果",
+    "creator": "创建者",
+    "admin": "管理员",
+    "superAdmin": "超级管理员",
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出登录",
+    "language": "语言"
+  },
+  "common": {
+    "loading": "加载中…",
+    "submitting": "提交中…",
+    "yes": "是",
+    "no": "否",
+    "comment": "备注（可选）",
+    "select": "— 选择 —"
+  },
+  "election": {
+    "dateLabel": "选举日期：",
+    "zipcodeLabel": "邮政编码",
+    "closesLabel": "截止",
+    "votedOn": "您投票于",
+    "wouldYouChange": "您想修改您的投票吗？",
+    "yesEdit": "是，修改",
+    "noReview": "否，仅查看",
+    "readonlyNote": "您之前的投票如下所示，不能在此处修改。",
+    "submitVotes": "提交投票",
+    "updateVotes": "更新投票",
+    "submittedOk": "投票已成功提交！",
+    "closedNote": "此投票已不再接受回复。",
+    "loadFailed": "加载选举失败",
+    "submissionFailed": "提交失败",
+    "validation": {
+      "yesNoFor": "请为以下选项回答“是”或“否”：{name}",
+      "selectionFor": "请为以下职位做出选择：{office}"
+    }
+  }
+}

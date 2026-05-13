@@ -1,0 +1,42 @@
+{
+  "brand": "Système de Vote",
+  "nav": {
+    "searchPolls": "Rechercher des Sondages",
+    "viewResults": "Voir les Résultats",
+    "creator": "Créateur",
+    "admin": "Admin",
+    "superAdmin": "Super Admin",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "language": "Langue"
+  },
+  "common": {
+    "loading": "Chargement…",
+    "submitting": "Envoi…",
+    "yes": "Oui",
+    "no": "Non",
+    "comment": "Commentaire (facultatif)",
+    "select": "— sélectionner —"
+  },
+  "election": {
+    "dateLabel": "Date de l'élection :",
+    "zipcodeLabel": "Code postal",
+    "closesLabel": "Clôture",
+    "votedOn": "Vous avez voté le",
+    "wouldYouChange": "Souhaitez-vous modifier vos réponses ?",
+    "yesEdit": "Oui, modifier",
+    "noReview": "Non, juste consulter",
+    "readonlyNote": "Vos votes précédents sont affichés ci-dessous. Ils ne peuvent pas être modifiés ici.",
+    "submitVotes": "Envoyer les votes",
+    "updateVotes": "Mettre à jour les votes",
+    "submittedOk": "Réponses envoyées avec succès !",
+    "closedNote": "Ce sondage n'accepte plus de réponses.",
+    "loadFailed": "Échec du chargement de l'élection",
+    "submissionFailed": "Échec de l'envoi",
+    "validation": {
+      "yesNoFor": "Veuillez répondre Oui ou Non pour : {name}",
+      "selectionFor": "Veuillez faire une sélection pour : {office}"
+    }
+  }
+}

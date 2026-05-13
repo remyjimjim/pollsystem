@@ -1,0 +1,42 @@
+{
+  "brand": "Abstimmungssystem",
+  "nav": {
+    "searchPolls": "Umfragen suchen",
+    "viewResults": "Ergebnisse anzeigen",
+    "creator": "Ersteller",
+    "admin": "Admin",
+    "superAdmin": "Super-Admin",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "language": "Sprache"
+  },
+  "common": {
+    "loading": "Lädt…",
+    "submitting": "Senden…",
+    "yes": "Ja",
+    "no": "Nein",
+    "comment": "Kommentar (optional)",
+    "select": "— auswählen —"
+  },
+  "election": {
+    "dateLabel": "Wahltag:",
+    "zipcodeLabel": "Postleitzahl",
+    "closesLabel": "Schließt",
+    "votedOn": "Sie haben abgestimmt am",
+    "wouldYouChange": "Möchten Sie Ihre Antworten ändern?",
+    "yesEdit": "Ja, bearbeiten",
+    "noReview": "Nein, nur ansehen",
+    "readonlyNote": "Ihre vorherigen Stimmen werden unten angezeigt. Sie können hier nicht geändert werden.",
+    "submitVotes": "Stimmen abgeben",
+    "updateVotes": "Stimmen aktualisieren",
+    "submittedOk": "Antworten erfolgreich gesendet!",
+    "closedNote": "Diese Umfrage nimmt keine Antworten mehr an.",
+    "loadFailed": "Wahl konnte nicht geladen werden",
+    "submissionFailed": "Senden fehlgeschlagen",
+    "validation": {
+      "yesNoFor": "Bitte antworten Sie mit Ja oder Nein für: {name}",
+      "selectionFor": "Bitte treffen Sie eine Auswahl für: {office}"
+    }
+  }
+}
