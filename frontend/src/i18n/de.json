@@ -230,5 +230,122 @@
   "notFound": {
     "heading": "Nicht gefunden",
     "message": "Seite nicht gefunden"
+  },
+  "creator": {
+    "dashboard": {
+      "title": "Ersteller-Dashboard",
+      "requestAdminAccess": "Admin-Zugang beantragen",
+      "newPoll": "+ Neue Umfrage",
+      "showArchived": "Archivierte anzeigen",
+      "hideArchived": "Archivierte ausblenden",
+      "emptyDefault": "Sie haben noch keine Umfragen erstellt.",
+      "emptyArchived": "Keine Umfragen (archiviert oder anders).",
+      "tableTitle": "Titel",
+      "tableType": "Typ",
+      "tableStatus": "Status",
+      "tableCloseDate": "Schlussdatum",
+      "edit": "Bearbeiten",
+      "archive": "Archivieren",
+      "archiving": "Wird archiviert…",
+      "restore": "Wiederherstellen",
+      "restoring": "Wird wiederhergestellt…",
+      "archiveConfirm": "„{title}“ archivieren? Dies entfernt sie aus Dashboard, Suche und Abstimmung. Sie können sie über „Archivierte anzeigen“ wiederherstellen.",
+      "errorLoad": "Umfragen konnten nicht geladen werden",
+      "errorArchive": "Archivieren fehlgeschlagen",
+      "errorRestore": "Wiederherstellung fehlgeschlagen"
+    },
+    "createPoll": {
+      "heading": "Neue Umfrage erstellen",
+      "chooseType": "Wählen Sie einen Umfragetyp",
+      "changeType": "Typ ändern",
+      "unsupportedTypePre": "Das Formular",
+      "unsupportedTypePost": "ist noch nicht implementiert.",
+      "loadFailed": "Umfragetypen konnten nicht geladen werden"
+    },
+    "editPoll": {
+      "heading": "Entwurf bearbeiten",
+      "draftOnly": "Nur Umfragen im Status ENTWURF können bearbeitet werden.",
+      "notSupported": "Das Bearbeiten von {type}-Umfragen wird noch nicht unterstützt.",
+      "notFound": "Umfrage nicht gefunden.",
+      "loadFailed": "Umfrage konnte nicht geladen werden"
+    }
+  },
+  "form": {
+    "title": "Titel",
+    "summary": "Zusammenfassung",
+    "closeDateOptional": "Schlussdatum (optional)",
+    "saveDraft": "Entwurf speichern",
+    "saveChanges": "Änderungen speichern",
+    "saving": "Speichern…",
+    "publish": "Veröffentlichen",
+    "confirmPublish": "Bestätigen und veröffentlichen",
+    "cancel": "Abbrechen",
+    "draftSaved": "Entwurf gespeichert",
+    "published": "Veröffentlicht!",
+    "publishFailed": "Veröffentlichung fehlgeschlagen",
+    "saveFailed": "Speichern fehlgeschlagen",
+    "closeDateShort": "Diese Umfrage schließt am {date}. Fortfahren?",
+    "geoScope": "Geografischer Geltungsbereich",
+    "questions": "Fragen",
+    "questionPlaceholder": "Frage {n}",
+    "addQuestion": "+ Frage hinzufügen",
+    "removeQuestion": "Frage entfernen",
+    "validation": {
+      "titleRequired": "Titel ist erforderlich",
+      "summaryRequired": "Zusammenfassung ist erforderlich",
+      "zipcodeRequired": "Wählen Sie mindestens eine Postleitzahl",
+      "atLeastOneQuestion": "Fügen Sie mindestens eine Frage hinzu",
+      "dateRequired": "Wahltag ist erforderlich",
+      "zipcodeFormat": "Postleitzahl muss 5 Ziffern haben",
+      "completeCandidates": "Fügen Sie mindestens einen vollständigen Kandidaten hinzu (Name, Zugehörigkeit, Amt)",
+      "pickElection": "Wählen Sie eine übergeordnete Wahl",
+      "effectiveRequired": "Datum des Inkrafttretens ist erforderlich"
+    },
+    "election": {
+      "electionDate": "Wahltag",
+      "zipcode": "Postleitzahl",
+      "candidates": "Kandidaten",
+      "candidatesHelp": "Wähler stimmen für jeden Kandidaten mit Ja / Nein ab.",
+      "candidateName": "Name",
+      "candidateAffiliation": "Zugehörigkeit",
+      "candidateOffice": "Amt (z. B. Bürgermeister)",
+      "addCandidate": "+ Kandidaten hinzufügen",
+      "removeCandidate": "Kandidaten entfernen"
+    },
+    "ballotMeasure": {
+      "parentElection": "Übergeordnete Wahl",
+      "selectElection": "Wahl auswählen",
+      "noElections": "Sie haben noch keine Wahlen erstellt. Erstellen Sie zuerst eine und hängen Sie dann ein Referendum an.",
+      "effectiveDate": "Gültig ab",
+      "electionsLoadFailed": "Ihre Wahlen konnten nicht geladen werden"
+    }
+  },
+  "zipSetter": {
+    "state": "Bundesstaat",
+    "selectState": "Bundesstaat auswählen",
+    "loadStatesFailed": "Bundesstaaten konnten nicht geladen werden",
+    "loadCountiesFailed": "Counties konnten nicht geladen werden",
+    "loadZipcodesFailed": "Postleitzahlen konnten nicht geladen werden",
+    "counties": "Counties",
+    "selectedCount": "({selected} / {total} ausgewählt)",
+    "selectAll": "Alle auswählen ({total})",
+    "noCountiesSeeded": "Für diesen Bundesstaat sind noch keine Counties hinterlegt. Wählen Sie einen anderen Bundesstaat oder erweitern Sie die Seed-Daten.",
+    "zipcodes": "Postleitzahlen",
+    "noZipcodesAvailable": "Keine Postleitzahlen verfügbar"
+  },
+  "creatorRequest": {
+    "heading": "Ersteller-Anfrage",
+    "submitted": "Ihre Anfrage wurde gesendet. Sie erhalten eine E-Mail, sobald sie geprüft wurde.",
+    "intro": "Sagen Sie uns, wo und welche Art von Umfragen Sie erstellen möchten. Ein Admin wird Ihre Anfrage prüfen.",
+    "pollTypes": "Umfragetypen",
+    "geoScope": "Geografischer Geltungsbereich",
+    "selectedZipcodes": "Ausgewählt:",
+    "reasonLabel": "Begründung (optional)",
+    "reasonPlaceholder": "Warum möchten Sie Umfragen in diesem Gebiet erstellen?",
+    "submit": "Anfrage senden",
+    "submitting": "Senden…",
+    "errorNoPollType": "Wählen Sie mindestens einen Umfragetyp",
+    "errorNoZipcode": "Wählen Sie mindestens eine Postleitzahl",
+    "errorSubmission": "Senden fehlgeschlagen"
   }
 }

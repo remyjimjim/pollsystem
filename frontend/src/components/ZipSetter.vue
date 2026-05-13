@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 import type { State, County, CountyZip } from '@/types'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   modelValue: string[]
@@ -30,7 +33,7 @@ async function loadStates() {
     const res = await axios.get<State[]>('/api/states')
     states.value = res.data
   } catch {
-    error.value = 'Failed to load states'
+    error.value = t('zipSetter.loadStatesFailed')
   } finally {
     loadingStates.value = false
   }
@@ -48,7 +51,7 @@ async function loadCounties(stateId: number) {
     })
     counties.value = res.data
   } catch {
-    error.value = 'Failed to load counties'
+    error.value = t('zipSetter.loadCountiesFailed')
   } finally {
     loadingCounties.value = false
   }
@@ -70,7 +73,7 @@ async function loadZips(countyIds: number[]) {
       res.data.some(cz => cz.zipcode === z)
     )
   } catch {
-    error.value = 'Failed to load zipcodes'
+    error.value = t('zipSetter.loadZipcodesFailed')
   } finally {
     loadingZips.value = false
   }
@@ -122,7 +125,7 @@ loadStates()
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-2">
-      <label class="text-sm font-semibold text-slate-700">State</label>
+      <label class="text-sm font-semibold text-slate-700">{{ $t('zipSetter.state') }}</label>
       <select
         :value="selectedStateId ?? ''"
         @change="onStateChange"
@@ -130,7 +133,7 @@ loadStates()
         class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none disabled:opacity-60"
       >
         <option value="" disabled>
-          {{ loadingStates ? 'Loading…' : 'Select a state' }}
+          {{ loadingStates ? $t('common.loading') : $t('zipSetter.selectState') }}
         </option>
         <option v-for="s in states" :key="s.id" :value="s.id">
           {{ s.name }} ({{ s.initial }})
@@ -156,9 +159,9 @@ loadStates()
             <path fill="currentColor" d="M5.25 7.5 10 12.25 14.75 7.5z" />
           </svg>
           <span class="text-sm font-semibold text-slate-700">
-            Counties<template v-if="!loadingCounties && counties.length > 0">
+            {{ $t('zipSetter.counties') }}<template v-if="!loadingCounties && counties.length > 0">
               <span class="ml-1 text-xs font-normal text-slate-500">
-                ({{ selectedCountyIds.length }} / {{ counties.length }} selected)
+                {{ $t('zipSetter.selectedCount', { selected: selectedCountyIds.length, total: counties.length }) }}
               </span>
             </template>
           </span>
@@ -173,17 +176,16 @@ loadStates()
             :checked="allCountiesSelected"
             @change="toggleAllCounties"
           />
-          Select all ({{ counties.length }})
+          {{ $t('zipSetter.selectAll', { total: counties.length }) }}
         </label>
       </summary>
       <div class="border-t border-slate-200 p-3">
-        <p v-if="loadingCounties" class="m-0 text-sm text-slate-500">Loading…</p>
+        <p v-if="loadingCounties" class="m-0 text-sm text-slate-500">{{ $t('common.loading') }}</p>
         <div
           v-else-if="counties.length === 0"
           class="rounded-md border border-orange-400 bg-orange-50 p-3 text-sm text-orange-900"
         >
-          No counties seeded for this state yet. Pick a different state, or extend
-          the seed data in <code class="font-mono">backend/src/main/resources/db/migration/</code>.
+          {{ $t('zipSetter.noCountiesSeeded') }}
         </div>
         <div
           v-else
@@ -215,9 +217,9 @@ loadStates()
             <path fill="currentColor" d="M5.25 7.5 10 12.25 14.75 7.5z" />
           </svg>
           <span class="text-sm font-semibold text-slate-700">
-            Zipcodes<template v-if="!loadingZips && zips.length > 0">
+            {{ $t('zipSetter.zipcodes') }}<template v-if="!loadingZips && zips.length > 0">
               <span class="ml-1 text-xs font-normal text-slate-500">
-                ({{ selectedZipcodes.length }} / {{ zips.length }} selected)
+                {{ $t('zipSetter.selectedCount', { selected: selectedZipcodes.length, total: zips.length }) }}
               </span>
             </template>
           </span>
@@ -232,13 +234,13 @@ loadStates()
             :checked="allZipcodesSelected"
             @change="toggleAllZipcodes"
           />
-          Select all ({{ zips.length }})
+          {{ $t('zipSetter.selectAll', { total: zips.length }) }}
         </label>
       </summary>
       <div class="border-t border-slate-200 p-3">
-        <p v-if="loadingZips" class="m-0 text-sm text-slate-500">Loading…</p>
+        <p v-if="loadingZips" class="m-0 text-sm text-slate-500">{{ $t('common.loading') }}</p>
         <p v-else-if="zips.length === 0" class="m-0 text-sm text-slate-500">
-          No zipcodes available
+          {{ $t('zipSetter.noZipcodesAvailable') }}
         </p>
         <div
           v-else

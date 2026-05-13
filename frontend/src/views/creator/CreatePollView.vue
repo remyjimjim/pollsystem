@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 import type { PollType } from '@/types'
 import QuestionnaireForm from '@/components/QuestionnaireForm.vue'
 import ElectionForm from '@/components/ElectionForm.vue'
 import BallotMeasureForm from '@/components/BallotMeasureForm.vue'
+
+const { t } = useI18n()
 
 const pollTypes = ref<PollType[]>([])
 const selected = ref<PollType | null>(null)
@@ -16,7 +19,7 @@ onMounted(async () => {
     const res = await axios.get<PollType[]>('/api/poll-types')
     pollTypes.value = res.data
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Failed to load poll types'
+    error.value = e?.response?.data?.message ?? t('creator.createPoll.loadFailed')
   }
 })
 
@@ -39,12 +42,12 @@ function reset() {
 
 <template>
   <div class="mx-auto max-w-3xl py-8">
-    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Create New Poll</h1>
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('creator.createPoll.heading') }}</h1>
 
     <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
 
     <section v-if="!selected">
-      <h2 class="mb-3 text-lg font-semibold text-slate-700">Choose a poll type</h2>
+      <h2 class="mb-3 text-lg font-semibold text-slate-700">{{ $t('creator.createPoll.chooseType') }}</h2>
       <div class="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
         <button
           v-for="pt in pollTypes"
@@ -63,7 +66,7 @@ function reset() {
         <button
           @click="reset"
           class="text-sm text-slate-800 underline"
-        >Change type</button>
+        >{{ $t('creator.createPoll.changeType') }}</button>
       </div>
 
       <QuestionnaireForm
@@ -83,7 +86,7 @@ function reset() {
 
       <div v-else class="rounded-md border border-orange-400 bg-orange-50 p-4">
         <p class="m-0 text-sm text-slate-700">
-          The <strong class="font-semibold">{{ selected.name }}</strong> form is not implemented yet.
+          {{ $t('creator.createPoll.unsupportedTypePre') }} <strong class="font-semibold">{{ selected.name }}</strong> {{ $t('creator.createPoll.unsupportedTypePost') }}
         </p>
       </div>
     </section>

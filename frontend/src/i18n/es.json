@@ -230,5 +230,122 @@
   "notFound": {
     "heading": "No encontrado",
     "message": "Página no encontrada"
+  },
+  "creator": {
+    "dashboard": {
+      "title": "Panel de Creador",
+      "requestAdminAccess": "Solicitar acceso de admin",
+      "newPoll": "+ Nueva encuesta",
+      "showArchived": "Mostrar archivados",
+      "hideArchived": "Ocultar archivados",
+      "emptyDefault": "Aún no ha creado ninguna encuesta.",
+      "emptyArchived": "Sin encuestas (archivadas u otras).",
+      "tableTitle": "Título",
+      "tableType": "Tipo",
+      "tableStatus": "Estado",
+      "tableCloseDate": "Fecha de cierre",
+      "edit": "Editar",
+      "archive": "Archivar",
+      "archiving": "Archivando…",
+      "restore": "Restaurar",
+      "restoring": "Restaurando…",
+      "archiveConfirm": "¿Archivar «{title}»? Esto la elimina del panel, la búsqueda y la votación. Podrá restaurarla más tarde mediante «Mostrar archivados».",
+      "errorLoad": "Error al cargar las encuestas",
+      "errorArchive": "Error al archivar",
+      "errorRestore": "Error al restaurar"
+    },
+    "createPoll": {
+      "heading": "Crear nueva encuesta",
+      "chooseType": "Elija un tipo de encuesta",
+      "changeType": "Cambiar tipo",
+      "unsupportedTypePre": "El formulario",
+      "unsupportedTypePost": "aún no está implementado.",
+      "loadFailed": "Error al cargar los tipos de encuesta"
+    },
+    "editPoll": {
+      "heading": "Editar borrador",
+      "draftOnly": "Solo se pueden editar las encuestas en estado BORRADOR.",
+      "notSupported": "Editar encuestas {type} aún no es compatible.",
+      "notFound": "Encuesta no encontrada.",
+      "loadFailed": "Error al cargar la encuesta"
+    }
+  },
+  "form": {
+    "title": "Título",
+    "summary": "Resumen",
+    "closeDateOptional": "Fecha de cierre (opcional)",
+    "saveDraft": "Guardar borrador",
+    "saveChanges": "Guardar cambios",
+    "saving": "Guardando…",
+    "publish": "Publicar",
+    "confirmPublish": "Confirmar y publicar",
+    "cancel": "Cancelar",
+    "draftSaved": "Borrador guardado",
+    "published": "¡Publicado!",
+    "publishFailed": "Error al publicar",
+    "saveFailed": "Error al guardar",
+    "closeDateShort": "Esta encuesta cerrará el {date}. ¿Continuar?",
+    "geoScope": "Alcance geográfico",
+    "questions": "Preguntas",
+    "questionPlaceholder": "Pregunta {n}",
+    "addQuestion": "+ Añadir pregunta",
+    "removeQuestion": "Eliminar pregunta",
+    "validation": {
+      "titleRequired": "El título es obligatorio",
+      "summaryRequired": "El resumen es obligatorio",
+      "zipcodeRequired": "Seleccione al menos un código postal",
+      "atLeastOneQuestion": "Añada al menos una pregunta",
+      "dateRequired": "La fecha de la elección es obligatoria",
+      "zipcodeFormat": "El código postal debe tener 5 dígitos",
+      "completeCandidates": "Añada al menos un candidato completo (nombre, afiliación, cargo)",
+      "pickElection": "Elija una elección padre",
+      "effectiveRequired": "La fecha de vigencia es obligatoria"
+    },
+    "election": {
+      "electionDate": "Fecha de la elección",
+      "zipcode": "Código postal",
+      "candidates": "Candidatos",
+      "candidatesHelp": "Los votantes marcarán Sí / No para cada candidato.",
+      "candidateName": "Nombre",
+      "candidateAffiliation": "Afiliación",
+      "candidateOffice": "Cargo (ej. Alcalde)",
+      "addCandidate": "+ Añadir candidato",
+      "removeCandidate": "Eliminar candidato"
+    },
+    "ballotMeasure": {
+      "parentElection": "Elección padre",
+      "selectElection": "Seleccione una elección",
+      "noElections": "Aún no ha creado ninguna elección. Cree una primero y luego adjunte una medida.",
+      "effectiveDate": "Fecha de vigencia",
+      "electionsLoadFailed": "Error al cargar sus elecciones"
+    }
+  },
+  "zipSetter": {
+    "state": "Estado",
+    "selectState": "Seleccione un estado",
+    "loadStatesFailed": "Error al cargar los estados",
+    "loadCountiesFailed": "Error al cargar los condados",
+    "loadZipcodesFailed": "Error al cargar los códigos postales",
+    "counties": "Condados",
+    "selectedCount": "({selected} / {total} seleccionados)",
+    "selectAll": "Seleccionar todos ({total})",
+    "noCountiesSeeded": "Aún no hay condados cargados para este estado. Elija otro estado o amplíe los datos iniciales.",
+    "zipcodes": "Códigos postales",
+    "noZipcodesAvailable": "No hay códigos postales disponibles"
+  },
+  "creatorRequest": {
+    "heading": "Solicitud de Creador",
+    "submitted": "Su solicitud ha sido enviada. Recibirá un correo una vez sea revisada.",
+    "intro": "Indíquenos dónde y qué tipo de encuestas le gustaría crear. Un admin revisará su solicitud.",
+    "pollTypes": "Tipos de encuesta",
+    "geoScope": "Alcance geográfico",
+    "selectedZipcodes": "Seleccionados:",
+    "reasonLabel": "Motivo (opcional)",
+    "reasonPlaceholder": "¿Por qué desea crear encuestas en esta zona?",
+    "submit": "Enviar solicitud",
+    "submitting": "Enviando…",
+    "errorNoPollType": "Seleccione al menos un tipo de encuesta",
+    "errorNoZipcode": "Seleccione al menos un código postal",
+    "errorSubmission": "Error al enviar"
   }
 }

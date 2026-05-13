@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import axios from 'axios'
 import QuestionnaireForm from '@/components/QuestionnaireForm.vue'
 import ElectionForm from '@/components/ElectionForm.vue'
 import BallotMeasureForm from '@/components/BallotMeasureForm.vue'
+
+const { t } = useI18n()
 
 interface QuestionDto { id: number; text: string }
 interface DomainDto { zipcode: string; countyId: number; stateId: number }
@@ -63,31 +66,31 @@ onMounted(async () => {
     if (type.value === 'questionnaire') {
       const res = await axios.get<QuestionnaireDto>(`/api/polls/questionnaires/${id.value}`)
       if (res.data.status !== 'DRAFT') {
-        error.value = 'Only DRAFT polls can be edited.'
+        error.value = t('creator.editPoll.draftOnly')
       } else {
         questionnaire.value = res.data
       }
     } else if (type.value === 'election') {
       const res = await axios.get<ElectionDto>(`/api/polls/elections/${id.value}`)
       if (res.data.status !== 'DRAFT') {
-        error.value = 'Only DRAFT polls can be edited.'
+        error.value = t('creator.editPoll.draftOnly')
       } else {
         election.value = res.data
       }
     } else if (type.value === 'ballot-measure') {
       const res = await axios.get<BallotMeasureDto>(`/api/polls/ballot-measures/${id.value}`)
       if (res.data.status !== 'DRAFT') {
-        error.value = 'Only DRAFT polls can be edited.'
+        error.value = t('creator.editPoll.draftOnly')
       } else {
         ballotMeasure.value = res.data
       }
     } else {
-      error.value = `Editing ${type.value} polls is not supported yet.`
+      error.value = t('creator.editPoll.notSupported', { type: type.value })
     }
   } catch (e: any) {
     error.value = e?.response?.status === 404
-      ? 'Poll not found.'
-      : (e?.response?.data?.message ?? 'Failed to load poll')
+      ? t('creator.editPoll.notFound')
+      : (e?.response?.data?.message ?? t('creator.editPoll.loadFailed'))
   } finally {
     loading.value = false
   }
@@ -96,8 +99,8 @@ onMounted(async () => {
 
 <template>
   <div class="mx-auto max-w-3xl py-8">
-    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Edit Draft</h1>
-    <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('creator.editPoll.heading') }}</h1>
+    <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
     <p v-else-if="error" class="text-sm text-red-700">{{ error }}</p>
 
     <QuestionnaireForm

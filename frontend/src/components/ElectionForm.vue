@@ -2,6 +2,9 @@
 import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface CandidateInputModel {
   name: string
@@ -78,14 +81,14 @@ function payload() {
 }
 
 function validate(): string | null {
-  if (!form.title.trim()) return 'Title is required'
-  if (!form.date) return 'Election date is required'
-  if (!/^\d{5}$/.test(form.zipcode.trim())) return 'Zipcode must be 5 digits'
+  if (!form.title.trim()) return t('form.validation.titleRequired')
+  if (!form.date) return t('form.validation.dateRequired')
+  if (!/^\d{5}$/.test(form.zipcode.trim())) return t('form.validation.zipcodeFormat')
   const completeCandidates = form.candidates.filter(
     c => c.name.trim() && c.affiliation.trim() && c.officeName.trim()
   )
   if (completeCandidates.length === 0) {
-    return 'Add at least one complete candidate (name, affiliation, office)'
+    return t('form.validation.completeCandidates')
   }
   return null
 }
@@ -102,9 +105,9 @@ async function saveDraft() {
     } else {
       await axios.put(`/api/polls/elections/${draftId.value}`, payload())
     }
-    message.value = 'Draft saved'
+    message.value = t('form.draftSaved')
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Save failed'
+    error.value = e?.response?.data?.message ?? t('form.saveFailed')
   } finally {
     submitting.value = false
   }
@@ -124,15 +127,15 @@ async function publish(confirmed = false) {
       null,
       { params: { confirmed } }
     )
-    message.value = 'Published!'
+    message.value = t('form.published')
     setTimeout(() => router.push('/creator/dashboard'), 600)
   } catch (e: any) {
     const msg: string = e?.response?.data?.message ?? ''
     if (msg.startsWith('close_date_short:')) {
       const iso = msg.substring('close_date_short:'.length)
-      closeWarning.value = `This poll will close on ${new Date(iso).toLocaleString()}. Continue?`
+      closeWarning.value = t('form.closeDateShort', { date: new Date(iso).toLocaleString() })
     } else {
-      error.value = msg || 'Publish failed'
+      error.value = msg || t('form.publishFailed')
     }
   } finally {
     submitting.value = false
@@ -143,7 +146,7 @@ async function publish(confirmed = false) {
 <template>
   <div class="flex flex-col gap-4">
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      Title
+      {{ $t('form.title') }}
       <input
         v-model="form.title"
         maxlength="500"
@@ -154,7 +157,7 @@ async function publish(confirmed = false) {
 
     <div class="grid grid-cols-2 gap-3">
       <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-        Election date
+        {{ $t('form.election.electionDate') }}
         <input
           v-model="form.date"
           type="date"
@@ -163,7 +166,7 @@ async function publish(confirmed = false) {
         />
       </label>
       <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-        Zipcode
+        {{ $t('form.election.zipcode') }}
         <input
           v-model="form.zipcode"
           type="text"
@@ -177,7 +180,7 @@ async function publish(confirmed = false) {
     </div>
 
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      Close date (optional)
+      {{ $t('form.closeDateOptional') }}
       <input
         v-model="form.closeDate"
         type="datetime-local"
@@ -186,8 +189,8 @@ async function publish(confirmed = false) {
     </label>
 
     <fieldset class="rounded-md border border-slate-200 p-4">
-      <legend class="px-2 text-sm font-semibold text-slate-700">Candidates</legend>
-      <p class="mb-2 text-sm text-slate-500">Voters will mark Yes / No on each candidate.</p>
+      <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('form.election.candidates') }}</legend>
+      <p class="mb-2 text-sm text-slate-500">{{ $t('form.election.candidatesHelp') }}</p>
       <div
         v-for="(c, i) in form.candidates"
         :key="i"
@@ -195,19 +198,19 @@ async function publish(confirmed = false) {
       >
         <input
           v-model="c.name"
-          placeholder="Name"
+          :placeholder="$t('form.election.candidateName')"
           maxlength="255"
           class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
         <input
           v-model="c.affiliation"
-          placeholder="Affiliation"
+          :placeholder="$t('form.election.candidateAffiliation')"
           maxlength="255"
           class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
         <input
           v-model="c.officeName"
-          placeholder="Office (e.g. Mayor)"
+          :placeholder="$t('form.election.candidateOffice')"
           maxlength="255"
           class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
@@ -216,14 +219,14 @@ async function publish(confirmed = false) {
           @click="removeCandidate(i)"
           :disabled="form.candidates.length === 1"
           class="rounded border border-slate-300 bg-white hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-          aria-label="Remove candidate"
+          :aria-label="$t('form.election.removeCandidate')"
         >×</button>
       </div>
       <button
         type="button"
         @click="addCandidate"
         class="self-start rounded border border-dashed border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
-      >+ Add candidate</button>
+      >{{ $t('form.election.addCandidate') }}</button>
     </fieldset>
 
     <p v-if="error" class="m-0 text-sm text-red-700">{{ error }}</p>
@@ -238,7 +241,7 @@ async function publish(confirmed = false) {
           :disabled="submitting"
           class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Confirm and publish
+          {{ $t('form.confirmPublish') }}
         </button>
         <button
           type="button"
@@ -246,7 +249,7 @@ async function publish(confirmed = false) {
           :disabled="submitting"
           class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Cancel
+          {{ $t('form.cancel') }}
         </button>
       </div>
     </div>
@@ -258,7 +261,7 @@ async function publish(confirmed = false) {
         :disabled="submitting"
         class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {{ submitting ? 'Saving…' : (draftId ? 'Save changes' : 'Save draft') }}
+        {{ submitting ? $t('form.saving') : (draftId ? $t('form.saveChanges') : $t('form.saveDraft')) }}
       </button>
       <button
         type="button"
@@ -266,7 +269,7 @@ async function publish(confirmed = false) {
         :disabled="submitting"
         class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Publish
+        {{ $t('form.publish') }}
       </button>
     </div>
   </div>

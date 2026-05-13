@@ -2,7 +2,10 @@
 import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import ZipSetter from '@/components/ZipSetter.vue'
+
+const { t } = useI18n()
 
 interface QuestionnaireInitial {
   id: number
@@ -69,10 +72,10 @@ function payload() {
 }
 
 function validate(): string | null {
-  if (!form.title.trim()) return 'Title is required'
-  if (!form.summary.trim()) return 'Summary is required'
-  if (form.zipcodes.length === 0) return 'Select at least one zipcode'
-  if (form.questions.every(q => !q.text.trim())) return 'Add at least one question'
+  if (!form.title.trim()) return t('form.validation.titleRequired')
+  if (!form.summary.trim()) return t('form.validation.summaryRequired')
+  if (form.zipcodes.length === 0) return t('form.validation.zipcodeRequired')
+  if (form.questions.every(q => !q.text.trim())) return t('form.validation.atLeastOneQuestion')
   return null
 }
 
@@ -88,9 +91,9 @@ async function saveDraft() {
     } else {
       await axios.put(`/api/polls/questionnaires/${draftId.value}`, payload())
     }
-    message.value = 'Draft saved'
+    message.value = t('form.draftSaved')
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Save failed'
+    error.value = e?.response?.data?.message ?? t('form.saveFailed')
   } finally {
     submitting.value = false
   }
@@ -110,15 +113,15 @@ async function publish(confirmed = false) {
       null,
       { params: { confirmed } }
     )
-    message.value = 'Published!'
+    message.value = t('form.published')
     setTimeout(() => router.push('/creator/dashboard'), 600)
   } catch (e: any) {
     const msg: string = e?.response?.data?.message ?? ''
     if (msg.startsWith('close_date_short:')) {
       const iso = msg.substring('close_date_short:'.length)
-      closeWarning.value = `This poll will close on ${new Date(iso).toLocaleString()}. Continue?`
+      closeWarning.value = t('form.closeDateShort', { date: new Date(iso).toLocaleString() })
     } else {
-      error.value = msg || 'Publish failed'
+      error.value = msg || t('form.publishFailed')
     }
   } finally {
     submitting.value = false
@@ -129,7 +132,7 @@ async function publish(confirmed = false) {
 <template>
   <div class="flex flex-col gap-4">
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      Title
+      {{ $t('form.title') }}
       <input
         v-model="form.title"
         maxlength="500"
@@ -139,7 +142,7 @@ async function publish(confirmed = false) {
     </label>
 
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      Summary
+      {{ $t('form.summary') }}
       <textarea
         v-model="form.summary"
         rows="3"
@@ -149,7 +152,7 @@ async function publish(confirmed = false) {
     </label>
 
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      Close date (optional)
+      {{ $t('form.closeDateOptional') }}
       <input
         v-model="form.closeDate"
         type="datetime-local"
@@ -158,12 +161,12 @@ async function publish(confirmed = false) {
     </label>
 
     <fieldset class="rounded-md border border-slate-200 p-4">
-      <legend class="px-2 text-sm font-semibold text-slate-700">Geographic Scope</legend>
+      <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('form.geoScope') }}</legend>
       <ZipSetter v-model="form.zipcodes" />
     </fieldset>
 
     <fieldset class="rounded-md border border-slate-200 p-4">
-      <legend class="px-2 text-sm font-semibold text-slate-700">Questions</legend>
+      <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('form.questions') }}</legend>
       <div
         v-for="(q, i) in form.questions"
         :key="i"
@@ -171,7 +174,7 @@ async function publish(confirmed = false) {
       >
         <input
           v-model="q.text"
-          :placeholder="`Question ${i + 1}`"
+          :placeholder="t('form.questionPlaceholder', { n: i + 1 })"
           maxlength="1000"
           class="flex-1 rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
@@ -180,14 +183,14 @@ async function publish(confirmed = false) {
           @click="removeQuestion(i)"
           :disabled="form.questions.length === 1"
           class="w-8 rounded border border-slate-300 bg-white hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-          aria-label="Remove question"
+          :aria-label="$t('form.removeQuestion')"
         >×</button>
       </div>
       <button
         type="button"
         @click="addQuestion"
         class="self-start rounded border border-dashed border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
-      >+ Add question</button>
+      >{{ $t('form.addQuestion') }}</button>
     </fieldset>
 
     <p v-if="error" class="m-0 text-sm text-red-700">{{ error }}</p>
@@ -202,7 +205,7 @@ async function publish(confirmed = false) {
           :disabled="submitting"
           class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Confirm and publish
+          {{ $t('form.confirmPublish') }}
         </button>
         <button
           type="button"
@@ -210,7 +213,7 @@ async function publish(confirmed = false) {
           :disabled="submitting"
           class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Cancel
+          {{ $t('form.cancel') }}
         </button>
       </div>
     </div>
@@ -222,7 +225,7 @@ async function publish(confirmed = false) {
         :disabled="submitting"
         class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {{ submitting ? 'Saving…' : (draftId ? 'Save changes' : 'Save draft') }}
+        {{ submitting ? $t('form.saving') : (draftId ? $t('form.saveChanges') : $t('form.saveDraft')) }}
       </button>
       <button
         type="button"
@@ -230,7 +233,7 @@ async function publish(confirmed = false) {
         :disabled="submitting"
         class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Publish
+        {{ $t('form.publish') }}
       </button>
     </div>
   </div>

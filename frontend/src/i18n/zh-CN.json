@@ -230,5 +230,122 @@
   "notFound": {
     "heading": "未找到",
     "message": "页面未找到"
+  },
+  "creator": {
+    "dashboard": {
+      "title": "创建者控制面板",
+      "requestAdminAccess": "申请管理员权限",
+      "newPoll": "+ 新建投票",
+      "showArchived": "显示已归档",
+      "hideArchived": "隐藏已归档",
+      "emptyDefault": "您还没有创建任何投票。",
+      "emptyArchived": "没有投票（无论是否归档）。",
+      "tableTitle": "标题",
+      "tableType": "类型",
+      "tableStatus": "状态",
+      "tableCloseDate": "截止日期",
+      "edit": "编辑",
+      "archive": "归档",
+      "archiving": "归档中…",
+      "restore": "恢复",
+      "restoring": "恢复中…",
+      "archiveConfirm": "归档“{title}”？这将把它从控制面板、搜索和投票中移除。您之后可以通过“显示已归档”将其恢复。",
+      "errorLoad": "加载投票失败",
+      "errorArchive": "归档失败",
+      "errorRestore": "恢复失败"
+    },
+    "createPoll": {
+      "heading": "创建新投票",
+      "chooseType": "选择投票类型",
+      "changeType": "更改类型",
+      "unsupportedTypePre": "",
+      "unsupportedTypePost": "表单尚未实现。",
+      "loadFailed": "加载投票类型失败"
+    },
+    "editPoll": {
+      "heading": "编辑草稿",
+      "draftOnly": "只能编辑“草稿”状态的投票。",
+      "notSupported": "尚不支持编辑 {type} 类型的投票。",
+      "notFound": "未找到投票。",
+      "loadFailed": "加载投票失败"
+    }
+  },
+  "form": {
+    "title": "标题",
+    "summary": "摘要",
+    "closeDateOptional": "截止日期（可选）",
+    "saveDraft": "保存草稿",
+    "saveChanges": "保存更改",
+    "saving": "保存中…",
+    "publish": "发布",
+    "confirmPublish": "确认并发布",
+    "cancel": "取消",
+    "draftSaved": "草稿已保存",
+    "published": "已发布！",
+    "publishFailed": "发布失败",
+    "saveFailed": "保存失败",
+    "closeDateShort": "此投票将于 {date} 截止。是否继续？",
+    "geoScope": "地理范围",
+    "questions": "问题",
+    "questionPlaceholder": "问题 {n}",
+    "addQuestion": "+ 添加问题",
+    "removeQuestion": "删除问题",
+    "validation": {
+      "titleRequired": "标题为必填项",
+      "summaryRequired": "摘要为必填项",
+      "zipcodeRequired": "请至少选择一个邮政编码",
+      "atLeastOneQuestion": "请至少添加一个问题",
+      "dateRequired": "选举日期为必填项",
+      "zipcodeFormat": "邮政编码必须为 5 位数字",
+      "completeCandidates": "请至少添加一位完整的候选人（姓名、所属、职位）",
+      "pickElection": "请选择一项父级选举",
+      "effectiveRequired": "生效日期为必填项"
+    },
+    "election": {
+      "electionDate": "选举日期",
+      "zipcode": "邮政编码",
+      "candidates": "候选人",
+      "candidatesHelp": "选民将对每位候选人选择“是”或“否”。",
+      "candidateName": "姓名",
+      "candidateAffiliation": "所属",
+      "candidateOffice": "职位（例如：市长）",
+      "addCandidate": "+ 添加候选人",
+      "removeCandidate": "删除候选人"
+    },
+    "ballotMeasure": {
+      "parentElection": "父级选举",
+      "selectElection": "选择一项选举",
+      "noElections": "您还没有创建任何选举。请先创建一项，然后再附加公投。",
+      "effectiveDate": "生效日期",
+      "electionsLoadFailed": "加载您的选举失败"
+    }
+  },
+  "zipSetter": {
+    "state": "州",
+    "selectState": "选择一个州",
+    "loadStatesFailed": "加载州失败",
+    "loadCountiesFailed": "加载县失败",
+    "loadZipcodesFailed": "加载邮政编码失败",
+    "counties": "县",
+    "selectedCount": "（{selected} / {total} 已选择）",
+    "selectAll": "全选（{total}）",
+    "noCountiesSeeded": "此州尚未导入县数据。请选择其他州，或扩展初始数据。",
+    "zipcodes": "邮政编码",
+    "noZipcodesAvailable": "没有可用的邮政编码"
+  },
+  "creatorRequest": {
+    "heading": "创建者申请",
+    "submitted": "您的申请已提交。审核后您将收到邮件通知。",
+    "intro": "告诉我们您希望在哪里以及创建哪种类型的投票。管理员将审核您的申请。",
+    "pollTypes": "投票类型",
+    "geoScope": "地理范围",
+    "selectedZipcodes": "已选择：",
+    "reasonLabel": "理由（可选）",
+    "reasonPlaceholder": "您为什么希望在此区域创建投票？",
+    "submit": "提交申请",
+    "submitting": "提交中…",
+    "errorNoPollType": "请至少选择一种投票类型",
+    "errorNoZipcode": "请至少选择一个邮政编码",
+    "errorSubmission": "提交失败"
   }
 }

@@ -230,5 +230,122 @@
   "notFound": {
     "heading": "Introuvable",
     "message": "Page introuvable"
+  },
+  "creator": {
+    "dashboard": {
+      "title": "Tableau de bord Créateur",
+      "requestAdminAccess": "Demander l'accès admin",
+      "newPoll": "+ Nouveau sondage",
+      "showArchived": "Afficher les archivés",
+      "hideArchived": "Masquer les archivés",
+      "emptyDefault": "Vous n'avez encore créé aucun sondage.",
+      "emptyArchived": "Aucun sondage (archivé ou autre).",
+      "tableTitle": "Titre",
+      "tableType": "Type",
+      "tableStatus": "Statut",
+      "tableCloseDate": "Date de clôture",
+      "edit": "Modifier",
+      "archive": "Archiver",
+      "archiving": "Archivage…",
+      "restore": "Restaurer",
+      "restoring": "Restauration…",
+      "archiveConfirm": "Archiver « {title} » ? Cela le retire du tableau de bord, de la recherche et du vote. Vous pourrez le restaurer via « Afficher les archivés ».",
+      "errorLoad": "Échec du chargement des sondages",
+      "errorArchive": "Échec de l'archivage",
+      "errorRestore": "Échec de la restauration"
+    },
+    "createPoll": {
+      "heading": "Créer un nouveau sondage",
+      "chooseType": "Choisissez un type de sondage",
+      "changeType": "Changer de type",
+      "unsupportedTypePre": "Le formulaire",
+      "unsupportedTypePost": "n'est pas encore implémenté.",
+      "loadFailed": "Échec du chargement des types de sondage"
+    },
+    "editPoll": {
+      "heading": "Modifier le brouillon",
+      "draftOnly": "Seuls les sondages au statut BROUILLON peuvent être modifiés.",
+      "notSupported": "La modification des sondages {type} n'est pas encore prise en charge.",
+      "notFound": "Sondage introuvable.",
+      "loadFailed": "Échec du chargement du sondage"
+    }
+  },
+  "form": {
+    "title": "Titre",
+    "summary": "Résumé",
+    "closeDateOptional": "Date de clôture (facultative)",
+    "saveDraft": "Enregistrer le brouillon",
+    "saveChanges": "Enregistrer les modifications",
+    "saving": "Enregistrement…",
+    "publish": "Publier",
+    "confirmPublish": "Confirmer et publier",
+    "cancel": "Annuler",
+    "draftSaved": "Brouillon enregistré",
+    "published": "Publié !",
+    "publishFailed": "Échec de la publication",
+    "saveFailed": "Échec de l'enregistrement",
+    "closeDateShort": "Ce sondage se clôturera le {date}. Continuer ?",
+    "geoScope": "Portée géographique",
+    "questions": "Questions",
+    "questionPlaceholder": "Question {n}",
+    "addQuestion": "+ Ajouter une question",
+    "removeQuestion": "Supprimer la question",
+    "validation": {
+      "titleRequired": "Le titre est obligatoire",
+      "summaryRequired": "Le résumé est obligatoire",
+      "zipcodeRequired": "Sélectionnez au moins un code postal",
+      "atLeastOneQuestion": "Ajoutez au moins une question",
+      "dateRequired": "La date de l'élection est obligatoire",
+      "zipcodeFormat": "Le code postal doit comporter 5 chiffres",
+      "completeCandidates": "Ajoutez au moins un candidat complet (nom, affiliation, fonction)",
+      "pickElection": "Choisissez une élection parente",
+      "effectiveRequired": "La date d'entrée en vigueur est obligatoire"
+    },
+    "election": {
+      "electionDate": "Date de l'élection",
+      "zipcode": "Code postal",
+      "candidates": "Candidats",
+      "candidatesHelp": "Les électeurs marqueront Oui / Non pour chaque candidat.",
+      "candidateName": "Nom",
+      "candidateAffiliation": "Affiliation",
+      "candidateOffice": "Fonction (ex. Maire)",
+      "addCandidate": "+ Ajouter un candidat",
+      "removeCandidate": "Supprimer le candidat"
+    },
+    "ballotMeasure": {
+      "parentElection": "Élection parente",
+      "selectElection": "Sélectionnez une élection",
+      "noElections": "Vous n'avez encore créé aucune élection. Créez-en une d'abord, puis attachez-y une mesure.",
+      "effectiveDate": "Date d'entrée en vigueur",
+      "electionsLoadFailed": "Échec du chargement de vos élections"
+    }
+  },
+  "zipSetter": {
+    "state": "État",
+    "selectState": "Sélectionnez un état",
+    "loadStatesFailed": "Échec du chargement des états",
+    "loadCountiesFailed": "Échec du chargement des comtés",
+    "loadZipcodesFailed": "Échec du chargement des codes postaux",
+    "counties": "Comtés",
+    "selectedCount": "({selected} / {total} sélectionnés)",
+    "selectAll": "Tout sélectionner ({total})",
+    "noCountiesSeeded": "Aucun comté n'est encore enregistré pour cet état. Choisissez un autre état ou complétez les données initiales.",
+    "zipcodes": "Codes postaux",
+    "noZipcodesAvailable": "Aucun code postal disponible"
+  },
+  "creatorRequest": {
+    "heading": "Demande de Créateur",
+    "submitted": "Votre demande a été envoyée. Vous recevrez un e-mail une fois qu'elle aura été examinée.",
+    "intro": "Indiquez-nous où et quel type de sondages vous souhaitez créer. Un admin examinera votre demande.",
+    "pollTypes": "Types de sondage",
+    "geoScope": "Portée géographique",
+    "selectedZipcodes": "Sélectionnés :",
+    "reasonLabel": "Motif (facultatif)",
+    "reasonPlaceholder": "Pourquoi souhaitez-vous créer des sondages dans cette zone ?",
+    "submit": "Envoyer la demande",
+    "submitting": "Envoi…",
+    "errorNoPollType": "Sélectionnez au moins un type de sondage",
+    "errorNoZipcode": "Sélectionnez au moins un code postal",
+    "errorSubmission": "Échec de l'envoi"
   }
 }

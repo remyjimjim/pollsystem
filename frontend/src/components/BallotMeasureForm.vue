@@ -2,6 +2,9 @@
 import { onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface BallotMeasureInitial {
   id: number
@@ -62,7 +65,7 @@ async function loadElections() {
     const res = await axios.get<CreatorPollSummary[]>('/api/creator/polls')
     elections.value = res.data.filter(p => p.type === 'Election')
   } catch {
-    error.value = 'Failed to load your elections'
+    error.value = t('form.ballotMeasure.electionsLoadFailed')
   } finally {
     loadingElections.value = false
   }
@@ -80,10 +83,10 @@ function payload() {
 }
 
 function validate(): string | null {
-  if (form.electionId == null) return 'Pick a parent Election'
-  if (!form.title.trim()) return 'Title is required'
-  if (!form.summary.trim()) return 'Summary is required'
-  if (!form.effectiveDate) return 'Effective date is required'
+  if (form.electionId == null) return t('form.validation.pickElection')
+  if (!form.title.trim()) return t('form.validation.titleRequired')
+  if (!form.summary.trim()) return t('form.validation.summaryRequired')
+  if (!form.effectiveDate) return t('form.validation.effectiveRequired')
   return null
 }
 
@@ -99,9 +102,9 @@ async function saveDraft() {
     } else {
       await axios.put(`/api/polls/ballot-measures/${draftId.value}`, payload())
     }
-    message.value = 'Draft saved'
+    message.value = t('form.draftSaved')
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Save failed'
+    error.value = e?.response?.data?.message ?? t('form.saveFailed')
   } finally {
     submitting.value = false
   }
@@ -121,15 +124,15 @@ async function publish(confirmed = false) {
       null,
       { params: { confirmed } }
     )
-    message.value = 'Published!'
+    message.value = t('form.published')
     setTimeout(() => router.push('/creator/dashboard'), 600)
   } catch (e: any) {
     const msg: string = e?.response?.data?.message ?? ''
     if (msg.startsWith('close_date_short:')) {
       const iso = msg.substring('close_date_short:'.length)
-      closeWarning.value = `This poll will close on ${new Date(iso).toLocaleString()}. Continue?`
+      closeWarning.value = t('form.closeDateShort', { date: new Date(iso).toLocaleString() })
     } else {
-      error.value = msg || 'Publish failed'
+      error.value = msg || t('form.publishFailed')
     }
   } finally {
     submitting.value = false
@@ -142,7 +145,7 @@ onMounted(loadElections)
 <template>
   <div class="flex flex-col gap-4">
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      Parent Election
+      {{ $t('form.ballotMeasure.parentElection') }}
       <select
         v-model="form.electionId"
         :disabled="loadingElections"
@@ -150,7 +153,7 @@ onMounted(loadElections)
         class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none disabled:opacity-60"
       >
         <option :value="null" disabled>
-          {{ loadingElections ? 'Loading…' : 'Select an Election' }}
+          {{ loadingElections ? $t('common.loading') : $t('form.ballotMeasure.selectElection') }}
         </option>
         <option v-for="e in elections" :key="e.id" :value="e.id">
           {{ e.title }} ({{ e.status }})
@@ -158,11 +161,11 @@ onMounted(loadElections)
       </select>
     </label>
     <p v-if="!loadingElections && elections.length === 0" class="m-0 text-sm text-slate-500">
-      You haven't created any Elections yet. Create one first, then attach a measure to it.
+      {{ $t('form.ballotMeasure.noElections') }}
     </p>
 
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      Title
+      {{ $t('form.title') }}
       <input
         v-model="form.title"
         maxlength="500"
@@ -172,7 +175,7 @@ onMounted(loadElections)
     </label>
 
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-      Summary
+      {{ $t('form.summary') }}
       <textarea
         v-model="form.summary"
         rows="4"
@@ -183,7 +186,7 @@ onMounted(loadElections)
 
     <div class="grid grid-cols-2 gap-3">
       <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-        Effective date
+        {{ $t('form.ballotMeasure.effectiveDate') }}
         <input
           v-model="form.effectiveDate"
           type="date"
@@ -192,7 +195,7 @@ onMounted(loadElections)
         />
       </label>
       <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-        Close date (optional)
+        {{ $t('form.closeDateOptional') }}
         <input
           v-model="form.closeDate"
           type="datetime-local"
@@ -213,7 +216,7 @@ onMounted(loadElections)
           :disabled="submitting"
           class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Confirm and publish
+          {{ $t('form.confirmPublish') }}
         </button>
         <button
           type="button"
@@ -221,7 +224,7 @@ onMounted(loadElections)
           :disabled="submitting"
           class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Cancel
+          {{ $t('form.cancel') }}
         </button>
       </div>
     </div>
@@ -233,7 +236,7 @@ onMounted(loadElections)
         :disabled="submitting"
         class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {{ submitting ? 'Saving…' : (draftId ? 'Save changes' : 'Save draft') }}
+        {{ submitting ? $t('form.saving') : (draftId ? $t('form.saveChanges') : $t('form.saveDraft')) }}
       </button>
       <button
         type="button"
@@ -241,7 +244,7 @@ onMounted(loadElections)
         :disabled="submitting"
         class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Publish
+        {{ $t('form.publish') }}
       </button>
     </div>
   </div>

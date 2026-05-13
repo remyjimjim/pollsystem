@@ -230,5 +230,122 @@
   "notFound": {
     "heading": "Not Found",
     "message": "Page not found"
+  },
+  "creator": {
+    "dashboard": {
+      "title": "Creator Dashboard",
+      "requestAdminAccess": "Request admin access",
+      "newPoll": "+ New Poll",
+      "showArchived": "Show archived",
+      "hideArchived": "Hide archived",
+      "emptyDefault": "You haven't created any polls yet.",
+      "emptyArchived": "No polls (archived or otherwise).",
+      "tableTitle": "Title",
+      "tableType": "Type",
+      "tableStatus": "Status",
+      "tableCloseDate": "Close date",
+      "edit": "Edit",
+      "archive": "Archive",
+      "archiving": "Archiving…",
+      "restore": "Restore",
+      "restoring": "Restoring…",
+      "archiveConfirm": "Archive \"{title}\"? This removes it from the dashboard, search, and voting. You can restore it later via \"Show archived\".",
+      "errorLoad": "Failed to load polls",
+      "errorArchive": "Archive failed",
+      "errorRestore": "Restore failed"
+    },
+    "createPoll": {
+      "heading": "Create New Poll",
+      "chooseType": "Choose a poll type",
+      "changeType": "Change type",
+      "unsupportedTypePre": "The",
+      "unsupportedTypePost": "form is not implemented yet.",
+      "loadFailed": "Failed to load poll types"
+    },
+    "editPoll": {
+      "heading": "Edit Draft",
+      "draftOnly": "Only DRAFT polls can be edited.",
+      "notSupported": "Editing {type} polls is not supported yet.",
+      "notFound": "Poll not found.",
+      "loadFailed": "Failed to load poll"
+    }
+  },
+  "form": {
+    "title": "Title",
+    "summary": "Summary",
+    "closeDateOptional": "Close date (optional)",
+    "saveDraft": "Save draft",
+    "saveChanges": "Save changes",
+    "saving": "Saving…",
+    "publish": "Publish",
+    "confirmPublish": "Confirm and publish",
+    "cancel": "Cancel",
+    "draftSaved": "Draft saved",
+    "published": "Published!",
+    "publishFailed": "Publish failed",
+    "saveFailed": "Save failed",
+    "closeDateShort": "This poll will close on {date}. Continue?",
+    "geoScope": "Geographic Scope",
+    "questions": "Questions",
+    "questionPlaceholder": "Question {n}",
+    "addQuestion": "+ Add question",
+    "removeQuestion": "Remove question",
+    "validation": {
+      "titleRequired": "Title is required",
+      "summaryRequired": "Summary is required",
+      "zipcodeRequired": "Select at least one zipcode",
+      "atLeastOneQuestion": "Add at least one question",
+      "dateRequired": "Election date is required",
+      "zipcodeFormat": "Zipcode must be 5 digits",
+      "completeCandidates": "Add at least one complete candidate (name, affiliation, office)",
+      "pickElection": "Pick a parent Election",
+      "effectiveRequired": "Effective date is required"
+    },
+    "election": {
+      "electionDate": "Election date",
+      "zipcode": "Zipcode",
+      "candidates": "Candidates",
+      "candidatesHelp": "Voters will mark Yes / No on each candidate.",
+      "candidateName": "Name",
+      "candidateAffiliation": "Affiliation",
+      "candidateOffice": "Office (e.g. Mayor)",
+      "addCandidate": "+ Add candidate",
+      "removeCandidate": "Remove candidate"
+    },
+    "ballotMeasure": {
+      "parentElection": "Parent Election",
+      "selectElection": "Select an Election",
+      "noElections": "You haven't created any Elections yet. Create one first, then attach a measure to it.",
+      "effectiveDate": "Effective date",
+      "electionsLoadFailed": "Failed to load your elections"
+    }
+  },
+  "zipSetter": {
+    "state": "State",
+    "selectState": "Select a state",
+    "loadStatesFailed": "Failed to load states",
+    "loadCountiesFailed": "Failed to load counties",
+    "loadZipcodesFailed": "Failed to load zipcodes",
+    "counties": "Counties",
+    "selectedCount": "({selected} / {total} selected)",
+    "selectAll": "Select all ({total})",
+    "noCountiesSeeded": "No counties seeded for this state yet. Pick a different state, or extend the seed data.",
+    "zipcodes": "Zipcodes",
+    "noZipcodesAvailable": "No zipcodes available"
+  },
+  "creatorRequest": {
+    "heading": "Creator Request",
+    "submitted": "Your request has been submitted. You'll receive an email once it has been reviewed.",
+    "intro": "Tell us where and what kind of polls you'd like to create. An admin will review your request.",
+    "pollTypes": "Poll Types",
+    "geoScope": "Geographic Scope",
+    "selectedZipcodes": "Selected:",
+    "reasonLabel": "Reason (optional)",
+    "reasonPlaceholder": "Why would you like to create polls in this area?",
+    "submit": "Submit Request",
+    "submitting": "Submitting…",
+    "errorNoPollType": "Select at least one poll type",
+    "errorNoZipcode": "Select at least one zipcode",
+    "errorSubmission": "Submission failed"
   }
 }

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 import type { PollStatus } from '@/types'
 import { AccessLevel } from '@/types'
 import { useAuthStore } from '@/stores/auth'
 
+const { t } = useI18n()
 const auth = useAuthStore()
 
 interface CreatorPollSummary {
@@ -54,7 +56,7 @@ async function load() {
     })
     polls.value = res.data
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Failed to load polls'
+    error.value = e?.response?.data?.message ?? t('creator.dashboard.errorLoad')
   } finally {
     loading.value = false
   }
@@ -67,14 +69,14 @@ function toggleArchived() {
 
 const acting = ref<number | null>(null)
 async function archive(p: CreatorPollSummary) {
-  if (!window.confirm(`Archive "${p.title}"? This removes it from the dashboard, search, and voting. You can restore it later via "Show archived".`)) return
+  if (!window.confirm(t('creator.dashboard.archiveConfirm', { title: p.title }))) return
   acting.value = p.id
   error.value = null
   try {
     await axios.delete(`/api/creator/polls/${editSlug(p.type)}/${p.id}`)
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Archive failed'
+    error.value = e?.response?.data?.message ?? t('creator.dashboard.errorArchive')
   } finally {
     acting.value = null
   }
@@ -87,7 +89,7 @@ async function restore(p: CreatorPollSummary) {
     await axios.post(`/api/creator/polls/${editSlug(p.type)}/${p.id}/restore`)
     await load()
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Restore failed'
+    error.value = e?.response?.data?.message ?? t('creator.dashboard.errorRestore')
   } finally {
     acting.value = null
   }
@@ -99,20 +101,20 @@ onMounted(load)
 <template>
   <div class="mx-auto max-w-5xl py-8">
     <div class="mb-4 flex items-center justify-between">
-      <h1 class="m-0 text-2xl font-semibold text-slate-800">Creator Dashboard</h1>
+      <h1 class="m-0 text-2xl font-semibold text-slate-800">{{ $t('creator.dashboard.title') }}</h1>
       <div class="flex gap-2">
         <router-link
           v-if="!auth.hasAccess(AccessLevel.ADMIN)"
           to="/admin-request"
           class="rounded border border-slate-800 bg-white px-4 py-2 text-sm text-slate-800 no-underline hover:bg-slate-50"
         >
-          Request admin access
+          {{ $t('creator.dashboard.requestAdminAccess') }}
         </router-link>
         <router-link
           to="/creator/polls/new"
           class="rounded bg-slate-800 px-4 py-2 text-sm text-white no-underline hover:bg-slate-900"
         >
-          + New Poll
+          {{ $t('creator.dashboard.newPoll') }}
         </router-link>
       </div>
     </div>
@@ -122,23 +124,23 @@ onMounted(load)
         type="button"
         @click="toggleArchived"
         class="text-sm text-slate-600 underline hover:text-slate-900"
-      >{{ showArchived ? 'Hide archived' : 'Show archived' }}</button>
+      >{{ showArchived ? $t('creator.dashboard.hideArchived') : $t('creator.dashboard.showArchived') }}</button>
     </div>
 
     <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
-    <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
+    <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
 
     <p v-else-if="polls.length === 0" class="text-sm text-slate-500">
-      {{ showArchived ? 'No polls (archived or otherwise).' : "You haven't created any polls yet." }}
+      {{ showArchived ? $t('creator.dashboard.emptyArchived') : $t('creator.dashboard.emptyDefault') }}
     </p>
 
     <table v-else class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Title</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Type</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Status</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Close date</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableTitle') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableType') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableStatus') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableCloseDate') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
           <th class="border-b border-slate-200 p-2"></th>
         </tr>
@@ -165,7 +167,7 @@ onMounted(load)
               v-if="p.status === 'DRAFT'"
               :to="`/creator/polls/${editSlug(p.type)}/${p.id}/edit`"
               class="text-slate-800 underline"
-            >Edit</router-link>
+            >{{ $t('creator.dashboard.edit') }}</router-link>
           </td>
           <td class="border-b border-slate-100 p-2">
             <button
@@ -173,13 +175,13 @@ onMounted(load)
               @click="archive(p)"
               :disabled="acting === p.id"
               class="text-slate-800 underline hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
-            >{{ acting === p.id ? 'Archiving…' : 'Archive' }}</button>
+            >{{ acting === p.id ? $t('creator.dashboard.archiving') : $t('creator.dashboard.archive') }}</button>
             <button
               v-else
               @click="restore(p)"
               :disabled="acting === p.id"
               class="text-slate-800 underline hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
-            >{{ acting === p.id ? 'Restoring…' : 'Restore' }}</button>
+            >{{ acting === p.id ? $t('creator.dashboard.restoring') : $t('creator.dashboard.restore') }}</button>
           </td>
         </tr>
       </tbody>
