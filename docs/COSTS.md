@@ -78,6 +78,7 @@ Two configurations are presented:
 | Fly.io — backend (JVM) | 3–5× shared-cpu-2x, **2 GB RAM**, autoscale | $60–$120 |
 | Fly.io — frontend | 1× shared-cpu-1x, 256 MB RAM, auto-stop | ~$3 |
 | Fly Postgres (managed) | dedicated-cpu-1x, 10 GB volume, daily snapshots | ~$30 |
+| Database encryption (at rest) | Fly Postgres volume encryption — default-on, AES-256 | $0 |
 | Upstash Redis | Pay-as-you-go (~3–5 M commands/month) | ~$5–$10 |
 | SendGrid | Free tier (≤ 3,000 emails/month) | $0 |
 | Object storage (R2 / S3) | Static assets, JSON exports, ~5 GB | ~$1 |
@@ -92,6 +93,7 @@ Two configurations are presented:
 | Fly.io — backend (GraalVM native image) | 3–5× shared-cpu-1x, **512 MB RAM**, autoscale | ~$15–$25 |
 | Fly.io — frontend | 1× shared-cpu-1x, 256 MB RAM, auto-stop | ~$3 |
 | Neon Postgres — Launch | 10 GB storage, autoscaling compute, branching | ~$19 |
+| Database encryption (at rest) | Neon storage encryption — default-on, AES-256 | $0 |
 | Upstash Redis | Pay-as-you-go (~3–5 M commands/month) | ~$5–$10 |
 | SendGrid | Free tier (≤ 3,000 emails/month) | $0 |
 | GitHub Actions | Free tier; native-image build cached between runs | $0 |
@@ -201,14 +203,29 @@ free tier — which, for this product, won't happen until thousands of monthly a
 
 ## When to leave the lowest-cost staging configuration
 
-The recommended config is sized for **staging-at-scale**, not production. Move up when:
+The recommended config is sized for **staging-at-scale** and is intended to also
+serve as effective production for the early phase of the product. Move up to a
+dedicated production tier when **any one** of these holds:
 
+- **≥ 1,000 paid subscriptions.** At ~$25/mo per sub that's ≥ $25 k/mo of revenue
+  riding on the platform — operational risk justifies the upgrade.
 - The 200 k user pool is exceeded by ≥ 2× and Neon Launch's storage is filling up.
 - Steady-state DB CPU on Neon exceeds the Launch plan's autoscale ceiling.
 - Magic-link email volume exceeds SendGrid's free tier sustainably.
-- Compliance, audit, or uptime SLAs are introduced — at that point you want Fly Postgres dedicated, off-site backups, and a read replica.
+- Compliance, audit, or uptime SLAs are introduced — at that point you want Fly
+  Postgres dedicated, off-site backups, and a read replica.
 
-For most teams the migration path is: **lowest-cost staging → conservative baseline (still on staging) → production tier with HA Postgres and a read replica**. Each step is a config change, not a rewrite.
+At the production-tier step, **database encryption upgrades** from default at-rest
+to **customer-managed keys (BYOK)** — AWS KMS or Fly's equivalent at ~$1/key/month
+plus per-API-call fees. That's a compliance lever (SOC 2, HIPAA, PCI) rather than
+a security lever in absolute terms; the default at-rest encryption is already
+strong, but CMK lets you rotate keys on your own schedule and prove key control
+during audits.
+
+For most teams the migration path is: **lowest-cost staging-as-production →
+conservative baseline (still single-tier) → true production tier with HA
+Postgres, a read replica, and customer-managed encryption keys**. Each step is a
+config change, not a rewrite.
 
 ---
 
