@@ -4,6 +4,7 @@ import fr from './fr.json'
 import es from './es.json'
 import de from './de.json'
 import it from './it.json'
+import ja from './ja.json'
 import nb from './nb.json'
 import ptBR from './pt-BR.json'
 import zhCN from './zh-CN.json'
@@ -16,6 +17,7 @@ export const SUPPORTED_LOCALES = [
   { code: 'es',    name: 'Español'    },
   { code: 'de',    name: 'Deutsch'    },
   { code: 'it',    name: 'Italiano'   },
+  { code: 'ja',    name: '日本語'      },
   { code: 'nb',    name: 'Norsk'      },
   { code: 'pt-BR', name: 'Português'  },
   { code: 'zh-CN', name: '中文'       }
@@ -46,7 +48,7 @@ export const i18n = createI18n({
   legacy: false,
   locale: resolveInitialLocale(),
   fallbackLocale: 'en',
-  messages: { en, fr, es, de, it, nb, 'pt-BR': ptBR, 'zh-CN': zhCN }
+  messages: { en, fr, es, de, it, ja, nb, 'pt-BR': ptBR, 'zh-CN': zhCN }
 })
 
 /** Persists the chosen locale and switches the active one. */
