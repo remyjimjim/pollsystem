@@ -2,6 +2,9 @@
 import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface BallotMeasureDto {
   id: number
@@ -56,7 +59,7 @@ async function load() {
     const res = await axios.get<BallotMeasureDto>(`/api/polls/ballot-measures/${props.id}`)
     measure.value = res.data
     if (isClosed.value) {
-      closedReason.value = 'This poll is no longer available for responses.'
+      closedReason.value = t('ballotMeasure.closedNote')
       return
     }
     const mineRes = await axios.get<MyBallotResponseDto>(
@@ -71,7 +74,7 @@ async function load() {
       mode.value = 'fresh'
     }
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Failed to load ballot measure'
+    error.value = e?.response?.data?.message ?? t('ballotMeasure.loadFailed')
   } finally {
     loading.value = false
   }
@@ -82,7 +85,7 @@ function chooseReadonly() { mode.value = 'readonly' }
 
 async function submit() {
   if (answer.value == null) {
-    error.value = 'Please answer Yes or No'
+    error.value = t('ballotMeasure.validation.pleaseAnswer')
     return
   }
   submitting.value = true
@@ -92,10 +95,10 @@ async function submit() {
       response: answer.value,
       comment: comment.value.trim() || null
     })
-    message.value = 'Response submitted successfully!'
+    message.value = t('ballotMeasure.submittedOk')
     setTimeout(() => router.push(`/polls/ballot-measure/${props.id}/results`), 600)
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Submission failed'
+    error.value = e?.response?.data?.message ?? t('ballotMeasure.submissionFailed')
   } finally {
     submitting.value = false
   }
@@ -105,25 +108,25 @@ onMounted(load)
 </script>
 
 <template>
-  <div v-if="loading" class="text-sm text-slate-600">Loading…</div>
+  <div v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</div>
   <div v-else-if="error" class="text-sm text-red-700">{{ error }}</div>
   <div v-else-if="closedReason" class="rounded-md border border-orange-400 bg-orange-50 p-4">
     <p class="mb-2 text-sm text-orange-900">{{ closedReason }}</p>
     <router-link
       :to="`/polls/ballot-measure/${props.id}/results`"
       class="text-sm font-semibold text-slate-800 underline"
-    >View results</router-link>
+    >{{ $t('nav.viewResults') }}</router-link>
   </div>
 
   <div v-else-if="measure" class="flex flex-col gap-4">
     <header class="mb-2">
       <h2 class="mb-1 text-xl font-semibold text-slate-800">{{ measure.title }}</h2>
       <p class="mb-2 text-sm text-slate-500">
-        Part of: {{ measure.electionTitle }}
-        · Zipcode {{ measure.zipcode }}
-        · Effective {{ new Date(measure.effectiveDate).toLocaleDateString() }}
+        {{ $t('ballotMeasure.partOf') }} {{ measure.electionTitle }}
+        · {{ $t('ballotMeasure.zipcodeLabel') }} {{ measure.zipcode }}
+        · {{ $t('ballotMeasure.effectiveLabel') }} {{ new Date(measure.effectiveDate).toLocaleDateString() }}
         <template v-if="measure.closeDate">
-          · Closes {{ new Date(measure.closeDate).toLocaleString() }}
+          · {{ $t('ballotMeasure.closesLabel') }} {{ new Date(measure.closeDate).toLocaleString() }}
         </template>
       </p>
       <p
@@ -135,20 +138,20 @@ onMounted(load)
 
     <div v-if="mode === 'choosing' && mine" class="rounded-md border border-sky-300 bg-sky-50 p-4">
       <p class="mb-2 text-sm text-slate-700">
-        You voted on
+        {{ $t('ballotMeasure.votedOn') }}
         <strong class="font-semibold">{{ new Date(mine.dateSubmitted!).toLocaleDateString() }}</strong>:
-        <strong class="font-semibold">{{ mine.response ? 'Yes' : 'No' }}</strong>.
-        Would you like to change your response?
+        <strong class="font-semibold">{{ mine.response ? $t('common.yes') : $t('common.no') }}</strong>.
+        {{ $t('ballotMeasure.wouldYouChange') }}
       </p>
       <div class="flex gap-2">
         <button
           @click="chooseEdit"
           class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900"
-        >Yes, edit</button>
+        >{{ $t('ballotMeasure.yesEdit') }}</button>
         <button
           @click="chooseReadonly"
           class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50"
-        >No, just review</button>
+        >{{ $t('ballotMeasure.noReview') }}</button>
       </div>
     </div>
 
@@ -156,26 +159,26 @@ onMounted(load)
       v-if="mode === 'readonly'"
       class="rounded-md border border-slate-300 bg-slate-50 p-3 text-sm text-slate-600"
     >
-      Your previous response is shown below. It cannot be modified here.
+      {{ $t('ballotMeasure.readonlyNote') }}
     </div>
 
     <fieldset
       :disabled="mode === 'readonly'"
       class="rounded-md border border-slate-200 p-4 disabled:opacity-90"
     >
-      <legend class="px-2 text-sm font-semibold text-slate-700">Your vote</legend>
+      <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('ballotMeasure.yourVoteLegend') }}</legend>
       <div class="mb-3 flex gap-6">
         <label class="flex items-center gap-2 text-sm">
           <input type="radio" :value="true" v-model="answer" name="vote" />
-          Yes
+          {{ $t('common.yes') }}
         </label>
         <label class="flex items-center gap-2 text-sm">
           <input type="radio" :value="false" v-model="answer" name="vote" />
-          No
+          {{ $t('common.no') }}
         </label>
       </div>
       <label class="flex flex-col gap-1 text-sm text-slate-600">
-        Comment (optional)
+        {{ $t('common.comment') }}
         <textarea
           v-model="comment"
           rows="2"
@@ -192,7 +195,7 @@ onMounted(load)
         :disabled="submitting"
         class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {{ submitting ? 'Submitting…' : (mine?.hasResponse ? 'Update vote' : 'Submit vote') }}
+        {{ submitting ? $t('common.submitting') : (mine?.hasResponse ? $t('ballotMeasure.updateVote') : $t('ballotMeasure.submitVote')) }}
       </button>
     </div>
   </div>

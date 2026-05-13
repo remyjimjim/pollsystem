@@ -17,7 +17,141 @@
     "yes": "Yes",
     "no": "No",
     "comment": "Comment (optional)",
-    "select": "— select —"
+    "select": "— select —",
+    "tryAgain": "Try again",
+    "close": "Close",
+    "apply": "Apply",
+    "clear": "Clear",
+    "back": "Back"
+  },
+  "home": {
+    "welcomeBack": "Welcome back,",
+    "guestIntro": "Anonymous polling and elections. Create an account to vote on published polls; apply for Creator access to publish your own.",
+    "cards": {
+      "findPolls": {
+        "title": "Find polls and view results",
+        "description": "Search by title, creator, zipcode, candidate, or type. Open a poll to vote or jump to its results page.",
+        "cta": "Search polls"
+      },
+      "creatorDashboard": {
+        "title": "Creator dashboard",
+        "description": "See your polls in draft, published, and closed states. Create new polls or edit existing drafts.",
+        "cta": "Open dashboard"
+      },
+      "newPoll": {
+        "title": "Start a new poll",
+        "description": "Build an Election, Questionnaire, or Referendum and send respondent links once it goes live.",
+        "cta": "Create poll"
+      },
+      "becomeCreator": {
+        "title": "Become a Creator",
+        "description": "Apply to host your own polls in specific zipcodes. An admin reviews your request and grants access.",
+        "cta": "Request Creator access"
+      },
+      "adminDashboard": {
+        "title": "Admin dashboard",
+        "description": "Review pending Creator requests, manage creators and their polls.",
+        "cta": "Open admin"
+      },
+      "becomeAdmin": {
+        "title": "Become an Admin",
+        "description": "Apply for admin rights over zipcodes you already create polls in. Reviewed by a Super.",
+        "cta": "Request Admin access"
+      },
+      "superAdmin": {
+        "title": "Super admin",
+        "description": "Review admin requests, manage IP rules, edit poll templates, and oversee all admins.",
+        "cta": "Open super admin"
+      },
+      "guestResults": {
+        "title": "View poll results",
+        "description": "Browse every published poll and open its results page. No account required.",
+        "cta": "View results"
+      },
+      "guestSignIn": {
+        "title": "Sign in",
+        "description": "Already have an account? We'll email you a one-time sign-in link.",
+        "cta": "Sign in"
+      },
+      "guestRegister": {
+        "title": "Create an account",
+        "description": "Email + phone + zipcode is all it takes. No passwords.",
+        "cta": "Register"
+      }
+    }
+  },
+  "login": {
+    "heading": "Sign in",
+    "emailLabel": "Email",
+    "intro": "Enter the email on your account and we'll send you a one-time sign-in link.",
+    "submitButton": "Email me a sign-in link",
+    "submittingButton": "Sending link…",
+    "noAccount": "No account?",
+    "registerLink": "Register",
+    "checkEmailHeading": "Check your email.",
+    "checkEmailBody": "We've sent a one-time sign-in link to {email}. The link expires in 15 minutes and can only be used once.",
+    "wrongAddress": "Wrong address?",
+    "errorNoAccount": "We don't have an account for that email. Please register first.",
+    "errorGeneric": "Could not send the sign-in link"
+  },
+  "register": {
+    "heading": "Create an account",
+    "intro": "We use one-time email links instead of passwords. Enter your details and we'll send a sign-in link to your inbox.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "zipcodeLabel": "Zipcode",
+    "submitButton": "Email me a sign-in link",
+    "submittingButton": "Sending link…",
+    "checkEmailHeading": "Check your email.",
+    "checkEmailBody": "We've sent a one-time sign-in link to {email}. Click the link to finish creating your account. The link expires in 15 minutes.",
+    "wrongAddress": "Wrong address?",
+    "haveAccount": "Already have an account?",
+    "signInLink": "Sign in",
+    "errorGeneric": "Could not send the sign-in link"
+  },
+  "magicLink": {
+    "signingIn": "Signing you in…",
+    "failedHeading": "Sign-in failed",
+    "errorMalformed": "This sign-in link is malformed.",
+    "errorExpired": "This sign-in link has expired or has already been used. Request a new one.",
+    "errorGeneric": "Could not complete sign-in.",
+    "requestNew": "Request a new sign-in link"
+  },
+  "search": {
+    "headingAuthed": "Find a Poll",
+    "headingGuest": "Browse Poll Results",
+    "guestIntroBefore": "Search and view results for any published poll.",
+    "guestIntroSignIn": "Sign in",
+    "guestIntroAfter": "to vote.",
+    "filters": {
+      "titleContains": "Title contains",
+      "zipcode": "Zipcode",
+      "candidateName": "Candidate name (Election only)",
+      "type": "Type",
+      "typeAny": "Any",
+      "typeQuestionnaire": "Questionnaire",
+      "typeElection": "Election",
+      "typeBallotMeasure": "Ballot Measure"
+    },
+    "search": "Search",
+    "searching": "Searching…",
+    "noMatches": "No active polls match your filters.",
+    "table": {
+      "title": "Title",
+      "type": "Type",
+      "zipcodes": "Zipcodes",
+      "closes": "Closes"
+    },
+    "noCloseDate": "No close date",
+    "viewResults": "View results",
+    "vote": "Vote →",
+    "showMore": "Show {n} more",
+    "additionalZipcodes": "Additional zipcodes ({n})",
+    "errorFailed": "Search failed"
+  },
+  "pollDetail": {
+    "unknownType": "Unknown poll type.",
+    "backToSearch": "Back to search"
   },
   "election": {
     "dateLabel": "Election date:",
@@ -38,5 +172,63 @@
       "yesNoFor": "Please answer Yes or No for: {name}",
       "selectionFor": "Please make a selection for: {office}"
     }
+  },
+  "questionnaire": {
+    "closesLabel": "Closes",
+    "submittedAnswersOn": "You submitted answers on",
+    "wouldYouChange": "Would you like to change your responses?",
+    "yesEdit": "Yes, edit",
+    "noReview": "No, just review",
+    "readonlyNote": "Your previous responses are shown below. They cannot be modified here.",
+    "answer": "Answer",
+    "submitResponses": "Submit responses",
+    "updateResponses": "Update responses",
+    "submittedOk": "Responses submitted successfully!",
+    "closedNote": "This poll is no longer available for responses.",
+    "loadFailed": "Failed to load poll",
+    "submissionFailed": "Submission failed",
+    "validation": {
+      "pleaseAnswer": "Please answer: \"{text}\""
+    }
+  },
+  "ballotMeasure": {
+    "partOf": "Part of:",
+    "zipcodeLabel": "Zipcode",
+    "effectiveLabel": "Effective",
+    "closesLabel": "Closes",
+    "votedOn": "You voted on",
+    "wouldYouChange": "Would you like to change your response?",
+    "yesEdit": "Yes, edit",
+    "noReview": "No, just review",
+    "readonlyNote": "Your previous response is shown below. It cannot be modified here.",
+    "yourVoteLegend": "Your vote",
+    "submitVote": "Submit vote",
+    "updateVote": "Update vote",
+    "submittedOk": "Response submitted successfully!",
+    "closedNote": "This poll is no longer available for responses.",
+    "loadFailed": "Failed to load ballot measure",
+    "submissionFailed": "Submission failed",
+    "validation": {
+      "pleaseAnswer": "Please answer Yes or No"
+    }
+  },
+  "results": {
+    "heading": "Results",
+    "headingFor": "{title} — Results",
+    "unsupportedPre": "Results for",
+    "unsupportedPost": "are not yet supported.",
+    "filterLabel": "Filter by zipcode",
+    "filterPlaceholder": "e.g. 90001",
+    "respondents": "{n} respondent(s)",
+    "filterPrefix": "filter:",
+    "responseCount": "{n} responses",
+    "noResponsesYet": "No responses yet.",
+    "noVotesYet": "No votes yet.",
+    "poll404": "Poll not found",
+    "loadFailed": "Failed to load results"
+  },
+  "notFound": {
+    "heading": "Not Found",
+    "message": "Page not found"
   }
 }

@@ -17,7 +17,141 @@
     "yes": "Oui",
     "no": "Non",
     "comment": "Commentaire (facultatif)",
-    "select": "— sélectionner —"
+    "select": "— sélectionner —",
+    "tryAgain": "Réessayer",
+    "close": "Fermer",
+    "apply": "Appliquer",
+    "clear": "Effacer",
+    "back": "Retour"
+  },
+  "home": {
+    "welcomeBack": "Bon retour,",
+    "guestIntro": "Sondages et élections anonymes. Créez un compte pour voter sur les sondages publiés ; demandez l'accès Créateur pour publier les vôtres.",
+    "cards": {
+      "findPolls": {
+        "title": "Trouver des sondages et voir les résultats",
+        "description": "Recherchez par titre, créateur, code postal, candidat ou type. Ouvrez un sondage pour voter ou accéder à sa page de résultats.",
+        "cta": "Rechercher des sondages"
+      },
+      "creatorDashboard": {
+        "title": "Tableau de bord Créateur",
+        "description": "Consultez vos sondages aux états brouillon, publié et clos. Créez de nouveaux sondages ou modifiez les brouillons existants.",
+        "cta": "Ouvrir le tableau de bord"
+      },
+      "newPoll": {
+        "title": "Commencer un nouveau sondage",
+        "description": "Créez une Élection, un Questionnaire ou un Référendum et envoyez les liens aux répondants une fois publié.",
+        "cta": "Créer un sondage"
+      },
+      "becomeCreator": {
+        "title": "Devenir Créateur",
+        "description": "Demandez à héberger vos propres sondages dans des codes postaux spécifiques. Un admin examine votre demande et accorde l'accès.",
+        "cta": "Demander l'accès Créateur"
+      },
+      "adminDashboard": {
+        "title": "Tableau de bord Admin",
+        "description": "Examinez les demandes Créateur en attente, gérez les créateurs et leurs sondages.",
+        "cta": "Ouvrir admin"
+      },
+      "becomeAdmin": {
+        "title": "Devenir Admin",
+        "description": "Demandez des droits admin sur les codes postaux où vous créez déjà des sondages. Examiné par un Super.",
+        "cta": "Demander l'accès Admin"
+      },
+      "superAdmin": {
+        "title": "Super admin",
+        "description": "Examinez les demandes admin, gérez les règles IP, modifiez les modèles de sondage et supervisez tous les admins.",
+        "cta": "Ouvrir super admin"
+      },
+      "guestResults": {
+        "title": "Voir les résultats des sondages",
+        "description": "Parcourez tous les sondages publiés et ouvrez leur page de résultats. Aucun compte requis.",
+        "cta": "Voir les résultats"
+      },
+      "guestSignIn": {
+        "title": "Connexion",
+        "description": "Vous avez déjà un compte ? Nous vous enverrons un lien de connexion à usage unique.",
+        "cta": "Se connecter"
+      },
+      "guestRegister": {
+        "title": "Créer un compte",
+        "description": "Un e-mail, un téléphone et un code postal suffisent. Pas de mot de passe.",
+        "cta": "S'inscrire"
+      }
+    }
+  },
+  "login": {
+    "heading": "Connexion",
+    "emailLabel": "E-mail",
+    "intro": "Entrez l'e-mail de votre compte et nous vous enverrons un lien de connexion à usage unique.",
+    "submitButton": "M'envoyer un lien de connexion",
+    "submittingButton": "Envoi du lien…",
+    "noAccount": "Pas de compte ?",
+    "registerLink": "S'inscrire",
+    "checkEmailHeading": "Vérifiez votre e-mail.",
+    "checkEmailBody": "Nous avons envoyé un lien de connexion à usage unique à {email}. Le lien expire dans 15 minutes et ne peut être utilisé qu'une seule fois.",
+    "wrongAddress": "Mauvaise adresse ?",
+    "errorNoAccount": "Nous n'avons pas de compte pour cet e-mail. Veuillez d'abord vous inscrire.",
+    "errorGeneric": "Impossible d'envoyer le lien de connexion"
+  },
+  "register": {
+    "heading": "Créer un compte",
+    "intro": "Nous utilisons des liens e-mail à usage unique au lieu de mots de passe. Entrez vos informations et nous enverrons un lien de connexion dans votre boîte de réception.",
+    "emailLabel": "E-mail",
+    "phoneLabel": "Téléphone",
+    "zipcodeLabel": "Code postal",
+    "submitButton": "M'envoyer un lien de connexion",
+    "submittingButton": "Envoi du lien…",
+    "checkEmailHeading": "Vérifiez votre e-mail.",
+    "checkEmailBody": "Nous avons envoyé un lien de connexion à usage unique à {email}. Cliquez sur le lien pour finaliser la création de votre compte. Le lien expire dans 15 minutes.",
+    "wrongAddress": "Mauvaise adresse ?",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "signInLink": "Se connecter",
+    "errorGeneric": "Impossible d'envoyer le lien de connexion"
+  },
+  "magicLink": {
+    "signingIn": "Connexion en cours…",
+    "failedHeading": "Échec de la connexion",
+    "errorMalformed": "Ce lien de connexion est mal formé.",
+    "errorExpired": "Ce lien de connexion a expiré ou a déjà été utilisé. Demandez-en un nouveau.",
+    "errorGeneric": "Impossible de finaliser la connexion.",
+    "requestNew": "Demander un nouveau lien de connexion"
+  },
+  "search": {
+    "headingAuthed": "Trouver un Sondage",
+    "headingGuest": "Parcourir les Résultats des Sondages",
+    "guestIntroBefore": "Recherchez et consultez les résultats de tout sondage publié.",
+    "guestIntroSignIn": "Se connecter",
+    "guestIntroAfter": "pour voter.",
+    "filters": {
+      "titleContains": "Le titre contient",
+      "zipcode": "Code postal",
+      "candidateName": "Nom du candidat (Élection uniquement)",
+      "type": "Type",
+      "typeAny": "Tous",
+      "typeQuestionnaire": "Questionnaire",
+      "typeElection": "Élection",
+      "typeBallotMeasure": "Référendum"
+    },
+    "search": "Rechercher",
+    "searching": "Recherche…",
+    "noMatches": "Aucun sondage actif ne correspond à vos filtres.",
+    "table": {
+      "title": "Titre",
+      "type": "Type",
+      "zipcodes": "Codes postaux",
+      "closes": "Clôture"
+    },
+    "noCloseDate": "Aucune date de clôture",
+    "viewResults": "Voir les résultats",
+    "vote": "Voter →",
+    "showMore": "Afficher {n} de plus",
+    "additionalZipcodes": "Codes postaux supplémentaires ({n})",
+    "errorFailed": "Échec de la recherche"
+  },
+  "pollDetail": {
+    "unknownType": "Type de sondage inconnu.",
+    "backToSearch": "Retour à la recherche"
   },
   "election": {
     "dateLabel": "Date de l'élection :",
@@ -38,5 +172,63 @@
       "yesNoFor": "Veuillez répondre Oui ou Non pour : {name}",
       "selectionFor": "Veuillez faire une sélection pour : {office}"
     }
+  },
+  "questionnaire": {
+    "closesLabel": "Clôture",
+    "submittedAnswersOn": "Vous avez soumis vos réponses le",
+    "wouldYouChange": "Souhaitez-vous modifier vos réponses ?",
+    "yesEdit": "Oui, modifier",
+    "noReview": "Non, juste consulter",
+    "readonlyNote": "Vos réponses précédentes sont affichées ci-dessous. Elles ne peuvent pas être modifiées ici.",
+    "answer": "Réponse",
+    "submitResponses": "Envoyer les réponses",
+    "updateResponses": "Mettre à jour les réponses",
+    "submittedOk": "Réponses envoyées avec succès !",
+    "closedNote": "Ce sondage n'accepte plus de réponses.",
+    "loadFailed": "Échec du chargement du sondage",
+    "submissionFailed": "Échec de l'envoi",
+    "validation": {
+      "pleaseAnswer": "Veuillez répondre à : « {text} »"
+    }
+  },
+  "ballotMeasure": {
+    "partOf": "Partie de :",
+    "zipcodeLabel": "Code postal",
+    "effectiveLabel": "En vigueur",
+    "closesLabel": "Clôture",
+    "votedOn": "Vous avez voté le",
+    "wouldYouChange": "Souhaitez-vous modifier votre réponse ?",
+    "yesEdit": "Oui, modifier",
+    "noReview": "Non, juste consulter",
+    "readonlyNote": "Votre réponse précédente est affichée ci-dessous. Elle ne peut pas être modifiée ici.",
+    "yourVoteLegend": "Votre vote",
+    "submitVote": "Envoyer le vote",
+    "updateVote": "Mettre à jour le vote",
+    "submittedOk": "Réponse envoyée avec succès !",
+    "closedNote": "Ce sondage n'accepte plus de réponses.",
+    "loadFailed": "Échec du chargement du référendum",
+    "submissionFailed": "Échec de l'envoi",
+    "validation": {
+      "pleaseAnswer": "Veuillez répondre Oui ou Non"
+    }
+  },
+  "results": {
+    "heading": "Résultats",
+    "headingFor": "{title} — Résultats",
+    "unsupportedPre": "Les résultats pour",
+    "unsupportedPost": "ne sont pas encore pris en charge.",
+    "filterLabel": "Filtrer par code postal",
+    "filterPlaceholder": "ex. 90001",
+    "respondents": "{n} répondant(s)",
+    "filterPrefix": "filtre :",
+    "responseCount": "{n} réponses",
+    "noResponsesYet": "Aucune réponse pour le moment.",
+    "noVotesYet": "Aucun vote pour le moment.",
+    "poll404": "Sondage introuvable",
+    "loadFailed": "Échec du chargement des résultats"
+  },
+  "notFound": {
+    "heading": "Introuvable",
+    "message": "Page introuvable"
   }
 }

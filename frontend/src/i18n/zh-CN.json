@@ -17,7 +17,141 @@
     "yes": "是",
     "no": "否",
     "comment": "备注（可选）",
-    "select": "— 选择 —"
+    "select": "— 选择 —",
+    "tryAgain": "重试",
+    "close": "关闭",
+    "apply": "应用",
+    "clear": "清除",
+    "back": "返回"
+  },
+  "home": {
+    "welcomeBack": "欢迎回来，",
+    "guestIntro": "匿名投票与选举。创建账户即可对已发布的投票进行表决；申请“创建者”权限以发布您自己的投票。",
+    "cards": {
+      "findPolls": {
+        "title": "查找投票并查看结果",
+        "description": "按标题、创建者、邮政编码、候选人或类型搜索。打开投票进行表决，或转到其结果页。",
+        "cta": "搜索投票"
+      },
+      "creatorDashboard": {
+        "title": "创建者控制面板",
+        "description": "查看您处于草稿、已发布和已关闭状态的投票。创建新投票或编辑现有草稿。",
+        "cta": "打开控制面板"
+      },
+      "newPoll": {
+        "title": "开始新投票",
+        "description": "构建一项选举、问卷或公投，发布后向参与者发送链接。",
+        "cta": "创建投票"
+      },
+      "becomeCreator": {
+        "title": "成为创建者",
+        "description": "申请在特定邮政编码地区主办您自己的投票。管理员将审核您的请求并授予权限。",
+        "cta": "申请创建者权限"
+      },
+      "adminDashboard": {
+        "title": "管理员控制面板",
+        "description": "审核待处理的创建者请求，管理创建者及其投票。",
+        "cta": "打开管理员"
+      },
+      "becomeAdmin": {
+        "title": "成为管理员",
+        "description": "为您已经创建投票的邮政编码申请管理员权限。由超级管理员审核。",
+        "cta": "申请管理员权限"
+      },
+      "superAdmin": {
+        "title": "超级管理员",
+        "description": "审核管理员请求、管理 IP 规则、编辑投票模板，并监督所有管理员。",
+        "cta": "打开超级管理员"
+      },
+      "guestResults": {
+        "title": "查看投票结果",
+        "description": "浏览所有已发布的投票并查看其结果页。无需账户。",
+        "cta": "查看结果"
+      },
+      "guestSignIn": {
+        "title": "登录",
+        "description": "已有账户？我们会将一次性登录链接发送到您的邮箱。",
+        "cta": "登录"
+      },
+      "guestRegister": {
+        "title": "创建账户",
+        "description": "只需电子邮件 + 电话 + 邮政编码。无需密码。",
+        "cta": "注册"
+      }
+    }
+  },
+  "login": {
+    "heading": "登录",
+    "emailLabel": "电子邮件",
+    "intro": "输入您账户的电子邮件，我们将向您发送一次性登录链接。",
+    "submitButton": "通过电子邮件发送登录链接",
+    "submittingButton": "正在发送链接…",
+    "noAccount": "还没有账户？",
+    "registerLink": "注册",
+    "checkEmailHeading": "请查收电子邮件。",
+    "checkEmailBody": "我们已向 {email} 发送了一次性登录链接。该链接将在 15 分钟后过期，且只能使用一次。",
+    "wrongAddress": "地址错误？",
+    "errorNoAccount": "我们没有该电子邮件的账户。请先注册。",
+    "errorGeneric": "无法发送登录链接"
+  },
+  "register": {
+    "heading": "创建账户",
+    "intro": "我们使用一次性电子邮件链接代替密码。输入您的信息，我们将向您的邮箱发送登录链接。",
+    "emailLabel": "电子邮件",
+    "phoneLabel": "电话",
+    "zipcodeLabel": "邮政编码",
+    "submitButton": "通过电子邮件发送登录链接",
+    "submittingButton": "正在发送链接…",
+    "checkEmailHeading": "请查收电子邮件。",
+    "checkEmailBody": "我们已向 {email} 发送了一次性登录链接。点击该链接以完成账户创建。该链接将在 15 分钟后过期。",
+    "wrongAddress": "地址错误？",
+    "haveAccount": "已有账户？",
+    "signInLink": "登录",
+    "errorGeneric": "无法发送登录链接"
+  },
+  "magicLink": {
+    "signingIn": "正在为您登录…",
+    "failedHeading": "登录失败",
+    "errorMalformed": "此登录链接格式错误。",
+    "errorExpired": "此登录链接已过期或已被使用。请申请新链接。",
+    "errorGeneric": "无法完成登录。",
+    "requestNew": "申请新的登录链接"
+  },
+  "search": {
+    "headingAuthed": "查找投票",
+    "headingGuest": "浏览投票结果",
+    "guestIntroBefore": "搜索并查看任何已发布投票的结果。",
+    "guestIntroSignIn": "登录",
+    "guestIntroAfter": "以参与投票。",
+    "filters": {
+      "titleContains": "标题包含",
+      "zipcode": "邮政编码",
+      "candidateName": "候选人姓名（仅限选举）",
+      "type": "类型",
+      "typeAny": "任意",
+      "typeQuestionnaire": "问卷",
+      "typeElection": "选举",
+      "typeBallotMeasure": "公投"
+    },
+    "search": "搜索",
+    "searching": "搜索中…",
+    "noMatches": "没有活跃的投票符合您的筛选条件。",
+    "table": {
+      "title": "标题",
+      "type": "类型",
+      "zipcodes": "邮政编码",
+      "closes": "截止"
+    },
+    "noCloseDate": "无截止日期",
+    "viewResults": "查看结果",
+    "vote": "投票 →",
+    "showMore": "显示其他 {n} 个",
+    "additionalZipcodes": "其他邮政编码（{n}）",
+    "errorFailed": "搜索失败"
+  },
+  "pollDetail": {
+    "unknownType": "未知的投票类型。",
+    "backToSearch": "返回搜索"
   },
   "election": {
     "dateLabel": "选举日期：",
@@ -38,5 +172,63 @@
       "yesNoFor": "请为以下选项回答“是”或“否”：{name}",
       "selectionFor": "请为以下职位做出选择：{office}"
     }
+  },
+  "questionnaire": {
+    "closesLabel": "截止",
+    "submittedAnswersOn": "您于以下时间提交了答复",
+    "wouldYouChange": "您想修改您的答复吗？",
+    "yesEdit": "是，修改",
+    "noReview": "否，仅查看",
+    "readonlyNote": "您之前的答复如下所示，不能在此处修改。",
+    "answer": "答复",
+    "submitResponses": "提交答复",
+    "updateResponses": "更新答复",
+    "submittedOk": "答复已成功提交！",
+    "closedNote": "此投票已不再接受回复。",
+    "loadFailed": "加载投票失败",
+    "submissionFailed": "提交失败",
+    "validation": {
+      "pleaseAnswer": "请回答：“{text}”"
+    }
+  },
+  "ballotMeasure": {
+    "partOf": "属于：",
+    "zipcodeLabel": "邮政编码",
+    "effectiveLabel": "生效日期",
+    "closesLabel": "截止",
+    "votedOn": "您投票于",
+    "wouldYouChange": "您想修改您的答复吗？",
+    "yesEdit": "是，修改",
+    "noReview": "否，仅查看",
+    "readonlyNote": "您之前的答复如下所示，不能在此处修改。",
+    "yourVoteLegend": "您的投票",
+    "submitVote": "提交投票",
+    "updateVote": "更新投票",
+    "submittedOk": "答复已成功提交！",
+    "closedNote": "此投票已不再接受回复。",
+    "loadFailed": "加载公投失败",
+    "submissionFailed": "提交失败",
+    "validation": {
+      "pleaseAnswer": "请回答“是”或“否”"
+    }
+  },
+  "results": {
+    "heading": "结果",
+    "headingFor": "{title} — 结果",
+    "unsupportedPre": "尚不支持",
+    "unsupportedPost": "的结果。",
+    "filterLabel": "按邮政编码筛选",
+    "filterPlaceholder": "例如：90001",
+    "respondents": "{n} 位答复者",
+    "filterPrefix": "筛选：",
+    "responseCount": "{n} 条答复",
+    "noResponsesYet": "暂无答复。",
+    "noVotesYet": "暂无投票。",
+    "poll404": "未找到投票",
+    "loadFailed": "加载结果失败"
+  },
+  "notFound": {
+    "heading": "未找到",
+    "message": "页面未找到"
   }
 }

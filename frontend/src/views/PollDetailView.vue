@@ -26,9 +26,9 @@ const id = computed(() => Number(route.params.id))
     />
     <div v-else class="rounded-md border border-orange-400 bg-orange-50 p-4">
       <h1 class="mb-2 text-xl font-semibold text-slate-800">{{ type }}</h1>
-      <p class="mb-2 text-sm text-slate-700">Unknown poll type.</p>
+      <p class="mb-2 text-sm text-slate-700">{{ $t('pollDetail.unknownType') }}</p>
       <router-link to="/polls/search" class="text-sm font-semibold text-slate-800 underline">
-        Back to search
+        {{ $t('pollDetail.backToSearch') }}
       </router-link>
     </div>
   </div>

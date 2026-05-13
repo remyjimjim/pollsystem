@@ -4,7 +4,7 @@
 
 <template>
   <div class="py-8">
-    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Not Found</h1>
-    <p class="text-slate-600">Page not found</p>
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('notFound.heading') }}</h1>
+    <p class="text-slate-600">{{ $t('notFound.message') }}</p>
   </div>
 </template>

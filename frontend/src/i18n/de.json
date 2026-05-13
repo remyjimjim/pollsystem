@@ -17,7 +17,141 @@
     "yes": "Ja",
     "no": "Nein",
     "comment": "Kommentar (optional)",
-    "select": "— auswählen —"
+    "select": "— auswählen —",
+    "tryAgain": "Erneut versuchen",
+    "close": "Schließen",
+    "apply": "Anwenden",
+    "clear": "Löschen",
+    "back": "Zurück"
+  },
+  "home": {
+    "welcomeBack": "Willkommen zurück,",
+    "guestIntro": "Anonyme Umfragen und Wahlen. Erstellen Sie ein Konto, um an veröffentlichten Umfragen teilzunehmen; beantragen Sie Ersteller-Zugang, um eigene zu veröffentlichen.",
+    "cards": {
+      "findPolls": {
+        "title": "Umfragen finden und Ergebnisse anzeigen",
+        "description": "Suchen Sie nach Titel, Ersteller, Postleitzahl, Kandidat oder Typ. Öffnen Sie eine Umfrage zum Abstimmen oder springen Sie zur Ergebnisseite.",
+        "cta": "Umfragen suchen"
+      },
+      "creatorDashboard": {
+        "title": "Ersteller-Dashboard",
+        "description": "Sehen Sie Ihre Umfragen in den Status Entwurf, veröffentlicht und geschlossen. Erstellen Sie neue Umfragen oder bearbeiten Sie vorhandene Entwürfe.",
+        "cta": "Dashboard öffnen"
+      },
+      "newPoll": {
+        "title": "Neue Umfrage starten",
+        "description": "Erstellen Sie eine Wahl, einen Fragebogen oder ein Referendum und senden Sie nach der Veröffentlichung Teilnehmer-Links.",
+        "cta": "Umfrage erstellen"
+      },
+      "becomeCreator": {
+        "title": "Ersteller werden",
+        "description": "Beantragen Sie, eigene Umfragen in bestimmten Postleitzahlen zu hosten. Ein Admin prüft Ihre Anfrage und gewährt Zugang.",
+        "cta": "Ersteller-Zugang beantragen"
+      },
+      "adminDashboard": {
+        "title": "Admin-Dashboard",
+        "description": "Prüfen Sie offene Ersteller-Anfragen, verwalten Sie Ersteller und ihre Umfragen.",
+        "cta": "Admin öffnen"
+      },
+      "becomeAdmin": {
+        "title": "Admin werden",
+        "description": "Beantragen Sie Admin-Rechte für Postleitzahlen, in denen Sie bereits Umfragen erstellen. Geprüft von einem Super.",
+        "cta": "Admin-Zugang beantragen"
+      },
+      "superAdmin": {
+        "title": "Super-Admin",
+        "description": "Prüfen Sie Admin-Anfragen, verwalten Sie IP-Regeln, bearbeiten Sie Umfragenvorlagen und beaufsichtigen Sie alle Admins.",
+        "cta": "Super-Admin öffnen"
+      },
+      "guestResults": {
+        "title": "Umfrageergebnisse anzeigen",
+        "description": "Durchsuchen Sie alle veröffentlichten Umfragen und öffnen Sie deren Ergebnisseite. Kein Konto erforderlich.",
+        "cta": "Ergebnisse anzeigen"
+      },
+      "guestSignIn": {
+        "title": "Anmelden",
+        "description": "Bereits ein Konto? Wir senden Ihnen einen einmaligen Anmeldelink per E-Mail.",
+        "cta": "Anmelden"
+      },
+      "guestRegister": {
+        "title": "Konto erstellen",
+        "description": "E-Mail + Telefon + Postleitzahl genügen. Keine Passwörter.",
+        "cta": "Registrieren"
+      }
+    }
+  },
+  "login": {
+    "heading": "Anmelden",
+    "emailLabel": "E-Mail",
+    "intro": "Geben Sie die E-Mail Ihres Kontos ein, und wir senden Ihnen einen einmaligen Anmeldelink.",
+    "submitButton": "Anmeldelink per E-Mail senden",
+    "submittingButton": "Link wird gesendet…",
+    "noAccount": "Kein Konto?",
+    "registerLink": "Registrieren",
+    "checkEmailHeading": "Prüfen Sie Ihre E-Mail.",
+    "checkEmailBody": "Wir haben einen einmaligen Anmeldelink an {email} gesendet. Der Link läuft in 15 Minuten ab und kann nur einmal verwendet werden.",
+    "wrongAddress": "Falsche Adresse?",
+    "errorNoAccount": "Wir haben kein Konto für diese E-Mail. Bitte registrieren Sie sich zuerst.",
+    "errorGeneric": "Anmeldelink konnte nicht gesendet werden"
+  },
+  "register": {
+    "heading": "Konto erstellen",
+    "intro": "Wir verwenden einmalige E-Mail-Links anstelle von Passwörtern. Geben Sie Ihre Daten ein, und wir senden einen Anmeldelink in Ihren Posteingang.",
+    "emailLabel": "E-Mail",
+    "phoneLabel": "Telefon",
+    "zipcodeLabel": "Postleitzahl",
+    "submitButton": "Anmeldelink per E-Mail senden",
+    "submittingButton": "Link wird gesendet…",
+    "checkEmailHeading": "Prüfen Sie Ihre E-Mail.",
+    "checkEmailBody": "Wir haben einen einmaligen Anmeldelink an {email} gesendet. Klicken Sie auf den Link, um die Konto-Erstellung abzuschließen. Der Link läuft in 15 Minuten ab.",
+    "wrongAddress": "Falsche Adresse?",
+    "haveAccount": "Bereits ein Konto?",
+    "signInLink": "Anmelden",
+    "errorGeneric": "Anmeldelink konnte nicht gesendet werden"
+  },
+  "magicLink": {
+    "signingIn": "Anmeldung läuft…",
+    "failedHeading": "Anmeldung fehlgeschlagen",
+    "errorMalformed": "Dieser Anmeldelink ist fehlerhaft.",
+    "errorExpired": "Dieser Anmeldelink ist abgelaufen oder wurde bereits verwendet. Fordern Sie einen neuen an.",
+    "errorGeneric": "Anmeldung konnte nicht abgeschlossen werden.",
+    "requestNew": "Neuen Anmeldelink anfordern"
+  },
+  "search": {
+    "headingAuthed": "Eine Umfrage finden",
+    "headingGuest": "Umfrageergebnisse durchsuchen",
+    "guestIntroBefore": "Suchen Sie und sehen Sie Ergebnisse aller veröffentlichten Umfragen.",
+    "guestIntroSignIn": "Anmelden",
+    "guestIntroAfter": "zum Abstimmen.",
+    "filters": {
+      "titleContains": "Titel enthält",
+      "zipcode": "Postleitzahl",
+      "candidateName": "Kandidatenname (nur Wahl)",
+      "type": "Typ",
+      "typeAny": "Beliebig",
+      "typeQuestionnaire": "Fragebogen",
+      "typeElection": "Wahl",
+      "typeBallotMeasure": "Referendum"
+    },
+    "search": "Suchen",
+    "searching": "Suchen…",
+    "noMatches": "Keine aktiven Umfragen entsprechen Ihren Filtern.",
+    "table": {
+      "title": "Titel",
+      "type": "Typ",
+      "zipcodes": "Postleitzahlen",
+      "closes": "Schließt"
+    },
+    "noCloseDate": "Kein Schlussdatum",
+    "viewResults": "Ergebnisse anzeigen",
+    "vote": "Abstimmen →",
+    "showMore": "{n} weitere anzeigen",
+    "additionalZipcodes": "Weitere Postleitzahlen ({n})",
+    "errorFailed": "Suche fehlgeschlagen"
+  },
+  "pollDetail": {
+    "unknownType": "Unbekannter Umfragetyp.",
+    "backToSearch": "Zurück zur Suche"
   },
   "election": {
     "dateLabel": "Wahltag:",
@@ -38,5 +172,63 @@
       "yesNoFor": "Bitte antworten Sie mit Ja oder Nein für: {name}",
       "selectionFor": "Bitte treffen Sie eine Auswahl für: {office}"
     }
+  },
+  "questionnaire": {
+    "closesLabel": "Schließt",
+    "submittedAnswersOn": "Sie haben Antworten gesendet am",
+    "wouldYouChange": "Möchten Sie Ihre Antworten ändern?",
+    "yesEdit": "Ja, bearbeiten",
+    "noReview": "Nein, nur ansehen",
+    "readonlyNote": "Ihre vorherigen Antworten werden unten angezeigt. Sie können hier nicht geändert werden.",
+    "answer": "Antwort",
+    "submitResponses": "Antworten senden",
+    "updateResponses": "Antworten aktualisieren",
+    "submittedOk": "Antworten erfolgreich gesendet!",
+    "closedNote": "Diese Umfrage nimmt keine Antworten mehr an.",
+    "loadFailed": "Umfrage konnte nicht geladen werden",
+    "submissionFailed": "Senden fehlgeschlagen",
+    "validation": {
+      "pleaseAnswer": "Bitte beantworten Sie: „{text}“"
+    }
+  },
+  "ballotMeasure": {
+    "partOf": "Teil von:",
+    "zipcodeLabel": "Postleitzahl",
+    "effectiveLabel": "Gültig ab",
+    "closesLabel": "Schließt",
+    "votedOn": "Sie haben abgestimmt am",
+    "wouldYouChange": "Möchten Sie Ihre Antwort ändern?",
+    "yesEdit": "Ja, bearbeiten",
+    "noReview": "Nein, nur ansehen",
+    "readonlyNote": "Ihre vorherige Antwort wird unten angezeigt. Sie kann hier nicht geändert werden.",
+    "yourVoteLegend": "Ihre Stimme",
+    "submitVote": "Stimme abgeben",
+    "updateVote": "Stimme aktualisieren",
+    "submittedOk": "Antwort erfolgreich gesendet!",
+    "closedNote": "Diese Umfrage nimmt keine Antworten mehr an.",
+    "loadFailed": "Referendum konnte nicht geladen werden",
+    "submissionFailed": "Senden fehlgeschlagen",
+    "validation": {
+      "pleaseAnswer": "Bitte antworten Sie mit Ja oder Nein"
+    }
+  },
+  "results": {
+    "heading": "Ergebnisse",
+    "headingFor": "{title} — Ergebnisse",
+    "unsupportedPre": "Ergebnisse für",
+    "unsupportedPost": "werden noch nicht unterstützt.",
+    "filterLabel": "Nach Postleitzahl filtern",
+    "filterPlaceholder": "z. B. 90001",
+    "respondents": "{n} Teilnehmer",
+    "filterPrefix": "Filter:",
+    "responseCount": "{n} Antworten",
+    "noResponsesYet": "Noch keine Antworten.",
+    "noVotesYet": "Noch keine Stimmen.",
+    "poll404": "Umfrage nicht gefunden",
+    "loadFailed": "Ergebnisse konnten nicht geladen werden"
+  },
+  "notFound": {
+    "heading": "Nicht gefunden",
+    "message": "Seite nicht gefunden"
   }
 }

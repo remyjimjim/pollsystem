@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import axios from 'axios'
+
+const { t } = useI18n()
 
 interface QuestionResultDto {
   questionId: number
@@ -111,8 +114,8 @@ async function load() {
     }
   } catch (e: any) {
     error.value = e?.response?.status === 404
-      ? 'Poll not found'
-      : (e?.response?.data?.message ?? 'Failed to load results')
+      ? t('results.poll404')
+      : (e?.response?.data?.message ?? t('results.loadFailed'))
   } finally {
     loading.value = false
   }
@@ -146,20 +149,20 @@ onMounted(load)
 <template>
   <div class="mx-auto max-w-3xl py-8">
     <div v-if="!isSupported" class="rounded-md border border-orange-400 bg-orange-50 p-4">
-      <h1 class="mb-2 text-xl font-semibold text-slate-800">Results</h1>
+      <h1 class="mb-2 text-xl font-semibold text-slate-800">{{ $t('results.heading') }}</h1>
       <p class="text-sm text-slate-700">
-        Results for <strong class="font-semibold">{{ type }}</strong> are not yet supported.
+        {{ $t('results.unsupportedPre') }} <strong class="font-semibold">{{ type }}</strong> {{ $t('results.unsupportedPost') }}
       </p>
     </div>
 
     <template v-else>
       <h1 v-if="data" class="mb-4 text-2xl font-semibold text-slate-800">
-        {{ data.title }} — Results
+        {{ $t('results.headingFor', { title: data.title }) }}
       </h1>
-      <h1 v-else class="mb-4 text-2xl font-semibold text-slate-800">Results</h1>
+      <h1 v-else class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('results.heading') }}</h1>
 
       <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
-      <p v-if="loading" class="text-sm text-slate-600">Loading…</p>
+      <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
 
       <form
         v-if="data"
@@ -167,13 +170,13 @@ onMounted(load)
         class="mb-4 flex items-end gap-2 rounded-md bg-slate-50 p-3"
       >
         <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-          Filter by zipcode
+          {{ $t('results.filterLabel') }}
           <input
             v-model="zipFilter"
             type="text"
             maxlength="5"
             pattern="[0-9]{5}"
-            placeholder="e.g. 90001"
+            :placeholder="$t('results.filterPlaceholder')"
             class="rounded border border-slate-300 p-2 text-sm font-normal focus:border-slate-500 focus:outline-none"
           />
         </label>
@@ -182,7 +185,7 @@ onMounted(load)
           :disabled="loading"
           class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Apply
+          {{ $t('common.apply') }}
         </button>
         <button
           v-if="zipFilter"
@@ -190,7 +193,7 @@ onMounted(load)
           @click="clearFilter"
           class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50"
         >
-          Clear
+          {{ $t('common.clear') }}
         </button>
       </form>
 
@@ -203,9 +206,9 @@ onMounted(load)
 
       <template v-else-if="data">
         <p class="m-0 text-sm text-slate-500">
-          {{ data.totalRespondents }} respondent(s)
+          {{ $t('results.respondents', { n: data.totalRespondents }) }}
           <span v-if="data.filterApplied">
-            · filter: {{ Object.entries(data.filterApplied).map(([k, v]) => `${k}=${v}`).join(', ') }}
+            · {{ $t('results.filterPrefix') }} {{ Object.entries(data.filterApplied).map(([k, v]) => `${k}=${v}`).join(', ') }}
           </span>
         </p>
 
@@ -217,7 +220,7 @@ onMounted(load)
             class="mt-4 rounded-md border border-slate-200 p-4"
           >
             <h3 class="mb-1 text-base font-semibold text-slate-700">{{ q.text }}</h3>
-            <p class="m-0 text-sm text-slate-500">{{ q.totalResponses }} responses</p>
+            <p class="m-0 text-sm text-slate-500">{{ $t('results.responseCount', { n: q.totalResponses }) }}</p>
             <table v-if="q.totalResponses > 0" class="mt-2 w-full border-collapse">
               <tbody>
                 <tr v-for="[answer, count] in Object.entries(q.byAnswer)" :key="answer">
@@ -236,7 +239,7 @@ onMounted(load)
                 </tr>
               </tbody>
             </table>
-            <p v-else class="m-0 mt-1 text-sm text-slate-500">No responses yet.</p>
+            <p v-else class="m-0 mt-1 text-sm text-slate-500">{{ $t('results.noResponsesYet') }}</p>
           </section>
         </template>
 
@@ -246,7 +249,7 @@ onMounted(load)
             <table v-if="bData.totalRespondents > 0" class="w-full border-collapse">
               <tbody>
                 <tr>
-                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">Yes</td>
+                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.yes') }}</td>
                   <td class="rounded bg-slate-100 py-1 align-middle">
                     <div
                       class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
@@ -258,7 +261,7 @@ onMounted(load)
                   </td>
                 </tr>
                 <tr>
-                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">No</td>
+                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.no') }}</td>
                   <td class="rounded bg-slate-100 py-1 align-middle">
                     <div
                       class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
@@ -271,7 +274,7 @@ onMounted(load)
                 </tr>
               </tbody>
             </table>
-            <p v-else class="m-0 text-sm text-slate-500">No votes yet.</p>
+            <p v-else class="m-0 text-sm text-slate-500">{{ $t('results.noVotesYet') }}</p>
           </section>
         </template>
 
@@ -295,7 +298,7 @@ onMounted(load)
               <table v-if="c.total > 0" class="mt-2 w-full border-collapse">
                 <tbody>
                   <tr>
-                    <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">Yes</td>
+                    <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.yes') }}</td>
                     <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
                         class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
@@ -307,7 +310,7 @@ onMounted(load)
                     </td>
                   </tr>
                   <tr>
-                    <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">No</td>
+                    <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.no') }}</td>
                     <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
                         class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
@@ -320,7 +323,7 @@ onMounted(load)
                   </tr>
                 </tbody>
               </table>
-              <p v-else class="m-0 text-sm text-slate-500">No votes yet.</p>
+              <p v-else class="m-0 text-sm text-slate-500">{{ $t('results.noVotesYet') }}</p>
             </div>
           </section>
         </template>

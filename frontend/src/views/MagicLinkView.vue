@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 
+const { t } = useI18n()
 const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
@@ -14,7 +16,7 @@ onMounted(async () => {
   const token = route.query.token
   if (typeof token !== 'string' || !token) {
     status.value = 'error'
-    error.value = 'This sign-in link is malformed.'
+    error.value = t('magicLink.errorMalformed')
     return
   }
   try {
@@ -25,8 +27,8 @@ onMounted(async () => {
     status.value = 'error'
     error.value =
       e?.response?.status === 401
-        ? 'This sign-in link has expired or has already been used. Request a new one.'
-        : e?.response?.data?.message ?? 'Could not complete sign-in.'
+        ? t('magicLink.errorExpired')
+        : e?.response?.data?.message ?? t('magicLink.errorGeneric')
   }
 })
 </script>
@@ -34,17 +36,17 @@ onMounted(async () => {
 <template>
   <div class="mx-auto max-w-md py-8">
     <p v-if="status === 'pending'" class="text-center text-base text-slate-600">
-      Signing you in…
+      {{ $t('magicLink.signingIn') }}
     </p>
     <div
       v-else
       class="rounded border border-red-200 bg-red-50 p-4 text-red-900"
     >
-      <h1 class="mb-2 text-xl font-semibold">Sign-in failed</h1>
+      <h1 class="mb-2 text-xl font-semibold">{{ $t('magicLink.failedHeading') }}</h1>
       <p class="mb-2">{{ error }}</p>
       <p>
         <router-link to="/login" class="font-semibold text-red-900 underline">
-          Request a new sign-in link
+          {{ $t('magicLink.requestNew') }}
         </router-link>
       </p>
     </div>

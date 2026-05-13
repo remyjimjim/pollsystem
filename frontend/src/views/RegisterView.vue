@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 
+const { t } = useI18n()
 const auth = useAuthStore()
 
 const form = reactive({
@@ -24,7 +26,7 @@ async function onSubmit() {
     })
     sentTo.value = form.email
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Could not send the sign-in link'
+    error.value = e?.response?.data?.message ?? t('register.errorGeneric')
   } finally {
     submitting.value = false
   }
@@ -33,31 +35,30 @@ async function onSubmit() {
 
 <template>
   <div class="mx-auto max-w-sm py-8">
-    <h1 class="mb-4 text-2xl font-semibold text-slate-800">Create an account</h1>
+    <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('register.heading') }}</h1>
 
     <div
       v-if="sentTo"
       class="rounded border border-green-200 bg-green-50 p-4 text-sm text-green-900"
     >
-      <p class="mb-2"><strong class="font-semibold">Check your email.</strong></p>
-      <p class="mb-2">
-        We've sent a one-time sign-in link to
-        <strong class="font-semibold">{{ sentTo }}</strong>.
-        Click the link to finish creating your account. The link expires in 15 minutes.
-      </p>
+      <p class="mb-2"><strong class="font-semibold">{{ $t('register.checkEmailHeading') }}</strong></p>
+      <i18n-t keypath="register.checkEmailBody" tag="p" class="mb-2">
+        <template #email>
+          <strong class="font-semibold">{{ sentTo }}</strong>
+        </template>
+      </i18n-t>
       <p class="mt-3 text-center">
-        Wrong address?
-        <a href="#" @click.prevent="sentTo = null" class="text-slate-700 underline">Try again</a>
+        {{ $t('register.wrongAddress') }}
+        <a href="#" @click.prevent="sentTo = null" class="text-slate-700 underline">{{ $t('common.tryAgain') }}</a>
       </p>
     </div>
 
     <form v-else @submit.prevent="onSubmit" class="flex flex-col gap-3">
       <p class="mb-1 text-sm text-slate-600">
-        We use one-time email links instead of passwords. Enter your details and
-        we'll send a sign-in link to your inbox.
+        {{ $t('register.intro') }}
       </p>
       <label class="flex flex-col gap-1 text-sm text-slate-700">
-        Email
+        {{ $t('register.emailLabel') }}
         <input
           v-model="form.email"
           type="email"
@@ -67,7 +68,7 @@ async function onSubmit() {
         />
       </label>
       <label class="flex flex-col gap-1 text-sm text-slate-700">
-        Phone
+        {{ $t('register.phoneLabel') }}
         <input
           v-model="form.phone"
           type="tel"
@@ -77,7 +78,7 @@ async function onSubmit() {
         />
       </label>
       <label class="flex flex-col gap-1 text-sm text-slate-700">
-        Zipcode
+        {{ $t('register.zipcodeLabel') }}
         <input
           v-model="form.zipcode"
           type="text"
@@ -95,11 +96,11 @@ async function onSubmit() {
         :disabled="submitting"
         class="rounded bg-slate-800 px-4 py-2 text-base text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {{ submitting ? 'Sending link…' : 'Email me a sign-in link' }}
+        {{ submitting ? $t('register.submittingButton') : $t('register.submitButton') }}
       </button>
       <p class="text-center text-sm text-slate-600">
-        Already have an account?
-        <router-link to="/login" class="text-slate-800 underline">Sign in</router-link>
+        {{ $t('register.haveAccount') }}
+        <router-link to="/login" class="text-slate-800 underline">{{ $t('register.signInLink') }}</router-link>
       </p>
     </form>
   </div>

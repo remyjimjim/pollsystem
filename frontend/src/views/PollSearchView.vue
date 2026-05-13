@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 
+const { t } = useI18n()
 const auth = useAuthStore()
 
 interface ZipState {
@@ -81,7 +83,7 @@ async function search() {
     results.value = res.data
     searched.value = true
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Search failed'
+    error.value = e?.response?.data?.message ?? t('search.errorFailed')
   } finally {
     loading.value = false
   }
@@ -91,12 +93,12 @@ async function search() {
 <template>
   <div class="mx-auto max-w-5xl py-8">
     <h1 class="mb-2 text-2xl font-semibold text-slate-800">
-      {{ auth.isAuthenticated ? 'Find a Poll' : 'Browse Poll Results' }}
+      {{ auth.isAuthenticated ? $t('search.headingAuthed') : $t('search.headingGuest') }}
     </h1>
     <p v-if="!auth.isAuthenticated" class="mb-6 text-sm text-slate-600">
-      Search and view results for any published poll.
-      <router-link to="/login" class="text-slate-800 underline">Sign in</router-link>
-      to vote.
+      {{ $t('search.guestIntroBefore') }}
+      <router-link to="/login" class="text-slate-800 underline">{{ $t('search.guestIntroSignIn') }}</router-link>
+      {{ $t('search.guestIntroAfter') }}
     </p>
 
     <form
@@ -104,7 +106,7 @@ async function search() {
       class="mb-6 grid grid-cols-1 items-end gap-3 rounded-md bg-slate-50 p-4 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
     >
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        Title contains
+        {{ $t('search.filters.titleContains') }}
         <input
           v-model="filters.title"
           type="text"
@@ -112,7 +114,7 @@ async function search() {
         />
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        Zipcode
+        {{ $t('search.filters.zipcode') }}
         <input
           v-model="filters.zipcode"
           type="text"
@@ -122,7 +124,7 @@ async function search() {
         />
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        Candidate name (Election only)
+        {{ $t('search.filters.candidateName') }}
         <input
           v-model="filters.candidateName"
           type="text"
@@ -130,15 +132,15 @@ async function search() {
         />
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        Type
+        {{ $t('search.filters.type') }}
         <select
           v-model="filters.type"
           class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
         >
-          <option value="">Any</option>
-          <option value="Questionnaire">Questionnaire</option>
-          <option value="Election">Election</option>
-          <option value="BallotMeasure">Ballot Measure</option>
+          <option value="">{{ $t('search.filters.typeAny') }}</option>
+          <option value="Questionnaire">{{ $t('search.filters.typeQuestionnaire') }}</option>
+          <option value="Election">{{ $t('search.filters.typeElection') }}</option>
+          <option value="BallotMeasure">{{ $t('search.filters.typeBallotMeasure') }}</option>
         </select>
       </label>
       <button
@@ -146,23 +148,23 @@ async function search() {
         :disabled="loading"
         class="h-fit rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {{ loading ? 'Searching…' : 'Search' }}
+        {{ loading ? $t('search.searching') : $t('search.search') }}
       </button>
     </form>
 
     <p v-if="error" class="mb-2 text-sm text-red-700">{{ error }}</p>
 
     <p v-if="searched && results.length === 0" class="text-sm text-slate-500">
-      No active polls match your filters.
+      {{ $t('search.noMatches') }}
     </p>
 
     <table v-if="results.length > 0" class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Title</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Type</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Zipcodes</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">Closes</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('search.table.title') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('search.table.type') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('search.table.zipcodes') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('search.table.closes') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
         </tr>
       </thead>
@@ -184,7 +186,7 @@ async function search() {
                   data-zip-trigger
                   @click="toggleExpand(r, $event)"
                   class="ml-0.5 rounded px-1 font-semibold text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring focus:ring-slate-400"
-                  :title="`Show ${r.zipcodes.length - 1} more`"
+                  :title="t('search.showMore', { n: r.zipcodes.length - 1 })"
                   :aria-expanded="expandedKey === rowKey(r)"
                 >…</button>
                 <span class="ml-0.5 text-slate-500">+{{ r.zipcodes.length - 1 }}</span>
@@ -198,13 +200,13 @@ async function search() {
                 >
                   <header class="flex items-center justify-between border-b border-slate-200 px-3 py-2">
                     <span class="text-xs font-semibold text-slate-700">
-                      Additional zipcodes ({{ r.zipcodes.length - 1 }})
+                      {{ $t('search.additionalZipcodes', { n: r.zipcodes.length - 1 }) }}
                     </span>
                     <button
                       type="button"
                       @click.stop="closeExpanded"
                       class="rounded p-0.5 text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring focus:ring-slate-400"
-                      aria-label="Close"
+                      :aria-label="$t('common.close')"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -237,7 +239,7 @@ async function search() {
             </template>
           </td>
           <td class="border-b border-slate-100 p-2">
-            {{ r.closeDate ? new Date(r.closeDate).toLocaleString() : 'No close date' }}
+            {{ r.closeDate ? new Date(r.closeDate).toLocaleString() : $t('search.noCloseDate') }}
           </td>
           <td class="border-b border-slate-100 p-2">
             <div class="flex gap-3 whitespace-nowrap">
@@ -245,14 +247,14 @@ async function search() {
                 :to="`/polls/${routeMap(r.type)}/${r.id}/results`"
                 class="text-slate-800 underline"
               >
-                View results
+                {{ $t('search.viewResults') }}
               </router-link>
               <router-link
                 v-if="auth.isAuthenticated"
                 :to="`/polls/${routeMap(r.type)}/${r.id}`"
                 class="text-slate-800 underline"
               >
-                Vote →
+                {{ $t('search.vote') }}
               </router-link>
             </div>
           </td>

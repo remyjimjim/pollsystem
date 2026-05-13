@@ -2,6 +2,9 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface QuestionDto { id: number; text: string }
 interface QuestionnaireDto {
@@ -61,7 +64,7 @@ async function load() {
     )
     poll.value = pollRes.data
     if (isClosed.value) {
-      closedReason.value = 'This poll is no longer available for responses.'
+      closedReason.value = t('questionnaire.closedNote')
       return
     }
     const mineRes = await axios.get<MyResponsesDto>(
@@ -71,7 +74,7 @@ async function load() {
     seedAnswers()
     mode.value = mine.value.hasResponses ? 'choosing' : 'fresh'
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Failed to load poll'
+    error.value = e?.response?.data?.message ?? t('questionnaire.loadFailed')
   } finally {
     loading.value = false
   }
@@ -96,7 +99,7 @@ async function submit() {
   if (!poll.value) return
   for (const q of poll.value.questions) {
     if (!answers[q.id]?.response.trim()) {
-      error.value = `Please answer: "${q.text}"`
+      error.value = t('questionnaire.validation.pleaseAnswer', { text: q.text })
       return
     }
   }
@@ -110,12 +113,12 @@ async function submit() {
         comment: answers[q.id].comment.trim() || null
       }))
     })
-    message.value = 'Responses submitted successfully!'
+    message.value = t('questionnaire.submittedOk')
     setTimeout(() => {
       router.push(`/polls/questionnaire/${props.id}/results`)
     }, 600)
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? 'Submission failed'
+    error.value = e?.response?.data?.message ?? t('questionnaire.submissionFailed')
   } finally {
     submitting.value = false
   }
@@ -125,14 +128,14 @@ onMounted(load)
 </script>
 
 <template>
-  <div v-if="loading" class="text-sm text-slate-600">Loading…</div>
+  <div v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</div>
   <div v-else-if="error" class="text-sm text-red-700">{{ error }}</div>
   <div v-else-if="closedReason" class="rounded-md border border-orange-400 bg-orange-50 p-4">
     <p class="mb-2 text-sm text-orange-900">{{ closedReason }}</p>
     <router-link
       :to="`/polls/questionnaire/${props.id}/results`"
       class="text-sm font-semibold text-slate-800 underline"
-    >View results</router-link>
+    >{{ $t('nav.viewResults') }}</router-link>
   </div>
 
   <div v-else-if="poll" class="flex flex-col gap-4">
@@ -140,25 +143,25 @@ onMounted(load)
       <h2 class="mb-1 text-xl font-semibold text-slate-800">{{ poll.title }}</h2>
       <p class="m-0 whitespace-pre-wrap text-slate-600">{{ poll.summary }}</p>
       <p v-if="poll.closeDate" class="mt-2 text-sm text-slate-500">
-        Closes {{ new Date(poll.closeDate).toLocaleString() }}
+        {{ $t('questionnaire.closesLabel') }} {{ new Date(poll.closeDate).toLocaleString() }}
       </p>
     </header>
 
     <div v-if="mode === 'choosing' && mine" class="rounded-md border border-sky-300 bg-sky-50 p-4">
       <p class="mb-2 text-sm text-slate-700">
-        You submitted answers on
+        {{ $t('questionnaire.submittedAnswersOn') }}
         <strong class="font-semibold">{{ new Date(mine.firstSubmittedAt!).toLocaleDateString() }}</strong>.
-        Would you like to change your responses?
+        {{ $t('questionnaire.wouldYouChange') }}
       </p>
       <div class="flex gap-2">
         <button
           @click="chooseEdit"
           class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900"
-        >Yes, edit</button>
+        >{{ $t('questionnaire.yesEdit') }}</button>
         <button
           @click="chooseReadonly"
           class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50"
-        >No, just review</button>
+        >{{ $t('questionnaire.noReview') }}</button>
       </div>
     </div>
 
@@ -166,7 +169,7 @@ onMounted(load)
       v-if="mode === 'readonly'"
       class="rounded-md border border-slate-300 bg-slate-50 p-3 text-sm text-slate-600"
     >
-      Your previous responses are shown below. They cannot be modified here.
+      {{ $t('questionnaire.readonlyNote') }}
     </div>
 
     <fieldset
@@ -177,7 +180,7 @@ onMounted(load)
     >
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ q.text }}</legend>
       <div class="mb-2 flex flex-col gap-1 text-sm text-slate-600">
-        <span>Answer</span>
+        <span>{{ $t('questionnaire.answer') }}</span>
         <div class="flex gap-4">
           <label class="flex items-center gap-2 text-base text-slate-700">
             <input
@@ -187,7 +190,7 @@ onMounted(load)
               v-model="answers[q.id].response"
               required
             />
-            Yes
+            {{ $t('common.yes') }}
           </label>
           <label class="flex items-center gap-2 text-base text-slate-700">
             <input
@@ -197,12 +200,12 @@ onMounted(load)
               v-model="answers[q.id].response"
               required
             />
-            No
+            {{ $t('common.no') }}
           </label>
         </div>
       </div>
       <label class="mb-2 flex flex-col gap-1 text-sm text-slate-600">
-        Comment (optional)
+        {{ $t('common.comment') }}
         <input
           v-model="answers[q.id].comment"
           type="text"
@@ -219,7 +222,7 @@ onMounted(load)
         :disabled="submitting"
         class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {{ submitting ? 'Submitting…' : (mine?.hasResponses ? 'Update responses' : 'Submit responses') }}
+        {{ submitting ? $t('common.submitting') : (mine?.hasResponses ? $t('questionnaire.updateResponses') : $t('questionnaire.submitResponses')) }}
       </button>
     </div>
   </div>

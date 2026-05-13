@@ -17,7 +17,141 @@
     "yes": "Sí",
     "no": "No",
     "comment": "Comentario (opcional)",
-    "select": "— seleccionar —"
+    "select": "— seleccionar —",
+    "tryAgain": "Intentar de nuevo",
+    "close": "Cerrar",
+    "apply": "Aplicar",
+    "clear": "Limpiar",
+    "back": "Volver"
+  },
+  "home": {
+    "welcomeBack": "Bienvenido de nuevo,",
+    "guestIntro": "Encuestas y elecciones anónimas. Cree una cuenta para votar en encuestas publicadas; solicite acceso de Creador para publicar las suyas.",
+    "cards": {
+      "findPolls": {
+        "title": "Buscar encuestas y ver resultados",
+        "description": "Busque por título, creador, código postal, candidato o tipo. Abra una encuesta para votar o vaya a su página de resultados.",
+        "cta": "Buscar encuestas"
+      },
+      "creatorDashboard": {
+        "title": "Panel de Creador",
+        "description": "Vea sus encuestas en estados borrador, publicada y cerrada. Cree nuevas encuestas o edite los borradores existentes.",
+        "cta": "Abrir panel"
+      },
+      "newPoll": {
+        "title": "Iniciar una nueva encuesta",
+        "description": "Cree una Elección, Cuestionario o Referéndum y envíe los enlaces a los encuestados cuando se publique.",
+        "cta": "Crear encuesta"
+      },
+      "becomeCreator": {
+        "title": "Conviértase en Creador",
+        "description": "Solicite alojar sus propias encuestas en códigos postales específicos. Un admin revisa su solicitud y concede acceso.",
+        "cta": "Solicitar acceso de Creador"
+      },
+      "adminDashboard": {
+        "title": "Panel de Admin",
+        "description": "Revise las solicitudes de Creador pendientes, gestione creadores y sus encuestas.",
+        "cta": "Abrir admin"
+      },
+      "becomeAdmin": {
+        "title": "Conviértase en Admin",
+        "description": "Solicite derechos de admin sobre los códigos postales donde ya crea encuestas. Revisado por un Super.",
+        "cta": "Solicitar acceso de Admin"
+      },
+      "superAdmin": {
+        "title": "Super admin",
+        "description": "Revise solicitudes de admin, gestione reglas de IP, edite plantillas de encuestas y supervise a todos los admins.",
+        "cta": "Abrir super admin"
+      },
+      "guestResults": {
+        "title": "Ver resultados de encuestas",
+        "description": "Explore todas las encuestas publicadas y abra su página de resultados. No se requiere cuenta.",
+        "cta": "Ver resultados"
+      },
+      "guestSignIn": {
+        "title": "Iniciar sesión",
+        "description": "¿Ya tiene una cuenta? Le enviaremos un enlace de inicio de sesión de un solo uso por correo.",
+        "cta": "Iniciar sesión"
+      },
+      "guestRegister": {
+        "title": "Crear una cuenta",
+        "description": "Correo electrónico + teléfono + código postal es todo lo que necesita. Sin contraseñas.",
+        "cta": "Registrarse"
+      }
+    }
+  },
+  "login": {
+    "heading": "Iniciar sesión",
+    "emailLabel": "Correo electrónico",
+    "intro": "Ingrese el correo electrónico de su cuenta y le enviaremos un enlace de inicio de sesión de un solo uso.",
+    "submitButton": "Enviarme un enlace de inicio de sesión",
+    "submittingButton": "Enviando enlace…",
+    "noAccount": "¿No tiene cuenta?",
+    "registerLink": "Registrarse",
+    "checkEmailHeading": "Revise su correo electrónico.",
+    "checkEmailBody": "Hemos enviado un enlace de inicio de sesión de un solo uso a {email}. El enlace expira en 15 minutos y solo se puede usar una vez.",
+    "wrongAddress": "¿Dirección incorrecta?",
+    "errorNoAccount": "No tenemos una cuenta para ese correo electrónico. Por favor regístrese primero.",
+    "errorGeneric": "No se pudo enviar el enlace de inicio de sesión"
+  },
+  "register": {
+    "heading": "Crear una cuenta",
+    "intro": "Usamos enlaces de correo de un solo uso en lugar de contraseñas. Ingrese sus datos y enviaremos un enlace de inicio de sesión a su bandeja de entrada.",
+    "emailLabel": "Correo electrónico",
+    "phoneLabel": "Teléfono",
+    "zipcodeLabel": "Código postal",
+    "submitButton": "Enviarme un enlace de inicio de sesión",
+    "submittingButton": "Enviando enlace…",
+    "checkEmailHeading": "Revise su correo electrónico.",
+    "checkEmailBody": "Hemos enviado un enlace de inicio de sesión de un solo uso a {email}. Haga clic en el enlace para terminar de crear su cuenta. El enlace expira en 15 minutos.",
+    "wrongAddress": "¿Dirección incorrecta?",
+    "haveAccount": "¿Ya tiene una cuenta?",
+    "signInLink": "Iniciar sesión",
+    "errorGeneric": "No se pudo enviar el enlace de inicio de sesión"
+  },
+  "magicLink": {
+    "signingIn": "Iniciando sesión…",
+    "failedHeading": "Error al iniciar sesión",
+    "errorMalformed": "Este enlace de inicio de sesión está mal formado.",
+    "errorExpired": "Este enlace de inicio de sesión ha expirado o ya ha sido usado. Solicite uno nuevo.",
+    "errorGeneric": "No se pudo completar el inicio de sesión.",
+    "requestNew": "Solicitar un nuevo enlace de inicio de sesión"
+  },
+  "search": {
+    "headingAuthed": "Encontrar una Encuesta",
+    "headingGuest": "Explorar Resultados de Encuestas",
+    "guestIntroBefore": "Busque y vea los resultados de cualquier encuesta publicada.",
+    "guestIntroSignIn": "Iniciar sesión",
+    "guestIntroAfter": "para votar.",
+    "filters": {
+      "titleContains": "El título contiene",
+      "zipcode": "Código postal",
+      "candidateName": "Nombre del candidato (solo Elección)",
+      "type": "Tipo",
+      "typeAny": "Cualquiera",
+      "typeQuestionnaire": "Cuestionario",
+      "typeElection": "Elección",
+      "typeBallotMeasure": "Referéndum"
+    },
+    "search": "Buscar",
+    "searching": "Buscando…",
+    "noMatches": "Ninguna encuesta activa coincide con sus filtros.",
+    "table": {
+      "title": "Título",
+      "type": "Tipo",
+      "zipcodes": "Códigos postales",
+      "closes": "Cierra"
+    },
+    "noCloseDate": "Sin fecha de cierre",
+    "viewResults": "Ver resultados",
+    "vote": "Votar →",
+    "showMore": "Mostrar {n} más",
+    "additionalZipcodes": "Códigos postales adicionales ({n})",
+    "errorFailed": "Error en la búsqueda"
+  },
+  "pollDetail": {
+    "unknownType": "Tipo de encuesta desconocido.",
+    "backToSearch": "Volver a la búsqueda"
   },
   "election": {
     "dateLabel": "Fecha de la elección:",
@@ -38,5 +172,63 @@
       "yesNoFor": "Por favor responda Sí o No para: {name}",
       "selectionFor": "Por favor haga una selección para: {office}"
     }
+  },
+  "questionnaire": {
+    "closesLabel": "Cierra",
+    "submittedAnswersOn": "Envió sus respuestas el",
+    "wouldYouChange": "¿Desea cambiar sus respuestas?",
+    "yesEdit": "Sí, editar",
+    "noReview": "No, solo revisar",
+    "readonlyNote": "Sus respuestas anteriores se muestran a continuación. No se pueden modificar aquí.",
+    "answer": "Respuesta",
+    "submitResponses": "Enviar respuestas",
+    "updateResponses": "Actualizar respuestas",
+    "submittedOk": "¡Respuestas enviadas con éxito!",
+    "closedNote": "Esta encuesta ya no está disponible para respuestas.",
+    "loadFailed": "Error al cargar la encuesta",
+    "submissionFailed": "Error al enviar",
+    "validation": {
+      "pleaseAnswer": "Por favor responda: «{text}»"
+    }
+  },
+  "ballotMeasure": {
+    "partOf": "Parte de:",
+    "zipcodeLabel": "Código postal",
+    "effectiveLabel": "Vigente",
+    "closesLabel": "Cierra",
+    "votedOn": "Votaste el",
+    "wouldYouChange": "¿Desea cambiar su respuesta?",
+    "yesEdit": "Sí, editar",
+    "noReview": "No, solo revisar",
+    "readonlyNote": "Su respuesta anterior se muestra a continuación. No se puede modificar aquí.",
+    "yourVoteLegend": "Su voto",
+    "submitVote": "Enviar voto",
+    "updateVote": "Actualizar voto",
+    "submittedOk": "¡Respuesta enviada con éxito!",
+    "closedNote": "Esta encuesta ya no está disponible para respuestas.",
+    "loadFailed": "Error al cargar el referéndum",
+    "submissionFailed": "Error al enviar",
+    "validation": {
+      "pleaseAnswer": "Por favor responda Sí o No"
+    }
+  },
+  "results": {
+    "heading": "Resultados",
+    "headingFor": "{title} — Resultados",
+    "unsupportedPre": "Los resultados para",
+    "unsupportedPost": "aún no son compatibles.",
+    "filterLabel": "Filtrar por código postal",
+    "filterPlaceholder": "ej. 90001",
+    "respondents": "{n} encuestado(s)",
+    "filterPrefix": "filtro:",
+    "responseCount": "{n} respuestas",
+    "noResponsesYet": "Aún no hay respuestas.",
+    "noVotesYet": "Aún no hay votos.",
+    "poll404": "Encuesta no encontrada",
+    "loadFailed": "Error al cargar los resultados"
+  },
+  "notFound": {
+    "heading": "No encontrado",
+    "message": "Página no encontrada"
   }
 }
