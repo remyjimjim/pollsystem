@@ -1,5 +1,7 @@
 package com.pollsystem.poll
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.pollsystem.model.Candidate
 import com.pollsystem.model.Election
 import com.pollsystem.model.Office
@@ -21,7 +23,8 @@ class ElectionService(
     private val elections: ElectionRepository,
     private val candidates: CandidateRepository,
     private val offices: OfficeRepository,
-    private val pollTypes: PollTypeRepository
+    private val pollTypes: PollTypeRepository,
+    private val objectMapper: ObjectMapper
 ) {
 
     @Transactional
@@ -85,8 +88,29 @@ class ElectionService(
     }
 
     @Transactional(readOnly = true)
-    fun toDto(e: Election): ElectionDto =
-        ElectionDto.from(e, candidates.findByElectionId(e.id))
+    fun toDto(e: Election): ElectionDto {
+        val (widget, groupBy) = readCandidatesHints(e.pollType.templateJson)
+        return ElectionDto.from(
+            e,
+            candidates.findByElectionId(e.id),
+            candidatesWidget = widget,
+            candidatesGroupBy = groupBy
+        )
+    }
+
+    /**
+     * Pulls the candidate rendering hints out of the poll-type template JSON.
+     * Returns nulls (legacy per-candidate Yes/No ballot) on any parse trouble.
+     */
+    private fun readCandidatesHints(templateJson: String): Pair<String?, String?> = try {
+        val root: JsonNode = objectMapper.readTree(templateJson)
+        val candidates = root.path("fields").path("candidates")
+        val widget = candidates.path("widget").asText(null)?.takeIf { it.isNotBlank() }
+        val groupBy = candidates.path("groupBy").asText(null)?.takeIf { it.isNotBlank() }
+        widget to groupBy
+    } catch (_: Exception) {
+        null to null
+    }
 
     private fun loadOwned(id: Long, creator: User): Election {
         val e = get(id)

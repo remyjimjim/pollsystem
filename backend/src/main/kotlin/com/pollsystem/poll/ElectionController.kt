@@ -62,10 +62,21 @@ data class ElectionDto(
     val status: PollStatus,
     val closeDate: Instant?,
     val dateSubmitted: Instant,
-    val candidates: List<CandidateDto>
+    val candidates: List<CandidateDto>,
+    /** Rendering hint pulled from the parent PollType's template_json; null
+     *  if the template has no hint, in which case the frontend falls back
+     *  to the legacy per-candidate Yes/No ballot. */
+    val candidatesWidget: String?,
+    /** Field name to group candidates by before rendering (e.g. "officeName"). */
+    val candidatesGroupBy: String?
 ) {
     companion object {
-        fun from(e: Election, candidates: List<Candidate>) = ElectionDto(
+        fun from(
+            e: Election,
+            candidates: List<Candidate>,
+            candidatesWidget: String?,
+            candidatesGroupBy: String?
+        ) = ElectionDto(
             id = e.id,
             pollTypeId = e.pollType.id,
             creatorId = e.creator.id,
@@ -75,7 +86,9 @@ data class ElectionDto(
             status = e.status,
             closeDate = e.closeDate,
             dateSubmitted = e.dateSubmitted,
-            candidates = candidates.map(CandidateDto::from)
+            candidates = candidates.map(CandidateDto::from),
+            candidatesWidget = candidatesWidget,
+            candidatesGroupBy = candidatesGroupBy
         )
     }
 }
