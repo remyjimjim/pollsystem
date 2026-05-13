@@ -3,16 +3,20 @@ import en from './en.json'
 import fr from './fr.json'
 import es from './es.json'
 import de from './de.json'
+import it from './it.json'
+import ptBR from './pt-BR.json'
 import zhCN from './zh-CN.json'
 
 // Locales that real humans will see. Add a new entry here and a matching JSON
 // file (same key set as en.json) to roll out a new language.
 export const SUPPORTED_LOCALES = [
-  { code: 'en',    name: 'English'  },
-  { code: 'fr',    name: 'Français' },
-  { code: 'es',    name: 'Español'  },
-  { code: 'de',    name: 'Deutsch'  },
-  { code: 'zh-CN', name: '中文'     }
+  { code: 'en',    name: 'English'    },
+  { code: 'fr',    name: 'Français'   },
+  { code: 'es',    name: 'Español'    },
+  { code: 'de',    name: 'Deutsch'    },
+  { code: 'it',    name: 'Italiano'   },
+  { code: 'pt-BR', name: 'Português'  },
+  { code: 'zh-CN', name: '中文'       }
 ] as const
 
 export type LocaleCode = typeof SUPPORTED_LOCALES[number]['code']
@@ -40,7 +44,7 @@ export const i18n = createI18n({
   legacy: false,
   locale: resolveInitialLocale(),
   fallbackLocale: 'en',
-  messages: { en, fr, es, de, 'zh-CN': zhCN }
+  messages: { en, fr, es, de, it, 'pt-BR': ptBR, 'zh-CN': zhCN }
 })
 
 /** Persists the chosen locale and switches the active one. */
