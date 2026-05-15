@@ -10,6 +10,38 @@ elided. The "Pre-record history" block at the end of the file predates the
 available conversation record entirely — those entries carry a paraphrased
 **Intent** line instead of a quoted **Requested**.
 
+# Entry format
+
+Each entry is a level-2 heading followed by labelled blocks:
+
+```
+## YYYY-MM-DD — Short title
+
+**Requested:**
+
+> The request, quoted verbatim. When several prompts shaped one change,
+> each is quoted as its own blockquote.
+
+**Changed:**
+
+- A bulleted summary of what was actually done.
+
+**Commit:** `abc1234`
+```
+
+- **Heading** — the date the change landed, plus a short title.
+- **Requested** — the prompt(s) that asked for the change, in the
+  requester's own words. *Pre-record* entries use **Intent** instead — a
+  paraphrase, since no prompt was on record.
+- **Changed** — what was done, as a bulleted summary.
+- **Commit** / **Commits** — the hash(es) the change shipped in. Closely
+  related commits may be grouped into a single entry, with every hash
+  listed.
+
+Newest entries go at the top; the "Pre-record history" block stays at the
+end. A change is normally logged in the same commit that makes it (or the
+commit immediately after, for the entry describing that commit itself).
+
 ---
 
 ## 2026-05-15 — Establish a development log
