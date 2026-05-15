@@ -39,8 +39,13 @@ Each entry is a level-2 heading followed by labelled blocks:
   listed.
 
 Newest entries go at the top; the "Pre-record history" block stays at the
-end. A change is normally logged in the same commit that makes it (or the
-commit immediately after, for the entry describing that commit itself).
+end.
+
+A change is logged in the commit **immediately after** the one that makes
+it: an entry cites its change's commit hash, and a commit cannot contain
+its own hash. So the workflow is — commit the change, then commit the
+DEVLOG entry citing that hash. The DEVLOG-entry commit is not itself
+logged.
 
 ---
 
