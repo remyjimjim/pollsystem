@@ -44,6 +44,24 @@ commit immediately after, for the entry describing that commit itself).
 
 ---
 
+## 2026-05-15 — Add a README with a documentation index
+
+**Requested:**
+
+> Add DEVLOG to README so contributors find it
+
+**Changed:**
+
+- Created `README.md` at the repo root (the repo had none): a project
+  summary, a backend/frontend stack overview, and a documentation index
+  table linking every file under `docs/`.
+- `docs/DEVLOG.md` is the first row of that index and is called out again
+  under "Contributing" as a same-commit expectation for new changes.
+
+**Commit:** `f615f87`
+
+---
+
 ## 2026-05-15 — Establish a development log
 
 **Requested:**
