@@ -49,6 +49,25 @@ logged.
 
 ---
 
+## 2026-05-15 — Fix the DEVLOG entry-format workflow wording
+
+**Requested:**
+
+> Yes, fix the format wording
+
+**Changed:**
+
+- The "Entry format" section claimed a change is "normally logged in the
+  same commit that makes it" — not achievable, since an entry cites its
+  change's commit hash and a commit cannot contain its own hash.
+- Reworded it to the actual workflow: commit the change, then commit the
+  DEVLOG entry citing that hash; the DEVLOG-entry commit is not itself
+  logged.
+
+**Commit:** `7d32312`
+
+---
+
 ## 2026-05-15 — Add a README with a documentation index
 
 **Requested:**
