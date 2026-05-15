@@ -58,7 +58,7 @@ commit immediately after, for the entry describing that commit itself).
 - `docs/DEVLOG.md` is the first row of that index and is called out again
   under "Contributing" as a same-commit expectation for new changes.
 
-**Commit:** `f615f87`
+**Commit:** `24b2717`
 
 ---
 
