@@ -4,6 +4,12 @@ A running record of changes, pairing the request that prompted each one
 (in the requester's own words) with a summary of what was done. Newest
 entries are added at the top.
 
+Entries below `46469e9` were reconstructed retroactively from `git log`;
+their quotes are drawn from the conversation record and may be lightly
+elided. The "Pre-record history" block at the end of the file predates the
+available conversation record entirely — those entries carry a paraphrased
+**Intent** line instead of a quoted **Requested**.
+
 ---
 
 ## 2026-05-15 — Poll search: OR-combine title and candidate-name filters
@@ -56,3 +62,582 @@ entries are added at the top.
   sub-path stays public.
 
 **Commits:** `4e53bca`
+
+---
+
+## 2026-05-13 — COSTS.md: database encryption + staging-as-production reframe
+
+**Requested:**
+
+> Can we add 'database encryption' to the docs/COSTS.md scenarios for the
+> staging and production costs?
+
+> Essentially my current inclination is to use staging as 'production' in
+> effect then if I get to 1000 or more subscriptions add a more robust true
+> production tier.
+
+**Changed:**
+
+- Added a database-encryption-at-rest line ($0, default-on AES-256) to both
+  the conservative-baseline and lowest-cost-path staging tables in
+  `docs/COSTS.md`.
+- Reframed the lowest-cost staging configuration as "staging-as-production
+  for the early phase," and added `≥ 1,000 paid subscriptions` as the top
+  trigger for moving to a true production tier.
+- Noted that the production-tier step is where encryption upgrades to
+  customer-managed keys (BYOK / AWS KMS, ~$1/key/month) as a compliance
+  lever.
+
+**Commit:** `020e713`
+
+---
+
+## 2026-05-13 — i18n: Japanese locale
+
+**Requested:**
+
+> Let's add Japanese too
+
+**Changed:**
+
+- Added `frontend/src/i18n/ja.json` and registered the `ja` locale
+  (日本語) in `i18n/index.ts`. Key-parity with `en.json` verified.
+
+**Commit:** `2201461`
+
+---
+
+## 2026-05-13 — i18n: Norwegian (Bokmål) locale
+
+**Requested:**
+
+> Can we add Norwegian too?
+
+**Changed:**
+
+- Added `frontend/src/i18n/nb.json` and registered the `nb` locale
+  (Norsk) in `i18n/index.ts`. Key-parity with `en.json` verified.
+
+**Commit:** `a411310`
+
+---
+
+## 2026-05-13 — i18n: Italian & Brazilian Portuguese locales
+
+**Requested:**
+
+> I like it. Can we add Italian and Portuguese?
+
+**Changed:**
+
+- Added `frontend/src/i18n/it.json` and `pt-BR.json`, registering the `it`
+  (Italiano) and `pt-BR` (Português) locales in `i18n/index.ts`.
+  Key-parity with `en.json` verified.
+
+**Commit:** `3e0ea5d`
+
+---
+
+## 2026-05-12–13 — Full app internationalization (en/fr/es/de/zh-CN)
+
+**Requested:**
+
+The initiating request to internationalize the app is not in the
+reconstructable record; the work was carried out in four reviewable
+phases, with these continuation prompts:
+
+> proceed with phase 2
+
+> proceed with phase 3
+
+> Yes please *(phase 4)*
+
+**Changed:**
+
+- Stood up `vue-i18n@10`: `i18n/index.ts` with `SUPPORTED_LOCALES`,
+  `setLocale()`, browser-locale detection and `localStorage` persistence;
+  `templateLabel.ts` helper for localized template-JSON labels; language
+  switcher in `App.vue`.
+- Localized the whole app across four phases — Phase 1: election voting
+  form; Phase 2: rest of the voter journey; Phase 3: creator dashboard,
+  authoring forms, ZipSetter, creator-request views; Phase 4: admin +
+  super views.
+- Locale files for `en`, `fr`, `es`, `de`, `zh-CN` (later joined by `it`,
+  `pt-BR`, `nb`, `ja`), each at key-parity with `en.json`.
+
+**Commits:** `c0e79c9` (Phase 1), `5a51366` (Phase 2), `a5b7f63` (Phase 3),
+`edabf87` (Phase 4)
+
+---
+
+## 2026-05-12 — Election voting form: candidate widget rendering hints
+
+**Requested:**
+
+> Given the template located at super/poll-templates and how election
+> candidates are rendered at /polls/election/1, would it be doable to add a
+> name : value pair to the 'candidates' json before the item element …
+> widget : selectOne …
+
+> Yes, the candidates should be grouped by office, perhaps we should put
+> the officeName after widget … I was hoping a 'widget : selectOne' would
+> be rendered as a select one radio buttons group, a widget of type
+> 'widget : selectOneList' would be rendered as dropdown select …
+
+> Yes, let's go with that and let's not forget the selectOneCheckbox also.
+
+**Changed:**
+
+- Added `widget` and `groupBy` rendering hints to the Election template's
+  `candidates` block via migration `V12` — five widget types
+  (`selectOneRadio`, `selectOneList`, `selectOneCheckbox`,
+  `selectManyCheckbox`, legacy `selectOne`) and `groupBy: officeName`.
+- `ElectionService` parses the hints from the template JSON;
+  `ElectionDto` carries `candidatesWidget` / `candidatesGroupBy`.
+- `ElectionResponseForm.vue` rewritten to branch on the widget type, with
+  per-office selection state grouped under each office name.
+
+**Commits:** `366f7eb` (template + migration), `c0e79c9` (form rendering)
+
+---
+
+## 2026-05-11 — Creator dashboard: relabel Delete → Archive, highlight past close dates
+
+**Requested:**
+
+> Can we change the background-color of a cell in the 'Close date' column
+> whose close date is in the past or today?
+
+> /btw, I'd prefer a light orange
+
+> Do you think on the /creator/dashboard page we should stick with 'Delete'
+> or go with 'Archive' or 'Disable' for the action label?
+
+**Changed:**
+
+- `DashboardView.vue` highlights close-date cells that are past or today in
+  light orange (`bg-orange-50 text-orange-900`) via a `closeDatePast()`
+  helper.
+- Relabeled the soft-delete action column from "Delete" to "Archive" so the
+  label matches the actual (reversible) behavior.
+
+**Commit:** `8920826`
+
+---
+
+## 2026-05-11 — Surface ResponseStatusException reasons in JSON errors
+
+**Requested:**
+
+> When I restore an archived poll, edit it, save changes and click the
+> 'Publish' button it says 'Publish failed'.
+
+**Changed:**
+
+- Set `server.error.include-message: always` in `application.yml` so the
+  `reason` from a `ResponseStatusException` reaches the JSON error body,
+  turning opaque "Publish failed" messages into actionable ones.
+
+**Commit:** `cc73971`
+
+---
+
+## 2026-05-11 — Creator dashboard: show-archived toggle + restore
+
+**Requested:**
+
+> Before I delete it, is there a way to bring it back, like maybe an action
+> link at the top of the /creator/dashboard that says 'Show archived'?
+
+> restore-to-DRAFT feels right, make it so #1.
+
+**Changed:**
+
+- Added `POST /{type}/{id}/restore` (ARCHIVED → DRAFT) and a `?showArchived`
+  query param to `CreatorPollsController`.
+- `DashboardView.vue` gained a "Show archived" toggle and per-row Restore
+  buttons; ownership is enforced server-side.
+
+**Commit:** `f120dcc`
+
+---
+
+## 2026-05-11 — Creator dashboard: soft-delete (Archive) column
+
+**Requested:**
+
+> Is there way to get a 'Delete' column as the last column of the
+> /creator/dashboard and when pressed the poll will be deleted?
+
+> Yes, I concur, let's go with a soft-delete please.
+
+**Changed:**
+
+- Added `DELETE /{type}/{id}` to `CreatorPollsController`, implemented as a
+  soft-delete that flips the poll to `PollStatus.ARCHIVED` rather than
+  removing the row; creator ownership is checked.
+- `DashboardView.vue` gained the action column.
+
+**Commit:** `1ca9981`
+
+---
+
+## 2026-05-11 — Poll search: drop Creator email filter and column
+
+**Requested:**
+
+> Can we remove the 'Creator Email' textbox and the 'Creator' column in the
+> results section of the /polls/search page?
+
+**Changed:**
+
+- Removed the Creator-email filter input and the Creator results column
+  from `PollSearchView.vue`.
+
+**Commit:** `3b46f8d`
+
+---
+
+## 2026-05-11 — JWT: extend session TTL to 90 days
+
+**Requested:**
+
+> Can we implement the 'Long-lived sessions' option?
+
+**Changed:**
+
+- Set `app.jwt.expiration-ms` to 90 days (`7776000000`) so authenticated
+  sessions persist far longer between magic-link logins.
+
+**Commit:** `33558bf`
+
+---
+
+## 2026-05-11 — Router guard: hydrate user from token before deciding auth
+
+**Requested:**
+
+> When I press [Shift - Enter] to refresh a page it puts me at /login, is
+> there a way to not do that?
+
+**Changed:**
+
+- Made the Vue Router guard async: when a token is present but the user
+  isn't yet loaded, it awaits `authStore.fetchUser()` before deciding,
+  so a hard refresh no longer bounces an authenticated user to `/login`.
+
+**Commit:** `6fb171e`
+
+---
+
+## 2026-05-11 — Admin dashboard: refetch on bfcache restore
+
+**Requested:**
+
+> When I flip the request by clicking the button then I go back to the
+> dashboard it still lists the 'Action' as what it was before I flipped it.
+
+> I tried to flip creator request id #3 to 'Approve' but when I went back to
+> the /admin/dashboard it still said 'Rejected'.
+
+**Changed:**
+
+- `DashboardView.vue` (admin) listens for `pageshow` and refetches when the
+  page is restored from the browser's back-forward cache, so a flipped
+  decision no longer shows a stale "Action".
+
+**Commit:** `be4cf87`
+
+---
+
+## 2026-05-11 — Creator requests: allow admins to flip a previous decision
+
+**Requested:**
+
+> On the /admin/dashboard 'Recent decisions' section … can we have an
+> 'Approve' button if the request is in 'rejected' status otherwise a
+> 'Reject' button if the request is in 'Appproved' status?
+
+**Changed:**
+
+- `CreatorRequestService.decide()` no longer requires a PENDING request — it
+  accepts any status other than the target decision, allowing an admin to
+  flip an already-decided request.
+- Flipping APPROVED → REJECTED disables the associated role-assignment rows
+  (the user's `access` level is left untouched).
+- `CreatorRequestDetailView.vue` shows Approve unless already APPROVED, and
+  Reject unless already REJECTED.
+
+**Commit:** `9188524`
+
+---
+
+## 2026-05-11 — Questionnaire response: Yes/No radios
+
+**Requested:**
+
+> Nicely done … change the 'Answer' section from a textarea to a set of
+> Yes/No radio buttons?
+
+**Changed:**
+
+- `QuestionnaireResponseForm.vue` replaced the free-text Answer textarea
+  with a Yes/No radio-button pair per question (`name="q-${q.id}"`).
+
+**Commit:** `fe5d07ba`
+
+---
+
+# Pre-record history
+
+The entries below predate the available conversation record. Their
+**Intent** lines are paraphrased from commit history, not quoted from any
+prompt. Closely related commits are grouped; every commit hash is listed.
+
+---
+
+## 2026-05-11 — Poll search: multi-zipcode scope popover
+
+**Intent:** Keep the search results table compact when a poll covers many
+zipcodes.
+
+**Changed:**
+
+- `PollSearchView.vue` shows the first zipcode inline and collapses the
+  rest behind a `…` popover that closes on outside-click or Esc.
+
+**Commit:** `9a6b6be`
+
+---
+
+## 2026-05-11 — ZipSetter: collapsible disclosure drawers
+
+**Intent:** Tame the ZipSetter UI by letting the county and zipcode lists
+collapse.
+
+**Changed:**
+
+- Counties and zipcodes are presented in collapsible disclosure drawers
+  rather than two long flat lists.
+
+**Commit:** `e38ebac`
+
+---
+
+## 2026-05-11 — Creator dashboard: hide "Request admin access" for ADMIN+
+
+**Intent:** Don't offer an admin-access request to users who already have
+it.
+
+**Changed:**
+
+- The "Request admin access" affordance is hidden when the user is already
+  ADMIN or SUPER.
+
+**Commit:** `3cefcde`
+
+---
+
+## 2026-05-11 — Admin dashboard: show all in-scope unassigned requests
+
+**Intent:** Surface every unassigned request in an admin's scope, not just
+the stale ones.
+
+**Changed:**
+
+- The admin dashboard lists all in-scope unassigned requests instead of
+  filtering down to only stale ones.
+
+**Commit:** `f3e6994`
+
+---
+
+## 2026-05-10 — Admin & Super request-management views
+
+**Intent:** Build out the request-handling surface for admins and supers.
+
+**Changed:**
+
+- Added the admin dashboard, the creator-request detail view, and the
+  Super admin-workload table.
+- Migration `V11` seeds a local-dev ADMIN scoped over LA County zipcodes
+  so the views have data to exercise.
+
+**Commits:** `79eb1b4`, `ae04604`
+
+---
+
+## 2026-05-10 — EmailService: real delivery via JavaMailSender
+
+**Intent:** Actually send mail instead of stubbing it.
+
+**Changed:**
+
+- `EmailService` sends through `JavaMailSender` rather than logging or
+  no-op'ing the message.
+
+**Commit:** `c3a46f5`
+
+---
+
+## 2026-05-10 — Creator/Admin request: optional reason field
+
+**Intent:** Don't force a reason when submitting a creator or admin request.
+
+**Changed:**
+
+- The reason field on both the Creator-Request and Admin-Request forms is
+  now optional.
+
+**Commits:** `fda7251`, `196ba0a`
+
+---
+
+## 2026-05-10 — ZipSetter: select-all checkboxes
+
+**Intent:** Make bulk county/zipcode selection quicker.
+
+**Changed:**
+
+- Added Select-all checkboxes for counties and, separately, for zipcodes.
+
+**Commits:** `c54fe7f`, `282ed50`
+
+---
+
+## 2026-05-10 — Seed full US county & ZIP data
+
+**Intent:** Replace partial geographic seed data with the full US set.
+
+**Changed:**
+
+- Seeded the complete US counties list and the full ZIP-to-county mapping;
+  the empty-county case is surfaced in ZipSetter.
+
+**Commits:** `adb1806`, `1d52a47`
+
+---
+
+## 2026-05-10 — ZipSetter cascade fix
+
+**Intent:** Fix the county→zipcode cascade not updating reliably.
+
+**Changed:**
+
+- Switched the ZipSetter cascade from implicit reactivity to an explicit
+  `@change` handler.
+
+**Commit:** `2ca0f9d`
+
+---
+
+## 2026-05-10 — Adopt Tailwind v4 and migrate all views
+
+**Intent:** Standardize styling on Tailwind.
+
+**Changed:**
+
+- Adopted Tailwind v4 as the default styling tool and migrated the
+  remaining 23 views and components to it.
+
+**Commits:** `e6f4f39`, `67cd70f`
+
+---
+
+## 2026-05-10 — Public poll search + HomeView action cards
+
+**Intent:** Let visitors search polls without signing in, and give the home
+page clear entry points.
+
+**Changed:**
+
+- Made poll search publicly accessible and added action cards to
+  `HomeView`.
+
+**Commit:** `c866389`
+
+---
+
+## 2026-05-10 — Local dev: magic-link wiring, Mailpit, error dispatches
+
+**Intent:** Make the magic-link flow runnable end-to-end locally.
+
+**Changed:**
+
+- Wired the frontend to magic-link auth and added a Mailpit local-dev
+  profile for catching outbound mail.
+- Permitted `ERROR`/`FORWARD` dispatches in the security config so real
+  HTTP status codes surface instead of being masked.
+
+**Commits:** `7fbcba6`, `40e5493`
+
+---
+
+## 2026-05-10 — Build & deploy docs, Gradle wrapper/toolchain
+
+**Intent:** Make the build reproducible and document local deployment.
+
+**Changed:**
+
+- Committed the Gradle wrapper and added a JDK 17 toolchain with documented
+  JVM compatibility.
+- Expanded `DEPLOYING-LOCAL.md` (smoke-test section, local profile,
+  `gradlew`), updated `BUILDING.md`, and dropped an unused
+  `tsconfig.node.json` project reference.
+
+**Commits:** `ede790d`, `40e5493` *(see above)*, `a427faa`, `6c626c2`,
+`bc57a63`, `3c68e21`
+
+---
+
+## 2026-05-09 — Magic-link auth migration + Stripe webhooks
+
+**Intent:** Move authentication to passwordless magic links and accept
+Stripe billing events.
+
+**Changed:**
+
+- Migrated auth to a magic-link flow and added a Stripe webhook handler.
+- Documented magic-link auth, Stripe billing, and the Fly.io deploy.
+
+**Commits:** `cb80bbb`, `45ddb61`
+
+---
+
+## 2026-05-09 — Test-suite stabilization
+
+**Intent:** Get the full test suite reliably green.
+
+**Changed:**
+
+- Fixed transaction-isolation, validation, and a demote bug to make the
+  suite pass; switched the test base to a singleton-container pattern for
+  stability.
+- Quoted the `Office.desc` column to avoid a Postgres reserved-word
+  collision.
+
+**Commits:** `0bcc8e6`, `ca38255`, `09495cb`
+
+---
+
+## 2026-05-09 — Docs: rename COSTS-SPRING → COSTS
+
+**Intent:** Tidy documentation naming.
+
+**Changed:**
+
+- Renamed `COSTS-SPRING` to `COSTS`.
+
+**Commit:** `3a59e52`
+
+---
+
+## 2026-05-07 — Project bootstrap
+
+**Intent:** Seed the repository.
+
+**Changed:**
+
+- Initial commit (`convo.txt`).
+
+**Commit:** `5a631ef`
