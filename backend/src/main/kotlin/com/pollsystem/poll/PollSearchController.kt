@@ -52,18 +52,32 @@ class PollSearchController(
         val now = Instant.now()
         val results = mutableListOf<PollSearchResult>()
 
-        val electionsWithCandidate: Set<Long>? = if (!candidateName.isNullOrBlank()) {
-            candidates.findByNameContainingIgnoreCase(candidateName)
+        val titleQuery = title?.takeIf { it.isNotBlank() }
+        val candidateQuery = candidateName?.takeIf { it.isNotBlank() }
+
+        // Elections whose candidate roster matches the candidate-name filter.
+        val electionsWithCandidate: Set<Long> = if (candidateQuery != null) {
+            candidates.findByNameContainingIgnoreCase(candidateQuery)
                 .map { it.election.id }
                 .toSet()
-        } else null
+        } else emptySet()
 
-        // Candidate-name filter only matches Elections; skip the other types entirely.
-        if (electionsWithCandidate == null &&
-            (type == null || type.equals("Questionnaire", ignoreCase = true))
-        ) {
+        /**
+         * Title and candidate name are OR-combined: a poll matches if either
+         * hits. A blank field drops out of the OR rather than matching all.
+         * (Type and zipcode are applied separately as AND constraints.)
+         */
+        fun textMatch(titleHit: Boolean, candidateHit: Boolean): Boolean = when {
+            titleQuery == null && candidateQuery == null -> true
+            titleQuery != null && candidateQuery != null -> titleHit || candidateHit
+            titleQuery != null -> titleHit
+            else -> candidateHit
+        }
+
+        if (type == null || type.equals("Questionnaire", ignoreCase = true)) {
             for (q in questionnaires.findActive(now)) {
-                if (!matches(q.title, title)) continue
+                // Questionnaires have no candidates, so only the title can hit.
+                if (!textMatch(titleHit = titleHit(q.title, titleQuery), candidateHit = false)) continue
                 if (!matches(q.creator.email, creatorEmail)) continue
                 val zipStates = domains.findByQuestionnaireId(q.id)
                     .map { ZipState(it.zipcode, it.state.initial) }
@@ -83,8 +97,11 @@ class PollSearchController(
 
         if (type == null || type.equals("Election", ignoreCase = true)) {
             for (e in elections.findActive(now)) {
-                if (electionsWithCandidate != null && e.id !in electionsWithCandidate) continue
-                if (!matches(e.title, title)) continue
+                if (!textMatch(
+                        titleHit = titleHit(e.title, titleQuery),
+                        candidateHit = e.id in electionsWithCandidate
+                    )
+                ) continue
                 if (!matches(e.creator.email, creatorEmail)) continue
                 if (zipcode != null && zipcode != e.zipcode) continue
                 results += PollSearchResult(
@@ -98,11 +115,10 @@ class PollSearchController(
             }
         }
 
-        if (electionsWithCandidate == null &&
-            (type == null || type.equals("BallotMeasure", ignoreCase = true))
-        ) {
+        if (type == null || type.equals("BallotMeasure", ignoreCase = true)) {
             for (bm in ballotMeasures.findActive(now)) {
-                if (!matches(bm.title, title)) continue
+                // Ballot measures have no candidates, so only the title can hit.
+                if (!textMatch(titleHit = titleHit(bm.title, titleQuery), candidateHit = false)) continue
                 if (!matches(bm.creator.email, creatorEmail)) continue
                 val zip = bm.election.zipcode
                 if (zipcode != null && zipcode != zip) continue
@@ -156,4 +172,8 @@ class PollSearchController(
 
     private fun matches(field: String, query: String?): Boolean =
         query.isNullOrBlank() || field.contains(query, ignoreCase = true)
+
+    /** A title hit requires a non-blank query; a blank query is not a hit. */
+    private fun titleHit(title: String, query: String?): Boolean =
+        query != null && title.contains(query, ignoreCase = true)
 }
