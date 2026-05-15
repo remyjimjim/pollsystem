@@ -24,6 +24,12 @@ data class PollSearchResult(
     val zipcodes: List<ZipState>
 )
 
+/** Distinct values that feed the autocomplete datalists on the search form. */
+data class SearchSuggestions(
+    val titles: List<String>,
+    val candidates: List<String>
+)
+
 @RestController
 @RequestMapping("/api/polls/search")
 class PollSearchController(
@@ -114,6 +120,30 @@ class PollSearchController(
         return results.sortedWith(
             compareBy({ it.closeDate ?: Instant.MAX }, { it.title })
         )
+    }
+
+    /**
+     * Feeds the autocomplete datalists on the search form: distinct titles
+     * and candidate names drawn only from currently-active polls.
+     */
+    @GetMapping("/suggestions")
+    fun suggestions(): SearchSuggestions {
+        val now = Instant.now()
+        val activeElections = elections.findActive(now)
+
+        val titles = (
+            questionnaires.findActive(now).map { it.title } +
+                activeElections.map { it.title } +
+                ballotMeasures.findActive(now).map { it.title }
+            ).distinct().sorted()
+
+        val candidateNames = activeElections
+            .flatMap { candidates.findByElectionId(it.id) }
+            .map { it.name }
+            .distinct()
+            .sorted()
+
+        return SearchSuggestions(titles, candidateNames)
     }
 
     /**

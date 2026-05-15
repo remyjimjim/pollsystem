@@ -18,6 +18,10 @@ interface PollSearchResult {
   closeDate: string | null
   zipcodes: ZipState[]
 }
+interface SearchSuggestions {
+  titles: string[]
+  candidates: string[]
+}
 
 // Which row's "extra zipcodes" popover is open. null = closed.
 const expandedKey = ref<string | null>(null)
@@ -40,9 +44,22 @@ function onDocClick(e: MouseEvent) {
 function onEsc(e: KeyboardEvent) {
   if (e.key === 'Escape') expandedKey.value = null
 }
+// Distinct values drawn from active polls, shown as native <datalist> hints.
+const suggestions = ref<SearchSuggestions>({ titles: [], candidates: [] })
+
+async function loadSuggestions() {
+  try {
+    const res = await axios.get<SearchSuggestions>('/api/polls/search/suggestions')
+    suggestions.value = res.data
+  } catch {
+    // Autocomplete is a convenience; a failure here shouldn't block searching.
+  }
+}
+
 onMounted(() => {
   document.addEventListener('click', onDocClick)
   document.addEventListener('keydown', onEsc)
+  loadSuggestions()
 })
 onBeforeUnmount(() => {
   document.removeEventListener('click', onDocClick)
@@ -110,8 +127,13 @@ async function search() {
         <input
           v-model="filters.title"
           type="text"
+          list="title-suggestions"
+          autocomplete="off"
           class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
         />
+        <datalist id="title-suggestions">
+          <option v-for="s in suggestions.titles" :key="s" :value="s" />
+        </datalist>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.zipcode') }}
@@ -128,8 +150,13 @@ async function search() {
         <input
           v-model="filters.candidateName"
           type="text"
+          list="candidate-suggestions"
+          autocomplete="off"
           class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
         />
+        <datalist id="candidate-suggestions">
+          <option v-for="s in suggestions.candidates" :key="s" :value="s" />
+        </datalist>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.type') }}
