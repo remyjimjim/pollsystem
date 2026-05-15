@@ -12,6 +12,39 @@ available conversation record entirely — those entries carry a paraphrased
 
 ---
 
+## 2026-05-15 — Establish a development log
+
+**Requested:**
+
+> I really love your summaries of what changed and happened, is there a way
+> my prompts could be included in the transcript so as to provide a bit of
+> added context as to what I was asking for?
+
+> Yes, please start option 2
+
+> Reconstruct earlier session entries from git log please.
+
+> Might as well add the commits from 2026-05-10 and prior to the record in
+> the format you described and commit please.
+
+**Changed:**
+
+- Created `docs/DEVLOG.md`, a running log pairing each change's request (in
+  the requester's own words) with a summary of what was done and the
+  commit hash; newest entries on top.
+- Seeded it with the two then-current poll-search changes, then
+  reconstructed 16 prior-session entries (2026-05-13 → 2026-05-11) quoted
+  from the conversation record.
+- Added a "Pre-record history" section covering every commit from the
+  2026-05-07 bootstrap through 2026-05-11, paraphrased from commit history.
+
+**Commits:** `8db9f16`, `37bbc44`
+
+*(The commit that adds this very entry is not itself logged — it only
+appends these lines.)*
+
+---
+
 ## 2026-05-15 — Poll search: OR-combine title and candidate-name filters
 
 **Requested:**
