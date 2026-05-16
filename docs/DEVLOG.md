@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-05-15 — Enforce DEVLOG logging: CLAUDE.md + Stop hook
+
+**Requested:**
+
+> Also log decisions that didn't result in code and how do I ask for this
+> type of logging to be "automatic"?
+
+> Both, and backfill the three decisions
+
+**Changed:**
+
+- Added `CLAUDE.md` instructing Claude to add a DEVLOG entry after every
+  commit and to log no-code decisions as Decision entries (the standing
+  instruction layer).
+- Added `.claude/hooks/devlog-reminder.sh` and a `Stop` hook in
+  `.claude/settings.json` that flags any change commit with no
+  corresponding `docs/DEVLOG.md` entry (the enforcement layer).
+- Related earlier commits: the "Decision entries" format variant
+  (`a0710ba`) and the three backfilled no-code decisions (`a6243d6`).
+
+**Commit:** `d6ceeac`
+
+---
+
 ## 2026-05-15 — Document verification-only DEVLOG entries
 
 **Requested:**
