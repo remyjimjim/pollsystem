@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-05-15 — Re-smoke-test the OR search after backend restart
+
+**Requested:**
+
+> smoke-test the OR search
+
+**Verified:**
+
+- Re-ran the 9-case OR-search suite against the backend after a restart:
+  no-filter baseline, title-only, candidate-only, title-OR-candidate
+  union, the OR result narrowed by `type` (both directions), a no-match
+  query, and mixed title/candidate hits.
+- All 9 passed, identical to the post-implementation run — OR semantics,
+  blank-field drop-out, and the `type` AND-filter all intact.
+
+**Commit:** none — verification only; exercised `46469e9`.
+
+---
+
 ## 2026-05-15 — Track .vscode settings and frontend lockfile
 
 **Requested:**
