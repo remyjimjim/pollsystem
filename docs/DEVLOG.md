@@ -55,6 +55,26 @@ logged.
 
 ---
 
+## 2026-05-15 — Document verification-only DEVLOG entries
+
+**Requested:**
+
+> sure, go ahead and log it please.
+
+…approving the offer to cover the verification-only entry variant in the
+format section.
+
+**Changed:**
+
+- Added a "Verification-only entries" paragraph to the "Entry format"
+  section, describing entries that record a check rather than a change:
+  they swap **Changed** for a **Verified** block and use a
+  `none — verification only` commit line.
+
+**Commit:** `31ff540`
+
+---
+
 ## 2026-05-15 — Smoke-test the OR search
 
 **Requested:**
