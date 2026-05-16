@@ -44,6 +44,12 @@ change — a smoke-test, a manual QA pass. These swap **Changed** for a
 their **Commit** line reads `none — verification only` (optionally naming
 the commit that was exercised).
 
+**Decision entries.** Some entries record a decision reached in discussion
+that produced no code — keeping a constraint, choosing not to build
+something, settling on an approach. These swap **Changed** for a
+**Decision** block stating the outcome and the reasoning behind it, and
+their **Commit** line reads `none — decision only`.
+
 Newest entries go at the top; the "Pre-record history" block stays at the
 end.
 
