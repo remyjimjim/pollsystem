@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-05-15 — Track .vscode settings and frontend lockfile
+
+**Requested:**
+
+> commit the .vscode and package-lock files
+
+**Changed:**
+
+- Committed the previously-untracked `.vscode/settings.json` (a Java
+  extension build-config setting) and `frontend/package-lock.json` (npm
+  lockfile, `lockfileVersion 3`) so the dependency tree is pinned for
+  everyone working in the repo.
+
+**Commit:** `051a97d`
+
+---
+
 ## 2026-05-15 — Enforce DEVLOG logging: CLAUDE.md + Stop hook
 
 **Requested:**
