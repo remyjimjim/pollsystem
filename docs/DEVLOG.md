@@ -532,6 +532,74 @@ phases, with these continuation prompts:
 
 ---
 
+## 2026-05-11 — Decision: PUBLISHED polls stay non-editable
+
+**Requested:**
+
+*The prompt that opened this discussion is not in the reconstructable
+record; the decision is recovered from project notes. (Approximate date.)*
+
+**Decision:**
+
+- PUBLISHED polls cannot be edited — the Edit affordance stays gated on
+  `status === 'DRAFT'`. A creator who needs to revise a published poll
+  archives it and creates a fresh draft.
+- Reasoning: editing a live poll would silently corrupt voter intent — if
+  question text or candidate names change after votes are cast, existing
+  responses no longer mean what voters said. A "safe-fields-only" partial
+  edit (title, close date) was considered and rejected as UI complexity
+  for a rare case.
+
+**Commit:** none — decision only.
+
+---
+
+## 2026-05-11 — Decision: no user_history table
+
+**Requested:**
+
+> Should we have a user_history table to track changes in user.access …
+> if so it should probably have a created timestamp field.
+
+> Oh, good to know, let's leave it as is.
+
+**Decision:**
+
+- No dedicated `user_history` table. A user's access-level history is
+  derivable from existing `role_assignment` rows, so a separate audit
+  table would duplicate recoverable state for no real gain.
+
+**Commit:** none — decision only.
+
+---
+
+## 2026-05-11 — Decision: keep email and phone both UNIQUE
+
+**Requested:**
+
+> In your opinion, should we keep the constraint that each email address
+> and each phone number needs to be unique or should we think about just
+> email or just phone number or combine it with zipcode or?
+
+> let's make phone unique, relax email
+
+> I think we should just leave it like it is. I'll risk locking out shared
+> inboxes.
+
+**Decision:**
+
+- The `users` table keeps **both `email` and `phone` UNIQUE**. Relaxing
+  email uniqueness (to allow shared household inboxes) was briefly favored,
+  then rejected.
+- Reasoning: magic-link auth looks accounts up by email, so a non-unique
+  email would make that lookup ambiguous and force a login-flow redesign
+  (asking for phone as well). The user accepted occasionally locking out
+  shared inboxes to keep login simple.
+
+**Commit:** none — decision only.
+
+---
+
 ## 2026-05-11 — Questionnaire response: Yes/No radios
 
 **Requested:**
