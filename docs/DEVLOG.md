@@ -49,6 +49,27 @@ logged.
 
 ---
 
+## 2026-05-15 — Smoke-test the OR search
+
+**Requested:**
+
+> smoke-test the OR search
+
+**Verified:**
+
+- Ran 9 query cases against the running backend exercising the OR
+  semantics of the title and candidate-name filters: no-filter baseline,
+  title-only, candidate-only, title-OR-candidate (union), the OR result
+  narrowed by `type` (both directions), a no-match query, and mixed
+  title/candidate hits.
+- All 9 passed — notably the union case (a title-matching questionnaire
+  and a candidate-matching election both surface) and the no-match case
+  (empty result, not a false match-all).
+
+**Commit:** none — verification only; exercised `46469e9`.
+
+---
+
 ## 2026-05-15 — Fix the DEVLOG entry-format workflow wording
 
 **Requested:**
