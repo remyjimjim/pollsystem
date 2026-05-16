@@ -38,6 +38,12 @@ Each entry is a level-2 heading followed by labelled blocks:
   related commits may be grouped into a single entry, with every hash
   listed.
 
+**Verification-only entries.** Some entries record a check rather than a
+change — a smoke-test, a manual QA pass. These swap **Changed** for a
+**Verified** block summarizing what was exercised and the outcome, and
+their **Commit** line reads `none — verification only` (optionally naming
+the commit that was exercised).
+
 Newest entries go at the top; the "Pre-record history" block stays at the
 end.
 
