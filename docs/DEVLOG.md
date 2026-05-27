@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-05-26 — Fix publish-drops-edits bug; add super-admin safe-field edits
+
+**Requested:**
+
+> Regarding the /creator/dashboard, I wanted to edit the 'Close date'
+> for a questionaire I'd created so I clicked 'Archive' and edited the
+> 'Close date' to May 25, 2026, published the draft but change did not
+> take and there was no warning message, can that be fixed so I at
+> least get a warning message? It'd be great if as a 'Super Admin' I
+> could modify any part of a poll.
+
+> fix the bug and add super-admin safe-field edits
+
+**Changed:**
+
+- Fixed `publish()` in `QuestionnaireForm.vue`, `ElectionForm.vue`, and
+  `BallotMeasureForm.vue`: it now calls `saveDraft()` unconditionally
+  (was gated on `draftId == null`, so existing-draft edits were never
+  PUT before publish). Publish aborts if save surfaced an error,
+  letting the user see "Close date must be in the future" and other
+  validation messages instead of a silent no-op.
+- Added a super-admin `Manage All Polls` page at `/super/manage-polls`,
+  backed by a new `SuperPollsController` (`/api/super/polls`). Lists
+  every poll across all creators and statuses; inline-edit lets a
+  super-admin change **title, summary, and closeDate** on any poll —
+  the fields documented as safe to mutate after publication.
+- Voter-facing structure (questions, candidates, geo scope) remains
+  off-limits even to super-admin: changing it after responses are cast
+  would silently re-shape what voters said. The constraint from the
+  earlier "editing published polls" decision is preserved; this is a
+  safe-field carve-out, not a reversal.
+- Dashboard tile + i18n keys added under `super.dashboard` and
+  `super.managePolls`. Other locales fall back to en via the existing
+  `fallbackLocale: 'en'`.
+
+**Commit:** `bfec7a8`
+
+---
+
 ## 2026-05-26 — Restore zipcode autocomplete on the search form
 
 **Requested:**
