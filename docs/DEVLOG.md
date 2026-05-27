@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-05-26 — "See closed polls too" filter on /polls/search
+
+**Requested:**
+
+> For the /polls/search page can we add a checkbox (in the heading of
+> the 'view results' column maybe) labeled 'See closed polls too' so
+> the users can see results for polls from history?
+
+**Changed:**
+
+- `/api/polls/search` accepts a new `includeClosed` query param
+  (defaults to false). When true, the controller pulls each type's
+  `findExpiredX(now)` alongside `findActive(now)`.
+- Result ordering now puts active polls first (closes-soonest
+  ascending) and closed polls at the bottom (most-recently-closed
+  first), so the active set isn't displaced when the filter is on.
+- `PollSearchView.vue` picks up a "See closed polls too" checkbox in
+  the existing filter grid — placed in the form rather than the
+  actions-column header (which the user suggested) because the table
+  only renders after a search, and the column-header placement would
+  hide the toggle on the user's first query.
+- Closed rows render with muted text (`text-slate-500`) and a small
+  "Closed" badge next to the title. The Vote action hides for
+  authenticated users on closed rows since there's nothing to vote
+  on; View Results stays.
+
+**Commit:** `ccd5289`
+
+---
+
 ## 2026-05-26 — Allow past close dates on re-publish, keep 5-day confirmation
 
 **Requested:**
