@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-05-26 — Multi-select State with the Zipcodes-style checkbox + shortcut UX
+
+**Requested:**
+
+> Can we make the State selectList a multi-selectList just like the
+> Zipcodes multi-selectList with the same shortcuts?
+
+**Changed:**
+
+- **State** picker now matches the Zipcodes picker exactly: checkbox
+  list, shift-click range from the last single click, `*` to select
+  all, `Shift+0` to clear. Trigger summary shows the single state
+  name, "N states selected" for multi-pick, or "Any state" when
+  empty.
+- New `search.filters.stateHelp` tooltip mirrors the Zipcodes one.
+- `selectedStateId: number | ''` became `selectedStateIds: number[]`
+  throughout the component; cascade and search-param logic updated.
+- Backend cascade across multiple states:
+  - `GET /api/counties?state_id=A,B` now accepts a list; returns the
+    union of counties.
+  - `GET /api/zipcodes?state_id=A,B` likewise returns the union of
+    zips across the listed states.
+  - `GET /api/polls/search?stateId=A,B` accepts a list; the geo-zip
+    fallback resolves to the union of all those states' zips when
+    no zipcode/county is set.
+- New repository method `CountyRepository.findByStateIdIn` carries
+  the multi-state lookup.
+- County stays single-select — the user can drill into one county
+  picked from the union of all selected states' counties.
+
+**Commit:** `be95ac1`
+
+---
+
 ## 2026-05-26 — Clear typeahead on state change + match State/County to Zipcodes dropdown style
 
 **Requested:**
