@@ -8,6 +8,7 @@ import com.pollsystem.model.User
 import com.pollsystem.repository.CountyZipsRepository
 import com.pollsystem.repository.PollTypeRepository
 import com.pollsystem.repository.QuestionRepository
+import com.pollsystem.repository.QuestionResponseRepository
 import com.pollsystem.repository.QuestionnaireDomainRepository
 import com.pollsystem.repository.QuestionnaireRepository
 import org.springframework.http.HttpStatus
@@ -21,6 +22,7 @@ import java.time.temporal.ChronoUnit
 class QuestionnaireService(
     private val questionnaires: QuestionnaireRepository,
     private val questions: QuestionRepository,
+    private val questionResponses: QuestionResponseRepository,
     private val domains: QuestionnaireDomainRepository,
     private val pollTypes: PollTypeRepository,
     private val countyZips: CountyZipsRepository
@@ -125,7 +127,25 @@ class QuestionnaireService(
     }
 
     private fun replaceQuestions(q: Questionnaire, inputs: List<QuestionInput>) {
-        questions.deleteAll(questions.findByQuestionnaireId(q.id))
+        val existing = questions.findByQuestionnaireId(q.id)
+        val existingTexts = existing.map { it.question.trim() }
+        val incomingTexts = inputs.map { it.text.trim() }
+        // No structural change → nothing to write. This is the path that
+        // a close-date-only edit must take when the questionnaire was
+        // previously PUBLISHED and has responses tied to its questions;
+        // re-running the delete-and-recreate below would trip the
+        // question_responses FK.
+        if (existingTexts == incomingTexts) return
+        if (existing.isNotEmpty() &&
+            existing.any { questionResponses.findByQuestionId(it.id).isNotEmpty() }
+        ) {
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Questions cannot be changed because responses have already been cast on this poll. " +
+                    "To adjust title, summary, or close date, use Super Admin → Manage All Polls."
+            )
+        }
+        questions.deleteAll(existing)
         questions.saveAll(inputs.map { Question(questionnaire = q, question = it.text.trim()) })
     }
 

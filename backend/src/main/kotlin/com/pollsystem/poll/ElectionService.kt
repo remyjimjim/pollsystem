@@ -8,6 +8,7 @@ import com.pollsystem.model.Office
 import com.pollsystem.model.PollStatus
 import com.pollsystem.model.User
 import com.pollsystem.repository.CandidateRepository
+import com.pollsystem.repository.CandidateResponseRepository
 import com.pollsystem.repository.ElectionRepository
 import com.pollsystem.repository.OfficeRepository
 import com.pollsystem.repository.PollTypeRepository
@@ -22,6 +23,7 @@ import java.time.temporal.ChronoUnit
 class ElectionService(
     private val elections: ElectionRepository,
     private val candidates: CandidateRepository,
+    private val candidateResponses: CandidateResponseRepository,
     private val offices: OfficeRepository,
     private val pollTypes: PollTypeRepository,
     private val objectMapper: ObjectMapper
@@ -121,7 +123,28 @@ class ElectionService(
     }
 
     private fun replaceCandidates(election: Election, inputs: List<CandidateInput>) {
-        candidates.deleteAll(candidates.findByElectionId(election.id))
+        val existing = candidates.findByElectionId(election.id)
+        val existingTuples = existing.map {
+            Triple(it.name.trim(), it.affiliation.trim(), it.office.name.trim())
+        }
+        val incomingTuples = inputs.map {
+            Triple(it.name.trim(), it.affiliation.trim(), it.officeName.trim())
+        }
+        // No structural change → don't touch the candidate rows. Skipping
+        // is what lets a close-date-only edit on a previously-PUBLISHED
+        // election succeed; otherwise the delete-and-recreate would trip
+        // the candidate_responses FK for any candidates with cast votes.
+        if (existingTuples == incomingTuples) return
+        if (existing.isNotEmpty() &&
+            existing.any { candidateResponses.findByCandidateId(it.id).isNotEmpty() }
+        ) {
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Candidates cannot be changed because votes have already been cast on this election. " +
+                    "To adjust title or close date, use Super Admin → Manage All Polls."
+            )
+        }
+        candidates.deleteAll(existing)
         if (inputs.isEmpty()) return
         candidates.saveAll(inputs.map { input ->
             val office = upsertOffice(input.officeName.trim(), input.officeDesc?.trim())
