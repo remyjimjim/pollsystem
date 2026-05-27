@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-05-26 — Collapse the zipcode list into a click-to-open dropdown
+
+**Requested:**
+
+> Can we make it so when a user selects a value in a selectList like
+> State for instance, which then populates the set of zipcodes to
+> display in Zipcodes, can the Zipcodes selectList show the first
+> zipcode and a down arrow then when the user clicks on the Zipcode
+> selectList the list expands to a scrollable list with the first 5
+> items showing and the rest strollable?
+
+**Changed:**
+
+- The zipcode picker now collapses to a compact trigger by default:
+  shows the first selected zip (or the first available zip if none
+  selected) + a chevron. Clicking the trigger absolute-positions the
+  scrollable list below it; `max-h-32` (128px ≈ 5 rows at ~24px
+  each) keeps the first ~5 items visible with the rest scrollable.
+- Click outside or press Esc closes the dropdown. Extended the
+  existing `onDocClick` + `onEsc` handlers (already in place for
+  the zip-popover in results) to cover the new `data-zip-picker`.
+- The chevron rotates 180° while open as an open/closed cue.
+- When more than one zip is selected, the trigger reads
+  "N zipcodes selected" instead of a single zipcode (new
+  `search.filters.zipcodeNSelected` i18n key).
+- The shift-click hint only surfaces while the picker is open — no
+  point cluttering the closed state with shortcut docs.
+
+**Commit:** `2fe44ae`
+
+---
+
 ## 2026-05-26 — Move the zipcode picker back under its own column header
 
 **Requested:**
