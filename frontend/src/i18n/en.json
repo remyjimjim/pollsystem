@@ -131,7 +131,7 @@
       "countyAny": "Any county",
       "zipcode": "Zipcodes",
       "zipcodeAny": "Any zipcode",
-      "zipcodeTypeahead": "(e.g. 982)",
+      "zipcodeTypeahead": "(e.g. 982..)",
       "zipcodeStartHint": "Pick a state or start typing a zipcode here.",
       "zipcodeNone": "No matching zipcodes",
       "zipcodeShiftHint": "Shift+click for range • * select all • Shift+0 clear",
