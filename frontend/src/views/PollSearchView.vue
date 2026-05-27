@@ -285,10 +285,8 @@ async function search() {
       {{ $t('search.guestIntroAfter') }}
     </p>
 
-    <form
-      @submit.prevent="search"
-      class="mb-6 grid grid-cols-1 items-end gap-3 rounded-md bg-slate-50 p-4 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
-    >
+    <form @submit.prevent="search" class="mb-6 rounded-md bg-slate-50 p-4">
+      <div class="grid grid-cols-1 items-end gap-3 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.titleContains') }}
         <input
@@ -335,38 +333,6 @@ async function search() {
           :placeholder="$t('search.filters.zipcodeTypeahead')"
           class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
         />
-        <div
-          v-if="selectedStateId === '' && zipFilter.trim() === ''"
-          class="rounded border border-slate-300 bg-slate-100 p-2 text-xs font-normal text-slate-500"
-        >{{ $t('search.filters.zipcodeStartHint') }}</div>
-        <div
-          v-else-if="displayedZipcodes.length === 0"
-          class="rounded border border-slate-300 bg-slate-50 p-2 text-xs font-normal text-slate-500"
-        >{{ $t('search.filters.zipcodeNone') }}</div>
-        <div
-          v-else
-          tabindex="0"
-          @keydown="onZipKeydown"
-          class="max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400"
-        >
-          <label
-            v-for="(z, idx) in displayedZipcodes"
-            :key="z.id"
-            class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
-          >
-            <input
-              type="checkbox"
-              :checked="selectedZipcodes.includes(z.zipcode)"
-              @click="onZipClick($event, idx, z.zipcode)"
-              class="h-3.5 w-3.5"
-            />
-            <span class="font-mono">{{ z.zipcode }}</span>
-          </label>
-        </div>
-        <span
-          v-if="displayedZipcodes.length > 1"
-          class="text-xs font-normal text-slate-500"
-        >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.candidateName') }}
@@ -408,6 +374,46 @@ async function search() {
       >
         {{ loading ? $t('search.searching') : $t('search.search') }}
       </button>
+      </div>
+
+      <!-- Zipcode picker list lives below the grid so the grid headers
+           all align (the zipcode <label> above only carries header +
+           typeahead). -->
+      <div class="mt-3">
+        <div
+          v-if="selectedStateId === '' && zipFilter.trim() === ''"
+          class="rounded border border-slate-300 bg-slate-100 p-2 text-xs font-normal text-slate-500"
+        >{{ $t('search.filters.zipcodeStartHint') }}</div>
+        <div
+          v-else-if="displayedZipcodes.length === 0"
+          class="rounded border border-slate-300 bg-slate-50 p-2 text-xs font-normal text-slate-500"
+        >{{ $t('search.filters.zipcodeNone') }}</div>
+        <template v-else>
+          <div
+            tabindex="0"
+            @keydown="onZipKeydown"
+            class="max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400"
+          >
+            <label
+              v-for="(z, idx) in displayedZipcodes"
+              :key="z.id"
+              class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+            >
+              <input
+                type="checkbox"
+                :checked="selectedZipcodes.includes(z.zipcode)"
+                @click="onZipClick($event, idx, z.zipcode)"
+                class="h-3.5 w-3.5"
+              />
+              <span class="font-mono">{{ z.zipcode }}</span>
+            </label>
+          </div>
+          <span
+            v-if="displayedZipcodes.length > 1"
+            class="text-xs font-normal text-slate-500"
+          >{{ $t('search.filters.zipcodeShiftHint') }}</span>
+        </template>
+      </div>
     </form>
 
     <p v-if="error" class="mb-2 text-sm text-red-700">{{ error }}</p>
