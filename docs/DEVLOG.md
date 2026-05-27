@@ -61,6 +61,43 @@ logged.
 
 ---
 
+## 2026-05-26 — Cascading state/county/zipcode dropdowns on /polls/search
+
+**Requested:**
+
+> for the /polls/search page can we add state and county selectList
+> boxes before zipcode where if the state box is populated the county
+> selectList depends on what's selected in the state list and zipcodes
+> in the zipcode selectList depend on what's selected in the state and
+> county selectLists?
+
+> I think (1) is optimal.
+
+(After clarification: option 1 — the dropdowns narrow the zipcode
+list only; only the zipcode selection actually filters search
+results.)
+
+**Changed:**
+
+- Replaced the freeform zipcode input + datalist on `PollSearchView`
+  with three cascading `<select>` boxes: state → county → zipcode.
+  Counties stay disabled until a state is chosen; zipcodes stay
+  disabled until a county is chosen. Each level resets the
+  downstream selections.
+- Existing geography endpoints (`/api/states`,
+  `/api/counties?state_id=`, `/api/zipcodes?county_ids=`) carry the
+  cascade; no new backend endpoints needed.
+- Per option (1), only the zipcode value is sent as a search param.
+  State and county are UI scaffolding; the backend search filter
+  semantics didn't change.
+- Cleaned up the now-unused `zipcodes` field from
+  `/api/polls/search/suggestions` since the cascade renders the
+  county's full known zip list rather than a global autocomplete.
+
+**Commit:** `1951215`
+
+---
+
 ## 2026-05-26 — "See closed polls too" filter on /polls/search
 
 **Requested:**
