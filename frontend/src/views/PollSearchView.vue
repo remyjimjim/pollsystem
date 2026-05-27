@@ -264,16 +264,19 @@ async function search() {
   try {
     const params: Record<string, string> = {}
     if (filters.title.trim()) params.title = filters.title.trim()
-    if (selectedZipcodes.value.length > 0) {
-      // Spring binds a comma-separated string to List<String> just as
-      // it does for the existing /api/zipcodes endpoint.
+    if (selectedStateId.value === '') {
+      // Typeahead mode: state is "Any". The text the user typed is
+      // the single zipcode they're searching for.
+      const v = zipFilter.value.trim()
+      if (v) params.zipcode = v
+    } else if (selectedZipcodes.value.length > 0) {
+      // State + explicit zip picks → those zips.
       params.zipcode = selectedZipcodes.value.join(',')
     } else if (selectedCountyId.value !== '') {
-      // No specific zipcodes picked, but county is set: "any zip in
-      // this county".
+      // State + county, no picks → any zip in this county.
       params.countyId = String(selectedCountyId.value)
-    } else if (selectedStateId.value !== '') {
-      // State only — "any zip in this state".
+    } else {
+      // State only, no picks → any zip in this state.
       params.stateId = String(selectedStateId.value)
     }
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
@@ -343,70 +346,81 @@ async function search() {
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.zipcode') }}
-        <input
-          v-model="zipFilter"
-          type="text"
-          inputmode="numeric"
-          maxlength="5"
-          :placeholder="$t('search.filters.zipcodeTypeahead')"
-          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
-        />
-        <div
-          v-if="selectedStateId === '' && zipFilter.trim() === ''"
-          class="rounded border border-slate-300 bg-slate-100 p-2 text-xs font-normal text-slate-500"
-        >{{ $t('search.filters.zipcodeStartHint') }}</div>
-        <div
-          v-else-if="displayedZipcodes.length === 0"
-          class="rounded border border-slate-300 bg-slate-50 p-2 text-xs font-normal text-slate-500"
-        >{{ $t('search.filters.zipcodeNone') }}</div>
-        <div v-else data-zip-picker class="relative">
-          <!-- Collapsed trigger: shows first selected (or first available)
-               and a chevron. Click to open the scrollable checkbox list. -->
-          <button
-            type="button"
-            @click.stop="zipPickerOpen = !zipPickerOpen"
-            :aria-expanded="zipPickerOpen"
-            class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none"
-          >
-            <span class="font-mono">{{ zipPickerSummary }}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              class="ml-2 h-4 w-4 text-slate-500 transition-transform"
-              :class="{ 'rotate-180': zipPickerOpen }"
-              aria-hidden="true"
-            >
-              <path
-                fill="currentColor"
-                d="M5.3 7.3 4 8.6 10 14.6l6-6L14.7 7.3 10 12z"
-              />
-            </svg>
-          </button>
+
+        <!-- Mode A: state is "Any" → typeahead input with native datalist
+             of prefix matches. Single-zip search; if the user wants
+             multi-select they pick a state. -->
+        <template v-if="selectedStateId === ''">
+          <input
+            v-model="zipFilter"
+            type="text"
+            inputmode="numeric"
+            maxlength="5"
+            autocomplete="off"
+            list="zip-typeahead-options"
+            :placeholder="$t('search.filters.zipcodeTypeahead')"
+            class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
+          />
+          <datalist id="zip-typeahead-options">
+            <option v-for="z in displayedZipcodes" :key="z.id" :value="z.zipcode" />
+          </datalist>
+        </template>
+
+        <!-- Mode B: a state is selected → pre-populated dropdown of zips
+             in that state (or in the picked county). Click to open;
+             checkboxes for multi-select. -->
+        <template v-else>
           <div
-            v-if="zipPickerOpen"
-            tabindex="0"
-            @keydown="onZipKeydown"
-            class="absolute left-0 right-0 z-20 mt-1 max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
-          >
-            <label
-              v-for="(z, idx) in displayedZipcodes"
-              :key="z.id"
-              class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+            v-if="displayedZipcodes.length === 0"
+            class="rounded border border-slate-300 bg-slate-50 p-2 text-xs font-normal text-slate-500"
+          >{{ $t('search.filters.zipcodeNone') }}</div>
+          <div v-else data-zip-picker class="relative">
+            <button
+              type="button"
+              @click.stop="zipPickerOpen = !zipPickerOpen"
+              :aria-expanded="zipPickerOpen"
+              class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none"
             >
-              <input
-                type="checkbox"
-                :checked="selectedZipcodes.includes(z.zipcode)"
-                @click="onZipClick($event, idx, z.zipcode)"
-                class="h-3.5 w-3.5"
-              />
-              <span class="font-mono">{{ z.zipcode }}</span>
-            </label>
+              <span class="font-mono">{{ zipPickerSummary }}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                class="ml-2 h-4 w-4 text-slate-500 transition-transform"
+                :class="{ 'rotate-180': zipPickerOpen }"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M5.3 7.3 4 8.6 10 14.6l6-6L14.7 7.3 10 12z"
+                />
+              </svg>
+            </button>
+            <div
+              v-if="zipPickerOpen"
+              tabindex="0"
+              @keydown="onZipKeydown"
+              class="absolute left-0 right-0 z-20 mt-1 max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
+            >
+              <label
+                v-for="(z, idx) in displayedZipcodes"
+                :key="z.id"
+                class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+              >
+                <input
+                  type="checkbox"
+                  :checked="selectedZipcodes.includes(z.zipcode)"
+                  @click="onZipClick($event, idx, z.zipcode)"
+                  class="h-3.5 w-3.5"
+                />
+                <span class="font-mono">{{ z.zipcode }}</span>
+              </label>
+            </div>
           </div>
-        </div>
-        <span
-          v-if="displayedZipcodes.length > 1 && zipPickerOpen"
-          class="text-xs font-normal text-slate-500"
-        >{{ $t('search.filters.zipcodeShiftHint') }}</span>
+          <span
+            v-if="displayedZipcodes.length > 1 && zipPickerOpen"
+            class="text-xs font-normal text-slate-500"
+          >{{ $t('search.filters.zipcodeShiftHint') }}</span>
+        </template>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.candidateName') }}
