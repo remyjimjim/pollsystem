@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-05-26 — Label state filter "State (populates zipcodes)"
+
+**Requested:**
+
+> Can we change the state selectList heading from "State" to "State
+> (populates zipcodes)"?
+
+**Changed:**
+
+- Updated `search.filters.state` in `en.json`. The cascade behavior
+  (picking a state surfaces the zipcode checkbox list below) wasn't
+  obvious from the bare "State" label.
+
+**Commit:** `095c047`
+
+---
+
 ## 2026-05-26 — Align the zipcode header with the rest of the filter labels
 
 **Requested:**
