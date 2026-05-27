@@ -21,6 +21,7 @@ interface PollSearchResult {
 interface SearchSuggestions {
   titles: string[]
   candidates: string[]
+  zipcodes: string[]
 }
 
 // Which row's "extra zipcodes" popover is open. null = closed.
@@ -45,7 +46,7 @@ function onEsc(e: KeyboardEvent) {
   if (e.key === 'Escape') expandedKey.value = null
 }
 // Distinct values drawn from active polls, shown as native <datalist> hints.
-const suggestions = ref<SearchSuggestions>({ titles: [], candidates: [] })
+const suggestions = ref<SearchSuggestions>({ titles: [], candidates: [], zipcodes: [] })
 
 async function loadSuggestions() {
   try {
@@ -142,8 +143,13 @@ async function search() {
           type="text"
           maxlength="5"
           pattern="[0-9]{5}"
+          list="zipcode-suggestions"
+          autocomplete="off"
           class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
         />
+        <datalist id="zipcode-suggestions">
+          <option v-for="s in suggestions.zipcodes" :key="s" :value="s" />
+        </datalist>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.candidateName') }}
