@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-05-26 — Tighten the zipcode start-hint wording
+
+**Requested:**
+
+> Can we change the placeholder text for the zipcodes box from "Pick
+> a state above, or start typing a zipcode here." to "Pick a state or
+> start typing a zipcode here."?
+
+**Changed:**
+
+- Updated `search.filters.zipcodeStartHint` in `en.json`. Drops the
+  comma and the "above" reference since the input is right next to
+  the hint.
+
+**Commit:** `f01b629`
+
+---
+
 ## 2026-05-26 — Zipcode typeahead — type digits without picking a state
 
 **Requested:**
