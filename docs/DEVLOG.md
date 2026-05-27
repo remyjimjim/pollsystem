@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-05-26 — Enable County always, typeahead with autocomplete when no state
+
+**Requested:**
+
+> Can we make the "County" selectList enabled and it's only populated
+> if a State has been selected, if no state is selected then a user
+> can type the county name with autocomplete and a multi-selectList?
+
+**Changed:**
+
+- County trigger is no longer disabled when no state is picked.
+  Opening it now always renders a small search input above the
+  checkbox list. Behavior:
+  - **State(s) selected**: input filters the pre-loaded county list
+    locally; the placeholder reads "Filter…".
+  - **No state**: input fires a debounced (200ms) prefix lookup
+    against `/api/counties?prefix=…`; matches populate the
+    checkboxes. Placeholder reads "Type a county name…".
+- Multi-select, shift-click range, `*` / `Shift+0` shortcuts work in
+  both modes and operate on the visible (filtered) list.
+- Backend: `GeographyController.listCounties` accepts an optional
+  `prefix` param (case-insensitive, capped at 50). When set,
+  `state_id` is ignored. `state_id` itself became optional too. New
+  repository method
+  `CountyRepository.findByNameStartingWithIgnoreCaseOrderByName`
+  carries the lookup.
+- Verified: `?prefix=Whatcom` → 1 match; `?prefix=king` → 10
+  (case-insensitive across states); `?prefix=zzzz` → 0;
+  `?state_id=48` still returns 39 WA counties; bare `/api/counties`
+  returns `[]` instead of erroring.
+
+**Commit:** `4d8229d`
+
+---
+
 ## 2026-05-26 — Multi-select County, matching the State + Zipcodes UX
 
 **Requested:**
