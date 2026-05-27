@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-05-26 — Move the zipcode picker back under its own column header
+
+**Requested:**
+
+> Can we have the selection of a state populate the zipcodes widget
+> underneath the "Zipcodes" heading and remove the selectList on the
+> bottom row?
+
+**Changed:**
+
+- Reverted commit `fc3a963`'s "list below the grid" split. The
+  zipcode picker — empty-state hints, the scrollable checkbox list,
+  and the shift-click hint — is back under the "Zipcodes" heading in
+  the same grid cell as the typeahead.
+- The cell is now taller than the others; `items-end` on the grid
+  still bottom-anchors the shorter cells against it (the zipcode
+  header sits at the top of its own column, the other headers sit
+  lower).
+
+**Commit:** `ceafb7d`
+
+---
+
 ## 2026-05-26 — Hint the prefix-search nature of the zipcode placeholder
 
 **Requested:**
