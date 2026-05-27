@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-05-26 — "Any zipcode" under a chosen county now filters by that county's zips
+
+**Requested:**
+
+> It looks like currently if state and county are populated and
+> zipcode set to 'ANY' then zipcode ignores state and county filters
+> interpreting 'ANY' as literally any zipcode period instead of
+> interpreting 'ANY' as any zipcode from state AND county set of
+> zipcodes. Can we change the behavior to the latter?
+
+**Changed:**
+
+- `/api/polls/search` accepts a new optional `countyId` query param.
+  The controller resolves a geo filter as: specific zipcode if set,
+  else the county's zipcode set if `countyId` is set, else no geo
+  filter. All three poll-type loops now match against the resolved
+  set rather than the single-zipcode string.
+- `PollSearchView` sends `countyId` only when the user has picked a
+  county but left zipcode at "Any zipcode". When they pick a specific
+  zipcode, only `zipcode` is sent (and the backend's specific-zipcode
+  branch wins anyway).
+- This refines the earlier option (1) decision: state and county are
+  still pure UI scaffolding for narrowing the zipcode dropdown, but
+  county *also* becomes a filter when the user leaves zipcode at
+  "Any". State alone still has no filtering effect — county is
+  required because the cascade keeps the zipcode dropdown disabled
+  until a county is picked.
+- Verified by replay: `?countyId=3006` (Whatcom) returns all 3 polls
+  that cover Whatcom zips; `?countyId=2970` (Adams) returns only
+  Electric Cars, which covers Adams zips like 99105.
+
+**Commit:** `58f77f5`
+
+---
+
 ## 2026-05-26 — Cascading state/county/zipcode dropdowns on /polls/search
 
 **Requested:**
