@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-05-26 — State-only zip picker + select-all / clear-all shortcuts
+
+**Requested:**
+
+> Whoops, apparently I didn't test enough. Let's change it so that if
+> you know the state but don't know the county so you leave it at
+> 'Any' then when you go to the zipcode list you should see all
+> zipcodes for that state. Also, can we add a 'Shift-*' to select all
+> and a 'Shift-0' to de-select all?
+
+**Changed:**
+
+- The zipcode checkbox list now activates as soon as a state is
+  picked. With county still at "Any", the list contains every zip in
+  the state; picking a county narrows it; clearing the county falls
+  back to the state-wide list.
+- `/api/zipcodes` accepts a new `state_id` param alongside the
+  existing `county_ids`. When `state_id` is set without `county_ids`,
+  the controller expands to every county in that state and returns
+  their combined zips.
+- `/api/polls/search` accepts a new `stateId` param. The geo-filter
+  fallback chain is now zipcodes → countyId → stateId → none.
+- Frontend keyboard shortcuts on the zipcode picker container: `*`
+  (or `Shift+8` by code, layout-tolerant) selects every visible zip;
+  `Shift+0` (or `)` by character) clears the selection. The picker
+  is focusable (`tabindex="0"`) so keys fire when the user clicks
+  into the list.
+- Hint text updated: "Shift+click for range • * select all • Shift+0
+  clear".
+- Verified: `?state_id=48` returns 563 WA zips; bare `?stateId=48`
+  search returns the 3 WA polls; an Alabama search returns 0.
+
+**Commit:** `c8cb321`
+
+---
+
 ## 2026-05-26 — Multi-zip checkbox picker with shift-click range select
 
 **Requested:**
