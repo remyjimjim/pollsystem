@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-05-26 — Clear typeahead on state change + match State/County to Zipcodes dropdown style
+
+**Requested:**
+
+> It looks like when a user selects a state from the State selectList
+> the county selectList is correctly populated but the Zipcodes
+> selectList stays unpopulated. It'd be great if all selectLists
+> could be like the populated Zipcodes multi selectList and the
+> Zipcodes selectList could be populated by either a State being
+> selected and/or a county being selected.
+
+(Clarified: same trigger style, still single-select.)
+
+**Changed:**
+
+- Fix: `onStateChange` now resets `zipFilter`. Previously, if the
+  user had typed e.g. "982" in the Any-State typeahead mode and then
+  picked Arizona, the leftover prefix kept filtering the state-wide
+  zipcode list to zero matches — the dropdown looked empty even
+  though `zipcodeOptions` was populated. Clearing the filter on
+  state change makes the dropdown reflect the chosen state's full
+  zip list immediately.
+- Refactor: replaced the native `<select>` for **State** and
+  **County** with the same trigger-button + scrollable-dropdown
+  pattern that the Zipcodes picker uses. Still single-select; click
+  the trigger to expand, click an option to pick + close. The
+  County trigger stays disabled until a state is picked. `onDocClick`
+  and `onEsc` extended to cover both new pickers.
+
+**Commit:** `4ad4453`
+
+---
+
 ## 2026-05-26 — Hover-tooltip help on the Zipcodes label
 
 **Requested:**
