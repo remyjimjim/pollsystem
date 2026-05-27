@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-05-26 — Zipcode typeahead — type digits without picking a state
+
+**Requested:**
+
+> Can we adjust the zipcode field so that you don't have to select
+> the state first, if you know the exact zipcode then just start
+> typing into the zipcode box then matches will be shown as the user
+> types the digits?
+
+**Changed:**
+
+- Added a typeahead input above the zipcode checkbox list on
+  `PollSearchView`. When no state is selected, typing digits fires a
+  debounced (200ms) prefix lookup against `/api/zipcodes?prefix=…`
+  and the matching zips appear as checkboxes. When a state is
+  selected, typing narrows the already-loaded state/county list
+  locally without a network call.
+- `/api/zipcodes` accepts a new `prefix` param. Results are capped at
+  50 so the dropdown stays scrollable — refine by typing more
+  digits. `CountyZipsRepository.findByZipcodeStartingWithOrderByZipcode`
+  added.
+- `*` and `Shift+0` shortcuts now operate on `displayedZipcodes` (the
+  filtered subset) instead of `zipcodeOptions`, so they respect the
+  typeahead. Shift-click range works on the filtered indices too.
+- Replaced the "Pick a state first" placeholder with a "Pick a state
+  above, or start typing a zipcode here" hint that points at the new
+  input.
+- Verified: `?prefix=982` returns the 50 zips starting with 982;
+  `?prefix=98264` returns the single exact match; `?prefix=00000`
+  returns 0; prefix takes precedence over `state_id` when both are
+  sent.
+
+**Commit:** `5543189`
+
+---
+
 ## 2026-05-26 — State-only zip picker + select-all / clear-all shortcuts
 
 **Requested:**
