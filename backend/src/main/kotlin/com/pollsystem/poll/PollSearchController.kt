@@ -44,7 +44,7 @@ class PollSearchController(
     @GetMapping
     fun search(
         @RequestParam(required = false) title: String?,
-        @RequestParam(required = false) zipcode: String?,
+        @RequestParam(name = "zipcode", required = false) zipcodes: List<String>?,
         @RequestParam(required = false) countyId: Long?,
         @RequestParam(required = false) creatorEmail: String?,
         @RequestParam(required = false) candidateName: String?,
@@ -55,12 +55,14 @@ class PollSearchController(
         val results = mutableListOf<PollSearchResult>()
 
         // Geo filter resolves to a set of acceptable zipcodes:
-        // - a specific zipcode → that one.
-        // - county only → every zip in that county (the "Any zipcode under
-        //   this county" case from the cascade).
+        // - one or more zipcode picks → those (the user's explicit
+        //   subset within a county).
+        // - county only → every zip in that county (the "Any zipcode
+        //   under this county" case from the cascade).
         // - neither → no geo filter.
+        val pickedZips = zipcodes?.filter { it.isNotBlank() }
         val geoFilter: Set<String>? = when {
-            !zipcode.isNullOrBlank() -> setOf(zipcode)
+            !pickedZips.isNullOrEmpty() -> pickedZips.toSet()
             countyId != null -> countyZips.findByCountyIdIn(listOf(countyId))
                 .map { it.zipcode }
                 .toSet()

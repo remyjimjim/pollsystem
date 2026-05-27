@@ -94,13 +94,15 @@ async function loadZipcodes(countyId: number) {
 
 async function onStateChange() {
   selectedCountyId.value = ''
-  filters.zipcode = ''
+  selectedZipcodes.value = []
+  lastClickedZipIndex.value = null
   counties.value = []
   zipcodeOptions.value = []
   if (selectedStateId.value !== '') await loadCounties(selectedStateId.value)
 }
 async function onCountyChange() {
-  filters.zipcode = ''
+  selectedZipcodes.value = []
+  lastClickedZipIndex.value = null
   zipcodeOptions.value = []
   if (selectedCountyId.value !== '') await loadZipcodes(selectedCountyId.value)
 }
@@ -118,11 +120,42 @@ onBeforeUnmount(() => {
 
 const filters = reactive({
   title: '',
-  zipcode: '',
   candidateName: '',
   type: '',
   includeClosed: false
 })
+
+// Zipcode picker: user checks one or more zipcodes from the county's
+// list. Shift+click toggles a range from the last single click.
+const selectedZipcodes = ref<string[]>([])
+const lastClickedZipIndex = ref<number | null>(null)
+
+function onZipClick(e: MouseEvent, idx: number, code: string) {
+  const target = e.target as HTMLInputElement
+  const willBeChecked = target.checked
+  if (e.shiftKey && lastClickedZipIndex.value !== null) {
+    const a = lastClickedZipIndex.value
+    const b = idx
+    const [start, end] = a < b ? [a, b] : [b, a]
+    const rangeCodes = zipcodeOptions.value.slice(start, end + 1).map(z => z.zipcode)
+    if (willBeChecked) {
+      const merged = new Set([...selectedZipcodes.value, ...rangeCodes])
+      selectedZipcodes.value = Array.from(merged)
+    } else {
+      const remove = new Set(rangeCodes)
+      selectedZipcodes.value = selectedZipcodes.value.filter(z => !remove.has(z))
+    }
+  } else {
+    if (willBeChecked) {
+      if (!selectedZipcodes.value.includes(code)) {
+        selectedZipcodes.value = [...selectedZipcodes.value, code]
+      }
+    } else {
+      selectedZipcodes.value = selectedZipcodes.value.filter(z => z !== code)
+    }
+  }
+  lastClickedZipIndex.value = idx
+}
 
 function isClosed(r: PollSearchResult): boolean {
   return !!r.closeDate && new Date(r.closeDate).getTime() <= Date.now()
@@ -148,10 +181,12 @@ async function search() {
   try {
     const params: Record<string, string> = {}
     if (filters.title.trim()) params.title = filters.title.trim()
-    if (filters.zipcode.trim()) {
-      params.zipcode = filters.zipcode.trim()
+    if (selectedZipcodes.value.length > 0) {
+      // Spring binds a comma-separated string to List<String> just as
+      // it does for the existing /api/zipcodes endpoint.
+      params.zipcode = selectedZipcodes.value.join(',')
     } else if (selectedCountyId.value !== '') {
-      // No specific zipcode picked, but county is set: ask the backend
+      // No specific zipcodes picked, but county is set: ask the backend
       // to treat that as "any zipcode in this county" rather than no
       // geo filter at all.
       params.countyId = String(selectedCountyId.value)
@@ -223,14 +258,36 @@ async function search() {
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.zipcode') }}
-        <select
-          v-model="filters.zipcode"
-          :disabled="selectedCountyId === ''"
-          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none disabled:bg-slate-100 disabled:text-slate-400"
+        <div
+          v-if="selectedCountyId === ''"
+          class="rounded border border-slate-300 bg-slate-100 p-2 text-sm font-normal text-slate-400"
+        >{{ $t('search.filters.zipcodePickCountyFirst') }}</div>
+        <div
+          v-else-if="zipcodeOptions.length === 0"
+          class="rounded border border-slate-300 bg-slate-50 p-2 text-sm font-normal text-slate-500"
+        >{{ $t('search.filters.zipcodeNone') }}</div>
+        <div
+          v-else
+          class="max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900"
         >
-          <option value="">{{ $t('search.filters.zipcodeAny') }}</option>
-          <option v-for="z in zipcodeOptions" :key="z.id" :value="z.zipcode">{{ z.zipcode }}</option>
-        </select>
+          <label
+            v-for="(z, idx) in zipcodeOptions"
+            :key="z.id"
+            class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+          >
+            <input
+              type="checkbox"
+              :checked="selectedZipcodes.includes(z.zipcode)"
+              @click="onZipClick($event, idx, z.zipcode)"
+              class="h-3.5 w-3.5"
+            />
+            <span class="font-mono">{{ z.zipcode }}</span>
+          </label>
+        </div>
+        <span
+          v-if="zipcodeOptions.length > 1 && selectedCountyId !== ''"
+          class="text-xs font-normal text-slate-500"
+        >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.candidateName') }}
