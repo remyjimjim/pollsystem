@@ -111,11 +111,11 @@ async function saveDraft() {
 }
 
 async function publish(confirmed = false) {
-  if (draftId.value == null) {
-    await saveDraft()
-    if (draftId.value == null) return
-  }
-  error.value = null; message.value = null
+  // Always save first so in-memory edits (e.g. closeDate) are persisted
+  // before the publish endpoint validates them.
+  await saveDraft()
+  if (draftId.value == null || error.value) return
+  message.value = null
   if (!confirmed) closeWarning.value = null
   submitting.value = true
   try {

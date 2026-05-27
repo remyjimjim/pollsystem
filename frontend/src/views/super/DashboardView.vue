@@ -83,6 +83,13 @@ onMounted(fetchLoad)
         <h3 class="mb-1 font-semibold text-slate-800">{{ $t('super.dashboard.linksIpManagementTitle') }}</h3>
         <p class="m-0 text-sm text-slate-600">{{ $t('super.dashboard.linksIpManagementDesc') }}</p>
       </router-link>
+      <router-link
+        to="/super/manage-polls"
+        class="block rounded-lg border border-slate-200 bg-white p-5 no-underline transition-colors hover:border-slate-800"
+      >
+        <h3 class="mb-1 font-semibold text-slate-800">{{ $t('super.dashboard.linksManagePollsTitle') }}</h3>
+        <p class="m-0 text-sm text-slate-600">{{ $t('super.dashboard.linksManagePollsDesc') }}</p>
+      </router-link>
     </div>
 
     <section>

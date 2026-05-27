@@ -143,6 +143,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/super/ManageAdminsView.vue'),
     meta: { requiresAuth: true, minAccess: AccessLevel.SUPER }
   },
+  {
+    path: '/super/manage-polls',
+    name: 'SuperManagePolls',
+    component: () => import('@/views/super/ManagePollsView.vue'),
+    meta: { requiresAuth: true, minAccess: AccessLevel.SUPER }
+  },
 
   // Catch-all
   {
