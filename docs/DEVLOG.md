@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-05-26 — Multi-zip checkbox picker with shift-click range select
+
+**Requested:**
+
+> Can we make the zipcode selectList be a multiple selectList using
+> checkboxes such that the user can select a zipcode via checking the
+> box and then if the user wants to select the checked zipcode plus
+> the next 5 zipcodes the user would use 'Shift-Click' to select all
+> 6 zipcodes? If the user wanted to select 3 out of 10 zips then the
+> user would just check the checkbox next to the desired zips?
+
+**Changed:**
+
+- Replaced the single zipcode `<select>` on `PollSearchView` with a
+  scrollable checkbox list (one row per zipcode in the chosen
+  county). Plain click toggles a single zip; shift+click toggles
+  every zip between the last single click and the new one,
+  inclusive. The toggle direction matches the new state of the
+  shift-clicked checkbox — shift-click on an unchecked → adds range;
+  shift-click on a checked → removes range.
+- A small "Shift+click to select a range" hint renders beneath the
+  list when there's more than one zip available.
+- Empty/disabled states surface a hint instead of an empty box:
+  "Pick a county first" until a county is chosen; "No zipcodes
+  seeded for this county" when the county returns zero.
+- `/api/polls/search` now accepts repeated or comma-separated
+  `zipcode` values, matched as a set. Frontend joins the picked zips
+  with commas, mirroring the existing `/api/zipcodes` call pattern
+  in `ZipSetter.vue`. The `countyId` fallback for the
+  "no zip ticked, county set" path is preserved.
+- Verified by replay: `?zipcode=98264` still returns 3 polls
+  (single-zip backwards compat); `?zipcode=98220,98225,98264` also
+  returns 3 polls; out-of-state zips with no coverage return 0;
+  title-only filter still works without geo.
+
+**Commit:** `6e6eb1b`
+
+---
+
 ## 2026-05-26 — "Any zipcode" under a chosen county now filters by that county's zips
 
 **Requested:**
