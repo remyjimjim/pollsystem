@@ -47,11 +47,19 @@ function onDocClick(e: MouseEvent) {
   if (!target?.closest('[data-zip-picker]')) {
     zipPickerOpen.value = false
   }
+  if (!target?.closest('[data-state-picker]')) {
+    statePickerOpen.value = false
+  }
+  if (!target?.closest('[data-county-picker]')) {
+    countyPickerOpen.value = false
+  }
 }
 function onEsc(e: KeyboardEvent) {
   if (e.key === 'Escape') {
     expandedKey.value = null
     zipPickerOpen.value = false
+    statePickerOpen.value = false
+    countyPickerOpen.value = false
   }
 }
 // Distinct values drawn from active polls, shown as native <datalist> hints.
@@ -141,6 +149,11 @@ async function onStateChange() {
   selectedCountyId.value = ''
   selectedZipcodes.value = []
   lastClickedZipIndex.value = null
+  // Drop any leftover typeahead text. When the user was in Any-State
+  // mode and typed e.g. "982", that prefix would otherwise persist and
+  // filter the state-wide dropdown to nothing (e.g. picking Arizona,
+  // whose zips start with 85–86).
+  zipFilter.value = ''
   counties.value = []
   zipcodeOptions.value = []
   if (selectedStateId.value !== '') {
@@ -212,6 +225,31 @@ const zipPickerSummary = computed<string>(() => {
   }
   return displayedZipcodes.value[0]?.zipcode ?? ''
 })
+
+// State + County picker open state (same dropdown-trigger UX as the
+// zipcode picker — kept single-select per user preference).
+const statePickerOpen = ref(false)
+const countyPickerOpen = ref(false)
+const selectedStateLabel = computed(() => {
+  if (selectedStateId.value === '') return t('search.filters.stateAny')
+  return states.value.find(s => s.id === selectedStateId.value)?.name
+    ?? t('search.filters.stateAny')
+})
+const selectedCountyLabel = computed(() => {
+  if (selectedCountyId.value === '') return t('search.filters.countyAny')
+  return counties.value.find(c => c.id === selectedCountyId.value)?.name
+    ?? t('search.filters.countyAny')
+})
+function pickState(id: number | '') {
+  selectedStateId.value = id
+  statePickerOpen.value = false
+  onStateChange()
+}
+function pickCounty(id: number | '') {
+  selectedCountyId.value = id
+  countyPickerOpen.value = false
+  onCountyChange()
+}
 
 function onZipClick(e: MouseEvent, idx: number, code: string) {
   const target = e.target as HTMLInputElement
@@ -323,26 +361,78 @@ async function search() {
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.state') }}
-        <select
-          v-model="selectedStateId"
-          @change="onStateChange"
-          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
-        >
-          <option value="">{{ $t('search.filters.stateAny') }}</option>
-          <option v-for="s in states" :key="s.id" :value="s.id">{{ s.name }}</option>
-        </select>
+        <div data-state-picker class="relative">
+          <button
+            type="button"
+            @click.stop="statePickerOpen = !statePickerOpen"
+            :aria-expanded="statePickerOpen"
+            class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none"
+          >
+            <span>{{ selectedStateLabel }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              class="ml-2 h-4 w-4 text-slate-500 transition-transform"
+              :class="{ 'rotate-180': statePickerOpen }"
+              aria-hidden="true"
+            ><path fill="currentColor" d="M5.3 7.3 4 8.6 10 14.6l6-6L14.7 7.3 10 12z" /></svg>
+          </button>
+          <div
+            v-if="statePickerOpen"
+            class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg"
+          >
+            <button
+              type="button"
+              @click="pickState('')"
+              :class="['flex w-full items-center rounded px-2 py-1 text-left text-xs hover:bg-slate-50', selectedStateId === '' ? 'bg-slate-100 font-semibold' : '']"
+            >{{ $t('search.filters.stateAny') }}</button>
+            <button
+              v-for="s in states"
+              :key="s.id"
+              type="button"
+              @click="pickState(s.id)"
+              :class="['flex w-full items-center rounded px-2 py-1 text-left text-xs hover:bg-slate-50', selectedStateId === s.id ? 'bg-slate-100 font-semibold' : '']"
+            >{{ s.name }}</button>
+          </div>
+        </div>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.county') }}
-        <select
-          v-model="selectedCountyId"
-          @change="onCountyChange"
-          :disabled="selectedStateId === ''"
-          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none disabled:bg-slate-100 disabled:text-slate-400"
-        >
-          <option value="">{{ $t('search.filters.countyAny') }}</option>
-          <option v-for="c in counties" :key="c.id" :value="c.id">{{ c.name }}</option>
-        </select>
+        <div data-county-picker class="relative">
+          <button
+            type="button"
+            @click.stop="countyPickerOpen = selectedStateId !== '' ? !countyPickerOpen : false"
+            :disabled="selectedStateId === ''"
+            :aria-expanded="countyPickerOpen"
+            class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none disabled:bg-slate-100 disabled:text-slate-400 disabled:hover:bg-slate-100"
+          >
+            <span>{{ selectedCountyLabel }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              class="ml-2 h-4 w-4 text-slate-500 transition-transform"
+              :class="{ 'rotate-180': countyPickerOpen }"
+              aria-hidden="true"
+            ><path fill="currentColor" d="M5.3 7.3 4 8.6 10 14.6l6-6L14.7 7.3 10 12z" /></svg>
+          </button>
+          <div
+            v-if="countyPickerOpen"
+            class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg"
+          >
+            <button
+              type="button"
+              @click="pickCounty('')"
+              :class="['flex w-full items-center rounded px-2 py-1 text-left text-xs hover:bg-slate-50', selectedCountyId === '' ? 'bg-slate-100 font-semibold' : '']"
+            >{{ $t('search.filters.countyAny') }}</button>
+            <button
+              v-for="c in counties"
+              :key="c.id"
+              type="button"
+              @click="pickCounty(c.id)"
+              :class="['flex w-full items-center rounded px-2 py-1 text-left text-xs hover:bg-slate-50', selectedCountyId === c.id ? 'bg-slate-100 font-semibold' : '']"
+            >{{ c.name }}</button>
+          </div>
+        </div>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         <span :title="$t('search.filters.zipcodeHelp')" class="cursor-help">
