@@ -22,8 +22,19 @@ class GeographyController(
         states.findAll(Sort.by("name")).map(StateDto::from)
 
     @GetMapping("/counties")
-    fun listCounties(@RequestParam("state_id") stateIds: List<Long>): List<CountyDto> {
-        if (stateIds.isEmpty()) return emptyList()
+    fun listCounties(
+        @RequestParam("state_id", required = false) stateIds: List<Long>?,
+        @RequestParam("prefix", required = false) prefix: String?
+    ): List<CountyDto> {
+        // Prefix-search mode: the search page lets a user start typing
+        // a county name without picking a state first. Cap matches at 50
+        // so the dropdown stays scrollable — refine by typing more.
+        if (!prefix.isNullOrBlank()) {
+            return counties.findByNameStartingWithIgnoreCaseOrderByName(prefix.trim())
+                .take(50)
+                .map(CountyDto::from)
+        }
+        if (stateIds.isNullOrEmpty()) return emptyList()
         return counties.findByStateIdIn(stateIds)
             .sortedBy { it.name }
             .map(CountyDto::from)

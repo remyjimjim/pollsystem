@@ -131,6 +131,38 @@ async function loadZipcodesByPrefix(prefix: string) {
   }
 }
 
+// User-typed county-search input. Drives a debounced prefix lookup
+// when no state is selected; when a state is selected, narrows the
+// already-loaded county list locally.
+const countyFilter = ref('')
+let countyFilterTimer: ReturnType<typeof setTimeout> | null = null
+async function loadCountiesByPrefix(prefix: string) {
+  try {
+    const res = await axios.get<CountyRow[]>('/api/counties', { params: { prefix } })
+    counties.value = res.data
+  } catch {
+    counties.value = []
+  }
+}
+watch(countyFilter, (newVal) => {
+  if (selectedStateIds.value.length > 0) return // state context: local filter only
+  if (countyFilterTimer) clearTimeout(countyFilterTimer)
+  const trimmed = newVal.trim()
+  if (trimmed === '') {
+    counties.value = []
+    return
+  }
+  countyFilterTimer = setTimeout(() => loadCountiesByPrefix(trimmed), 200)
+})
+const displayedCounties = computed<CountyRow[]>(() => {
+  // When a state is selected, counties are pre-loaded and we filter
+  // locally. With no state the list comes from prefix-search already.
+  if (selectedStateIds.value.length === 0) return counties.value
+  const prefix = countyFilter.value.trim().toLowerCase()
+  if (prefix === '') return counties.value
+  return counties.value.filter(c => c.name.toLowerCase().startsWith(prefix))
+})
+
 // User-typed zipcode-search input. Drives a debounced prefix lookup
 // when no state is selected; when a state is selected, narrows the
 // already-loaded state/county list locally.
@@ -161,6 +193,7 @@ async function onStateChange() {
   // Drop any leftover typeahead text. Otherwise it would keep filtering
   // the state-set dropdown — e.g. typed "982" + picked Arizona = empty.
   zipFilter.value = ''
+  countyFilter.value = ''
   counties.value = []
   zipcodeOptions.value = []
   if (selectedStateIds.value.length > 0) {
@@ -304,7 +337,7 @@ function onCountyClick(e: MouseEvent, idx: number, id: number) {
     const a = lastClickedCountyIndex.value
     const b = idx
     const [start, end] = a < b ? [a, b] : [b, a]
-    const rangeIds = counties.value.slice(start, end + 1).map(c => c.id)
+    const rangeIds = displayedCounties.value.slice(start, end + 1).map(c => c.id)
     if (willBeChecked) {
       const merged = new Set([...selectedCountyIds.value, ...rangeIds])
       selectedCountyIds.value = Array.from(merged)
@@ -329,7 +362,7 @@ function onCountyKeydown(e: KeyboardEvent) {
   const isDeselectAll = e.key === ')' || (e.shiftKey && e.code === 'Digit0')
   if (isSelectAll) {
     e.preventDefault()
-    selectedCountyIds.value = counties.value.map(c => c.id)
+    selectedCountyIds.value = displayedCounties.value.map(c => c.id)
     lastClickedCountyIndex.value = null
     onCountyChange()
   } else if (isDeselectAll) {
@@ -501,10 +534,9 @@ async function search() {
         <div data-county-picker class="relative">
           <button
             type="button"
-            @click.stop="countyPickerOpen = selectedStateIds.length > 0 ? !countyPickerOpen : false"
-            :disabled="selectedStateIds.length === 0"
+            @click.stop="countyPickerOpen = !countyPickerOpen"
             :aria-expanded="countyPickerOpen"
-            class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none disabled:bg-slate-100 disabled:text-slate-400 disabled:hover:bg-slate-100"
+            class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none"
           >
             <span>{{ countyPickerSummary }}</span>
             <svg
@@ -519,25 +551,38 @@ async function search() {
             v-if="countyPickerOpen"
             tabindex="0"
             @keydown="onCountyKeydown"
-            class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
+            class="absolute left-0 right-0 z-20 mt-1 rounded border border-slate-300 bg-white text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
           >
-            <label
-              v-for="(c, idx) in counties"
-              :key="c.id"
-              class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
-            >
-              <input
-                type="checkbox"
-                :checked="selectedCountyIds.includes(c.id)"
-                @click="onCountyClick($event, idx, c.id)"
-                class="h-3.5 w-3.5"
-              />
-              <span>{{ c.name }}</span>
-            </label>
+            <input
+              v-model="countyFilter"
+              type="text"
+              autocomplete="off"
+              :placeholder="selectedStateIds.length === 0 ? $t('search.filters.countyTypeahead') : $t('search.filters.countyFilter')"
+              class="block w-full rounded-t border-b border-slate-300 p-2 text-xs font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
+            />
+            <div class="max-h-48 overflow-y-auto p-1">
+              <div
+                v-if="displayedCounties.length === 0"
+                class="px-2 py-1 text-xs text-slate-500"
+              >{{ selectedStateIds.length === 0 && countyFilter.trim() === '' ? $t('search.filters.countyStartHint') : $t('search.filters.countyNoMatches') }}</div>
+              <label
+                v-for="(c, idx) in displayedCounties"
+                :key="c.id"
+                class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+              >
+                <input
+                  type="checkbox"
+                  :checked="selectedCountyIds.includes(c.id)"
+                  @click="onCountyClick($event, idx, c.id)"
+                  class="h-3.5 w-3.5"
+                />
+                <span>{{ c.name }}</span>
+              </label>
+            </div>
           </div>
         </div>
         <span
-          v-if="countyPickerOpen && counties.length > 1"
+          v-if="countyPickerOpen && displayedCounties.length > 1"
           class="text-xs font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>
