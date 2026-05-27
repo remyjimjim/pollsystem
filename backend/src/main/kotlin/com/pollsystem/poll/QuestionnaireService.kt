@@ -83,7 +83,12 @@ class QuestionnaireService(
 
         val close = existing.closeDate
         if (close != null) {
-            if (close.isBefore(Instant.now())) {
+            // submitDate is null until the first publish. On re-publish (after
+            // archive + restore) the creator can set a past close date to wind
+            // an already-live poll down. The 5-day-out warning still fires so
+            // accidental near-now picks still prompt a confirmation.
+            val isFirstPublish = existing.submitDate == null
+            if (isFirstPublish && close.isBefore(Instant.now())) {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Close date must be in the future")
             }
             val daysOut = ChronoUnit.DAYS.between(Instant.now(), close)

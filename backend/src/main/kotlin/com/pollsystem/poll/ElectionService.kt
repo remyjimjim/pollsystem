@@ -77,10 +77,18 @@ class ElectionService(
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT can be published")
         }
-        if (candidates.findByElectionId(id).isEmpty()) {
+        val electionCandidates = candidates.findByElectionId(id)
+        if (electionCandidates.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one candidate required")
         }
-        validateClose(existing.closeDate, confirmed)
+        // A re-publish is identified by the election having cast votes
+        // already. Election entities don't carry a publish-time tracker
+        // (date_submitted is set at row creation), so this is the
+        // closest proxy: any vote means the poll has been live before.
+        val hasBeenLive = electionCandidates.any {
+            candidateResponses.findByCandidateId(it.id).isNotEmpty()
+        }
+        validateClose(existing.closeDate, confirmed, allowPast = hasBeenLive)
         return elections.save(existing.copy(status = PollStatus.PUBLISHED))
     }
 
@@ -162,9 +170,9 @@ class ElectionService(
         return offices.save(Office(name = name, desc = desc ?: ""))
     }
 
-    private fun validateClose(close: Instant?, confirmed: Boolean) {
+    private fun validateClose(close: Instant?, confirmed: Boolean, allowPast: Boolean = false) {
         if (close == null) return
-        if (close.isBefore(Instant.now())) {
+        if (!allowPast && close.isBefore(Instant.now())) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Close date must be in the future")
         }
         val daysOut = ChronoUnit.DAYS.between(Instant.now(), close)

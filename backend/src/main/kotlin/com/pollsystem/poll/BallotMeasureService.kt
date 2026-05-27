@@ -4,6 +4,7 @@ import com.pollsystem.model.BallotMeasure
 import com.pollsystem.model.PollStatus
 import com.pollsystem.model.User
 import com.pollsystem.repository.BallotMeasureRepository
+import com.pollsystem.repository.BallotResponseRepository
 import com.pollsystem.repository.ElectionRepository
 import com.pollsystem.repository.PollTypeRepository
 import org.springframework.http.HttpStatus
@@ -16,6 +17,7 @@ import java.time.temporal.ChronoUnit
 @Service
 class BallotMeasureService(
     private val measures: BallotMeasureRepository,
+    private val ballotResponses: BallotResponseRepository,
     private val elections: ElectionRepository,
     private val pollTypes: PollTypeRepository
 ) {
@@ -85,7 +87,12 @@ class BallotMeasureService(
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT can be published")
         }
-        validateClose(existing.closeDate, confirmed)
+        // A re-publish (archive + restore + re-edit) on a ballot measure
+        // that already has cast votes is allowed to take a past close
+        // date; date_submitted is set at draft creation so isn't useful
+        // as the "has been live" signal, but the response count is.
+        val hasBeenLive = ballotResponses.findByMeasureId(id).isNotEmpty()
+        validateClose(existing.closeDate, confirmed, allowPast = hasBeenLive)
         return measures.save(
             existing.copy(status = PollStatus.PUBLISHED, lastUpdated = Instant.now())
         )
@@ -104,9 +111,9 @@ class BallotMeasureService(
         return bm
     }
 
-    private fun validateClose(close: Instant?, confirmed: Boolean) {
+    private fun validateClose(close: Instant?, confirmed: Boolean, allowPast: Boolean = false) {
         if (close == null) return
-        if (close.isBefore(Instant.now())) {
+        if (!allowPast && close.isBefore(Instant.now())) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Close date must be in the future")
         }
         val daysOut = ChronoUnit.DAYS.between(Instant.now(), close)
