@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-05-26 — Hint the prefix-search nature of the zipcode placeholder
+
+**Requested:**
+
+> Can we change the placeholder text for the Zipcodes selectList
+> from "(e.g. 982)" to "(e.g. 982..)"
+
+**Changed:**
+
+- Updated `search.filters.zipcodeTypeahead` to `"(e.g. 982..)"`. The
+  trailing `..` cues the user that the input takes a prefix rather
+  than the full 5-digit zipcode.
+
+**Commit:** `cb859bb`
+
+---
+
 ## 2026-05-26 — Shorten the zipcode placeholder so the close paren fits
 
 **Requested:**
