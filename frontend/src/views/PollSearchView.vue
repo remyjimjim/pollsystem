@@ -21,8 +21,10 @@ interface PollSearchResult {
 interface SearchSuggestions {
   titles: string[]
   candidates: string[]
-  zipcodes: string[]
 }
+interface StateRow { id: number; name: string; initial: string }
+interface CountyRow { id: number; stateId: number; name: string }
+interface CountyZipRow { id: number; countyId: number; zipcode: string }
 
 // Which row's "extra zipcodes" popover is open. null = closed.
 const expandedKey = ref<string | null>(null)
@@ -46,7 +48,7 @@ function onEsc(e: KeyboardEvent) {
   if (e.key === 'Escape') expandedKey.value = null
 }
 // Distinct values drawn from active polls, shown as native <datalist> hints.
-const suggestions = ref<SearchSuggestions>({ titles: [], candidates: [], zipcodes: [] })
+const suggestions = ref<SearchSuggestions>({ titles: [], candidates: [] })
 
 async function loadSuggestions() {
   try {
@@ -57,10 +59,57 @@ async function loadSuggestions() {
   }
 }
 
+// Geography cascade. Selections in state + county narrow the zipcode
+// dropdown; only the chosen zipcode is sent as a search param.
+const states = ref<StateRow[]>([])
+const counties = ref<CountyRow[]>([])
+const zipcodeOptions = ref<CountyZipRow[]>([])
+const selectedStateId = ref<number | ''>('')
+const selectedCountyId = ref<number | ''>('')
+
+async function loadStates() {
+  try {
+    const res = await axios.get<StateRow[]>('/api/states')
+    states.value = res.data
+  } catch {
+    // Cascade is geography UX scaffolding; failures shouldn't block search.
+  }
+}
+async function loadCounties(stateId: number) {
+  try {
+    const res = await axios.get<CountyRow[]>('/api/counties', { params: { state_id: stateId } })
+    counties.value = res.data
+  } catch {
+    counties.value = []
+  }
+}
+async function loadZipcodes(countyId: number) {
+  try {
+    const res = await axios.get<CountyZipRow[]>('/api/zipcodes', { params: { county_ids: countyId } })
+    zipcodeOptions.value = res.data
+  } catch {
+    zipcodeOptions.value = []
+  }
+}
+
+async function onStateChange() {
+  selectedCountyId.value = ''
+  filters.zipcode = ''
+  counties.value = []
+  zipcodeOptions.value = []
+  if (selectedStateId.value !== '') await loadCounties(selectedStateId.value)
+}
+async function onCountyChange() {
+  filters.zipcode = ''
+  zipcodeOptions.value = []
+  if (selectedCountyId.value !== '') await loadZipcodes(selectedCountyId.value)
+}
+
 onMounted(() => {
   document.addEventListener('click', onDocClick)
   document.addEventListener('keydown', onEsc)
   loadSuggestions()
+  loadStates()
 })
 onBeforeUnmount(() => {
   document.removeEventListener('click', onDocClick)
@@ -143,19 +192,38 @@ async function search() {
         </datalist>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        {{ $t('search.filters.zipcode') }}
-        <input
-          v-model="filters.zipcode"
-          type="text"
-          maxlength="5"
-          pattern="[0-9]{5}"
-          list="zipcode-suggestions"
-          autocomplete="off"
+        {{ $t('search.filters.state') }}
+        <select
+          v-model="selectedStateId"
+          @change="onStateChange"
           class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
-        />
-        <datalist id="zipcode-suggestions">
-          <option v-for="s in suggestions.zipcodes" :key="s" :value="s" />
-        </datalist>
+        >
+          <option value="">{{ $t('search.filters.stateAny') }}</option>
+          <option v-for="s in states" :key="s.id" :value="s.id">{{ s.name }}</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+        {{ $t('search.filters.county') }}
+        <select
+          v-model="selectedCountyId"
+          @change="onCountyChange"
+          :disabled="selectedStateId === ''"
+          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none disabled:bg-slate-100 disabled:text-slate-400"
+        >
+          <option value="">{{ $t('search.filters.countyAny') }}</option>
+          <option v-for="c in counties" :key="c.id" :value="c.id">{{ c.name }}</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+        {{ $t('search.filters.zipcode') }}
+        <select
+          v-model="filters.zipcode"
+          :disabled="selectedCountyId === ''"
+          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none disabled:bg-slate-100 disabled:text-slate-400"
+        >
+          <option value="">{{ $t('search.filters.zipcodeAny') }}</option>
+          <option v-for="z in zipcodeOptions" :key="z.id" :value="z.zipcode">{{ z.zipcode }}</option>
+        </select>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.candidateName') }}

@@ -27,8 +27,7 @@ data class PollSearchResult(
 /** Distinct values that feed the autocomplete datalists on the search form. */
 data class SearchSuggestions(
     val titles: List<String>,
-    val candidates: List<String>,
-    val zipcodes: List<String>
+    val candidates: List<String>
 )
 
 @RestController
@@ -176,13 +175,7 @@ class PollSearchController(
             .distinct()
             .sorted()
 
-        val zipcodes = (
-            activeQuestionnaires.flatMap { domains.findByQuestionnaireId(it.id).map { d -> d.zipcode } } +
-                activeElections.map { it.zipcode } +
-                activeBallotMeasures.map { it.election.zipcode }
-            ).distinct().sorted()
-
-        return SearchSuggestions(titles, candidateNames, zipcodes)
+        return SearchSuggestions(titles, candidateNames)
     }
 
     /**
