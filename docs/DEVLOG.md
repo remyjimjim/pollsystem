@@ -61,6 +61,50 @@ logged.
 
 ---
 
+## 2026-05-26 — Allow past close dates on re-publish, keep 5-day confirmation
+
+**Requested:**
+
+> The questionaire now saves, well done, but when I click the
+> 'Publish' button I get the error that close date needs to be in the
+> future. While that is a valid constraint for poll creation, after
+> the poll instance exists it should be allowable to be modified to
+> the past by a Creator or above. Is that possible?
+
+> Let's go with (a) "keep the 5 day warning active on re-publish"
+
+**Changed:**
+
+- `QuestionnaireService.publish` now gates the
+  `"Close date must be in the future"` check on
+  `existing.submitDate == null`. First publish still rejects past
+  close dates; re-publish (after archive + restore) accepts them.
+- `ElectionService.publish` and `BallotMeasureService.publish` carry
+  the same relaxation, but neither entity has a publish-time tracker
+  (`date_submitted` defaults to draft-creation time). For both, the
+  re-publish signal is "this poll has cast responses": Election via
+  `candidateResponses` across its candidates, BallotMeasure via
+  `BallotResponseRepository.findByMeasureId`. Wired the latter in;
+  the candidate one was already injected from the prior fix.
+- The 5-day-out `close_date_short:` confirmation still fires on every
+  publish — a past close date counts as "less than 5 days out", so
+  the existing `t('form.closeDateShort', { date })` prompt asks the
+  creator to confirm before the poll publishes already-closed.
+- Edge case: an Election or BallotMeasure that was published, never
+  voted on, then archived/restored will still hit the strict
+  future-only check on re-publish. Acceptable since the poll has no
+  voter history to wind down; pick a near-future date as workaround,
+  or use Super Admin → Manage All Polls.
+- Verified by replay: re-publishing Vaccines (which has 26 responses)
+  with a past close date returns 422 `close_date_short:` on
+  `confirmed=false`, then 200 on `confirmed=true`, with status
+  `PUBLISHED`. A fresh first-publish draft with a past close date
+  still gets 400 even with `confirmed=true`.
+
+**Commit:** `4fe6f29`
+
+---
+
 ## 2026-05-26 — Save Changes on restored-from-archived drafts no longer trips response FKs
 
 **Requested:**
