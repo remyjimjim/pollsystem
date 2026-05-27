@@ -48,7 +48,8 @@ class PollSearchController(
         @RequestParam(required = false) zipcode: String?,
         @RequestParam(required = false) creatorEmail: String?,
         @RequestParam(required = false) candidateName: String?,
-        @RequestParam(required = false) type: String?
+        @RequestParam(required = false) type: String?,
+        @RequestParam(required = false, defaultValue = "false") includeClosed: Boolean
     ): List<PollSearchResult> {
         val now = Instant.now()
         val results = mutableListOf<PollSearchResult>()
@@ -76,7 +77,9 @@ class PollSearchController(
         }
 
         if (type == null || type.equals("Questionnaire", ignoreCase = true)) {
-            for (q in questionnaires.findActive(now)) {
+            val pool = questionnaires.findActive(now) +
+                if (includeClosed) questionnaires.findExpiredQuestionnaires(now) else emptyList()
+            for (q in pool) {
                 // Questionnaires have no candidates, so only the title can hit.
                 if (!textMatch(titleHit = titleHit(q.title, titleQuery), candidateHit = false)) continue
                 if (!matches(q.creator.email, creatorEmail)) continue
@@ -97,7 +100,9 @@ class PollSearchController(
         }
 
         if (type == null || type.equals("Election", ignoreCase = true)) {
-            for (e in elections.findActive(now)) {
+            val pool = elections.findActive(now) +
+                if (includeClosed) elections.findExpiredElections(now) else emptyList()
+            for (e in pool) {
                 if (!textMatch(
                         titleHit = titleHit(e.title, titleQuery),
                         candidateHit = e.id in electionsWithCandidate
@@ -117,7 +122,9 @@ class PollSearchController(
         }
 
         if (type == null || type.equals("BallotMeasure", ignoreCase = true)) {
-            for (bm in ballotMeasures.findActive(now)) {
+            val pool = ballotMeasures.findActive(now) +
+                if (includeClosed) ballotMeasures.findExpiredBallotMeasures(now) else emptyList()
+            for (bm in pool) {
                 // Ballot measures have no candidates, so only the title can hit.
                 if (!textMatch(titleHit = titleHit(bm.title, titleQuery), candidateHit = false)) continue
                 if (!matches(bm.creator.email, creatorEmail)) continue
@@ -134,8 +141,15 @@ class PollSearchController(
             }
         }
 
+        // Active polls (no closeDate or future) first, sorted by closeDate
+        // ascending; closed polls last, sorted by closeDate descending so the
+        // most-recently-closed appears at the top of the closed section.
         return results.sortedWith(
-            compareBy({ it.closeDate ?: Instant.MAX }, { it.title })
+            compareBy<PollSearchResult>(
+                { if (it.closeDate != null && !it.closeDate.isAfter(now)) 1 else 0 },
+                { if (it.closeDate != null && !it.closeDate.isAfter(now)) -it.closeDate.toEpochMilli() else (it.closeDate?.toEpochMilli() ?: Long.MAX_VALUE) },
+                { it.title }
+            )
         )
     }
 

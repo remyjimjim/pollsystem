@@ -71,8 +71,13 @@ const filters = reactive({
   title: '',
   zipcode: '',
   candidateName: '',
-  type: ''
+  type: '',
+  includeClosed: false
 })
+
+function isClosed(r: PollSearchResult): boolean {
+  return !!r.closeDate && new Date(r.closeDate).getTime() <= Date.now()
+}
 
 const results = ref<PollSearchResult[]>([])
 const loading = ref(false)
@@ -97,6 +102,7 @@ async function search() {
     if (filters.zipcode.trim()) params.zipcode = filters.zipcode.trim()
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
     if (filters.type) params.type = filters.type
+    if (filters.includeClosed) params.includeClosed = 'true'
     const res = await axios.get<PollSearchResult[]>('/api/polls/search', { params })
     results.value = res.data
     searched.value = true
@@ -176,6 +182,14 @@ async function search() {
           <option value="BallotMeasure">{{ $t('search.filters.typeBallotMeasure') }}</option>
         </select>
       </label>
+      <label class="flex items-center gap-2 text-xs font-semibold text-slate-700">
+        <input
+          v-model="filters.includeClosed"
+          type="checkbox"
+          class="h-4 w-4 rounded border-slate-300 text-slate-800 focus:ring-slate-500"
+        />
+        {{ $t('search.filters.includeClosed') }}
+      </label>
       <button
         type="submit"
         :disabled="loading"
@@ -202,8 +216,14 @@ async function search() {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="r in results" :key="`${r.type}-${r.id}`">
-          <td class="border-b border-slate-100 p-2">{{ r.title }}</td>
+        <tr v-for="r in results" :key="`${r.type}-${r.id}`" :class="isClosed(r) ? 'text-slate-500' : ''">
+          <td class="border-b border-slate-100 p-2">
+            {{ r.title }}
+            <span
+              v-if="isClosed(r)"
+              class="ml-2 inline-block rounded bg-slate-200 px-1.5 py-0.5 text-xs font-semibold text-slate-700"
+            >{{ $t('search.closedBadge') }}</span>
+          </td>
           <td class="border-b border-slate-100 p-2">{{ r.type }}</td>
           <td class="border-b border-slate-100 p-2 font-mono text-xs">
             <template v-if="r.zipcodes.length === 0">—</template>
@@ -283,7 +303,7 @@ async function search() {
                 {{ $t('search.viewResults') }}
               </router-link>
               <router-link
-                v-if="auth.isAuthenticated"
+                v-if="auth.isAuthenticated && !isClosed(r)"
                 :to="`/polls/${routeMap(r.type)}/${r.id}`"
                 class="text-slate-800 underline"
               >

@@ -131,11 +131,13 @@
       "typeAny": "Any",
       "typeQuestionnaire": "Questionnaire",
       "typeElection": "Election",
-      "typeBallotMeasure": "Ballot Measure"
+      "typeBallotMeasure": "Ballot Measure",
+      "includeClosed": "See closed polls too"
     },
     "search": "Search",
     "searching": "Searching…",
     "noMatches": "No active polls match your filters.",
+    "closedBadge": "Closed",
     "table": {
       "title": "Title",
       "type": "Type",
