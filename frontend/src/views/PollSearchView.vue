@@ -41,11 +41,18 @@ function closeExpanded() {
 function onDocClick(e: MouseEvent) {
   // Close if the click was outside any open popover or its trigger.
   const target = e.target as HTMLElement | null
-  if (target?.closest('[data-zip-popover]') || target?.closest('[data-zip-trigger]')) return
-  expandedKey.value = null
+  if (!target?.closest('[data-zip-popover]') && !target?.closest('[data-zip-trigger]')) {
+    expandedKey.value = null
+  }
+  if (!target?.closest('[data-zip-picker]')) {
+    zipPickerOpen.value = false
+  }
 }
 function onEsc(e: KeyboardEvent) {
-  if (e.key === 'Escape') expandedKey.value = null
+  if (e.key === 'Escape') {
+    expandedKey.value = null
+    zipPickerOpen.value = false
+  }
 }
 // Distinct values drawn from active polls, shown as native <datalist> hints.
 const suggestions = ref<SearchSuggestions>({ titles: [], candidates: [] })
@@ -196,6 +203,15 @@ const filters = reactive({
 // list. Shift+click toggles a range from the last single click.
 const selectedZipcodes = ref<string[]>([])
 const lastClickedZipIndex = ref<number | null>(null)
+const zipPickerOpen = ref(false)
+
+const zipPickerSummary = computed<string>(() => {
+  if (selectedZipcodes.value.length === 1) return selectedZipcodes.value[0]
+  if (selectedZipcodes.value.length > 1) {
+    return t('search.filters.zipcodeNSelected', { n: selectedZipcodes.value.length })
+  }
+  return displayedZipcodes.value[0]?.zipcode ?? ''
+})
 
 function onZipClick(e: MouseEvent, idx: number, code: string) {
   const target = e.target as HTMLInputElement
@@ -343,28 +359,52 @@ async function search() {
           v-else-if="displayedZipcodes.length === 0"
           class="rounded border border-slate-300 bg-slate-50 p-2 text-xs font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeNone') }}</div>
-        <div
-          v-else
-          tabindex="0"
-          @keydown="onZipKeydown"
-          class="max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400"
-        >
-          <label
-            v-for="(z, idx) in displayedZipcodes"
-            :key="z.id"
-            class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+        <div v-else data-zip-picker class="relative">
+          <!-- Collapsed trigger: shows first selected (or first available)
+               and a chevron. Click to open the scrollable checkbox list. -->
+          <button
+            type="button"
+            @click.stop="zipPickerOpen = !zipPickerOpen"
+            :aria-expanded="zipPickerOpen"
+            class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none"
           >
-            <input
-              type="checkbox"
-              :checked="selectedZipcodes.includes(z.zipcode)"
-              @click="onZipClick($event, idx, z.zipcode)"
-              class="h-3.5 w-3.5"
-            />
-            <span class="font-mono">{{ z.zipcode }}</span>
-          </label>
+            <span class="font-mono">{{ zipPickerSummary }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              class="ml-2 h-4 w-4 text-slate-500 transition-transform"
+              :class="{ 'rotate-180': zipPickerOpen }"
+              aria-hidden="true"
+            >
+              <path
+                fill="currentColor"
+                d="M5.3 7.3 4 8.6 10 14.6l6-6L14.7 7.3 10 12z"
+              />
+            </svg>
+          </button>
+          <div
+            v-if="zipPickerOpen"
+            tabindex="0"
+            @keydown="onZipKeydown"
+            class="absolute left-0 right-0 z-20 mt-1 max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
+          >
+            <label
+              v-for="(z, idx) in displayedZipcodes"
+              :key="z.id"
+              class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+            >
+              <input
+                type="checkbox"
+                :checked="selectedZipcodes.includes(z.zipcode)"
+                @click="onZipClick($event, idx, z.zipcode)"
+                class="h-3.5 w-3.5"
+              />
+              <span class="font-mono">{{ z.zipcode }}</span>
+            </label>
+          </div>
         </div>
         <span
-          v-if="displayedZipcodes.length > 1"
+          v-if="displayedZipcodes.length > 1 && zipPickerOpen"
           class="text-xs font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>

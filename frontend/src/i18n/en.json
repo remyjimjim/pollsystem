@@ -134,6 +134,7 @@
       "zipcodeTypeahead": "(e.g. 982..)",
       "zipcodeStartHint": "Pick a state or start typing a zipcode here.",
       "zipcodeNone": "No matching zipcodes",
+      "zipcodeNSelected": "{n} zipcodes selected",
       "zipcodeShiftHint": "Shift+click for range • * select all • Shift+0 clear",
       "candidateName": "Candidate name (Election only)",
       "type": "Type",
