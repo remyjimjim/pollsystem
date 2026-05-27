@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-05-26 — Align the zipcode header with the rest of the filter labels
+
+**Requested:**
+
+> Can we move the zipcodes selectList down so the "zipcodes" header
+> aligns vertically with the rest of the inputs?
+
+**Changed:**
+
+- Split the zipcode picker into two pieces:
+  - The grid `<label>` now carries only the header + typeahead input,
+    making the cell the same height as the other filter cells. With
+    `items-end` on the grid, headers and inputs all line up.
+  - The scrollable checkbox list, empty-state hints, and the
+    shift-click hint moved into a row beneath the grid inside the
+    same `<form>`. The picker still reacts to the typeahead and
+    state/county selections; only its DOM location changed.
+
+**Commit:** `fc3a963`
+
+---
+
 ## 2026-05-26 — Tighten the zipcode start-hint wording
 
 **Requested:**
