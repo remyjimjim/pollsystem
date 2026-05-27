@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-05-26 — Switch zipcode picker UI by State selection
+
+**Requested:**
+
+> Can we change it so that the if the State selectList is set to 'Any
+> State' the auto-complete textbox with the placeholder text of
+> "(e.g. 982..)" render but if the State selectList is set to
+> 'Arizona' for instance then the pre-populated selectList is
+> rendered?
+
+**Changed:**
+
+- The zipcode picker now renders in one of two mutually exclusive
+  modes based on the State selection:
+  - **State = Any:** typeahead text input with a native `<datalist>`
+    of prefix matches. The user types digits, picks one suggestion,
+    and that single zipcode is the geo filter. Optimized for "I know
+    the exact zip".
+  - **State = specific:** typeahead disappears; the pre-populated
+    dropdown trigger renders instead. Click to expand, check
+    multiple zips. Optimized for browsing.
+- `search()` routes the geo query param accordingly: typed value in
+  typeahead mode; `selectedZipcodes` / `countyId` / `stateId` in
+  dropdown mode.
+
+**Commit:** `78d8198`
+
+---
+
 ## 2026-05-26 — Collapse the zipcode list into a click-to-open dropdown
 
 **Requested:**
