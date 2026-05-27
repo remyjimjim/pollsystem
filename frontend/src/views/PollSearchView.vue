@@ -345,7 +345,9 @@ async function search() {
         </select>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        {{ $t('search.filters.zipcode') }}
+        <span :title="$t('search.filters.zipcodeHelp')" class="cursor-help">
+          {{ $t('search.filters.zipcode') }}
+        </span>
 
         <!-- Mode A: state is "Any" → typeahead input with native datalist
              of prefix matches. Single-zip search; if the user wants

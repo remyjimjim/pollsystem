@@ -136,6 +136,7 @@
       "zipcodeNone": "No matching zipcodes",
       "zipcodeNSelected": "{n} zipcodes selected",
       "zipcodeShiftHint": "Shift+click for range • * select all • Shift+0 clear",
+      "zipcodeHelp": "Shift-* to select All..Shift-0 to de-select All, click on one zip and shift click 5 zips down to select a range",
       "candidateName": "Candidate name (Election only)",
       "type": "Type",
       "typeAny": "Any",
