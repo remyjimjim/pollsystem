@@ -2,6 +2,7 @@ package com.pollsystem.poll
 
 import com.pollsystem.repository.BallotMeasureRepository
 import com.pollsystem.repository.CandidateRepository
+import com.pollsystem.repository.CountyRepository
 import com.pollsystem.repository.CountyZipsRepository
 import com.pollsystem.repository.ElectionRepository
 import com.pollsystem.repository.QuestionnaireDomainRepository
@@ -38,7 +39,8 @@ class PollSearchController(
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
     private val candidates: CandidateRepository,
-    private val countyZips: CountyZipsRepository
+    private val countyZips: CountyZipsRepository,
+    private val counties: CountyRepository
 ) {
 
     @GetMapping
@@ -46,6 +48,7 @@ class PollSearchController(
         @RequestParam(required = false) title: String?,
         @RequestParam(name = "zipcode", required = false) zipcodes: List<String>?,
         @RequestParam(required = false) countyId: Long?,
+        @RequestParam(required = false) stateId: Long?,
         @RequestParam(required = false) creatorEmail: String?,
         @RequestParam(required = false) candidateName: String?,
         @RequestParam(required = false) type: String?,
@@ -56,16 +59,22 @@ class PollSearchController(
 
         // Geo filter resolves to a set of acceptable zipcodes:
         // - one or more zipcode picks → those (the user's explicit
-        //   subset within a county).
-        // - county only → every zip in that county (the "Any zipcode
-        //   under this county" case from the cascade).
-        // - neither → no geo filter.
+        //   subset).
+        // - county only → every zip in that county.
+        // - state only → every zip in every county of that state
+        //   (the "Any zipcode under this state" case).
+        // - none → no geo filter.
         val pickedZips = zipcodes?.filter { it.isNotBlank() }
         val geoFilter: Set<String>? = when {
             !pickedZips.isNullOrEmpty() -> pickedZips.toSet()
             countyId != null -> countyZips.findByCountyIdIn(listOf(countyId))
                 .map { it.zipcode }
                 .toSet()
+            stateId != null -> {
+                val countyIdsInState = counties.findByStateId(stateId).map { it.id }
+                if (countyIdsInState.isEmpty()) emptySet()
+                else countyZips.findByCountyIdIn(countyIdsInState).map { it.zipcode }.toSet()
+            }
             else -> null
         }
 

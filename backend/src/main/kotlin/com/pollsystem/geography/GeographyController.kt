@@ -28,9 +28,20 @@ class GeographyController(
             .map(CountyDto::from)
 
     @GetMapping("/zipcodes")
-    fun listZipcodes(@RequestParam("county_ids") countyIds: List<Long>): List<CountyZipDto> {
-        if (countyIds.isEmpty()) return emptyList()
-        return countyZips.findByCountyIdIn(countyIds)
+    fun listZipcodes(
+        @RequestParam("county_ids", required = false) countyIds: List<Long>?,
+        @RequestParam("state_id", required = false) stateId: Long?
+    ): List<CountyZipDto> {
+        // When state_id is set without county_ids, expand to every county
+        // in that state — lets the search page populate the zipcode picker
+        // with the full state list when the user leaves county at "Any".
+        val ids = when {
+            !countyIds.isNullOrEmpty() -> countyIds
+            stateId != null -> counties.findByStateId(stateId).map { it.id }
+            else -> return emptyList()
+        }
+        if (ids.isEmpty()) return emptyList()
+        return countyZips.findByCountyIdIn(ids)
             .sortedBy { it.zipcode }
             .map(CountyZipDto::from)
     }

@@ -83,9 +83,17 @@ async function loadCounties(stateId: number) {
     counties.value = []
   }
 }
-async function loadZipcodes(countyId: number) {
+async function loadZipcodesByCounty(countyId: number) {
   try {
     const res = await axios.get<CountyZipRow[]>('/api/zipcodes', { params: { county_ids: countyId } })
+    zipcodeOptions.value = res.data
+  } catch {
+    zipcodeOptions.value = []
+  }
+}
+async function loadZipcodesByState(stateId: number) {
+  try {
+    const res = await axios.get<CountyZipRow[]>('/api/zipcodes', { params: { state_id: stateId } })
     zipcodeOptions.value = res.data
   } catch {
     zipcodeOptions.value = []
@@ -98,13 +106,40 @@ async function onStateChange() {
   lastClickedZipIndex.value = null
   counties.value = []
   zipcodeOptions.value = []
-  if (selectedStateId.value !== '') await loadCounties(selectedStateId.value)
+  if (selectedStateId.value !== '') {
+    await loadCounties(selectedStateId.value)
+    // Populate zips for the whole state — user can either narrow with a
+    // county next or pick zips directly across the state.
+    await loadZipcodesByState(selectedStateId.value)
+  }
 }
 async function onCountyChange() {
   selectedZipcodes.value = []
   lastClickedZipIndex.value = null
-  zipcodeOptions.value = []
-  if (selectedCountyId.value !== '') await loadZipcodes(selectedCountyId.value)
+  if (selectedCountyId.value !== '') {
+    await loadZipcodesByCounty(selectedCountyId.value)
+  } else if (selectedStateId.value !== '') {
+    // County reset back to "Any" — fall back to the state-wide list.
+    await loadZipcodesByState(selectedStateId.value)
+  } else {
+    zipcodeOptions.value = []
+  }
+}
+
+function onZipKeydown(e: KeyboardEvent) {
+  // Shift+8 produces '*', Shift+0 produces ')'. Match by key character
+  // and also fall back to code-based detection for non-US layouts.
+  const isSelectAll = e.key === '*' || (e.shiftKey && e.code === 'Digit8')
+  const isDeselectAll = e.key === ')' || (e.shiftKey && e.code === 'Digit0')
+  if (isSelectAll) {
+    e.preventDefault()
+    selectedZipcodes.value = zipcodeOptions.value.map(z => z.zipcode)
+    lastClickedZipIndex.value = null
+  } else if (isDeselectAll) {
+    e.preventDefault()
+    selectedZipcodes.value = []
+    lastClickedZipIndex.value = null
+  }
 }
 
 onMounted(() => {
@@ -186,10 +221,12 @@ async function search() {
       // it does for the existing /api/zipcodes endpoint.
       params.zipcode = selectedZipcodes.value.join(',')
     } else if (selectedCountyId.value !== '') {
-      // No specific zipcodes picked, but county is set: ask the backend
-      // to treat that as "any zipcode in this county" rather than no
-      // geo filter at all.
+      // No specific zipcodes picked, but county is set: "any zip in
+      // this county".
       params.countyId = String(selectedCountyId.value)
+    } else if (selectedStateId.value !== '') {
+      // State only — "any zip in this state".
+      params.stateId = String(selectedStateId.value)
     }
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
     if (filters.type) params.type = filters.type
@@ -259,16 +296,18 @@ async function search() {
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.zipcode') }}
         <div
-          v-if="selectedCountyId === ''"
+          v-if="selectedStateId === ''"
           class="rounded border border-slate-300 bg-slate-100 p-2 text-sm font-normal text-slate-400"
-        >{{ $t('search.filters.zipcodePickCountyFirst') }}</div>
+        >{{ $t('search.filters.zipcodePickStateFirst') }}</div>
         <div
           v-else-if="zipcodeOptions.length === 0"
           class="rounded border border-slate-300 bg-slate-50 p-2 text-sm font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeNone') }}</div>
         <div
           v-else
-          class="max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900"
+          tabindex="0"
+          @keydown="onZipKeydown"
+          class="max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400"
         >
           <label
             v-for="(z, idx) in zipcodeOptions"
@@ -285,7 +324,7 @@ async function search() {
           </label>
         </div>
         <span
-          v-if="zipcodeOptions.length > 1 && selectedCountyId !== ''"
+          v-if="zipcodeOptions.length > 1 && selectedStateId !== ''"
           class="text-xs font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>
