@@ -2,6 +2,12 @@ spring:
   application:
     name: pollsystem
 
+  # Default to the `local` profile when SPRING_PROFILES_ACTIVE is not set.
+  # Deployed environments override this (e.g. SPRING_PROFILES_ACTIVE=prod).
+  # The active profile picks which JavaMailSender bean MailConfig wires.
+  profiles:
+    default: local
+
   # Database
   datasource:
     url: jdbc:postgresql://localhost:5432/pollsystem
@@ -25,18 +31,8 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
-  # Mail (SendGrid or SMTP)
-  mail:
-    host: smtp.sendgrid.net
-    port: 587
-    username: apikey
-    password: ${SENDGRID_API_KEY:your-sendgrid-api-key}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+# Mail wiring lives in com.pollsystem.email.MailConfig — see it for the
+# `local` (Mailpit) vs default (SendGrid) JavaMailSender beans.
 
 # Application config
 app:
