@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-05-26 — Save Changes on restored-from-archived drafts no longer trips response FKs
+
+**Requested:**
+
+> When attempting to 'Save changes' on the Questionaire with Title =
+> 'Vaccines' after archiving it and selecting 'Edit' and updating the
+> 'Close date' to 5/24/2026 (2 days ago) I get the sql error 'could
+> not execute statement [ERROR: update or delete on table "questions"
+> violates foreign key constraint "question_responses_question_id_fkey"
+> on table "question_responses" Detail: Key (id)=(100) is still
+> referenced from table "question_responses".]', can we fix this?
+
+**Changed:**
+
+- `QuestionnaireService.replaceQuestions` and
+  `ElectionService.replaceCandidates` both did a blind
+  `deleteAll + saveAll` on every PUT, tripping the
+  `question_responses` / `candidate_responses` FK when a previously
+  PUBLISHED poll had been archived, restored to DRAFT, and re-saved.
+  Both helpers now compare the incoming list against existing rows and
+  return early when they match — so close-date-only edits no longer
+  touch the child tables.
+- When the incoming list differs from existing AND any existing child
+  row has responses, both helpers now throw `409 Conflict` with a
+  friendly message pointing the creator at Super Admin → Manage All
+  Polls. The voter-intent constraint from the
+  [[project_published_poll_edits]] decision is enforced at the layer
+  that actually executes the change.
+- Wired `QuestionResponseRepository` into `QuestionnaireService` and
+  `CandidateResponseRepository` into `ElectionService` for the
+  existence checks.
+- Verified by replay: the exact PUT payload that previously errored
+  now returns 200; editing a question text → 409 with the friendly
+  message; adding a question → same 409. DB row counts intact
+  through both rejected attempts.
+
+**Commit:** `badd417`
+
+---
+
 ## 2026-05-26 — Profile-conditional JavaMailSender bean (Mailpit in dev, SendGrid otherwise)
 
 **Requested:**
