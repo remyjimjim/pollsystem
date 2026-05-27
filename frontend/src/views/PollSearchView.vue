@@ -79,7 +79,8 @@ async function loadSuggestions() {
 const states = ref<StateRow[]>([])
 const counties = ref<CountyRow[]>([])
 const zipcodeOptions = ref<CountyZipRow[]>([])
-const selectedStateId = ref<number | ''>('')
+const selectedStateIds = ref<number[]>([])
+const lastClickedStateIndex = ref<number | null>(null)
 const selectedCountyId = ref<number | ''>('')
 
 async function loadStates() {
@@ -90,9 +91,11 @@ async function loadStates() {
     // Cascade is geography UX scaffolding; failures shouldn't block search.
   }
 }
-async function loadCounties(stateId: number) {
+async function loadCounties(stateIds: number[]) {
   try {
-    const res = await axios.get<CountyRow[]>('/api/counties', { params: { state_id: stateId } })
+    const res = await axios.get<CountyRow[]>('/api/counties', {
+      params: { state_id: stateIds.join(',') }
+    })
     counties.value = res.data
   } catch {
     counties.value = []
@@ -106,9 +109,11 @@ async function loadZipcodesByCounty(countyId: number) {
     zipcodeOptions.value = []
   }
 }
-async function loadZipcodesByState(stateId: number) {
+async function loadZipcodesByState(stateIds: number[]) {
   try {
-    const res = await axios.get<CountyZipRow[]>('/api/zipcodes', { params: { state_id: stateId } })
+    const res = await axios.get<CountyZipRow[]>('/api/zipcodes', {
+      params: { state_id: stateIds.join(',') }
+    })
     zipcodeOptions.value = res.data
   } catch {
     zipcodeOptions.value = []
@@ -129,7 +134,7 @@ async function loadZipcodesByPrefix(prefix: string) {
 const zipFilter = ref('')
 let zipFilterTimer: ReturnType<typeof setTimeout> | null = null
 watch(zipFilter, (newVal) => {
-  if (selectedStateId.value !== '') return // state context: local filter only
+  if (selectedStateIds.value.length > 0) return // state context: local filter only
   if (zipFilterTimer) clearTimeout(zipFilterTimer)
   const trimmed = newVal.trim()
   if (trimmed === '') {
@@ -149,18 +154,16 @@ async function onStateChange() {
   selectedCountyId.value = ''
   selectedZipcodes.value = []
   lastClickedZipIndex.value = null
-  // Drop any leftover typeahead text. When the user was in Any-State
-  // mode and typed e.g. "982", that prefix would otherwise persist and
-  // filter the state-wide dropdown to nothing (e.g. picking Arizona,
-  // whose zips start with 85–86).
+  // Drop any leftover typeahead text. Otherwise it would keep filtering
+  // the state-set dropdown — e.g. typed "982" + picked Arizona = empty.
   zipFilter.value = ''
   counties.value = []
   zipcodeOptions.value = []
-  if (selectedStateId.value !== '') {
-    await loadCounties(selectedStateId.value)
-    // Populate zips for the whole state — user can either narrow with a
-    // county next or pick zips directly across the state.
-    await loadZipcodesByState(selectedStateId.value)
+  if (selectedStateIds.value.length > 0) {
+    await loadCounties(selectedStateIds.value)
+    // Populate zips across all chosen states; user can narrow further
+    // with a county or by ticking specific zips.
+    await loadZipcodesByState(selectedStateIds.value)
   }
 }
 async function onCountyChange() {
@@ -168,9 +171,9 @@ async function onCountyChange() {
   lastClickedZipIndex.value = null
   if (selectedCountyId.value !== '') {
     await loadZipcodesByCounty(selectedCountyId.value)
-  } else if (selectedStateId.value !== '') {
-    // County reset back to "Any" — fall back to the state-wide list.
-    await loadZipcodesByState(selectedStateId.value)
+  } else if (selectedStateIds.value.length > 0) {
+    // County reset back to "Any" — fall back to the state-set list.
+    await loadZipcodesByState(selectedStateIds.value)
   } else {
     zipcodeOptions.value = []
   }
@@ -227,23 +230,65 @@ const zipPickerSummary = computed<string>(() => {
 })
 
 // State + County picker open state (same dropdown-trigger UX as the
-// zipcode picker — kept single-select per user preference).
+// zipcode picker; State is multi-select with shift-click + */Shift+0,
+// County stays single-select).
 const statePickerOpen = ref(false)
 const countyPickerOpen = ref(false)
-const selectedStateLabel = computed(() => {
-  if (selectedStateId.value === '') return t('search.filters.stateAny')
-  return states.value.find(s => s.id === selectedStateId.value)?.name
-    ?? t('search.filters.stateAny')
+const statePickerSummary = computed<string>(() => {
+  if (selectedStateIds.value.length === 0) return t('search.filters.stateAny')
+  if (selectedStateIds.value.length === 1) {
+    return states.value.find(s => s.id === selectedStateIds.value[0])?.name
+      ?? t('search.filters.stateAny')
+  }
+  return t('search.filters.stateNSelected', { n: selectedStateIds.value.length })
 })
 const selectedCountyLabel = computed(() => {
   if (selectedCountyId.value === '') return t('search.filters.countyAny')
   return counties.value.find(c => c.id === selectedCountyId.value)?.name
     ?? t('search.filters.countyAny')
 })
-function pickState(id: number | '') {
-  selectedStateId.value = id
-  statePickerOpen.value = false
+
+function onStateClick(e: MouseEvent, idx: number, id: number) {
+  const target = e.target as HTMLInputElement
+  const willBeChecked = target.checked
+  if (e.shiftKey && lastClickedStateIndex.value !== null) {
+    const a = lastClickedStateIndex.value
+    const b = idx
+    const [start, end] = a < b ? [a, b] : [b, a]
+    const rangeIds = states.value.slice(start, end + 1).map(s => s.id)
+    if (willBeChecked) {
+      const merged = new Set([...selectedStateIds.value, ...rangeIds])
+      selectedStateIds.value = Array.from(merged)
+    } else {
+      const remove = new Set(rangeIds)
+      selectedStateIds.value = selectedStateIds.value.filter(x => !remove.has(x))
+    }
+  } else {
+    if (willBeChecked) {
+      if (!selectedStateIds.value.includes(id)) {
+        selectedStateIds.value = [...selectedStateIds.value, id]
+      }
+    } else {
+      selectedStateIds.value = selectedStateIds.value.filter(x => x !== id)
+    }
+  }
+  lastClickedStateIndex.value = idx
   onStateChange()
+}
+function onStateKeydown(e: KeyboardEvent) {
+  const isSelectAll = e.key === '*' || (e.shiftKey && e.code === 'Digit8')
+  const isDeselectAll = e.key === ')' || (e.shiftKey && e.code === 'Digit0')
+  if (isSelectAll) {
+    e.preventDefault()
+    selectedStateIds.value = states.value.map(s => s.id)
+    lastClickedStateIndex.value = null
+    onStateChange()
+  } else if (isDeselectAll) {
+    e.preventDefault()
+    selectedStateIds.value = []
+    lastClickedStateIndex.value = null
+    onStateChange()
+  }
 }
 function pickCounty(id: number | '') {
   selectedCountyId.value = id
@@ -302,20 +347,20 @@ async function search() {
   try {
     const params: Record<string, string> = {}
     if (filters.title.trim()) params.title = filters.title.trim()
-    if (selectedStateId.value === '') {
-      // Typeahead mode: state is "Any". The text the user typed is
+    if (selectedStateIds.value.length === 0) {
+      // Typeahead mode: no state picked. The text the user typed is
       // the single zipcode they're searching for.
       const v = zipFilter.value.trim()
       if (v) params.zipcode = v
     } else if (selectedZipcodes.value.length > 0) {
-      // State + explicit zip picks → those zips.
+      // States + explicit zip picks → those zips.
       params.zipcode = selectedZipcodes.value.join(',')
     } else if (selectedCountyId.value !== '') {
-      // State + county, no picks → any zip in this county.
+      // States + county, no picks → any zip in this county.
       params.countyId = String(selectedCountyId.value)
     } else {
-      // State only, no picks → any zip in this state.
-      params.stateId = String(selectedStateId.value)
+      // States only, no picks → any zip in those states.
+      params.stateId = selectedStateIds.value.join(',')
     }
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
     if (filters.type) params.type = filters.type
@@ -360,7 +405,9 @@ async function search() {
         </datalist>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        {{ $t('search.filters.state') }}
+        <span :title="$t('search.filters.stateHelp')" class="cursor-help">
+          {{ $t('search.filters.state') }}
+        </span>
         <div data-state-picker class="relative">
           <button
             type="button"
@@ -368,7 +415,7 @@ async function search() {
             :aria-expanded="statePickerOpen"
             class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none"
           >
-            <span>{{ selectedStateLabel }}</span>
+            <span>{{ statePickerSummary }}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -379,30 +426,37 @@ async function search() {
           </button>
           <div
             v-if="statePickerOpen"
-            class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg"
+            tabindex="0"
+            @keydown="onStateKeydown"
+            class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
           >
-            <button
-              type="button"
-              @click="pickState('')"
-              :class="['flex w-full items-center rounded px-2 py-1 text-left text-xs hover:bg-slate-50', selectedStateId === '' ? 'bg-slate-100 font-semibold' : '']"
-            >{{ $t('search.filters.stateAny') }}</button>
-            <button
-              v-for="s in states"
+            <label
+              v-for="(s, idx) in states"
               :key="s.id"
-              type="button"
-              @click="pickState(s.id)"
-              :class="['flex w-full items-center rounded px-2 py-1 text-left text-xs hover:bg-slate-50', selectedStateId === s.id ? 'bg-slate-100 font-semibold' : '']"
-            >{{ s.name }}</button>
+              class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+            >
+              <input
+                type="checkbox"
+                :checked="selectedStateIds.includes(s.id)"
+                @click="onStateClick($event, idx, s.id)"
+                class="h-3.5 w-3.5"
+              />
+              <span>{{ s.name }}</span>
+            </label>
           </div>
         </div>
+        <span
+          v-if="statePickerOpen && states.length > 1"
+          class="text-xs font-normal text-slate-500"
+        >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.county') }}
         <div data-county-picker class="relative">
           <button
             type="button"
-            @click.stop="countyPickerOpen = selectedStateId !== '' ? !countyPickerOpen : false"
-            :disabled="selectedStateId === ''"
+            @click.stop="countyPickerOpen = selectedStateIds.length > 0 ? !countyPickerOpen : false"
+            :disabled="selectedStateIds.length === 0"
             :aria-expanded="countyPickerOpen"
             class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 focus:border-slate-500 focus:outline-none disabled:bg-slate-100 disabled:text-slate-400 disabled:hover:bg-slate-100"
           >
@@ -439,10 +493,10 @@ async function search() {
           {{ $t('search.filters.zipcode') }}
         </span>
 
-        <!-- Mode A: state is "Any" → typeahead input with native datalist
-             of prefix matches. Single-zip search; if the user wants
-             multi-select they pick a state. -->
-        <template v-if="selectedStateId === ''">
+        <!-- Mode A: no state picked → typeahead input with native datalist
+             of prefix matches. Single-zip search; multi-zip picking
+             unlocks once any state is selected. -->
+        <template v-if="selectedStateIds.length === 0">
           <input
             v-model="zipFilter"
             type="text"

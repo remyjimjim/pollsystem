@@ -48,7 +48,7 @@ class PollSearchController(
         @RequestParam(required = false) title: String?,
         @RequestParam(name = "zipcode", required = false) zipcodes: List<String>?,
         @RequestParam(required = false) countyId: Long?,
-        @RequestParam(required = false) stateId: Long?,
+        @RequestParam(name = "stateId", required = false) stateIds: List<Long>?,
         @RequestParam(required = false) creatorEmail: String?,
         @RequestParam(required = false) candidateName: String?,
         @RequestParam(required = false) type: String?,
@@ -70,10 +70,10 @@ class PollSearchController(
             countyId != null -> countyZips.findByCountyIdIn(listOf(countyId))
                 .map { it.zipcode }
                 .toSet()
-            stateId != null -> {
-                val countyIdsInState = counties.findByStateId(stateId).map { it.id }
-                if (countyIdsInState.isEmpty()) emptySet()
-                else countyZips.findByCountyIdIn(countyIdsInState).map { it.zipcode }.toSet()
+            !stateIds.isNullOrEmpty() -> {
+                val countyIdsInStates = counties.findByStateIdIn(stateIds).map { it.id }
+                if (countyIdsInStates.isEmpty()) emptySet()
+                else countyZips.findByCountyIdIn(countyIdsInStates).map { it.zipcode }.toSet()
             }
             else -> null
         }

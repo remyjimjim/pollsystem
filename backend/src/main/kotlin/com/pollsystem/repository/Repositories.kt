@@ -106,6 +106,7 @@ interface StateRepository : JpaRepository<State, Long> {
 @Repository
 interface CountyRepository : JpaRepository<County, Long> {
     fun findByStateId(stateId: Long): List<County>
+    fun findByStateIdIn(stateIds: List<Long>): List<County>
 }
 
 @Repository

@@ -127,6 +127,8 @@
       "titleContains": "Title contains",
       "state": "State (populates zipcodes)",
       "stateAny": "Any state",
+      "stateNSelected": "{n} states selected",
+      "stateHelp": "Shift-* to select All..Shift-0 to de-select All, click on one state and shift click 5 states down to select a range",
       "county": "County",
       "countyAny": "Any county",
       "zipcode": "Zipcodes",
