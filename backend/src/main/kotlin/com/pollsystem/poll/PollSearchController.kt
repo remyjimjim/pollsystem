@@ -45,6 +45,7 @@ class PollSearchController(
     fun search(
         @RequestParam(required = false) title: String?,
         @RequestParam(required = false) zipcode: String?,
+        @RequestParam(required = false) countyId: Long?,
         @RequestParam(required = false) creatorEmail: String?,
         @RequestParam(required = false) candidateName: String?,
         @RequestParam(required = false) type: String?,
@@ -52,6 +53,19 @@ class PollSearchController(
     ): List<PollSearchResult> {
         val now = Instant.now()
         val results = mutableListOf<PollSearchResult>()
+
+        // Geo filter resolves to a set of acceptable zipcodes:
+        // - a specific zipcode → that one.
+        // - county only → every zip in that county (the "Any zipcode under
+        //   this county" case from the cascade).
+        // - neither → no geo filter.
+        val geoFilter: Set<String>? = when {
+            !zipcode.isNullOrBlank() -> setOf(zipcode)
+            countyId != null -> countyZips.findByCountyIdIn(listOf(countyId))
+                .map { it.zipcode }
+                .toSet()
+            else -> null
+        }
 
         val titleQuery = title?.takeIf { it.isNotBlank() }
         val candidateQuery = candidateName?.takeIf { it.isNotBlank() }
@@ -86,7 +100,7 @@ class PollSearchController(
                     .map { ZipState(it.zipcode, it.state.initial) }
                     .distinctBy { it.code }
                     .sortedBy { it.code }
-                if (zipcode != null && zipStates.none { it.code == zipcode }) continue
+                if (geoFilter != null && zipStates.none { it.code in geoFilter }) continue
                 results += PollSearchResult(
                     id = q.id,
                     type = "Questionnaire",
@@ -108,7 +122,7 @@ class PollSearchController(
                     )
                 ) continue
                 if (!matches(e.creator.email, creatorEmail)) continue
-                if (zipcode != null && zipcode != e.zipcode) continue
+                if (geoFilter != null && e.zipcode !in geoFilter) continue
                 results += PollSearchResult(
                     id = e.id,
                     type = "Election",
@@ -128,7 +142,7 @@ class PollSearchController(
                 if (!textMatch(titleHit = titleHit(bm.title, titleQuery), candidateHit = false)) continue
                 if (!matches(bm.creator.email, creatorEmail)) continue
                 val zip = bm.election.zipcode
-                if (zipcode != null && zipcode != zip) continue
+                if (geoFilter != null && zip !in geoFilter) continue
                 results += PollSearchResult(
                     id = bm.id,
                     type = "BallotMeasure",

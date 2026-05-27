@@ -148,7 +148,14 @@ async function search() {
   try {
     const params: Record<string, string> = {}
     if (filters.title.trim()) params.title = filters.title.trim()
-    if (filters.zipcode.trim()) params.zipcode = filters.zipcode.trim()
+    if (filters.zipcode.trim()) {
+      params.zipcode = filters.zipcode.trim()
+    } else if (selectedCountyId.value !== '') {
+      // No specific zipcode picked, but county is set: ask the backend
+      // to treat that as "any zipcode in this county" rather than no
+      // geo filter at all.
+      params.countyId = String(selectedCountyId.value)
+    }
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
     if (filters.type) params.type = filters.type
     if (filters.includeClosed) params.includeClosed = 'true'
