@@ -47,7 +47,7 @@ class PollSearchController(
     fun search(
         @RequestParam(required = false) title: String?,
         @RequestParam(name = "zipcode", required = false) zipcodes: List<String>?,
-        @RequestParam(required = false) countyId: Long?,
+        @RequestParam(name = "countyId", required = false) countyIds: List<Long>?,
         @RequestParam(name = "stateId", required = false) stateIds: List<Long>?,
         @RequestParam(required = false) creatorEmail: String?,
         @RequestParam(required = false) candidateName: String?,
@@ -67,7 +67,7 @@ class PollSearchController(
         val pickedZips = zipcodes?.filter { it.isNotBlank() }
         val geoFilter: Set<String>? = when {
             !pickedZips.isNullOrEmpty() -> pickedZips.toSet()
-            countyId != null -> countyZips.findByCountyIdIn(listOf(countyId))
+            !countyIds.isNullOrEmpty() -> countyZips.findByCountyIdIn(countyIds)
                 .map { it.zipcode }
                 .toSet()
             !stateIds.isNullOrEmpty() -> {

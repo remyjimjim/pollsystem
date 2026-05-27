@@ -131,6 +131,8 @@
       "stateHelp": "Shift-* to select All..Shift-0 to de-select All, click on one state and shift click 5 states down to select a range",
       "county": "County",
       "countyAny": "Any county",
+      "countyNSelected": "{n} counties selected",
+      "countyHelp": "Shift-* to select All..Shift-0 to de-select All, click on one county and shift click 5 counties down to select a range",
       "zipcode": "Zipcodes",
       "zipcodeAny": "Any zipcode",
       "zipcodeTypeahead": "(e.g. 982..)",
