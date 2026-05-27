@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-05-26 — Profile-conditional JavaMailSender bean (Mailpit in dev, SendGrid otherwise)
+
+**Requested:**
+
+> Regarding your message: "The user's real magic-link login flow is
+> currently broken — they'd hit it the next time they try to sign in
+> via the email link. Worth either fixing the SendGrid creds, pointing
+> spring.mail.host at Mailpit (port 1025), or adding a profile-conditional
+> bean swap", the bean swap would be my preference.
+
+**Changed:**
+
+- Added `com.pollsystem.email.MailConfig` with two `@Profile`-gated
+  `JavaMailSender` beans. Active profile `local` → Mailpit at
+  localhost:1025 (no auth, no STARTTLS); any other profile → SendGrid
+  relay reading `SENDGRID_API_KEY` from the environment.
+- Set `spring.profiles.default: local` in `application.yml` so a bare
+  `java -jar` in dev defaults to Mailpit. Deployed envs set
+  `SPRING_PROFILES_ACTIVE` explicitly to get the SendGrid bean.
+- Removed the `spring.mail.*` block from `application.yml` and deleted
+  `application-local.yml` — both now redundant since the active mail
+  backend is wired in `MailConfig.kt`.
+- Verified by restart: log line `No active profile set, falling back
+  to 1 default profile: "local"`, and a fresh
+  `POST /api/auth/magic-link/request` lands in Mailpit (count 2 → 3,
+  no `Authentication failed` warning).
+
+**Commit:** `0573105`
+
+---
+
 ## 2026-05-26 — Fix publish-drops-edits bug; add super-admin safe-field edits
 
 **Requested:**
