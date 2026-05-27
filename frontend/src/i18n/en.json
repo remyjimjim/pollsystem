@@ -125,7 +125,7 @@
     "guestIntroAfter": "to vote.",
     "filters": {
       "titleContains": "Title contains",
-      "state": "State",
+      "state": "State (populates zipcodes)",
       "stateAny": "Any state",
       "county": "County",
       "countyAny": "Any county",
