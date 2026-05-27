@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-05-26 — Multi-select County, matching the State + Zipcodes UX
+
+**Requested:**
+
+> County please
+
+(Same multi-select treatment as State.)
+
+**Changed:**
+
+- **County** picker now matches State and Zipcodes: checkbox list,
+  shift-click range from the last single click, `*` to select all,
+  `Shift+0` to clear, hover-tooltip help via the new
+  `search.filters.countyHelp` key. Trigger summary shows the single
+  county name, "N counties selected", or "Any county".
+- `selectedCountyId: number | ''` became `selectedCountyIds:
+  number[]` throughout the component; cascade reload of zips now
+  takes the union of all ticked counties.
+- `PollSearchController.search` `countyId` param became a list — Spring
+  binds the comma-separated value to `List<Long>`; the geo-filter
+  pulls every county's zips into the acceptable set.
+- Verified by replay: single `countyId=3006` still returns the WA
+  polls (backwards compat); `countyId=3006,3000` returns the same
+  set (both counties are covered); `countyId=2970,2971` returns just
+  Electric Cars (the only poll covering Adams zips); a non-existent
+  county returns 0.
+
+**Commit:** `8eca6f0`
+
+---
+
 ## 2026-05-26 — Multi-select State with the Zipcodes-style checkbox + shortcut UX
 
 **Requested:**
