@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-05-26 — Shorten the zipcode placeholder so the close paren fits
+
+**Requested:**
+
+> Can we change the zipcodes placeholder text from "(e.g. 982" to
+> "(e.g. 982)"?
+
+**Changed:**
+
+- The original `zipcodeTypeahead` string `"Type digits to filter
+  (e.g. 982)"` was wider than the input at the form's narrowest grid
+  breakpoint, so the rendered placeholder was getting truncated
+  mid-paren. Shortened to `"(e.g. 982)"` so the entire example fits.
+
+**Commit:** `e429eaf`
+
+---
+
 ## 2026-05-26 — Label state filter "State (populates zipcodes)"
 
 **Requested:**
