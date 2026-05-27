@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-05-26 — Hover-tooltip help on the Zipcodes label
+
+**Requested:**
+
+> Can we add a help alert that when one hovers over the Zipcodes
+> label the help text appears "Shift-* to select All..Shift-0 to
+> de-select All, click on one zip and shift click 5 zips down to
+> select a range"?
+
+**Changed:**
+
+- Wrapped the "Zipcodes" heading text in a `<span>` with a `title`
+  attribute and `cursor-help` styling. Hovering surfaces the
+  keyboard-shortcut and shift-click docs as a native browser
+  tooltip — supplementing the inline `zipcodeShiftHint` that only
+  shows while the dropdown is open.
+- New i18n key `search.filters.zipcodeHelp` carries the help text
+  verbatim from the request.
+
+**Commit:** `88b84b6`
+
+---
+
 ## 2026-05-26 — Switch zipcode picker UI by State selection
 
 **Requested:**
