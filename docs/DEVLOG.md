@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-05-26 — Restore zipcode autocomplete on the search form
+
+**Requested:**
+
+> Regarding the /polls/search component, would it be possible to make
+> the 'Title contains' field autocomplete as the user types. Same with
+> the zipcode field and the 'Candidate name' field?
+
+> It looks like only the zipcode field is missing autocomplete, can you
+> make it work like the 'Candidate name' field?
+
+**Changed:**
+
+- Added a `zipcodes: List<String>` field to `SearchSuggestions` and
+  populated it in `/api/polls/search/suggestions` with the distinct
+  zipcodes drawn from currently-active questionnaires (via
+  `QuestionnaireDomain`), elections, and ballot measures, sorted.
+- Wired the zipcode `<input>` in `PollSearchView.vue` to a
+  `<datalist id="zipcode-suggestions">` populated from
+  `suggestions.zipcodes`, mirroring the candidate-name field exactly
+  (`list=` + `autocomplete="off"`).
+- Smoke-tested headlessly: 563 distinct 5-digit zips returned, sorted
+  ascending, all distinct; the Vite dev server proxies the new field;
+  searching by a suggested zip narrows results as expected.
+
+**Commit:** `e6f816d`
+
+---
+
 ## 2026-05-15 — Re-smoke-test the OR search after backend restart
 
 **Requested:**
