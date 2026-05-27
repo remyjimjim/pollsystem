@@ -30,8 +30,17 @@ class GeographyController(
     @GetMapping("/zipcodes")
     fun listZipcodes(
         @RequestParam("county_ids", required = false) countyIds: List<Long>?,
-        @RequestParam("state_id", required = false) stateId: Long?
+        @RequestParam("state_id", required = false) stateId: Long?,
+        @RequestParam("prefix", required = false) prefix: String?
     ): List<CountyZipDto> {
+        // Prefix-search is its own mode: the search page lets a user start
+        // typing a zip without picking a state first. Capped to 50 so the
+        // dropdown stays scrollable; refine by typing more digits.
+        if (!prefix.isNullOrBlank()) {
+            return countyZips.findByZipcodeStartingWithOrderByZipcode(prefix.trim())
+                .take(50)
+                .map(CountyZipDto::from)
+        }
         // When state_id is set without county_ids, expand to every county
         // in that state — lets the search page populate the zipcode picker
         // with the full state list when the user leaves county at "Any".

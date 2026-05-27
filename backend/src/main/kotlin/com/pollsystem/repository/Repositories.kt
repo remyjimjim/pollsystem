@@ -114,6 +114,7 @@ interface CountyZipsRepository : JpaRepository<CountyZips, Long> {
     fun findByZipcode(zipcode: String): List<CountyZips>
     fun findByZipcodeIn(zipcodes: List<String>): List<CountyZips>
     fun findByCountyIdIn(countyIds: List<Long>): List<CountyZips>
+    fun findByZipcodeStartingWithOrderByZipcode(prefix: String): List<CountyZips>
 }
 
 @Repository

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -99,6 +99,36 @@ async function loadZipcodesByState(stateId: number) {
     zipcodeOptions.value = []
   }
 }
+async function loadZipcodesByPrefix(prefix: string) {
+  try {
+    const res = await axios.get<CountyZipRow[]>('/api/zipcodes', { params: { prefix } })
+    zipcodeOptions.value = res.data
+  } catch {
+    zipcodeOptions.value = []
+  }
+}
+
+// User-typed zipcode-search input. Drives a debounced prefix lookup
+// when no state is selected; when a state is selected, narrows the
+// already-loaded state/county list locally.
+const zipFilter = ref('')
+let zipFilterTimer: ReturnType<typeof setTimeout> | null = null
+watch(zipFilter, (newVal) => {
+  if (selectedStateId.value !== '') return // state context: local filter only
+  if (zipFilterTimer) clearTimeout(zipFilterTimer)
+  const trimmed = newVal.trim()
+  if (trimmed === '') {
+    zipcodeOptions.value = []
+    return
+  }
+  zipFilterTimer = setTimeout(() => loadZipcodesByPrefix(trimmed), 200)
+})
+
+const displayedZipcodes = computed<CountyZipRow[]>(() => {
+  const prefix = zipFilter.value.trim()
+  if (prefix === '') return zipcodeOptions.value
+  return zipcodeOptions.value.filter(z => z.zipcode.startsWith(prefix))
+})
 
 async function onStateChange() {
   selectedCountyId.value = ''
@@ -133,7 +163,9 @@ function onZipKeydown(e: KeyboardEvent) {
   const isDeselectAll = e.key === ')' || (e.shiftKey && e.code === 'Digit0')
   if (isSelectAll) {
     e.preventDefault()
-    selectedZipcodes.value = zipcodeOptions.value.map(z => z.zipcode)
+    // Operate on whatever's visible to the user (respects any active
+    // typeahead filter).
+    selectedZipcodes.value = displayedZipcodes.value.map(z => z.zipcode)
     lastClickedZipIndex.value = null
   } else if (isDeselectAll) {
     e.preventDefault()
@@ -172,7 +204,7 @@ function onZipClick(e: MouseEvent, idx: number, code: string) {
     const a = lastClickedZipIndex.value
     const b = idx
     const [start, end] = a < b ? [a, b] : [b, a]
-    const rangeCodes = zipcodeOptions.value.slice(start, end + 1).map(z => z.zipcode)
+    const rangeCodes = displayedZipcodes.value.slice(start, end + 1).map(z => z.zipcode)
     if (willBeChecked) {
       const merged = new Set([...selectedZipcodes.value, ...rangeCodes])
       selectedZipcodes.value = Array.from(merged)
@@ -295,13 +327,21 @@ async function search() {
       </label>
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('search.filters.zipcode') }}
+        <input
+          v-model="zipFilter"
+          type="text"
+          inputmode="numeric"
+          maxlength="5"
+          :placeholder="$t('search.filters.zipcodeTypeahead')"
+          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
+        />
         <div
-          v-if="selectedStateId === ''"
-          class="rounded border border-slate-300 bg-slate-100 p-2 text-sm font-normal text-slate-400"
-        >{{ $t('search.filters.zipcodePickStateFirst') }}</div>
+          v-if="selectedStateId === '' && zipFilter.trim() === ''"
+          class="rounded border border-slate-300 bg-slate-100 p-2 text-xs font-normal text-slate-500"
+        >{{ $t('search.filters.zipcodeStartHint') }}</div>
         <div
-          v-else-if="zipcodeOptions.length === 0"
-          class="rounded border border-slate-300 bg-slate-50 p-2 text-sm font-normal text-slate-500"
+          v-else-if="displayedZipcodes.length === 0"
+          class="rounded border border-slate-300 bg-slate-50 p-2 text-xs font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeNone') }}</div>
         <div
           v-else
@@ -310,7 +350,7 @@ async function search() {
           class="max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400"
         >
           <label
-            v-for="(z, idx) in zipcodeOptions"
+            v-for="(z, idx) in displayedZipcodes"
             :key="z.id"
             class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
           >
@@ -324,7 +364,7 @@ async function search() {
           </label>
         </div>
         <span
-          v-if="zipcodeOptions.length > 1 && selectedStateId !== ''"
+          v-if="displayedZipcodes.length > 1"
           class="text-xs font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>
