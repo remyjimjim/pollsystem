@@ -61,6 +61,82 @@ logged.
 
 ---
 
+## 2026-05-28 — Replace /super/manage-admins with /super/manage-users
+
+**Requested:**
+
+> Can we replace /super/manage-admins with a mockup I have that behaves
+> just like /polls/search and use the route /super/manage-users?
+
+(Followed by a wireframe in `Assets/Mockups/Super-Manage-Users.png` and
+several follow-ups: the seventh column is **Msg**, not a date; the
+latest message shows as a clickable preview that opens a popup with
+Prev/Next over the user's history; "New msg?" composes a new one with
+an optional "Send to user?" email; edits never re-email; empty cell
+shows "(none) + New msg?"; row checkbox toggles `User.isEnabled`;
+Demote-to-Creator stays inline on Admin rows; filters live-update with
+no Search button; Email-contains autocompletes; Shift-\* / Shift-0 on
+the Enable column.)
+
+**Changed:**
+
+- **Backend** — new `SuperUsersController` at `/api/super/users`:
+  - `GET /` with `role`, `includeDisabled`, `email`, `stateId`,
+    `countyId`, `zipcode` filters. Cascade follows the same precedence
+    as `/polls/search` (zipcodes → counties → states → none). State
+    and County are derived per-row from the user's zipcode via
+    `CountyZips`. Latest message is batch-loaded and attached.
+  - `GET /emails?prefix=…` — capped-at-20 autocomplete source for
+    the Email-contains filter.
+  - `POST /{id}/toggle-enabled` and `POST /bulk-toggle-enabled` —
+    powers the row checkbox plus Shift-\* / Shift-0 / shift-range.
+    Both filter to USER/CREATOR/ADMIN; SUPER never gets flipped.
+  - `POST /{id}/demote` — preserves the old controller's capability,
+    now scoped to Admins surfaced by this page.
+  - `GET /{id}/messages`, `POST /{id}/messages` (with optional
+    `sendEmail`), `PUT /messages/{id}` — power the Msg modal. Body is
+    1–2000 chars enforced at controller + DB. Editing never re-emails.
+- New Flyway migration **V13\_\_user\_messages.sql** with `user_id`,
+  `author_id`, `body` (CHECK length 1..2000), `emailed`, timestamps,
+  and a `(user_id, created_at DESC)` index for fast latest-per-user.
+- New `UserMessage` entity + `UserMessageRepository`.
+- Deleted **`SuperAdminController`** and its test — the per-zipcode
+  `RoleAssignment.enabled` toggle it carried has no surface in the new
+  page, and the user-account flag has replaced it.
+- **Frontend** — new `views/super/ManageUsersView.vue`:
+  - Role chips (User/Creator/Admin), Show-disabled, Email-contains
+    with `<datalist>` autocomplete, and the same State/County/Zip
+    multi-select dropdown pickers (with shift-range and Shift-\* /
+    Shift-0) used on `/polls/search`. No Search button — every change
+    triggers a debounced (150ms) refetch.
+  - Results table: Email, Role, State, County, Zipcode,
+    Enable/Disable (checkbox with shift-range bulk-toggle and header
+    Shift-\* / Shift-0), Msg.
+  - Msg cell: clicking the latest-message preview opens a modal with a
+    2000-char textarea, Prev/Next over the user's history, a
+    `New msg?` action that switches to a fresh-message form with a
+    `Send to user?` checkbox (only on new messages).
+  - Demote button inline on Admin rows.
+- Route swap: removed `/super/manage-admins`, added
+  `/super/manage-users` (`ManageUsers`). Dashboard link updated.
+  Deleted `ManageAdminsView.vue`.
+- i18n: `super.manageUsers.*` block added; `super.manageAdmins.*`
+  removed; `super.dashboard.linksManageUsersTitle/Desc` replaced the
+  old `…Admins…` keys. Added `common.save` / `common.saving`.
+- Tests: new `SuperUsersControllerTest` covering role filter, disabled
+  visibility, email-contains, zipcode-cascade geo derivation, toggle
+  (and SUPER guard), bulk toggle (SUPER untouched), demote happy/error
+  paths, create+edit messages (incl. email recording), 400 on empty /
+  oversize body, and latestMessage attachment. `SuperEndpointsSecurityTest`
+  updated to probe `/api/super/users` instead of `/admins`.
+- Verified end-to-end against the running backend: list with each
+  filter family, autocomplete, single + bulk toggle, create with
+  `sendEmail` confirmed in Mailpit, edit, prev/next history, demote.
+
+**Commit:** `634b4e4`
+
+---
+
 ## 2026-05-26 — Enable County always, typeahead with autocomplete when no state
 
 **Requested:**
