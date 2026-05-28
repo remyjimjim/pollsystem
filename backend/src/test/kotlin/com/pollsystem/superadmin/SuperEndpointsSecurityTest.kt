@@ -32,7 +32,7 @@ class SuperEndpointsSecurityTest : AbstractIntegrationTest() {
 
     @ParameterizedTest
     @ValueSource(strings = [
-        "/api/super/admins",
+        "/api/super/users",
         "/api/super/admin-requests",
         "/api/super/poll-types",
         "/api/super/ip-rules"
@@ -43,7 +43,7 @@ class SuperEndpointsSecurityTest : AbstractIntegrationTest() {
 
     @ParameterizedTest
     @ValueSource(strings = [
-        "/api/super/admins",
+        "/api/super/users",
         "/api/super/admin-requests",
         "/api/super/poll-types",
         "/api/super/ip-rules"
@@ -56,7 +56,7 @@ class SuperEndpointsSecurityTest : AbstractIntegrationTest() {
 
     @ParameterizedTest
     @ValueSource(strings = [
-        "/api/super/admins",
+        "/api/super/users",
         "/api/super/admin-requests",
         "/api/super/poll-types",
         "/api/super/ip-rules"

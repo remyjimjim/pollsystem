@@ -59,12 +59,12 @@ onMounted(fetchLoad)
         </p>
       </router-link>
       <router-link
-        to="/super/manage-admins"
+        to="/super/manage-users"
         class="block rounded-lg border border-slate-200 bg-white p-5 no-underline transition-colors hover:border-slate-800"
       >
-        <h3 class="mb-1 font-semibold text-slate-800">{{ $t('super.dashboard.linksManageAdminsTitle') }}</h3>
+        <h3 class="mb-1 font-semibold text-slate-800">{{ $t('super.dashboard.linksManageUsersTitle') }}</h3>
         <p class="m-0 text-sm text-slate-600">
-          {{ $t('super.dashboard.linksManageAdminsDesc') }}
+          {{ $t('super.dashboard.linksManageUsersDesc') }}
         </p>
       </router-link>
       <router-link

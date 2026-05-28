@@ -13,6 +13,9 @@ interface UserRepository : JpaRepository<User, Long> {
     fun existsByEmail(email: String): Boolean
     fun existsByPhone(phone: String): Boolean
     fun findByAccess(access: AccessLevel): List<User>
+    fun findByAccessIn(access: List<AccessLevel>): List<User>
+    fun findByEmailContainingIgnoreCaseOrderByEmail(fragment: String): List<User>
+    fun findByEmailStartingWithIgnoreCaseOrderByEmail(prefix: String): List<User>
     fun findByStripeCustomerId(stripeCustomerId: String): User?
     fun findByStripeSubscriptionId(stripeSubscriptionId: String): User?
 }
@@ -244,6 +247,12 @@ interface QuestionnaireDomainRepository : JpaRepository<QuestionnaireDomain, Lon
 @Repository
 interface QuestionRepository : JpaRepository<Question, Long> {
     fun findByQuestionnaireId(questionnaireId: Long): List<Question>
+}
+
+@Repository
+interface UserMessageRepository : JpaRepository<UserMessage, Long> {
+    fun findByUserIdOrderByCreatedAtDesc(userId: Long): List<UserMessage>
+    fun findByUserIdInOrderByCreatedAtDesc(userIds: List<Long>): List<UserMessage>
 }
 
 @Repository

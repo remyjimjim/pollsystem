@@ -138,9 +138,9 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, minAccess: AccessLevel.SUPER }
   },
   {
-    path: '/super/manage-admins',
-    name: 'ManageAdmins',
-    component: () => import('@/views/super/ManageAdminsView.vue'),
+    path: '/super/manage-users',
+    name: 'ManageUsers',
+    component: () => import('@/views/super/ManageUsersView.vue'),
     meta: { requiresAuth: true, minAccess: AccessLevel.SUPER }
   },
   {
