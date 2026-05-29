@@ -575,27 +575,29 @@ onBeforeUnmount(() => {
       @submit.prevent
       class="mb-4 grid grid-cols-1 items-start gap-3 rounded-md bg-slate-50 p-4 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
     >
-      <!-- Role + Show disabled: a single span-2 cell so the legend, the
-           three role checkboxes, and "Show disabled" all sit on one
-           row. Outside the auto-fit cells they would wrap below 180px. -->
-      <fieldset class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-semibold text-slate-700 sm:col-span-2">
-        <legend class="contents">{{ $t('super.manageUsers.role') }}</legend>
-        <label class="flex items-center gap-1 font-normal">
-          <input v-model="roleFilter.USER" type="checkbox" class="h-4 w-4" />
-          {{ $t('super.manageUsers.roleUser') }}
-        </label>
-        <label class="flex items-center gap-1 font-normal">
-          <input v-model="roleFilter.CREATOR" type="checkbox" class="h-4 w-4" />
-          {{ $t('super.manageUsers.roleCreator') }}
-        </label>
-        <label class="flex items-center gap-1 font-normal">
-          <input v-model="roleFilter.ADMIN" type="checkbox" class="h-4 w-4" />
-          {{ $t('super.manageUsers.roleAdmin') }}
-        </label>
-        <label class="ml-3 flex items-center gap-2">
-          <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
-          {{ $t('super.manageUsers.showDisabled') }}
-        </label>
+      <!-- Role: heading sits above the checkbox row. Role + Show
+           disabled share one span-2 grid cell so the four checkboxes
+           still fit on a single line at typical widths. -->
+      <fieldset class="flex flex-col gap-1 text-sm font-semibold text-slate-700 sm:col-span-2">
+        <legend>{{ $t('super.manageUsers.role') }}</legend>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 font-normal">
+          <label class="flex items-center gap-1">
+            <input v-model="roleFilter.USER" type="checkbox" class="h-4 w-4" />
+            {{ $t('super.manageUsers.roleUser') }}
+          </label>
+          <label class="flex items-center gap-1">
+            <input v-model="roleFilter.CREATOR" type="checkbox" class="h-4 w-4" />
+            {{ $t('super.manageUsers.roleCreator') }}
+          </label>
+          <label class="flex items-center gap-1">
+            <input v-model="roleFilter.ADMIN" type="checkbox" class="h-4 w-4" />
+            {{ $t('super.manageUsers.roleAdmin') }}
+          </label>
+          <label class="ml-3 flex items-center gap-2">
+            <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
+            {{ $t('super.manageUsers.showDisabled') }}
+          </label>
+        </div>
       </fieldset>
 
       <!-- Email contains -->
