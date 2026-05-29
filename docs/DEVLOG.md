@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-05-28 — Messages filter + sortable Zipcode on Manage Users
+
+**Requested:**
+
+> Can we make Zipcode sortable now?
+
+> Can we add one more filter after the Zipcode filter named "Messages"
+> so that it searches thru all the messages for a particular word or
+> phrase?
+
+**Changed:**
+
+- Zipcode header is now click-sortable with the same toggle and ▲ / ▼
+  indicator as the other columns. Sort value is the raw zipcode
+  string.
+- New "Messages" text input sits after the Zipcode picker. Typing fires
+  a debounced (200ms) refetch that includes a `?message=…` param.
+- Backend `SuperUsersController.list` accepts an optional `message`
+  param and intersects the user pool with the set of user_ids whose
+  body contains the substring (case-insensitive). Blank / whitespace-
+  only values are treated as no filter.
+- `UserMessageRepository.findUserIdsWithBodyContaining` runs the JPQL
+  `LOWER(m.body) LIKE LOWER(CONCAT('%', :needle, '%'))` and returns
+  distinct user ids.
+- i18n: `super.manageUsers.messageFilter / messagePlaceholder /
+  messageHelp` added.
+- Test: new `SuperUsersControllerTest` case covers a positive match,
+  a non-match, and the blank-string passthrough.
+- Verified against the live backend: case-insensitive single word,
+  multi-word substring (URL-encoded spaces), no-match, and the
+  combined `role=USER&message=…` form.
+
+**Commit:** `e5792d3`
+
+---
+
 ## 2026-05-28 — Sortable columns on Manage Users
 
 **Requested:**
