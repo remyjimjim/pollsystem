@@ -61,6 +61,43 @@ logged.
 
 ---
 
+## 2026-05-28 — Align Manage Users filter row, match results-table font size
+
+**Requested:**
+
+> Could you make the left side of the form filters, namely Role,
+> Zipcode and Messages so that the Role heading is at the same level
+> vertically as the "Email contains" heading?
+
+> Can we pull the "Role" heading and checkboxes up so that "Role"
+> aligns vertically with "Show disabled"?
+
+> Can we move the "user", "creator" and "Show disabled" checkboxes
+> and labels to be on the same line as the "Admin" checkbox?
+
+> Can we make the font size of the [filter] headings the same size as
+> the results headings […]?
+
+**Changed:**
+
+- Form grid: `items-end` → `items-start`, so every filter cell
+  top-aligns its heading regardless of how tall the body is.
+- Role fieldset is now a single horizontal flex row: the `<legend>`
+  uses `display: contents` so "Role" renders inline alongside the
+  three role checkboxes instead of stacking above them.
+- "Show disabled" was merged into the Role fieldset, and the
+  fieldset spans two grid columns (`sm:col-span-2`). Role +
+  User/Creator/Admin + Show-disabled all share one line at typical
+  widths.
+- Every filter cell root moved from `text-xs` to `text-sm` so the
+  filter headings match the results-table headers exactly. The
+  Role-row labels inherit, so User/Creator/Admin/Show-disabled also
+  bump up.
+
+**Commit:** `afc4a20`
+
+---
+
 ## 2026-05-28 — Messages filter + sortable Zipcode on Manage Users
 
 **Requested:**
