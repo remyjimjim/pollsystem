@@ -36,7 +36,7 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
         fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "s")
         fixtures.createUser(access = AccessLevel.VIEWER, emailPrefix = "v")
 
-        val rows = controller.list(null, false, null, null, null, null)
+        val rows = controller.list(null, false, null, null, null, null, null)
         val accesses = rows.map { it.access }.toSet()
         assertThat(accesses).contains(AccessLevel.USER, AccessLevel.CREATOR, AccessLevel.ADMIN)
         assertThat(accesses).doesNotContain(AccessLevel.SUPER, AccessLevel.VIEWER)
@@ -47,7 +47,7 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
         fixtures.createUser(access = AccessLevel.USER, emailPrefix = "u")
         fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "a")
 
-        val only = controller.list(listOf("ADMIN"), false, null, null, null, null)
+        val only = controller.list(listOf("ADMIN"), false, null, null, null, null, null)
         assertThat(only).allMatch { it.access == AccessLevel.ADMIN }
     }
 
@@ -56,23 +56,23 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
         val u = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "dis")
         users.save(u.copy(isEnabled = false))
 
-        val without = controller.list(listOf("USER"), false, "dis", null, null, null)
+        val without = controller.list(listOf("USER"), false, "dis", null, null, null, null)
         assertThat(without.none { it.id == u.id }).isTrue()
-        val withDisabled = controller.list(listOf("USER"), true, "dis", null, null, null)
+        val withDisabled = controller.list(listOf("USER"), true, "dis", null, null, null, null)
         assertThat(withDisabled.any { it.id == u.id }).isTrue()
     }
 
     @Test
     fun `list filters by email substring case-insensitively`() {
         val u = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "Filterme")
-        val rows = controller.list(listOf("USER"), false, "FILTERME", null, null, null)
+        val rows = controller.list(listOf("USER"), false, "FILTERME", null, null, null, null)
         assertThat(rows.any { it.id == u.id }).isTrue()
     }
 
     @Test
     fun `list filters by zipcode and derives state and county from the zip`() {
         val u = fixtures.createUser(access = AccessLevel.USER, zipcode = "90001", emailPrefix = "geo")
-        val rows = controller.list(listOf("USER"), false, "geo", null, null, listOf("90001"))
+        val rows = controller.list(listOf("USER"), false, "geo", null, null, listOf("90001"), null)
         assertThat(rows.single { it.id == u.id }).satisfies({
             assertThat(it.zipcode).isEqualTo("90001")
             assertThat(it.stateInitial).isEqualTo("CA")
@@ -179,9 +179,29 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
         val super1 = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "suplatest")
         controller.createMessage(recipient.id, CreateMessageRequest("first", false), principalFor(super1))
         controller.createMessage(recipient.id, CreateMessageRequest("second", false), principalFor(super1))
-        val row = controller.list(listOf("USER"), false, "latest", null, null, null).single { it.id == recipient.id }
+        val row = controller.list(listOf("USER"), false, "latest", null, null, null, null).single { it.id == recipient.id }
         assertThat(row.latestMessage?.body).isEqualTo("second")
         assertThat(userMessages.findByUserIdOrderByCreatedAtDesc(recipient.id)).hasSize(2)
+    }
+
+    @Test
+    fun `list message filter narrows to users with a matching message body`() {
+        val hit = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "msgmatch")
+        val miss = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "msgmiss")
+        val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "supmsg")
+        controller.createMessage(hit.id,
+            CreateMessageRequest("Please review the QUARANTINE policy", false), principalFor(sup))
+        controller.createMessage(miss.id,
+            CreateMessageRequest("Welcome to the platform", false), principalFor(sup))
+
+        val rows = controller.list(listOf("USER"), false, null, null, null, null, "quarantine")
+        val ids = rows.map { it.id }.toSet()
+        assertThat(ids).contains(hit.id)
+        assertThat(ids).doesNotContain(miss.id)
+
+        // Blank needle is treated as no filter — both users pass.
+        val all = controller.list(listOf("USER"), false, null, null, null, null, "   ").map { it.id }.toSet()
+        assertThat(all).contains(hit.id, miss.id)
     }
 
     @TestConfiguration

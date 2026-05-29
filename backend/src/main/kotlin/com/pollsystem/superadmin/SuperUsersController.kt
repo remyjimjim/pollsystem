@@ -79,7 +79,8 @@ class SuperUsersController(
         @RequestParam(required = false) email: String?,
         @RequestParam(name = "stateId", required = false) stateIds: List<Long>?,
         @RequestParam(name = "countyId", required = false) countyIds: List<Long>?,
-        @RequestParam(name = "zipcode", required = false) zipcodes: List<String>?
+        @RequestParam(name = "zipcode", required = false) zipcodes: List<String>?,
+        @RequestParam(required = false) message: String?
     ): List<SuperUserRow> {
         val parsedRoles = roles
             ?.mapNotNull { runCatching { AccessLevel.valueOf(it.uppercase()) }.getOrNull() }
@@ -107,6 +108,14 @@ class SuperUsersController(
             else -> null
         }
         if (zipFilter != null) pool = pool.filter { it.zipcode in zipFilter }
+
+        // Free-text search over the message history. Resolves to the set
+        // of user ids that have at least one matching body, then narrows
+        // the pool to that set.
+        if (!message.isNullOrBlank()) {
+            val matchedUserIds = userMessages.findUserIdsWithBodyContaining(message.trim()).toSet()
+            pool = pool.filter { it.id in matchedUserIds }
+        }
 
         if (pool.isEmpty()) return emptyList()
 

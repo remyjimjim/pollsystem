@@ -33,6 +33,7 @@ const roleFilter = ref<Record<Role, boolean>>({ USER: true, CREATOR: true, ADMIN
 const showDisabled = ref(false)
 const emailFilter = ref('')
 const emailSuggestions = ref<string[]>([])
+const messageFilter = ref('')
 
 const states = ref<StateRow[]>([])
 const counties = ref<CountyRow[]>([])
@@ -273,6 +274,13 @@ watch(emailFilter, (newVal) => {
 
 watch(roleFilter, scheduleFetch, { deep: true })
 watch(showDisabled, scheduleFetch)
+// Free-text search of the message history. Debounced so each keystroke
+// doesn't fire its own request.
+let messageFilterTimer: ReturnType<typeof setTimeout> | null = null
+watch(messageFilter, () => {
+  if (messageFilterTimer) clearTimeout(messageFilterTimer)
+  messageFilterTimer = setTimeout(scheduleFetch, 200)
+})
 
 // ---------- main fetch (debounced) ----------
 let fetchTimer: ReturnType<typeof setTimeout> | null = null
@@ -289,6 +297,7 @@ async function fetchUsers() {
     if (roles.length > 0) params.role = roles.join(',')
     if (showDisabled.value) params.includeDisabled = 'true'
     if (emailFilter.value.trim()) params.email = emailFilter.value.trim()
+    if (messageFilter.value.trim()) params.message = messageFilter.value.trim()
     // Same cascade as /polls/search: zipcodes win, then counties, then states.
     if (selectedStateIds.value.length === 0 && zipFilter.value.trim()) {
       params.zipcode = zipFilter.value.trim()
@@ -308,7 +317,7 @@ async function fetchUsers() {
 }
 
 // ---------- column sorting ----------
-type SortKey = 'email' | 'access' | 'stateInitial' | 'countyName' | 'isEnabled' | 'msg'
+type SortKey = 'email' | 'access' | 'stateInitial' | 'countyName' | 'zipcode' | 'isEnabled' | 'msg'
 const sortKey = ref<SortKey>('email')
 const sortDir = ref<'asc' | 'desc'>('asc')
 function toggleSort(key: SortKey) {
@@ -327,6 +336,7 @@ function sortValue(row: UserRow, key: SortKey): string {
     case 'access': return row.access
     case 'stateInitial': return (row.stateInitial ?? '').toLowerCase()
     case 'countyName': return (row.countyName ?? '').toLowerCase()
+    case 'zipcode': return row.zipcode
     // Per the request: 'true' sorts alphabetically after 'false', so asc
     // groups disabled rows first, enabled last.
     case 'isEnabled': return row.isEnabled ? 'true' : 'false'
@@ -718,6 +728,18 @@ onBeforeUnmount(() => {
           </div>
         </template>
       </label>
+
+      <!-- Messages: free-text search of every user's message history. -->
+      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+        <span :title="$t('super.manageUsers.messageHelp')" class="cursor-help">{{ $t('super.manageUsers.messageFilter') }}</span>
+        <input
+          v-model="messageFilter"
+          type="text"
+          autocomplete="off"
+          :placeholder="$t('super.manageUsers.messagePlaceholder')"
+          class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
+        />
+      </label>
     </form>
 
     <p v-if="error" class="mb-2 text-sm text-red-700">{{ error }}</p>
@@ -745,7 +767,10 @@ onBeforeUnmount(() => {
             @click="toggleSort('countyName')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colCounty') }}{{ sortIndicator('countyName') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.colZipcode') }}</th>
+          <th
+            @click="toggleSort('zipcode')"
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
+          >{{ $t('super.manageUsers.colZipcode') }}{{ sortIndicator('zipcode') }}</th>
           <th
             tabindex="0"
             @click="toggleSort('isEnabled')"

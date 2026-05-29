@@ -253,6 +253,13 @@ interface QuestionRepository : JpaRepository<Question, Long> {
 interface UserMessageRepository : JpaRepository<UserMessage, Long> {
     fun findByUserIdOrderByCreatedAtDesc(userId: Long): List<UserMessage>
     fun findByUserIdInOrderByCreatedAtDesc(userIds: List<Long>): List<UserMessage>
+
+    /** User ids whose message history contains the given substring (case-insensitive). */
+    @Query("""
+        SELECT DISTINCT m.userId FROM UserMessage m
+        WHERE LOWER(m.body) LIKE LOWER(CONCAT('%', :needle, '%'))
+    """)
+    fun findUserIdsWithBodyContaining(@Param("needle") needle: String): List<Long>
 }
 
 @Repository
