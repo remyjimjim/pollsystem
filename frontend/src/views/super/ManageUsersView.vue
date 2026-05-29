@@ -573,35 +573,33 @@ onBeforeUnmount(() => {
 
     <form
       @submit.prevent
-      class="mb-4 grid grid-cols-1 items-end gap-3 rounded-md bg-slate-50 p-4 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
+      class="mb-4 grid grid-cols-1 items-start gap-3 rounded-md bg-slate-50 p-4 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
     >
-      <!-- Role -->
-      <fieldset class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-        <legend>{{ $t('super.manageUsers.role') }}</legend>
-        <div class="flex flex-wrap gap-3 pt-1 font-normal">
-          <label class="flex items-center gap-1">
-            <input v-model="roleFilter.USER" type="checkbox" class="h-4 w-4" />
-            {{ $t('super.manageUsers.roleUser') }}
-          </label>
-          <label class="flex items-center gap-1">
-            <input v-model="roleFilter.CREATOR" type="checkbox" class="h-4 w-4" />
-            {{ $t('super.manageUsers.roleCreator') }}
-          </label>
-          <label class="flex items-center gap-1">
-            <input v-model="roleFilter.ADMIN" type="checkbox" class="h-4 w-4" />
-            {{ $t('super.manageUsers.roleAdmin') }}
-          </label>
-        </div>
+      <!-- Role + Show disabled: a single span-2 cell so the legend, the
+           three role checkboxes, and "Show disabled" all sit on one
+           row. Outside the auto-fit cells they would wrap below 180px. -->
+      <fieldset class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-semibold text-slate-700 sm:col-span-2">
+        <legend class="contents">{{ $t('super.manageUsers.role') }}</legend>
+        <label class="flex items-center gap-1 font-normal">
+          <input v-model="roleFilter.USER" type="checkbox" class="h-4 w-4" />
+          {{ $t('super.manageUsers.roleUser') }}
+        </label>
+        <label class="flex items-center gap-1 font-normal">
+          <input v-model="roleFilter.CREATOR" type="checkbox" class="h-4 w-4" />
+          {{ $t('super.manageUsers.roleCreator') }}
+        </label>
+        <label class="flex items-center gap-1 font-normal">
+          <input v-model="roleFilter.ADMIN" type="checkbox" class="h-4 w-4" />
+          {{ $t('super.manageUsers.roleAdmin') }}
+        </label>
+        <label class="ml-3 flex items-center gap-2">
+          <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
+          {{ $t('super.manageUsers.showDisabled') }}
+        </label>
       </fieldset>
 
-      <!-- Show disabled -->
-      <label class="flex items-center gap-2 text-xs font-semibold text-slate-700">
-        <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
-        {{ $t('super.manageUsers.showDisabled') }}
-      </label>
-
       <!-- Email contains -->
-      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
         {{ $t('super.manageUsers.emailContains') }}
         <input
           v-model="emailFilter"
@@ -616,7 +614,7 @@ onBeforeUnmount(() => {
       </label>
 
       <!-- State picker -->
-      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
         <span :title="$t('super.manageUsers.stateHelp')" class="cursor-help">{{ $t('super.manageUsers.state') }}</span>
         <div data-state-picker class="relative">
           <button
@@ -643,7 +641,7 @@ onBeforeUnmount(() => {
       </label>
 
       <!-- County picker -->
-      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
         <span :title="$t('super.manageUsers.countyHelp')" class="cursor-help">{{ $t('super.manageUsers.county') }}</span>
         <div data-county-picker class="relative">
           <button
@@ -682,7 +680,7 @@ onBeforeUnmount(() => {
       </label>
 
       <!-- Zipcode picker (mode A: typeahead, mode B: dropdown) -->
-      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
         <span :title="$t('super.manageUsers.zipcodeHelp')" class="cursor-help">{{ $t('super.manageUsers.zipcode') }}</span>
         <template v-if="selectedStateIds.length === 0">
           <input
@@ -730,7 +728,7 @@ onBeforeUnmount(() => {
       </label>
 
       <!-- Messages: free-text search of every user's message history. -->
-      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
         <span :title="$t('super.manageUsers.messageHelp')" class="cursor-help">{{ $t('super.manageUsers.messageFilter') }}</span>
         <input
           v-model="messageFilter"
