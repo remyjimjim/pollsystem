@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-05-28 — Sortable columns on Manage Users
+
+**Requested:**
+
+> Would it be possible to have the results columns of "Email", "Role",
+> "State", "County", "Enable/Disable" and "Msg" sortable alphabetically
+> where "Enable/Disable" treats a "true" as alphabetically after
+> "false"?
+
+**Changed:**
+
+- The six listed column headers on `/super/manage-users` are now
+  clickable: click sorts that column ascending, click again to flip
+  to descending. The active column shows ▲ / ▼.
+- Sort runs client-side over the loaded result set via a new
+  `sortedResults` computed; the backend's default email order is now
+  just the initial state.
+- Comparison is lowercase alphabetic on the raw field, with two
+  domain-specific keys:
+  - `isEnabled` compares the literal strings `'false'` and `'true'`
+    — so ascending lists disabled rows first and enabled last, per the
+    request.
+  - `msg` compares `latestMessage.body ?? ''` — rows with no message
+    sort first in ascending.
+- Empty State / County values sort as `''`.
+- Zipcode header stays non-sortable; the column wasn't in the request.
+- Shift-click range on the Enable/Disable checkbox now slices over
+  `sortedResults`, so a range follows what the user sees on screen.
+  The anchor resets whenever the sort order changes.
+
+**Commit:** `8a58eef`
+
+---
+
 ## 2026-05-28 — Replace /super/manage-admins with /super/manage-users
 
 **Requested:**
