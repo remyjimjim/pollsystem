@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-05-28 — Stack Role checkboxes under the Role heading
+
+**Requested:**
+
+> Can we put the "User","Creator","Admin" and "Show disabled"
+> checkboxes and headings directly under the "Role" heading in the
+> filters section?
+
+**Changed:**
+
+- Reverted the inline `<legend class="contents">` layout: the Role
+  legend is back on its own line, with the four checkboxes
+  (User / Creator / Admin / Show-disabled) wrapping on the row
+  immediately below it.
+- The fieldset is still `sm:col-span-2` so all four checkboxes fit
+  on a single row at typical widths.
+
+**Commit:** `40e279b`
+
+---
+
 ## 2026-05-28 — Align Manage Users filter row, match results-table font size
 
 **Requested:**
