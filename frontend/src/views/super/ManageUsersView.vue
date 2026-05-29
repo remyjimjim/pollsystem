@@ -307,6 +307,48 @@ async function fetchUsers() {
   }
 }
 
+// ---------- column sorting ----------
+type SortKey = 'email' | 'access' | 'stateInitial' | 'countyName' | 'isEnabled' | 'msg'
+const sortKey = ref<SortKey>('email')
+const sortDir = ref<'asc' | 'desc'>('asc')
+function toggleSort(key: SortKey) {
+  if (sortKey.value === key) {
+    sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortKey.value = key
+    sortDir.value = 'asc'
+  }
+  // A new sort order breaks the previous shift-range anchor.
+  lastClickedEnableIndex.value = null
+}
+function sortValue(row: UserRow, key: SortKey): string {
+  switch (key) {
+    case 'email': return row.email.toLowerCase()
+    case 'access': return row.access
+    case 'stateInitial': return (row.stateInitial ?? '').toLowerCase()
+    case 'countyName': return (row.countyName ?? '').toLowerCase()
+    // Per the request: 'true' sorts alphabetically after 'false', so asc
+    // groups disabled rows first, enabled last.
+    case 'isEnabled': return row.isEnabled ? 'true' : 'false'
+    case 'msg': return (row.latestMessage?.body ?? '').toLowerCase()
+  }
+}
+const sortedResults = computed<UserRow[]>(() => {
+  const dir = sortDir.value === 'asc' ? 1 : -1
+  const k = sortKey.value
+  return results.value.slice().sort((a, b) => {
+    const av = sortValue(a, k)
+    const bv = sortValue(b, k)
+    if (av < bv) return -dir
+    if (av > bv) return dir
+    return 0
+  })
+})
+function sortIndicator(key: SortKey): string {
+  if (sortKey.value !== key) return ''
+  return sortDir.value === 'asc' ? ' ▲' : ' ▼'
+}
+
 // ---------- enable/disable column ----------
 const lastClickedEnableIndex = ref<number | null>(null)
 function onEnableClick(e: MouseEvent, idx: number, row: UserRow) {
@@ -315,7 +357,10 @@ function onEnableClick(e: MouseEvent, idx: number, row: UserRow) {
   if (e.shiftKey && lastClickedEnableIndex.value !== null) {
     const a = Math.min(lastClickedEnableIndex.value, idx)
     const b = Math.max(lastClickedEnableIndex.value, idx)
-    const ids = results.value.slice(a, b + 1).map(r => r.id)
+    // Range is taken from the currently-visible (sorted) order so a
+    // shift-click across two rows toggles everything the user sees
+    // between them, not whatever the unsorted backend order is.
+    const ids = sortedResults.value.slice(a, b + 1).map(r => r.id)
     bulkToggle(ids, targetState)
   } else {
     toggleEnabled(row.id)
@@ -684,22 +729,38 @@ onBeforeUnmount(() => {
     <table v-if="results.length > 0" class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.colEmail') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.colRole') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.colState') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.colCounty') }}</th>
+          <th
+            @click="toggleSort('email')"
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
+          >{{ $t('super.manageUsers.colEmail') }}{{ sortIndicator('email') }}</th>
+          <th
+            @click="toggleSort('access')"
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
+          >{{ $t('super.manageUsers.colRole') }}{{ sortIndicator('access') }}</th>
+          <th
+            @click="toggleSort('stateInitial')"
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
+          >{{ $t('super.manageUsers.colState') }}{{ sortIndicator('stateInitial') }}</th>
+          <th
+            @click="toggleSort('countyName')"
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
+          >{{ $t('super.manageUsers.colCounty') }}{{ sortIndicator('countyName') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.colZipcode') }}</th>
           <th
             tabindex="0"
+            @click="toggleSort('isEnabled')"
             @keydown="onEnableHeaderKeydown"
             :title="$t('super.manageUsers.enableHelp')"
-            class="cursor-help border-b border-slate-200 p-2 font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-400"
-          >{{ $t('super.manageUsers.colEnable') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.colMsg') }}</th>
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-1 focus:ring-slate-400"
+          >{{ $t('super.manageUsers.colEnable') }}{{ sortIndicator('isEnabled') }}</th>
+          <th
+            @click="toggleSort('msg')"
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
+          >{{ $t('super.manageUsers.colMsg') }}{{ sortIndicator('msg') }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, idx) in results" :key="row.id">
+        <tr v-for="(row, idx) in sortedResults" :key="row.id">
           <td class="border-b border-slate-100 p-2">{{ row.email }}</td>
           <td class="border-b border-slate-100 p-2">
             <span :class="['rounded px-2 py-0.5 text-xs font-semibold', accessBadgeClasses(row.access)]">{{ row.access }}</span>
