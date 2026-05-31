@@ -409,6 +409,43 @@ const loading = ref(false)
 const searched = ref(false)
 const error = ref<string | null>(null)
 
+// ---------- column sorting (client-side, on top of the backend's
+// active-first ordering — picking a column overrides that order) ----------
+type SortKey = 'title' | 'type' | 'zipcode' | 'closeDate'
+const sortKey = ref<SortKey | null>(null)
+const sortDir = ref<'asc' | 'desc'>('asc')
+function toggleSort(k: SortKey) {
+  if (sortKey.value === k) sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  else { sortKey.value = k; sortDir.value = 'asc' }
+}
+function sortValue(r: PollSearchResult, k: SortKey): string {
+  switch (k) {
+    case 'title': return r.title.toLowerCase()
+    case 'type': return r.type
+    // The zipcodes payload is already sorted by code from the backend,
+    // so taking the first item gives a stable alphanumeric anchor.
+    case 'zipcode': return r.zipcodes[0]?.code ?? ''
+    // ISO timestamps are lex-sortable. Null close-date = "never closes",
+    // sorts after every real date in ascending order.
+    case 'closeDate': return r.closeDate ?? '￿'
+  }
+}
+const sortedResults = computed<PollSearchResult[]>(() => {
+  if (sortKey.value === null) return results.value
+  const dir = sortDir.value === 'asc' ? 1 : -1
+  const k = sortKey.value
+  return results.value.slice().sort((a, b) => {
+    const av = sortValue(a, k), bv = sortValue(b, k)
+    if (av < bv) return -dir
+    if (av > bv) return dir
+    return 0
+  })
+})
+function sortIndicator(k: SortKey): string {
+  if (sortKey.value !== k) return ''
+  return sortDir.value === 'asc' ? ' ▲' : ' ▼'
+}
+
 function routeMap(type: string): string {
   switch (type) {
     case 'Questionnaire': return 'questionnaire'
@@ -717,15 +754,15 @@ async function search() {
     <table v-if="results.length > 0" class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('search.table.title') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('search.table.type') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('search.table.zipcodes') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('search.table.closes') }}</th>
+          <th @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.title') }}{{ sortIndicator('title') }}</th>
+          <th @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.type') }}{{ sortIndicator('type') }}</th>
+          <th @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.zipcodes') }}{{ sortIndicator('zipcode') }}</th>
+          <th @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.closes') }}{{ sortIndicator('closeDate') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="r in results" :key="`${r.type}-${r.id}`" :class="isClosed(r) ? 'text-slate-500' : ''">
+        <tr v-for="r in sortedResults" :key="`${r.type}-${r.id}`" :class="isClosed(r) ? 'text-slate-500' : ''">
           <td class="border-b border-slate-100 p-2">
             {{ r.title }}
             <span
