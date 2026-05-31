@@ -2,6 +2,7 @@ package com.pollsystem.adminpolls
 
 import com.pollsystem.AbstractIntegrationTest
 import com.pollsystem.TestFixtures
+import com.pollsystem.email.EmailService
 import com.pollsystem.model.AccessLevel
 import com.pollsystem.model.BlockScope
 import com.pollsystem.model.Election
@@ -17,11 +18,18 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Primary
 import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 import java.time.LocalDate
 
+@Import(AdminPollsControllerTest.RecordingEmailConfig::class)
 class AdminPollsControllerTest : AbstractIntegrationTest() {
+
+    @Autowired private lateinit var recordedEmails: RecordingEmailService
 
     @Autowired private lateinit var controller: AdminPollsController
     @Autowired private lateinit var fixtures: TestFixtures
@@ -160,8 +168,48 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
 
         val created = controller.createNote("ELECTION", e.id, CreateNoteRequest("First note"), principalFor(admin))
         assertThat(created.body).isEqualTo("First note")
-        val edited = controller.editNote(created.id, CreateNoteRequest("Edited"))
+        val edited = controller.editNote(created.id, EditNoteRequest("Edited"))
         assertThat(edited.body).isEqualTo("Edited")
         assertThat(controller.listNotes("ELECTION", e.id).first().body).isEqualTo("Edited")
+    }
+
+    @Test
+    fun `createNote with sendEmail emails the poll creator and persists the flag`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mail-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "mail-creator")
+        val e = newElection(creator, zipcode = "90001", title = "Mailable")
+        recordedEmails.clear()
+
+        val created = controller.createNote(
+            "ELECTION", e.id,
+            CreateNoteRequest("Heads up about your poll", sendEmail = true),
+            principalFor(admin)
+        )
+        assertThat(created.emailed).isTrue()
+        assertThat(recordedEmails.sent).hasSize(1)
+        assertThat(recordedEmails.sent[0].to).isEqualTo(creator.email)
+        assertThat(recordedEmails.sent[0].body).contains("Heads up")
+
+        // Editing never re-emails.
+        recordedEmails.clear()
+        controller.editNote(created.id, EditNoteRequest("Edited body"))
+        assertThat(recordedEmails.sent).isEmpty()
+    }
+
+    @TestConfiguration
+    class RecordingEmailConfig {
+        @Bean
+        @Primary
+        fun recordingEmailService() = RecordingEmailService()
+    }
+
+    class RecordingEmailService : EmailService {
+        data class Sent(val to: String, val subject: String, val body: String)
+        val sent = mutableListOf<Sent>()
+        override fun send(to: String, subject: String, body: String) {
+            sent += Sent(to, subject, body)
+        }
+        fun clear() = sent.clear()
     }
 }

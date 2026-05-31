@@ -56,6 +56,7 @@ data class AdminPollRow(
 data class NoteDto(
     val id: Long,
     val body: String,
+    val emailed: Boolean,
     val createdAt: Instant,
     val updatedAt: Instant
 )
@@ -70,7 +71,8 @@ data class StateOption(val id: Long, val name: String, val initial: String)
 data class CountyOption(val id: Long, val stateId: Long, val name: String)
 
 data class CreateBlockRequest(val scope: BlockScope, val zipcode: String?, val countyId: Long?, val stateId: Long?)
-data class CreateNoteRequest(val body: String)
+data class CreateNoteRequest(val body: String, val sendEmail: Boolean = false)
+data class EditNoteRequest(val body: String)
 
 data class BlockDto(
     val id: Long,
@@ -96,7 +98,8 @@ class AdminPollsController(
     private val states: StateRepository,
     private val roleAssignments: RoleAssignmentRepository,
     private val blocks: PollTypeBlockRepository,
-    private val notes: PollNoteRepository
+    private val notes: PollNoteRepository,
+    private val emailService: com.pollsystem.email.EmailService
 ) {
 
     @GetMapping("/purview")
@@ -335,15 +338,22 @@ class AdminPollsController(
         val (kind, _) = locatePoll(type, id)
         val text = body.body.trim()
         if (text.isEmpty() || text.length > 2000) throw bad("Note must be 1–2000 chars")
+        var emailed = false
+        if (body.sendEmail) {
+            val creatorEmail = creatorEmailFor(kind, id)
+            emailService.send(creatorEmail, "A note about your poll", text)
+            emailed = true
+        }
         val saved = notes.save(PollNote(
-            pollType = kind, pollId = id, body = text, authorId = principal.user.id
+            pollType = kind, pollId = id, body = text,
+            authorId = principal.user.id, emailed = emailed
         ))
         return toDto(saved)
     }
 
     @PutMapping("/notes/{noteId}")
     @Transactional
-    fun editNote(@PathVariable noteId: Long, @RequestBody body: CreateNoteRequest): NoteDto {
+    fun editNote(@PathVariable noteId: Long, @RequestBody body: EditNoteRequest): NoteDto {
         val existing = notes.findById(noteId).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Note not found")
         }
@@ -411,6 +421,19 @@ class AdminPollsController(
         return kind to zips
     }
 
+    /** Address used when emailing a copy of the note to the poll's creator. */
+    private fun creatorEmailFor(kind: PollKind, id: Long): String = when (kind) {
+        PollKind.QUESTIONNAIRE -> questionnaires.findById(id).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
+        }.creator.email
+        PollKind.ELECTION -> elections.findById(id).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
+        }.creator.email
+        PollKind.BALLOT_MEASURE -> ballotMeasures.findById(id).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
+        }.creator.email
+    }
+
     private fun parseKind(type: String): PollKind = runCatching { PollKind.valueOf(type.uppercase()) }
         .getOrElse { throw bad("Unknown poll type: $type") }
 
@@ -453,7 +476,8 @@ class AdminPollsController(
     }
 
     private fun toDto(n: PollNote) = NoteDto(
-        id = n.id, body = n.body, createdAt = n.createdAt, updatedAt = n.updatedAt
+        id = n.id, body = n.body, emailed = n.emailed,
+        createdAt = n.createdAt, updatedAt = n.updatedAt
     )
 
     private fun bad(msg: String) = ResponseStatusException(HttpStatus.BAD_REQUEST, msg)

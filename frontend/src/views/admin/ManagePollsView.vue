@@ -7,9 +7,9 @@ const { t } = useI18n()
 
 type Kind = 'ELECTION' | 'QUESTIONNAIRE' | 'BALLOT_MEASURE'
 type Scope = 'ZIPCODE' | 'COUNTY' | 'STATE'
-type SortKey = 'title' | 'type' | 'stateInitial' | 'countyName' | 'zipcode' | 'closeDate' | 'blocked' | 'note'
+type SortKey = 'title' | 'type' | 'creatorEmail' | 'stateInitial' | 'countyName' | 'zipcode' | 'closeDate' | 'blocked' | 'note'
 
-interface NoteDto { id: number; body: string; createdAt: string; updatedAt: string }
+interface NoteDto { id: number; body: string; emailed: boolean; createdAt: string; updatedAt: string }
 interface PollRow {
   id: number
   type: Kind
@@ -289,6 +289,7 @@ function sortValue(r: PollRow, k: SortKey): string {
   switch (k) {
     case 'title': return r.title.toLowerCase()
     case 'type': return r.type
+    case 'creatorEmail': return r.creatorEmail.toLowerCase()
     case 'stateInitial': return (r.stateInitial ?? '').toLowerCase()
     case 'countyName': return (r.countyName ?? '').toLowerCase()
     case 'zipcode': return r.zipcodes[0] ?? ''
@@ -429,6 +430,7 @@ const noteModalNotes = ref<NoteDto[]>([])
 const noteModalIdx = ref(0)
 const noteModalMode = ref<'edit' | 'new'>('edit')
 const noteModalBody = ref('')
+const noteModalSendEmail = ref(false)
 const noteModalSaving = ref(false)
 const noteModalError = ref<string | null>(null)
 const noteTextarea = ref<HTMLTextAreaElement | null>(null)
@@ -440,6 +442,7 @@ async function openNoteModal(row: PollRow, startMode: 'edit' | 'new' = 'edit') {
   noteModalIdx.value = 0
   noteModalMode.value = startMode
   noteModalBody.value = ''
+  noteModalSendEmail.value = false
   noteModalOpen.value = true
   try {
     noteModalNotes.value = (await axios.get<NoteDto[]>(`/api/admin/polls/${row.type}/${row.id}/notes`)).data
@@ -474,6 +477,7 @@ function noteNext() {
 function noteStartNew() {
   noteModalMode.value = 'new'
   noteModalBody.value = ''
+  noteModalSendEmail.value = false
   nextTick(() => noteTextarea.value?.focus())
 }
 function noteBackToEdit() {
@@ -494,11 +498,12 @@ async function saveNote() {
     if (noteModalMode.value === 'new') {
       const res = await axios.post<NoteDto>(
         `/api/admin/polls/${noteModalRow.value.type}/${noteModalRow.value.id}/notes`,
-        { body }
+        { body, sendEmail: noteModalSendEmail.value }
       )
       noteModalNotes.value = [res.data, ...noteModalNotes.value]
       noteModalIdx.value = 0
       noteModalMode.value = 'edit'
+      noteModalSendEmail.value = false
       if (noteModalRow.value) {
         const updated = { ...noteModalRow.value, latestNote: res.data }
         results.value = results.value.map(r => (r.id === updated.id && r.type === updated.type ? updated : r))
@@ -695,6 +700,7 @@ onBeforeUnmount(() => {
         <tr class="bg-slate-50 text-left">
           <th @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colTitle') }}{{ sortIndicator('title') }}</th>
           <th @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colType') }}{{ sortIndicator('type') }}</th>
+          <th @click="toggleSort('creatorEmail')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCreator') }}{{ sortIndicator('creatorEmail') }}</th>
           <th @click="toggleSort('stateInitial')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colState') }}{{ sortIndicator('stateInitial') }}</th>
           <th @click="toggleSort('countyName')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCounty') }}{{ sortIndicator('countyName') }}</th>
           <th @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colZipcode') }}{{ sortIndicator('zipcode') }}</th>
@@ -709,6 +715,7 @@ onBeforeUnmount(() => {
           <td class="border-b border-slate-100 p-2">
             <span :class="['rounded px-2 py-0.5 text-xs font-semibold', kindBadgeClasses(row.type)]">{{ kindLabel(row.type) }}</span>
           </td>
+          <td class="border-b border-slate-100 p-2">{{ row.creatorEmail }}</td>
           <td class="border-b border-slate-100 p-2">{{ row.stateInitial ?? '—' }}</td>
           <td class="border-b border-slate-100 p-2">{{ row.countyName ?? '—' }}</td>
           <td class="border-b border-slate-100 p-2 font-mono">
@@ -832,6 +839,10 @@ onBeforeUnmount(() => {
           class="mb-1 w-full rounded border border-slate-300 p-2 text-sm text-slate-900 focus:border-slate-500 focus:outline-none" />
         <p class="mb-2 text-right text-xs text-slate-500">{{ noteModalBody.length }}/2000</p>
         <p v-if="noteModalError" class="mb-2 text-xs text-red-700">{{ noteModalError }}</p>
+        <label v-if="noteModalMode === 'new'" class="mb-3 flex items-center gap-2 text-xs text-slate-700">
+          <input v-model="noteModalSendEmail" type="checkbox" class="h-4 w-4" />
+          {{ $t('admin.managePolls.sendToCreator', { email: noteModalRow?.creatorEmail ?? '' }) }}
+        </label>
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex gap-2 text-xs">
             <button v-if="noteModalMode === 'edit'" type="button" :disabled="noteModalIdx >= noteModalNotes.length - 1" @click="notePrev"

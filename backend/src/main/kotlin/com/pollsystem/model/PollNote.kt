@@ -23,6 +23,9 @@ data class PollNote(
     @Column(name = "author_id", nullable = false)
     val authorId: Long,
 
+    @Column(nullable = false)
+    val emailed: Boolean = false,
+
     @Column(name = "created_at", nullable = false)
     val createdAt: Instant = Instant.now(),
 
