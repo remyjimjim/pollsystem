@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-05-31 — Rename Manage Polls column header to "Enabled?"
+
+**Requested:**
+
+> For the /admin/manage-polls page, can we change the "Enable/Disable"
+> heading to "Enabled?"?
+
+**Changed:**
+
+- `admin.managePolls.colEnable` flipped from "Enable/Disable" to
+  "Enabled?". The cell already reads as a yes/no answer (checked =
+  enabled) after the prior polarity flip; the heading now matches.
+- The matching `super.manageUsers.colEnable` key is left untouched —
+  the Users page still surfaces both directions of the toggle inline.
+
+**Commit:** `a4a5e1e`
+
+---
+
 ## 2026-05-31 — Load County / Zipcode pickers on demand for SUPER on Manage Polls
 
 **Requested:**
