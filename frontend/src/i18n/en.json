@@ -503,7 +503,7 @@
       "colZipcode": "Zipcode",
       "colCloses": "Closes",
       "closeNever": "—",
-      "colEnable": "Enable/Disable",
+      "colEnable": "Enabled?",
       "colNote": "Notes",
       "statusEnabled": "Enabled",
       "statusDisabled": "Disabled",
