@@ -61,6 +61,86 @@ logged.
 
 ---
 
+## 2026-05-31 — /admin/manage-polls with submission blocking + notes
+
+**Requested:**
+
+> Can we update /admin/manage-polls so that it's roughly equivalent to
+> /super/manage-users except: change the 'Role' section by replacing
+> user, creator, admin checkboxes with election, questionaire and
+> ballot measure checkboxes; change 'Email contains' with 'Title
+> contains' and instead of 'Msg' use 'Notes' and let the Admin make
+> notes in textareas. … Admins can disable/enable specific Poll types
+> for a given zipcode, county or state within their purview. When a
+> Poll type is disabled for a given zipcode then no more submissions
+> are allowed for all instances of that poll type and zipcode(s),
+> county or state.
+
+> Also hide blocked polls from /polls/search and public results.
+
+**Changed:**
+
+- New Flyway migration **V14__admin_polls.sql** introducing two tables:
+  - `poll_type_blocks (poll_type, scope ZIPCODE|COUNTY|STATE,
+    zipcode|county_id|state_id, created_at, created_by)` with a CHECK
+    enforcing exactly one geo identifier per row and three partial
+    unique indexes (one per scope) so duplicate blocks at the same
+    target are rejected.
+  - `poll_notes (poll_type, poll_id, body ≤2000, author_id,
+    timestamps)` — polymorphic on `(poll_type, poll_id)`. Notes are
+    shared across admins; the latest preview appears in the table cell
+    and full history is reachable via Prev/Next.
+- New `PollKind` + `BlockScope` enums; `PollTypeBlock`, `PollNote`
+  entities; `PollTypeBlockRepository`, `PollNoteRepository`.
+- New `PollBlockService` answers "is this poll blocked?" by matching
+  any of three scopes against a poll's zipcode set. Bulk path
+  pre-resolves zip → (county, state) once per batch so search-page
+  filtering stays O(N).
+- New `AdminPollsController` at `/api/admin/polls`:
+  - `GET /` — purview-scoped list with `pollType`, `title`, `stateId`,
+    `countyId`, `zipcode`, `notesContain` filters. Each row exposes
+    derived `blocked` (any active block matching the poll) and
+    `latestNote`.
+  - `GET /purview` — admin's available states/counties/zipcodes from
+    enabled ADMIN-role assignments. SUPER returns `unrestricted=true`
+    so the page works system-wide.
+  - `GET/POST/DELETE /{type}/{id}/blocks` and `/blocks/{id}` — block
+    CRUD; out-of-purview targets are rejected with 403.
+  - `GET/POST /{type}/{id}/notes`, `PUT /notes/{id}` — note CRUD
+    mirroring the /super/manage-users message flow (no
+    Send-to-user).
+- Enforcement wired into:
+  - All three response controllers (`Questionnaire`, `Election`,
+    `BallotMeasure`) — 403 with "Submissions disabled by admin" when a
+    block matches, before any DB writes.
+  - All three results controllers — 404 (treat as "not found") when a
+    block matches.
+  - `PollSearchController` — `PollBlockService.filterUnblocked`
+    drops blocked rows before sort.
+- New `frontend/src/views/admin/ManagePollsView.vue` (replaces the old
+  stub): filter row with Poll-Type checkboxes (Election/Questionnaire/
+  Ballot Measure), Title-contains with `/api/polls/search/suggestions`
+  autocomplete, purview-gated State/County/Zipcode multi-select
+  pickers, and a Notes free-text filter. Results table with sortable
+  Title/Type/State/County/Zipcode/Enable-Disable/Notes columns. The
+  Enable/Disable cell is a button that opens a modal listing every
+  active block on the poll with per-block Remove buttons and a "Add a
+  new block" form with ZIPCODE/COUNTY/STATE radio scope. The Notes
+  cell opens the same Prev/Next history modal as the Messages flow on
+  /super/manage-users, minus the email checkbox.
+- `admin.managePolls.*` i18n block populated.
+- Backend test (`AdminPollsControllerTest`) covers purview gating,
+  out-of-purview block 403, block + note CRUD.
+- Verified end-to-end against the running backend: SUPER purview is
+  unrestricted; blocking an ELECTION by ZIPCODE makes
+  `/api/polls/search` drop the row, returns 404 from the results
+  endpoint, and 403 from the responses endpoint. Removing the block
+  restores all three.
+
+**Commit:** `13e5452`
+
+---
+
 ## 2026-05-28 — Stack Role checkboxes under the Role heading
 
 **Requested:**
