@@ -97,7 +97,7 @@ class ElectionResponseController(
         if (close != null && !close.isAfter(Instant.now())) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
         }
-        if (blocks.isBlocked(com.pollsystem.model.PollKind.ELECTION, listOf(election.zipcode))) {
+        if (blocks.isBlocked(com.pollsystem.model.PollKind.ELECTION, election.id)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
 

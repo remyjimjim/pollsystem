@@ -54,7 +54,7 @@ class ElectionResultsController(
             ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
         }
         // Admin block hides the poll from public results too.
-        if (blocks.isBlocked(PollKind.ELECTION, listOf(election.zipcode))) {
+        if (blocks.isBlocked(PollKind.ELECTION, election.id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
         }
         val candidateList = candidates.findByElectionId(id)

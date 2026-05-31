@@ -52,8 +52,7 @@ class QuestionnaireResultsController(
         val q = questionnaires.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
         }
-        val qZips = domains.findByQuestionnaireId(id).map { it.zipcode }
-        if (blocks.isBlocked(PollKind.QUESTIONNAIRE, qZips)) {
+        if (blocks.isBlocked(PollKind.QUESTIONNAIRE, id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
         }
 

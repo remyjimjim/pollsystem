@@ -221,8 +221,7 @@ class AdminPollsController(
         // Compute blocked + latestNote in one pass per kind.
         val withBlocks = rows.map { r ->
             val kind = PollKind.valueOf(r.type)
-            val blockedNow = isBlockedFor(kind, r.zipcodes)
-            r.copy(blocked = blockedNow)
+            r.copy(blocked = isBlockedFor(kind, r.id))
         }
         val byKind = withBlocks.groupBy { PollKind.valueOf(it.type) }
         val latestByKey = mutableMapOf<Pair<PollKind, Long>, PollNote>()
@@ -253,18 +252,8 @@ class AdminPollsController(
     @GetMapping("/{type}/{id}/blocks")
     @Transactional(readOnly = true)
     fun listBlocks(@PathVariable type: String, @PathVariable id: Long): List<BlockDto> {
-        val (kind, zips) = locatePoll(type, id)
-        val all = blocks.findByPollType(kind)
-        val zipSet = zips.toSet()
-        val countyIds = countyZips.findByZipcodeIn(zips).map { it.county.id }.toSet()
-        val stateIds = countyZips.findByZipcodeIn(zips).map { it.county.state.id }.toSet()
-        return all.filter {
-            when (it.scope) {
-                BlockScope.ZIPCODE -> it.zipcode in zipSet
-                BlockScope.COUNTY -> it.countyId in countyIds
-                BlockScope.STATE -> it.stateId in stateIds
-            }
-        }.map(::toBlockDto)
+        val (kind, _) = locatePoll(type, id)
+        return blocks.findByPollTypeAndPollId(kind, id).map(::toBlockDto)
     }
 
     @PostMapping("/{type}/{id}/block")
@@ -282,30 +271,30 @@ class AdminPollsController(
                 val zip = body.zipcode ?: throw bad("zipcode required for ZIPCODE scope")
                 if (zip !in zips) throw bad("Zipcode $zip is not one of this poll's zipcodes")
                 requirePurviewZipcode(purview, zip)
-                val existing = blocks.findByPollTypeAndScopeAndZipcode(kind, BlockScope.ZIPCODE, zip)
+                val existing = blocks.findByPollTypeAndPollIdAndScopeAndZipcode(kind, id, BlockScope.ZIPCODE, zip)
                 if (existing != null) return toBlockDto(existing)
                 blocks.save(PollTypeBlock(
-                    pollType = kind, scope = BlockScope.ZIPCODE,
+                    pollType = kind, pollId = id, scope = BlockScope.ZIPCODE,
                     zipcode = zip, createdBy = principal.user.id
                 ))
             }
             BlockScope.COUNTY -> {
                 val cId = body.countyId ?: throw bad("countyId required for COUNTY scope")
                 requirePurviewCounty(purview, cId)
-                val existing = blocks.findByPollTypeAndScopeAndCountyId(kind, BlockScope.COUNTY, cId)
+                val existing = blocks.findByPollTypeAndPollIdAndScopeAndCountyId(kind, id, BlockScope.COUNTY, cId)
                 if (existing != null) return toBlockDto(existing)
                 blocks.save(PollTypeBlock(
-                    pollType = kind, scope = BlockScope.COUNTY,
+                    pollType = kind, pollId = id, scope = BlockScope.COUNTY,
                     countyId = cId, createdBy = principal.user.id
                 ))
             }
             BlockScope.STATE -> {
                 val sId = body.stateId ?: throw bad("stateId required for STATE scope")
                 requirePurviewState(purview, sId)
-                val existing = blocks.findByPollTypeAndScopeAndStateId(kind, BlockScope.STATE, sId)
+                val existing = blocks.findByPollTypeAndPollIdAndScopeAndStateId(kind, id, BlockScope.STATE, sId)
                 if (existing != null) return toBlockDto(existing)
                 blocks.save(PollTypeBlock(
-                    pollType = kind, scope = BlockScope.STATE,
+                    pollType = kind, pollId = id, scope = BlockScope.STATE,
                     stateId = sId, createdBy = principal.user.id
                 ))
             }
@@ -448,19 +437,8 @@ class AdminPollsController(
         }
     }
 
-    private fun isBlockedFor(kind: PollKind, pollZips: List<String>): Boolean {
-        val tb = blocks.findByPollType(kind)
-        if (tb.isEmpty()) return false
-        val meta = countyZips.findByZipcodeIn(pollZips).groupBy { it.zipcode }
-        return pollZips.any { zip ->
-            if (tb.any { it.scope == BlockScope.ZIPCODE && it.zipcode == zip }) return@any true
-            val m = meta[zip].orEmpty()
-            val cIds = m.map { it.county.id }.toSet()
-            if (tb.any { it.scope == BlockScope.COUNTY && it.countyId in cIds }) return@any true
-            val sIds = m.map { it.county.state.id }.toSet()
-            tb.any { it.scope == BlockScope.STATE && it.stateId in sIds }
-        }
-    }
+    private fun isBlockedFor(kind: PollKind, pollId: Long): Boolean =
+        blocks.existsByPollTypeAndPollId(kind, pollId)
 
     private fun toBlockDto(b: PollTypeBlock): BlockDto {
         val county = b.countyId?.let { counties.findById(it).orElse(null) }

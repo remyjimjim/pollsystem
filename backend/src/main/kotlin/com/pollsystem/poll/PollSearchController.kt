@@ -175,11 +175,11 @@ class PollSearchController(
             }
         }
 
-        // Hide polls that admins have blocked at any of their zipcodes.
+        // Hide polls that admins have blocked individually.
         val visible = blockService.filterUnblocked(
             results,
             type = { kindOf(it.type) },
-            zipcodes = { row -> row.zipcodes.map { it.code } }
+            id = { it.id }
         )
 
         // Active polls (no closeDate or future) first, sorted by closeDate

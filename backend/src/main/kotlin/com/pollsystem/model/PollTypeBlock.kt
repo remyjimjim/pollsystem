@@ -18,6 +18,9 @@ data class PollTypeBlock(
     @Column(name = "poll_type", nullable = false, length = 32)
     val pollType: PollKind,
 
+    @Column(name = "poll_id", nullable = false)
+    val pollId: Long,
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)
     val scope: BlockScope,

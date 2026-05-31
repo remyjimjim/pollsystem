@@ -294,26 +294,28 @@ async function openBlockModal(row: PollRow) {
 /**
  * Click handler for the Enable/Disable checkbox in the table.
  *
- * - Unchecked → checked (transitioning to "disabled"): open the modal so
- *   the admin picks the scope (zipcode / county / state). The actual
- *   block isn't created until Apply lands inside the modal; if the modal
- *   is dismissed, the row state is unchanged on next refetch.
- * - Checked → unchecked (transitioning to "enabled"): silently remove
- *   every block currently affecting this poll that's within the admin's
+ * The checkbox reads as "is this poll enabled?" — checked = enabled,
+ * unchecked = blocked. So the two transitions are:
+ * - Checked → unchecked (enabled → disabled): open the modal so the
+ *   admin picks the scope (zipcode / county / state). The actual block
+ *   isn't created until Apply lands inside the modal; if the modal is
+ *   dismissed the row stays checked after the next refetch.
+ * - Unchecked → checked (disabled → enabled): silently remove every
+ *   block currently affecting this poll that's within the admin's
  *   purview. Out-of-purview blocks (e.g. a state-wide block another
- *   admin set) stay and the row will refresh back to checked.
+ *   admin set) stay and the row will refresh back to unchecked.
  *
  * `@click.prevent` stops the browser from flipping the checkbox before
  * the backend round-trip completes; the `:checked` bind reflects the
- * authoritative `row.blocked`.
+ * authoritative `!row.blocked`.
  */
 async function onBlockCheckboxClick(row: PollRow) {
   if (!row.blocked) {
-    // Was unchecked, user wants to disable → ask for scope via modal.
+    // Was checked (enabled), user wants to disable → ask for scope via modal.
     await openBlockModal(row)
     return
   }
-  // Was checked, user wants to enable → drop all blocks we can reach.
+  // Was unchecked (disabled), user wants to enable → drop all blocks we can reach.
   try {
     const existing = (await axios.get<BlockDto[]>(`/api/admin/polls/${row.type}/${row.id}/blocks`)).data
     await Promise.allSettled(
@@ -666,7 +668,7 @@ onBeforeUnmount(() => {
           <td class="border-b border-slate-100 p-2">
             <input
               type="checkbox"
-              :checked="row.blocked"
+              :checked="!row.blocked"
               @click.prevent="onBlockCheckboxClick(row)"
               :title="row.blocked ? $t('admin.managePolls.statusDisabled') : $t('admin.managePolls.statusEnabled')"
               :aria-label="row.blocked ? $t('admin.managePolls.statusDisabled') : $t('admin.managePolls.statusEnabled')"

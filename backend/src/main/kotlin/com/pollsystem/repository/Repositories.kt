@@ -264,11 +264,11 @@ interface UserMessageRepository : JpaRepository<UserMessage, Long> {
 
 @Repository
 interface PollTypeBlockRepository : JpaRepository<PollTypeBlock, Long> {
-    fun findByPollType(pollType: PollKind): List<PollTypeBlock>
-    fun findByPollTypeIn(pollTypes: List<PollKind>): List<PollTypeBlock>
-    fun findByPollTypeAndScopeAndZipcode(pollType: PollKind, scope: BlockScope, zipcode: String): PollTypeBlock?
-    fun findByPollTypeAndScopeAndCountyId(pollType: PollKind, scope: BlockScope, countyId: Long): PollTypeBlock?
-    fun findByPollTypeAndScopeAndStateId(pollType: PollKind, scope: BlockScope, stateId: Long): PollTypeBlock?
+    fun findByPollTypeAndPollId(pollType: PollKind, pollId: Long): List<PollTypeBlock>
+    fun existsByPollTypeAndPollId(pollType: PollKind, pollId: Long): Boolean
+    fun findByPollTypeAndPollIdAndScopeAndZipcode(pollType: PollKind, pollId: Long, scope: BlockScope, zipcode: String): PollTypeBlock?
+    fun findByPollTypeAndPollIdAndScopeAndCountyId(pollType: PollKind, pollId: Long, scope: BlockScope, countyId: Long): PollTypeBlock?
+    fun findByPollTypeAndPollIdAndScopeAndStateId(pollType: PollKind, pollId: Long, scope: BlockScope, stateId: Long): PollTypeBlock?
 }
 
 @Repository

@@ -131,6 +131,27 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `block on one poll does not affect a sibling poll at the same zipcode`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "isol-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "isol-creator")
+        val a = newElection(creator, zipcode = "90001", title = "Poll A")
+        val b = newElection(creator, zipcode = "90001", title = "Poll B")
+
+        controller.createBlock(
+            type = "ELECTION", id = a.id,
+            body = CreateBlockRequest(scope = BlockScope.ZIPCODE, zipcode = "90001", countyId = null, stateId = null),
+            principal = principalFor(admin)
+        )
+
+        val rows = controller.list(principalFor(admin), listOf("ELECTION"), null, null, null, null, null, true)
+        val rowA = rows.first { it.id == a.id }
+        val rowB = rows.first { it.id == b.id }
+        assertThat(rowA.blocked).isTrue()
+        assertThat(rowB.blocked).isFalse()
+    }
+
+    @Test
     fun `note create + list + edit`() {
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "note-admin")
         fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")

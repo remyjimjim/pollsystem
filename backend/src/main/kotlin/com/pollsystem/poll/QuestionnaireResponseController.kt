@@ -101,8 +101,7 @@ class QuestionnaireResponseController(
         if (close != null && !close.isAfter(Instant.now())) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
         }
-        val zipcodes = domains.findByQuestionnaireId(id).map { it.zipcode }
-        if (blocks.isBlocked(PollKind.QUESTIONNAIRE, zipcodes)) {
+        if (blocks.isBlocked(PollKind.QUESTIONNAIRE, id)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
 

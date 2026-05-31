@@ -42,7 +42,7 @@ class BallotMeasureResultsController(
         val measure = measures.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
-        if (blocks.isBlocked(PollKind.BALLOT_MEASURE, listOf(measure.election.zipcode))) {
+        if (blocks.isBlocked(PollKind.BALLOT_MEASURE, measure.id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
         val all = responses.findByMeasureId(id)
