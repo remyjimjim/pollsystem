@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-05-31 — Sortable Title / Type / Zipcodes / Closes on /polls/search
+
+**Requested:**
+
+> For /polls/search page can we make the following columns sortable:
+> 'Title' (alphabetic), 'Type' (alphabetic), 'Zipcodes' (alphanumeric),
+> 'Closes' (date/time)?
+
+**Changed:**
+
+- All four columns on the public search table are now click-sortable
+  with the same ▲ / ▼ indicator used by `/super/manage-users` and
+  `/admin/manage-polls`. Initial render keeps the backend's
+  active-first / closed-last ordering; the first header click drops
+  into client-side sort.
+- Title and Type compare on lowercase strings. Zipcode anchors on the
+  first item in the row's already-sorted zipcodes array, which gives
+  a stable alphanumeric key without needing a secondary tie-breaker.
+  Closes compares ISO timestamps lex-wise; null close-dates sort
+  last in ascending order (treated as "never closes").
+
+**Commit:** `5c4eca9`
+
+---
+
 ## 2026-05-31 — Rename Manage Polls column header to "Enabled?"
 
 **Requested:**
