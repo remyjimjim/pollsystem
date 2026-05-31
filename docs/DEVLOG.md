@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-05-31 — Load County / Zipcode pickers on demand for SUPER on Manage Polls
+
+**Requested:**
+
+> When I change the "State" filter from 'Any State' to for instance
+> 'Alaska' the "County" filter doesn't populate with all the counties
+> in Alaska, can we make it populate?
+
+**Changed:**
+
+- `/api/admin/polls/purview` returns an empty `counties` and
+  `zipcodes` list for SUPER (the rationale was not to ship 3.3k
+  counties / 30k+ zipcodes upfront). The frontend tried to fetch a
+  `/api/zipcodes/all` URL that doesn't exist, so the lists never
+  populated and a Picked state didn't surface its counties.
+- New `refreshCountiesForState` calls `/api/counties?state_id=…` for
+  SUPER when the State picker changes; restricted ADMINs keep
+  filtering their assignment-derived list locally.
+- New `refreshZipcodesForGeo` does the same for the Zipcode picker —
+  uses `county_ids` when counties are picked, otherwise `state_id`.
+- All state / county selection paths (click handler + Shift-\* /
+  Shift-0 shortcut) now route through `afterStateChange` /
+  `afterCountyChange` helpers that reset the down-cascade selections
+  and trigger the appropriate API reloads.
+- Dropped the misnamed `/api/zipcodes/all` call from `loadPurview`.
+
+**Commit:** `c4e5b93`
+
+---
+
 ## 2026-05-31 — Per-poll block scoping + flipped checkbox polarity
 
 **Requested:**
