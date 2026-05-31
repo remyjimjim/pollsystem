@@ -61,6 +61,50 @@ logged.
 
 ---
 
+## 2026-05-31 — Manage Polls — Show-disabled toggle, checkbox widget, Closes column
+
+**Requested:**
+
+> Can we add the 'Show disabled' checkbox to the Poll Type section that
+> once clicked will show all disabled poll instances?
+
+> Can we change the Enable/Disable widget from a button to a checkbox
+> and if the checkbox goes from checked to unchecked/enabled then no
+> modal box pops up to disable zipcodes, but if the checkbox goes from
+> unchecked to checked then pop up the modal filter box?
+
+> Can we add a "Closes" column that shows the polls closing date and
+> is sortable by date?
+
+**Changed:**
+
+- Backend `GET /api/admin/polls` accepts an optional
+  `includeDisabled=true` flag; when omitted, rows whose `blocked` is
+  true are filtered out. Existing test was updated, and a new one
+  covers both modes (default hides the blocked row; flag includes it).
+- Frontend Poll-Type fieldset now contains a "Show disabled" checkbox
+  bound to a `showDisabled` ref that drives the new flag.
+- Enable/Disable cell switched from the colored Enabled/Disabled
+  button to a plain checkbox bound to `row.blocked`:
+  - Unchecked → checked: the existing block-modal opens so the admin
+    picks ZIPCODE / COUNTY / STATE scope. The checkbox doesn't flip
+    until the next refetch — `@click.prevent` keeps the visual state
+    authoritative on the server.
+  - Checked → unchecked: silently `DELETE`s every block currently
+    affecting the poll (Promise.allSettled, per-block, so each
+    purview-rejection stays isolated), then refetches. Blocks the
+    admin can't remove (out of purview) leave the row checked.
+- New "Closes" column sits between Zipcode and Enable/Disable. Cell
+  formats `closeDate` via `toLocaleString()` (or `closeNever` when
+  null). Sort key uses the raw ISO timestamp; null close-dates sort
+  last in ascending order — treated as "never closes".
+- i18n keys added: `admin.managePolls.showDisabled`, `colCloses`,
+  `closeNever`.
+
+**Commit:** `852e603`
+
+---
+
 ## 2026-05-31 — /admin/manage-polls with submission blocking + notes
 
 **Requested:**
