@@ -7,7 +7,7 @@ const { t } = useI18n()
 
 type Kind = 'ELECTION' | 'QUESTIONNAIRE' | 'BALLOT_MEASURE'
 type Scope = 'ZIPCODE' | 'COUNTY' | 'STATE'
-type SortKey = 'title' | 'type' | 'stateInitial' | 'countyName' | 'zipcode' | 'blocked' | 'note'
+type SortKey = 'title' | 'type' | 'stateInitial' | 'countyName' | 'zipcode' | 'closeDate' | 'blocked' | 'note'
 
 interface NoteDto { id: number; body: string; createdAt: string; updatedAt: string }
 interface PollRow {
@@ -40,6 +40,7 @@ interface BlockDto {
 
 // ---------- filters ----------
 const kindFilter = ref<Record<Kind, boolean>>({ ELECTION: true, QUESTIONNAIRE: true, BALLOT_MEASURE: true })
+const showDisabled = ref(false)
 const titleFilter = ref('')
 const titleSuggestions = ref<string[]>([])
 const notesFilter = ref('')
@@ -106,6 +107,7 @@ async function fetchPolls() {
     if (kinds.length > 0) params.pollType = kinds.join(',')
     if (titleFilter.value.trim()) params.title = titleFilter.value.trim()
     if (notesFilter.value.trim()) params.notesContain = notesFilter.value.trim()
+    if (showDisabled.value) params.includeDisabled = 'true'
     if (selectedZipcodes.value.length > 0) params.zipcode = selectedZipcodes.value.join(',')
     else if (selectedCountyIds.value.length > 0) params.countyId = selectedCountyIds.value.join(',')
     else if (selectedStateIds.value.length > 0) params.stateId = selectedStateIds.value.join(',')
@@ -118,6 +120,7 @@ async function fetchPolls() {
 }
 
 watch(kindFilter, scheduleFetch, { deep: true })
+watch(showDisabled, scheduleFetch)
 let titleTimer: ReturnType<typeof setTimeout> | null = null
 watch(titleFilter, () => {
   if (titleTimer) clearTimeout(titleTimer)
@@ -236,6 +239,9 @@ function sortValue(r: PollRow, k: SortKey): string {
     case 'stateInitial': return (r.stateInitial ?? '').toLowerCase()
     case 'countyName': return (r.countyName ?? '').toLowerCase()
     case 'zipcode': return r.zipcodes[0] ?? ''
+    // ISO timestamps are lex-sortable. Null close-date = "never closes",
+    // sorts after every real date in ascending order.
+    case 'closeDate': return r.closeDate ?? '￿'
     case 'blocked': return r.blocked ? 'true' : 'false'
     case 'note': return (r.latestNote?.body ?? '').toLowerCase()
   }
@@ -282,6 +288,41 @@ async function openBlockModal(row: PollRow) {
     blockModalExisting.value = (await axios.get<BlockDto[]>(`/api/admin/polls/${row.type}/${row.id}/blocks`)).data
   } catch (e: any) {
     blockModalError.value = e?.response?.data?.message ?? t('admin.managePolls.errorBlocks')
+  }
+}
+
+/**
+ * Click handler for the Enable/Disable checkbox in the table.
+ *
+ * - Unchecked → checked (transitioning to "disabled"): open the modal so
+ *   the admin picks the scope (zipcode / county / state). The actual
+ *   block isn't created until Apply lands inside the modal; if the modal
+ *   is dismissed, the row state is unchanged on next refetch.
+ * - Checked → unchecked (transitioning to "enabled"): silently remove
+ *   every block currently affecting this poll that's within the admin's
+ *   purview. Out-of-purview blocks (e.g. a state-wide block another
+ *   admin set) stay and the row will refresh back to checked.
+ *
+ * `@click.prevent` stops the browser from flipping the checkbox before
+ * the backend round-trip completes; the `:checked` bind reflects the
+ * authoritative `row.blocked`.
+ */
+async function onBlockCheckboxClick(row: PollRow) {
+  if (!row.blocked) {
+    // Was unchecked, user wants to disable → ask for scope via modal.
+    await openBlockModal(row)
+    return
+  }
+  // Was checked, user wants to enable → drop all blocks we can reach.
+  try {
+    const existing = (await axios.get<BlockDto[]>(`/api/admin/polls/${row.type}/${row.id}/blocks`)).data
+    await Promise.allSettled(
+      existing.map(b => axios.delete(`/api/admin/polls/blocks/${b.id}`))
+    )
+  } catch (e: any) {
+    error.value = e?.response?.data?.message ?? t('admin.managePolls.errorBlock')
+  } finally {
+    await fetchPolls()
   }
 }
 function closeBlockModal() {
@@ -496,6 +537,10 @@ onBeforeUnmount(() => {
             <input v-model="kindFilter.BALLOT_MEASURE" type="checkbox" class="h-4 w-4" />
             {{ $t('admin.managePolls.kindBallotMeasure') }}
           </label>
+          <label class="ml-3 flex items-center gap-2">
+            <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
+            {{ $t('admin.managePolls.showDisabled') }}
+          </label>
         </div>
       </fieldset>
 
@@ -598,6 +643,7 @@ onBeforeUnmount(() => {
           <th @click="toggleSort('stateInitial')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colState') }}{{ sortIndicator('stateInitial') }}</th>
           <th @click="toggleSort('countyName')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCounty') }}{{ sortIndicator('countyName') }}</th>
           <th @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colZipcode') }}{{ sortIndicator('zipcode') }}</th>
+          <th @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCloses') }}{{ sortIndicator('closeDate') }}</th>
           <th @click="toggleSort('blocked')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colEnable') }}{{ sortIndicator('blocked') }}</th>
           <th @click="toggleSort('note')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colNote') }}{{ sortIndicator('note') }}</th>
         </tr>
@@ -615,11 +661,17 @@ onBeforeUnmount(() => {
             <template v-else>{{ row.zipcodes[0] }} <span class="text-slate-500">+{{ row.zipcodes.length - 1 }}</span></template>
           </td>
           <td class="border-b border-slate-100 p-2">
-            <button type="button" @click="openBlockModal(row)"
-              :class="['rounded px-2 py-0.5 text-xs font-semibold',
-                row.blocked ? 'bg-red-200 text-red-900 hover:bg-red-300' : 'bg-emerald-200 text-emerald-900 hover:bg-emerald-300']">
-              {{ row.blocked ? $t('admin.managePolls.statusDisabled') : $t('admin.managePolls.statusEnabled') }}
-            </button>
+            {{ row.closeDate ? new Date(row.closeDate).toLocaleString() : $t('admin.managePolls.closeNever') }}
+          </td>
+          <td class="border-b border-slate-100 p-2">
+            <input
+              type="checkbox"
+              :checked="row.blocked"
+              @click.prevent="onBlockCheckboxClick(row)"
+              :title="row.blocked ? $t('admin.managePolls.statusDisabled') : $t('admin.managePolls.statusEnabled')"
+              :aria-label="row.blocked ? $t('admin.managePolls.statusDisabled') : $t('admin.managePolls.statusEnabled')"
+              class="h-4 w-4"
+            />
           </td>
           <td class="border-b border-slate-100 p-2 text-xs">
             <template v-if="row.latestNote">

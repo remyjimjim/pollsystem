@@ -72,7 +72,7 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         // 10001 = New York; outside CA.
         val outOfPurview = newElection(creator, zipcode = "10001", title = "Outside Purview")
 
-        val rows = controller.list(principalFor(admin), listOf("ELECTION"), null, null, null, null, null)
+        val rows = controller.list(principalFor(admin), listOf("ELECTION"), null, null, null, null, null, false)
         val ids = rows.map { it.id }.toSet()
         assertThat(ids).contains(inPurview.id)
         assertThat(ids).doesNotContain(outOfPurview.id)
@@ -109,6 +109,25 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         // Delete restores blocked=false.
         controller.deleteBlock(ok.id, principalFor(admin))
         assertThat(blocks.findById(ok.id)).isEmpty
+    }
+
+    @Test
+    fun `includeDisabled controls whether blocked polls show in the list`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "incl-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "incl-creator")
+        val e = newElection(creator, zipcode = "90001", title = "Toggleable")
+        controller.createBlock(
+            type = "ELECTION", id = e.id,
+            body = CreateBlockRequest(scope = BlockScope.ZIPCODE, zipcode = "90001", countyId = null, stateId = null),
+            principal = principalFor(admin)
+        )
+
+        val defaultRows = controller.list(principalFor(admin), listOf("ELECTION"), null, null, null, null, null, false)
+        assertThat(defaultRows.map { it.id }).doesNotContain(e.id)
+
+        val withDisabled = controller.list(principalFor(admin), listOf("ELECTION"), null, null, null, null, null, true)
+        assertThat(withDisabled.first { it.id == e.id }.blocked).isTrue()
     }
 
     @Test

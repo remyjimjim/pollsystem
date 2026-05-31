@@ -131,7 +131,8 @@ class AdminPollsController(
         @RequestParam(name = "stateId", required = false) stateIds: List<Long>?,
         @RequestParam(name = "countyId", required = false) countyIds: List<Long>?,
         @RequestParam(name = "zipcode", required = false) zipcodes: List<String>?,
-        @RequestParam(required = false) notesContain: String?
+        @RequestParam(required = false) notesContain: String?,
+        @RequestParam(required = false, defaultValue = "false") includeDisabled: Boolean
     ): List<AdminPollRow> {
         val purview = resolvePurview(principal)
         if (purview != null && purview.isEmpty()) return emptyList()
@@ -239,6 +240,7 @@ class AdminPollsController(
             val key = PollKind.valueOf(r.type) to r.id
             r.copy(latestNote = latestByKey[key]?.let { toDto(it) })
         }
+        if (!includeDisabled) final = final.filter { !it.blocked }
         if (!notesContain.isNullOrBlank()) {
             val keys = notes.findPollKeysWithBodyContaining(notesContain.trim())
                 .map { (it[0] as PollKind) to (it[1] as Long) }
