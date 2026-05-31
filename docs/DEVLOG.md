@@ -61,6 +61,58 @@ logged.
 
 ---
 
+## 2026-05-31 — Per-poll block scoping + flipped checkbox polarity
+
+**Requested:**
+
+> On the /admin/manage-polls page, when I check the Enabled/Disabled
+> checkbox for the questionnaire titled 'Electric Cars' with no
+> filters selected it enables ables not just 'Electric Cars' but the
+> other Questionnaire titled 'Vaccines' too, how can we change that
+> to just the poll selected?
+
+> When I look at the questionnaire titled 'Electric Cars' and it has
+> the Enabled/Disabled checkmark checked, does that mean it's enabled
+> or disabled? … yes flip it
+
+**Changed:**
+
+- New Flyway migration **V15__poll_blocks_per_poll.sql** adds a
+  `poll_id` column to `poll_type_blocks` and rebuilds the three
+  partial unique indexes (`(poll_type, poll_id, zipcode|county_id|
+  state_id)` per scope) plus a `(poll_type, poll_id)` lookup index.
+  The earlier bucket model — block keyed only by `(poll_type, scope,
+  geo)` — affected every poll of that type at that geo, so disabling
+  Electric Cars at zip 98001 also disabled Vaccines. Per-poll scoping
+  isolates the toggle to the row the admin clicked. Existing
+  `poll_type_blocks` rows were dev test data and are dropped by the
+  migration.
+- `PollTypeBlock` entity carries `pollId`; repository finders now key
+  on `(pollType, pollId)`; `existsByPollTypeAndPollId` powers the
+  gate.
+- `PollBlockService` simplifies to a one-row lookup; the bulk
+  `filterUnblocked` keys by `(type, id)` and drops the zipcode-walk.
+- The three response controllers, three results controllers, and
+  `PollSearchController` all shed the zipcode-list arg in favor of
+  `(pollType, pollId)`.
+- `AdminPollsController.createBlock` stores `pollId` alongside the
+  scope. `listBlocks` returns only blocks tied to this specific poll;
+  `isBlockedFor` does a one-row `existsBy…` check.
+- Frontend Enable/Disable checkbox polarity flipped: `:checked` now
+  binds to `!row.blocked` so checked = enabled (matches
+  `/super/manage-users`). The block modal still triggers on the
+  disable transition (checked → unchecked); silent block removal on
+  the enable transition (unchecked → checked).
+- New test `block on one poll does not affect a sibling poll at the
+  same zipcode` proves the isolation.
+- Verified live: blocking Electric Cars at 98001 leaves
+  `vaccines.blocked = false` in `/api/admin/polls`, and search /
+  results behavior for unrelated polls is unchanged.
+
+**Commit:** `47f388d`
+
+---
+
 ## 2026-05-31 — Manage Polls — Show-disabled toggle, checkbox widget, Closes column
 
 **Requested:**
