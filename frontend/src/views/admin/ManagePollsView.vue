@@ -73,16 +73,66 @@ async function loadPurview() {
     const res = await axios.get<Purview>('/api/admin/polls/purview')
     purview.value = res.data
     if (res.data.unrestricted) {
-      // SUPER: load the full lists so the pickers behave like /super/manage-users.
-      const [s, z] = await Promise.all([
-        axios.get<StateOpt[]>('/api/states'),
-        axios.get<string[]>('/api/zipcodes/all').catch(() => ({ data: [] as string[] }))
-      ])
-      purview.value = { ...res.data, states: s.data, zipcodes: z.data }
+      // SUPER: load the full state list. Counties and zipcodes load on
+      // demand when the admin narrows the geography (otherwise we'd ship
+      // 3.3k counties and 30k+ zipcodes that they don't need yet).
+      const s = await axios.get<StateOpt[]>('/api/states')
+      purview.value = { ...res.data, states: s.data }
     }
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('admin.managePolls.errorPurview')
   }
+}
+
+/**
+ * For SUPER (unrestricted) admins, populate the county picker from
+ * `/api/counties` matching the picked states. For purview-restricted
+ * admins, the county list was already loaded by `/api/admin/polls/purview`
+ * and is filtered locally by `displayedCounties` — leave it alone.
+ */
+async function refreshCountiesForState() {
+  if (!purview.value.unrestricted) return
+  if (selectedStateIds.value.length === 0) {
+    purview.value = { ...purview.value, counties: [] }
+    return
+  }
+  try {
+    const res = await axios.get<CountyOpt[]>('/api/counties', {
+      params: { state_id: selectedStateIds.value.join(',') }
+    })
+    purview.value = { ...purview.value, counties: res.data }
+  } catch { /* keep prior list */ }
+}
+
+/** Same pattern as `refreshCountiesForState` but for the zipcode picker. */
+async function refreshZipcodesForGeo() {
+  if (!purview.value.unrestricted) return
+  const params: Record<string, string> = {}
+  if (selectedCountyIds.value.length > 0) {
+    params.county_ids = selectedCountyIds.value.join(',')
+  } else if (selectedStateIds.value.length > 0) {
+    params.state_id = selectedStateIds.value.join(',')
+  } else {
+    purview.value = { ...purview.value, zipcodes: [] }
+    return
+  }
+  try {
+    const res = await axios.get<{ zipcode: string }[]>('/api/zipcodes', { params })
+    purview.value = { ...purview.value, zipcodes: res.data.map(z => z.zipcode) }
+  } catch { /* keep prior list */ }
+}
+
+function afterStateChange() {
+  selectedCountyIds.value = []
+  selectedZipcodes.value = []
+  refreshCountiesForState()
+  refreshZipcodesForGeo()
+  scheduleFetch()
+}
+function afterCountyChange() {
+  selectedZipcodes.value = []
+  refreshZipcodesForGeo()
+  scheduleFetch()
 }
 
 async function loadTitleSuggestions() {
@@ -149,9 +199,7 @@ function onStateClick(e: MouseEvent, idx: number, id: number) {
       : selectedStateIds.value.filter(x => x !== id)
   }
   lastClickedStateIndex.value = idx
-  selectedCountyIds.value = []
-  selectedZipcodes.value = []
-  scheduleFetch()
+  afterStateChange()
 }
 function onStateKeydown(e: KeyboardEvent) { handleShortcuts(e, 'state') }
 function onCountyClick(e: MouseEvent, idx: number, id: number) {
@@ -170,8 +218,7 @@ function onCountyClick(e: MouseEvent, idx: number, id: number) {
       : selectedCountyIds.value.filter(x => x !== id)
   }
   lastClickedCountyIndex.value = idx
-  selectedZipcodes.value = []
-  scheduleFetch()
+  afterCountyChange()
 }
 function onCountyKeydown(e: KeyboardEvent) { handleShortcuts(e, 'county') }
 function onZipClick(e: MouseEvent, idx: number, code: string) {
@@ -198,10 +245,16 @@ function handleShortcuts(e: KeyboardEvent, which: 'state' | 'county' | 'zip') {
   const isNone = e.key === ')' || (e.shiftKey && e.code === 'Digit0')
   if (!isAll && !isNone) return
   e.preventDefault()
-  if (which === 'state') selectedStateIds.value = isAll ? purview.value.states.map(s => s.id) : []
-  if (which === 'county') selectedCountyIds.value = isAll ? displayedCounties.value.map(c => c.id) : []
-  if (which === 'zip') selectedZipcodes.value = isAll ? displayedZipcodes.value.slice() : []
-  scheduleFetch()
+  if (which === 'state') {
+    selectedStateIds.value = isAll ? purview.value.states.map(s => s.id) : []
+    afterStateChange()
+  } else if (which === 'county') {
+    selectedCountyIds.value = isAll ? displayedCounties.value.map(c => c.id) : []
+    afterCountyChange()
+  } else {
+    selectedZipcodes.value = isAll ? displayedZipcodes.value.slice() : []
+    scheduleFetch()
+  }
 }
 
 // ---------- picker summaries ----------
