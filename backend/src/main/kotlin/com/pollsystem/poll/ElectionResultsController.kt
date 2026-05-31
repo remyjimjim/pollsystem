@@ -1,5 +1,6 @@
 package com.pollsystem.poll
 
+import com.pollsystem.model.PollKind
 import com.pollsystem.repository.CandidateRepository
 import com.pollsystem.repository.CandidateResponseRepository
 import com.pollsystem.repository.ElectionRepository
@@ -39,6 +40,7 @@ class ElectionResultsController(
     private val elections: ElectionRepository,
     private val candidates: CandidateRepository,
     private val responses: CandidateResponseRepository,
+    private val blocks: PollBlockService,
     @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
 ) {
 
@@ -50,6 +52,10 @@ class ElectionResultsController(
     ): ElectionResultsDto {
         val election = elections.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
+        }
+        // Admin block hides the poll from public results too.
+        if (blocks.isBlocked(PollKind.ELECTION, listOf(election.zipcode))) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
         }
         val candidateList = candidates.findByElectionId(id)
         val all = responses.findByElectionId(id)

@@ -1,9 +1,11 @@
 package com.pollsystem.poll
 
+import com.pollsystem.model.PollKind
 import com.pollsystem.model.PollStatus
 import com.pollsystem.model.QuestionResponse
 import com.pollsystem.repository.QuestionRepository
 import com.pollsystem.repository.QuestionResponseRepository
+import com.pollsystem.repository.QuestionnaireDomainRepository
 import com.pollsystem.repository.QuestionnaireRepository
 import com.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
@@ -51,7 +53,9 @@ data class MyResponsesDto(
 class QuestionnaireResponseController(
     private val questionnaires: QuestionnaireRepository,
     private val questions: QuestionRepository,
-    private val responses: QuestionResponseRepository
+    private val responses: QuestionResponseRepository,
+    private val domains: QuestionnaireDomainRepository,
+    private val blocks: PollBlockService
 ) {
 
     @GetMapping("/me")
@@ -96,6 +100,10 @@ class QuestionnaireResponseController(
         val close = q.closeDate
         if (close != null && !close.isAfter(Instant.now())) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
+        }
+        val zipcodes = domains.findByQuestionnaireId(id).map { it.zipcode }
+        if (blocks.isBlocked(PollKind.QUESTIONNAIRE, zipcodes)) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
 
         val pollQuestions = questions.findByQuestionnaireId(id).associateBy { it.id }

@@ -40,7 +40,8 @@ data class MyBallotResponseDto(
 @RequestMapping("/api/polls/ballot-measures/{id}/responses")
 class BallotMeasureResponseController(
     private val measures: BallotMeasureRepository,
-    private val responses: BallotResponseRepository
+    private val responses: BallotResponseRepository,
+    private val blocks: PollBlockService
 ) {
 
     @GetMapping("/me")
@@ -90,6 +91,9 @@ class BallotMeasureResponseController(
         val close = measure.closeDate
         if (close != null && !close.isAfter(Instant.now())) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
+        }
+        if (blocks.isBlocked(com.pollsystem.model.PollKind.BALLOT_MEASURE, listOf(measure.election.zipcode))) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
 
         val now = Instant.now()

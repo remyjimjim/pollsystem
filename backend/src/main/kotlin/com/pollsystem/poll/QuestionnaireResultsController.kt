@@ -1,7 +1,9 @@
 package com.pollsystem.poll
 
+import com.pollsystem.model.PollKind
 import com.pollsystem.repository.QuestionRepository
 import com.pollsystem.repository.QuestionResponseRepository
+import com.pollsystem.repository.QuestionnaireDomainRepository
 import com.pollsystem.repository.QuestionnaireRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -36,6 +38,8 @@ class QuestionnaireResultsController(
     private val questionnaires: QuestionnaireRepository,
     private val questions: QuestionRepository,
     private val responses: QuestionResponseRepository,
+    private val domains: QuestionnaireDomainRepository,
+    private val blocks: PollBlockService,
     @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
 ) {
 
@@ -47,6 +51,10 @@ class QuestionnaireResultsController(
     ): QuestionnaireResultsDto {
         val q = questionnaires.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
+        }
+        val qZips = domains.findByQuestionnaireId(id).map { it.zipcode }
+        if (blocks.isBlocked(PollKind.QUESTIONNAIRE, qZips)) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
         }
 
         val pollQuestions = questions.findByQuestionnaireId(id)

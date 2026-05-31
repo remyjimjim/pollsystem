@@ -1,5 +1,6 @@
 package com.pollsystem.poll
 
+import com.pollsystem.model.PollKind
 import com.pollsystem.repository.BallotMeasureRepository
 import com.pollsystem.repository.BallotResponseRepository
 import org.springframework.beans.factory.annotation.Value
@@ -28,6 +29,7 @@ data class BallotMeasureResultsDto(
 class BallotMeasureResultsController(
     private val measures: BallotMeasureRepository,
     private val responses: BallotResponseRepository,
+    private val blocks: PollBlockService,
     @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
 ) {
 
@@ -39,6 +41,9 @@ class BallotMeasureResultsController(
     ): BallotMeasureResultsDto {
         val measure = measures.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
+        }
+        if (blocks.isBlocked(PollKind.BALLOT_MEASURE, listOf(measure.election.zipcode))) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
         val all = responses.findByMeasureId(id)
         val filtered = if (zipcode != null) all.filter { it.user.zipcode == zipcode } else all

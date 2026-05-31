@@ -50,7 +50,8 @@ data class MyElectionResponsesDto(
 class ElectionResponseController(
     private val elections: ElectionRepository,
     private val candidates: CandidateRepository,
-    private val responses: CandidateResponseRepository
+    private val responses: CandidateResponseRepository,
+    private val blocks: PollBlockService
 ) {
 
     @GetMapping("/me")
@@ -95,6 +96,9 @@ class ElectionResponseController(
         val close = election.closeDate
         if (close != null && !close.isAfter(Instant.now())) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
+        }
+        if (blocks.isBlocked(com.pollsystem.model.PollKind.ELECTION, listOf(election.zipcode))) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
 
         val candidatesById = candidates.findByElectionId(id).associateBy { it.id }

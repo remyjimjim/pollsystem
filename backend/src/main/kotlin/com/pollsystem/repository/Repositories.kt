@@ -263,6 +263,38 @@ interface UserMessageRepository : JpaRepository<UserMessage, Long> {
 }
 
 @Repository
+interface PollTypeBlockRepository : JpaRepository<PollTypeBlock, Long> {
+    fun findByPollType(pollType: PollKind): List<PollTypeBlock>
+    fun findByPollTypeIn(pollTypes: List<PollKind>): List<PollTypeBlock>
+    fun findByPollTypeAndScopeAndZipcode(pollType: PollKind, scope: BlockScope, zipcode: String): PollTypeBlock?
+    fun findByPollTypeAndScopeAndCountyId(pollType: PollKind, scope: BlockScope, countyId: Long): PollTypeBlock?
+    fun findByPollTypeAndScopeAndStateId(pollType: PollKind, scope: BlockScope, stateId: Long): PollTypeBlock?
+}
+
+@Repository
+interface PollNoteRepository : JpaRepository<PollNote, Long> {
+    fun findByPollTypeAndPollIdOrderByCreatedAtDesc(pollType: PollKind, pollId: Long): List<PollNote>
+
+    /** Latest note per (poll_type, poll_id) for batch attachment to list rows. */
+    @Query("""
+        SELECT n FROM PollNote n
+        WHERE n.pollType = :type AND n.pollId IN :ids
+        ORDER BY n.createdAt DESC
+    """)
+    fun findByPollTypeAndPollIdInOrderByCreatedAtDesc(
+        @Param("type") pollType: PollKind,
+        @Param("ids") pollIds: List<Long>
+    ): List<PollNote>
+
+    /** Distinct (poll_type, poll_id) pairs whose note body contains the substring. */
+    @Query("""
+        SELECT DISTINCT n.pollType, n.pollId FROM PollNote n
+        WHERE LOWER(n.body) LIKE LOWER(CONCAT('%', :needle, '%'))
+    """)
+    fun findPollKeysWithBodyContaining(@Param("needle") needle: String): List<Array<Any>>
+}
+
+@Repository
 interface QuestionResponseRepository : JpaRepository<QuestionResponse, Long> {
     fun findByUserIdAndQuestionId(userId: Long, questionId: Long): QuestionResponse?
     fun findByQuestionId(questionId: Long): List<QuestionResponse>

@@ -1,5 +1,6 @@
 package com.pollsystem.poll
 
+import com.pollsystem.model.PollKind
 import com.pollsystem.repository.BallotMeasureRepository
 import com.pollsystem.repository.CandidateRepository
 import com.pollsystem.repository.CountyRepository
@@ -40,8 +41,17 @@ class PollSearchController(
     private val ballotMeasures: BallotMeasureRepository,
     private val candidates: CandidateRepository,
     private val countyZips: CountyZipsRepository,
-    private val counties: CountyRepository
+    private val counties: CountyRepository,
+    private val blockService: PollBlockService
 ) {
+
+    /** Maps the search-row `type` string back to the block-table enum. */
+    private fun kindOf(typeName: String): PollKind = when (typeName) {
+        "Questionnaire" -> PollKind.QUESTIONNAIRE
+        "Election" -> PollKind.ELECTION
+        "BallotMeasure" -> PollKind.BALLOT_MEASURE
+        else -> error("Unknown poll type $typeName")
+    }
 
     @GetMapping
     fun search(
@@ -165,10 +175,17 @@ class PollSearchController(
             }
         }
 
+        // Hide polls that admins have blocked at any of their zipcodes.
+        val visible = blockService.filterUnblocked(
+            results,
+            type = { kindOf(it.type) },
+            zipcodes = { row -> row.zipcodes.map { it.code } }
+        )
+
         // Active polls (no closeDate or future) first, sorted by closeDate
         // ascending; closed polls last, sorted by closeDate descending so the
         // most-recently-closed appears at the top of the closed section.
-        return results.sortedWith(
+        return visible.sortedWith(
             compareBy<PollSearchResult>(
                 { if (it.closeDate != null && !it.closeDate.isAfter(now)) 1 else 0 },
                 { if (it.closeDate != null && !it.closeDate.isAfter(now)) -it.closeDate.toEpochMilli() else (it.closeDate?.toEpochMilli() ?: Long.MAX_VALUE) },
