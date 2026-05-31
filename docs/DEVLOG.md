@@ -61,6 +61,71 @@ logged.
 
 ---
 
+## 2026-05-31 — Creator column + email-on-note on Manage Polls; Search button on Manage Users
+
+**Requested:**
+
+> can we add a black 'Search' button after the 'Messages' input on
+> the /super/manage-users page so we can search?
+
+> Can we align the 'Search' button vertically with the 'Messages'
+> input box so the top of the 'Messages' box is the same height as
+> the top of the 'Search' button?
+
+> Can we make the /admin/manage-polls list the email of the creator
+> of the poll and have the 'Notes' results widget behave exactly
+> like the /super/manage-users 'Msg' results where the message can
+> be up to 2000 characters and you can save the message and
+> optionally email the creator a copy of the message?
+
+**Changed:**
+
+- New `V16__poll_note_emailed.sql` adds `emailed BOOLEAN NOT NULL
+  DEFAULT FALSE` to `poll_notes` so a created note can record
+  whether a copy was emailed to the poll's creator, mirroring the
+  `user_messages.emailed` flag from the Messages flow.
+- `PollNote` entity, `NoteDto`, and `toDto` thread the new flag
+  through.
+- `CreateNoteRequest` gains a `sendEmail` boolean; a new
+  `EditNoteRequest` (body only) is split out so editing can't be
+  asked to re-email. `AdminPollsController.createNote` resolves
+  the poll's creator email and calls `EmailService.send` when
+  `sendEmail=true`, then saves the note with `emailed=true`.
+  Editing never re-emails.
+- New backend test
+  `createNote with sendEmail emails the poll creator and persists
+  the flag` covers the path via a recording `EmailService` test
+  config.
+- Frontend `ManagePollsView.vue`:
+  - New "Creator" column between Type and State, sortable
+    (`sortKey: 'creatorEmail'`).
+  - The Note modal grows a `noteModalSendEmail` ref; on new mode
+    only, a `Email a copy to {email}` checkbox shows. `saveNote`
+    posts `{body, sendEmail}` to the new endpoint.
+  - The flag resets to false whenever the modal opens, after a
+    save, or when toggling back to history.
+- Frontend `ManageUsersView.vue`:
+  - A black "Search" cell follows the Messages input. Clicking the
+    button (or Enter inside any filter input — the form's
+    `@submit.prevent` now calls `searchNow`) cancels every pending
+    debounce timer and fires `fetchUsers()` immediately. The
+    existing live-filter is unchanged.
+  - The Search cell carries an invisible heading row so its
+    `flex flex-col gap-1` structure matches the Messages cell, and
+    the button's top edge lines up with the top of the Messages
+    input under the form's `items-start` alignment.
+- i18n: `admin.managePolls.colCreator`, `sendToCreator`,
+  `super.manageUsers.search`, `searching`.
+- Verified live against the running backend: row payloads now
+  include `creatorEmail`; a note created with `sendEmail: true`
+  lands in Mailpit ("A note about your poll") to the creator, and
+  the row's `latestNote.emailed` is `true`; editing the same note
+  leaves Mailpit's count unchanged.
+
+**Commit:** `8f4db69`
+
+---
+
 ## 2026-05-31 — Sortable Title / Type / Zipcodes / Closes on /polls/search
 
 **Requested:**
