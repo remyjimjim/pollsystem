@@ -655,8 +655,9 @@
       "editState": "State",
       "editCounty": "County",
       "editZipcode": "Zipcode",
-      "editPickState": "— pick a state —",
-      "editPickCounty": "— pick a county —",
+      "editPickState": "Type a state name…",
+      "editPickCounty": "Type a county name…",
+      "editZipPlaceholder": "5 digits",
       "errorSaveEdit": "Edit failed"
     },
     "managePolls": {

@@ -541,54 +541,65 @@ const editRole = ref<Role>('USER')
 const editStateId = ref<number | ''>('')
 const editCountyId = ref<number | ''>('')
 const editZipcode = ref<string>('')
+const editStateName = ref<string>('')
+const editCountyName = ref<string>('')
 const editCounties = ref<CountyRow[]>([])
 const editZipcodes = ref<CountyZipRow[]>([])
 const editBusy = ref(false)
 const editError = ref<string | null>(null)
+let editZipPrefixTimer: ReturnType<typeof setTimeout> | null = null
+let suppressEditWatchers = false
 
 async function openEdit(row: UserRow) {
   editUser.value = row
   editRole.value = (row.access === 'ADMIN' || row.access === 'CREATOR' || row.access === 'USER')
     ? row.access
     : 'USER'
+  // Suppress the editStateName/editCountyName watchers while we seed — they
+  // would otherwise blow away the very ids we just resolved.
+  suppressEditWatchers = true
   editZipcode.value = row.zipcode
   editStateId.value = ''
   editCountyId.value = ''
+  editStateName.value = ''
+  editCountyName.value = ''
   editCounties.value = []
   editZipcodes.value = []
   editError.value = null
   editOpen.value = true
-  // Seed the cascade from the user's current zipcode so the dropdowns
-  // open already pointing at where the user is.
+  // Seed the cascade from the user's current zipcode so the inputs open
+  // already showing where the user is.
   try {
     const meta = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
       params: { prefix: row.zipcode }
     })).data.find(z => z.zipcode === row.zipcode)
     if (meta) {
-      const c = (await axios.get<CountyRow[]>('/api/counties', {
-        params: { state_id: '' }
-      })).data
-      // Look up the state via the county.
       const allStates = states.value.length > 0 ? states.value : (await axios.get<StateRow[]>('/api/states')).data
-      const county = c.find(x => x.id === meta.countyId)
-        ?? (await axios.get<CountyRow[]>('/api/counties', {
-          params: { state_id: allStates.map(s => s.id).join(',') }
-        })).data.find(x => x.id === meta.countyId)
+      // Reach the right state by loading counties for the full state list
+      // and finding the one that contains this zip's county.
+      const allCounties = (await axios.get<CountyRow[]>('/api/counties', {
+        params: { state_id: allStates.map(s => s.id).join(',') }
+      })).data
+      const county = allCounties.find(x => x.id === meta.countyId)
       if (county) {
+        const state = allStates.find(s => s.id === county.stateId)
         editStateId.value = county.stateId
+        editStateName.value = state?.name ?? ''
         await reloadEditCounties()
         editCountyId.value = county.id
+        editCountyName.value = county.name
         await reloadEditZipcodes()
       }
     }
-  } catch { /* seed is non-fatal; user can still pick from scratch */ }
+  } catch { /* seed is non-fatal; user can still pick from scratch */ } finally {
+    suppressEditWatchers = false
+  }
 }
 function closeEdit() {
   editOpen.value = false
   editUser.value = null
 }
 async function reloadEditCounties() {
-  editCountyId.value = ''
   editZipcodes.value = []
   if (editStateId.value === '') { editCounties.value = []; return }
   try {
@@ -598,13 +609,59 @@ async function reloadEditCounties() {
   } catch { editCounties.value = [] }
 }
 async function reloadEditZipcodes() {
-  if (editCountyId.value === '') { editZipcodes.value = []; return }
-  try {
-    editZipcodes.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
-      params: { county_ids: String(editCountyId.value) }
-    })).data
-  } catch { editZipcodes.value = [] }
+  if (editCountyId.value !== '') {
+    try {
+      editZipcodes.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
+        params: { county_ids: String(editCountyId.value) }
+      })).data
+    } catch { editZipcodes.value = [] }
+    return
+  }
+  if (editStateId.value !== '') {
+    try {
+      editZipcodes.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
+        params: { state_id: String(editStateId.value) }
+      })).data
+    } catch { editZipcodes.value = [] }
+    return
+  }
+  editZipcodes.value = []
 }
+
+// State input: match-by-name → set id + cascade. Unknown text leaves id ''.
+watch(editStateName, async (name) => {
+  if (suppressEditWatchers) return
+  const trimmed = name.trim()
+  const match = states.value.find(s => s.name.toLowerCase() === trimmed.toLowerCase())
+  editStateId.value = match?.id ?? ''
+  editCountyId.value = ''
+  editCountyName.value = ''
+  await reloadEditCounties()
+  await reloadEditZipcodes()
+})
+watch(editCountyName, async (name) => {
+  if (suppressEditWatchers) return
+  const trimmed = name.trim()
+  const match = editCounties.value.find(c => c.name.toLowerCase() === trimmed.toLowerCase())
+  editCountyId.value = match?.id ?? ''
+  await reloadEditZipcodes()
+})
+// Zipcode input: when no state/county is picked, debounce-query
+// /api/zipcodes?prefix= so the datalist suggests as the user types.
+watch(editZipcode, (val) => {
+  if (suppressEditWatchers) return
+  if (editStateId.value !== '' || editCountyId.value !== '') return
+  if (editZipPrefixTimer) clearTimeout(editZipPrefixTimer)
+  const trimmed = val.trim()
+  if (trimmed === '') { editZipcodes.value = []; return }
+  editZipPrefixTimer = setTimeout(async () => {
+    try {
+      editZipcodes.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
+        params: { prefix: trimmed }
+      })).data
+    } catch { editZipcodes.value = [] }
+  }, 200)
+})
 async function saveEdit() {
   if (!editUser.value) return
   editBusy.value = true
@@ -1031,26 +1088,55 @@ onBeforeUnmount(() => {
               <option value="ADMIN">{{ $t('super.manageUsers.roleAdmin') }}</option>
             </select>
           </label>
+          <!-- State / County / Zipcode are <input list> typeaheads: the
+               browser filters the <datalist> as the user types. Watchers
+               on the bound name strings map the picked value back to the
+               row id (state/county) or zipcode that drives cascade and
+               save. -->
           <label class="flex flex-col gap-1">
             <span class="font-semibold text-slate-700">{{ $t('super.manageUsers.editState') }}</span>
-            <select v-model="editStateId" @change="reloadEditCounties" class="rounded border border-slate-300 p-2">
-              <option :value="''">{{ $t('super.manageUsers.editPickState') }}</option>
-              <option v-for="s in states" :key="s.id" :value="s.id">{{ s.name }}</option>
-            </select>
+            <input
+              v-model="editStateName"
+              type="text"
+              list="edit-states-list"
+              autocomplete="off"
+              :placeholder="$t('super.manageUsers.editPickState')"
+              class="rounded border border-slate-300 p-2"
+            />
+            <datalist id="edit-states-list">
+              <option v-for="s in states" :key="s.id" :value="s.name" />
+            </datalist>
           </label>
           <label class="flex flex-col gap-1">
             <span class="font-semibold text-slate-700">{{ $t('super.manageUsers.editCounty') }}</span>
-            <select v-model="editCountyId" @change="reloadEditZipcodes" :disabled="editStateId === ''" class="rounded border border-slate-300 p-2 disabled:opacity-60">
-              <option :value="''">{{ $t('super.manageUsers.editPickCounty') }}</option>
-              <option v-for="c in editCounties" :key="c.id" :value="c.id">{{ c.name }}</option>
-            </select>
+            <input
+              v-model="editCountyName"
+              type="text"
+              list="edit-counties-list"
+              autocomplete="off"
+              :disabled="editStateId === ''"
+              :placeholder="$t('super.manageUsers.editPickCounty')"
+              class="rounded border border-slate-300 p-2 disabled:opacity-60"
+            />
+            <datalist id="edit-counties-list">
+              <option v-for="c in editCounties" :key="c.id" :value="c.name" />
+            </datalist>
           </label>
           <label class="flex flex-col gap-1">
             <span class="font-semibold text-slate-700">{{ $t('super.manageUsers.editZipcode') }}</span>
-            <select v-model="editZipcode" :disabled="editCountyId === ''" class="rounded border border-slate-300 p-2 font-mono disabled:opacity-60">
-              <option v-if="editCountyId === ''" :value="editUser?.zipcode ?? ''">{{ editUser?.zipcode ?? '' }}</option>
-              <option v-for="z in editZipcodes" :key="z.id" :value="z.zipcode">{{ z.zipcode }}</option>
-            </select>
+            <input
+              v-model="editZipcode"
+              type="text"
+              inputmode="numeric"
+              maxlength="5"
+              list="edit-zips-list"
+              autocomplete="off"
+              :placeholder="$t('super.manageUsers.editZipPlaceholder')"
+              class="rounded border border-slate-300 p-2 font-mono"
+            />
+            <datalist id="edit-zips-list">
+              <option v-for="z in editZipcodes" :key="z.id" :value="z.zipcode" />
+            </datalist>
           </label>
         </div>
 
