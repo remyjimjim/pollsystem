@@ -61,6 +61,57 @@ logged.
 
 ---
 
+## 2026-06-01 — Typeahead autocomplete in the Edit-user modal
+
+**Requested:**
+
+> Take the modal window that pops up on the /super/manage-users page,
+> it should autocomplete from typing in the textbox including
+> zipcode, I don't think it's doing that now.
+
+**Changed:**
+
+- The Edit-user modal's State, County, and Zipcode fields switched
+  from native `<select>` dropdowns to `<input list>` typeaheads
+  backed by `<datalist>`. The browser handles substring-as-you-type
+  filtering natively, which is what the user expected.
+- Watchers on `editStateName` and `editCountyName` map the input
+  back to the corresponding row id when the typed text matches a
+  known option, and clear the id otherwise. The cascade
+  (`reloadEditCounties` / `reloadEditZipcodes`) runs whenever the
+  upstream id changes.
+- Zipcode behavior: when a county is picked, its zips populate the
+  datalist directly. When neither state nor county is picked, a
+  debounced (200ms) `GET /api/zipcodes?prefix=` lookup fills the
+  datalist so typing digits suggests matching zips.
+- A `suppressEditWatchers` flag stops the name watchers from firing
+  during the on-open seed pass; without it, the assignment in
+  `openEdit` would have wiped the very ids the seed just resolved.
+
+**Commit:** `e822869`
+
+---
+
+## 2026-06-01 — Cancel button on poll edit forms
+
+**Requested:**
+
+> For the /creator/polls/questionnaire/6/edit page and and other poll
+> edit pages can we have a 'Cancel' button between the 'Save changes'
+> and the 'Publish' buttons?
+
+**Changed:**
+
+- `QuestionnaireForm.vue`, `ElectionForm.vue`, and
+  `BallotMeasureForm.vue` each grow a Cancel button between
+  Save-changes and Publish. The handler routes back to
+  `/creator/dashboard` without writing anything. Reuses the existing
+  `form.cancel` i18n key.
+
+**Commit:** `84dbb98`
+
+---
+
 ## 2026-05-31 — State / County / Zipcode multi-select pickers on the Results page
 
 **Requested:**
