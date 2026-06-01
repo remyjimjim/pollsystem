@@ -47,7 +47,8 @@ class QuestionnaireResultsController(
     @Transactional(readOnly = true)
     fun get(
         @PathVariable id: Long,
-        @RequestParam(required = false) zipcode: String?
+        @RequestParam(required = false) zipcode: String?,
+        @RequestParam(required = false, defaultValue = "false") onlyPurview: Boolean = false
     ): QuestionnaireResultsDto {
         val q = questionnaires.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
@@ -57,17 +58,19 @@ class QuestionnaireResultsController(
         }
 
         val pollQuestions = questions.findByQuestionnaireId(id)
+        val purviewZips = domains.findByQuestionnaireId(id).map { it.zipcode }.toSet()
         val all = responses.findByQuestionnaireId(id)
-        val filtered = if (zipcode != null) {
-            all.filter { it.user.zipcode == zipcode }
-        } else {
-            all
-        }
+        var filtered = all
+        if (zipcode != null) filtered = filtered.filter { it.user.zipcode == zipcode }
+        if (onlyPurview) filtered = filtered.filter { it.user.zipcode in purviewZips }
 
         val respondents = filtered.map { it.user.id }.distinct().size
-        val filterMap = zipcode?.let { mapOf("zipcode" to it) }
+        val filterMap = buildMap {
+            zipcode?.let { put("zipcode", it) }
+            if (onlyPurview) put("onlyPurview", "true")
+        }.takeIf { it.isNotEmpty() }
 
-        if (zipcode != null && respondents < kThreshold) {
+        if ((zipcode != null || onlyPurview) && respondents < kThreshold) {
             return QuestionnaireResultsDto(
                 questionnaireId = id,
                 title = q.title,

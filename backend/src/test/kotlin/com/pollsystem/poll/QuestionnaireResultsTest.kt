@@ -90,6 +90,23 @@ class QuestionnaireResultsTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `onlyPurview narrows to submitters within the poll's zipcode set`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
+        val pollId = publishOneQuestionPoll(creator)  // domain zip = 90001
+
+        repeat(3) { submit(pollId, fixtures.createUser(zipcode = "90001", emailPrefix = "in$it"), "Yes") }
+        repeat(2) { submit(pollId, fixtures.createUser(zipcode = "10001", emailPrefix = "out$it"), "No") }
+
+        val all = resultsController.get(pollId, zipcode = null, onlyPurview = false)
+        assertThat(all.totalRespondents).isEqualTo(5)
+
+        val withinPurview = resultsController.get(pollId, zipcode = null, onlyPurview = true)
+        assertThat(withinPurview.suppressed).isFalse
+        assertThat(withinPurview.totalRespondents).isEqualTo(3)
+        assertThat(withinPurview.filterApplied).containsEntry("onlyPurview", "true")
+    }
+
+    @Test
     fun `zipcode filter at or above threshold returns aggregates`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
         val pollId = publishOneQuestionPoll(creator)

@@ -37,7 +37,8 @@ class BallotMeasureResultsController(
     @Transactional(readOnly = true)
     fun get(
         @PathVariable id: Long,
-        @RequestParam(required = false) zipcode: String?
+        @RequestParam(required = false) zipcode: String?,
+        @RequestParam(required = false, defaultValue = "false") onlyPurview: Boolean = false
     ): BallotMeasureResultsDto {
         val measure = measures.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
@@ -45,13 +46,19 @@ class BallotMeasureResultsController(
         if (blocks.isBlocked(PollKind.BALLOT_MEASURE, measure.id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
+        val purviewZips = setOf(measure.election.zipcode)
         val all = responses.findByMeasureId(id)
-        val filtered = if (zipcode != null) all.filter { it.user.zipcode == zipcode } else all
+        var filtered = all
+        if (zipcode != null) filtered = filtered.filter { it.user.zipcode == zipcode }
+        if (onlyPurview) filtered = filtered.filter { it.user.zipcode in purviewZips }
 
         val respondents = filtered.size  // unique by (user, measure) constraint
-        val filterMap = zipcode?.let { mapOf("zipcode" to it) }
+        val filterMap = buildMap {
+            zipcode?.let { put("zipcode", it) }
+            if (onlyPurview) put("onlyPurview", "true")
+        }.takeIf { it.isNotEmpty() }
 
-        if (zipcode != null && respondents < kThreshold) {
+        if ((zipcode != null || onlyPurview) && respondents < kThreshold) {
             return BallotMeasureResultsDto(
                 measureId = id,
                 title = measure.title,

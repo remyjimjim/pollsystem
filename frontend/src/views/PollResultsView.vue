@@ -62,6 +62,7 @@ const bData = ref<BallotMeasureResultsDto | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
 const zipFilter = ref('')
+const onlyPurview = ref(false)
 
 const isSupported = computed(
   () => type.value === 'questionnaire' || type.value === 'election' || type.value === 'ballot-measure'
@@ -87,6 +88,7 @@ async function load() {
   try {
     const params: Record<string, string> = {}
     if (zipFilter.value.trim()) params.zipcode = zipFilter.value.trim()
+    if (onlyPurview.value) params.onlyPurview = 'true'
     if (type.value === 'questionnaire') {
       const res = await axios.get<QuestionnaireResultsDto>(
         `/api/polls/questionnaires/${id.value}/results`,
@@ -163,6 +165,18 @@ onMounted(load)
 
       <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
       <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
+
+      <!-- Purview note + checkbox. Default is "all respondents"; checking
+           the box re-fetches with onlyPurview=true so the aggregate is
+           narrowed to submitters whose user.zipcode is in the poll's set. -->
+      <div v-if="data" class="mb-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+        <p class="m-0">{{ $t('results.purviewNote') }}</p>
+        <p class="m-0 mt-1 text-xs text-slate-500">{{ $t('results.purviewUsOnly') }}</p>
+        <label class="mt-2 flex items-center gap-2 font-semibold text-slate-700">
+          <input v-model="onlyPurview" type="checkbox" @change="load" class="h-4 w-4" />
+          {{ $t('results.onlyPurview') }}
+        </label>
+      </div>
 
       <form
         v-if="data"
