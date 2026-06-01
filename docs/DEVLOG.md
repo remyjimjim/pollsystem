@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-05-31 — Show-disabled on its own row, Search button next to Notes on Manage Polls
+
+**Requested:**
+
+> Can we move the "Show disabled" checkbox so that it is exactly
+> underneath the "Election" Poll type checkbox on the
+> /admin/manage-polls
+
+> Can we add a 'Search' button next to the 'Notes' input box on the
+> /admin/manage-polls page?
+
+**Changed:**
+
+- "Show disabled" moved out of the Poll Type checkbox flex-wrap row
+  onto its own line inside the same fieldset, so it sits directly
+  under the Election checkbox above instead of trailing Ballot
+  Measure to the right.
+- Added a black Search button after the Notes input, mirroring the
+  /super/manage-users button. Form `@submit.prevent` now wires to a
+  new `searchNow` that cancels every pending debounce timer
+  (`fetchTimer`, `titleTimer`, `notesTimer`) and runs `fetchPolls()`
+  immediately. Live-filter on each input change is unchanged.
+- The Search cell uses the same two-row layout as the Notes cell
+  (invisible heading on top) so the button's top edge lines up with
+  the top of the Notes input under `items-start`.
+- i18n: `admin.managePolls.search`, `searching`.
+
+**Commit:** `7e72fd6`
+
+---
+
 ## 2026-05-31 — Creator column + email-on-note on Manage Polls; Search button on Manage Users
 
 **Requested:**
