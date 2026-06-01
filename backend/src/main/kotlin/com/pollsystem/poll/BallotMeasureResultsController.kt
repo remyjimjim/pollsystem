@@ -3,6 +3,8 @@ package com.pollsystem.poll
 import com.pollsystem.model.PollKind
 import com.pollsystem.repository.BallotMeasureRepository
 import com.pollsystem.repository.BallotResponseRepository
+import com.pollsystem.repository.CountyRepository
+import com.pollsystem.repository.CountyZipsRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
@@ -30,6 +32,8 @@ class BallotMeasureResultsController(
     private val measures: BallotMeasureRepository,
     private val responses: BallotResponseRepository,
     private val blocks: PollBlockService,
+    private val countyZips: CountyZipsRepository,
+    private val counties: CountyRepository,
     @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
 ) {
 
@@ -37,7 +41,9 @@ class BallotMeasureResultsController(
     @Transactional(readOnly = true)
     fun get(
         @PathVariable id: Long,
-        @RequestParam(required = false) zipcode: String?,
+        @RequestParam(name = "zipcode", required = false) zipcodes: List<String>? = null,
+        @RequestParam(name = "stateId", required = false) stateIds: List<Long>? = null,
+        @RequestParam(name = "countyId", required = false) countyIds: List<Long>? = null,
         @RequestParam(required = false, defaultValue = "false") onlyPurview: Boolean = false
     ): BallotMeasureResultsDto {
         val measure = measures.findById(id).orElseThrow {
@@ -47,18 +53,16 @@ class BallotMeasureResultsController(
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
         val purviewZips = setOf(measure.election.zipcode)
+        val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
         val all = responses.findByMeasureId(id)
         var filtered = all
-        if (zipcode != null) filtered = filtered.filter { it.user.zipcode == zipcode }
+        if (geoZips != null) filtered = filtered.filter { it.user.zipcode in geoZips }
         if (onlyPurview) filtered = filtered.filter { it.user.zipcode in purviewZips }
 
         val respondents = filtered.size  // unique by (user, measure) constraint
-        val filterMap = buildMap {
-            zipcode?.let { put("zipcode", it) }
-            if (onlyPurview) put("onlyPurview", "true")
-        }.takeIf { it.isNotEmpty() }
+        val filterMap = describeFilter(zipcodes, stateIds, countyIds, onlyPurview)
 
-        if ((zipcode != null || onlyPurview) && respondents < kThreshold) {
+        if ((geoZips != null || onlyPurview) && respondents < kThreshold) {
             return BallotMeasureResultsDto(
                 measureId = id,
                 title = measure.title,

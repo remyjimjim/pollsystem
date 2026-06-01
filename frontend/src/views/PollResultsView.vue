@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import axios from 'axios'
+
+interface StateRow { id: number; name: string; initial: string }
+interface CountyRow { id: number; stateId: number; name: string }
+interface CountyZipRow { id: number; countyId: number; zipcode: string }
 
 const { t } = useI18n()
 
@@ -61,8 +65,155 @@ const eData = ref<ElectionResultsDto | null>(null)
 const bData = ref<BallotMeasureResultsDto | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
-const zipFilter = ref('')
 const onlyPurview = ref(false)
+
+// ---------- geo pickers (same UX as /polls/search) ----------
+const states = ref<StateRow[]>([])
+const counties = ref<CountyRow[]>([])
+const zipcodeOptions = ref<CountyZipRow[]>([])
+const selectedStateIds = ref<number[]>([])
+const lastClickedStateIndex = ref<number | null>(null)
+const selectedCountyIds = ref<number[]>([])
+const lastClickedCountyIndex = ref<number | null>(null)
+const selectedZipcodes = ref<string[]>([])
+const lastClickedZipIndex = ref<number | null>(null)
+const statePickerOpen = ref(false)
+const countyPickerOpen = ref(false)
+const zipPickerOpen = ref(false)
+
+async function loadStates() {
+  try { states.value = (await axios.get<StateRow[]>('/api/states')).data } catch { /* non-fatal */ }
+}
+async function loadCounties(stateIds: number[]) {
+  try {
+    counties.value = (await axios.get<CountyRow[]>('/api/counties', {
+      params: { state_id: stateIds.join(',') }
+    })).data
+  } catch { counties.value = [] }
+}
+async function loadZipcodesByCounty(countyIds: number[]) {
+  try {
+    zipcodeOptions.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
+      params: { county_ids: countyIds.join(',') }
+    })).data
+  } catch { zipcodeOptions.value = [] }
+}
+async function loadZipcodesByState(stateIds: number[]) {
+  try {
+    zipcodeOptions.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
+      params: { state_id: stateIds.join(',') }
+    })).data
+  } catch { zipcodeOptions.value = [] }
+}
+
+async function onStateChange() {
+  selectedCountyIds.value = []
+  selectedZipcodes.value = []
+  counties.value = []
+  zipcodeOptions.value = []
+  if (selectedStateIds.value.length > 0) {
+    await loadCounties(selectedStateIds.value)
+    await loadZipcodesByState(selectedStateIds.value)
+  }
+}
+async function onCountyChange() {
+  selectedZipcodes.value = []
+  if (selectedCountyIds.value.length > 0) {
+    await loadZipcodesByCounty(selectedCountyIds.value)
+  } else if (selectedStateIds.value.length > 0) {
+    await loadZipcodesByState(selectedStateIds.value)
+  } else {
+    zipcodeOptions.value = []
+  }
+}
+
+function onStateClick(e: MouseEvent, idx: number, id: number) {
+  const target = e.target as HTMLInputElement
+  const willCheck = target.checked
+  if (e.shiftKey && lastClickedStateIndex.value !== null) {
+    const a = Math.min(lastClickedStateIndex.value, idx)
+    const b = Math.max(lastClickedStateIndex.value, idx)
+    const ids = states.value.slice(a, b + 1).map(s => s.id)
+    selectedStateIds.value = willCheck
+      ? Array.from(new Set([...selectedStateIds.value, ...ids]))
+      : selectedStateIds.value.filter(x => !ids.includes(x))
+  } else {
+    selectedStateIds.value = willCheck
+      ? Array.from(new Set([...selectedStateIds.value, id]))
+      : selectedStateIds.value.filter(x => x !== id)
+  }
+  lastClickedStateIndex.value = idx
+  onStateChange()
+}
+function onCountyClick(e: MouseEvent, idx: number, id: number) {
+  const target = e.target as HTMLInputElement
+  const willCheck = target.checked
+  if (e.shiftKey && lastClickedCountyIndex.value !== null) {
+    const a = Math.min(lastClickedCountyIndex.value, idx)
+    const b = Math.max(lastClickedCountyIndex.value, idx)
+    const ids = counties.value.slice(a, b + 1).map(c => c.id)
+    selectedCountyIds.value = willCheck
+      ? Array.from(new Set([...selectedCountyIds.value, ...ids]))
+      : selectedCountyIds.value.filter(x => !ids.includes(x))
+  } else {
+    selectedCountyIds.value = willCheck
+      ? Array.from(new Set([...selectedCountyIds.value, id]))
+      : selectedCountyIds.value.filter(x => x !== id)
+  }
+  lastClickedCountyIndex.value = idx
+  onCountyChange()
+}
+function onZipClick(e: MouseEvent, idx: number, code: string) {
+  const target = e.target as HTMLInputElement
+  const willCheck = target.checked
+  if (e.shiftKey && lastClickedZipIndex.value !== null) {
+    const a = Math.min(lastClickedZipIndex.value, idx)
+    const b = Math.max(lastClickedZipIndex.value, idx)
+    const codes = zipcodeOptions.value.slice(a, b + 1).map(z => z.zipcode)
+    selectedZipcodes.value = willCheck
+      ? Array.from(new Set([...selectedZipcodes.value, ...codes]))
+      : selectedZipcodes.value.filter(z => !codes.includes(z))
+  } else {
+    selectedZipcodes.value = willCheck
+      ? Array.from(new Set([...selectedZipcodes.value, code]))
+      : selectedZipcodes.value.filter(z => z !== code)
+  }
+  lastClickedZipIndex.value = idx
+}
+
+const statePickerSummary = computed<string>(() => {
+  if (selectedStateIds.value.length === 0) return t('results.stateAny')
+  if (selectedStateIds.value.length === 1) {
+    return states.value.find(s => s.id === selectedStateIds.value[0])?.name ?? t('results.stateAny')
+  }
+  return t('results.stateNSelected', { n: selectedStateIds.value.length })
+})
+const countyPickerSummary = computed<string>(() => {
+  if (selectedCountyIds.value.length === 0) return t('results.countyAny')
+  if (selectedCountyIds.value.length === 1) {
+    return counties.value.find(c => c.id === selectedCountyIds.value[0])?.name ?? t('results.countyAny')
+  }
+  return t('results.countyNSelected', { n: selectedCountyIds.value.length })
+})
+const zipPickerSummary = computed<string>(() => {
+  if (selectedZipcodes.value.length === 1) return selectedZipcodes.value[0]
+  if (selectedZipcodes.value.length > 1) return t('results.zipcodeNSelected', { n: selectedZipcodes.value.length })
+  return zipcodeOptions.value[0]?.zipcode ?? t('results.zipcodeAny')
+})
+
+function onDocClick(e: MouseEvent) {
+  const target = e.target as HTMLElement | null
+  if (!target?.closest('[data-state-picker]')) statePickerOpen.value = false
+  if (!target?.closest('[data-county-picker]')) countyPickerOpen.value = false
+  if (!target?.closest('[data-zip-picker]')) zipPickerOpen.value = false
+}
+function onEsc(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    statePickerOpen.value = false
+    countyPickerOpen.value = false
+    zipPickerOpen.value = false
+  }
+}
 
 const isSupported = computed(
   () => type.value === 'questionnaire' || type.value === 'election' || type.value === 'ballot-measure'
@@ -87,7 +238,11 @@ async function load() {
   error.value = null
   try {
     const params: Record<string, string> = {}
-    if (zipFilter.value.trim()) params.zipcode = zipFilter.value.trim()
+    // Geo filter cascade matches /polls/search: explicit zipcodes win,
+    // otherwise counties expand to their zips, otherwise states.
+    if (selectedZipcodes.value.length > 0) params.zipcode = selectedZipcodes.value.join(',')
+    else if (selectedCountyIds.value.length > 0) params.countyId = selectedCountyIds.value.join(',')
+    else if (selectedStateIds.value.length > 0) params.stateId = selectedStateIds.value.join(',')
     if (onlyPurview.value) params.onlyPurview = 'true'
     if (type.value === 'questionnaire') {
       const res = await axios.get<QuestionnaireResultsDto>(
@@ -124,9 +279,18 @@ async function load() {
 }
 
 function clearFilter() {
-  zipFilter.value = ''
+  selectedStateIds.value = []
+  selectedCountyIds.value = []
+  selectedZipcodes.value = []
+  counties.value = []
+  zipcodeOptions.value = []
   load()
 }
+const hasGeoFilter = computed(() =>
+  selectedStateIds.value.length > 0 ||
+  selectedCountyIds.value.length > 0 ||
+  selectedZipcodes.value.length > 0
+)
 
 function pct(count: number, total: number): string {
   if (total === 0) return '0%'
@@ -145,7 +309,16 @@ const groupedCandidates = computed(() => {
 })
 
 watch([id, type], load, { immediate: false })
-onMounted(load)
+onMounted(() => {
+  document.addEventListener('click', onDocClick)
+  document.addEventListener('keydown', onEsc)
+  loadStates()
+  load()
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onDocClick)
+  document.removeEventListener('keydown', onEsc)
+})
 </script>
 
 <template>
@@ -181,34 +354,81 @@ onMounted(load)
       <form
         v-if="data"
         @submit.prevent="load"
-        class="mb-4 flex items-end gap-2 rounded-md bg-slate-50 p-3"
+        class="mb-4 grid grid-cols-1 items-end gap-3 rounded-md bg-slate-50 p-3 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
       >
+        <!-- State picker -->
         <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
-          {{ $t('results.filterLabel') }}
-          <input
-            v-model="zipFilter"
-            type="text"
-            maxlength="5"
-            pattern="[0-9]{5}"
-            :placeholder="$t('results.filterPlaceholder')"
-            class="rounded border border-slate-300 p-2 text-sm font-normal focus:border-slate-500 focus:outline-none"
-          />
+          {{ $t('results.state') }}
+          <div data-state-picker class="relative">
+            <button type="button" @click.stop="statePickerOpen = !statePickerOpen"
+              class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50">
+              <span>{{ statePickerSummary }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="ml-2 h-4 w-4 text-slate-500 transition-transform" :class="{ 'rotate-180': statePickerOpen }" aria-hidden="true"><path fill="currentColor" d="M5.3 7.3 4 8.6 10 14.6l6-6L14.7 7.3 10 12z" /></svg>
+            </button>
+            <div v-if="statePickerOpen" class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg">
+              <label v-for="(s, idx) in states" :key="s.id" class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50">
+                <input type="checkbox" :checked="selectedStateIds.includes(s.id)" @click="onStateClick($event, idx, s.id)" class="h-3.5 w-3.5" />
+                <span>{{ s.name }}</span>
+              </label>
+            </div>
+          </div>
         </label>
-        <button
-          type="submit"
-          :disabled="loading"
-          class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {{ $t('common.apply') }}
-        </button>
-        <button
-          v-if="zipFilter"
-          type="button"
-          @click="clearFilter"
-          class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50"
-        >
-          {{ $t('common.clear') }}
-        </button>
+
+        <!-- County picker -->
+        <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+          {{ $t('results.county') }}
+          <div data-county-picker class="relative">
+            <button type="button" @click.stop="countyPickerOpen = !countyPickerOpen"
+              :disabled="counties.length === 0"
+              class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60">
+              <span>{{ countyPickerSummary }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="ml-2 h-4 w-4 text-slate-500 transition-transform" :class="{ 'rotate-180': countyPickerOpen }" aria-hidden="true"><path fill="currentColor" d="M5.3 7.3 4 8.6 10 14.6l6-6L14.7 7.3 10 12z" /></svg>
+            </button>
+            <div v-if="countyPickerOpen && counties.length > 0" class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg">
+              <label v-for="(c, idx) in counties" :key="c.id" class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50">
+                <input type="checkbox" :checked="selectedCountyIds.includes(c.id)" @click="onCountyClick($event, idx, c.id)" class="h-3.5 w-3.5" />
+                <span>{{ c.name }}</span>
+              </label>
+            </div>
+          </div>
+        </label>
+
+        <!-- Zipcode picker -->
+        <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+          {{ $t('results.zipcode') }}
+          <div data-zip-picker class="relative">
+            <button type="button" @click.stop="zipPickerOpen = !zipPickerOpen"
+              :disabled="zipcodeOptions.length === 0"
+              class="flex w-full items-center justify-between rounded border border-slate-300 bg-white p-2 text-left text-sm font-normal text-slate-900 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60">
+              <span class="font-mono">{{ zipPickerSummary }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="ml-2 h-4 w-4 text-slate-500 transition-transform" :class="{ 'rotate-180': zipPickerOpen }" aria-hidden="true"><path fill="currentColor" d="M5.3 7.3 4 8.6 10 14.6l6-6L14.7 7.3 10 12z" /></svg>
+            </button>
+            <div v-if="zipPickerOpen && zipcodeOptions.length > 0" class="absolute left-0 right-0 z-20 mt-1 max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg">
+              <label v-for="(z, idx) in zipcodeOptions" :key="z.id" class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50">
+                <input type="checkbox" :checked="selectedZipcodes.includes(z.zipcode)" @click="onZipClick($event, idx, z.zipcode)" class="h-3.5 w-3.5" />
+                <span class="font-mono">{{ z.zipcode }}</span>
+              </label>
+            </div>
+          </div>
+        </label>
+
+        <div class="flex items-end gap-2">
+          <button
+            type="submit"
+            :disabled="loading"
+            class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {{ $t('common.apply') }}
+          </button>
+          <button
+            v-if="hasGeoFilter"
+            type="button"
+            @click="clearFilter"
+            class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50"
+          >
+            {{ $t('common.clear') }}
+          </button>
+        </div>
       </form>
 
       <div

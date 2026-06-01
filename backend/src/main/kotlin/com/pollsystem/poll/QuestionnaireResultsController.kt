@@ -1,6 +1,8 @@
 package com.pollsystem.poll
 
 import com.pollsystem.model.PollKind
+import com.pollsystem.repository.CountyRepository
+import com.pollsystem.repository.CountyZipsRepository
 import com.pollsystem.repository.QuestionRepository
 import com.pollsystem.repository.QuestionResponseRepository
 import com.pollsystem.repository.QuestionnaireDomainRepository
@@ -40,6 +42,8 @@ class QuestionnaireResultsController(
     private val responses: QuestionResponseRepository,
     private val domains: QuestionnaireDomainRepository,
     private val blocks: PollBlockService,
+    private val countyZips: CountyZipsRepository,
+    private val counties: CountyRepository,
     @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
 ) {
 
@@ -47,7 +51,9 @@ class QuestionnaireResultsController(
     @Transactional(readOnly = true)
     fun get(
         @PathVariable id: Long,
-        @RequestParam(required = false) zipcode: String?,
+        @RequestParam(name = "zipcode", required = false) zipcodes: List<String>? = null,
+        @RequestParam(name = "stateId", required = false) stateIds: List<Long>? = null,
+        @RequestParam(name = "countyId", required = false) countyIds: List<Long>? = null,
         @RequestParam(required = false, defaultValue = "false") onlyPurview: Boolean = false
     ): QuestionnaireResultsDto {
         val q = questionnaires.findById(id).orElseThrow {
@@ -59,18 +65,16 @@ class QuestionnaireResultsController(
 
         val pollQuestions = questions.findByQuestionnaireId(id)
         val purviewZips = domains.findByQuestionnaireId(id).map { it.zipcode }.toSet()
+        val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
         val all = responses.findByQuestionnaireId(id)
         var filtered = all
-        if (zipcode != null) filtered = filtered.filter { it.user.zipcode == zipcode }
+        if (geoZips != null) filtered = filtered.filter { it.user.zipcode in geoZips }
         if (onlyPurview) filtered = filtered.filter { it.user.zipcode in purviewZips }
 
         val respondents = filtered.map { it.user.id }.distinct().size
-        val filterMap = buildMap {
-            zipcode?.let { put("zipcode", it) }
-            if (onlyPurview) put("onlyPurview", "true")
-        }.takeIf { it.isNotEmpty() }
+        val filterMap = describeFilter(zipcodes, stateIds, countyIds, onlyPurview)
 
-        if ((zipcode != null || onlyPurview) && respondents < kThreshold) {
+        if ((geoZips != null || onlyPurview) && respondents < kThreshold) {
             return QuestionnaireResultsDto(
                 questionnaireId = id,
                 title = q.title,

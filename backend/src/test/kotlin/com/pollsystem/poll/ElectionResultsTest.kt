@@ -60,7 +60,7 @@ class ElectionResultsTest : AbstractIntegrationTest() {
         // 1 votes No-Alice, Yes-Bob
         vote(pollId, fixtures.createUser(emailPrefix = "alt"), mapOf("Alice" to false, "Bob" to true))
 
-        val results = resultsController.get(pollId, zipcode = null)
+        val results = resultsController.get(pollId)
         assertThat(results.suppressed).isFalse
         assertThat(results.totalRespondents).isEqualTo(4)
 
@@ -85,10 +85,10 @@ class ElectionResultsTest : AbstractIntegrationTest() {
             vote(pollId, fixtures.createUser(zipcode = "90012", emailPrefix = "b$it"), mapOf("Alice" to false))
         }
 
-        val filtered = resultsController.get(pollId, zipcode = "90001")
+        val filtered = resultsController.get(pollId, zipcodes = listOf("90001"))
         assertThat(filtered.suppressed).isTrue
 
-        val unfiltered = resultsController.get(pollId, zipcode = null)
+        val unfiltered = resultsController.get(pollId)
         assertThat(unfiltered.suppressed).isFalse
         assertThat(unfiltered.totalRespondents).isEqualTo(6)
     }

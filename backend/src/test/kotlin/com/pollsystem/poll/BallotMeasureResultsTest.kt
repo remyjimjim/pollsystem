@@ -63,7 +63,7 @@ class BallotMeasureResultsTest : AbstractIntegrationTest() {
         repeat(4) { vote(measureId, fixtures.createUser(emailPrefix = "y$it"), true) }
         repeat(2) { vote(measureId, fixtures.createUser(emailPrefix = "n$it"), false) }
 
-        val results = resultsController.get(measureId, zipcode = null)
+        val results = resultsController.get(measureId)
         assertThat(results.suppressed).isFalse
         assertThat(results.totalRespondents).isEqualTo(6)
         assertThat(results.yes).isEqualTo(4)
@@ -80,11 +80,11 @@ class BallotMeasureResultsTest : AbstractIntegrationTest() {
         // 4 elsewhere
         repeat(4) { vote(measureId, fixtures.createUser(zipcode = "90012", emailPrefix = "b$it"), false) }
 
-        val filtered = resultsController.get(measureId, zipcode = "90001")
+        val filtered = resultsController.get(measureId, zipcodes = listOf("90001"))
         assertThat(filtered.suppressed).isTrue
         assertThat(filtered.totalRespondents).isEqualTo(0)
 
-        val unfiltered = resultsController.get(measureId, zipcode = null)
+        val unfiltered = resultsController.get(measureId)
         assertThat(unfiltered.suppressed).isFalse
         assertThat(unfiltered.totalRespondents).isEqualTo(6)
     }

@@ -59,7 +59,7 @@ class QuestionnaireResultsTest : AbstractIntegrationTest() {
         // Mixed case: should fold into "yes" bucket
         submit(pollId, fixtures.createUser(emailPrefix = "mixed"), "YES")
 
-        val results = resultsController.get(pollId, zipcode = null)
+        val results = resultsController.get(pollId, zipcodes = null)
 
         assertThat(results.suppressed).isFalse
         assertThat(results.totalRespondents).isEqualTo(6)
@@ -78,13 +78,13 @@ class QuestionnaireResultsTest : AbstractIntegrationTest() {
         repeat(2) { submit(pollId, fixtures.createUser(zipcode = "90001", emailPrefix = "a$it"), "Yes") }
         repeat(5) { submit(pollId, fixtures.createUser(zipcode = "90012", emailPrefix = "b$it"), "Yes") }
 
-        val filtered = resultsController.get(pollId, zipcode = "90001")
+        val filtered = resultsController.get(pollId, zipcodes = listOf("90001"))
         assertThat(filtered.suppressed).isTrue
         assertThat(filtered.suppressionMessage).isNotBlank
         assertThat(filtered.perQuestion).isEmpty()
 
         // Without the filter, all 7 contribute and suppression doesn't trigger
-        val unfiltered = resultsController.get(pollId, zipcode = null)
+        val unfiltered = resultsController.get(pollId, zipcodes = null)
         assertThat(unfiltered.suppressed).isFalse
         assertThat(unfiltered.totalRespondents).isEqualTo(7)
     }
@@ -97,10 +97,10 @@ class QuestionnaireResultsTest : AbstractIntegrationTest() {
         repeat(3) { submit(pollId, fixtures.createUser(zipcode = "90001", emailPrefix = "in$it"), "Yes") }
         repeat(2) { submit(pollId, fixtures.createUser(zipcode = "10001", emailPrefix = "out$it"), "No") }
 
-        val all = resultsController.get(pollId, zipcode = null, onlyPurview = false)
+        val all = resultsController.get(pollId, onlyPurview = false)
         assertThat(all.totalRespondents).isEqualTo(5)
 
-        val withinPurview = resultsController.get(pollId, zipcode = null, onlyPurview = true)
+        val withinPurview = resultsController.get(pollId, onlyPurview = true)
         assertThat(withinPurview.suppressed).isFalse
         assertThat(withinPurview.totalRespondents).isEqualTo(3)
         assertThat(withinPurview.filterApplied).containsEntry("onlyPurview", "true")
@@ -115,7 +115,7 @@ class QuestionnaireResultsTest : AbstractIntegrationTest() {
         repeat(3) { submit(pollId, fixtures.createUser(zipcode = "90001", emailPrefix = "a$it"), "Yes") }
         repeat(2) { submit(pollId, fixtures.createUser(zipcode = "90012", emailPrefix = "b$it"), "No") }
 
-        val filtered = resultsController.get(pollId, zipcode = "90001")
+        val filtered = resultsController.get(pollId, zipcodes = listOf("90001"))
         assertThat(filtered.suppressed).isFalse
         assertThat(filtered.totalRespondents).isEqualTo(3)
         assertThat(filtered.perQuestion.first().byAnswer["yes"]).isEqualTo(3)
