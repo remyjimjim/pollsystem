@@ -229,6 +229,14 @@ async function publish(confirmed = false) {
       </button>
       <button
         type="button"
+        @click="router.push('/creator/dashboard')"
+        :disabled="submitting"
+        class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {{ $t('form.cancel') }}
+      </button>
+      <button
+        type="button"
         @click="publish(false)"
         :disabled="submitting"
         class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
