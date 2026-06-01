@@ -61,6 +61,57 @@ logged.
 
 ---
 
+## 2026-05-31 — onlyPurview filter on the Results pages
+
+**Requested:**
+
+> tell me if this is your understanding, when a person registers then
+> they become a "USER" and the email address is their identifier and
+> their phone number is stored and the zipcode they enter is stored
+> in the user table but doesn't limit what polls you can complete, it
+> only comes into play when the polls results are presented because
+> let's say there's a county questionnaire and you want to see the
+> results so the results will show for users whose zipcode is within
+> the purview of the poll then there will be a checkbox to show
+> non-county voters results.
+
+> Yes let's do that, with a Note at the top of the results display
+> saying 'Below are the results from all respondents. To limit
+> results to only those respondents from the intended purview
+> (zipcode, county, state or nation) then check the checkbox below
+> for "Only voters from poll's purview.".' Currently, all polls are
+> only pertinent to the US.
+
+**Changed:**
+
+- Each of the three Results endpoints
+  (`/api/polls/{questionnaires,elections,ballot-measures}/{id}/results`)
+  accepts an optional `onlyPurview=true|false` (default false). When
+  true the response list is intersected with the poll's purview
+  zipcode set:
+  - Election: `{election.zipcode}`
+  - Questionnaire: distinct `questionnaire_domains.zipcode`
+  - BallotMeasure: `{election.zipcode}` (via its parent Election)
+- The new filter composes with the existing `?zipcode=` filter and is
+  reported back in `filterApplied` as `{"onlyPurview": "true"}` when
+  active. K-anonymity suppression now triggers when either filter is
+  active and the surviving group is below the configured threshold.
+- Frontend `PollResultsView.vue` renders the requested note paragraph
+  above the filter form, followed by a smaller line
+  "Currently, all polls are only pertinent to the US.", and a
+  checkbox "Only voters from poll's purview" that re-fetches on
+  toggle. Default is unchecked → all respondents.
+- New backend test
+  `onlyPurview narrows to submitters within the poll's zipcode set`
+  builds 3 in-purview + 2 out-of-purview voters and confirms
+  `onlyPurview=true` returns 3 with `filterApplied.onlyPurview=true`.
+- Verified live: `GET /api/polls/{type}/{id}/results?onlyPurview=true`
+  drops out-of-purview rows and `filterApplied` reflects the toggle.
+
+**Commit:** `5c7e45a`
+
+---
+
 ## 2026-05-31 — Edit user role + location on /super/manage-users
 
 **Requested:**
