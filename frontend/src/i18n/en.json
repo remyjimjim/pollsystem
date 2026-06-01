@@ -494,6 +494,8 @@
       "zipcodeNSelected": "{n} zipcodes",
       "notesFilter": "Notes",
       "notesPlaceholder": "Word or phrase…",
+      "search": "Search",
+      "searching": "Searching…",
       "none": "No polls in your purview match these filters.",
       "purviewEmpty": "You have no Admin assignments yet.",
       "colTitle": "Title",

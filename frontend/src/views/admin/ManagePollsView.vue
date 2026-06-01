@@ -148,6 +148,13 @@ function scheduleFetch() {
   if (fetchTimer) clearTimeout(fetchTimer)
   fetchTimer = setTimeout(fetchPolls, 150)
 }
+/** Run the search now — used by the Search button and Enter-in-form. */
+function searchNow() {
+  if (fetchTimer) { clearTimeout(fetchTimer); fetchTimer = null }
+  if (titleTimer) { clearTimeout(titleTimer); titleTimer = null }
+  if (notesTimer) { clearTimeout(notesTimer); notesTimer = null }
+  fetchPolls()
+}
 async function fetchPolls() {
   loading.value = true
   error.value = null
@@ -578,7 +585,7 @@ onBeforeUnmount(() => {
     <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('admin.managePolls.heading') }}</h1>
 
     <form
-      @submit.prevent
+      @submit.prevent="searchNow"
       class="mb-4 grid grid-cols-1 items-start gap-3 rounded-md bg-slate-50 p-4 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
     >
       <!-- Poll type -->
@@ -597,11 +604,13 @@ onBeforeUnmount(() => {
             <input v-model="kindFilter.BALLOT_MEASURE" type="checkbox" class="h-4 w-4" />
             {{ $t('admin.managePolls.kindBallotMeasure') }}
           </label>
-          <label class="ml-3 flex items-center gap-2">
-            <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
-            {{ $t('admin.managePolls.showDisabled') }}
-          </label>
         </div>
+        <!-- Show disabled on its own line so it sits directly under the
+             Election checkbox above. -->
+        <label class="flex items-center gap-1 font-normal">
+          <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
+          {{ $t('admin.managePolls.showDisabled') }}
+        </label>
       </fieldset>
 
       <!-- Title contains -->
@@ -688,6 +697,19 @@ onBeforeUnmount(() => {
           :placeholder="$t('admin.managePolls.notesPlaceholder')"
           class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
       </label>
+
+      <!-- Search: live-filter still fires on every change, but the
+           button cancels any pending debounce and runs the query now.
+           Mirrors the label/input column structure so the button's top
+           edge lines up with the top of the Notes input. -->
+      <div class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
+        <span aria-hidden="true" class="invisible">.</span>
+        <button
+          type="submit"
+          :disabled="loading"
+          class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+        >{{ loading ? $t('admin.managePolls.searching') : $t('admin.managePolls.search') }}</button>
+      </div>
     </form>
 
     <p v-if="error" class="mb-2 text-sm text-red-700">{{ error }}</p>
