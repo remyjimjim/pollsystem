@@ -61,6 +61,59 @@ logged.
 
 ---
 
+## 2026-05-31 — Edit user role + location on /super/manage-users
+
+**Requested:**
+
+> on the /super/manage-users page the super admin should be able to
+> change any user's role from what it is to any of USER, CREATOR and
+> ADMIN. Same for any user's state, county and zipcode.
+
+> How about if we update each role↔assignment to the role that the
+> super-admin specifies?
+
+**Changed:**
+
+- New `PUT /api/super/users/{userId}` endpoint with body
+  `{role?, zipcode?}`. Both fields optional; either or both can land
+  in one round-trip. Role is restricted to USER / CREATOR / ADMIN
+  (LISTABLE_ROLES), so a super can't accidentally make/unmake another
+  super here. Zipcode is validated against `county_zips` so the
+  state/county always derive cleanly.
+- When the role changes, every existing `RoleAssignment` for the user
+  is rewritten to the new role via a new
+  `RoleAssignmentBulkOps` service that issues a native
+  `UPDATE role_assignments SET role = CAST(:role AS access_level)
+   WHERE user_id = :userId` and `flush + clear`s the persistence
+  context so reads in the same transaction see the new role. The
+  in-memory `findByUserId + saveAll(copy(role = …))` path doesn't
+  work — Hibernate's merge against a Kotlin `val` data-class copy
+  with the same id silently no-ops for an enum field mapped via
+  `@JdbcTypeCode(NAMED_ENUM)`. Recorded so the next person doesn't
+  retrace the half-day diagnosis.
+- Also fixed a subtle bug found in the same diagnosis: after
+  `users.save(u.copy(access = newAccess, ...))`, Hibernate's merge
+  mutates `u`'s backing field even though Kotlin marks it `val`, so a
+  subsequent `newAccess != u.access` check was always false and the
+  RA update was skipped. Snapshot `previousAccess` before the save.
+- Frontend `ManageUsersView.vue` adds an Edit modal that opens when
+  clicking the role badge or any of the State / County / Zipcode
+  cells. The modal has a Role select and cascading State → County →
+  Zipcode dropdowns; the cascade seeds from the user's current
+  zipcode on open. Save PUTs only the fields that changed; cancel
+  closes without writing.
+- Backend tests: role change propagates onto every RoleAssignment
+  via a fresh repo read, zipcode change re-derives state/county,
+  SUPER target / unknown zipcode / bad role rejected with the right
+  HTTP codes.
+- Verified end-to-end against the running backend: PUT body with
+  both fields lands; revert restores; 400 on unknown zipcode and on
+  role=SUPER.
+
+**Commit:** `8b763ae`
+
+---
+
 ## 2026-05-31 — Show-disabled on its own row, Search button next to Notes on Manage Polls
 
 **Requested:**
