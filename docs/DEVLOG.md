@@ -61,6 +61,51 @@ logged.
 
 ---
 
+## 2026-05-31 — State / County / Zipcode multi-select pickers on the Results page
+
+**Requested:**
+
+> Given the page polls/election/2/results, can we add state and county
+> to the filter with the usual state populates county populates
+> zipcodes and checkboxes behaviour?
+
+**Changed:**
+
+- All three Results endpoints
+  (`/api/polls/{questionnaires,elections,ballot-measures}/{id}/results`)
+  replaced the single `?zipcode=` String param with a triple of
+  list-valued params: `?zipcode=` (multi), `?stateId=`, `?countyId=`.
+  Precedence mirrors `PollSearchController.search`: explicit zipcodes
+  win, otherwise counties expand to their zips, otherwise states
+  expand to every zip under each state's counties. Shared resolution
+  lives in a new `poll/ResultsFilters.kt` so all three controllers
+  share the same precedence logic and the same `filterApplied`
+  description shape.
+- K-anonymity continues to suppress when either the geo filter or
+  `onlyPurview` is active and the surviving group is below the
+  configured threshold.
+- Frontend `PollResultsView.vue` swaps the single-zipcode `<input>`
+  for the same cascading multi-select picker pattern used by
+  `/polls/search` and `/admin/manage-polls`:
+  - State picker (multi-select dropdown) drives County picker;
+  - County picker (multi-select dropdown) narrows the Zipcode picker
+    to that county's zips, or falls back to all of the state's zips
+    when no counties are picked;
+  - Zipcode picker (multi-select dropdown) — picks compose with
+    Apply / Clear.
+- Existing controller tests updated for the new param shape
+  (`zipcodes = listOf("90001")` in place of `zipcode = "90001"`).
+- i18n: `results.state`, `stateAny`, `stateNSelected`, `county`,
+  `countyAny`, `countyNSelected`, `zipcode`, `zipcodeAny`,
+  `zipcodeNSelected`.
+- Verified live: `?stateId=48`, `?countyId=3006`, and
+  `?zipcode=98264,98225` each reflect in `filterApplied` and route
+  through the same geo cascade.
+
+**Commit:** `9fb6dcc`
+
+---
+
 ## 2026-05-31 — onlyPurview filter on the Results pages
 
 **Requested:**
