@@ -35,6 +35,8 @@ interface RoleAssignmentRepository : JpaRepository<RoleAssignment, Long> {
     fun findByUserAndRole(user: User, role: AccessLevel): List<RoleAssignment>
     fun findByRoleAndZipcodeAndEnabled(role: AccessLevel, zipcode: String, enabled: Boolean): List<RoleAssignment>
     fun findByUserIdAndRole(userId: Long, role: AccessLevel): List<RoleAssignment>
+    fun findByUserId(userId: Long): List<RoleAssignment>
+
     fun findByCreatorRequestId(creatorRequestId: Long): List<RoleAssignment>
     fun findByCreatorRequestIdIn(creatorRequestIds: List<Long>): List<RoleAssignment>
     fun findByAdminRequestId(adminRequestId: Long): List<RoleAssignment>

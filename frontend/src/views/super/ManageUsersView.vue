@@ -534,6 +534,96 @@ async function saveModal() {
   }
 }
 
+// ---------- edit-user modal: change role + zipcode (state/county derive) ----------
+const editOpen = ref(false)
+const editUser = ref<UserRow | null>(null)
+const editRole = ref<Role>('USER')
+const editStateId = ref<number | ''>('')
+const editCountyId = ref<number | ''>('')
+const editZipcode = ref<string>('')
+const editCounties = ref<CountyRow[]>([])
+const editZipcodes = ref<CountyZipRow[]>([])
+const editBusy = ref(false)
+const editError = ref<string | null>(null)
+
+async function openEdit(row: UserRow) {
+  editUser.value = row
+  editRole.value = (row.access === 'ADMIN' || row.access === 'CREATOR' || row.access === 'USER')
+    ? row.access
+    : 'USER'
+  editZipcode.value = row.zipcode
+  editStateId.value = ''
+  editCountyId.value = ''
+  editCounties.value = []
+  editZipcodes.value = []
+  editError.value = null
+  editOpen.value = true
+  // Seed the cascade from the user's current zipcode so the dropdowns
+  // open already pointing at where the user is.
+  try {
+    const meta = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
+      params: { prefix: row.zipcode }
+    })).data.find(z => z.zipcode === row.zipcode)
+    if (meta) {
+      const c = (await axios.get<CountyRow[]>('/api/counties', {
+        params: { state_id: '' }
+      })).data
+      // Look up the state via the county.
+      const allStates = states.value.length > 0 ? states.value : (await axios.get<StateRow[]>('/api/states')).data
+      const county = c.find(x => x.id === meta.countyId)
+        ?? (await axios.get<CountyRow[]>('/api/counties', {
+          params: { state_id: allStates.map(s => s.id).join(',') }
+        })).data.find(x => x.id === meta.countyId)
+      if (county) {
+        editStateId.value = county.stateId
+        await reloadEditCounties()
+        editCountyId.value = county.id
+        await reloadEditZipcodes()
+      }
+    }
+  } catch { /* seed is non-fatal; user can still pick from scratch */ }
+}
+function closeEdit() {
+  editOpen.value = false
+  editUser.value = null
+}
+async function reloadEditCounties() {
+  editCountyId.value = ''
+  editZipcodes.value = []
+  if (editStateId.value === '') { editCounties.value = []; return }
+  try {
+    editCounties.value = (await axios.get<CountyRow[]>('/api/counties', {
+      params: { state_id: String(editStateId.value) }
+    })).data
+  } catch { editCounties.value = [] }
+}
+async function reloadEditZipcodes() {
+  if (editCountyId.value === '') { editZipcodes.value = []; return }
+  try {
+    editZipcodes.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
+      params: { county_ids: String(editCountyId.value) }
+    })).data
+  } catch { editZipcodes.value = [] }
+}
+async function saveEdit() {
+  if (!editUser.value) return
+  editBusy.value = true
+  editError.value = null
+  try {
+    const body: { role?: string; zipcode?: string } = {}
+    if (editRole.value !== editUser.value.access) body.role = editRole.value
+    if (editZipcode.value && editZipcode.value !== editUser.value.zipcode) body.zipcode = editZipcode.value
+    if (!body.role && !body.zipcode) { closeEdit(); return }
+    const res = await axios.put<UserRow>(`/api/super/users/${editUser.value.id}`, body)
+    replaceRow(res.data)
+    closeEdit()
+  } catch (e: any) {
+    editError.value = e?.response?.data?.message ?? t('super.manageUsers.errorSaveEdit')
+  } finally {
+    editBusy.value = false
+  }
+}
+
 // ---------- global UI handlers ----------
 function onDocClick(e: MouseEvent) {
   const target = e.target as HTMLElement | null
@@ -547,6 +637,7 @@ function onEsc(e: KeyboardEvent) {
     countyPickerOpen.value = false
     zipPickerOpen.value = false
     if (modalOpen.value) closeMessageModal()
+    if (editOpen.value) closeEdit()
   }
 }
 function previewText(body: string): string {
@@ -808,7 +899,12 @@ onBeforeUnmount(() => {
         <tr v-for="(row, idx) in sortedResults" :key="row.id">
           <td class="border-b border-slate-100 p-2">{{ row.email }}</td>
           <td class="border-b border-slate-100 p-2">
-            <span :class="['rounded px-2 py-0.5 text-xs font-semibold', accessBadgeClasses(row.access)]">{{ row.access }}</span>
+            <button
+              type="button"
+              @click="openEdit(row)"
+              :class="['rounded px-2 py-0.5 text-xs font-semibold hover:opacity-80', accessBadgeClasses(row.access)]"
+              :title="$t('super.manageUsers.editRoleTitle')"
+            >{{ row.access }}</button>
             <button
               v-if="row.access === 'ADMIN'"
               type="button"
@@ -816,9 +912,9 @@ onBeforeUnmount(() => {
               class="ml-2 rounded border border-red-700 bg-white px-2 py-0.5 text-xs text-red-700 hover:bg-red-50"
             >{{ $t('super.manageUsers.demote') }}</button>
           </td>
-          <td class="border-b border-slate-100 p-2">{{ row.stateInitial ?? '—' }}</td>
-          <td class="border-b border-slate-100 p-2">{{ row.countyName ?? '—' }}</td>
-          <td class="border-b border-slate-100 p-2 font-mono">{{ row.zipcode }}</td>
+          <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.stateInitial ?? '—' }}</button></td>
+          <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.countyName ?? '—' }}</button></td>
+          <td class="border-b border-slate-100 p-2 font-mono"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.zipcode }}</button></td>
           <td class="border-b border-slate-100 p-2">
             <input
               type="checkbox"
@@ -906,6 +1002,68 @@ onBeforeUnmount(() => {
             :disabled="modalSaving"
             class="rounded bg-slate-800 px-4 py-1.5 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
           >{{ modalSaving ? $t('common.saving') : $t('common.save') }}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit user (role + location) -->
+    <div
+      v-if="editOpen"
+      role="dialog"
+      aria-modal="true"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      @click.self="closeEdit"
+    >
+      <div class="w-full max-w-lg rounded-md bg-white p-4 shadow-lg">
+        <header class="mb-3 flex items-center justify-between">
+          <strong class="text-sm text-slate-800">{{ $t('super.manageUsers.editTitle', { email: editUser?.email ?? '' }) }}</strong>
+          <button type="button" @click="closeEdit" :aria-label="$t('common.close')" class="rounded p-1 text-slate-500 hover:bg-slate-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-4 w-4" aria-hidden="true"><path fill="currentColor" d="M5.7 4.3 4.3 5.7 8.6 10l-4.3 4.3 1.4 1.4L10 11.4l4.3 4.3 1.4-1.4L11.4 10l4.3-4.3-1.4-1.4L10 8.6 5.7 4.3z" /></svg>
+          </button>
+        </header>
+
+        <div class="flex flex-col gap-3 text-sm">
+          <label class="flex flex-col gap-1">
+            <span class="font-semibold text-slate-700">{{ $t('super.manageUsers.editRole') }}</span>
+            <select v-model="editRole" class="rounded border border-slate-300 p-2">
+              <option value="USER">{{ $t('super.manageUsers.roleUser') }}</option>
+              <option value="CREATOR">{{ $t('super.manageUsers.roleCreator') }}</option>
+              <option value="ADMIN">{{ $t('super.manageUsers.roleAdmin') }}</option>
+            </select>
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="font-semibold text-slate-700">{{ $t('super.manageUsers.editState') }}</span>
+            <select v-model="editStateId" @change="reloadEditCounties" class="rounded border border-slate-300 p-2">
+              <option :value="''">{{ $t('super.manageUsers.editPickState') }}</option>
+              <option v-for="s in states" :key="s.id" :value="s.id">{{ s.name }}</option>
+            </select>
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="font-semibold text-slate-700">{{ $t('super.manageUsers.editCounty') }}</span>
+            <select v-model="editCountyId" @change="reloadEditZipcodes" :disabled="editStateId === ''" class="rounded border border-slate-300 p-2 disabled:opacity-60">
+              <option :value="''">{{ $t('super.manageUsers.editPickCounty') }}</option>
+              <option v-for="c in editCounties" :key="c.id" :value="c.id">{{ c.name }}</option>
+            </select>
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="font-semibold text-slate-700">{{ $t('super.manageUsers.editZipcode') }}</span>
+            <select v-model="editZipcode" :disabled="editCountyId === ''" class="rounded border border-slate-300 p-2 font-mono disabled:opacity-60">
+              <option v-if="editCountyId === ''" :value="editUser?.zipcode ?? ''">{{ editUser?.zipcode ?? '' }}</option>
+              <option v-for="z in editZipcodes" :key="z.id" :value="z.zipcode">{{ z.zipcode }}</option>
+            </select>
+          </label>
+        </div>
+
+        <p v-if="editError" class="mt-3 text-xs text-red-700">{{ editError }}</p>
+
+        <div class="mt-4 flex justify-end gap-2">
+          <button type="button" @click="closeEdit" class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50">{{ $t('common.close') }}</button>
+          <button
+            type="button"
+            @click="saveEdit"
+            :disabled="editBusy"
+            class="rounded bg-slate-800 px-4 py-1.5 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+          >{{ editBusy ? $t('common.saving') : $t('common.save') }}</button>
         </div>
       </div>
     </div>

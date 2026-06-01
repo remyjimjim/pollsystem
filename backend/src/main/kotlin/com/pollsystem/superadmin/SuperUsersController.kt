@@ -56,6 +56,7 @@ data class SuperUserMessageDto(
 data class CreateMessageRequest(val body: String, val sendEmail: Boolean = false)
 data class EditMessageRequest(val body: String)
 data class BulkToggleRequest(val userIds: List<Long>, val enable: Boolean)
+data class EditUserRequest(val role: String?, val zipcode: String?)
 
 /** Only User/Creator/Admin are listable here — VIEWER and SUPER are intentionally excluded. */
 private val LISTABLE_ROLES = setOf(AccessLevel.USER, AccessLevel.CREATOR, AccessLevel.ADMIN)
@@ -68,7 +69,8 @@ class SuperUsersController(
     private val countyZips: CountyZipsRepository,
     private val roleAssignments: RoleAssignmentRepository,
     private val userMessages: UserMessageRepository,
-    private val emailService: EmailService
+    private val emailService: EmailService,
+    private val roleAssignmentBulkOps: RoleAssignmentBulkOps
 ) {
 
     @GetMapping
@@ -173,6 +175,64 @@ class SuperUsersController(
         val pool = users.findAllById(body.userIds).filter { it.access in LISTABLE_ROLES }
         val saved = users.saveAll(pool.map { it.copy(isEnabled = body.enable) })
         return saved.sortedBy { it.email }.map(::rowFor)
+    }
+
+    /**
+     * Edit a listable user's role and/or zipcode. Both fields are
+     * optional — only the fields the super-admin actually changes get
+     * persisted. The role is restricted to LISTABLE_ROLES so this
+     * endpoint can't create or unmake a SUPER. When the role changes,
+     * every existing RoleAssignment for the user is updated to the new
+     * role so the per-zipcode rows stay aligned with the access level.
+     */
+    @PutMapping("/{userId}")
+    @Transactional
+    fun edit(
+        @PathVariable userId: Long,
+        @RequestBody body: EditUserRequest
+    ): SuperUserRow {
+        val u = users.findById(userId).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        }
+        guardListable(u)
+
+        val newAccess = body.role?.trim()?.takeIf { it.isNotEmpty() }?.let { raw ->
+            val parsed = runCatching { AccessLevel.valueOf(raw.uppercase()) }.getOrNull()
+                ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown role: $raw")
+            if (parsed !in LISTABLE_ROLES) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Role must be one of USER/CREATOR/ADMIN")
+            }
+            parsed
+        }
+        val newZipcode = body.zipcode?.trim()?.takeIf { it.isNotEmpty() }?.also { zip ->
+            if (countyZips.findByZipcode(zip).isEmpty()) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown zipcode: $zip")
+            }
+        }
+        if (newAccess == null && newZipcode == null) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Nothing to update")
+        }
+
+        // Snapshot the old access level BEFORE the save — JPA's merge
+        // mutates `u`'s backing field even though the Kotlin property is
+        // `val`, so a post-save `u.access` already reflects the new
+        // value and a `newAccess != u.access` check would always be
+        // false.
+        val previousAccess = u.access
+        val updated = users.save(
+            u.copy(
+                access = newAccess ?: u.access,
+                zipcode = newZipcode ?: u.zipcode
+            )
+        )
+        // Mirror the role change onto every existing assignment so the
+        // per-zipcode rows reflect the user's new access level. Per the
+        // super-admin's directive, all of the user's RoleAssignments are
+        // rewritten — not just the ones currently matching the old role.
+        if (newAccess != null && newAccess != previousAccess) {
+            roleAssignmentBulkOps.updateRoleForUser(userId, newAccess)
+        }
+        return rowFor(updated)
     }
 
     @PostMapping("/{userId}/demote")

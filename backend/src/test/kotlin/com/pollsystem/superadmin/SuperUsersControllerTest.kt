@@ -24,6 +24,7 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var fixtures: TestFixtures
     @Autowired private lateinit var users: UserRepository
     @Autowired private lateinit var userMessages: UserMessageRepository
+    @Autowired private lateinit var roleAssignments: com.pollsystem.repository.RoleAssignmentRepository
     @Autowired private lateinit var recordedEmails: RecordingEmailService
 
     private fun principalFor(user: com.pollsystem.model.User) = AppUserDetails(user)
@@ -105,6 +106,48 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
         assertThat(users.findById(b.id).orElseThrow().isEnabled).isFalse()
         // SUPER is filtered out by LISTABLE_ROLES — must remain enabled.
         assertThat(users.findById(s.id).orElseThrow().isEnabled).isTrue()
+    }
+
+    @Test
+    fun `edit updates role and propagates onto every RoleAssignment`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "edit-role")
+        fixtures.assignAdmin(admin)
+
+        val after = controller.edit(admin.id, EditUserRequest(role = "CREATOR", zipcode = null))
+        assertThat(after.access).isEqualTo(AccessLevel.CREATOR)
+
+        // RoleAssignmentBulkOps already flushed + cleared the persistence
+        // context, so a fresh read shows the new role.
+        val rows = roleAssignments.findByUserId(admin.id)
+        assertThat(rows).isNotEmpty
+        assertThat(rows.map { it.role }.toSet()).containsExactly(AccessLevel.CREATOR)
+    }
+
+    @Test
+    fun `edit updates zipcode and re-derives state and county`() {
+        val u = fixtures.createUser(access = AccessLevel.USER, zipcode = "90001", emailPrefix = "edit-zip")
+        val after = controller.edit(u.id, EditUserRequest(role = null, zipcode = "10001"))
+        assertThat(after.zipcode).isEqualTo("10001")
+        assertThat(after.stateInitial).isEqualTo("NY")
+    }
+
+    @Test
+    fun `edit rejects SUPER targets, unknown zipcodes, and bad roles`() {
+        val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "edit-super")
+        assertThatThrownBy { controller.edit(sup.id, EditUserRequest(role = "USER", zipcode = null)) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) {
+                assertThat(it.statusCode.value()).isEqualTo(409)
+            }
+
+        val u = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "edit-bad")
+        assertThatThrownBy { controller.edit(u.id, EditUserRequest(role = null, zipcode = "00000")) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) {
+                assertThat(it.statusCode.value()).isEqualTo(400)
+            }
+        assertThatThrownBy { controller.edit(u.id, EditUserRequest(role = "SUPER", zipcode = null)) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) {
+                assertThat(it.statusCode.value()).isEqualTo(400)
+            }
     }
 
     @Test

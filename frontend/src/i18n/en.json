@@ -636,7 +636,16 @@
       "errorDemote": "Demote failed",
       "errorLoadMessages": "Failed to load message history",
       "errorSaveMessage": "Failed to save message",
-      "errorBodyLength": "Message must be 1–2000 characters."
+      "errorBodyLength": "Message must be 1–2000 characters.",
+      "editTitle": "Edit {email}",
+      "editRoleTitle": "Click to edit role / location",
+      "editRole": "Role",
+      "editState": "State",
+      "editCounty": "County",
+      "editZipcode": "Zipcode",
+      "editPickState": "— pick a state —",
+      "editPickCounty": "— pick a county —",
+      "errorSaveEdit": "Edit failed"
     },
     "managePolls": {
       "heading": "Manage All Polls",
