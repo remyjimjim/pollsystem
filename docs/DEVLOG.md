@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-06-01 — Demote Creator → User on Manage Users
+
+**Requested:**
+
+> On the super/manage-users page can we have a 'Demote' button for
+> CREATORs that demotes their role to 'USER' similar to the 'Demote'
+> button for ADMINs?
+
+**Changed:**
+
+- `SuperUsersController.demote` now walks ADMIN→CREATOR and
+  CREATOR→USER (USER still returns 409, SUPER still 403). The
+  role-assignment disable step targets the user's *previous* access
+  level rather than hard-coded ADMIN, so a demoted Creator can't keep
+  acting on stale creator assignments either.
+- The existing Demote button on `ManageUsersView` is now also rendered
+  for rows where `row.access === 'CREATOR'`. Same red-outline styling,
+  same /demote endpoint.
+- Added two i18n keys (`demoteConfirmToUser`, `demotedToUser`) in
+  `en.json` for the CREATOR→USER confirmation and success message; the
+  existing `demoteConfirm` / `demoted` strings still cover the
+  ADMIN→CREATOR case so non-English locales keep their existing copy
+  for that path.
+- Test rewritten to walk Admin→Creator→User and to assert that USER
+  is 409 and SUPER is 403.
+
+**Commit:** `15261c4`
+
+---
+
 ## 2026-06-01 — Typeahead autocomplete in the Edit-user modal
 
 **Requested:**
