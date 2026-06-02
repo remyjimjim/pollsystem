@@ -329,8 +329,8 @@ async function fetchUsers() {
 type SortKey =
   | 'email' | 'access' | 'stateInitial' | 'countyName' | 'zipcode'
   | 'isEnabled' | 'msg' | 'pollsCreated' | 'pollsCompleted'
-const sortKey = ref<SortKey>('email')
-const sortDir = ref<'asc' | 'desc'>('asc')
+const sortKey = ref<SortKey>('pollsCompleted')
+const sortDir = ref<'asc' | 'desc'>('desc')
 function toggleSort(key: SortKey) {
   if (sortKey.value === key) {
     sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
