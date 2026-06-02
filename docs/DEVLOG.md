@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-06-02 — Keep Role badge + kebab on a single line
+
+**Requested:**
+
+> can we make the Role column just like 1% wider so the kebab is on
+> the same line as CREATOR?
+
+**Changed:**
+
+- The Role `<td>` in `ManageUsersView` now carries `whitespace-nowrap`.
+  The auto-layout table widens the column just enough to fit the
+  CREATOR badge alongside the `⋮` kebab, so the kebab stays on the
+  same line. Equivalent in visual effect to nudging the column ~1%
+  wider, without hand-picked pixel values.
+
+**Commit:** `0fe59fb`
+
+---
+
 ## 2026-06-01 — Kebab role-actions menu (Promote / Demote) on Manage Users
 
 **Requested:**
