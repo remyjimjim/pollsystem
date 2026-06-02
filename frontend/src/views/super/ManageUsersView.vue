@@ -414,6 +414,88 @@ function replaceRow(row: UserRow) {
   results.value = results.value.map(r => (r.id === row.id ? row : r))
 }
 
+// ---------- polls modal (list) + nested answers modal ----------
+type PollListMode = 'created' | 'completed'
+type PollKind = 'questionnaire' | 'election' | 'ballot-measure'
+interface PollListing {
+  type: PollKind
+  id: number
+  title: string
+  status: 'DRAFT' | 'PUBLISHED' | 'CLOSED' | 'ARCHIVED'
+  createdAt?: string | null
+  lastSubmittedAt?: string | null
+}
+interface PollAnswerRow {
+  prompt: string
+  answer: string
+  comment: string | null
+  submittedAt: string
+}
+
+const pollsOpen = ref(false)
+const pollsUser = ref<UserRow | null>(null)
+const pollsList = ref<PollListing[]>([])
+const pollsLoading = ref(false)
+const pollsError = ref<string | null>(null)
+const pollsMode = computed<PollListMode>(() =>
+  pollsUser.value?.access === 'USER' ? 'completed' : 'created'
+)
+
+async function openPolls(row: UserRow) {
+  pollsUser.value = row
+  pollsList.value = []
+  pollsError.value = null
+  pollsLoading.value = true
+  pollsOpen.value = true
+  try {
+    const path = pollsMode.value === 'created' ? 'polls-created' : 'polls-completed'
+    pollsList.value = (await axios.get<PollListing[]>(`/api/super/users/${row.id}/${path}`)).data
+  } catch (e: any) {
+    pollsError.value = e?.response?.data?.message ?? t('super.manageUsers.pollsLoadFailed')
+  } finally {
+    pollsLoading.value = false
+  }
+}
+function closePolls() {
+  pollsOpen.value = false
+  pollsUser.value = null
+  pollsList.value = []
+}
+
+const answersOpen = ref(false)
+const answersPoll = ref<PollListing | null>(null)
+const answersList = ref<PollAnswerRow[]>([])
+const answersLoading = ref(false)
+const answersError = ref<string | null>(null)
+
+async function openAnswers(poll: PollListing) {
+  if (!pollsUser.value) return
+  answersPoll.value = poll
+  answersList.value = []
+  answersError.value = null
+  answersLoading.value = true
+  answersOpen.value = true
+  try {
+    const url = `/api/super/users/${pollsUser.value.id}/polls-completed/${poll.type}/${poll.id}/answers`
+    answersList.value = (await axios.get<PollAnswerRow[]>(url)).data
+  } catch (e: any) {
+    answersError.value = e?.response?.data?.message ?? t('super.manageUsers.answersLoadFailed')
+  } finally {
+    answersLoading.value = false
+  }
+}
+function closeAnswers() {
+  answersOpen.value = false
+  answersPoll.value = null
+  answersList.value = []
+}
+
+function formatPollDate(iso?: string | null): string {
+  if (!iso) return '—'
+  const parsed = new Date(iso)
+  return isNaN(parsed.getTime()) ? iso : parsed.toLocaleDateString()
+}
+
 // ---------- demote ----------
 async function demote(row: UserRow) {
   const confirmKey = row.access === 'CREATOR'
@@ -702,6 +784,10 @@ function onEsc(e: KeyboardEvent) {
     zipPickerOpen.value = false
     if (modalOpen.value) closeMessageModal()
     if (editOpen.value) closeEdit()
+    // Close the nested answers modal first so a single Esc unstacks one
+    // level rather than dismissing the whole polls flow.
+    if (answersOpen.value) closeAnswers()
+    else if (pollsOpen.value) closePolls()
   }
 }
 function previewText(body: string): string {
@@ -975,6 +1061,12 @@ onBeforeUnmount(() => {
               @click="demote(row)"
               class="ml-2 rounded border border-red-700 bg-white px-2 py-0.5 text-xs text-red-700 hover:bg-red-50"
             >{{ $t('super.manageUsers.demote') }}</button>
+            <button
+              type="button"
+              @click="openPolls(row)"
+              class="ml-2 text-xs text-slate-700 underline hover:text-slate-900"
+              :title="$t('super.manageUsers.pollsHint')"
+            >{{ $t('super.manageUsers.polls') }}</button>
           </td>
           <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.stateInitial ?? '—' }}</button></td>
           <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.countyName ?? '—' }}</button></td>
@@ -1158,6 +1250,105 @@ onBeforeUnmount(() => {
             class="rounded bg-slate-800 px-4 py-1.5 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
           >{{ editBusy ? $t('common.saving') : $t('common.save') }}</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Polls modal: list of polls created (CREATOR/ADMIN) or completed (USER) -->
+    <div
+      v-if="pollsOpen"
+      role="dialog"
+      aria-modal="true"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      @click.self="closePolls"
+    >
+      <div class="w-full max-w-2xl rounded-md bg-white p-4 shadow-lg">
+        <header class="mb-3 flex items-center justify-between">
+          <strong class="text-sm text-slate-800">
+            {{ pollsMode === 'created'
+              ? $t('super.manageUsers.pollsCreatedTitle', { email: pollsUser?.email ?? '' })
+              : $t('super.manageUsers.pollsCompletedTitle', { email: pollsUser?.email ?? '' }) }}
+          </strong>
+          <button type="button" @click="closePolls" :aria-label="$t('common.close')" class="rounded p-1 text-slate-500 hover:bg-slate-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-4 w-4" aria-hidden="true"><path fill="currentColor" d="M5.7 4.3 4.3 5.7 8.6 10l-4.3 4.3 1.4 1.4L10 11.4l4.3 4.3 1.4-1.4L11.4 10l4.3-4.3-1.4-1.4L10 8.6 5.7 4.3z" /></svg>
+          </button>
+        </header>
+        <p v-if="pollsLoading" class="text-xs text-slate-500">{{ $t('common.loading') }}</p>
+        <p v-else-if="pollsError" class="text-xs text-red-700">{{ pollsError }}</p>
+        <p v-else-if="pollsList.length === 0" class="text-xs text-slate-500">{{ $t('super.manageUsers.pollsNone') }}</p>
+        <table v-else class="w-full border-collapse text-xs">
+          <thead>
+            <tr class="bg-slate-50 text-left">
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.pollColTitle') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.pollColType') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.pollColStatus') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
+                {{ pollsMode === 'created' ? $t('super.manageUsers.pollColCreated') : $t('super.manageUsers.pollColLastSubmitted') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="p in pollsList" :key="`${p.type}-${p.id}`">
+              <td class="border-b border-slate-100 p-2">
+                <router-link
+                  v-if="pollsMode === 'created'"
+                  :to="{ name: 'PollDetail', params: { type: p.type, id: String(p.id) } }"
+                  class="text-slate-800 underline"
+                >{{ p.title }}</router-link>
+                <button
+                  v-else
+                  type="button"
+                  @click="openAnswers(p)"
+                  class="text-slate-800 underline"
+                >{{ p.title }}</button>
+              </td>
+              <td class="border-b border-slate-100 p-2">{{ p.type }}</td>
+              <td class="border-b border-slate-100 p-2">{{ p.status }}</td>
+              <td class="border-b border-slate-100 p-2">
+                {{ formatPollDate(pollsMode === 'created' ? p.createdAt : p.lastSubmittedAt) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Nested answers modal: the user's actual answers for one completed poll. -->
+    <div
+      v-if="answersOpen"
+      role="dialog"
+      aria-modal="true"
+      class="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4"
+      @click.self="closeAnswers"
+    >
+      <div class="w-full max-w-2xl rounded-md bg-white p-4 shadow-lg">
+        <header class="mb-3 flex items-center justify-between">
+          <strong class="text-sm text-slate-800">
+            {{ $t('super.manageUsers.answersTitle', { title: answersPoll?.title ?? '' }) }}
+          </strong>
+          <button type="button" @click="closeAnswers" :aria-label="$t('common.close')" class="rounded p-1 text-slate-500 hover:bg-slate-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-4 w-4" aria-hidden="true"><path fill="currentColor" d="M5.7 4.3 4.3 5.7 8.6 10l-4.3 4.3 1.4 1.4L10 11.4l4.3 4.3 1.4-1.4L11.4 10l4.3-4.3-1.4-1.4L10 8.6 5.7 4.3z" /></svg>
+          </button>
+        </header>
+        <p v-if="answersLoading" class="text-xs text-slate-500">{{ $t('common.loading') }}</p>
+        <p v-else-if="answersError" class="text-xs text-red-700">{{ answersError }}</p>
+        <p v-else-if="answersList.length === 0" class="text-xs text-slate-500">{{ $t('super.manageUsers.answersNone') }}</p>
+        <table v-else class="w-full border-collapse text-xs">
+          <thead>
+            <tr class="bg-slate-50 text-left">
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.pollColPrompt') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.pollColAnswer') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(a, i) in answersList" :key="i">
+              <td class="border-b border-slate-100 p-2 align-top">{{ a.prompt }}</td>
+              <td class="border-b border-slate-100 p-2 align-top">
+                <span>{{ a.answer }}</span>
+                <em v-if="a.comment" class="mt-1 block text-slate-500">“{{ a.comment }}”</em>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

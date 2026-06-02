@@ -4,6 +4,13 @@ import com.pollsystem.AbstractIntegrationTest
 import com.pollsystem.TestFixtures
 import com.pollsystem.email.EmailService
 import com.pollsystem.model.AccessLevel
+import com.pollsystem.poll.QuestionAnswerInput
+import com.pollsystem.poll.QuestionInput
+import com.pollsystem.poll.QuestionnaireDraftRequest
+import com.pollsystem.poll.QuestionnaireResponseController
+import com.pollsystem.poll.QuestionnaireService
+import com.pollsystem.poll.SubmitResponsesRequest
+import com.pollsystem.repository.QuestionRepository
 import com.pollsystem.repository.UserMessageRepository
 import com.pollsystem.repository.UserRepository
 import com.pollsystem.security.AppUserDetails
@@ -26,6 +33,9 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var userMessages: UserMessageRepository
     @Autowired private lateinit var roleAssignments: com.pollsystem.repository.RoleAssignmentRepository
     @Autowired private lateinit var recordedEmails: RecordingEmailService
+    @Autowired private lateinit var questionnaireService: QuestionnaireService
+    @Autowired private lateinit var questionnaireResponseController: QuestionnaireResponseController
+    @Autowired private lateinit var questions: QuestionRepository
 
     private fun principalFor(user: com.pollsystem.model.User) = AppUserDetails(user)
 
@@ -170,6 +180,72 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
         assertThatThrownBy { controller.demote(sup.id) }
             .isInstanceOfSatisfying(ResponseStatusException::class.java) {
                 assertThat(it.statusCode.value()).isEqualTo(403)
+            }
+    }
+
+    @Test
+    fun `polls-created lists author's questionnaires and polls-completed + answers surface respondent's work`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "polls-creator")
+        val voter = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "polls-voter")
+        val bystander = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "polls-bystander")
+
+        // Publish a 2-question questionnaire owned by `creator`.
+        val draft = questionnaireService.saveDraft(
+            creator,
+            QuestionnaireDraftRequest(
+                pollTypeId = 2L,
+                title = "Spring 2026 pulse",
+                summary = "summary",
+                closeDate = null,
+                questions = listOf(QuestionInput("Coffee?"), QuestionInput("Tea?")),
+                zipcodes = listOf("90001")
+            )
+        )
+        questionnaireService.publish(draft.id, creator, confirmed = false)
+        val qList = questions.findByQuestionnaireId(draft.id)
+
+        // The voter answers both questions; the bystander does not.
+        questionnaireResponseController.submit(
+            AppUserDetails(voter),
+            draft.id,
+            SubmitResponsesRequest(answers = listOf(
+                QuestionAnswerInput(qList[0].id, "Yes"),
+                QuestionAnswerInput(qList[1].id, "No")
+            ))
+        )
+
+        // Creator's polls-created lists the questionnaire exactly once.
+        val created = controller.pollsCreated(creator.id)
+        assertThat(created).hasSize(1)
+        assertThat(created[0].type).isEqualTo("questionnaire")
+        assertThat(created[0].id).isEqualTo(draft.id)
+        assertThat(created[0].title).isEqualTo("Spring 2026 pulse")
+        // Bystander created nothing.
+        assertThat(controller.pollsCreated(bystander.id)).isEmpty()
+
+        // Voter's polls-completed lists the questionnaire exactly once
+        // (deduped across 2 question responses).
+        val completed = controller.pollsCompleted(voter.id)
+        assertThat(completed).hasSize(1)
+        assertThat(completed[0].type).isEqualTo("questionnaire")
+        assertThat(completed[0].id).isEqualTo(draft.id)
+        // Bystander completed nothing.
+        assertThat(controller.pollsCompleted(bystander.id)).isEmpty()
+
+        // Answer detail returns one row per question with the typed answer.
+        val answers = controller.pollAnswers(voter.id, "questionnaire", draft.id)
+        assertThat(answers).hasSize(2)
+        assertThat(answers.map { it.prompt }).containsExactlyInAnyOrder("Coffee?", "Tea?")
+        assertThat(answers.map { it.answer }).containsExactlyInAnyOrder("Yes", "No")
+
+        // 404 on unknown user, 400 on unknown type.
+        assertThatThrownBy { controller.pollsCreated(99_999) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) {
+                assertThat(it.statusCode.value()).isEqualTo(404)
+            }
+        assertThatThrownBy { controller.pollAnswers(voter.id, "nope", draft.id) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) {
+                assertThat(it.statusCode.value()).isEqualTo(400)
             }
     }
 

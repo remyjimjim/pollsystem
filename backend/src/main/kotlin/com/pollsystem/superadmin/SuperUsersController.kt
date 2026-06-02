@@ -2,11 +2,18 @@ package com.pollsystem.superadmin
 
 import com.pollsystem.email.EmailService
 import com.pollsystem.model.AccessLevel
+import com.pollsystem.model.PollStatus
 import com.pollsystem.model.RoleAssignment
 import com.pollsystem.model.User
 import com.pollsystem.model.UserMessage
+import com.pollsystem.repository.BallotMeasureRepository
+import com.pollsystem.repository.BallotResponseRepository
+import com.pollsystem.repository.CandidateResponseRepository
 import com.pollsystem.repository.CountyRepository
 import com.pollsystem.repository.CountyZipsRepository
+import com.pollsystem.repository.ElectionRepository
+import com.pollsystem.repository.QuestionResponseRepository
+import com.pollsystem.repository.QuestionnaireRepository
 import com.pollsystem.repository.RoleAssignmentRepository
 import com.pollsystem.repository.UserMessageRepository
 import com.pollsystem.repository.UserRepository
@@ -24,11 +31,13 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
+import java.time.ZoneOffset
 
 /**
  * Single Super-admin view of every user account: filter by role / location,
  * enable or disable login, attach messages, demote an Admin back to Creator
- * or a Creator back to a plain User.
+ * or a Creator back to a plain User, and view the polls a user has either
+ * authored or responded to.
  * Replaces the older `/api/super/admins` controller, which only surfaced
  * Admins + Supers and tracked per-zipcode role-assignment toggles.
  *
@@ -59,6 +68,33 @@ data class EditMessageRequest(val body: String)
 data class BulkToggleRequest(val userIds: List<Long>, val enable: Boolean)
 data class EditUserRequest(val role: String?, val zipcode: String?)
 
+/** A poll authored by a given user, used by GET /{userId}/polls-created. */
+data class SuperUserPollCreated(
+    val type: String,
+    val id: Long,
+    val title: String,
+    val status: PollStatus,
+    val createdAt: Instant?,
+    val closeDate: Instant?
+)
+
+/** A poll a user has responded to, used by GET /{userId}/polls-completed. */
+data class SuperUserPollCompleted(
+    val type: String,
+    val id: Long,
+    val title: String,
+    val status: PollStatus,
+    val lastSubmittedAt: Instant
+)
+
+/** One row in the answer-detail modal for a specific completed poll. */
+data class SuperUserPollAnswer(
+    val prompt: String,
+    val answer: String,
+    val comment: String?,
+    val submittedAt: Instant
+)
+
 /** Only User/Creator/Admin are listable here — VIEWER and SUPER are intentionally excluded. */
 private val LISTABLE_ROLES = setOf(AccessLevel.USER, AccessLevel.CREATOR, AccessLevel.ADMIN)
 
@@ -71,7 +107,13 @@ class SuperUsersController(
     private val roleAssignments: RoleAssignmentRepository,
     private val userMessages: UserMessageRepository,
     private val emailService: EmailService,
-    private val roleAssignmentBulkOps: RoleAssignmentBulkOps
+    private val roleAssignmentBulkOps: RoleAssignmentBulkOps,
+    private val questionnaires: QuestionnaireRepository,
+    private val elections: ElectionRepository,
+    private val ballotMeasures: BallotMeasureRepository,
+    private val questionResponses: QuestionResponseRepository,
+    private val candidateResponses: CandidateResponseRepository,
+    private val ballotResponses: BallotResponseRepository
 ) {
 
     @GetMapping
@@ -335,6 +377,159 @@ class SuperUsersController(
             countyName = county?.name,
             latestMessage = latest?.let(::toDto)
         )
+    }
+
+    /**
+     * Every poll authored by this user, across all three poll types.
+     * Used by the "polls" link on a Creator/Admin/Super row in
+     * /super/manage-users to surface what they've built.
+     */
+    @GetMapping("/{userId}/polls-created")
+    @Transactional(readOnly = true)
+    fun pollsCreated(@PathVariable userId: Long): List<SuperUserPollCreated> {
+        if (!users.existsById(userId)) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        }
+        val rows = mutableListOf<SuperUserPollCreated>()
+        questionnaires.findByCreatorId(userId).forEach {
+            rows += SuperUserPollCreated(
+                type = "questionnaire",
+                id = it.id,
+                title = it.title,
+                status = it.status,
+                createdAt = it.createDate.atStartOfDay().toInstant(ZoneOffset.UTC),
+                closeDate = it.closeDate
+            )
+        }
+        elections.findByCreatorId(userId).forEach {
+            // Election has no dateCreated column; dateSubmitted is when it
+            // was put into the system and is what /super/polls uses as its
+            // creation-ish ordering proxy.
+            rows += SuperUserPollCreated(
+                type = "election",
+                id = it.id,
+                title = it.title,
+                status = it.status,
+                createdAt = it.dateSubmitted,
+                closeDate = it.closeDate
+            )
+        }
+        ballotMeasures.findByCreatorId(userId).forEach {
+            rows += SuperUserPollCreated(
+                type = "ballot-measure",
+                id = it.id,
+                title = it.title,
+                status = it.status,
+                createdAt = it.dateCreated,
+                closeDate = it.closeDate
+            )
+        }
+        return rows.sortedByDescending { it.createdAt ?: Instant.EPOCH }
+    }
+
+    /**
+     * Every poll this user has responded to. Deduplicates per (type, id),
+     * since a Questionnaire or Election yields multiple per-question /
+     * per-candidate response rows. lastSubmittedAt is the most recent
+     * dateSubmitted across that poll's responses by this user.
+     */
+    @GetMapping("/{userId}/polls-completed")
+    @Transactional(readOnly = true)
+    fun pollsCompleted(@PathVariable userId: Long): List<SuperUserPollCompleted> {
+        if (!users.existsById(userId)) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        }
+        val rows = mutableListOf<SuperUserPollCompleted>()
+
+        questionResponses.findByUserId(userId)
+            .groupBy { it.question.questionnaire.id }
+            .forEach { (_, group) ->
+                val q = group.first().question.questionnaire
+                rows += SuperUserPollCompleted(
+                    type = "questionnaire",
+                    id = q.id,
+                    title = q.title,
+                    status = q.status,
+                    lastSubmittedAt = group.maxOf { it.dateSubmitted }
+                )
+            }
+        candidateResponses.findByUserId(userId)
+            .groupBy { it.candidate.election.id }
+            .forEach { (_, group) ->
+                val e = group.first().candidate.election
+                rows += SuperUserPollCompleted(
+                    type = "election",
+                    id = e.id,
+                    title = e.title,
+                    status = e.status,
+                    lastSubmittedAt = group.maxOf { it.dateSubmitted }
+                )
+            }
+        ballotResponses.findByUserId(userId).forEach { br ->
+            rows += SuperUserPollCompleted(
+                type = "ballot-measure",
+                id = br.measure.id,
+                title = br.measure.title,
+                status = br.measure.status,
+                lastSubmittedAt = br.dateSubmitted
+            )
+        }
+        return rows.sortedByDescending { it.lastSubmittedAt }
+    }
+
+    /**
+     * The user's actual answers for one completed poll instance. Shape
+     * varies by type: questionnaire returns one row per answered question,
+     * election returns one row per candidate the user voted on, ballot
+     * measure returns a single row (one yes/no per measure).
+     */
+    @GetMapping("/{userId}/polls-completed/{type}/{pollId}/answers")
+    @Transactional(readOnly = true)
+    fun pollAnswers(
+        @PathVariable userId: Long,
+        @PathVariable type: String,
+        @PathVariable pollId: Long
+    ): List<SuperUserPollAnswer> {
+        if (!users.existsById(userId)) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        }
+        return when (type) {
+            "questionnaire" -> questionResponses
+                .findByQuestionnaireIdAndUserId(pollId, userId)
+                .sortedBy { it.question.id }
+                .map { qr ->
+                    SuperUserPollAnswer(
+                        prompt = qr.question.question,
+                        answer = qr.response,
+                        comment = qr.comment,
+                        submittedAt = qr.dateSubmitted
+                    )
+                }
+            "election" -> candidateResponses
+                .findByElectionIdAndUserId(pollId, userId)
+                .sortedBy { it.candidate.id }
+                .map { cr ->
+                    SuperUserPollAnswer(
+                        prompt = "${cr.candidate.name} (${cr.candidate.affiliation})",
+                        answer = if (cr.response) "Yes" else "No",
+                        comment = cr.comment,
+                        submittedAt = cr.dateSubmitted
+                    )
+                }
+            "ballot-measure" -> ballotResponses
+                .findByUserIdAndMeasureId(userId, pollId)
+                ?.let { br ->
+                    listOf(
+                        SuperUserPollAnswer(
+                            prompt = br.measure.title,
+                            answer = if (br.response) "Yes" else "No",
+                            comment = br.comment,
+                            submittedAt = br.dateSubmitted
+                        )
+                    )
+                } ?: emptyList()
+            else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
+        }
     }
 
     private fun toDto(m: UserMessage) = SuperUserMessageDto(

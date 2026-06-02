@@ -188,10 +188,14 @@ interface CandidateResponseRepository : JpaRepository<CandidateResponse, Long> {
         WHERE cr.candidate.election.id = :electionId
     """)
     fun findByElectionId(@Param("electionId") electionId: Long): List<CandidateResponse>
+
+    /** Every CandidateResponse this user has submitted, across all elections. */
+    fun findByUserId(userId: Long): List<CandidateResponse>
 }
 
 @Repository
 interface BallotMeasureRepository : JpaRepository<BallotMeasure, Long> {
+    fun findByCreatorId(creatorId: Long): List<BallotMeasure>
     fun findByElectionId(electionId: Long): List<BallotMeasure>
     fun findByTitleContainingIgnoreCase(title: String): List<BallotMeasure>
     fun findByStatus(status: PollStatus): List<BallotMeasure>
@@ -217,6 +221,9 @@ interface BallotResponseRepository : JpaRepository<BallotResponse, Long> {
     fun findByUserIdAndMeasureId(userId: Long, measureId: Long): BallotResponse?
     fun findByMeasureId(measureId: Long): List<BallotResponse>
     fun existsByUserIdAndMeasureId(userId: Long, measureId: Long): Boolean
+
+    /** Every BallotResponse this user has submitted (one per measure). */
+    fun findByUserId(userId: Long): List<BallotResponse>
 }
 
 @Repository
@@ -317,4 +324,7 @@ interface QuestionResponseRepository : JpaRepository<QuestionResponse, Long> {
         WHERE qr.question.questionnaire.id = :questionnaireId
     """)
     fun findByQuestionnaireId(@Param("questionnaireId") questionnaireId: Long): List<QuestionResponse>
+
+    /** Every QuestionResponse this user has submitted, across all questionnaires. */
+    fun findByUserId(userId: Long): List<QuestionResponse>
 }
