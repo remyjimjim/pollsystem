@@ -61,6 +61,54 @@ logged.
 
 ---
 
+## 2026-06-01 — Dedicated Polls Created / Polls Completed columns
+
+**Requested:**
+
+> I think we should move "polls" out to it's own 2 columns, namely,
+> polls created and polls completed, what do you think?
+
+> Count as a link, e.g. '3' (Recommended) ... Drop it (Recommended)
+> ... Yes, sortable by count (Recommended)
+
+**Changed:**
+
+- The user-list table in `/super/manage-users` gains two new sortable
+  columns: **Polls Created** and **Polls Completed**. Each cell shows
+  the per-user count as a link that opens the existing polls modal
+  in the matching mode. Rows with 0 polls render as a dim, non-
+  clickable "0". Both columns appear for every row regardless of
+  role — a Creator who has also answered polls is no longer hidden.
+- The small inline `polls` link in the Role cell is gone; the two
+  new columns are the only entry point now. `openPolls` takes an
+  explicit `mode: 'created' | 'completed'` parameter instead of
+  inferring it from `row.access`.
+- **Backend.** `SuperUserRow` gains `pollsCreatedCount` and
+  `pollsCompletedCount`. A new private `batchPollCounts(userIds)`
+  helper sums six COUNT queries into two per-user maps:
+  - `QuestionnaireRepository.countByCreatorIds`,
+    `ElectionRepository.countByCreatorIds`,
+    `BallotMeasureRepository.countByCreatorIds` for created.
+  - `QuestionResponseRepository.countDistinctQuestionnairesByUserIds`,
+    `CandidateResponseRepository.countDistinctElectionsByUserIds`,
+    `BallotResponseRepository.countDistinctMeasuresByUserIds` for
+    completed. Distinct counts so a multi-question questionnaire
+    doesn't inflate the user's tally.
+- The `list()` endpoint feeds the same maps in one batch; `rowFor()`
+  does a single-user lookup so demote / toggle / edit responses
+  carry the counts through.
+- **Sort.** `SortKey` adds `pollsCreated` / `pollsCompleted`,
+  `sortValue` widens to `string | number` so the count columns sort
+  numerically while the existing string-keyed columns keep their
+  case-insensitive lex order.
+- **Tests.** The questionnaire-path `SuperUsersControllerTest` now
+  also asserts the list endpoint surfaces 1/0 for the creator,
+  0/1 for the voter, and 0/0 for the bystander.
+
+**Commit:** `f15f54b`
+
+---
+
 ## 2026-06-01 — Spell out all three dev terminals in RUNNING.md
 
 **Requested:**
