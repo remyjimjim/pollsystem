@@ -634,6 +634,8 @@
       "demote": "Demote",
       "demoteConfirm": "Demote {email} to CREATOR? All their admin assignments will be disabled.",
       "demoted": "{email} demoted to CREATOR.",
+      "demoteConfirmToUser": "Demote {email} to USER? All their creator assignments will be disabled.",
+      "demotedToUser": "{email} demoted to USER.",
       "msgNone": "(none)",
       "msgNew": "New msg?",
       "sendToUser": "Send to user?",

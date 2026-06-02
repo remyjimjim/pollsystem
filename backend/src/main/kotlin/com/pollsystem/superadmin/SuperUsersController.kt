@@ -27,7 +27,8 @@ import java.time.Instant
 
 /**
  * Single Super-admin view of every user account: filter by role / location,
- * enable or disable login, attach messages, demote an Admin back to Creator.
+ * enable or disable login, attach messages, demote an Admin back to Creator
+ * or a Creator back to a plain User.
  * Replaces the older `/api/super/admins` controller, which only surfaced
  * Admins + Supers and tracked per-zipcode role-assignment toggles.
  *
@@ -241,16 +242,19 @@ class SuperUsersController(
         val u = users.findById(userId).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         }
-        if (u.access == AccessLevel.SUPER) {
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot demote a Super")
+        val newAccess = when (u.access) {
+            AccessLevel.ADMIN -> AccessLevel.CREATOR
+            AccessLevel.CREATOR -> AccessLevel.USER
+            AccessLevel.SUPER ->
+                throw ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot demote a Super")
+            else ->
+                throw ResponseStatusException(HttpStatus.CONFLICT, "Only Admins or Creators can be demoted")
         }
-        if (u.access != AccessLevel.ADMIN) {
-            throw ResponseStatusException(HttpStatus.CONFLICT, "Only Admins can be demoted here")
-        }
-        val updated = users.save(u.copy(access = AccessLevel.CREATOR))
-        // Disable any ADMIN-role assignments alongside the demotion so the
-        // user can't still act as Admin on those zipcodes via stale rows.
-        roleAssignments.findByUserIdAndRole(userId, AccessLevel.ADMIN)
+        val updated = users.save(u.copy(access = newAccess))
+        // Disable any assignments at the OLD access level alongside the
+        // demotion so the user can't still act in that role on those
+        // zipcodes via stale rows.
+        roleAssignments.findByUserIdAndRole(userId, u.access)
             .let { rows -> roleAssignments.saveAll(rows.map { ra: RoleAssignment -> ra.copy(enabled = false) }) }
         return rowFor(updated)
     }

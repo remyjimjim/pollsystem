@@ -416,12 +416,19 @@ function replaceRow(row: UserRow) {
 
 // ---------- demote ----------
 async function demote(row: UserRow) {
-  if (!confirm(t('super.manageUsers.demoteConfirm', { email: row.email }))) return
+  const confirmKey = row.access === 'CREATOR'
+    ? 'super.manageUsers.demoteConfirmToUser'
+    : 'super.manageUsers.demoteConfirm'
+  const doneKey = row.access === 'CREATOR'
+    ? 'super.manageUsers.demotedToUser'
+    : 'super.manageUsers.demoted'
+  if (!confirm(t(confirmKey, { email: row.email }))) return
   try {
     const res = await axios.post<UserRow>(`/api/super/users/${row.id}/demote`)
-    // Demoted Admin becomes Creator; might be filtered out if Creator unchecked.
+    // Admin becomes Creator, Creator becomes User; the row may drop out of
+    // the current view if that role's filter checkbox is unchecked.
     replaceRow(res.data)
-    message.value = t('super.manageUsers.demoted', { email: row.email })
+    message.value = t(doneKey, { email: row.email })
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('super.manageUsers.errorDemote')
   }
@@ -963,7 +970,7 @@ onBeforeUnmount(() => {
               :title="$t('super.manageUsers.editRoleTitle')"
             >{{ row.access }}</button>
             <button
-              v-if="row.access === 'ADMIN'"
+              v-if="row.access === 'ADMIN' || row.access === 'CREATOR'"
               type="button"
               @click="demote(row)"
               class="ml-2 rounded border border-red-700 bg-white px-2 py-0.5 text-xs text-red-700 hover:bg-red-50"
