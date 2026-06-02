@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-06-01 — Default Manage Users sort to Polls Completed desc
+
+**Requested:**
+
+> can we sort by polls completed descending by default
+
+**Changed:**
+
+- `ManageUsersView` initialises `sortKey` to `pollsCompleted` and
+  `sortDir` to `desc` (was `email` / `asc`). The most-active users
+  float to the top of the list on load; any column header click
+  still overrides as before.
+
+**Commit:** `5390a69`
+
+---
+
 ## 2026-06-01 — Flip VS Code Java updateBuildConfiguration to automatic
 
 **Requested:**
