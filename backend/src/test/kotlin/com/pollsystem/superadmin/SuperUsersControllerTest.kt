@@ -4,12 +4,23 @@ import com.pollsystem.AbstractIntegrationTest
 import com.pollsystem.TestFixtures
 import com.pollsystem.email.EmailService
 import com.pollsystem.model.AccessLevel
+import com.pollsystem.poll.BallotMeasureDraftRequest
+import com.pollsystem.poll.BallotMeasureResponseController
+import com.pollsystem.poll.BallotMeasureService
+import com.pollsystem.poll.CandidateAnswerInput
+import com.pollsystem.poll.CandidateInput
+import com.pollsystem.poll.ElectionDraftRequest
+import com.pollsystem.poll.ElectionResponseController
+import com.pollsystem.poll.ElectionService
 import com.pollsystem.poll.QuestionAnswerInput
 import com.pollsystem.poll.QuestionInput
 import com.pollsystem.poll.QuestionnaireDraftRequest
 import com.pollsystem.poll.QuestionnaireResponseController
 import com.pollsystem.poll.QuestionnaireService
+import com.pollsystem.poll.SubmitBallotResponseRequest
+import com.pollsystem.poll.SubmitElectionResponsesRequest
 import com.pollsystem.poll.SubmitResponsesRequest
+import com.pollsystem.repository.CandidateRepository
 import com.pollsystem.repository.QuestionRepository
 import com.pollsystem.repository.UserMessageRepository
 import com.pollsystem.repository.UserRepository
@@ -23,6 +34,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Import
 import org.springframework.web.server.ResponseStatusException
+import java.time.LocalDate
 
 @Import(SuperUsersControllerTest.RecordingEmailConfig::class)
 class SuperUsersControllerTest : AbstractIntegrationTest() {
@@ -36,6 +48,11 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var questionnaireService: QuestionnaireService
     @Autowired private lateinit var questionnaireResponseController: QuestionnaireResponseController
     @Autowired private lateinit var questions: QuestionRepository
+    @Autowired private lateinit var electionService: ElectionService
+    @Autowired private lateinit var electionResponseController: ElectionResponseController
+    @Autowired private lateinit var candidates: CandidateRepository
+    @Autowired private lateinit var ballotMeasureService: BallotMeasureService
+    @Autowired private lateinit var ballotMeasureResponseController: BallotMeasureResponseController
 
     private fun principalFor(user: com.pollsystem.model.User) = AppUserDetails(user)
 
@@ -247,6 +264,106 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
             .isInstanceOfSatisfying(ResponseStatusException::class.java) {
                 assertThat(it.statusCode.value()).isEqualTo(400)
             }
+    }
+
+    @Test
+    fun `polls-created lists author's election and polls-completed + answers surface voter's candidate picks`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "polls-ecreator")
+        val voter = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "polls-evoter")
+
+        val electionDraft = electionService.saveDraft(
+            creator,
+            ElectionDraftRequest(
+                pollTypeId = 1L,
+                title = "Sample mayoral race",
+                date = LocalDate.now().plusDays(30),
+                zipcode = "90001",
+                candidates = listOf(
+                    CandidateInput("Alice", "Indep", "Mayor"),
+                    CandidateInput("Bob", "Indep", "Mayor")
+                )
+            )
+        )
+        electionService.publish(electionDraft.id, creator, confirmed = false)
+        val cs = candidates.findByElectionId(electionDraft.id)
+
+        electionResponseController.submit(
+            AppUserDetails(voter),
+            electionDraft.id,
+            SubmitElectionResponsesRequest(answers = cs.map {
+                CandidateAnswerInput(it.id, response = it.name == "Alice")
+            })
+        )
+
+        val created = controller.pollsCreated(creator.id)
+        assertThat(created.map { it.type to it.id })
+            .containsExactly("election" to electionDraft.id)
+
+        val completed = controller.pollsCompleted(voter.id)
+        assertThat(completed).hasSize(1)
+        assertThat(completed[0].type).isEqualTo("election")
+        assertThat(completed[0].id).isEqualTo(electionDraft.id)
+
+        val answers = controller.pollAnswers(voter.id, "election", electionDraft.id)
+        assertThat(answers).hasSize(2)
+        val byPrompt = answers.associateBy { it.prompt }
+        assertThat(byPrompt["Alice (Indep)"]?.answer).isEqualTo("Yes")
+        assertThat(byPrompt["Bob (Indep)"]?.answer).isEqualTo("No")
+    }
+
+    @Test
+    fun `polls-created lists author's ballot measure and polls-completed + answers surface voter's yes-no`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "polls-bcreator")
+        val voter = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "polls-bvoter")
+
+        // A ballot measure must hang off a published Election owned by the
+        // same creator; publish both so the response controller accepts a
+        // vote against the measure.
+        val parentElection = electionService.saveDraft(
+            creator,
+            ElectionDraftRequest(
+                pollTypeId = 1L,
+                title = "Parent election",
+                date = LocalDate.now().plusDays(30),
+                zipcode = "90001",
+                candidates = listOf(CandidateInput("X", "Y", "Mayor"))
+            )
+        )
+        electionService.publish(parentElection.id, creator, confirmed = false)
+
+        val measureDraft = ballotMeasureService.saveDraft(
+            creator,
+            BallotMeasureDraftRequest(
+                pollTypeId = 3L,
+                electionId = parentElection.id,
+                title = "Approve $1M bond?",
+                summary = "Funds local infrastructure.",
+                effectiveDate = LocalDate.now().plusDays(60)
+            )
+        )
+        ballotMeasureService.publish(measureDraft.id, creator, confirmed = false)
+
+        ballotMeasureResponseController.submit(
+            AppUserDetails(voter),
+            measureDraft.id,
+            SubmitBallotResponseRequest(response = true, comment = "needs funding")
+        )
+
+        // The creator now owns 1 election + 1 ballot measure.
+        val created = controller.pollsCreated(creator.id)
+        val createdTypes = created.map { it.type }.sorted()
+        assertThat(createdTypes).containsExactly("ballot-measure", "election")
+
+        val completed = controller.pollsCompleted(voter.id)
+        assertThat(completed).hasSize(1)
+        assertThat(completed[0].type).isEqualTo("ballot-measure")
+        assertThat(completed[0].id).isEqualTo(measureDraft.id)
+
+        val answers = controller.pollAnswers(voter.id, "ballot-measure", measureDraft.id)
+        assertThat(answers).hasSize(1)
+        assertThat(answers[0].prompt).isEqualTo("Approve $1M bond?")
+        assertThat(answers[0].answer).isEqualTo("Yes")
+        assertThat(answers[0].comment).isEqualTo("needs funding")
     }
 
     @Test
