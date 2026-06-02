@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-06-01 — RUNNING.md cheat-sheet + drop obsolete compose version
+
+**Requested:**
+
+> can we add docker-compose.yml and docs/RUNNING.md to the working
+> tree, commit and push?
+
+> clean it up first please then commit and push
+
+**Changed:**
+
+- New `docs/RUNNING.md` — short cheat-sheet for the local dev loop:
+  bringing up Docker + `bootRun` + Vite, freeing a busy port,
+  querying the DB from bash or the container, and where creds live.
+  Positioned as a shortened "DEPLOYING-LOCAL.md" that's meant to
+  evolve over time.
+- During review, a duplicated `### Where db and other creds are
+  located:` heading and a stray `// enter polladmin password when
+  prompted.` line were collapsed into the single intended entry
+  pointing at `/docker-compose.yml`.
+- `docker-compose.yml` drops the obsolete top-level
+  `version: '3.8'` key — Compose v2 ignores it and emits a warning.
+
+**Commit:** `de32666`
+
+---
+
 ## 2026-06-01 — Compact "All (first 5, ...)" zipcode list display
 
 **Requested:**
