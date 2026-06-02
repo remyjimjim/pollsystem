@@ -23,6 +23,8 @@ interface UserRow {
   stateInitial: string | null
   countyName: string | null
   latestMessage: MessageDto | null
+  pollsCreatedCount: number
+  pollsCompletedCount: number
 }
 interface StateRow { id: number; name: string; initial: string }
 interface CountyRow { id: number; stateId: number; name: string }
@@ -324,7 +326,9 @@ async function fetchUsers() {
 }
 
 // ---------- column sorting ----------
-type SortKey = 'email' | 'access' | 'stateInitial' | 'countyName' | 'zipcode' | 'isEnabled' | 'msg'
+type SortKey =
+  | 'email' | 'access' | 'stateInitial' | 'countyName' | 'zipcode'
+  | 'isEnabled' | 'msg' | 'pollsCreated' | 'pollsCompleted'
 const sortKey = ref<SortKey>('email')
 const sortDir = ref<'asc' | 'desc'>('asc')
 function toggleSort(key: SortKey) {
@@ -337,7 +341,7 @@ function toggleSort(key: SortKey) {
   // A new sort order breaks the previous shift-range anchor.
   lastClickedEnableIndex.value = null
 }
-function sortValue(row: UserRow, key: SortKey): string {
+function sortValue(row: UserRow, key: SortKey): string | number {
   switch (key) {
     case 'email': return row.email.toLowerCase()
     case 'access': return row.access
@@ -348,6 +352,8 @@ function sortValue(row: UserRow, key: SortKey): string {
     // groups disabled rows first, enabled last.
     case 'isEnabled': return row.isEnabled ? 'true' : 'false'
     case 'msg': return (row.latestMessage?.body ?? '').toLowerCase()
+    case 'pollsCreated': return row.pollsCreatedCount
+    case 'pollsCompleted': return row.pollsCompletedCount
   }
 }
 const sortedResults = computed<UserRow[]>(() => {
@@ -437,18 +443,17 @@ const pollsUser = ref<UserRow | null>(null)
 const pollsList = ref<PollListing[]>([])
 const pollsLoading = ref(false)
 const pollsError = ref<string | null>(null)
-const pollsMode = computed<PollListMode>(() =>
-  pollsUser.value?.access === 'USER' ? 'completed' : 'created'
-)
+const pollsMode = ref<PollListMode>('created')
 
-async function openPolls(row: UserRow) {
+async function openPolls(row: UserRow, mode: PollListMode) {
   pollsUser.value = row
+  pollsMode.value = mode
   pollsList.value = []
   pollsError.value = null
   pollsLoading.value = true
   pollsOpen.value = true
   try {
-    const path = pollsMode.value === 'created' ? 'polls-created' : 'polls-completed'
+    const path = mode === 'created' ? 'polls-created' : 'polls-completed'
     pollsList.value = (await axios.get<PollListing[]>(`/api/super/users/${row.id}/${path}`)).data
   } catch (e: any) {
     pollsError.value = e?.response?.data?.message ?? t('super.manageUsers.pollsLoadFailed')
@@ -1033,6 +1038,14 @@ onBeforeUnmount(() => {
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colZipcode') }}{{ sortIndicator('zipcode') }}</th>
           <th
+            @click="toggleSort('pollsCreated')"
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
+          >{{ $t('super.manageUsers.colPollsCreated') }}{{ sortIndicator('pollsCreated') }}</th>
+          <th
+            @click="toggleSort('pollsCompleted')"
+            class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
+          >{{ $t('super.manageUsers.colPollsCompleted') }}{{ sortIndicator('pollsCompleted') }}</th>
+          <th
             tabindex="0"
             @click="toggleSort('isEnabled')"
             @keydown="onEnableHeaderKeydown"
@@ -1061,16 +1074,28 @@ onBeforeUnmount(() => {
               @click="demote(row)"
               class="ml-2 rounded border border-red-700 bg-white px-2 py-0.5 text-xs text-red-700 hover:bg-red-50"
             >{{ $t('super.manageUsers.demote') }}</button>
-            <button
-              type="button"
-              @click="openPolls(row)"
-              class="ml-2 text-xs text-slate-700 underline hover:text-slate-900"
-              :title="$t('super.manageUsers.pollsHint')"
-            >{{ $t('super.manageUsers.polls') }}</button>
           </td>
           <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.stateInitial ?? '—' }}</button></td>
           <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.countyName ?? '—' }}</button></td>
           <td class="border-b border-slate-100 p-2 font-mono"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.zipcode }}</button></td>
+          <td class="border-b border-slate-100 p-2 text-right">
+            <button
+              v-if="row.pollsCreatedCount > 0"
+              type="button"
+              @click="openPolls(row, 'created')"
+              class="text-slate-800 underline"
+            >{{ row.pollsCreatedCount }}</button>
+            <span v-else class="text-slate-400">0</span>
+          </td>
+          <td class="border-b border-slate-100 p-2 text-right">
+            <button
+              v-if="row.pollsCompletedCount > 0"
+              type="button"
+              @click="openPolls(row, 'completed')"
+              class="text-slate-800 underline"
+            >{{ row.pollsCompletedCount }}</button>
+            <span v-else class="text-slate-400">0</span>
+          </td>
           <td class="border-b border-slate-100 p-2">
             <input
               type="checkbox"

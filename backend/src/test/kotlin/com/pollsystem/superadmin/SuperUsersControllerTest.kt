@@ -264,6 +264,17 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
             .isInstanceOfSatisfying(ResponseStatusException::class.java) {
                 assertThat(it.statusCode.value()).isEqualTo(400)
             }
+
+        // The list endpoint surfaces the per-user counts feeding the two
+        // new "Polls Created" / "Polls Completed" columns in the UI.
+        val rows = controller.list(null, false, null, null, null, null, null)
+            .associateBy { it.email }
+        assertThat(rows[creator.email]?.pollsCreatedCount).isEqualTo(1)
+        assertThat(rows[creator.email]?.pollsCompletedCount).isEqualTo(0)
+        assertThat(rows[voter.email]?.pollsCreatedCount).isEqualTo(0)
+        assertThat(rows[voter.email]?.pollsCompletedCount).isEqualTo(1)
+        assertThat(rows[bystander.email]?.pollsCreatedCount).isEqualTo(0)
+        assertThat(rows[bystander.email]?.pollsCompletedCount).isEqualTo(0)
     }
 
     @Test

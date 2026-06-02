@@ -52,7 +52,11 @@ data class SuperUserRow(
     val zipcode: String,
     val stateInitial: String?,
     val countyName: String?,
-    val latestMessage: SuperUserMessageDto?
+    val latestMessage: SuperUserMessageDto?,
+    /** Number of polls (across all 3 types) this user has authored. */
+    val pollsCreatedCount: Int,
+    /** Number of distinct polls (across all 3 types) this user has responded to. */
+    val pollsCompletedCount: Int
 )
 
 data class SuperUserMessageDto(
@@ -164,13 +168,15 @@ class SuperUsersController(
 
         if (pool.isEmpty()) return emptyList()
 
-        // Batch-resolve geography + latest message for the result set.
+        // Batch-resolve geography + latest message + poll counts for the result set.
+        val poolIds = pool.map { it.id }
         val poolZips = pool.map { it.zipcode }.distinct()
         val zipToCounty = countyZips.findByZipcodeIn(poolZips)
             .associate { it.zipcode to it.county }
-        val latestByUser = userMessages.findByUserIdInOrderByCreatedAtDesc(pool.map { it.id })
+        val latestByUser = userMessages.findByUserIdInOrderByCreatedAtDesc(poolIds)
             .groupBy { it.userId }
             .mapValues { it.value.first() }
+        val (createdByUser, completedByUser) = batchPollCounts(poolIds)
 
         return pool.sortedBy { it.email }.map { u ->
             val county = zipToCounty[u.zipcode]
@@ -183,9 +189,42 @@ class SuperUsersController(
                 zipcode = u.zipcode,
                 stateInitial = county?.state?.initial,
                 countyName = county?.name,
-                latestMessage = latestByUser[u.id]?.let(::toDto)
+                latestMessage = latestByUser[u.id]?.let(::toDto),
+                pollsCreatedCount = createdByUser[u.id] ?: 0,
+                pollsCompletedCount = completedByUser[u.id] ?: 0
             )
         }
+    }
+
+    /**
+     * Sums six batch COUNT queries (3 created tables × 3 response tables)
+     * into per-user totals. Returns `(createdByUser, completedByUser)`,
+     * each a `Map<Long, Int>` keyed by user id with absent users defaulting
+     * to 0 at read time.
+     */
+    private fun batchPollCounts(userIds: List<Long>): Pair<Map<Long, Int>, Map<Long, Int>> {
+        if (userIds.isEmpty()) return emptyMap<Long, Int>() to emptyMap()
+        val created = HashMap<Long, Int>()
+        sequenceOf(
+            questionnaires.countByCreatorIds(userIds),
+            elections.countByCreatorIds(userIds),
+            ballotMeasures.countByCreatorIds(userIds)
+        ).flatten().forEach { row ->
+            val uid = (row[0] as Number).toLong()
+            val n = (row[1] as Number).toInt()
+            created.merge(uid, n) { a, b -> a + b }
+        }
+        val completed = HashMap<Long, Int>()
+        sequenceOf(
+            questionResponses.countDistinctQuestionnairesByUserIds(userIds),
+            candidateResponses.countDistinctElectionsByUserIds(userIds),
+            ballotResponses.countDistinctMeasuresByUserIds(userIds)
+        ).flatten().forEach { row ->
+            val uid = (row[0] as Number).toLong()
+            val n = (row[1] as Number).toInt()
+            completed.merge(uid, n) { a, b -> a + b }
+        }
+        return created to completed
     }
 
     /** Autocomplete source for the Email-contains filter. */
@@ -366,6 +405,7 @@ class SuperUsersController(
     private fun rowFor(u: User): SuperUserRow {
         val county = countyZips.findByZipcode(u.zipcode).firstOrNull()?.county
         val latest = userMessages.findByUserIdOrderByCreatedAtDesc(u.id).firstOrNull()
+        val (createdMap, completedMap) = batchPollCounts(listOf(u.id))
         return SuperUserRow(
             id = u.id,
             email = u.email,
@@ -375,7 +415,9 @@ class SuperUsersController(
             zipcode = u.zipcode,
             stateInitial = county?.state?.initial,
             countyName = county?.name,
-            latestMessage = latest?.let(::toDto)
+            latestMessage = latest?.let(::toDto),
+            pollsCreatedCount = createdMap[u.id] ?: 0,
+            pollsCompletedCount = completedMap[u.id] ?: 0
         )
     }
 

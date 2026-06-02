@@ -138,6 +138,14 @@ interface ElectionRepository : JpaRepository<Election, Long> {
     fun findByStatus(status: PollStatus): List<Election>
     fun findByStatusAndZipcode(status: PollStatus, zipcode: String): List<Election>
 
+    /** [creatorId, count] rows for the batch-count column in /super/users. */
+    @Query("""
+        SELECT e.creator.id, COUNT(e) FROM Election e
+        WHERE e.creator.id IN :userIds
+        GROUP BY e.creator.id
+    """)
+    fun countByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
+
     @Query("""
         SELECT e FROM Election e
         WHERE e.status = 'PUBLISHED'
@@ -191,6 +199,14 @@ interface CandidateResponseRepository : JpaRepository<CandidateResponse, Long> {
 
     /** Every CandidateResponse this user has submitted, across all elections. */
     fun findByUserId(userId: Long): List<CandidateResponse>
+
+    /** [userId, distinct election count] rows for /super/users completed column. */
+    @Query("""
+        SELECT cr.user.id, COUNT(DISTINCT cr.candidate.election.id) FROM CandidateResponse cr
+        WHERE cr.user.id IN :userIds
+        GROUP BY cr.user.id
+    """)
+    fun countDistinctElectionsByUserIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
 }
 
 @Repository
@@ -199,6 +215,14 @@ interface BallotMeasureRepository : JpaRepository<BallotMeasure, Long> {
     fun findByElectionId(electionId: Long): List<BallotMeasure>
     fun findByTitleContainingIgnoreCase(title: String): List<BallotMeasure>
     fun findByStatus(status: PollStatus): List<BallotMeasure>
+
+    /** [creatorId, count] rows for the batch-count column in /super/users. */
+    @Query("""
+        SELECT bm.creator.id, COUNT(bm) FROM BallotMeasure bm
+        WHERE bm.creator.id IN :userIds
+        GROUP BY bm.creator.id
+    """)
+    fun countByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
 
     @Query("""
         SELECT bm FROM BallotMeasure bm
@@ -224,12 +248,28 @@ interface BallotResponseRepository : JpaRepository<BallotResponse, Long> {
 
     /** Every BallotResponse this user has submitted (one per measure). */
     fun findByUserId(userId: Long): List<BallotResponse>
+
+    /** [userId, distinct measure count] rows for /super/users completed column. */
+    @Query("""
+        SELECT br.user.id, COUNT(DISTINCT br.measure.id) FROM BallotResponse br
+        WHERE br.user.id IN :userIds
+        GROUP BY br.user.id
+    """)
+    fun countDistinctMeasuresByUserIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
 }
 
 @Repository
 interface QuestionnaireRepository : JpaRepository<Questionnaire, Long> {
     fun findByCreatorId(creatorId: Long): List<Questionnaire>
     fun findByStatus(status: PollStatus): List<Questionnaire>
+
+    /** [creatorId, count] rows for the batch-count column in /super/users. */
+    @Query("""
+        SELECT q.creator.id, COUNT(q) FROM Questionnaire q
+        WHERE q.creator.id IN :userIds
+        GROUP BY q.creator.id
+    """)
+    fun countByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
 
     @Query("""
         SELECT q FROM Questionnaire q
@@ -327,4 +367,12 @@ interface QuestionResponseRepository : JpaRepository<QuestionResponse, Long> {
 
     /** Every QuestionResponse this user has submitted, across all questionnaires. */
     fun findByUserId(userId: Long): List<QuestionResponse>
+
+    /** [userId, distinct questionnaire count] rows for /super/users completed column. */
+    @Query("""
+        SELECT qr.user.id, COUNT(DISTINCT qr.question.questionnaire.id) FROM QuestionResponse qr
+        WHERE qr.user.id IN :userIds
+        GROUP BY qr.user.id
+    """)
+    fun countDistinctQuestionnairesByUserIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
 }
