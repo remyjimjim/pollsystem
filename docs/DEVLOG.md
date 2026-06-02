@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-06-01 — Flip VS Code Java updateBuildConfiguration to automatic
+
+**Requested:**
+
+> commit it
+
+**Changed:**
+
+- `.vscode/settings.json` flips `java.configuration.updateBuildConfiguration`
+  from `interactive` to `automatic`. The Java extension proposed this
+  after the `build.gradle.kts` change for spring-boot-devtools.
+  Together with the running `./gradlew -t compileKotlin` it means
+  VS Code no longer prompts on every gradle change — it just rebuilds.
+
+**Commit:** `99b3fad`
+
+---
+
 ## 2026-06-01 — Dedicated Polls Created / Polls Completed columns
 
 **Requested:**
