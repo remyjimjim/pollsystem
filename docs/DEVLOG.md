@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-06-01 — Kebab role-actions menu (Promote / Demote) on Manage Users
+
+**Requested:**
+
+> what if we added a 'actions' pop up that appears when you right-click
+> the Role button that lists the actions '..demote' and '..promote' and
+> remove the current 'Demote' buttons?
+
+> USER → CREATOR → ADMIN, stop ... Kebab button next to the badge ...
+> Yes, confirm both
+
+**Changed:**
+
+- The Role cell drops the always-visible red `Demote` button. In its
+  place is a small `⋮` kebab next to the role badge that opens a
+  popover menu listing the role-appropriate actions:
+  - **Promote to <next>** — walks `USER → CREATOR → ADMIN`.
+  - **Demote to <prev>** — walks `ADMIN → CREATOR → USER`
+    (existing behaviour, with role-assignment disable preserved).
+- The kebab only renders when at least one direction is legal, so a
+  SUPER row shows just the badge. Click-away and Esc close the menu
+  via the existing `onDocClick` / `onEsc` handlers with a new
+  `[data-role-menu]` guard.
+- Both promote and demote confirm() before firing.
+- **Backend.** New `POST /api/super/users/{id}/promote` endpoint
+  mirrors the demote shape: 404 on unknown user, 409 if the user is
+  already ADMIN, 403 on SUPER. Unlike demote, promote does **not**
+  disable existing role-assignments — the user is gaining powers,
+  and the old-level rows are still valid below the new level.
+- New i18n keys: `roleActions`, `promoteTo {level}`,
+  `demoteTo {level}`, `promoteConfirm`, `promoted`, `errorPromote`.
+- **Tests.** A new `SuperUsersControllerTest` case parallels the
+  demote test: walks USER→CREATOR→ADMIN, asserts 409 on a fresh
+  ADMIN, asserts 403 on a fresh SUPER.
+
+**Commit:** `4dd3c71`
+
+---
+
 ## 2026-06-01 — Default Manage Users sort to Polls Completed desc
 
 **Requested:**
