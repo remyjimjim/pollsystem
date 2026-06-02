@@ -33,6 +33,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    // Hot reload during local dev. The `developmentOnly` configuration
+    // keeps devtools out of production builds. Recompiling Kotlin (IDE
+    // auto-build, or `./gradlew compileKotlin` in a second terminal)
+    // triggers a fast restart of the application context.
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     // Kotlin
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
