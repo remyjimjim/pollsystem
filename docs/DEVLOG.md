@@ -61,6 +61,65 @@ logged.
 
 ---
 
+## 2026-06-01 — View a user's polls (created or completed) from Manage Users
+
+**Requested:**
+
+> On the /super/manage-users page in the results section in the
+> 'Role' column, if I click on the 'USER' role can we make it so I
+> can see all the polls that the user has completed and if I click
+> on a completed poll can I see the answers?
+
+> I like #3 above but for the USER roll it should be polls completed
+> but the rest of the roles (creator,admin,super) it the polls link
+> should bring polls they they've created instead of taken/completed.
+
+> Show the "polls" link for all 3 roles but the link shows polls
+> submitted for the user role and polls created for the other 2
+> roles (creator and admin).
+
+**Changed:**
+
+- Each row in `/super/manage-users` now carries a small `polls` link
+  in the Role cell, alongside the existing role badge and Demote
+  button. Click → opens a polls list modal. For a USER row the
+  modal lists every poll the user has responded to; for a
+  CREATOR/ADMIN row it lists every poll they authored. The list
+  columns are *Title • Type • Status • Created* (or *Last
+  submitted* in completed-mode).
+- In created-mode the title is a `router-link` to `PollDetail`
+  (`/polls/:type/:id`) so the super can jump straight to the poll
+  instance. In completed-mode the title is a button that opens a
+  nested second modal showing the user's actual answers — one row
+  per question (questionnaire), one per candidate voted on
+  (election), or a single row (ballot measure). A user's free-text
+  comment is rendered in italics underneath the answer when present.
+- Esc unstacks one modal at a time: the nested answers modal closes
+  first, the polls list modal next.
+- **Backend.** `SuperUsersController` gains three
+  `@Transactional(readOnly)` endpoints under `/api/super/users/{id}`:
+  `polls-created`, `polls-completed`, and
+  `polls-completed/{type}/{pollId}/answers`. Each one unions across
+  questionnaire / election / ballot-measure. `polls-completed`
+  groups per (type, pollId) since one questionnaire produces N
+  per-question response rows. `BallotMeasureRepository` gained the
+  missing `findByCreatorId`; the three response repositories gained
+  `findByUserId` so each completed-list query is a single statement.
+- Election has no `dateCreated` column; `dateSubmitted` is used as
+  the creation-time proxy, matching the convention
+  `SuperPollsController` already uses for its ordering.
+- A new `SuperUsersControllerTest` case publishes a 2-question
+  questionnaire, has a voter submit answers, then asserts
+  `polls-created` lists it once for the author, `polls-completed`
+  lists it once for the voter (deduped across both question
+  responses), the answer detail surfaces both prompt/answer pairs,
+  and the endpoints return 404 on unknown user / 400 on unknown
+  type.
+
+**Commit:** `6f54539`
+
+---
+
 ## 2026-06-01 — Enable Java automatic null-analysis in VS Code settings
 
 **Requested:**
