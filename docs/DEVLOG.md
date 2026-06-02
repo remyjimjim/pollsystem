@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-06-01 — Cover election + ballot-measure paths in super polls tests
+
+**Requested:**
+
+> add tests for election and ballot-measure paths
+
+**Changed:**
+
+- `SuperUsersControllerTest` gains two new integration cases that
+  parallel the existing questionnaire-path test:
+  - Election: creator publishes an election with two candidates; a
+    voter casts Yes/No across them. Asserts `polls-created` lists
+    the election under the creator, `polls-completed` lists it once
+    for the voter (deduped from two candidate response rows), and
+    `polls-completed/.../answers` returns one prompt+answer pair per
+    candidate (e.g. `"Alice (Indep)" → "Yes"`).
+  - Ballot measure: creator publishes a parent election + a child
+    ballot measure; a voter submits Yes with a typed comment.
+    Asserts `polls-created` shows both rows for the creator,
+    `polls-completed` shows the measure once for the voter, and the
+    answer detail carries the measure title, "Yes", and the comment.
+- Plugs the test-coverage gap flagged when the feature shipped — the
+  three union-across-poll-types branches in `SuperUsersController`
+  are now exercised end-to-end.
+
+**Commit:** `f3135fe`
+
+---
+
 ## 2026-06-01 — View a user's polls (created or completed) from Manage Users
 
 **Requested:**
