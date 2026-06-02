@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-06-01 — Spell out all three dev terminals in RUNNING.md
+
+**Requested:**
+
+> update RUNNING.md to list all three terminals please
+
+**Changed:**
+
+- The "Running the app" section in `docs/RUNNING.md` is now a labelled
+  three-terminal layout — **Terminal 1** runs `bootRun`,
+  **Terminal 2** runs `./gradlew -t compileKotlin`, **Terminal 3**
+  runs `npm run dev`. Makes the relationship explicit: the
+  continuous-build terminal does not replace `bootRun`, they run
+  alongside each other.
+
+**Commit:** `f6b6f4e`
+
+---
+
 ## 2026-06-01 — Document continuous-build terminal in RUNNING.md
 
 **Requested:**
