@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-06-01 — Enable spring-boot-devtools for hot reload
+
+**Requested:**
+
+> enable spring-boot-devtools for hot reload
+
+**Changed:**
+
+- `backend/build.gradle.kts` adds
+  `developmentOnly("org.springframework.boot:spring-boot-devtools")`
+  alongside the other Spring Boot starters. The `developmentOnly`
+  configuration keeps devtools out of production builds.
+- With devtools on the bootRun classpath, recompiling Kotlin (IDE
+  auto-build, or `./gradlew compileKotlin` in a second terminal)
+  triggers a fast Spring context restart — new `@RestController`
+  endpoints become callable without re-running `bootRun` from
+  scratch, which is what made debugging the polls endpoints painful
+  earlier today.
+- No `application.yml` changes were needed; `spring.devtools.restart.enabled`
+  defaults to `true` and is suppressed automatically when tests run
+  via the Spring TestContext loader, so the test suite isn't
+  affected.
+
+**Commit:** `1297da6`
+
+---
+
 ## 2026-06-01 — Clearer empty-state copy in the polls modal
 
 **Requested:**
