@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-06-01 — Document continuous-build terminal in RUNNING.md
+
+**Requested:**
+
+> ok, I'll run 'cd backend && ./gradlew -t compileKotlin' in another
+> terminal and please add it to docs/RUNNING.md, right?
+
+**Changed:**
+
+- `docs/RUNNING.md` "Running the app" section gains a second-terminal
+  step: `./gradlew -t compileKotlin` from `/backend`. With
+  spring-boot-devtools on the bootRun classpath (see prior entry),
+  that continuous build keeps the running app in sync with every
+  save — no `bootRun` restart needed for routine code changes.
+
+**Commit:** `c856fe9`
+
+---
+
 ## 2026-06-01 — Enable spring-boot-devtools for hot reload
 
 **Requested:**
