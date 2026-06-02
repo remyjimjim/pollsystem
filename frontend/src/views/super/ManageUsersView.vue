@@ -1095,7 +1095,7 @@ onBeforeUnmount(() => {
       <tbody>
         <tr v-for="(row, idx) in sortedResults" :key="row.id">
           <td class="border-b border-slate-100 p-2">{{ row.email }}</td>
-          <td class="border-b border-slate-100 p-2">
+          <td class="whitespace-nowrap border-b border-slate-100 p-2">
             <button
               type="button"
               @click="openEdit(row)"
