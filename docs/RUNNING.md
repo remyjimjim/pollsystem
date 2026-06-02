@@ -11,6 +11,11 @@
 ### Steps:
 - First bring up docker and start the pollsystem-db and mailpit containers.
 - Go to /backend dir and run 'SPRING_PROFILES_ACTIVE=local ./gradlew bootRun'.
+- In a *second* terminal, also from /backend, run './gradlew -t compileKotlin'.
+  The '-t' (continuous build) flag watches the Kotlin source tree and
+  recompiles on every save. spring-boot-devtools sees the fresh class files
+  and restarts the Spring context (~1s), so new @RestController routes and
+  any other backend change are picked up without rerunning bootRun.
 - cd to /frontend and run: npm run dev
 - If you get a port :xxxx in use'  then do 'sudo lsof -t -i:3000' and run 'sudo kill -9 xxxxx' replacing 'xxxxx' with the process id from the lsof command.
 
