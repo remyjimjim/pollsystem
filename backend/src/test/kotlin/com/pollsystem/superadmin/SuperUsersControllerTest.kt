@@ -178,6 +178,29 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `promote walks User to Creator and Creator to Admin, rejects Admin and Super`() {
+        val user = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "promote-user")
+        val afterUser = controller.promote(user.id)
+        assertThat(afterUser.access).isEqualTo(AccessLevel.CREATOR)
+
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "promote-creator")
+        val afterCreator = controller.promote(creator.id)
+        assertThat(afterCreator.access).isEqualTo(AccessLevel.ADMIN)
+
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "alreadyadmin")
+        assertThatThrownBy { controller.promote(admin.id) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) {
+                assertThat(it.statusCode.value()).isEqualTo(409)
+            }
+
+        val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "superpromoter")
+        assertThatThrownBy { controller.promote(sup.id) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) {
+                assertThat(it.statusCode.value()).isEqualTo(403)
+            }
+    }
+
+    @Test
     fun `demote walks Admin to Creator and Creator to User, rejects User and Super`() {
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "demote-admin")
         val afterAdmin = controller.demote(admin.id)

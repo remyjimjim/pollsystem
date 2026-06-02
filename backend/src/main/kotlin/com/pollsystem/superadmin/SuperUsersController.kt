@@ -35,9 +35,9 @@ import java.time.ZoneOffset
 
 /**
  * Single Super-admin view of every user account: filter by role / location,
- * enable or disable login, attach messages, demote an Admin back to Creator
- * or a Creator back to a plain User, and view the polls a user has either
- * authored or responded to.
+ * enable or disable login, attach messages, walk a user's access up
+ * (promote) or down (demote) the User ↔ Creator ↔ Admin ladder, and
+ * view the polls a user has either authored or responded to.
  * Replaces the older `/api/super/admins` controller, which only surfaced
  * Admins + Supers and tracked per-zipcode role-assignment toggles.
  *
@@ -314,6 +314,30 @@ class SuperUsersController(
         if (newAccess != null && newAccess != previousAccess) {
             roleAssignmentBulkOps.updateRoleForUser(userId, newAccess)
         }
+        return rowFor(updated)
+    }
+
+    @PostMapping("/{userId}/promote")
+    @Transactional
+    fun promote(@PathVariable userId: Long): SuperUserRow {
+        val u = users.findById(userId).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        }
+        val newAccess = when (u.access) {
+            AccessLevel.USER -> AccessLevel.CREATOR
+            AccessLevel.CREATOR -> AccessLevel.ADMIN
+            AccessLevel.ADMIN ->
+                throw ResponseStatusException(HttpStatus.CONFLICT, "Admins already at the top of the click-promote ladder")
+            AccessLevel.SUPER ->
+                throw ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot promote a Super")
+            else ->
+                throw ResponseStatusException(HttpStatus.CONFLICT, "Only Users or Creators can be promoted")
+        }
+        // Promote only adjusts the access level. Old-level role
+        // assignments stay enabled — they're still valid below the new
+        // level — and the new powers are granted explicitly via the
+        // existing assignment workflow.
+        val updated = users.save(u.copy(access = newAccess))
         return rowFor(updated)
     }
 

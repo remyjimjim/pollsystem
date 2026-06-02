@@ -501,8 +501,40 @@ function formatPollDate(iso?: string | null): string {
   return isNaN(parsed.getTime()) ? iso : parsed.toLocaleDateString()
 }
 
-// ---------- demote ----------
+// ---------- promote / demote menu ----------
+type LadderLevel = 'USER' | 'CREATOR' | 'ADMIN'
+const roleMenuOpenFor = ref<number | null>(null)
+
+function promoteTarget(row: UserRow): LadderLevel | null {
+  if (row.access === 'USER') return 'CREATOR'
+  if (row.access === 'CREATOR') return 'ADMIN'
+  return null
+}
+function demoteTarget(row: UserRow): LadderLevel | null {
+  if (row.access === 'ADMIN') return 'CREATOR'
+  if (row.access === 'CREATOR') return 'USER'
+  return null
+}
+
+async function promote(row: UserRow) {
+  const target = promoteTarget(row)
+  if (!target) return
+  roleMenuOpenFor.value = null
+  if (!confirm(t('super.manageUsers.promoteConfirm', { email: row.email, level: target }))) return
+  try {
+    const res = await axios.post<UserRow>(`/api/super/users/${row.id}/promote`)
+    replaceRow(res.data)
+    message.value = t('super.manageUsers.promoted', { email: row.email, level: target })
+  } catch (e: any) {
+    error.value = e?.response?.data?.message ?? t('super.manageUsers.errorPromote')
+  }
+}
+
 async function demote(row: UserRow) {
+  if (!demoteTarget(row)) return
+  roleMenuOpenFor.value = null
+  // Existing demote-copy already covers the two paths (Admin→Creator
+  // and Creator→User) — keep that for now rather than re-translating.
   const confirmKey = row.access === 'CREATOR'
     ? 'super.manageUsers.demoteConfirmToUser'
     : 'super.manageUsers.demoteConfirm'
@@ -781,12 +813,14 @@ function onDocClick(e: MouseEvent) {
   if (!target?.closest('[data-state-picker]')) statePickerOpen.value = false
   if (!target?.closest('[data-county-picker]')) countyPickerOpen.value = false
   if (!target?.closest('[data-zip-picker]')) zipPickerOpen.value = false
+  if (!target?.closest('[data-role-menu]')) roleMenuOpenFor.value = null
 }
 function onEsc(e: KeyboardEvent) {
   if (e.key === 'Escape') {
     statePickerOpen.value = false
     countyPickerOpen.value = false
     zipPickerOpen.value = false
+    roleMenuOpenFor.value = null
     if (modalOpen.value) closeMessageModal()
     if (editOpen.value) closeEdit()
     // Close the nested answers modal first so a single Esc unstacks one
@@ -1068,12 +1102,36 @@ onBeforeUnmount(() => {
               :class="['rounded px-2 py-0.5 text-xs font-semibold hover:opacity-80', accessBadgeClasses(row.access)]"
               :title="$t('super.manageUsers.editRoleTitle')"
             >{{ row.access }}</button>
-            <button
-              v-if="row.access === 'ADMIN' || row.access === 'CREATOR'"
-              type="button"
-              @click="demote(row)"
-              class="ml-2 rounded border border-red-700 bg-white px-2 py-0.5 text-xs text-red-700 hover:bg-red-50"
-            >{{ $t('super.manageUsers.demote') }}</button>
+            <span
+              v-if="promoteTarget(row) || demoteTarget(row)"
+              data-role-menu
+              class="relative ml-1 inline-block align-middle"
+            >
+              <button
+                type="button"
+                @click.stop="roleMenuOpenFor = roleMenuOpenFor === row.id ? null : row.id"
+                :aria-label="$t('super.manageUsers.roleActions')"
+                :title="$t('super.manageUsers.roleActions')"
+                class="rounded px-1 leading-none text-slate-500 hover:bg-slate-100"
+              >⋮</button>
+              <div
+                v-if="roleMenuOpenFor === row.id"
+                class="absolute left-0 top-full z-30 mt-1 w-48 rounded border border-slate-300 bg-white py-1 shadow-lg"
+              >
+                <button
+                  v-if="promoteTarget(row)"
+                  type="button"
+                  @click="promote(row)"
+                  class="block w-full px-3 py-1 text-left text-xs hover:bg-slate-50"
+                >{{ $t('super.manageUsers.promoteTo', { level: promoteTarget(row) }) }}</button>
+                <button
+                  v-if="demoteTarget(row)"
+                  type="button"
+                  @click="demote(row)"
+                  class="block w-full px-3 py-1 text-left text-xs text-red-700 hover:bg-red-50"
+                >{{ $t('super.manageUsers.demoteTo', { level: demoteTarget(row) }) }}</button>
+              </div>
+            </span>
           </td>
           <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.stateInitial ?? '—' }}</button></td>
           <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.countyName ?? '—' }}</button></td>
