@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-06-01 — Enable Java automatic null-analysis in VS Code settings
+
+**Requested:**
+
+> commit .vscode/settings.json too
+
+**Changed:**
+
+- `.vscode/settings.json` adds
+  `"java.compile.nullAnalysis.mode": "automatic"` alongside the
+  existing `java.configuration.updateBuildConfiguration` entry, so
+  the Java extension's null analysis kicks in without prompting
+  per-project.
+
+**Commit:** `ed7283f`
+
+---
+
 ## 2026-06-01 — OPERATIONS-BY-ROLE.md draft
 
 **Requested:**
