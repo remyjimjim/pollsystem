@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-06-01 — Compact "All (first 5, ...)" zipcode list display
+
+**Requested:**
+
+> On the /creator/request page (and in general any display that
+> includes list of zipcodes) when 'Select All' is checked for the
+> Zipcodes select list, instead of showing all the zipcodes for a
+> particular state, can we instead show 'ALL ' followed by '(' plus
+> the first 5 zipcodes in the list seperated by commas plus ')', for
+> instance if the state was Colorado for instance then the display
+> would look like 'All (80111, 80112, 80113, 80114, 80115)', does
+> that make sense?
+
+> /btw, can we make that 'All (80111, 80112, 80113, 80114, 80115,...)'
+> instead?
+
+**Changed:**
+
+- New shared helper `frontend/src/utils/formatZipList.ts` renders a
+  zipcode list as `All (z1, z2, z3, z4, z5, ...)` when either the
+  caller passes `totalAvailable` and the list equals it ("everything
+  selected") or there are more than 5 entries. Under 5 (and not
+  marked as "all available") falls back to the plain comma-joined
+  form; an exact 5 that fills `totalAvailable` skips the ellipsis
+  since nothing is hidden.
+- `ZipSetter.vue` exposes the total available count via a new
+  `v-model:total` so the host page can drive the "all selected"
+  branch even on small geographies.
+- Every existing display of a zipcode list now goes through
+  `formatZipList`: CreatorRequestView, AdminRequestView,
+  admin/CreatorRequestsView, super/AdminRequestsView,
+  admin/CreatorRequestDetailView, admin/DashboardView. Query-string
+  param usages (PollSearchView, ManagePollsView, ManageUsersView,
+  PollResultsView) are *not* touched — they're not display text.
+
+**Commit:** `64a4c49`
+
+---
+
 ## 2026-06-01 — Demote Creator → User on Manage Users
 
 **Requested:**
