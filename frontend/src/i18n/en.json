@@ -640,7 +640,7 @@
       "pollsHint": "View polls this user has authored (Creator/Admin) or completed (User).",
       "pollsCreatedTitle": "Polls created by {email}",
       "pollsCompletedTitle": "Polls completed by {email}",
-      "pollsNone": "(none)",
+      "pollsNone": "No polls found.",
       "pollsLoadFailed": "Failed to load polls",
       "pollColTitle": "Title",
       "pollColType": "Type",
