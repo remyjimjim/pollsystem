@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-06-01 — OPERATIONS-BY-ROLE.md draft
+
+**Requested:**
+
+> add OPERATIONS-BY-ROLE.md too
+
+> fix the typo and commit
+
+**Changed:**
+
+- New `docs/OPERATIONS-BY-ROLE.md` — initial draft of what Admins
+  can do to Creators, Users and poll-type instances by zipcode /
+  county / state: disable/enable controls, the disabled-account
+  error path that gates submit/save buttons, and the
+  `user.isEnabled = false` semantics on a disabled account.
+- A `pole type` → `poll type` typo on line 14 was fixed before
+  the commit.
+
+**Commit:** `a3dce33`
+
+---
+
 ## 2026-06-01 — RUNNING.md cheat-sheet + drop obsolete compose version
 
 **Requested:**
