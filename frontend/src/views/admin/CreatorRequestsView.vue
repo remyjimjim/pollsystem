@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import type { RequestStatus } from '@/types'
+import { formatZipList } from '@/utils/formatZipList'
 
 const { t } = useI18n()
 
@@ -141,7 +142,7 @@ onMounted(load)
           </td>
           <td class="border-b border-slate-100 p-2 align-top">{{ r.userEmail }}</td>
           <td class="border-b border-slate-100 p-2 align-top font-mono text-xs">
-            {{ r.zipcodes.join(', ') }}
+            {{ formatZipList(r.zipcodes) }}
           </td>
           <td class="border-b border-slate-100 p-2 align-top" style="max-width: 360px">
             {{ r.reason }}

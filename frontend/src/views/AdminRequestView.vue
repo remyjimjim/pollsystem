@@ -3,10 +3,12 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import ZipSetter from '@/components/ZipSetter.vue'
+import { formatZipList } from '@/utils/formatZipList'
 
 const { t } = useI18n()
 
 const zipcodes = ref<string[]>([])
+const totalZipsAvailable = ref<number>(0)
 const reason = ref('')
 
 const submitting = ref(false)
@@ -56,9 +58,9 @@ async function onSubmit() {
         <legend class="px-2 text-sm font-semibold text-slate-700">
           {{ $t('adminRequest.zipcodesLegend') }}
         </legend>
-        <ZipSetter v-model="zipcodes" />
+        <ZipSetter v-model="zipcodes" v-model:total="totalZipsAvailable" />
         <p v-if="zipcodes.length > 0" class="mt-2 text-sm text-slate-600">
-          {{ $t('adminRequest.selectedZipcodes') }} {{ zipcodes.join(', ') }}
+          {{ $t('adminRequest.selectedZipcodes') }} {{ formatZipList(zipcodes, { totalAvailable: totalZipsAvailable }) }}
         </p>
       </fieldset>
 

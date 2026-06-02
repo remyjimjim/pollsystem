@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { formatZipList } from '@/utils/formatZipList'
 
 const { t } = useI18n()
 
@@ -206,7 +207,7 @@ onBeforeUnmount(() => {
               </td>
               <td class="border-b border-slate-100 p-2 align-top">{{ r.userEmail }}</td>
               <td class="border-b border-slate-100 p-2 align-top font-mono text-xs">
-                {{ r.zipcodes.join(', ') }}
+                {{ formatZipList(r.zipcodes) }}
               </td>
               <td class="border-b border-slate-100 p-2 align-top">
                 {{ r.pollTypeIds.join(', ') }}
@@ -283,7 +284,7 @@ onBeforeUnmount(() => {
               </td>
               <td class="border-b border-slate-100 p-2">{{ d.userEmail }}</td>
               <td class="border-b border-slate-100 p-2 font-mono text-xs">
-                {{ d.zipcodes.join(', ') }}
+                {{ formatZipList(d.zipcodes) }}
               </td>
             </tr>
           </tbody>

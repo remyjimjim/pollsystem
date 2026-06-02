@@ -4,12 +4,14 @@ import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import type { PollType } from '@/types'
 import ZipSetter from '@/components/ZipSetter.vue'
+import { formatZipList } from '@/utils/formatZipList'
 
 const { t } = useI18n()
 
 const pollTypes = ref<PollType[]>([])
 const selectedPollTypeIds = ref<number[]>([])
 const zipcodes = ref<string[]>([])
+const totalZipsAvailable = ref<number>(0)
 const reason = ref('')
 
 const submitting = ref(false)
@@ -89,9 +91,9 @@ async function onSubmit() {
 
       <fieldset class="rounded-md border border-slate-200 p-4">
         <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('creatorRequest.geoScope') }}</legend>
-        <ZipSetter v-model="zipcodes" />
+        <ZipSetter v-model="zipcodes" v-model:total="totalZipsAvailable" />
         <p v-if="zipcodes.length > 0" class="mt-2 text-sm text-slate-600">
-          {{ $t('creatorRequest.selectedZipcodes') }} {{ zipcodes.join(', ') }}
+          {{ $t('creatorRequest.selectedZipcodes') }} {{ formatZipList(zipcodes, { totalAvailable: totalZipsAvailable }) }}
         </p>
       </fieldset>
 

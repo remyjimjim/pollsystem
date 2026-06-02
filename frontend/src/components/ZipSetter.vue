@@ -8,9 +8,11 @@ const { t } = useI18n()
 
 const props = defineProps<{
   modelValue: string[]
+  total?: number
 }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', zipcodes: string[]): void
+  (e: 'update:total', total: number): void
 }>()
 
 const states = ref<State[]>([])
@@ -118,6 +120,12 @@ watch(selectedCountyIds, (ids) => {
 watch(selectedZipcodes, (z) => {
   emit('update:modelValue', [...z])
 }, { deep: true })
+
+// Expose how many zipcodes are currently available in the visible list
+// so parents that summarize the selection know when "All" applies.
+watch(zips, (list) => {
+  emit('update:total', list.length)
+}, { deep: true, immediate: true })
 
 loadStates()
 </script>

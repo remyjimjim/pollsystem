@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import axios from 'axios'
+import { formatZipList } from '@/utils/formatZipList'
 
 const { t } = useI18n()
 
@@ -94,7 +95,7 @@ onMounted(load)
         <dd>{{ data.userEmail }}</dd>
 
         <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.zipcodes') }}</dt>
-        <dd class="font-mono text-xs">{{ data.zipcodes.join(', ') }}</dd>
+        <dd class="font-mono text-xs">{{ formatZipList(data.zipcodes) }}</dd>
 
         <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.pollTypes') }}</dt>
         <dd>{{ data.pollTypeIds.join(', ') }}</dd>
