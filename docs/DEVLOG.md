@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-06-01 — Clearer empty-state copy in the polls modal
+
+**Requested:**
+
+> if a user hasn't completed any polls can we replace "No static
+> resource api/super/users/7/polls-completed." with "No polls
+> found"?
+
+**Changed:**
+
+- The polls modal's empty-list branch in `ManageUsersView` now
+  reads `"No polls found."` instead of `"(none)"`. The
+  `pollsNone` key in `en.json` was the only update — other locales
+  fall back to English.
+- The original error string the user quoted (`No static resource
+  api/super/users/7/polls-completed.`) is Spring's default 404
+  message — it appears when a `bootRun` instance started before
+  commit `6f54539` is still running and doesn't yet know the new
+  route. Restarting the backend picks up the endpoint and the empty
+  state then shows the new copy.
+
+**Commit:** `b625dc4`
+
+---
+
 ## 2026-06-01 — Cover election + ballot-measure paths in super polls tests
 
 **Requested:**
