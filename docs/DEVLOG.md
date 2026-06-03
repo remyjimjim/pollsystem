@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-06-02 — Rename CivicChain → pollsystem across project docs
+
+**Requested:**
+
+> I noticed that the following for files referred to civicchain, an
+> old project, so I was hoping you could take a look at them and
+> decide if they need updating, the files are:  ./README.md
+> ./docs/TESTING-FLY.md ./docs/COSTS.md ./docs/DEPLOYING-FLY.md
+
+> The project name is pollsystem. ... Rename Fly app names in the docs
+> too (civicchain-backend → pollsystem-backend) (Recommended)
+
+**Changed:**
+
+- `README.md` and `docs/COSTS.md` use "pollsystem" in their top-level
+  title.
+- `docs/TESTING-FLY.md` and `docs/DEPLOYING-FLY.md` rename the Fly
+  app slugs `civicchain-backend` / `civicchain-frontend` to
+  `pollsystem-backend` / `pollsystem-frontend` everywhere they
+  appear in commands, fly.toml snippets, URLs, and the cheat-sheet
+  table.
+- The four files' content was already project-accurate (Spring Boot
+  3 / Kotlin / Vue 3 / Postgres / Flyway / Stripe); only the legacy
+  project name needed to go.
+- Caveat documented in the commit message: if Fly apps with the
+  `civicchain-*` names already exist on the account, a separate
+  `flyctl apps rename` step is needed to make the docs match
+  reality.
+
+**Commit:** `7f3eb54`
+
+---
+
 ## 2026-06-02 — Keep Role badge + kebab on a single line
 
 **Requested:**
