@@ -1,4 +1,4 @@
-# CivicChain — Spring Boot Architecture Cost Forecast
+# pollsystem — Spring Boot Architecture Cost Forecast
 
 > Cost forecast for the **Spring Boot 3 / Kotlin / Java 17** backend on **PostgreSQL**
 > that implements the domain model in `docs/UML/Class-diagram.plantuml` —

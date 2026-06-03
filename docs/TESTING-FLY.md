@@ -62,7 +62,7 @@ failed smoke test fails the deploy.
 
 The cleanest way to run end-to-end tests on Fly without touching production:
 
-- **Separate Fly app** for staging: `civicchain-backend-staging` and `civicchain-frontend-staging`.
+- **Separate Fly app** for staging: `pollsystem-backend-staging` and `pollsystem-frontend-staging`.
 - **Separate Neon branch** so migrations and data don't leak between staging and prod. Neon branches are zero-cost and fork from a parent in seconds — see https://neon.tech/docs/introduction/branching.
 - **Stripe test mode** keys throughout staging.
 - **Separate Upstash database** for staging (or namespace keys with a prefix).
@@ -75,7 +75,7 @@ trigger or a tag.
 - **Auth flow**: request magic link → confirm email arrives in SendGrid (or via Mailpit if you mirror it) → click link → session established.
 - **Stripe subscription**: trigger `stripe trigger checkout.session.completed` against the staging webhook URL → assert backend marks the user `paid_until` correctly.
 - **Poll lifecycle**: create poll as creator → respond as anonymous via token → fetch results.
-- **Migration sanity**: `flyctl ssh console -a civicchain-backend-staging` and `psql` to verify the latest Flyway migration ran.
+- **Migration sanity**: `flyctl ssh console -a pollsystem-backend-staging` and `psql` to verify the latest Flyway migration ran.
 
 These are the same flows local integration tests cover — running them on real
 infrastructure catches the integration seams (TLS, IP allow-listing on Neon,
@@ -99,13 +99,13 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy backend
-        run: flyctl deploy -a civicchain-backend-staging --remote-only
+        run: flyctl deploy -a pollsystem-backend-staging --remote-only
         working-directory: backend
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
       - name: Deploy frontend
-        run: flyctl deploy -a civicchain-frontend-staging --remote-only
+        run: flyctl deploy -a pollsystem-frontend-staging --remote-only
         working-directory: frontend
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
@@ -233,4 +233,4 @@ move past local development.
 | "Did my deploy actually work?" | `scripts/smoke.sh` — < 30 s. |
 | "Does the magic-link / Stripe / poll-response loop work end-to-end?" | Integration suite against staging — minutes. |
 | "Will it hold 5,000 concurrent at the lowest-cost config?" | k6 load test against staging — ~20 min. |
-| "Is prod healthy right now?" | `flyctl status -a civicchain-backend` + Fly metrics dashboard. |
+| "Is prod healthy right now?" | `flyctl status -a pollsystem-backend` + Fly metrics dashboard. |

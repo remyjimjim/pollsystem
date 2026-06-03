@@ -101,13 +101,13 @@ per instance. The GraalVM native-image variant is at the bottom of this doc.
 From `backend/`:
 
 ```bash
-flyctl launch --no-deploy --name civicchain-backend --region iad
+flyctl launch --no-deploy --name pollsystem-backend --region iad
 ```
 
 Answer "no" when asked to provision Postgres or Redis (we're using Neon and Upstash externally). The command writes a `fly.toml`. Edit it:
 
 ```toml
-app = "civicchain-backend"
+app = "pollsystem-backend"
 primary_region = "iad"
 
 [build]
@@ -140,7 +140,7 @@ primary_region = "iad"
 
 ```bash
 flyctl secrets set \
-  -a civicchain-backend \
+  -a pollsystem-backend \
   SPRING_DATASOURCE_URL="$DATABASE_URL" \
   SPRING_DATASOURCE_USERNAME=neondb_owner \
   SPRING_DATASOURCE_PASSWORD="$NEON_PASSWORD" \
@@ -155,16 +155,16 @@ flyctl secrets set \
 ### Deploy
 
 ```bash
-flyctl deploy -a civicchain-backend
+flyctl deploy -a pollsystem-backend
 ```
 
 First deploy takes ~5–8 minutes (image build + push + machine boot). On
 success:
 
 ```bash
-flyctl status -a civicchain-backend
-flyctl logs   -a civicchain-backend
-curl https://civicchain-backend.fly.dev/actuator/health
+flyctl status -a pollsystem-backend
+flyctl logs   -a pollsystem-backend
+curl https://pollsystem-backend.fly.dev/actuator/health
 ```
 
 Flyway runs the migrations against Neon on first startup. Watch the logs to
@@ -178,7 +178,7 @@ The Stripe webhook needs a stable URL on the backend. After Part 2:
 
 ```bash
 stripe webhooks create \
-  --url https://civicchain-backend.fly.dev/webhooks/stripe \
+  --url https://pollsystem-backend.fly.dev/webhooks/stripe \
   --enabled-events checkout.session.completed \
   --enabled-events customer.subscription.updated \
   --enabled-events customer.subscription.deleted \
@@ -189,7 +189,7 @@ stripe webhooks create \
 Stripe returns a signing secret (`whsec_…`). Set it on the backend:
 
 ```bash
-flyctl secrets set -a civicchain-backend STRIPE_WEBHOOK_SECRET="$WHSEC"
+flyctl secrets set -a pollsystem-backend STRIPE_WEBHOOK_SECRET="$WHSEC"
 ```
 
 The backend redeploys automatically when secrets change.
@@ -234,8 +234,8 @@ server {
 
   # Forward /api/* to the backend Fly app over the internal Wireguard mesh.
   location /api/ {
-    proxy_pass https://civicchain-backend.fly.dev/api/;
-    proxy_set_header Host civicchain-backend.fly.dev;
+    proxy_pass https://pollsystem-backend.fly.dev/api/;
+    proxy_set_header Host pollsystem-backend.fly.dev;
   }
 }
 ```
@@ -244,12 +244,12 @@ server {
 
 ```bash
 cd frontend
-flyctl launch --no-deploy --name civicchain-frontend --region iad
+flyctl launch --no-deploy --name pollsystem-frontend --region iad
 # Edit fly.toml: set internal_port = 80, memory_mb = 256, cpus = 1, cpu_kind = shared
-flyctl deploy -a civicchain-frontend
+flyctl deploy -a pollsystem-frontend
 ```
 
-Open `https://civicchain-frontend.fly.dev` — the SPA loads, and `/api` calls
+Open `https://pollsystem-frontend.fly.dev` — the SPA loads, and `/api` calls
 hit the backend.
 
 ---
@@ -257,8 +257,8 @@ hit the backend.
 ## Part 5 — Custom domain
 
 ```bash
-flyctl certs add poll.example.com           -a civicchain-frontend
-flyctl certs add api.poll.example.com       -a civicchain-backend
+flyctl certs add poll.example.com           -a pollsystem-frontend
+flyctl certs add api.poll.example.com       -a pollsystem-backend
 ```
 
 Add the DNS records Fly prints. Once the certs are issued (a few minutes):
@@ -317,12 +317,12 @@ Caveats:
 
 | Task | Command |
 |---|---|
-| Tail backend logs | `flyctl logs -a civicchain-backend` |
-| SSH into a backend machine | `flyctl ssh console -a civicchain-backend` |
+| Tail backend logs | `flyctl logs -a pollsystem-backend` |
+| SSH into a backend machine | `flyctl ssh console -a pollsystem-backend` |
 | Run a one-off DB query | `psql "$DATABASE_URL"` (Neon connection string) |
-| Manually scale backend | `flyctl scale count 3 -a civicchain-backend` |
-| Roll back a bad deploy | `flyctl releases -a civicchain-backend` then `flyctl deploy --image <previous>` |
-| Rotate JWT secret | `flyctl secrets set -a civicchain-backend JWT_SECRET="$(openssl rand -hex 32)"` (invalidates all sessions) |
+| Manually scale backend | `flyctl scale count 3 -a pollsystem-backend` |
+| Roll back a bad deploy | `flyctl releases -a pollsystem-backend` then `flyctl deploy --image <previous>` |
+| Rotate JWT secret | `flyctl secrets set -a pollsystem-backend JWT_SECRET="$(openssl rand -hex 32)"` (invalidates all sessions) |
 
 ---
 

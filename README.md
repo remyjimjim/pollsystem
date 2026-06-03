@@ -1,4 +1,4 @@
-# CivicChain
+# pollsystem
 
 A civic polling platform — questionnaires, elections, and ballot measures
 scoped to geographic areas by ZIP code.
