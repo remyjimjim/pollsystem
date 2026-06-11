@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-06-11 — Isolate V11 local-dev admin seed from the test profile
+
+**Requested:**
+
+> ./gradlew test failed, should I paste the terminal output or x number
+> of lines from the bottom of X.log or both or ?
+
+> [paste of 5 failing tests: AdminCreatorRequestsTest, two
+> CreatorRequestServiceTest cases, StaleRequestSweeperTest, and
+> GeographyControllerTest]
+
+> Yes please [to: implement Option A — profile-isolate V11]
+
+**Changed:**
+
+- `V11__seed_local_admin.sql` moved from `db/migration/` to a new
+  `db/seed-local/` directory. Test and prod profiles load only
+  `db/migration`; the V11 gap is fine because Flyway applies what
+  it finds in version order.
+- New `backend/src/main/resources/application-local.yml` overrides
+  `spring.flyway.locations` to layer both directories when the
+  `local` profile is active.
+- `GeographyControllerTest::GET counties returns counties for a
+  state` switched from exact `value(5)` to `greaterThanOrEqualTo(5)`
+  because V8 extends V2's 5 CA counties with the full Census list.
+- Full suite is green: 183/183 pass against the renamed
+  `org.kodewerks.pollsystem` package.
+
+**Commit:** `f5e6c19`
+
+---
+
 ## 2026-06-08 — Rename Kotlin package com.pollsystem → org.kodewerks.pollsystem
 
 **Requested:**
