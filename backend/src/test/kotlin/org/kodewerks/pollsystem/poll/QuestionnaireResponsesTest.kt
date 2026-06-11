@@ -1,12 +1,12 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.TestFixtures
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.User
-import com.pollsystem.repository.QuestionRepository
-import com.pollsystem.repository.QuestionResponseRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.TestFixtures
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.repository.QuestionRepository
+import org.kodewerks.pollsystem.repository.QuestionResponseRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

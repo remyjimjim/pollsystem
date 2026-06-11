@@ -1,12 +1,12 @@
-package com.pollsystem.adminrequest
+package org.kodewerks.pollsystem.adminrequest
 
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.TestFixtures
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.RequestStatus
-import com.pollsystem.repository.AdminRequestRepository
-import com.pollsystem.repository.RoleAssignmentRepository
-import com.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.TestFixtures
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.RequestStatus
+import org.kodewerks.pollsystem.repository.AdminRequestRepository
+import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

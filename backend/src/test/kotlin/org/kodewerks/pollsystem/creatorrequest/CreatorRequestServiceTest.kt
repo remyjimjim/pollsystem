@@ -1,12 +1,12 @@
-package com.pollsystem.creatorrequest
+package org.kodewerks.pollsystem.creatorrequest
 
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.TestFixtures
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.RequestStatus
-import com.pollsystem.repository.CreatorRequestRepository
-import com.pollsystem.repository.RoleAssignmentRepository
-import com.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.TestFixtures
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.RequestStatus
+import org.kodewerks.pollsystem.repository.CreatorRequestRepository
+import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

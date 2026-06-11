@@ -1,7 +1,7 @@
-package com.pollsystem.auth
+package org.kodewerks.pollsystem.auth
 
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.User
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.User
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern

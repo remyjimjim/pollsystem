@@ -1,9 +1,9 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.RequestStatus
-import com.pollsystem.repository.CreatorRequestRepository
-import com.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.RequestStatus
+import org.kodewerks.pollsystem.repository.CreatorRequestRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping

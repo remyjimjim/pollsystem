@@ -1,13 +1,13 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.model.PollKind
-import com.pollsystem.repository.BallotMeasureRepository
-import com.pollsystem.repository.CandidateRepository
-import com.pollsystem.repository.CountyRepository
-import com.pollsystem.repository.CountyZipsRepository
-import com.pollsystem.repository.ElectionRepository
-import com.pollsystem.repository.QuestionnaireDomainRepository
-import com.pollsystem.repository.QuestionnaireRepository
+import org.kodewerks.pollsystem.model.PollKind
+import org.kodewerks.pollsystem.repository.BallotMeasureRepository
+import org.kodewerks.pollsystem.repository.CandidateRepository
+import org.kodewerks.pollsystem.repository.CountyRepository
+import org.kodewerks.pollsystem.repository.CountyZipsRepository
+import org.kodewerks.pollsystem.repository.ElectionRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam

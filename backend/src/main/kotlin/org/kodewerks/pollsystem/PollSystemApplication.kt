@@ -1,4 +1,4 @@
-package com.pollsystem
+package org.kodewerks.pollsystem
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan

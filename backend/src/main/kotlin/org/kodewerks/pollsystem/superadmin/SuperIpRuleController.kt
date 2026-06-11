@@ -1,9 +1,9 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
-import com.pollsystem.model.IpRule
-import com.pollsystem.model.IpRuleType
-import com.pollsystem.repository.IpRuleRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.model.IpRule
+import org.kodewerks.pollsystem.model.IpRuleType
+import org.kodewerks.pollsystem.repository.IpRuleRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull

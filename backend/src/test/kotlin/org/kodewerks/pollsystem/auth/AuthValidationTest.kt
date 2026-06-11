@@ -1,7 +1,7 @@
-package com.pollsystem.auth
+package org.kodewerks.pollsystem.auth
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

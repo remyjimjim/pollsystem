@@ -1,6 +1,6 @@
-package com.pollsystem.geography
+package org.kodewerks.pollsystem.geography
 
-import com.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.hamcrest.Matchers.greaterThanOrEqualTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

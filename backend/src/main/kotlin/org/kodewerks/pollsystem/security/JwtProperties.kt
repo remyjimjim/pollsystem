@@ -1,4 +1,4 @@
-package com.pollsystem.security
+package org.kodewerks.pollsystem.security
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

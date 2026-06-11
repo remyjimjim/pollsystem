@@ -1,7 +1,7 @@
-package com.pollsystem.creatorrequest
+package org.kodewerks.pollsystem.creatorrequest
 
-import com.pollsystem.model.CreatorRequest
-import com.pollsystem.model.RequestStatus
+import org.kodewerks.pollsystem.model.CreatorRequest
+import org.kodewerks.pollsystem.model.RequestStatus
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
 import java.time.Instant

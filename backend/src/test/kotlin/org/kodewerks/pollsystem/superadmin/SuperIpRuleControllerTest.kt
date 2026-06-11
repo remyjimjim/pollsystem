@@ -1,11 +1,11 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.TestFixtures
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.IpRuleType
-import com.pollsystem.repository.IpRuleRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.TestFixtures
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.IpRuleType
+import org.kodewerks.pollsystem.repository.IpRuleRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

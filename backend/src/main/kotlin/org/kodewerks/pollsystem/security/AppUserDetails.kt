@@ -1,6 +1,6 @@
-package com.pollsystem.security
+package org.kodewerks.pollsystem.security
 
-import com.pollsystem.model.User
+import org.kodewerks.pollsystem.model.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

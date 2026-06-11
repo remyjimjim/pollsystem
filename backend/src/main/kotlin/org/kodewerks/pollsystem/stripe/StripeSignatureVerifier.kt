@@ -1,4 +1,4 @@
-package com.pollsystem.stripe
+package org.kodewerks.pollsystem.stripe
 
 import org.springframework.stereotype.Component
 import java.time.Instant

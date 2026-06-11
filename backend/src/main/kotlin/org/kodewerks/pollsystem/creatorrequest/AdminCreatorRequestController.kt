@@ -1,6 +1,6 @@
-package com.pollsystem.creatorrequest
+package org.kodewerks.pollsystem.creatorrequest
 
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException
 @RequestMapping("/api/admin/creator-requests")
 class AdminCreatorRequestController(
     private val service: CreatorRequestService,
-    private val requests: com.pollsystem.repository.CreatorRequestRepository
+    private val requests: org.kodewerks.pollsystem.repository.CreatorRequestRepository
 ) {
 
     @GetMapping

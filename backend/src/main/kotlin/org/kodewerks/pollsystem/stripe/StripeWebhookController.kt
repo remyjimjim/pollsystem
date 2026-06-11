@@ -1,4 +1,4 @@
-package com.pollsystem.stripe
+package org.kodewerks.pollsystem.stripe
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory

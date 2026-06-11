@@ -1,9 +1,9 @@
-package com.pollsystem.stripe
+package org.kodewerks.pollsystem.stripe
 
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.model.User
-import com.pollsystem.repository.StripeEventRepository
-import com.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.repository.StripeEventRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test

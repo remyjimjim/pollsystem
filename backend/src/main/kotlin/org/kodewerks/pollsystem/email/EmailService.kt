@@ -1,4 +1,4 @@
-package com.pollsystem.email
+package org.kodewerks.pollsystem.email
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider

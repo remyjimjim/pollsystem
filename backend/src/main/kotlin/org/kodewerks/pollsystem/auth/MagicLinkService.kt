@@ -1,8 +1,8 @@
-package com.pollsystem.auth
+package org.kodewerks.pollsystem.auth
 
-import com.pollsystem.model.MagicLinkToken
-import com.pollsystem.model.User
-import com.pollsystem.repository.MagicLinkTokenRepository
+import org.kodewerks.pollsystem.model.MagicLinkToken
+import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.repository.MagicLinkTokenRepository
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Service
 import java.security.MessageDigest

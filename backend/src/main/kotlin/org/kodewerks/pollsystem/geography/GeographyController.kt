@@ -1,8 +1,8 @@
-package com.pollsystem.geography
+package org.kodewerks.pollsystem.geography
 
-import com.pollsystem.repository.CountyRepository
-import com.pollsystem.repository.CountyZipsRepository
-import com.pollsystem.repository.StateRepository
+import org.kodewerks.pollsystem.repository.CountyRepository
+import org.kodewerks.pollsystem.repository.CountyZipsRepository
+import org.kodewerks.pollsystem.repository.StateRepository
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping

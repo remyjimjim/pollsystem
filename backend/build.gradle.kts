@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.jpa") version "1.9.25"
 }
 
-group = "com.pollsystem"
+group = "org.kodewerks.pollsystem"
 version = "0.0.1-SNAPSHOT"
 
 java {

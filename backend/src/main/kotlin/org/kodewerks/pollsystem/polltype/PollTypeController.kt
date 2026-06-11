@@ -1,9 +1,9 @@
-package com.pollsystem.polltype
+package org.kodewerks.pollsystem.polltype
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.pollsystem.model.PollType
-import com.pollsystem.repository.PollTypeRepository
+import org.kodewerks.pollsystem.model.PollType
+import org.kodewerks.pollsystem.repository.PollTypeRepository
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

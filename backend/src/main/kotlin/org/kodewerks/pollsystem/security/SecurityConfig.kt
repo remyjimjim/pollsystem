@@ -1,4 +1,4 @@
-package com.pollsystem.security
+package org.kodewerks.pollsystem.security
 
 import jakarta.servlet.DispatcherType
 import org.springframework.context.annotation.Bean

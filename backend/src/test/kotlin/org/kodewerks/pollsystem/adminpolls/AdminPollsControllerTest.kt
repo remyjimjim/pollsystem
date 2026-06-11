@@ -1,19 +1,19 @@
-package com.pollsystem.adminpolls
+package org.kodewerks.pollsystem.adminpolls
 
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.TestFixtures
-import com.pollsystem.email.EmailService
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.BlockScope
-import com.pollsystem.model.Election
-import com.pollsystem.model.PollKind
-import com.pollsystem.model.PollStatus
-import com.pollsystem.model.PollType
-import com.pollsystem.repository.ElectionRepository
-import com.pollsystem.repository.PollTypeBlockRepository
-import com.pollsystem.repository.PollTypeRepository
-import com.pollsystem.repository.UserRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.TestFixtures
+import org.kodewerks.pollsystem.email.EmailService
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.BlockScope
+import org.kodewerks.pollsystem.model.Election
+import org.kodewerks.pollsystem.model.PollKind
+import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.model.PollType
+import org.kodewerks.pollsystem.repository.ElectionRepository
+import org.kodewerks.pollsystem.repository.PollTypeBlockRepository
+import org.kodewerks.pollsystem.repository.PollTypeRepository
+import org.kodewerks.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -41,7 +41,7 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
     private fun electionPollType(): PollType =
         pollTypes.findAll().first { it.name == "Election" }
 
-    private fun newElection(creator: com.pollsystem.model.User, zipcode: String, title: String): Election =
+    private fun newElection(creator: org.kodewerks.pollsystem.model.User, zipcode: String, title: String): Election =
         elections.save(
             Election(
                 creator = creator,
@@ -54,7 +54,7 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
             )
         )
 
-    private fun principalFor(u: com.pollsystem.model.User) = AppUserDetails(u)
+    private fun principalFor(u: org.kodewerks.pollsystem.model.User) = AppUserDetails(u)
 
     @Test
     fun `purview returns assigned states-counties-zips for ADMIN, unrestricted for SUPER`() {

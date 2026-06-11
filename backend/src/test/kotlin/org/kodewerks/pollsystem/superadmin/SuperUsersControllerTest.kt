@@ -1,30 +1,30 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.TestFixtures
-import com.pollsystem.email.EmailService
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.poll.BallotMeasureDraftRequest
-import com.pollsystem.poll.BallotMeasureResponseController
-import com.pollsystem.poll.BallotMeasureService
-import com.pollsystem.poll.CandidateAnswerInput
-import com.pollsystem.poll.CandidateInput
-import com.pollsystem.poll.ElectionDraftRequest
-import com.pollsystem.poll.ElectionResponseController
-import com.pollsystem.poll.ElectionService
-import com.pollsystem.poll.QuestionAnswerInput
-import com.pollsystem.poll.QuestionInput
-import com.pollsystem.poll.QuestionnaireDraftRequest
-import com.pollsystem.poll.QuestionnaireResponseController
-import com.pollsystem.poll.QuestionnaireService
-import com.pollsystem.poll.SubmitBallotResponseRequest
-import com.pollsystem.poll.SubmitElectionResponsesRequest
-import com.pollsystem.poll.SubmitResponsesRequest
-import com.pollsystem.repository.CandidateRepository
-import com.pollsystem.repository.QuestionRepository
-import com.pollsystem.repository.UserMessageRepository
-import com.pollsystem.repository.UserRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.TestFixtures
+import org.kodewerks.pollsystem.email.EmailService
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.poll.BallotMeasureDraftRequest
+import org.kodewerks.pollsystem.poll.BallotMeasureResponseController
+import org.kodewerks.pollsystem.poll.BallotMeasureService
+import org.kodewerks.pollsystem.poll.CandidateAnswerInput
+import org.kodewerks.pollsystem.poll.CandidateInput
+import org.kodewerks.pollsystem.poll.ElectionDraftRequest
+import org.kodewerks.pollsystem.poll.ElectionResponseController
+import org.kodewerks.pollsystem.poll.ElectionService
+import org.kodewerks.pollsystem.poll.QuestionAnswerInput
+import org.kodewerks.pollsystem.poll.QuestionInput
+import org.kodewerks.pollsystem.poll.QuestionnaireDraftRequest
+import org.kodewerks.pollsystem.poll.QuestionnaireResponseController
+import org.kodewerks.pollsystem.poll.QuestionnaireService
+import org.kodewerks.pollsystem.poll.SubmitBallotResponseRequest
+import org.kodewerks.pollsystem.poll.SubmitElectionResponsesRequest
+import org.kodewerks.pollsystem.poll.SubmitResponsesRequest
+import org.kodewerks.pollsystem.repository.CandidateRepository
+import org.kodewerks.pollsystem.repository.QuestionRepository
+import org.kodewerks.pollsystem.repository.UserMessageRepository
+import org.kodewerks.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -43,7 +43,7 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var fixtures: TestFixtures
     @Autowired private lateinit var users: UserRepository
     @Autowired private lateinit var userMessages: UserMessageRepository
-    @Autowired private lateinit var roleAssignments: com.pollsystem.repository.RoleAssignmentRepository
+    @Autowired private lateinit var roleAssignments: org.kodewerks.pollsystem.repository.RoleAssignmentRepository
     @Autowired private lateinit var recordedEmails: RecordingEmailService
     @Autowired private lateinit var questionnaireService: QuestionnaireService
     @Autowired private lateinit var questionnaireResponseController: QuestionnaireResponseController
@@ -54,7 +54,7 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var ballotMeasureService: BallotMeasureService
     @Autowired private lateinit var ballotMeasureResponseController: BallotMeasureResponseController
 
-    private fun principalFor(user: com.pollsystem.model.User) = AppUserDetails(user)
+    private fun principalFor(user: org.kodewerks.pollsystem.model.User) = AppUserDetails(user)
 
     @Test
     fun `list defaults to enabled User+Creator+Admin, excludes SUPER and VIEWER`() {

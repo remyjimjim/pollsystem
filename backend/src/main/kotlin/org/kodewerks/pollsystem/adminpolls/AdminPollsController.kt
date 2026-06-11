@@ -1,22 +1,22 @@
-package com.pollsystem.adminpolls
+package org.kodewerks.pollsystem.adminpolls
 
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.BlockScope
-import com.pollsystem.model.PollKind
-import com.pollsystem.model.PollNote
-import com.pollsystem.model.PollStatus
-import com.pollsystem.model.PollTypeBlock
-import com.pollsystem.repository.BallotMeasureRepository
-import com.pollsystem.repository.CountyRepository
-import com.pollsystem.repository.CountyZipsRepository
-import com.pollsystem.repository.ElectionRepository
-import com.pollsystem.repository.PollNoteRepository
-import com.pollsystem.repository.PollTypeBlockRepository
-import com.pollsystem.repository.QuestionnaireDomainRepository
-import com.pollsystem.repository.QuestionnaireRepository
-import com.pollsystem.repository.RoleAssignmentRepository
-import com.pollsystem.repository.StateRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.BlockScope
+import org.kodewerks.pollsystem.model.PollKind
+import org.kodewerks.pollsystem.model.PollNote
+import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.model.PollTypeBlock
+import org.kodewerks.pollsystem.repository.BallotMeasureRepository
+import org.kodewerks.pollsystem.repository.CountyRepository
+import org.kodewerks.pollsystem.repository.CountyZipsRepository
+import org.kodewerks.pollsystem.repository.ElectionRepository
+import org.kodewerks.pollsystem.repository.PollNoteRepository
+import org.kodewerks.pollsystem.repository.PollTypeBlockRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireRepository
+import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.kodewerks.pollsystem.repository.StateRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.transaction.annotation.Transactional
@@ -99,7 +99,7 @@ class AdminPollsController(
     private val roleAssignments: RoleAssignmentRepository,
     private val blocks: PollTypeBlockRepository,
     private val notes: PollNoteRepository,
-    private val emailService: com.pollsystem.email.EmailService
+    private val emailService: org.kodewerks.pollsystem.email.EmailService
 ) {
 
     @GetMapping("/purview")

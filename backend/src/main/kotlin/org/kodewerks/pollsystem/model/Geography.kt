@@ -1,4 +1,4 @@
-package com.pollsystem.model
+package org.kodewerks.pollsystem.model
 
 import jakarta.persistence.*
 

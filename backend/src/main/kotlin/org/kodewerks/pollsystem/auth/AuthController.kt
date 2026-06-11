@@ -1,10 +1,10 @@
-package com.pollsystem.auth
+package org.kodewerks.pollsystem.auth
 
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.User
-import com.pollsystem.repository.UserRepository
-import com.pollsystem.security.AppUserDetails
-import com.pollsystem.security.JwtTokenProvider
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.security.JwtTokenProvider
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

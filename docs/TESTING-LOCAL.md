@@ -30,8 +30,8 @@ Spring auto-wires the JDBC URL/credentials from the container at runtime.
 ### Running a single test
 
 ```bash
-gradle test --tests com.pollsystem.poll.QuestionnaireServiceTest
-gradle test --tests 'com.pollsystem.poll.*'
+gradle test --tests org.kodewerks.pollsystem.poll.QuestionnaireServiceTest
+gradle test --tests 'org.kodewerks.pollsystem.poll.*'
 gradle test --tests '*ElectionResultsTest.shouldRedactBelowThreshold'
 ```
 

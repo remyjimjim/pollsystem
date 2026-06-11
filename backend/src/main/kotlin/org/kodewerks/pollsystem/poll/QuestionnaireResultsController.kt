@@ -1,12 +1,12 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.model.PollKind
-import com.pollsystem.repository.CountyRepository
-import com.pollsystem.repository.CountyZipsRepository
-import com.pollsystem.repository.QuestionRepository
-import com.pollsystem.repository.QuestionResponseRepository
-import com.pollsystem.repository.QuestionnaireDomainRepository
-import com.pollsystem.repository.QuestionnaireRepository
+import org.kodewerks.pollsystem.model.PollKind
+import org.kodewerks.pollsystem.repository.CountyRepository
+import org.kodewerks.pollsystem.repository.CountyZipsRepository
+import org.kodewerks.pollsystem.repository.QuestionRepository
+import org.kodewerks.pollsystem.repository.QuestionResponseRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional

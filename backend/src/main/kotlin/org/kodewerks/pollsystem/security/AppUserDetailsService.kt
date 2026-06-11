@@ -1,6 +1,6 @@
-package com.pollsystem.security
+package org.kodewerks.pollsystem.security
 
-import com.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.springframework.stereotype.Service
 
 /**

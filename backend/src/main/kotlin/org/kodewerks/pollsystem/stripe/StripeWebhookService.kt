@@ -1,9 +1,9 @@
-package com.pollsystem.stripe
+package org.kodewerks.pollsystem.stripe
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.pollsystem.model.StripeEvent
-import com.pollsystem.repository.StripeEventRepository
-import com.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.model.StripeEvent
+import org.kodewerks.pollsystem.repository.StripeEventRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

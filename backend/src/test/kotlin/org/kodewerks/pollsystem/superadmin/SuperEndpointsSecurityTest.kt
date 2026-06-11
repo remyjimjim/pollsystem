@@ -1,10 +1,10 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.TestFixtures
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.User
-import com.pollsystem.security.JwtTokenProvider
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.TestFixtures
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.security.JwtTokenProvider
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest

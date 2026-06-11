@@ -1,7 +1,7 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.repository.CountyRepository
-import com.pollsystem.repository.CountyZipsRepository
+import org.kodewerks.pollsystem.repository.CountyRepository
+import org.kodewerks.pollsystem.repository.CountyZipsRepository
 
 /**
  * Shared geo-filter resolution for the three Results endpoints. Mirrors

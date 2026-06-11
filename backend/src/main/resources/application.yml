@@ -31,7 +31,7 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
-# Mail wiring lives in com.pollsystem.email.MailConfig — see it for the
+# Mail wiring lives in org.kodewerks.pollsystem.email.MailConfig — see it for the
 # `local` (Mailpit) vs default (SendGrid) JavaMailSender beans.
 
 # Application config

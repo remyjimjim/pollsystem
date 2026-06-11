@@ -1,10 +1,10 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.model.PollStatus
-import com.pollsystem.repository.BallotMeasureRepository
-import com.pollsystem.repository.ElectionRepository
-import com.pollsystem.repository.QuestionnaireRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.repository.BallotMeasureRepository
+import org.kodewerks.pollsystem.repository.ElectionRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.transaction.annotation.Transactional

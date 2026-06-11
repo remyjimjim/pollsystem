@@ -1,4 +1,4 @@
-package com.pollsystem.security
+package org.kodewerks.pollsystem.security
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

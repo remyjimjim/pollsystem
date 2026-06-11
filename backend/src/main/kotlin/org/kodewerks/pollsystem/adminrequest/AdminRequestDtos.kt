@@ -1,7 +1,7 @@
-package com.pollsystem.adminrequest
+package org.kodewerks.pollsystem.adminrequest
 
-import com.pollsystem.model.AdminRequest
-import com.pollsystem.model.RequestStatus
+import org.kodewerks.pollsystem.model.AdminRequest
+import org.kodewerks.pollsystem.model.RequestStatus
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
 import java.time.Instant

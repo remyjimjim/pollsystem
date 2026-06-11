@@ -1,13 +1,13 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.model.PollKind
-import com.pollsystem.model.PollStatus
-import com.pollsystem.model.QuestionResponse
-import com.pollsystem.repository.QuestionRepository
-import com.pollsystem.repository.QuestionResponseRepository
-import com.pollsystem.repository.QuestionnaireDomainRepository
-import com.pollsystem.repository.QuestionnaireRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.model.PollKind
+import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.model.QuestionResponse
+import org.kodewerks.pollsystem.repository.QuestionRepository
+import org.kodewerks.pollsystem.repository.QuestionResponseRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty

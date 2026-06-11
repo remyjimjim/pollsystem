@@ -1,9 +1,9 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
-import com.pollsystem.model.PollStatus
-import com.pollsystem.repository.BallotMeasureRepository
-import com.pollsystem.repository.ElectionRepository
-import com.pollsystem.repository.QuestionnaireRepository
+import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.repository.BallotMeasureRepository
+import org.kodewerks.pollsystem.repository.ElectionRepository
+import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping

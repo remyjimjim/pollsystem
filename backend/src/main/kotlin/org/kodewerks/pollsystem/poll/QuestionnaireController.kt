@@ -1,6 +1,6 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

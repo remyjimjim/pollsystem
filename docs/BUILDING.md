@@ -78,7 +78,7 @@ command — booting the backend applies any pending migrations.
 
 | Artifact | Path | Notes |
 |---|---|---|
-| Main class | `com.pollsystem.PollSystemApplicationKt` | Spring Boot entry point |
+| Main class | `org.kodewerks.pollsystem.PollSystemApplicationKt` | Spring Boot entry point |
 | Migrations | `db/migration/V*.sql` | bundled into the JAR; applied by Flyway at startup |
 | Config | `application.yml` | bundled defaults; override via env vars at runtime |
 

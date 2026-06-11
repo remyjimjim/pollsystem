@@ -1,6 +1,6 @@
-package com.pollsystem.auth
+package org.kodewerks.pollsystem.auth
 
-import com.pollsystem.model.User
+import org.kodewerks.pollsystem.model.User
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.mail.SimpleMailMessage

@@ -1,8 +1,8 @@
-package com.pollsystem.geography
+package org.kodewerks.pollsystem.geography
 
-import com.pollsystem.model.County
-import com.pollsystem.model.CountyZips
-import com.pollsystem.model.State
+import org.kodewerks.pollsystem.model.County
+import org.kodewerks.pollsystem.model.CountyZips
+import org.kodewerks.pollsystem.model.State
 
 data class StateDto(val id: Long, val name: String, val initial: String) {
     companion object {

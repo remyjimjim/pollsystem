@@ -1,10 +1,10 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.model.BallotResponse
-import com.pollsystem.model.PollStatus
-import com.pollsystem.repository.BallotMeasureRepository
-import com.pollsystem.repository.BallotResponseRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.model.BallotResponse
+import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.repository.BallotMeasureRepository
+import org.kodewerks.pollsystem.repository.BallotResponseRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
@@ -92,7 +92,7 @@ class BallotMeasureResponseController(
         if (close != null && !close.isAfter(Instant.now())) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
         }
-        if (blocks.isBlocked(com.pollsystem.model.PollKind.BALLOT_MEASURE, measure.id)) {
+        if (blocks.isBlocked(org.kodewerks.pollsystem.model.PollKind.BALLOT_MEASURE, measure.id)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
 

@@ -1,8 +1,8 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.pollsystem.repository.PollTypeRepository
+import org.kodewerks.pollsystem.repository.PollTypeRepository
 import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping

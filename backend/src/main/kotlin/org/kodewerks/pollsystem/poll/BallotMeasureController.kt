@@ -1,8 +1,8 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.model.BallotMeasure
-import com.pollsystem.model.PollStatus
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.model.BallotMeasure
+import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size

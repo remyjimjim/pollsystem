@@ -1,8 +1,8 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.repository.PollTypeRepository
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.repository.PollTypeRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

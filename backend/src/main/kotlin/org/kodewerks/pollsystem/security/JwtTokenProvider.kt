@@ -1,4 +1,4 @@
-package com.pollsystem.security
+package org.kodewerks.pollsystem.security
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys

@@ -1,4 +1,4 @@
-package com.pollsystem
+package org.kodewerks.pollsystem
 
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection

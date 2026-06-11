@@ -1,9 +1,9 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.model.PollStatus
-import com.pollsystem.model.Question
-import com.pollsystem.model.Questionnaire
-import com.pollsystem.model.QuestionnaireDomain
+import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.model.Question
+import org.kodewerks.pollsystem.model.Questionnaire
+import org.kodewerks.pollsystem.model.QuestionnaireDomain
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty

@@ -1,12 +1,12 @@
-package com.pollsystem.admin
+package org.kodewerks.pollsystem.admin
 
-import com.pollsystem.creatorrequest.CreatorRequestDto
-import com.pollsystem.creatorrequest.CreatorRequestService
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.RequestStatus
-import com.pollsystem.repository.CreatorRequestRepository
-import com.pollsystem.repository.RoleAssignmentRepository
-import com.pollsystem.security.AppUserDetails
+import org.kodewerks.pollsystem.creatorrequest.CreatorRequestDto
+import org.kodewerks.pollsystem.creatorrequest.CreatorRequestService
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.RequestStatus
+import org.kodewerks.pollsystem.repository.CreatorRequestRepository
+import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.transaction.annotation.Transactional

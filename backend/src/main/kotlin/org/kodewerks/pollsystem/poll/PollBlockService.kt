@@ -1,7 +1,7 @@
-package com.pollsystem.poll
+package org.kodewerks.pollsystem.poll
 
-import com.pollsystem.model.PollKind
-import com.pollsystem.repository.PollTypeBlockRepository
+import org.kodewerks.pollsystem.model.PollKind
+import org.kodewerks.pollsystem.repository.PollTypeBlockRepository
 import org.springframework.stereotype.Service
 
 /**

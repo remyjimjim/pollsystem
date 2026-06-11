@@ -1,12 +1,12 @@
-package com.pollsystem
+package org.kodewerks.pollsystem
 
-import com.pollsystem.model.AccessLevel
-import com.pollsystem.model.RoleAssignment
-import com.pollsystem.model.User
-import com.pollsystem.repository.CountyRepository
-import com.pollsystem.repository.RoleAssignmentRepository
-import com.pollsystem.repository.StateRepository
-import com.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.RoleAssignment
+import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.repository.CountyRepository
+import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.kodewerks.pollsystem.repository.StateRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.concurrent.atomic.AtomicLong

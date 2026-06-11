@@ -1,10 +1,10 @@
-package com.pollsystem.auth
+package org.kodewerks.pollsystem.auth
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.pollsystem.AbstractIntegrationTest
-import com.pollsystem.model.User
-import com.pollsystem.repository.MagicLinkTokenRepository
-import com.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.repository.MagicLinkTokenRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test

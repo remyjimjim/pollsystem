@@ -1,6 +1,6 @@
-package com.pollsystem.superadmin
+package org.kodewerks.pollsystem.superadmin
 
-import com.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.AccessLevel
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.stereotype.Component

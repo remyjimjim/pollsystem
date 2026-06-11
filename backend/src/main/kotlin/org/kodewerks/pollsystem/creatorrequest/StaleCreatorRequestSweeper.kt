@@ -1,4 +1,4 @@
-package com.pollsystem.creatorrequest
+package org.kodewerks.pollsystem.creatorrequest
 
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
