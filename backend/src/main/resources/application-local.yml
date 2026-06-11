@@ -1,0 +1,12 @@
+# Local-dev profile overrides. Active by default (see spring.profiles.default
+# in application.yml). Production sets SPRING_PROFILES_ACTIVE explicitly and
+# does not pick this file up; tests run with @ActiveProfiles("test") and also
+# bypass it.
+
+spring:
+  flyway:
+    # Layer the seed-local directory on top of the shared migration set so
+    # local dev gets the admin@local.test fixture from V11 without polluting
+    # the test database. Flyway is happy with the V11 "gap" in db/migration —
+    # it applies whatever it finds, in version order.
+    locations: classpath:db/migration,classpath:db/seed-local

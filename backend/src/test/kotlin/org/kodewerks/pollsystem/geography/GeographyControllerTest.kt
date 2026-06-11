@@ -37,8 +37,8 @@ class GeographyControllerTest : AbstractIntegrationTest() {
 
         mockMvc.perform(get("/api/counties").param("state_id", caId.toString()))
             .andExpect(status().isOk)
-            // V2 seeds 5 CA counties
-            .andExpect(jsonPath("$.length()").value(5))
+            // V2 seeds 5 CA counties; V8 adds the rest from the Census list.
+            .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(5)))
             .andExpect(jsonPath("$[?(@.name=='Los Angeles')]").exists())
     }
 
