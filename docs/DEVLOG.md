@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-06-08 — Rename Kotlin package com.pollsystem → org.kodewerks.pollsystem
+
+**Requested:**
+
+> The project name is pollsystem. Can we have the package root be
+> org.kodewerks.pollsystem?
+
+**Changed:**
+
+- Directory move from `com/pollsystem/` to `org/kodewerks/pollsystem/`
+  under both `backend/src/main/kotlin` and `backend/src/test/kotlin`
+  (99 `.kt` files). The directory rename landed in `5c796c9` —
+  bundled alongside the prior commit's DEVLOG entry because the
+  `git mv` was already in the index when that commit went out.
+- Package declarations and imports across all 99 `.kt` files rewritten
+  to `org.kodewerks.pollsystem.*`.
+- `backend/build.gradle.kts` `group` set to `org.kodewerks.pollsystem`.
+- `backend/src/main/resources/application.yml` comment updated to
+  point at `org.kodewerks.pollsystem.email.MailConfig`.
+- `docs/BUILDING.md` Main-class entry updated to
+  `org.kodewerks.pollsystem.PollSystemApplicationKt`.
+- `docs/TESTING-LOCAL.md` `--tests` example paths updated to
+  `org.kodewerks.pollsystem.*`.
+- Validation deferred to the user: the test re-run was blocked by
+  Docker Desktop being down. Compile-level rename was verified
+  (all 26 test classes were discovered under the new namespace
+  before failing on the Testcontainers Docker probe).
+
+**Commits:** `5c796c9` (directory move, bundled), `105b625` (content rewrite)
+
+---
+
 ## 2026-06-02 — Rename CivicChain → pollsystem across project docs
 
 **Requested:**
