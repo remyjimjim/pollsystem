@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-06-17 — Revert CLAUDE.md case-flip
+
+**Requested:**
+
+> revert the CLAUDE.md rename
+
+**Changed:**
+
+- `claude.md` renamed back to `CLAUDE.md`. Claude Code's project-instructions
+  auto-load looks for the uppercase name and Linux is case-sensitive, so
+  the lowercase version risked silently dropping the per-project guidance
+  (including the DEVLOG rule) on future sessions. `README.md`'s lowercase
+  rename from the prior sweep stays as-is — nothing depends on its casing.
+
+**Commit:** `91cea3e`
+
+---
+
 ## 2026-06-17 — Lowercase top-level filenames and assets directory
 
 **Requested:**
