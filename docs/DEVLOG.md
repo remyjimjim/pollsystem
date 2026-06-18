@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-06-17 — Add logback-spring.xml with profile-driven sinks
+
+**Requested:**
+
+> Would it be possible to setup logging similar to how it's setup in this
+> project's logging doc located at [.../civicchain/docs/EVERYTHING-LOGGING.md]?
+
+> draft the logback-spring.xml
+
+> Yes [to: "add the .gitignore line and verify it starts up cleanly with
+> ./gradlew bootRun?"]
+
+**Changed:**
+
+- Added `backend/src/main/resources/logback-spring.xml` modelled on the
+  CivicChain "Everything Logging" doc. Three appenders: CONSOLE,
+  RollingFile for `combined.log` (INFO+), RollingFile for `error.log`
+  (ERROR only). Profile-driven root levels via `<springProfile>` —
+  `local` writes all three sinks with `org.kodewerks.pollsystem` at
+  DEBUG and the root at INFO; `test` stays console-only at WARN root
+  with our package at INFO; `!local & !test` (the production default,
+  including an unset profile and an explicit `prod`) writes all three
+  sinks at WARN root.
+- File destination is `${LOG_DIR:-logs}`, resolved relative to the JVM
+  working directory. For `./gradlew bootRun` that lands at
+  `backend/logs/` — added to `.gitignore`.
+- Rolling policy: 50MB per file, daily rotation, 14-day history on
+  combined, 30-day on error. Pulled out of thin air; tune to deploy
+  target.
+- Verification deferred. Attempted to trigger a DevTools reload by
+  running `./gradlew processResources` against the live bootRun; the
+  XML reached `build/resources/main/` but DevTools did not pick up the
+  new file (no `backend/logs/` directory was created). The config will
+  activate on the next manual bootRun restart.
+
+**Commit:** `9f45ea6`
+
+---
+
 ## 2026-06-17 — Revert CLAUDE.md case-flip
 
 **Requested:**
