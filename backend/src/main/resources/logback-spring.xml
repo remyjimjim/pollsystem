@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Logback config for pollsystem. Modelled on the CivicChain "Everything Logging"
+  doc: three sinks (console + combined.log + error.log) with profile-driven
+  levels (local=DEBUG, test=WARN, anything else=INFO).
+
+  Log files land under ${LOG_DIR}, default `logs/` (relative to the JVM's
+  working directory — for `./gradlew bootRun` that's `backend/`). Make sure
+  `backend/logs/` is in .gitignore before the first run.
+-->
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <property name="LOG_DIR" value="${LOG_DIR:-logs}"/>
+    <property name="CONSOLE_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss} %clr(%-5level) %clr([%thread]){faint} %clr(%logger{36}){cyan} - %msg%n"/>
+    <property name="FILE_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- combined.log: everything INFO and above, rolled daily + 50MB cap -->
+    <appender name="COMBINED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/combined.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>${FILE_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/combined-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>14</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- error.log: ERROR only — your "bad stuff" file -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>${FILE_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!--
+      Local: DEBUG for our code, INFO for framework noise. Writes files so
+      `tail -f backend/logs/error.log` works during development.
+    -->
+    <springProfile name="local">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="COMBINED_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+        <logger name="org.kodewerks.pollsystem" level="DEBUG"/>
+    </springProfile>
+
+    <!--
+      Test: console-only and quiet. Tests get noisy fast if every Hibernate
+      SQL line prints; bump our package to INFO so test diagnostics still show.
+    -->
+    <springProfile name="test">
+        <root level="WARN">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="org.kodewerks.pollsystem" level="INFO"/>
+    </springProfile>
+
+    <!--
+      Production-style default (matches CivicChain's `warn` setting): triggered
+      by any profile other than `local` / `test`, including an unset profile
+      and an explicit `prod`. Files on, console on (Fly.io / Docker capture
+      stdout for `flyctl logs` / `docker logs`).
+    -->
+    <springProfile name="!local &amp; !test">
+        <root level="WARN">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="COMBINED_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+        <logger name="org.kodewerks.pollsystem" level="INFO"/>
+    </springProfile>
+
+</configuration>
