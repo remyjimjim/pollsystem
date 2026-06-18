@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-06-17 — Verify logback-spring.xml on fresh bootRun
+
+**Requested:**
+
+> restart bootRun and confirm logs/ appears
+
+**Verified:**
+
+- Killed the live bootRun (whose DevTools restart hadn't picked up the
+  new logback config from the prior commit), deleted `backend/logs/`,
+  and started a fresh bootRun with `SPRING_PROFILES_ACTIVE=local`.
+- Startup banner used the new console pattern
+  (`2026-06-17 17:26:54 INFO [restartedMain] o.k.p.PollSystemApplicationKt - …`),
+  reported `local` as the active profile, and reached
+  `Started PollSystemApplicationKt in 9.573 seconds` with no
+  `APPLICATION FAILED` markers.
+- `backend/logs/combined.log` materialized at 5329 bytes; `error.log`
+  appeared at 0 bytes (no errors fired during startup). Confirms the
+  three appenders + `local` profile block from `9f45ea6` activate on a
+  cold restart.
+
+**Commit:** `none — verification only` (exercised `9f45ea6`)
+
+---
+
 ## 2026-06-17 — Add logback-spring.xml with profile-driven sinks
 
 **Requested:**
