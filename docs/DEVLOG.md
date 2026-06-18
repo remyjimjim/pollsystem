@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-06-17 — Lowercase top-level filenames and assets directory
+
+**Requested:**
+
+> If I were to wish to change every file I've created, as opposed to files
+> that spring generates/creates, upper or mixed case to all lower case, how
+> would I do that?
+
+> What's a good bash command to find all files with at least 1 uppercase
+> character including directory names?
+
+> How do I rename a file using git then commit then push?
+
+**Changed:**
+
+- `Assets/Mockups/` directory renamed to `assets/mockups/` (the
+  `Super-Manage-Users.png` screenshot inside kept its mixed case).
+- Top-level `CLAUDE.md` and `README.md` renamed to `claude.md` and
+  `readme.md`. No content changes — pure `git mv` case-flips.
+- Sweep was scoped to user-authored paths only; Spring-generated and
+  Kotlin/Vue source filenames were intentionally left alone since they
+  follow tooling conventions (PascalCase class-matching, etc.).
+
+**Commits:** `cb5df8f`, `2d60ebf`
+
+---
+
 ## 2026-06-11 — Isolate V11 local-dev admin seed from the test profile
 
 **Requested:**
