@@ -61,6 +61,71 @@ logged.
 
 ---
 
+## 2026-06-19 — E2E test cleanup infrastructure (DevController + Playwright hooks)
+
+**Requested:**
+
+> Can we add a loop immediately inside the "for (let i = 1; i <= 10; i++) {"
+> loop on line 12 of register-colorado-users.spec.ts that loops thru an
+> array of roles e.g. "[user,viewer,creator,admin]" so each time you add
+> a user the email would be test `zzz${i}test${role}@colorado.com` and
+> instead of interating from 1 to 10 let's just iterate from 1 to 2?
+
+> Add a beforeAll hook to the test that calls a backend endpoint
+> [for clearing leftover users]
+
+> For the test we just ran, if right before the last 'submit' on the 8th
+> window, can we have an alert that pops up and says 'Last chance to
+> query database' at which time I can query the pollsystem_test schema
+> and when done click the 'close' button the alert?
+
+> wire up globalTeardown
+
+**Changed:**
+
+- Backend: new `DevController` at `org.kodewerks.pollsystem.dev`,
+  `@Profile("local")` so it only registers under the local profile.
+  `POST /api/dev/reset-test-users?emailPrefix=…` deletes users matching
+  the prefix and cascades through every FK to `users(id)` —
+  `magic_link_tokens`, `role_assignments`, `candidate_responses`,
+  `ballot_responses`, `question_responses`, `user_messages.author_id`
+  (user_id is ON DELETE CASCADE in V13), `creator_requests` (user_id +
+  assigned_admin_id + processed_by_id), `admin_requests`, `ip_rules`,
+  `poll_type_blocks` (V14 created_by), `poll_notes` (V14 author_id),
+  and authored `elections` / `ballot_measures` / `questionnaires` plus
+  their child responses. Refuses prefixes shorter than 3 chars as a
+  guard against accidentally nuking the whole user table. Returns the
+  per-table row count so callers can sanity-check.
+- Backend: `SecurityConfig` permits `/api/dev/**` unauthenticated. The
+  controller's `@Profile("local")` gate means the path 404s in prod
+  regardless, so the permit doesn't widen attack surface there.
+- Frontend: outer `i=1..10` loop in `register-colorado-users.spec.ts`
+  refactored to `i=1..2 × role∈[user,viewer,creator,admin]` (8 users
+  total). Role appears in the email handle only — the registration form
+  has no role field; the role label is for traceability, with backend
+  access granted later via AdminRequest.
+- Frontend: `test.beforeAll` calls `/api/dev/reset-test-users?emailPrefix=zzz`
+  so deterministic email/phone fixtures don't collide with the previous
+  run's data on re-registration.
+- Frontend: `pauseWithModal()` injects an in-page HTML overlay (z-index
+  2147483647) with a Close button, blocks via
+  `page.waitForFunction(() => !window.__e2e_paused)`. Playwright
+  auto-dismisses native `alert()` so a DOM overlay is the only way to
+  hold the test deterministically on a human click. Fired on iteration 8
+  immediately before the magic-link submit, with the dev DB connection
+  string baked into the modal body.
+- Frontend: `globalTeardown` in `playwright.config.ts` points at
+  `./e2e/global-teardown.ts`, which calls the reset endpoint at the end
+  of every `npx playwright test` invocation. Honors `SKIP_TEARDOWN=1`
+  (useful when a pause/modal leaves state worth inspecting) and
+  `E2E_USER_PREFIX` to override the scope. `globalTeardown` uses a
+  relative path string rather than `require.resolve` because the
+  frontend is `"type": "module"`.
+
+**Commit:** `b9849b7`
+
+---
+
 ## 2026-06-18 — Install Playwright and harden register e2e tests
 
 **Requested:**
