@@ -6,6 +6,7 @@ import org.kodewerks.pollsystem.repository.UserRepository
 import org.kodewerks.pollsystem.security.AppUserDetails
 import org.kodewerks.pollsystem.security.JwtTokenProvider
 import jakarta.validation.Valid
+import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -16,13 +17,23 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
+// Local-profile test fixtures: emails matching this pattern get their access
+// level inferred from the role token in the handle. Scoped to keep the rule
+// from firing in prod even if an arbitrary user signs up with "testadmin" in
+// their address.
+private val TEST_FIXTURE_PATTERN = Regex(
+    "^zzz\\d+test(user|viewer|creator|admin)@.+$",
+    RegexOption.IGNORE_CASE
+)
+
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
     private val users: UserRepository,
     private val tokenProvider: JwtTokenProvider,
     private val magicLinks: MagicLinkService,
-    private val emailer: MagicLinkEmailer
+    private val emailer: MagicLinkEmailer,
+    private val env: Environment
 ) {
 
     /**
@@ -76,9 +87,23 @@ class AuthController(
                 email = req.email,
                 phone = phone,
                 zipcode = zipcode,
-                access = AccessLevel.USER,
+                access = inferAccess(req.email),
                 isEnabled = true
             )
         )
+    }
+
+    private fun inferAccess(email: String): AccessLevel {
+        // Outside the local profile the fixture pattern is ignored — every new
+        // user gets the default USER level regardless of email shape.
+        if ("local" !in env.activeProfiles) return AccessLevel.USER
+        val role = TEST_FIXTURE_PATTERN.matchEntire(email)?.groupValues?.get(1)?.lowercase()
+        return when (role) {
+            "admin"   -> AccessLevel.ADMIN
+            "creator" -> AccessLevel.CREATOR
+            "viewer"  -> AccessLevel.VIEWER
+            "user"    -> AccessLevel.USER
+            else      -> AccessLevel.USER
+        }
     }
 }

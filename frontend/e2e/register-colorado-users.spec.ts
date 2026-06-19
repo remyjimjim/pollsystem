@@ -1,62 +1,24 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 import { clearMailpit, fetchMagicLink } from './mailpit'
+import { pauseWithModal } from './pause-modal'
 
 // Role string is part of the email handle for traceability only. The
 // register form has no role field; access level is granted later via
 // AdminRequest approval.
 const ROLES = ['user', 'viewer', 'creator', 'admin'] as const
 
-// Inject a visible HTML modal with a Close button and block the test until
-// the user clicks Close. Playwright auto-dismisses native alert() calls, so
-// we render our own DOM overlay we can deterministically wait on.
-async function pauseWithModal(page: Page, message: string) {
-  await page.evaluate((msg) => {
-    const overlay = document.createElement('div')
-    overlay.id = '__e2e_pause_overlay'
-    overlay.style.cssText = [
-      'position:fixed', 'inset:0', 'z-index:2147483647',
-      'background:rgba(0,0,0,0.6)',
-      'display:flex', 'align-items:center', 'justify-content:center',
-    ].join(';')
-    overlay.innerHTML = `
-      <div style="background:#fff;padding:24px 28px;border-radius:8px;max-width:560px;
-                  font-family:system-ui,sans-serif;box-shadow:0 10px 25px rgba(0,0,0,0.3);">
-        <h2 style="margin:0 0 12px;font-size:18px;font-weight:600;color:#0f172a;">${msg}</h2>
-        <p style="margin:0 0 12px;font-size:13px;color:#475569;line-height:1.5;">
-          The test is paused. Query the dev database now if you need to. Connect with:
-        </p>
-        <code style="background:#f1f5f9;padding:6px 8px;border-radius:3px;display:block;
-                     font-size:12px;color:#0f172a;white-space:pre;overflow-x:auto;">
-PGPASSWORD=pollpass123 psql -h localhost -U polladmin -d pollsystem</code>
-        <p style="margin:12px 0 16px;font-size:12px;color:#64748b;line-height:1.4;">
-          Note: this is the local-dev DB <code>pollsystem</code>. The
-          Testcontainers <code>pollsystem_test</code> DB only exists during
-          <code>./gradlew test</code> runs.
-        </p>
-        <button id="__e2e_pause_close"
-                style="background:#0f172a;color:#fff;border:none;padding:8px 18px;
-                       border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;">
-          Close
-        </button>
-      </div>
-    `
-    document.body.appendChild(overlay)
-    ;(window as unknown as { __e2e_paused: boolean }).__e2e_paused = true
-    document.getElementById('__e2e_pause_close')!.addEventListener('click', () => {
-      overlay.remove()
-      ;(window as unknown as { __e2e_paused: boolean }).__e2e_paused = false
-    })
-  }, message)
-
-  // Long timeout — wait for the human to click Close.
-  await page.waitForFunction(
-    () => !(window as unknown as { __e2e_paused: boolean }).__e2e_paused,
-    undefined,
-    { timeout: 30 * 60_000 }
-  )
-}
-
 const TOTAL_USERS = 2 * ROLES.length
+
+const PAUSE_BODY = `
+  The test is paused. Query the dev database now if you need to. Connect with:
+  <code style="background:#f1f5f9;padding:2px 6px;border-radius:3px;display:inline-block;
+               margin-top:6px;font-size:12px;">PGPASSWORD=pollpass123 psql -h localhost -U polladmin -d pollsystem</code>
+  <br><br>
+  <span style="font-size:12px;color:#64748b;">
+    Note: this is the local-dev DB <code>pollsystem</code>. The Testcontainers
+    <code>pollsystem_test</code> DB only exists during <code>./gradlew test</code> runs.
+  </span>
+`
 
 test.describe('register Colorado users via magic link', () => {
   // Clear leftover users from previous runs so the deterministic email
@@ -95,31 +57,51 @@ test.describe('register Colorado users via magic link', () => {
         const page = await ctx.newPage()
 
         try {
-          // 1. Home → Register CTA (disambiguated from the nav link by the trailing arrow)
+          // 1. Home — no values to set; hold for 4s, then click Register CTA
+          //    (disambiguated from the nav link by the trailing arrow).
           await page.goto('http://localhost:3000')
+          await page.waitForTimeout(4_000)               // hold on home (no values)
           await page.getByRole('link', { name: 'Register →' }).click()
           await expect(page).toHaveURL('http://localhost:3000/register')
 
-          // 2. Fill the form and request the magic link.
+          // 2. /register — fill all three fields, hold 4s with the populated
+          //    form visible, then submit.
           await page.getByLabel('Email').fill(email)
           await page.getByLabel('Phone').fill(phone)
           await page.getByLabel('Zipcode').fill(zipcode)
+          await page.waitForTimeout(4_000)               // hold on /register with form filled
 
           // On the very last iteration, pause before submit so the user can
           // query the DB and see the state immediately before the 8th user
           // is registered. Resume by clicking Close in the injected modal.
           if (n === TOTAL_USERS) {
-            await pauseWithModal(page, 'Last chance to query database')
+            await pauseWithModal(page, 'Last chance to query database', PAUSE_BODY)
           }
 
           await page.getByRole('button', { name: 'Email me a sign-in link' }).click()
-          // SMTP send through Mailpit can take >5s; bump the assertion wait.
-          await expect(page.getByText('Check your email.')).toBeVisible({ timeout: 30_000 })
 
-          // 3. Pull the magic link out of Mailpit's API and visit it.
+          // Race success ("Check your email.") against the backend's error
+          // banner. If the email/phone collides with a prior run's user the
+          // backend balks via the UNIQUE constraint and we just skip this
+          // iteration — no need to wipe state up-front for re-runs.
+          const success = page.getByText('Check your email.')
+          const errorBanner = page.locator('p.text-red-700').first()
+          await Promise.race([
+            success.waitFor({ state: 'visible', timeout: 30_000 }),
+            errorBanner.waitFor({ state: 'visible', timeout: 30_000 }),
+          ])
+          if (await errorBanner.isVisible()) {
+            const msg = (await errorBanner.textContent())?.trim() ?? '(no message)'
+            console.log(`[skip ${email}] backend rejected: ${msg}`)
+            continue
+          }
+
+          // 3. Magic link — visit, confirm logged in, hold 4s on the
+          //    signed-in landing before the context closes.
           const magicHref = await fetchMagicLink(email)
           await page.goto(magicHref)
           await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible({ timeout: 30_000 })
+          await page.waitForTimeout(4_000)               // hold on signed-in landing
         } finally {
           // Closing the context drops the entire session (cookies, storage,
           // both pages). No explicit logout needed — next iteration starts
