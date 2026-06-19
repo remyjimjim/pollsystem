@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-06-19 — Move global-teardown.ts out of Playwright testDir
+
+**Requested:**
+
+> yes run it [verify globalTeardown fires]
+
+**Changed:**
+
+- `frontend/e2e/global-teardown.ts` → `frontend/playwright/global-teardown.ts`,
+  with `globalTeardown` in `playwright.config.ts` updated to match.
+- Reason: with the teardown file living inside `testDir: './e2e'`,
+  Playwright's spec-discovery walker double-loaded it (even though it
+  doesn't match the default `testMatch` of `*.@(spec|test).?(c|m)[jt]s`),
+  polluting the test runtime so the first `test.describe()` in the
+  loaded spec failed with "did not expect to be called here." The
+  failure only surfaced at run-time — `npx playwright test --list` had
+  reported the suite correctly.
+- Verified with a headed run: 1 passed in 51.9s, `globalTeardown`
+  logged `removed 8 user(s) with prefix 'zzz'` and the expected
+  cascade `magic_link_tokens=8, users=8`.
+
+**Commit:** `ddeb5da`
+
+---
+
 ## 2026-06-19 — E2E test cleanup infrastructure (DevController + Playwright hooks)
 
 **Requested:**
