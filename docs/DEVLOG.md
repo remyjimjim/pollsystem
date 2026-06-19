@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-06-19 — Add watchall dev script
+
+**Requested:**
+
+> scaffold a dev script, mkdir /pollsystem/scripts and put the script
+> in there and name it pollsystem.watchall.bash if you please.
+
+**Changed:**
+
+- New `scripts/pollsystem.watchall.bash` orchestrates the three-terminal
+  dev loop from `docs/RUNNING.md` in one process: continuous Kotlin
+  compile (`./gradlew -t compileKotlin`), backend `bootRun` with
+  `SPRING_PROFILES_ACTIVE=local`, and frontend `npm run dev`.
+- Each child runs via `setsid bash -c` so it lives in its own process
+  group; the EXIT/INT/TERM trap kills the whole subtree on Ctrl-C, so
+  daemonised grandchildren (Vite, Gradle workers) go down too instead
+  of orphaning.
+- Output is line-prefixed with a coloured `[watch | back | front]`
+  label via `tput`. Colour codes are suppressed when stdout isn't a
+  TTY so piped logs stay clean.
+- Preflight aborts with a clear message if `docker` / `npm` / the
+  `backend/gradlew` wrapper is missing, or if `pollsystem-db` or
+  `mailpit` containers aren't running — points the user back at
+  `docs/RUNNING.md` to bring them up first.
+
+**Commit:** `4977127`
+
+---
+
 ## 2026-06-19 — Infer access from email pattern + e2e refinements
 
 **Requested:**
