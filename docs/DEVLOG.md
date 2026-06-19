@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-06-19 — Verify watchall-launched stack with canonical e2e
+
+**Requested:**
+
+> run the test again to verify [after watchall confirmed working]
+
+**Verified:**
+
+- Stopped the in-session bootRun (port 8080 release) and brought the
+  full stack back up via `scripts/pollsystem.watchall.bash`. Preflight
+  checks passed (docker, npm, gradlew, both required containers up).
+- Ran `npx playwright test register-colorado-users --headed` against
+  the watchall-served stack. Result: **1 passed (2.6m)**. Iteration-8
+  modal fired, was dismissed, run continued.
+- `globalTeardown` logged `removed 8 user(s) with prefix 'zzz'` with
+  the expected cascade `magic_link_tokens=8, users=8`. Backend +
+  frontend behaviour identical to runs served by the manual
+  three-terminal setup — confirms the script's preflight and
+  process-group teardown aren't interfering with the dev loop.
+
+**Commit:** `none — verification only` (exercised `4977127`)
+
+---
+
 ## 2026-06-19 — Add watchall dev script
 
 **Requested:**
