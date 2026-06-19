@@ -6,6 +6,9 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: false, // the suite hits a shared backend + Mailpit
   reporter: 'list',
+  // Runs once after every spec file finishes. Wipes the zzz-prefixed test
+  // users + everything anchored to them. Skip with SKIP_TEARDOWN=1.
+  globalTeardown: './e2e/global-teardown.ts',
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
