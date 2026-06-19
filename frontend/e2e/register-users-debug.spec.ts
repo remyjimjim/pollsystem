@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { clearMailpit, fetchMagicLink } from './mailpit'
 
 // Parameterized debug variant of register-colorado-users.spec.ts: opens N
 // browser contexts (one per user), keeps every window open at the end, and
@@ -44,6 +45,8 @@ for (const scenario of SCENARIOS) {
     // Long timeout — the test waits on a human at the end.
     test.setTimeout(30 * 60_000)
 
+    await clearMailpit()
+
     const openPages: import('@playwright/test').Page[] = []
 
     for (let i = 1; i <= scenario.userCount; i++) {
@@ -55,31 +58,22 @@ for (const scenario of SCENARIOS) {
       const ctx = await browser.newContext()
       const page = await ctx.newPage()
 
-      // Home → Register
+      // Home → Register CTA (disambiguated from the nav link by the trailing arrow)
       await page.goto('http://localhost:3000')
-      await page.getByRole('link', { name: 'Register' }).click()
+      await page.getByRole('link', { name: 'Register →' }).click()
 
       // Fill form and submit
       await page.getByLabel('Email').fill(email)
       await page.getByLabel('Phone').fill(phone)
       await page.getByLabel('Zipcode').fill(zipcode)
       await page.getByRole('button', { name: 'Email me a sign-in link' }).click()
-      await expect(page.getByText('Check your email.')).toBeVisible()
+      // Mailpit SMTP send can take >5s; bump the assertion wait.
+      await expect(page.getByText('Check your email.')).toBeVisible({ timeout: 30_000 })
 
-      // Mailpit → this user's email → magic link
-      const mail = await ctx.newPage()
-      await mail.goto('http://localhost:8025')
-      await mail.locator('.message-list .message', { hasText: email }).first().click()
-      const magicHref = await mail.frameLocator('iframe')
-        .locator('a[href^="http://localhost:3000/auth/magic-link?token="]')
-        .first()
-        .getAttribute('href')
-      expect(magicHref, `no magic link found for ${email}`).not.toBeNull()
-      await mail.close() // drop just the Mailpit tab; keep the main page open
-
-      // Sign in via the magic link; leave the page open for inspection
-      await page.goto(magicHref!)
-      await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible()
+      // Pull the magic link from Mailpit's API and visit it.
+      const magicHref = await fetchMagicLink(email)
+      await page.goto(magicHref)
+      await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible({ timeout: 30_000 })
 
       openPages.push(page)
     }
