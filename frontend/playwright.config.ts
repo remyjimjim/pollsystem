@@ -8,7 +8,9 @@ export default defineConfig({
   reporter: 'list',
   // Runs once after every spec file finishes. Wipes the zzz-prefixed test
   // users + everything anchored to them. Skip with SKIP_TEARDOWN=1.
-  globalTeardown: './e2e/global-teardown.ts',
+  // Lives outside testDir so Playwright's spec discovery doesn't try to
+  // load it twice (once as teardown, once as a candidate spec file).
+  globalTeardown: './playwright/global-teardown.ts',
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
