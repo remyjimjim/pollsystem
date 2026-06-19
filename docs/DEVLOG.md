@@ -61,6 +61,56 @@ logged.
 
 ---
 
+## 2026-06-19 — Infer access from email pattern + e2e refinements
+
+**Requested:**
+
+> When a user is added look at the email address and if it contains
+> 'testuser' then set the access = 'USER'; if contains 'testviewer'
+> then set access = 'VIEWER'; if contains 'testcreator' then set
+> access = 'CREATOR'; if contains testadmin then set access = 'ADMIN'
+
+> Actually, I believe the users table already has a 'unique' constraint
+> on email address, no? So if a test tries to add a user with an email
+> that already exists it should balk, no? Or I suppose we could make an
+> implicit access.level rule where we check for the string 'zzz' + any
+> number + 'testuser@' + any domain.com.
+
+> can we change it to each new url stays visible 4s after all values
+> have been set and before it goes to the next url?
+
+**Changed:**
+
+- `AuthController.provision` now calls `inferAccess(email)` instead of
+  hard-coding `AccessLevel.USER`. Under the `local` profile only,
+  emails matching `^zzz\d+test(user|viewer|creator|admin)@.+$` get the
+  corresponding access level on first registration — the JWT issued
+  by `/magic-link/redeem` therefore carries the right level immediately,
+  no separate promote step required. Outside `local` the rule is a
+  no-op so the substring can never elevate a real signup.
+- The just-drafted `DevController.promoteTestUsers` endpoint is
+  removed; it's superseded by the registration-time inference and the
+  parallel `AccessLevel` import is dropped.
+- `pauseWithModal` extracted to `frontend/e2e/pause-modal.ts`; both
+  specs import from the shared module.
+- `register-colorado-users` gets a skip-on-conflict guard: after the
+  submit click it races `Check your email.` against
+  `p.text-red-700`; if the backend balks (UNIQUE collision, validation
+  error, etc.) it logs the banner message and `continue`s to the next
+  iteration. The test is now idempotent without strictly requiring the
+  `beforeAll` wipe.
+- `register-users-debug` rewritten to match the canonical's
+  iterations × roles shape (2 × 4 = 8 users instead of 10 `testuser`s)
+  with the role token baked into the email handle; calls the dev reset
+  endpoint up front and swaps `page.pause()` for `pauseWithModal` so
+  plain `--headed` works without `--debug`.
+- Each URL transition holds for 4s *after* fields are filled, *before*
+  navigating away — gives the user a real look at the populated state.
+
+**Commit:** `f4bdf9b`
+
+---
+
 ## 2026-06-19 — Move global-teardown.ts out of Playwright testDir
 
 **Requested:**
