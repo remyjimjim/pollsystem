@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-06-18 — Add Playwright e2e test for the magic-link register flow
+
+**Requested:**
+
+> If I described the functionality of a playwright e2e test like so
+> [pseudo-code: loop 1..10, register zzz{i}testuser@colorado.com via the
+> home → Register → fill form → click Mailpit magic link → logout flow]
+> could you turn that into an e2e playwright test?
+
+> Let's go ahead and create the playwright test we discussed including
+> the part where each iteration in the test opens/closes a browser
+
+**Changed:**
+
+- Added `frontend/e2e/register-colorado-users.spec.ts`. Loops 1..10
+  through the magic-link register flow: home → Register → fill
+  email/phone/zipcode → submit → open Mailpit in the same context →
+  filter the message list by recipient → extract the magic link from
+  the rendered body iframe → visit it → assert the Logout button is
+  visible.
+- Each iteration runs in a fresh `browser.newContext()` so cookies +
+  localStorage are isolated; the closing `ctx.close()` in `finally`
+  tears the whole session down without needing an explicit logout step.
+- Added `frontend/playwright.config.ts` with `testDir: './e2e'` to keep
+  Playwright from discovering the `*.spec.ts` files Vitest owns under
+  `frontend/src/`. `fullyParallel: false` because the suite shares one
+  backend + one Mailpit.
+- No Playwright deps installed yet — running it requires `npm i -D
+  @playwright/test && npx playwright install chromium`, with bootRun on
+  :8080, `npm run dev` on :3000, and Mailpit on :8025. Per TESTING-LOCAL,
+  CI integration remains out of scope.
+
+**Commit:** `1f73e95`
+
+---
+
 ## 2026-06-18 — Add TESTDB-QUERY guide for inspecting the test container
 
 **Requested:**
