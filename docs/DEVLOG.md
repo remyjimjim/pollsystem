@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-06-18 — Add parameterized keep-open Playwright debug variant
+
+**Requested:**
+
+> please write the test you suggested as a parameterized one.
+
+**Changed:**
+
+- Added `frontend/e2e/register-users-debug.spec.ts`. Iterates a
+  `SCENARIOS` array of `{name, userCount, emailFor, phoneFor, zipFor}`
+  records, producing one `test()` case per scenario via a top-level
+  `for` loop — Playwright's idiomatic data-driven pattern. Seeded with
+  the Colorado scenario from the close-as-you-go test; a California
+  example is included commented-out as a template for expanding.
+- Behaviour identical across scenarios: opens N browser contexts (one
+  per user), runs the home → Register → Mailpit → magic-link flow in
+  each, and leaves every window open at the end. `await page.pause()`
+  on the first opened page gates teardown on a human Resume click in
+  the Playwright Inspector — only meaningful when run with
+  `--headed --debug`; headless `page.pause()` hangs until the suite
+  timeout, which is documented in a header comment.
+- 30-minute `test.setTimeout` accommodates the human pause.
+
+**Commit:** `84589b2`
+
+---
+
 ## 2026-06-18 — Add Playwright e2e test for the magic-link register flow
 
 **Requested:**
