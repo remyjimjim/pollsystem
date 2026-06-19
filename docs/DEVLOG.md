@@ -61,6 +61,43 @@ logged.
 
 ---
 
+## 2026-06-18 — Install Playwright and harden register e2e tests
+
+**Requested:**
+
+> install playwright and run the test
+
+**Changed:**
+
+- Installed `@playwright/test` as a devDependency in `frontend/` and ran
+  `npx playwright install chromium`. The close-as-you-go suite now
+  passes locally in ~1.9 minutes.
+- First run surfaced three real issues that the sketch didn't catch:
+  1. The home view has two "Register" links — the header nav and a
+     "Register →" CTA. Strict-mode resolution failed without
+     disambiguation. Pinned the selector to "Register →" (matches the
+     pseudo-spec's "Register link under Create an account").
+  2. SMTP send through Mailpit can take >5s. Bumped the "Check your
+     email." and Logout-button assertion timeouts to 30s.
+  3. Mailpit's body-iframe selector hung iteration 1 — the iframe
+     internals change shape between Mailpit releases. Replaced UI
+     scraping with Mailpit's REST API, factored into a shared
+     `frontend/e2e/mailpit.ts` helper exposing `clearMailpit` and
+     `fetchMagicLink`. The latter polls
+     `/api/v1/search?query=to:<email>`, fetches the message body, and
+     regexes the magic link out — the version originally flagged in
+     this conversation as "the path I'd actually ship."
+- `clearMailpit()` runs at the start of each test so stale
+  (consumed-token) emails from prior runs don't fool the next iteration's
+  search. Both spec files (canonical + parameterized keep-open variant)
+  use the same helper.
+- Added `frontend/test-results/` and `frontend/playwright-report/` to
+  `.gitignore` so generated artifacts don't leak.
+
+**Commit:** `356ae54`
+
+---
+
 ## 2026-06-18 — Add parameterized keep-open Playwright debug variant
 
 **Requested:**
