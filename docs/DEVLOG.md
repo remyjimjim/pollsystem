@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-06-18 — Add TESTDB-QUERY guide for inspecting the test container
+
+**Requested:**
+
+> I understand the tests create a seperate "Test" database, is that so?
+> If so how can I query it before it get's cleaned up?
+
+> Can we put your response, everything from "Yes — and the setup is in"
+> to the end at "on that method." into a docs/TESTDB-QUERY.md?
+
+**Changed:**
+
+- Added `docs/TESTDB-QUERY.md` describing the per-run Testcontainers
+  Postgres setup (image, db name, credentials, dynamic host port,
+  shutdown-hook lifecycle, the schema-vs-method rollback split) and four
+  practical ways to attach to the container while the JVM is alive: a
+  pause test (zero config, recommended), IntelliJ debugger breakpoint,
+  `docker ps` during a normal run, and a temporary `withReuse(true)`
+  flip with the matching `~/.testcontainers.properties` flag.
+- Content is verbatim the conversation's answer to the inspection
+  question; preserved as a doc so the recipe is discoverable from
+  `docs/` rather than buried in chat history.
+
+**Commit:** `f90b8f0`
+
+---
+
 ## 2026-06-17 — Verify logback-spring.xml on fresh bootRun
 
 **Requested:**
