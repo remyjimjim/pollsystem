@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-06-20 — Mirror ZipSetter keystroke shortcuts onto PollSearchView
+
+**Requested:**
+
+> what is the key sequence to clear the county filter on the
+> http://localhost:3000/polls/search
+
+> [agreeing to mirror ZipSetter's shortcuts] yes please
+
+**Changed:**
+
+- `PollSearchView`'s state, county, and zip pickers now use the same
+  body of keyboard shortcuts that `ZipSetter` got earlier today.
+- For county and zip: `Enter` / `Escape` clear the filter; `Ctrl/Cmd-A`
+  adds every visible item to the selection; `Ctrl/Cmd-Shift-A`
+  removes every visible item. Existing `Shift-*` / `Shift-0` are
+  retained as parallel bindings.
+- For state (no filter input): `Enter` / `Escape` close the dropdown
+  instead of clearing a filter. `Shift-*` / `Ctrl-A` keep their
+  existing replace semantics since visible == all in the absence of
+  a filter.
+- **Behaviour change:** county and zip `Shift-*` / `Shift-0` are now
+  additive / subtractive (matching the new Select-all checkbox) — they
+  no longer wholesale replace the selection with the visible set, so
+  a typed prefix doesn't nuke choices made outside the current filter
+  window. The new Ctrl/Cmd-A pair shares the same additive semantics.
+- Enter calls `stopPropagation` plus `preventDefault` so the dropdown's
+  embedding context can't intercept the Enter.
+
+**Commit:** `0313043`
+
+---
+
 ## 2026-06-20 — Add todo.md with credentials-handling next steps
 
 **Requested:**
