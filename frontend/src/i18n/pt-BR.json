@@ -22,7 +22,8 @@
     "close": "Fechar",
     "apply": "Aplicar",
     "clear": "Limpar",
-    "back": "Voltar"
+    "back": "Voltar",
+    "geoScope": "Abrangência geográfica:"
   },
   "home": {
     "welcomeBack": "Bem-vindo de volta,",
@@ -285,7 +286,6 @@
     "publishFailed": "Falha ao publicar",
     "saveFailed": "Falha ao salvar",
     "closeDateShort": "Esta enquete encerrará em {date}. Continuar?",
-    "geoScope": "Escopo geográfico",
     "questions": "Perguntas",
     "questionPlaceholder": "Pergunta {n}",
     "addQuestion": "+ Adicionar pergunta",
@@ -338,7 +338,6 @@
     "submitted": "Sua solicitação foi enviada. Você receberá um e-mail após ela ter sido analisada.",
     "intro": "Diga-nos onde e que tipo de enquetes você gostaria de criar. Um admin analisará sua solicitação.",
     "pollTypes": "Tipos de enquete",
-    "geoScope": "Escopo geográfico",
     "selectedZipcodes": "Selecionados:",
     "reasonLabel": "Motivo (opcional)",
     "reasonPlaceholder": "Por que você gostaria de criar enquetes nesta área?",
@@ -352,7 +351,6 @@
     "heading": "Solicitar acesso de Admin",
     "submitted": "Sua solicitação foi enviada. Um Super irá analisá-la e você receberá um e-mail após o processamento.",
     "intro": "Escolha os CEPs para os quais você deseja administrar Solicitações de Criador. Um Super analisará sua solicitação.",
-    "zipcodesLegend": "CEPs que você deseja administrar",
     "selectedZipcodes": "Selecionados:",
     "reasonLabel": "Motivo (opcional)",
     "reasonPlaceholder": "Por que você gostaria de ser admin nesta área?",

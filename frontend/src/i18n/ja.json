@@ -22,7 +22,8 @@
     "close": "閉じる",
     "apply": "適用",
     "clear": "クリア",
-    "back": "戻る"
+    "back": "戻る",
+    "geoScope": "地理的範囲："
   },
   "home": {
     "welcomeBack": "おかえりなさい、",
@@ -285,7 +286,6 @@
     "publishFailed": "公開に失敗しました",
     "saveFailed": "保存に失敗しました",
     "closeDateShort": "この投票は {date} に締め切られます。続けますか？",
-    "geoScope": "地理的範囲",
     "questions": "質問",
     "questionPlaceholder": "質問 {n}",
     "addQuestion": "+ 質問を追加",
@@ -338,7 +338,6 @@
     "submitted": "リクエストを送信しました。審査が完了するとメールが届きます。",
     "intro": "どこで、どの種類の投票を作成したいかをお知らせください。管理者がリクエストを審査します。",
     "pollTypes": "投票種類",
-    "geoScope": "地理的範囲",
     "selectedZipcodes": "選択済み:",
     "reasonLabel": "理由（任意）",
     "reasonPlaceholder": "この地域で投票を作成したい理由は何ですか？",
@@ -352,7 +351,6 @@
     "heading": "管理者アクセスを申請",
     "submitted": "リクエストを送信しました。スーパーが審査し、処理が完了するとメールが届きます。",
     "intro": "作成者リクエストを管理したい郵便番号を選択してください。スーパーがリクエストを審査します。",
-    "zipcodesLegend": "管理したい郵便番号",
     "selectedZipcodes": "選択済み:",
     "reasonLabel": "理由（任意）",
     "reasonPlaceholder": "この地域で管理者になりたい理由は何ですか？",

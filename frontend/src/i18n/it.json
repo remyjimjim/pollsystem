@@ -22,7 +22,8 @@
     "close": "Chiudi",
     "apply": "Applica",
     "clear": "Cancella",
-    "back": "Indietro"
+    "back": "Indietro",
+    "geoScope": "Ambito geografico:"
   },
   "home": {
     "welcomeBack": "Bentornato,",
@@ -285,7 +286,6 @@
     "publishFailed": "Pubblicazione non riuscita",
     "saveFailed": "Salvataggio non riuscito",
     "closeDateShort": "Questo sondaggio chiuderà il {date}. Continuare?",
-    "geoScope": "Ambito geografico",
     "questions": "Domande",
     "questionPlaceholder": "Domanda {n}",
     "addQuestion": "+ Aggiungi domanda",
@@ -338,7 +338,6 @@
     "submitted": "La tua richiesta è stata inviata. Riceverai un'e-mail dopo che sarà stata esaminata.",
     "intro": "Dicci dove e quale tipo di sondaggi vuoi creare. Un admin esaminerà la tua richiesta.",
     "pollTypes": "Tipi di sondaggio",
-    "geoScope": "Ambito geografico",
     "selectedZipcodes": "Selezionati:",
     "reasonLabel": "Motivo (facoltativo)",
     "reasonPlaceholder": "Perché vuoi creare sondaggi in quest'area?",
@@ -352,7 +351,6 @@
     "heading": "Richiesta di accesso Admin",
     "submitted": "La tua richiesta è stata inviata. Un Super la esaminerà e riceverai un'e-mail dopo l'elaborazione.",
     "intro": "Scegli i CAP per i quali vuoi amministrare le Richieste di Creatore. Un Super esaminerà la tua richiesta.",
-    "zipcodesLegend": "CAP che vuoi amministrare",
     "selectedZipcodes": "Selezionati:",
     "reasonLabel": "Motivo (facoltativo)",
     "reasonPlaceholder": "Perché vuoi essere admin in quest'area?",

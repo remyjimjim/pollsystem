@@ -76,6 +76,14 @@ async function onSubmit() {
       </p>
 
       <fieldset class="rounded-md border border-slate-200 p-4">
+        <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('common.geoScope') }}</legend>
+        <ZipSetter v-model="zipcodes" v-model:total="totalZipsAvailable" />
+        <p v-if="zipcodes.length > 0" class="mt-2 text-sm text-slate-600">
+          {{ $t('creatorRequest.selectedZipcodes') }} {{ formatZipList(zipcodes, { totalAvailable: totalZipsAvailable }) }}
+        </p>
+      </fieldset>
+
+      <fieldset class="rounded-md border border-slate-200 p-4">
         <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('creatorRequest.pollTypes') }}</legend>
         <div class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
           <label
@@ -87,14 +95,6 @@ async function onSubmit() {
             {{ pt.name }}
           </label>
         </div>
-      </fieldset>
-
-      <fieldset class="rounded-md border border-slate-200 p-4">
-        <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('creatorRequest.geoScope') }}</legend>
-        <ZipSetter v-model="zipcodes" v-model:total="totalZipsAvailable" />
-        <p v-if="zipcodes.length > 0" class="mt-2 text-sm text-slate-600">
-          {{ $t('creatorRequest.selectedZipcodes') }} {{ formatZipList(zipcodes, { totalAvailable: totalZipsAvailable }) }}
-        </p>
       </fieldset>
 
       <fieldset class="rounded-md border border-slate-200 p-4">

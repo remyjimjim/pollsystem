@@ -22,7 +22,8 @@
     "close": "Schließen",
     "apply": "Anwenden",
     "clear": "Löschen",
-    "back": "Zurück"
+    "back": "Zurück",
+    "geoScope": "Geografischer Geltungsbereich:"
   },
   "home": {
     "welcomeBack": "Willkommen zurück,",
@@ -285,7 +286,6 @@
     "publishFailed": "Veröffentlichung fehlgeschlagen",
     "saveFailed": "Speichern fehlgeschlagen",
     "closeDateShort": "Diese Umfrage schließt am {date}. Fortfahren?",
-    "geoScope": "Geografischer Geltungsbereich",
     "questions": "Fragen",
     "questionPlaceholder": "Frage {n}",
     "addQuestion": "+ Frage hinzufügen",
@@ -338,7 +338,6 @@
     "submitted": "Ihre Anfrage wurde gesendet. Sie erhalten eine E-Mail, sobald sie geprüft wurde.",
     "intro": "Sagen Sie uns, wo und welche Art von Umfragen Sie erstellen möchten. Ein Admin wird Ihre Anfrage prüfen.",
     "pollTypes": "Umfragetypen",
-    "geoScope": "Geografischer Geltungsbereich",
     "selectedZipcodes": "Ausgewählt:",
     "reasonLabel": "Begründung (optional)",
     "reasonPlaceholder": "Warum möchten Sie Umfragen in diesem Gebiet erstellen?",
@@ -352,7 +351,6 @@
     "heading": "Admin-Zugang beantragen",
     "submitted": "Ihre Anfrage wurde gesendet. Ein Super wird sie prüfen und Sie erhalten eine E-Mail, sobald sie bearbeitet wurde.",
     "intro": "Wählen Sie die Postleitzahlen, für die Sie Ersteller-Anfragen verwalten möchten. Ein Super wird Ihre Anfrage prüfen.",
-    "zipcodesLegend": "Postleitzahlen, die Sie verwalten möchten",
     "selectedZipcodes": "Ausgewählt:",
     "reasonLabel": "Begründung (optional)",
     "reasonPlaceholder": "Warum möchten Sie Admin in diesem Gebiet sein?",

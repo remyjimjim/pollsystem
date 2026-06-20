@@ -22,7 +22,8 @@
     "close": "Lukk",
     "apply": "Bruk",
     "clear": "Tøm",
-    "back": "Tilbake"
+    "back": "Tilbake",
+    "geoScope": "Geografisk omfang:"
   },
   "home": {
     "welcomeBack": "Velkommen tilbake,",
@@ -285,7 +286,6 @@
     "publishFailed": "Publisering mislyktes",
     "saveFailed": "Lagring mislyktes",
     "closeDateShort": "Denne avstemningen stenger {date}. Fortsette?",
-    "geoScope": "Geografisk omfang",
     "questions": "Spørsmål",
     "questionPlaceholder": "Spørsmål {n}",
     "addQuestion": "+ Legg til spørsmål",
@@ -338,7 +338,6 @@
     "submitted": "Søknaden din er sendt. Du får en e-post når den er gjennomgått.",
     "intro": "Fortell oss hvor og hva slags avstemninger du vil opprette. En admin vil gjennomgå søknaden.",
     "pollTypes": "Avstemningstyper",
-    "geoScope": "Geografisk omfang",
     "selectedZipcodes": "Valgte:",
     "reasonLabel": "Begrunnelse (valgfri)",
     "reasonPlaceholder": "Hvorfor vil du opprette avstemninger i dette området?",
@@ -352,7 +351,6 @@
     "heading": "Søk om Admin-tilgang",
     "submitted": "Søknaden din er sendt. En Super gjennomgår den, og du får en e-post når den er behandlet.",
     "intro": "Velg postnumrene du vil administrere Oppretter-søknader for. En Super gjennomgår søknaden din.",
-    "zipcodesLegend": "Postnumre du vil administrere",
     "selectedZipcodes": "Valgte:",
     "reasonLabel": "Begrunnelse (valgfri)",
     "reasonPlaceholder": "Hvorfor vil du være admin i dette området?",

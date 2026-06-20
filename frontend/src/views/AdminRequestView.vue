@@ -56,7 +56,7 @@ async function onSubmit() {
 
       <fieldset class="rounded-md border border-slate-200 p-4">
         <legend class="px-2 text-sm font-semibold text-slate-700">
-          {{ $t('adminRequest.zipcodesLegend') }}
+          {{ $t('common.geoScope') }}
         </legend>
         <ZipSetter v-model="zipcodes" v-model:total="totalZipsAvailable" />
         <p v-if="zipcodes.length > 0" class="mt-2 text-sm text-slate-600">

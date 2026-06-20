@@ -22,7 +22,8 @@
     "close": "Fermer",
     "apply": "Appliquer",
     "clear": "Effacer",
-    "back": "Retour"
+    "back": "Retour",
+    "geoScope": "Portée géographique :"
   },
   "home": {
     "welcomeBack": "Bon retour,",
@@ -285,7 +286,6 @@
     "publishFailed": "Échec de la publication",
     "saveFailed": "Échec de l'enregistrement",
     "closeDateShort": "Ce sondage se clôturera le {date}. Continuer ?",
-    "geoScope": "Portée géographique",
     "questions": "Questions",
     "questionPlaceholder": "Question {n}",
     "addQuestion": "+ Ajouter une question",
@@ -338,7 +338,6 @@
     "submitted": "Votre demande a été envoyée. Vous recevrez un e-mail une fois qu'elle aura été examinée.",
     "intro": "Indiquez-nous où et quel type de sondages vous souhaitez créer. Un admin examinera votre demande.",
     "pollTypes": "Types de sondage",
-    "geoScope": "Portée géographique",
     "selectedZipcodes": "Sélectionnés :",
     "reasonLabel": "Motif (facultatif)",
     "reasonPlaceholder": "Pourquoi souhaitez-vous créer des sondages dans cette zone ?",
@@ -352,7 +351,6 @@
     "heading": "Demande d'accès Admin",
     "submitted": "Votre demande a été envoyée. Un Super l'examinera et vous recevrez un e-mail une fois traitée.",
     "intro": "Choisissez les codes postaux pour lesquels vous souhaitez administrer les Demandes de Créateur. Un Super examinera votre demande.",
-    "zipcodesLegend": "Codes postaux que vous souhaitez administrer",
     "selectedZipcodes": "Sélectionnés :",
     "reasonLabel": "Motif (facultatif)",
     "reasonPlaceholder": "Pourquoi souhaitez-vous être admin dans cette zone ?",

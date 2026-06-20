@@ -24,7 +24,8 @@
     "close": "Close",
     "apply": "Apply",
     "clear": "Clear",
-    "back": "Back"
+    "back": "Back",
+    "geoScope": "Geographic scope:"
   },
   "home": {
     "welcomeBack": "Welcome back,",
@@ -320,7 +321,6 @@
     "publishFailed": "Publish failed",
     "saveFailed": "Save failed",
     "closeDateShort": "This poll will close on {date}. Continue?",
-    "geoScope": "Geographic Scope",
     "questions": "Questions",
     "questionPlaceholder": "Question {n}",
     "addQuestion": "+ Add question",
@@ -373,7 +373,6 @@
     "submitted": "Your request has been submitted. You'll receive an email once it has been reviewed.",
     "intro": "Tell us where and what kind of polls you'd like to create. An admin will review your request.",
     "pollTypes": "Poll Types",
-    "geoScope": "Geographic Scope",
     "selectedZipcodes": "Selected:",
     "reasonLabel": "Reason (optional)",
     "reasonPlaceholder": "Why would you like to create polls in this area?",
@@ -387,7 +386,6 @@
     "heading": "Request Admin Access",
     "submitted": "Your request has been submitted. A Super will review it and you'll receive an email once it's processed.",
     "intro": "Pick the zipcodes you want to administer Creator Requests for. A Super will review your request.",
-    "zipcodesLegend": "Zipcodes you want to administer",
     "selectedZipcodes": "Selected:",
     "reasonLabel": "Reason (optional)",
     "reasonPlaceholder": "Why would you like to be an admin in this area?",

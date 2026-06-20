@@ -22,7 +22,8 @@
     "close": "关闭",
     "apply": "应用",
     "clear": "清除",
-    "back": "返回"
+    "back": "返回",
+    "geoScope": "地理范围："
   },
   "home": {
     "welcomeBack": "欢迎回来，",
@@ -285,7 +286,6 @@
     "publishFailed": "发布失败",
     "saveFailed": "保存失败",
     "closeDateShort": "此投票将于 {date} 截止。是否继续？",
-    "geoScope": "地理范围",
     "questions": "问题",
     "questionPlaceholder": "问题 {n}",
     "addQuestion": "+ 添加问题",
@@ -338,7 +338,6 @@
     "submitted": "您的申请已提交。审核后您将收到邮件通知。",
     "intro": "告诉我们您希望在哪里以及创建哪种类型的投票。管理员将审核您的申请。",
     "pollTypes": "投票类型",
-    "geoScope": "地理范围",
     "selectedZipcodes": "已选择：",
     "reasonLabel": "理由（可选）",
     "reasonPlaceholder": "您为什么希望在此区域创建投票？",
@@ -352,7 +351,6 @@
     "heading": "申请管理员权限",
     "submitted": "您的申请已提交。超级管理员将审核，处理完成后您将收到邮件。",
     "intro": "选择您希望对其创建者请求进行管理的邮政编码。超级管理员将审核您的申请。",
-    "zipcodesLegend": "您希望管理的邮政编码",
     "selectedZipcodes": "已选择：",
     "reasonLabel": "理由（可选）",
     "reasonPlaceholder": "您为什么希望在此区域担任管理员？",

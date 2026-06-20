@@ -22,7 +22,8 @@
     "close": "Cerrar",
     "apply": "Aplicar",
     "clear": "Limpiar",
-    "back": "Volver"
+    "back": "Volver",
+    "geoScope": "Alcance geográfico:"
   },
   "home": {
     "welcomeBack": "Bienvenido de nuevo,",
@@ -285,7 +286,6 @@
     "publishFailed": "Error al publicar",
     "saveFailed": "Error al guardar",
     "closeDateShort": "Esta encuesta cerrará el {date}. ¿Continuar?",
-    "geoScope": "Alcance geográfico",
     "questions": "Preguntas",
     "questionPlaceholder": "Pregunta {n}",
     "addQuestion": "+ Añadir pregunta",
@@ -338,7 +338,6 @@
     "submitted": "Su solicitud ha sido enviada. Recibirá un correo una vez sea revisada.",
     "intro": "Indíquenos dónde y qué tipo de encuestas le gustaría crear. Un admin revisará su solicitud.",
     "pollTypes": "Tipos de encuesta",
-    "geoScope": "Alcance geográfico",
     "selectedZipcodes": "Seleccionados:",
     "reasonLabel": "Motivo (opcional)",
     "reasonPlaceholder": "¿Por qué desea crear encuestas en esta zona?",
@@ -352,7 +351,6 @@
     "heading": "Solicitar acceso de Admin",
     "submitted": "Su solicitud ha sido enviada. Un Super la revisará y recibirá un correo una vez sea procesada.",
     "intro": "Elija los códigos postales para los que desea administrar Solicitudes de Creador. Un Super revisará su solicitud.",
-    "zipcodesLegend": "Códigos postales que desea administrar",
     "selectedZipcodes": "Seleccionados:",
     "reasonLabel": "Motivo (opcional)",
     "reasonPlaceholder": "¿Por qué desea ser admin en esta zona?",

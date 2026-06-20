@@ -131,6 +131,11 @@ async function publish(confirmed = false) {
 
 <template>
   <div data-component="questionnaire-form" class="flex flex-col gap-4">
+    <fieldset class="rounded-md border border-slate-200 p-4">
+      <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('common.geoScope') }}</legend>
+      <ZipSetter v-model="form.zipcodes" />
+    </fieldset>
+
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.title') }}
       <input
@@ -159,11 +164,6 @@ async function publish(confirmed = false) {
         class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
       />
     </label>
-
-    <fieldset class="rounded-md border border-slate-200 p-4">
-      <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('form.geoScope') }}</legend>
-      <ZipSetter v-model="form.zipcodes" />
-    </fieldset>
 
     <fieldset class="rounded-md border border-slate-200 p-4">
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('form.questions') }}</legend>
