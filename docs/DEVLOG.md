@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-06-20 — Add data-component markers + docs/MISC.md
+
+**Requested:**
+
+> Is there a way to tell when inspecting a page like /polls/search that
+> I've found a zipsetter component in the css, like a class name or
+> something?
+
+> Ok, go ahead and wire it up and can you add a note to docs/MISC.md?
+
+**Changed:**
+
+- Added `data-component="<kebab-name>"` on the outermost element of
+  seven components / views: `ZipSetter` (`zipsetter`), `PollSearchView`
+  (`poll-search-view`), `AdminRequestView` (`admin-request-view`),
+  `CreatorRequestView` (`creator-request-view`), `QuestionnaireForm`
+  (`questionnaire-form`), `ElectionForm` (`election-form`),
+  `BallotMeasureForm` (`ballot-measure-form`).
+- Vue compiles components down to plain HTML, so `<ZipSetter>` doesn't
+  surface in the elements panel by name. The attribute gives a
+  DOM-grep-able marker for quick console probes
+  (`document.querySelectorAll('[data-component="zipsetter"]')`) or
+  filtering the elements panel — useful when Vue DevTools isn't
+  installed or available.
+- New `docs/MISC.md` documents the convention (kebab-case, applied to
+  the component's outermost element when you'd want to grep for it
+  during inspection) and lists the current marker inventory. Append
+  entries as more tags get added.
+
+**Commit:** `32854af`
+
+---
+
 ## 2026-06-20 — Scope candidate-name field by poll type; widen suggestions
 
 **Requested:**
