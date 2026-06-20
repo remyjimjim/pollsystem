@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -81,6 +81,31 @@ const counties = ref<CountyRow[]>([])
 const zipcodeOptions = ref<CountyZipRow[]>([])
 const selectedStateIds = ref<number[]>([])
 const lastClickedStateIndex = ref<number | null>(null)
+const selectAllStatesRef = ref<HTMLInputElement | null>(null)
+
+const allStatesSelected = computed(() =>
+  states.value.length > 0 && selectedStateIds.value.length === states.value.length
+)
+const someStatesSelected = computed(() =>
+  selectedStateIds.value.length > 0 && selectedStateIds.value.length < states.value.length
+)
+// Native checkbox indeterminate is a JS property — not bindable via :attr.
+// watchEffect (rather than watch+immediate) so the indeterminate flag
+// re-applies when the dropdown closes/reopens and the template ref
+// gets re-mounted.
+watchEffect(() => {
+  if (selectAllStatesRef.value) {
+    selectAllStatesRef.value.indeterminate = someStatesSelected.value
+  }
+})
+
+function toggleAllStates() {
+  selectedStateIds.value = allStatesSelected.value
+    ? []
+    : states.value.map(s => s.id)
+  lastClickedStateIndex.value = null
+  onStateChange()
+}
 const selectedCountyIds = ref<number[]>([])
 const lastClickedCountyIndex = ref<number | null>(null)
 
@@ -184,6 +209,65 @@ const displayedZipcodes = computed<CountyZipRow[]>(() => {
   if (prefix === '') return zipcodeOptions.value
   return zipcodeOptions.value.filter(z => z.zipcode.startsWith(prefix))
 })
+
+// Select-all wiring for counties and zips. Both target the currently
+// VISIBLE list (post-filter), so the toggle only adds/removes what the
+// user can see. Existing selections outside the visible window are
+// preserved when collapsing the filter.
+const selectAllCountiesRef = ref<HTMLInputElement | null>(null)
+const allCountiesSelected = computed(() =>
+  displayedCounties.value.length > 0 &&
+  displayedCounties.value.every(c => selectedCountyIds.value.includes(c.id))
+)
+const someCountiesSelected = computed(() => {
+  const visible = displayedCounties.value
+  if (visible.length === 0) return false
+  const checked = visible.filter(c => selectedCountyIds.value.includes(c.id)).length
+  return checked > 0 && checked < visible.length
+})
+watchEffect(() => {
+  if (selectAllCountiesRef.value) {
+    selectAllCountiesRef.value.indeterminate = someCountiesSelected.value
+  }
+})
+function toggleAllCounties() {
+  const visibleIds = displayedCounties.value.map(c => c.id)
+  if (allCountiesSelected.value) {
+    const drop = new Set(visibleIds)
+    selectedCountyIds.value = selectedCountyIds.value.filter(id => !drop.has(id))
+  } else {
+    selectedCountyIds.value = Array.from(new Set([...selectedCountyIds.value, ...visibleIds]))
+  }
+  lastClickedCountyIndex.value = null
+  onCountyChange()
+}
+
+const selectAllZipsRef = ref<HTMLInputElement | null>(null)
+const allZipsSelected = computed(() =>
+  displayedZipcodes.value.length > 0 &&
+  displayedZipcodes.value.every(z => selectedZipcodes.value.includes(z.zipcode))
+)
+const someZipsSelected = computed(() => {
+  const visible = displayedZipcodes.value
+  if (visible.length === 0) return false
+  const checked = visible.filter(z => selectedZipcodes.value.includes(z.zipcode)).length
+  return checked > 0 && checked < visible.length
+})
+watchEffect(() => {
+  if (selectAllZipsRef.value) {
+    selectAllZipsRef.value.indeterminate = someZipsSelected.value
+  }
+})
+function toggleAllZips() {
+  const visibleCodes = displayedZipcodes.value.map(z => z.zipcode)
+  if (allZipsSelected.value) {
+    const drop = new Set(visibleCodes)
+    selectedZipcodes.value = selectedZipcodes.value.filter(z => !drop.has(z))
+  } else {
+    selectedZipcodes.value = Array.from(new Set([...selectedZipcodes.value, ...visibleCodes]))
+  }
+  lastClickedZipIndex.value = null
+}
 
 async function onStateChange() {
   selectedCountyIds.value = []
@@ -545,6 +629,19 @@ async function search() {
             class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
           >
             <label
+              v-if="states.length > 0"
+              class="sticky top-0 flex items-center gap-2 rounded border-b border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700"
+            >
+              <input
+                ref="selectAllStatesRef"
+                type="checkbox"
+                :checked="allStatesSelected"
+                @change="toggleAllStates"
+                class="h-3.5 w-3.5"
+              />
+              <span>{{ $t('zipSetter.selectAll', { total: states.length }) }}</span>
+            </label>
+            <label
               v-for="(s, idx) in states"
               :key="s.id"
               class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
@@ -602,6 +699,19 @@ async function search() {
                 v-if="displayedCounties.length === 0"
                 class="px-2 py-1 text-xs text-slate-500"
               >{{ selectedStateIds.length === 0 && countyFilter.trim() === '' ? $t('search.filters.countyStartHint') : $t('search.filters.countyNoMatches') }}</div>
+              <label
+                v-if="displayedCounties.length > 0"
+                class="sticky top-0 z-10 flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700"
+              >
+                <input
+                  ref="selectAllCountiesRef"
+                  type="checkbox"
+                  :checked="allCountiesSelected"
+                  @change="toggleAllCounties"
+                  class="h-3.5 w-3.5"
+                />
+                <span>{{ $t('zipSetter.selectAll', { total: displayedCounties.length }) }}</span>
+              </label>
               <label
                 v-for="(c, idx) in displayedCounties"
                 :key="c.id"
@@ -680,21 +790,49 @@ async function search() {
               v-if="zipPickerOpen"
               tabindex="0"
               @keydown="onZipKeydown"
-              class="absolute left-0 right-0 z-20 mt-1 max-h-32 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
+              class="absolute left-0 right-0 z-20 mt-1 rounded border border-slate-300 bg-white text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
             >
-              <label
-                v-for="(z, idx) in displayedZipcodes"
-                :key="z.id"
-                class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
-              >
-                <input
-                  type="checkbox"
-                  :checked="selectedZipcodes.includes(z.zipcode)"
-                  @click="onZipClick($event, idx, z.zipcode)"
-                  class="h-3.5 w-3.5"
-                />
-                <span class="font-mono">{{ z.zipcode }}</span>
-              </label>
+              <input
+                v-model="zipFilter"
+                type="text"
+                inputmode="numeric"
+                maxlength="5"
+                autocomplete="off"
+                :placeholder="$t('search.filters.countyFilter')"
+                class="block w-full rounded-t border-b border-slate-300 p-2 text-xs font-mono text-slate-900 focus:border-slate-500 focus:outline-none"
+              />
+              <div class="max-h-32 overflow-y-auto p-1">
+                <div
+                  v-if="displayedZipcodes.length === 0"
+                  class="px-2 py-1 text-xs text-slate-500"
+                >{{ $t('search.filters.zipcodeNone') }}</div>
+                <label
+                  v-if="displayedZipcodes.length > 0"
+                  class="sticky top-0 z-10 flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700"
+                >
+                  <input
+                    ref="selectAllZipsRef"
+                    type="checkbox"
+                    :checked="allZipsSelected"
+                    @change="toggleAllZips"
+                    class="h-3.5 w-3.5"
+                  />
+                  <span>{{ $t('zipSetter.selectAll', { total: displayedZipcodes.length }) }}</span>
+                </label>
+                <label
+                  v-for="(z, idx) in displayedZipcodes"
+                  :key="z.id"
+                  class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
+                >
+                  <input
+                    type="checkbox"
+                    :checked="selectedZipcodes.includes(z.zipcode)"
+                    @click="onZipClick($event, idx, z.zipcode)"
+                    class="h-3.5 w-3.5"
+                  />
+                  <span class="font-mono">{{ z.zipcode }}</span>
+                </label>
+              </div>
             </div>
           </div>
           <span
