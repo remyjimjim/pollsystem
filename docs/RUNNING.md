@@ -35,6 +35,8 @@ c "SELECT 1;"'
 - Select 'View details' in the container's menu.
 - Click on the 'Exec' tab.
 - psql -U polladmin -d pollsystem [RET] // enter polladmin password when prompted.
+- PGPASSWORD=pollpass123 psql -h localhost -U polladmin -d pollsystem // less secure
 ### Where db and other creds are located:
 - /docker-compose.yml
-
+### Run playwright e2e script:
+- cd frontend; npx playwright test register-colorado-users --headed
