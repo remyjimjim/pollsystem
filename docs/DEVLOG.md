@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-06-20 — Add todo.md with credentials-handling next steps
+
+**Requested:**
+
+> go ahead and commit and push todo.md please
+
+**Changed:**
+
+- New top-level `todo.md` capturing two pending items: deriving
+  `docker-compose.yml` login values from an encrypted `.creds.txt` at
+  the project root for local dev, and the parallel prod/staging
+  treatment. Tracked in-repo so the work surfaces in `git status`
+  until each item gets scoped into a proper issue / commit.
+
+**Commit:** `1fd5bc7`
+
+---
+
 ## 2026-06-20 — Capture session snippets and enable test-profile SQL logging
 
 **Requested:**
