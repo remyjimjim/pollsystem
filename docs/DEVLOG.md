@@ -61,6 +61,66 @@ logged.
 
 ---
 
+## 2026-06-20 — Select-all + filter affordances on the geography pickers
+
+**Requested:**
+
+> Isn't there a key sequence that enables all checkboxes in a select list?
+> [/polls/search zipsetter 'State' select list — would like a Select All
+> option at the top]
+
+> Can we add 'Select All' options to both the county and zipcodes
+> dropdowns plus an alphabetic search filter on the zipcodes dropdown?
+
+> I think it'd be good to add the alphabetic filters to zipsetter
+
+> if I click the 'select all' box ... then I use the filter and it
+> filters down to 4 states with checked checkboxes then I uncheck the
+> 4 states and enter [Ret] can the display then show all the states
+> with 4 unselected states showing?
+
+> Should have a more generic key sequence for 'Select All'? A more
+> natural choice?
+
+**Changed:**
+
+- `PollSearchView` state, county, and zip pickers each get a sticky
+  "Select all (N)" row at the top of their dropdown panel, where N
+  reflects the *visible* (post-filter) count. Selections are scoped to
+  what the user can see, so a typed prefix never wipes choices made
+  outside the current filter window.
+- `someXSelected` computeds + `watchEffect` blocks drive the native
+  checkbox `indeterminate` property. `watchEffect` (instead of
+  `watch + immediate: true`) so the flag re-applies when a dropdown
+  closes and the template ref re-mounts on reopen.
+- The PollSearch zip dropdown is restructured to host its own
+  alphanumeric prefix filter, mirroring the existing county filter
+  (was bare list-only before).
+- `ZipSetter` (used by AdminRequest, CreatorRequest, QuestionnaireForm)
+  gets the same Select-all + prefix-filter treatment, but inside its
+  existing `<details>` + auto-fill grid — kept the vertical grid
+  layout since ZipSetter lives in normal page flow, not a popup.
+- Section-level `@keydown` on each `<details>` so shortcuts fire no
+  matter which descendant is focused (filter input, checkbox, or the
+  summary itself):
+    - `Enter` / `Escape` clear the filter.
+    - `Ctrl/Cmd-A` adds visible items to the selection.
+    - `Ctrl/Cmd-Shift-A` removes visible items from the selection.
+    - `Shift-*` / `Shift-0` retained as parity with `PollSearchView`.
+  Enter calls `stopPropagation` plus `preventDefault` so the
+  embedding `<form>` (creator/admin request) doesn't implicit-submit.
+- `countyFilter` / `zipFilter` reset inside `loadCounties` /
+  `loadZips` so a stale prefix can't render an empty list after the
+  user switches state or county.
+- i18n reuse: `zipSetter.selectAll` (already translated in 9 locales)
+  for the Select-all label; the generic `search.filters.countyFilter`
+  ("Filter…") for both county and zip filter placeholders; existing
+  `search.filters.zipcodeNone` for the "no matches" empty state.
+
+**Commit:** `8442e3a`
+
+---
+
 ## 2026-06-19 — Verify watchall-launched stack with canonical e2e
 
 **Requested:**
