@@ -301,19 +301,31 @@ async function onCountyChange() {
 }
 
 function onZipKeydown(e: KeyboardEvent) {
-  // Shift+8 produces '*', Shift+0 produces ')'. Match by key character
-  // and also fall back to code-based detection for non-US layouts.
-  const isSelectAll = e.key === '*' || (e.shiftKey && e.code === 'Digit8')
-  const isDeselectAll = e.key === ')' || (e.shiftKey && e.code === 'Digit0')
+  if (e.key === 'Enter' || e.key === 'Escape') {
+    e.preventDefault()
+    e.stopPropagation()
+    zipFilter.value = ''
+    return
+  }
+  const ctrlOrCmd = e.ctrlKey || e.metaKey
+  const isA = e.key.toLowerCase() === 'a'
+  const isSelectAll = e.key === '*'
+    || (e.shiftKey && e.code === 'Digit8')
+    || (ctrlOrCmd && !e.shiftKey && isA)
+  const isDeselectAll = e.key === ')'
+    || (e.shiftKey && e.code === 'Digit0')
+    || (ctrlOrCmd && e.shiftKey && isA)
   if (isSelectAll) {
     e.preventDefault()
-    // Operate on whatever's visible to the user (respects any active
-    // typeahead filter).
-    selectedZipcodes.value = displayedZipcodes.value.map(z => z.zipcode)
+    const visibleCodes = displayedZipcodes.value.map(z => z.zipcode)
+    selectedZipcodes.value = Array.from(
+      new Set([...selectedZipcodes.value, ...visibleCodes])
+    )
     lastClickedZipIndex.value = null
   } else if (isDeselectAll) {
     e.preventDefault()
-    selectedZipcodes.value = []
+    const drop = new Set(displayedZipcodes.value.map(z => z.zipcode))
+    selectedZipcodes.value = selectedZipcodes.value.filter(z => !drop.has(z))
     lastClickedZipIndex.value = null
   }
 }
@@ -400,8 +412,22 @@ function onStateClick(e: MouseEvent, idx: number, id: number) {
   onStateChange()
 }
 function onStateKeydown(e: KeyboardEvent) {
-  const isSelectAll = e.key === '*' || (e.shiftKey && e.code === 'Digit8')
-  const isDeselectAll = e.key === ')' || (e.shiftKey && e.code === 'Digit0')
+  // State picker has no filter input — Enter/Escape just dismiss the
+  // dropdown rather than acting on a filter string.
+  if (e.key === 'Enter' || e.key === 'Escape') {
+    e.preventDefault()
+    e.stopPropagation()
+    statePickerOpen.value = false
+    return
+  }
+  const ctrlOrCmd = e.ctrlKey || e.metaKey
+  const isA = e.key.toLowerCase() === 'a'
+  const isSelectAll = e.key === '*'
+    || (e.shiftKey && e.code === 'Digit8')
+    || (ctrlOrCmd && !e.shiftKey && isA)
+  const isDeselectAll = e.key === ')'
+    || (e.shiftKey && e.code === 'Digit0')
+    || (ctrlOrCmd && e.shiftKey && isA)
   if (isSelectAll) {
     e.preventDefault()
     selectedStateIds.value = states.value.map(s => s.id)
@@ -442,16 +468,32 @@ function onCountyClick(e: MouseEvent, idx: number, id: number) {
   onCountyChange()
 }
 function onCountyKeydown(e: KeyboardEvent) {
-  const isSelectAll = e.key === '*' || (e.shiftKey && e.code === 'Digit8')
-  const isDeselectAll = e.key === ')' || (e.shiftKey && e.code === 'Digit0')
+  if (e.key === 'Enter' || e.key === 'Escape') {
+    e.preventDefault()
+    e.stopPropagation()
+    countyFilter.value = ''
+    return
+  }
+  const ctrlOrCmd = e.ctrlKey || e.metaKey
+  const isA = e.key.toLowerCase() === 'a'
+  const isSelectAll = e.key === '*'
+    || (e.shiftKey && e.code === 'Digit8')
+    || (ctrlOrCmd && !e.shiftKey && isA)
+  const isDeselectAll = e.key === ')'
+    || (e.shiftKey && e.code === 'Digit0')
+    || (ctrlOrCmd && e.shiftKey && isA)
   if (isSelectAll) {
     e.preventDefault()
-    selectedCountyIds.value = displayedCounties.value.map(c => c.id)
+    const visibleIds = displayedCounties.value.map(c => c.id)
+    selectedCountyIds.value = Array.from(
+      new Set([...selectedCountyIds.value, ...visibleIds])
+    )
     lastClickedCountyIndex.value = null
     onCountyChange()
   } else if (isDeselectAll) {
     e.preventDefault()
-    selectedCountyIds.value = []
+    const drop = new Set(displayedCounties.value.map(c => c.id))
+    selectedCountyIds.value = selectedCountyIds.value.filter(id => !drop.has(id))
     lastClickedCountyIndex.value = null
     onCountyChange()
   }
