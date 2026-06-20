@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-06-20 — Convention: Geographic scope fieldset first
+
+**Requested:**
+
+> we should put the zipsetter first under a label of 'Geographic scope:'
+> then the rest of the fields after it and stick to that pattern in
+> general for the forms, until we decide not to.
+
+**Decision:**
+
+- New project-wide convention: any form that needs a zipcode selection
+  renders `<ZipSetter>` as the first fieldset, under a legend of
+  `{{ $t('common.geoScope') }}` ("Geographic scope:"), with other
+  fields after.
+
+**Changed:**
+
+- Reordered fieldsets so `<ZipSetter>` is first in
+  `CreatorRequestView` (was after Poll Types) and `QuestionnaireForm`
+  (was mid-form, after Title/Summary/CloseDate).
+- `AdminRequestView` already had it first; just renamed the legend
+  from `adminRequest.zipcodesLegend` ("Zipcodes you want to
+  administer") to the shared label.
+- i18n: collapsed three duplicate keys (`form.geoScope`,
+  `creatorRequest.geoScope`, `adminRequest.zipcodesLegend`) into a
+  single `common.geoScope: "Geographic scope:"`. Applied to all 9
+  locales (en, es, fr, de, it, ja, nb, pt-BR, zh-CN).
+- Docs: appended a "Form layout" section to `docs/MISC.md` capturing
+  the convention so future forms follow it.
+
+**Commit:** `51d9632`
+
+---
+
 ## 2026-06-20 — Add data-component markers + docs/MISC.md
 
 **Requested:**

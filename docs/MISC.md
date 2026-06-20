@@ -43,3 +43,24 @@ Convention: kebab-case, identical to the component's filename minus
 search-by-name attribute distinct from any DOM class names Vue's compiler
 generates). Add the attribute to a component's outermost element when
 you'd want to grep for it during a page-inspection session.
+
+---
+
+## Form layout: Geographic scope first
+
+Any form that needs a zipcode selection renders `<ZipSetter>` as the
+**first** fieldset, under a legend of `{{ $t('common.geoScope') }}`
+("Geographic scope:"). Other fields follow.
+
+Currently applied to:
+
+- `views/AdminRequestView.vue`
+- `views/CreatorRequestView.vue`
+- `components/QuestionnaireForm.vue`
+
+`common.geoScope` is the single shared i18n key — don't reintroduce
+per-namespace variants like `creatorRequest.geoScope` or
+`adminRequest.zipcodesLegend` (collapsed into `common.geoScope` on
+2026-06-20). If a form's geographic field needs context-specific extra
+copy, put that copy in a helper `<p>` below the legend rather than
+forking the legend wording.
