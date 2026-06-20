@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-06-20 — Capture session snippets and enable test-profile SQL logging
+
+**Requested:**
+
+> go ahead and commit and push docs/RUNNING.md and backend.../application.yml
+
+**Changed:**
+
+- `docs/RUNNING.md` gains two snippets that accumulated while
+  iterating: the `PGPASSWORD=…` one-liner for psql against the dev DB,
+  and the canonical `cd frontend; npx playwright test
+  register-colorado-users --headed` invocation.
+- `backend/src/test/resources/application.yml` flips
+  `spring.jpa.show-sql` from `false` to `true` so the
+  Testcontainers-backed test profile prints Hibernate SQL during
+  `./gradlew test` — useful for diagnosing failures locally.
+- Edits authored by the user during the session; committed and pushed
+  here per their request.
+
+**Commit:** `ca6f7ff`
+
+---
+
 ## 2026-06-20 — Select-all + filter affordances on the geography pickers
 
 **Requested:**
