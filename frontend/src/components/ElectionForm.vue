@@ -144,7 +144,7 @@ async function publish(confirmed = false) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div data-component="election-form" class="flex flex-col gap-4">
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.title') }}
       <input

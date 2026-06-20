@@ -143,7 +143,7 @@ onMounted(loadElections)
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div data-component="ballot-measure-form" class="flex flex-col gap-4">
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.ballotMeasure.parentElection') }}
       <select

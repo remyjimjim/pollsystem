@@ -256,7 +256,7 @@ loadStates()
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div data-component="zipsetter" class="flex flex-col gap-4">
     <div class="flex flex-col gap-2">
       <label class="text-sm font-semibold text-slate-700">{{ $t('zipSetter.state') }}</label>
       <select

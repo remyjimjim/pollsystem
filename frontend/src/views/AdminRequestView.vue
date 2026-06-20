@@ -37,7 +37,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl py-8">
+  <div data-component="admin-request-view" class="mx-auto max-w-3xl py-8">
     <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('adminRequest.heading') }}</h1>
 
     <div

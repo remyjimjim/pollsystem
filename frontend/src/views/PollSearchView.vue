@@ -629,7 +629,7 @@ async function search() {
 </script>
 
 <template>
-  <div class="mx-auto max-w-5xl py-8">
+  <div data-component="poll-search-view" class="mx-auto max-w-5xl py-8">
     <h1 class="mb-2 text-2xl font-semibold text-slate-800">
       {{ auth.isAuthenticated ? $t('search.headingAuthed') : $t('search.headingGuest') }}
     </h1>
