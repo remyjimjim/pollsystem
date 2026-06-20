@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-06-20 — Scope candidate-name field by poll type; widen suggestions
+
+**Requested:**
+
+> Can we have the polls/search Candidate Name textbox use
+> auto-search/complete on Candidate name assuming the not excluded by
+> poll type?
+
+> Can we remove the "only from active Elections" constraint?
+
+**Changed:**
+
+- `PollSearchView` adds a `candidateFilterApplicable` computed —
+  `true` only when the type filter is `''` (Any) or `'Election'`. The
+  Candidate Name label/input/datalist render via `v-if`, so the field
+  vanishes for Questionnaire and BallotMeasure (poll types with no
+  candidates). A `watch` on `filters.type` clears
+  `filters.candidateName` the moment the type flips out of an
+  applicable value so a stale handle can't ride along on the next
+  search request.
+- `PollSearchController.suggestions` switches the candidate-name source
+  from `activeElections.flatMap(findByElectionId)` to
+  `candidates.findAll()`. Lets users retype a remembered name from a
+  past/closed race without having to know whether that race is still
+  open. Titles still come from active polls only since the title
+  autocomplete is meant to surface searchable polls.
+- Docstring on `/suggestions` updated to flag the `findAll()`
+  approach as a future SELECT-DISTINCT-native-query candidate as data
+  volume grows; fine at current volume.
+
+**Commit:** `2e32bad`
+
+---
+
 ## 2026-06-20 — Mirror ZipSetter keystroke shortcuts onto PollSearchView
 
 **Requested:**
