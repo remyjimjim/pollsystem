@@ -196,7 +196,10 @@ class PollSearchController(
 
     /**
      * Feeds the autocomplete datalists on the search form: distinct titles
-     * and candidate names drawn only from currently-active polls.
+     * drawn from currently-active polls, plus candidate names drawn from
+     * every election (active or not). Including past elections lets the
+     * user retype a name they remember from a closed race without having
+     * to know whether that race is still open.
      */
     @GetMapping("/suggestions")
     fun suggestions(): SearchSuggestions {
@@ -211,8 +214,7 @@ class PollSearchController(
                 activeBallotMeasures.map { it.title }
             ).distinct().sorted()
 
-        val candidateNames = activeElections
-            .flatMap { candidates.findByElectionId(it.id) }
+        val candidateNames = candidates.findAll()
             .map { it.name }
             .distinct()
             .sorted()

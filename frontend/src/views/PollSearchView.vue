@@ -348,6 +348,18 @@ const filters = reactive({
   includeClosed: false
 })
 
+// Candidates only exist on Elections, so the candidate-name field is
+// only relevant when the type filter is empty (Any) or 'Election'.
+const candidateFilterApplicable = computed(
+  () => filters.type === '' || filters.type === 'Election'
+)
+// Clear a stale candidateName the moment the user switches the type
+// filter to something candidate-less, so it doesn't get tacked onto
+// the next search request.
+watch(() => filters.type, () => {
+  if (!candidateFilterApplicable.value) filters.candidateName = ''
+})
+
 // Zipcode picker: user checks one or more zipcodes from the county's
 // list. Shift+click toggles a range from the last single click.
 const selectedZipcodes = ref<string[]>([])
@@ -883,7 +895,10 @@ async function search() {
           >{{ $t('search.filters.zipcodeShiftHint') }}</span>
         </template>
       </label>
-      <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
+      <label
+        v-if="candidateFilterApplicable"
+        class="flex flex-col gap-1 text-xs font-semibold text-slate-700"
+      >
         {{ $t('search.filters.candidateName') }}
         <input
           v-model="filters.candidateName"
