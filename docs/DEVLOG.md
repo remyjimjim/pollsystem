@@ -61,6 +61,52 @@ logged.
 
 ---
 
+## 2026-06-21 — In-process RoleAuthCache for hot role_assignments reads
+
+**Requested:**
+
+> nuke-on-write, start it
+
+**Changed:**
+
+- New `org.kodewerks.pollsystem.authz.RoleAuthCache` component. Two
+  Caffeine-backed maps cohabit:
+    - `usersByAuthKey: AuthKey(role, pollTypeId, zipcode) → Set<userId>`,
+      bounded at 100k entries (33k zips × 5 access levels ≈ trivial
+      memory). No TTL — invalidated explicitly on writes.
+    - `pendingCountByAdmin: userId → Long` with a 60s TTL — correctness
+      affects load-balancing fairness, not security.
+- `CreatorRequestService.routeToAdmin` now reads through the cache
+  (`usersAuthorized` + `pendingCount`) instead of hitting
+  `findEnabledByRoleAndZipcodes` + `countByAssignedAdminAndStatus`
+  directly. A `bumpPendingCount` call after the winner is chosen keeps
+  successive routing decisions in the same minute from clobbering the
+  same admin on a tie.
+- **Nuke-on-write** strategy: every write site that mutates
+  `role_assignments` calls `invalidateAuthorizations()` to clear
+  `usersByAuthKey` wholesale. Wired at:
+    - `CreatorRequestService.submit` (insert),
+    - `CreatorRequestService.decide` (approval flips),
+    - `AdminRequestService.submit` (insert),
+    - `AdminRequestService.decide` (APPROVED flip),
+    - `SuperUsersController.demote` (disables outgoing role rows),
+    - `RoleAssignmentBulkOps.updateRoleForUser` (native SQL bulk
+      rewrite of the `role` column),
+    - `DevController.resetTestUsers` (Playwright cleanup wipes rows).
+- Caching only addresses read latency, not the write amplification or
+  storage cost of the zipcode-level materialization. Keeps the door
+  open for the longer-form `scope_level` schema refactor outlined
+  earlier today — see this DEVLOG for the phased plan.
+- Pulled `com.github.ben-manes.caffeine:caffeine:3.1.8` directly
+  rather than enabling Spring's `@Cacheable` abstraction so eviction
+  stays explicit at the call sites.
+- Verification: `./gradlew test --no-daemon` → BUILD SUCCESSFUL,
+  **184 / 184 passing**. No behaviour change visible to callers.
+
+**Commit:** `e0a81b1`
+
+---
+
 ## 2026-06-21 — Migrate PollSearchView pickers onto useGeoPicker (Option B / step 2)
 
 **Requested:**
