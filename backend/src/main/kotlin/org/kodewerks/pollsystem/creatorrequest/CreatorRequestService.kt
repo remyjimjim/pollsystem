@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.creatorrequest
 
+import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.email.EmailService
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.CreatorRequest
@@ -25,7 +26,8 @@ class CreatorRequestService(
     private val users: UserRepository,
     private val pollTypes: PollTypeRepository,
     private val countyZips: CountyZipsRepository,
-    private val email: EmailService
+    private val email: EmailService,
+    private val roleAuthCache: RoleAuthCache,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -67,6 +69,7 @@ class CreatorRequestService(
             }
         }
         roleAssignments.saveAll(rows)
+        roleAuthCache.invalidateAuthorizations()
 
         val assigned = routeToAdmin(dto.zipcodes.distinct())
         val withAdmin = if (assigned != null) {
@@ -100,15 +103,19 @@ class CreatorRequestService(
     }
 
     private fun routeToAdmin(zipcodes: List<String>): User? {
-        val candidates = roleAssignments
-            .findEnabledByRoleAndZipcodes(AccessLevel.ADMIN, zipcodes)
-            .map { it.user }
-            .filter { it.isEnabled }
-            .distinctBy { it.id }
+        // Cache-front: usersAuthorized returns user-id set per zipcode
+        // O(1) after warmup. The User entity rehydration is one
+        // findAllById batch, even if the id set spans many cached zips.
+        val candidateIds = roleAuthCache.usersAuthorized(AccessLevel.ADMIN, zipcodes)
+        if (candidateIds.isEmpty()) return null
+        val candidates = users.findAllById(candidateIds).filter { it.isEnabled }
         if (candidates.isEmpty()) return null
-        return candidates.minBy {
-            creatorRequests.countByAssignedAdminAndStatus(it, RequestStatus.PENDING)
-        }
+        val winner = candidates.minBy { roleAuthCache.pendingCount(it) }
+        // We're about to assign one more PENDING request to this admin.
+        // Bump the cached counter so subsequent calls in the same minute
+        // pick a different admin if loads are tied.
+        roleAuthCache.bumpPendingCount(winner)
+        return winner
     }
 
     @Transactional
@@ -181,6 +188,11 @@ class CreatorRequestService(
             }
             results += updated
         }
+        // Any flip in this batch toggled role_assignments.enabled, so the
+        // cached "who's authorized" sets are stale. Nuke once per batch
+        // rather than per row — eviction is cheap, re-fetch cold-starts
+        // in the next handful of routing calls.
+        roleAuthCache.invalidateAuthorizations()
         return results
     }
 

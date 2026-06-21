@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.superadmin
 
+import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.email.EmailService
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.PollStatus
@@ -117,7 +118,8 @@ class SuperUsersController(
     private val ballotMeasures: BallotMeasureRepository,
     private val questionResponses: QuestionResponseRepository,
     private val candidateResponses: CandidateResponseRepository,
-    private val ballotResponses: BallotResponseRepository
+    private val ballotResponses: BallotResponseRepository,
+    private val roleAuthCache: RoleAuthCache,
 ) {
 
     @GetMapping
@@ -361,6 +363,7 @@ class SuperUsersController(
         // zipcodes via stale rows.
         roleAssignments.findByUserIdAndRole(userId, u.access)
             .let { rows -> roleAssignments.saveAll(rows.map { ra: RoleAssignment -> ra.copy(enabled = false) }) }
+        roleAuthCache.invalidateAuthorizations()
         return rowFor(updated)
     }
 

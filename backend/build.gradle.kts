@@ -55,6 +55,12 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
+    // In-process cache for role_assignments authorization lookups —
+    // see RoleAuthCache. We pull Caffeine directly rather than enabling
+    // Spring's @Cacheable abstraction so eviction stays explicit at the
+    // write sites instead of hiding behind annotations.
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")

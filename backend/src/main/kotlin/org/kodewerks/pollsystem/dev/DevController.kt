@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.dev
 
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
+import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 @Profile("local")
 class DevController(
     private val users: UserRepository,
+    private val roleAuthCache: RoleAuthCache,
 ) {
 
     @PersistenceContext
@@ -112,6 +114,11 @@ class DevController(
         nuke("poll_notes", "author_id IN ($idList)")
 
         nuke("users", "id IN ($idList)")
+
+        // role_assignments deletion above moved authorization. Nuke the
+        // cache so Playwright reruns see fresh empty state instead of a
+        // stale "this user is authorized" entry from the previous suite.
+        roleAuthCache.invalidateAuthorizations()
 
         log.info("Reset {} test users with email prefix '{}': ids={} deletions={}",
             matching.size, emailPrefix, ids, deletions)

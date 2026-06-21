@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.superadmin
 
+import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.model.AccessLevel
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
@@ -23,7 +24,8 @@ import org.springframework.stereotype.Component
  */
 @Component
 class RoleAssignmentBulkOps(
-    @PersistenceContext private val em: EntityManager
+    @PersistenceContext private val em: EntityManager,
+    private val roleAuthCache: RoleAuthCache,
 ) {
     fun updateRoleForUser(userId: Long, newRole: AccessLevel): Int {
         em.flush()
@@ -34,6 +36,10 @@ class RoleAssignmentBulkOps(
             .setParameter("userId", userId)
             .executeUpdate()
         em.clear()
+        // Bulk rewrite shifts every one of this user's rows into a different
+        // (role, zipcode) bucket — every cached entry referencing the old
+        // role for those zips is now wrong.
+        if (updated > 0) roleAuthCache.invalidateAuthorizations()
         return updated
     }
 }

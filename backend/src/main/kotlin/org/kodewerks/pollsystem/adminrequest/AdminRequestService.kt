@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.adminrequest
 
+import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.email.EmailService
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.AdminRequest
@@ -22,7 +23,8 @@ class AdminRequestService(
     private val roleAssignments: RoleAssignmentRepository,
     private val users: UserRepository,
     private val countyZips: CountyZipsRepository,
-    private val email: EmailService
+    private val email: EmailService,
+    private val roleAuthCache: RoleAuthCache,
 ) {
 
     @Transactional
@@ -60,6 +62,7 @@ class AdminRequestService(
             )
         }
         roleAssignments.saveAll(rows)
+        roleAuthCache.invalidateAuthorizations()
 
         email.send(
             to = user.email,
@@ -141,6 +144,9 @@ class AdminRequestService(
             }
             results += updated
         }
+        // Approval flipped ADMIN role rows enabled=true. The "who's
+        // authorized" cache is stale for the affected zipcodes.
+        if (decision == RequestStatus.APPROVED) roleAuthCache.invalidateAuthorizations()
         return results
     }
 
