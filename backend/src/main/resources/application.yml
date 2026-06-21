@@ -55,3 +55,11 @@ server:
   # frontend can show real validation messages instead of a generic fallback.
   error:
     include-message: always
+  # The ZipSetter / PollSearchView cascade can hit /api/zipcodes?county_ids=…
+  # with thousands of IDs when a user picks broad geo scope (51 states ⇒
+  # 3143 counties ⇒ ~15KB query string). Tomcat's default 8KB request-line
+  # limit rejects that with a connection-reset. 64KB covers the worst case
+  # for the seeded dev DB.
+  # TODO: convert /api/zipcodes (and /api/counties) to POST + JSON body for
+  # production. URLs that long aren't routable through every proxy / CDN.
+  max-http-request-header-size: 64KB
