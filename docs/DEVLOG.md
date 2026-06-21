@@ -61,6 +61,55 @@ logged.
 
 ---
 
+## 2026-06-20 — Extract ZipSetter logic into useGeoPicker composable (Option B / step 1)
+
+**Requested:**
+
+> commit then push then go to option B
+
+**Changed:**
+
+- New `frontend/src/composables/useGeoPicker.ts`: headless logic for the
+  State / County / Zipcode cascade picker shared between `ZipSetter`
+  and (next commit) `PollSearchView`. Returns three uniformly-shaped
+  sections (states, counties, zips), each carrying `items` /
+  `displayed` / `selected` / `filter` / `loading` refs, `allSelected`
+  and `someSelected` computeds, a template-ref-attachable
+  `selectAllRef` whose native `indeterminate` flag is wired
+  automatically via `watchEffect`, a `toggleAll()` action that
+  respects the visible (post-filter) window, and an
+  `onFilterKeydown` handler matching the existing
+  Enter/Esc/Ctrl-A/Shift-* shortcut family.
+- Cascade lives in the composable: `watch(selectedStateIds) →
+  loadCounties`, `watch(selectedCountyIds) → loadZips`. `loadStates`
+  fires on setup.
+- `enablePrefixSearch` opt-in for the filter-bar mode
+  (`PollSearchView`'s pre-state typeahead). Off by default; ZipSetter
+  doesn't need it. Backend contract unchanged (counties hit
+  `/api/counties?state_id=5,6`; zips hit
+  `/api/zipcodes?county_ids=10,11`).
+- `ZipSetter.vue`'s `<script setup>` shrinks from ~250 lines to ~25 —
+  just prop/emit plumbing plus a seed of the zip selection from
+  `modelValue`. The template structure is unchanged; bindings switched
+  to picker section properties (`states.items.value`,
+  `counties.toggleAll`, etc).
+- `useGeoPicker.spec.ts`: 6 new direct tests against the composable
+  (mount a host component, `expose()` the picker, drive its refs).
+  Covers load, single-state cascade, multi-state cascade with
+  comma-joined `state_id`, additive Select-all preserving
+  out-of-window selections, deselect-all-visible leaving out-of-window
+  alone, and state filter matching name OR USPS initial.
+- `ZipSetter.spec.ts` left untouched and still passing — the refactor
+  is a no-op from the consumer's perspective. **Frontend suite:
+  32/32 passing** (was 26); `vue-tsc --noEmit` clean.
+- Step 2 (migrating `PollSearchView`'s three popup pickers onto the
+  same composable) is deferred to the next session to keep this
+  commit reviewable on its own.
+
+**Commit:** `eb90ab8`
+
+---
+
 ## 2026-06-20 — ZipSetter State picker → multi-select with Select-all
 
 **Requested:**
