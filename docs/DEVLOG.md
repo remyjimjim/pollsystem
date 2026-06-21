@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-06-20 — ZipSetter State picker → multi-select with Select-all
+
+**Requested:**
+
+> the one issue I have with the zipsetter is that the State dropdown
+> should have a "Select all" checkbox just like the "Counties"
+> dropdown, can that be resolved before you go onto option 1 above?
+
+> [confirmed] Yes — convert to multi-state with Select-all (Recommended)
+
+> [confirmed layout] Yes — three uniform <details> sections (State /
+> County / Zip)
+
+**Changed:**
+
+- `ZipSetter`'s State picker switched from native `<select>` to a
+  `<details>` panel matching the existing County/Zip sections: filter
+  input, sticky Select-all (N) checkbox, indeterminate when partial,
+  Enter/Esc/Ctrl-A keystroke shortcuts. State filter matches by name
+  *or* USPS initial.
+- `selectedStateId: number | null` → `selectedStateIds: number[]`.
+  `loadCounties(id)` → `loadCounties(ids)` hitting
+  `/api/counties?state_id=5,6`. `GeographyController` already binds
+  `state_id` as `List<Long>`, so multi-state lands in one round-trip
+  with no backend change. `v-model` payload to consumers is still
+  `string[]` of zipcodes — purely a picker surface change.
+- All three consumers (`CreatorRequestView`, `AdminRequestView`,
+  `QuestionnaireForm`) pick it up automatically. Tests updated:
+  replaced the legacy `pickOption(<select>)` helper with checkbox
+  ticks, added a multi-state cascade test. 26/26 vitest passing,
+  `vue-tsc --noEmit` clean.
+
+**Commit:** `e90e2ae`
+
+---
+
 ## 2026-06-20 — Install vue-i18n globally for vitest
 
 **Requested:**
