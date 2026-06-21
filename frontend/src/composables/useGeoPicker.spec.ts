@@ -36,7 +36,7 @@ describe('useGeoPicker', () => {
     await flushPromises()
 
     expect(mockedAxios.get).toHaveBeenCalledWith('/api/states')
-    const items = (wrapper.vm.states as any).items.value
+    const items = ((wrapper.vm as any).states).items.value
     expect(items.length).toBe(1)
     expect(items[0].name).toBe('California')
   })
@@ -53,13 +53,13 @@ describe('useGeoPicker', () => {
     const wrapper = host()
     await flushPromises()
 
-    ;(wrapper.vm.states as any).selected.value.push(5)
+    ;((wrapper.vm as any).states).selected.value.push(5)
     await flushPromises()
 
     expect(mockedAxios.get).toHaveBeenNthCalledWith(2, '/api/counties', {
       params: { state_id: '5' }
     })
-    expect((wrapper.vm.counties as any).items.value.length).toBe(1)
+    expect(((wrapper.vm as any).counties).items.value.length).toBe(1)
   })
 
   it('multi-state: comma-separates state_id when several are picked', async () => {
@@ -83,9 +83,9 @@ describe('useGeoPicker', () => {
     const wrapper = host()
     await flushPromises()
 
-    ;(wrapper.vm.states as any).selected.value.push(5)
+    ;((wrapper.vm as any).states).selected.value.push(5)
     await flushPromises()
-    ;(wrapper.vm.states as any).selected.value.push(6)
+    ;((wrapper.vm as any).states).selected.value.push(6)
     await flushPromises()
 
     expect(mockedAxios.get).toHaveBeenLastCalledWith('/api/counties', {
@@ -93,7 +93,7 @@ describe('useGeoPicker', () => {
     })
   })
 
-  it('select-all on filtered list is additive — preserves out-of-window selections', async () => {
+  it('toggleAll: zero visible selected → selects all visible (preserves out-of-window)', async () => {
     mockedAxios.get.mockResolvedValueOnce({
       data: [
         { id: 1, name: 'Alabama',  initial: 'AL' },
@@ -105,17 +105,40 @@ describe('useGeoPicker', () => {
     const wrapper = host()
     await flushPromises()
 
-    const states = wrapper.vm.states as any
+    const states = (wrapper.vm as any).states
     // Pre-select Colorado (out-of-window once we filter to "A*")
     states.selected.value.push(3)
-    // Filter to A-prefixed states
     states.filter.value = 'A'
     await nextTick()
     expect(states.displayed.value.map((s: any) => s.id)).toEqual([1, 2])
-
-    // Select-all visible: should add 1 and 2 without dropping 3.
+    // None of the visible items are selected → toggle ADDS them all.
     states.toggleAll()
     expect([...states.selected.value].sort((a: number, b: number) => a - b)).toEqual([1, 2, 3])
+  })
+
+  it('toggleAll: partial selection (indeterminate) → drops the partial selection', async () => {
+    mockedAxios.get.mockResolvedValueOnce({
+      data: [
+        { id: 1, name: 'Alabama',  initial: 'AL' },
+        { id: 2, name: 'Arkansas', initial: 'AR' },
+        { id: 3, name: 'Colorado', initial: 'CO' },
+      ]
+    })
+
+    const wrapper = host()
+    await flushPromises()
+
+    const states = (wrapper.vm as any).states
+    // One of the two visible filtered states already selected — Select-all
+    // checkbox would render as indeterminate. Clicking it should clear the
+    // partial selection, not add the remaining item.
+    states.selected.value.push(1, 3)
+    states.filter.value = 'A'
+    await nextTick()
+    expect(states.someSelected.value).toBe(true)
+    states.toggleAll()
+    // 1 (visible+selected) dropped; 3 (out-of-window) untouched.
+    expect(states.selected.value).toEqual([3])
   })
 
   it('select-all again when all visible are checked deselects only visible', async () => {
@@ -130,7 +153,7 @@ describe('useGeoPicker', () => {
     const wrapper = host()
     await flushPromises()
 
-    const states = wrapper.vm.states as any
+    const states = (wrapper.vm as any).states
     states.selected.value.push(1, 2, 3)
     states.filter.value = 'A'
     await nextTick()
@@ -150,7 +173,7 @@ describe('useGeoPicker', () => {
     const wrapper = host()
     await flushPromises()
 
-    const states = wrapper.vm.states as any
+    const states = (wrapper.vm as any).states
     states.filter.value = 'ca'  // "California" by name AND "CA" by initial
     await nextTick()
     expect(states.displayed.value.map((s: any) => s.id)).toEqual([5])

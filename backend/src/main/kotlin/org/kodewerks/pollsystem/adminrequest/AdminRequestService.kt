@@ -67,14 +67,18 @@ class AdminRequestService(
             body = "Your request to become an Admin is being reviewed. " +
                 "We will notify you once a Super reviews it."
         )
-        // Notify all Supers
+        // Notify all Supers. Format the zipcode list as a sorted,
+        // comma-joined string so the email body reads as a human list
+        // rather than Kotlin's default `[90001, 90012]` toString.
+        val zipList = dto.zipcodes.distinct().sorted().joinToString(", ")
         users.findByAccess(AccessLevel.SUPER)
             .filter { it.isEnabled }
             .forEach { sup ->
                 email.send(
                     to = sup.email,
                     subject = "New Admin Request awaiting review",
-                    body = "User ${user.email} requested Admin access for zipcodes ${dto.zipcodes}.\n" +
+                    body = "User ${user.email} requested Admin access " +
+                        "for the following ${dto.zipcodes.distinct().size} zipcode(s): $zipList\n" +
                         "Reason: ${dto.reason}"
                 )
             }

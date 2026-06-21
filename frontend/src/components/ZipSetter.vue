@@ -34,7 +34,6 @@ watch(zips.items, (list) => {
 <template>
   <div data-component="zipsetter" class="flex flex-col gap-4">
     <details
-      open
       @keydown="states.onFilterKeydown"
       class="group rounded-md border border-slate-200 [&_summary::-webkit-details-marker]:hidden"
     >
@@ -80,6 +79,7 @@ watch(zips.items, (list) => {
         <template v-else>
           <input
             v-model="states.filter.value"
+            @keydown="states.onFilterKeydown"
             type="text"
             autocomplete="off"
             :placeholder="$t('search.filters.countyFilter')"
@@ -153,6 +153,7 @@ watch(zips.items, (list) => {
         <template v-else>
           <input
             v-model="counties.filter.value"
+            @keydown="counties.onFilterKeydown"
             type="text"
             autocomplete="off"
             :placeholder="$t('search.filters.countyFilter')"
@@ -223,6 +224,7 @@ watch(zips.items, (list) => {
         <template v-else>
           <input
             v-model="zips.filter.value"
+            @keydown="zips.onFilterKeydown"
             type="text"
             inputmode="numeric"
             maxlength="5"

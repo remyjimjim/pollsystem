@@ -83,10 +83,15 @@ class CreatorRequestService(
                 "We will notify you once it is reviewed."
         )
         if (assigned != null) {
+            // Format the zipcode list as a sorted, comma-joined string so
+            // the email body reads as a human list instead of Kotlin's
+            // default `[90001, 90012]` toString output.
+            val zipList = dto.zipcodes.distinct().sorted().joinToString(", ")
             email.send(
                 to = assigned.email,
                 subject = "New Creator Request awaiting review",
-                body = "User ${user.email} requested Creator access for zipcodes ${dto.zipcodes}.\n" +
+                body = "User ${user.email} requested Creator access " +
+                    "for the following ${dto.zipcodes.distinct().size} zipcode(s): $zipList\n" +
                     "Reason: ${dto.reason}"
             )
         }

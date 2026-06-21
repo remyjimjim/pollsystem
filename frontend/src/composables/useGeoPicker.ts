@@ -246,7 +246,15 @@ export function useGeoPicker(opts: UseGeoPickerOptions = {}): UseGeoPickerReturn
 
     function toggleAll() {
       const visibleKeys = displayed.value.map(keyOf)
-      if (allSelected.value) {
+      // Tri-state click semantics (matches Windows / macOS conventions):
+      //   none selected     → select all visible
+      //   some selected     → indeterminate state; click drops the partial
+      //                        selection (what the dash actually means)
+      //   all  selected     → click drops them all
+      // Folding "some" into the drop branch fixes the bug where clicking
+      // an indeterminate Select-all would *add* the remaining items
+      // instead of clearing the in-progress selection.
+      if (allSelected.value || someSelected.value) {
         const drop = new Set<TValue>(visibleKeys)
         selected.value = selected.value.filter(v => !drop.has(v))
       } else {
@@ -255,6 +263,14 @@ export function useGeoPicker(opts: UseGeoPickerOptions = {}): UseGeoPickerReturn
     }
 
     function onFilterKeydown(e: KeyboardEvent) {
+      // Same handler is bound twice — directly on each filter input (target
+      // phase) AND on the section's <details> (bubble phase). Belt and
+      // suspenders for the "Ctrl-A trapped" report — the direct binding
+      // makes sure the input itself catches the keystroke before the
+      // browser can do anything (selecting the filter's text, submitting
+      // the form, etc.). Once the target handler fires preventDefault,
+      // bail on the bubbled invocation so the action isn't done twice.
+      if (e.defaultPrevented) return
       if (e.key === 'Enter' || e.key === 'Escape') {
         e.preventDefault()
         e.stopPropagation()
