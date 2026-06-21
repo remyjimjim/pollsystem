@@ -366,7 +366,8 @@
     "selectAll": "Select all ({total})",
     "noCountiesSeeded": "No counties seeded for this state yet. Pick a different state, or extend the seed data.",
     "zipcodes": "Zipcodes",
-    "noZipcodesAvailable": "No zipcodes available"
+    "noZipcodesAvailable": "No zipcodes available",
+    "tooMany": "{count} items — too many to list. Type in the filter to narrow, or use Select all to pick everything."
   },
   "creatorRequest": {
     "heading": "Creator Request",

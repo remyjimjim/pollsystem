@@ -331,7 +331,8 @@
     "selectAll": "全选（{total}）",
     "noCountiesSeeded": "此州尚未导入县数据。请选择其他州，或扩展初始数据。",
     "zipcodes": "邮政编码",
-    "noZipcodesAvailable": "没有可用的邮政编码"
+    "noZipcodesAvailable": "没有可用的邮政编码",
+    "tooMany": "{count} 项 — 数量太多无法逐项展示。请用筛选缩小范围，或使用全选。"
   },
   "creatorRequest": {
     "heading": "创建者申请",

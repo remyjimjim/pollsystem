@@ -331,7 +331,8 @@
     "selectAll": "Alle auswählen ({total})",
     "noCountiesSeeded": "Für diesen Bundesstaat sind noch keine Counties hinterlegt. Wählen Sie einen anderen Bundesstaat oder erweitern Sie die Seed-Daten.",
     "zipcodes": "Postleitzahlen",
-    "noZipcodesAvailable": "Keine Postleitzahlen verfügbar"
+    "noZipcodesAvailable": "Keine Postleitzahlen verfügbar",
+    "tooMany": "{count} Einträge — zu viele zum Anzeigen. Filtere zum Eingrenzen oder nutze Alle auswählen."
   },
   "creatorRequest": {
     "heading": "Ersteller-Anfrage",

@@ -331,7 +331,8 @@
     "selectAll": "Seleziona tutti ({total})",
     "noCountiesSeeded": "Nessuna contea ancora caricata per questo stato. Scegli un altro stato o estendi i dati iniziali.",
     "zipcodes": "CAP",
-    "noZipcodesAvailable": "Nessun CAP disponibile"
+    "noZipcodesAvailable": "Nessun CAP disponibile",
+    "tooMany": "{count} elementi — troppi da elencare. Filtra per restringere, o usa Seleziona tutto."
   },
   "creatorRequest": {
     "heading": "Richiesta di Creatore",

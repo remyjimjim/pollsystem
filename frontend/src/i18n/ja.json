@@ -331,7 +331,8 @@
     "selectAll": "すべて選択（{total}）",
     "noCountiesSeeded": "この州には郡データがまだ入っていません。別の州を選択するか、初期データを拡張してください。",
     "zipcodes": "郵便番号",
-    "noZipcodesAvailable": "利用可能な郵便番号はありません"
+    "noZipcodesAvailable": "利用可能な郵便番号はありません",
+    "tooMany": "{count}件 — 多すぎて一覧表示できません。フィルターで絞り込むか、すべて選択を使ってください。"
   },
   "creatorRequest": {
     "heading": "作成者リクエスト",

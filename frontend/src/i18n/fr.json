@@ -331,7 +331,8 @@
     "selectAll": "Tout sélectionner ({total})",
     "noCountiesSeeded": "Aucun comté n'est encore enregistré pour cet état. Choisissez un autre état ou complétez les données initiales.",
     "zipcodes": "Codes postaux",
-    "noZipcodesAvailable": "Aucun code postal disponible"
+    "noZipcodesAvailable": "Aucun code postal disponible",
+    "tooMany": "{count} éléments — trop nombreux pour être listés. Filtrez pour affiner, ou utilisez Tout sélectionner."
   },
   "creatorRequest": {
     "heading": "Demande de Créateur",

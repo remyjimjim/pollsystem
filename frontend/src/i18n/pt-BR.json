@@ -331,7 +331,8 @@
     "selectAll": "Selecionar todos ({total})",
     "noCountiesSeeded": "Ainda não há condados carregados para este estado. Escolha outro estado ou estenda os dados iniciais.",
     "zipcodes": "CEPs",
-    "noZipcodesAvailable": "Nenhum CEP disponível"
+    "noZipcodesAvailable": "Nenhum CEP disponível",
+    "tooMany": "{count} itens — muitos para listar. Filtre para reduzir, ou use Selecionar tudo."
   },
   "creatorRequest": {
     "heading": "Solicitação de Criador",

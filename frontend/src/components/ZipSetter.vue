@@ -89,6 +89,10 @@ watch(zips.items, (list) => {
             v-if="states.displayed.value.length === 0"
             class="m-0 text-sm text-slate-500"
           >{{ $t('search.filters.countyNoMatches') }}</p>
+          <p
+            v-else-if="states.tooMany.value"
+            class="m-0 rounded-md border border-orange-300 bg-orange-50 p-2 text-sm text-orange-900"
+          >{{ $t('zipSetter.tooMany', { count: states.displayed.value.length }) }}</p>
           <div
             v-else
             class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"
@@ -163,6 +167,10 @@ watch(zips.items, (list) => {
             v-if="counties.displayed.value.length === 0"
             class="m-0 text-sm text-slate-500"
           >{{ $t('search.filters.countyNoMatches') }}</p>
+          <p
+            v-else-if="counties.tooMany.value"
+            class="m-0 rounded-md border border-orange-300 bg-orange-50 p-2 text-sm text-orange-900"
+          >{{ $t('zipSetter.tooMany', { count: counties.displayed.value.length }) }}</p>
           <div
             v-else
             class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"
@@ -236,6 +244,10 @@ watch(zips.items, (list) => {
             v-if="zips.displayed.value.length === 0"
             class="m-0 text-sm text-slate-500"
           >{{ $t('search.filters.zipcodeNone') }}</p>
+          <p
+            v-else-if="zips.tooMany.value"
+            class="m-0 rounded-md border border-orange-300 bg-orange-50 p-2 text-sm text-orange-900"
+          >{{ $t('zipSetter.tooMany', { count: zips.displayed.value.length }) }}</p>
           <div
             v-else
             class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"

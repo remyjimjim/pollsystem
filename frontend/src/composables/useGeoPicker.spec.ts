@@ -182,4 +182,28 @@ describe('useGeoPicker', () => {
     await nextTick()
     expect(states.displayed.value.map((s: any) => s.id)).toEqual([6])
   })
+
+  it('tooMany flips true above the 500-item render threshold', async () => {
+    // 501 fake states pushes one item past the threshold. Names include
+    // the iteration number so a filter can deterministically narrow.
+    const fakeStates = Array.from({ length: 501 }, (_, i) => ({
+      id: i + 1,
+      name: `State ${i + 1}`,
+      initial: `S${i + 1}`,
+    }))
+    mockedAxios.get.mockResolvedValueOnce({ data: fakeStates })
+
+    const wrapper = host()
+    await flushPromises()
+
+    const states = (wrapper.vm as any).states
+    expect(states.displayed.value.length).toBe(501)
+    expect(states.tooMany.value).toBe(true)
+
+    // Filter "state 5" matches 111 items (5, 50..59, 500) — under the cap.
+    states.filter.value = 'state 5'
+    await nextTick()
+    expect(states.displayed.value.length).toBeLessThanOrEqual(500)
+    expect(states.tooMany.value).toBe(false)
+  })
 })

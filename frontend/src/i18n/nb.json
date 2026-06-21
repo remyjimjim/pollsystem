@@ -331,7 +331,8 @@
     "selectAll": "Velg alle ({total})",
     "noCountiesSeeded": "Ingen fylker er lagt inn for denne delstaten ennå. Velg en annen delstat, eller utvid grunndataene.",
     "zipcodes": "Postnumre",
-    "noZipcodesAvailable": "Ingen postnumre tilgjengelig"
+    "noZipcodesAvailable": "Ingen postnumre tilgjengelig",
+    "tooMany": "{count} oppføringer — for mange til å vise. Filtrer for å snevre inn, eller bruk Velg alle."
   },
   "creatorRequest": {
     "heading": "Oppretter-søknad",

@@ -47,6 +47,17 @@ export interface PickerSection<TItem, TValue> {
   selectAllRef: Ref<HTMLInputElement | null>
   toggleAll: () => void
   onFilterKeydown: (e: KeyboardEvent) => void
+  /**
+   * `true` when `displayed.value.length` exceeds the configured render
+   * threshold (see `RENDER_THRESHOLD` below). Consumers use this to swap
+   * the per-item checkbox grid for a "too many — narrow with filter"
+   * message. The picker's data (items / displayed / selected) is
+   * unchanged; only rendering is suppressed.
+   *
+   * Without this guard, picking "all states → all counties" tries to
+   * mount ~31k zipcode checkboxes and locks the page for 30s+.
+   */
+  tooMany: ComputedRef<boolean>
 }
 
 export interface UseGeoPickerReturn {
@@ -60,6 +71,15 @@ export interface UseGeoPickerReturn {
     zips: (countyIds: number[]) => Promise<void>
   }
 }
+
+// Maximum number of items a section will render as individual checkboxes.
+// Above this, the section flips to a "too many — narrow with filter"
+// message; the filter input + Select-all checkbox stay available, so the
+// user can scope down or bulk-select without mounting thousands of DOM
+// nodes. Tuned for the dev DB (51 states / 3,143 counties / 31,734 zips):
+// 500 keeps every state visible by default while preventing the 30s lock
+// observed when picking all counties (~31k zips rendered).
+const RENDER_THRESHOLD = 500
 
 export function useGeoPicker(opts: UseGeoPickerOptions = {}): UseGeoPickerReturn {
   const { t } = useI18n()
@@ -296,6 +316,8 @@ export function useGeoPicker(opts: UseGeoPickerOptions = {}): UseGeoPickerReturn
       }
     }
 
+    const tooMany = computed(() => displayed.value.length > RENDER_THRESHOLD)
+
     return {
       items,
       displayed,
@@ -307,6 +329,7 @@ export function useGeoPicker(opts: UseGeoPickerOptions = {}): UseGeoPickerReturn
       selectAllRef,
       toggleAll,
       onFilterKeydown,
+      tooMany,
     }
   }
 
