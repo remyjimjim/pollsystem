@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-06-21 — Verify /actuator/rolecache end-to-end after watchall restart
+
+**Requested:**
+
+> restart watchall and verify
+
+**Verified:**
+
+- Killed the in-session watchall (its SIGTERM trap didn't propagate
+  cleanly across the `setsid bash -c` child process groups; SIGKILL
+  on the parent + named children took the tree down). Relaunched
+  `scripts/pollsystem.watchall.bash`; fresh bootRun came up cleanly
+  with the new Caffeine + Actuator JARs visible to the application
+  classloader (which the DevTools restart classloader couldn't see).
+- `GET /actuator/health` unauthenticated → **200**
+  `{"status":"UP"}` (orchestrator probe path).
+- `GET /actuator/rolecache` unauthenticated → **401** (SecurityConfig
+  gate working as designed).
+- Acquired a SUPER JWT for `alex.waltrip@gmail.com` via the
+  magic-link + Mailpit flow; `GET /actuator/rolecache` returned the
+  expected Snapshot JSON with both sections populated.
+- Submitted a creator request to exercise `routeToAdmin` and
+  warm the cache; snapshot then read **`authorizations.size: 1`**
+  (one `AuthKey` cached), `missCount: 1`, `loadSuccessCount: 1`,
+  `averageLoadPenaltyNanos: ~30 ms`. `pendingCounts.size: 2,
+  hitCount: 1, missCount: 2` — two admins considered for routing,
+  `bumpPendingCount` on the winner produced the hit.
+- `DELETE /actuator/rolecache` returned
+  `{"cleared":true,"authorizationsSizeBefore":1}` and the
+  subsequent snapshot showed `authorizations.size: 0` while the
+  `pendingCounts` section was untouched (intentional —
+  `invalidateAuthorizations()` only nukes the user-id-set cache,
+  not the per-admin pending counter).
+- Smoke-test user wiped via `POST /api/dev/reset-test-users?
+  emailPrefix=zzz` so subsequent runs start clean.
+
+**Commit:** `none — verification only` (exercised `da1bcc7`)
+
+---
+
 ## 2026-06-21 — Expose RoleAuthCache stats at /actuator/rolecache
 
 **Requested:**
