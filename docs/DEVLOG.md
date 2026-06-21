@@ -61,6 +61,59 @@ logged.
 
 ---
 
+## 2026-06-21 — ZipSetter UX findings + email zipcode formatting + DC label
+
+**Requested:**
+
+> Here's some findings when testing /creator/request and /admin-request:
+> - Set the initial state of 'State' dropdown to NOT show all options.
+>   I.E., show the drawer as closed.
+> - Neither 'Ctrl-A' nor 'Enter' successfully de-select all options,
+>   probably getting trapped.
+> - The admin email does not list the requested zipcodes.
+> - When one selects 4 states ... then selects 4 zipcodes ... then
+>   clicks the '-' Select All in order to deselect all zipcodes the
+>   dropdown instead selects all zipcodes
+> - The 'Select All' checkbox on the 'Zipcodes' dropdown can take up to
+>   10 seconds to change from non-selected to all selected.
+> - Change 'District of Columbia' to 'Wash D.C.' in 'States' dropdown
+>   options.
+
+**Changed:**
+
+- `ZipSetter` State `<details>` no longer opens by default; the form
+  doesn't lead with a wall of 51 checkboxes.
+- `useGeoPicker.toggleAll()` treats a partial selection as "drop the
+  partial" instead of "fill it out", matching the Win/macOS tri-state
+  checkbox convention. This is also what's behind the "10s lag" report:
+  clicking the indeterminate dash was unintentionally expanding a
+  4-zip in-progress selection to *all* zipcodes (slow array allocation,
+  full grid re-render) instead of clearing it. The new semantics
+  short-circuit to the cheaper "drop visible" path.
+- `onFilterKeydown` now binds directly on each filter input *and* on
+  the section's `<details>` (target + bubble phases). The direct
+  binding addresses the "Ctrl-A trapped" report by giving the input
+  itself first crack at the keystroke before the browser handles it
+  (text-select inside the input, implicit form submit on Enter, etc.).
+  A `defaultPrevented` guard at the top of the handler bails the
+  bubbled invocation so the action isn't done twice.
+- `useGeoPicker.spec.ts` gains an "indeterminate click drops the
+  partial" test alongside the renamed "zero visible → adds all" case.
+  **33 / 33 vitest passing**; `vue-tsc --noEmit` clean.
+- `CreatorRequestService` and `AdminRequestService` email bodies
+  format zipcodes as a sorted, comma-joined list with a count prefix
+  ("for the following 3 zipcode(s): 90001, 90012, 90210") instead of
+  Kotlin's default `[90001, 90012, 90210]` `toString` — the original
+  pattern was reported as "does not list the requested zipcodes".
+- New Flyway `V17__rename_dc_display_name.sql` renames "District of
+  Columbia" → "Wash D.C." in `states`. Pure label change; FK
+  references key off `id`, so no cascade impact. State picker now
+  shows the shorter name.
+
+**Commit:** `d222849`
+
+---
+
 ## 2026-06-20 — Extract ZipSetter logic into useGeoPicker composable (Option B / step 1)
 
 **Requested:**
