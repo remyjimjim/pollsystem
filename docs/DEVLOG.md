@@ -61,6 +61,52 @@ logged.
 
 ---
 
+## 2026-06-21 — Migrate PollSearchView pickers onto useGeoPicker (Option B / step 2)
+
+**Requested:**
+
+> do step 2 of option B
+
+**Changed:**
+
+- Completes the geography-picker unification plan. PollSearchView's
+  State/County/Zip pickers now bind directly to a
+  `useGeoPicker({ enablePrefixSearch: true })` instance instead of
+  re-implementing the data layer inline.
+- **Removed from the view** (now provided by the composable):
+  `loadStates`, `loadCounties`, `loadCountiesByPrefix`,
+  `loadZipcodesByCounty`, `loadZipcodesByPrefix`; the three item
+  refs; the three `selected*` refs; the two filter refs; the two
+  `displayed*` computeds; the three `allSelected` / `someSelected`
+  computeds; the three `selectAllRef` template refs +
+  `watchEffect`s driving native `indeterminate`; the three
+  `toggleAll*` functions; the `onStateChange` / `onCountyChange`
+  cascade orchestrators (composable's internal
+  `watch(selectedStateIds → loadCounties)` and
+  `watch(selectedCountyIds → loadZips)` cover them).
+- **Kept as PollSearchView-specific UX** the composable doesn't
+  model: popup open state, picker summary computeds, shift-click
+  range handlers (`lastClicked*Index` + `onStateClick` /
+  `onCountyClick` / `onZipClick`), `onStateKeydown` overriding the
+  composable's Enter/Esc (which would clear a nonexistent State
+  filter) to close the popup instead, and `loadZipcodesByState`
+  triggered by a derived `stateZipQueryKey` watch so the zip
+  dropdown populates immediately on state pick without a county.
+- The derived-key watch avoids the double-fetch a naive
+  `watch(states.selected)` would cause when a state change
+  cascades into a county reset in the same tick.
+- **Net delete: 231 lines** (1055 → 824). Reaffirms the Option B
+  prediction.
+- Template structure unchanged — only ref bindings updated to
+  thread through the composable's section objects
+  (`states.items.value`, `counties.selected.value`, etc).
+- Verification: **34 / 34 vitest passing**, `vue-tsc --noEmit`
+  clean. Backend contract unchanged.
+
+**Commit:** `821232f`
+
+---
+
 ## 2026-06-21 — Convert GeographyControllerTest zipcode cases to POST
 
 **Requested:**
