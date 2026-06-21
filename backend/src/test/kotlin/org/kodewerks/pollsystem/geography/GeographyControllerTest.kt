@@ -5,8 +5,10 @@ import org.hamcrest.Matchers.greaterThanOrEqualTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -43,7 +45,7 @@ class GeographyControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `GET zipcodes accepts comma-separated county_ids and returns zipcodes for those counties`() {
+    fun `POST zipcodes accepts a countyIds body and returns zipcodes for those counties`() {
         // Look up county ids for CA / Los Angeles
         val statesJson = mockMvc.perform(get("/api/states")).andReturn().response.contentAsString
         val caId = Regex("""\{"id":(\d+),"name":"California"""")
@@ -54,19 +56,40 @@ class GeographyControllerTest : AbstractIntegrationTest() {
         val laId = Regex("""\{"id":(\d+),"stateId":\d+,"name":"Los Angeles"""")
             .find(countiesJson)?.groupValues?.get(1)?.toLong()!!
 
-        mockMvc.perform(get("/api/zipcodes").param("county_ids", laId.toString()))
+        mockMvc.perform(
+            post("/api/zipcodes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"countyIds":[$laId]}""")
+        )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(1)))
             .andExpect(jsonPath("$[?(@.zipcode=='90001')]").exists())
     }
 
     @Test
-    fun `GET zipcodes with empty county_ids returns 400 (Spring rejects empty list binding)`() {
-        // Spring's converter on List<Long> with empty value rejects with 400 by default,
-        // but our service-side guard returns [] for an empty list. Sending no value is the
-        // missing-required case; sending an empty string typically yields 400.
-        // Validate the documented success path with a single id instead.
-        mockMvc.perform(get("/api/zipcodes").param("county_ids", "999999"))
+    fun `POST zipcodes with an unknown countyId returns 200 and an empty array`() {
+        // The service-side guard short-circuits when the resolved id list
+        // matches no county_zips rows — caller sees an empty array, not a
+        // 4xx, so the picker can disable downstream sections without an
+        // error toast.
+        mockMvc.perform(
+            post("/api/zipcodes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"countyIds":[999999]}""")
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()").value(0))
+    }
+
+    @Test
+    fun `POST zipcodes with an empty body returns 200 and an empty array`() {
+        // Match the GET-era contract: a request with no countyIds /
+        // stateIds / prefix yields no zips rather than an error.
+        mockMvc.perform(
+            post("/api/zipcodes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}")
+        )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()").value(0))
     }
