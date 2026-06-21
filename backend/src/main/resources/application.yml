@@ -48,6 +48,20 @@ app:
     webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
     tolerance-seconds: 300
 
+# Spring Boot Actuator. We expose only the endpoints we use
+# explicitly — `health` (public, for orchestrators / load balancers)
+# and our custom `rolecache` (gated to SUPER role in SecurityConfig).
+# Adding new endpoints means listing them here AND deciding their
+# security posture in SecurityConfig.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,rolecache
+  endpoint:
+    health:
+      show-details: never
+
 # Server
 server:
   port: 8080

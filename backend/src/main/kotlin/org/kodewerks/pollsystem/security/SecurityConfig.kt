@@ -63,10 +63,15 @@ class SecurityConfig(
                     "/api/polls/*/*/results/**",
                     // DevController is @Profile("local"), so under prod the
                     // path 404s and permitAll has no effect there.
-                    "/api/dev/**"
+                    "/api/dev/**",
+                    // Liveness/readiness probe — orchestrators need
+                    // unauthenticated access. Other actuator endpoints
+                    // require SUPER below.
+                    "/actuator/health",
                 ).permitAll()
                 it.requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER")
                 it.requestMatchers("/api/super/**").hasRole("SUPER")
+                it.requestMatchers("/actuator/**").hasRole("SUPER")
                 it.anyRequest().authenticated()
             }
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)

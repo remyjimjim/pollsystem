@@ -61,6 +61,11 @@ dependencies {
     // write sites instead of hiding behind annotations.
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
+    // Actuator surface — currently used only to expose the RoleAuthCache
+    // stats endpoint at /actuator/rolecache. Lock-down lives in
+    // SecurityConfig (hasRole SUPER) + application.yml exposure include.
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")

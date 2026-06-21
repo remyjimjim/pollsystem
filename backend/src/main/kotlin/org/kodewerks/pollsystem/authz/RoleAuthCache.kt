@@ -117,6 +117,46 @@ class RoleAuthCache(
         if (current != null) pendingCountByAdmin.put(admin.id, (current + delta).coerceAtLeast(0))
     }
 
+    /**
+     * Snapshot of both caches' Caffeine-recorded stats. Wrapped into a
+     * data class so the actuator endpoint serializes a stable JSON shape
+     * instead of leaking Caffeine's internal types into the wire format.
+     */
+    fun snapshot(): Snapshot = Snapshot(
+        authorizations = sectionOf(usersByAuthKey),
+        pendingCounts = sectionOf(pendingCountByAdmin),
+    )
+
+    data class Snapshot(
+        val authorizations: Section,
+        val pendingCounts: Section,
+    )
+
+    data class Section(
+        val size: Long,
+        val hitCount: Long,
+        val missCount: Long,
+        val hitRate: Double,
+        val loadSuccessCount: Long,
+        val loadFailureCount: Long,
+        val averageLoadPenaltyNanos: Double,
+        val evictionCount: Long,
+    )
+
+    private fun sectionOf(cache: Cache<*, *>): Section {
+        val s = cache.stats()
+        return Section(
+            size = cache.estimatedSize(),
+            hitCount = s.hitCount(),
+            missCount = s.missCount(),
+            hitRate = s.hitRate(),
+            loadSuccessCount = s.loadSuccessCount(),
+            loadFailureCount = s.loadFailureCount(),
+            averageLoadPenaltyNanos = s.averageLoadPenalty(),
+            evictionCount = s.evictionCount(),
+        )
+    }
+
     private fun loadForKey(key: AuthKey): Set<Long> {
         // Single-zipcode lookup: passes a list of one through to keep the
         // repo method shape unchanged.
