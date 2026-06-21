@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-06-21 — Cap ZipSetter section rendering at 500 items
+
+**Requested:**
+
+> on creator/request when I select all states then click on select all
+> counties it takes a good 30 seconds and everything slows down to a
+> crawl
+
+**Changed:**
+
+- Diagnosed: picking "all states → all counties" loads 31,734 zipcodes
+  (full dev DB) and tries to mount that many DOM checkbox inputs.
+  Combined with `v-model`'s O(n) `array.includes()` per checkbox per
+  re-render, that's ~1B operations on the Zip section, locking the
+  page for ~30s. The `/api/zipcodes?county_ids=…` URL is also ~16KB,
+  past Tomcat's default 8KB request-line ceiling — so the request
+  itself may not even land.
+- `useGeoPicker` now exposes a section-level `tooMany` computed that
+  flips `true` above `RENDER_THRESHOLD = 500` visible items.
+  `ZipSetter`'s three section templates render an orange
+  "{n} items — too many to list; narrow with the filter or use Select
+  all" message in that branch instead of the checkbox grid. Filter
+  input + Select-all checkbox stay visible so the user can scope down
+  or bulk-select without mounting the full grid.
+- Tuned for the dev DB (51 states / 3,143 counties / 31,734 zips):
+  500 keeps every state visible by default; the County section hits
+  the cap once the user picks several states broadly; the Zip section
+  hits it almost any time the County selection is wide. Selection
+  state (`selected`, `allSelected`, `someSelected`, `toggleAll`) is
+  unchanged — only rendering is suppressed.
+- New `zipSetter.tooMany` i18n key translated across all 9 locales.
+- Tests: new "tooMany flips true above 500" composable case using 501
+  synthetic states plus a filter-narrows-back assertion. **34 / 34
+  vitest passing**; `vue-tsc --noEmit` clean.
+
+**Commit:** `ce76107`
+
+---
+
 ## 2026-06-21 — ZipSetter UX findings + email zipcode formatting + DC label
 
 **Requested:**
