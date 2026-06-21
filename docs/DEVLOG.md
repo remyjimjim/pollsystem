@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-06-21 — Expose RoleAuthCache stats at /actuator/rolecache
+
+**Requested:**
+
+> expose cache stats via actuator
+
+**Changed:**
+
+- Added `spring-boot-starter-actuator`.
+- New `RoleAuthCacheEndpoint` (`@Endpoint(id = "rolecache")`) with
+  both `@ReadOperation` (snapshot of both caches: size, hit count,
+  miss count, hit rate, load success/failure, average load penalty
+  in ns, eviction count) and `@DeleteOperation` (manually
+  invalidates the authorizations cache for cold-start profiling).
+- `RoleAuthCache.snapshot()` returns a stable `Snapshot` /
+  `Section` data class shape so the JSON wire format doesn't leak
+  Caffeine's internal types.
+- `application.yml` exposes only `health,rolecache` from the
+  actuator surface — opt-in per name so adding a new endpoint is a
+  deliberate two-line change (exposure list + security decision).
+- `SecurityConfig` permits `/actuator/health` publicly (liveness
+  probes) and restricts the rest of `/actuator/**` to SUPER role.
+- Gotcha noted in the endpoint's class-level KDoc: Kotlin nests
+  block comments, so writing the actuator glob with two trailing
+  stars inside a `/** ... */` re-opens the doc comment as nested
+  and Kotlin can't find a closing `*/` before EOF.
+- Verified: **184 / 184 backend tests passing**. Live actuator
+  smoke test deferred to next bootRun — Spring Boot DevTools'
+  restart classloader can't pick up new dependency JARs (they
+  land on the base classloader), so the running bootRun needs a
+  full restart before `/actuator/rolecache` is reachable.
+
+**Commit:** `da1bcc7`
+
+---
+
 ## 2026-06-21 — In-process RoleAuthCache for hot role_assignments reads
 
 **Requested:**
