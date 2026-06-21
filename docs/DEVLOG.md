@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-06-20 — Install vue-i18n globally for vitest
+
+**Requested:**
+
+> run the tests
+
+**Changed:**
+
+- `frontend/vitest.setup.ts` now registers a minimal en-only
+  `createI18n` instance on `@vue/test-utils`' `config.global.plugins`.
+  Without it, any test that mounts a component using `useI18n()` or
+  `{{ $t() }}` blew up with `"Need to install with \`app.use\`
+  function"` — a pre-existing infrastructure gap that pre-dated this
+  session's frontend changes (`LoginView.spec.ts` and
+  `ZipSetter.spec.ts` were both failing on `npm test` before the
+  refactor).
+- `missingWarn` / `fallbackWarn` silenced so an unrelated translation
+  gap can't break an unrelated test.
+- Frontend suite now: **25/25 passing** (was 18/25).
+- Backend suite was not exercised this run — `./gradlew test`
+  invocations queued silently behind the `./gradlew -t compileKotlin`
+  daemon that `scripts/pollsystem.watchall.bash` keeps open. None of
+  the changes covered by this entry touch the backend, so the gap
+  isn't load-bearing for the current commits.
+
+**Commit:** `56003d9`
+
+---
+
 ## 2026-06-20 — Convention: Geographic scope fieldset first
 
 **Requested:**
