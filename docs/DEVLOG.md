@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-06-21 — Raise Tomcat request-line limit to 64KB
+
+**Requested:**
+
+> when I select all states then select all counties then unselect all
+> the counties that start with 'c' then expand the zipcodes drawer I
+> get 'Failed to load zipcodes' error message
+
+**Changed:**
+
+- Diagnosed: the cascade hits
+  `/api/zipcodes?county_ids=1,2,…,3000` with ~15KB of query string
+  even after the user drops C-prefixed counties. Tomcat's default
+  `max-http-request-header-size: 8KB` (covers request line + headers)
+  rejects the request with a connection-reset before it reaches the
+  controller — surfaced in the UI as "Failed to load zipcodes".
+- `application.yml` now sets `server.max-http-request-header-size:
+  64KB`. Covers the worst case for the seeded dev DB (3,143 counties)
+  with comfortable headroom.
+- TODO comment in `application.yml` flags the proper structural fix:
+  convert `/api/zipcodes` and `/api/counties` to POST + JSON body
+  before any production deploy. URLs that long aren't routable
+  through every CDN / proxy, and the limit bump is dev-symptom relief,
+  not a long-term answer.
+
+**Commit:** `52bb4ee`
+
+---
+
 ## 2026-06-21 — Cap ZipSetter section rendering at 500 items
 
 **Requested:**
