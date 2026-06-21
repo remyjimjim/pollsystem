@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch, watchEffect } from 'vue'
-import axios from 'axios'
-import { useI18n } from 'vue-i18n'
-import type { State, County, CountyZip } from '@/types'
-
-const { t } = useI18n()
+import { watch } from 'vue'
+import { useGeoPicker } from '@/composables/useGeoPicker'
 
 const props = defineProps<{
   modelValue: string[]
@@ -15,317 +11,31 @@ const emit = defineEmits<{
   (e: 'update:total', total: number): void
 }>()
 
-const states = ref<State[]>([])
-const counties = ref<County[]>([])
-const zips = ref<CountyZip[]>([])
+// Headless logic lives in useGeoPicker — fetches, selection state,
+// filter logic, Select-all + indeterminate, and keystroke shortcuts. This
+// shell binds the picker to ZipSetter's inline <details> presentation.
+const { states, counties, zips, error } = useGeoPicker()
 
-const selectedStateIds = ref<number[]>([])
-const selectedCountyIds = ref<number[]>([])
-const selectedZipcodes = ref<string[]>([...props.modelValue])
+// Seed the zip selection from the incoming modelValue so a parent form
+// resuming an existing draft pre-checks the right zipcodes.
+zips.selected.value = [...props.modelValue]
 
-const loadingStates = ref(false)
-const loadingCounties = ref(false)
-const loadingZips = ref(false)
-const error = ref<string | null>(null)
-
-// Alphanumeric prefix filters (local). States/counties/zips are pre-loaded
-// for the current scope; we narrow the visible list in-memory.
-const stateFilter = ref('')
-const countyFilter = ref('')
-const zipFilter = ref('')
-
-async function loadStates() {
-  loadingStates.value = true
-  error.value = null
-  try {
-    const res = await axios.get<State[]>('/api/states')
-    states.value = res.data
-  } catch {
-    error.value = t('zipSetter.loadStatesFailed')
-  } finally {
-    loadingStates.value = false
-  }
-}
-
-async function loadCounties(stateIds: number[]) {
-  loadingCounties.value = true
-  error.value = null
-  counties.value = []
-  zips.value = []
-  selectedCountyIds.value = []
-  countyFilter.value = ''
-  zipFilter.value = ''
-  if (stateIds.length === 0) {
-    loadingCounties.value = false
-    return
-  }
-  try {
-    // Backend GeographyController binds state_id as List<Long>, so a
-    // comma-separated value covers the multi-state case in one round-trip.
-    const res = await axios.get<County[]>('/api/counties', {
-      params: { state_id: stateIds.join(',') }
-    })
-    counties.value = res.data
-  } catch {
-    error.value = t('zipSetter.loadCountiesFailed')
-  } finally {
-    loadingCounties.value = false
-  }
-}
-
-async function loadZips(countyIds: number[]) {
-  if (countyIds.length === 0) {
-    zips.value = []
-    zipFilter.value = ''
-    return
-  }
-  loadingZips.value = true
-  error.value = null
-  zipFilter.value = ''
-  try {
-    const res = await axios.get<CountyZip[]>('/api/zipcodes', {
-      params: { county_ids: countyIds.join(',') }
-    })
-    zips.value = res.data
-    selectedZipcodes.value = selectedZipcodes.value.filter(z =>
-      res.data.some(cz => cz.zipcode === z)
-    )
-  } catch {
-    error.value = t('zipSetter.loadZipcodesFailed')
-  } finally {
-    loadingZips.value = false
-  }
-}
-
-const displayedStates = computed(() => {
-  const prefix = stateFilter.value.trim().toLowerCase()
-  if (prefix === '') return states.value
-  return states.value.filter(s =>
-    s.name.toLowerCase().startsWith(prefix) ||
-    s.initial.toLowerCase().startsWith(prefix)
-  )
-})
-
-const displayedCounties = computed(() => {
-  const prefix = countyFilter.value.trim().toLowerCase()
-  if (prefix === '') return counties.value
-  return counties.value.filter(c => c.name.toLowerCase().startsWith(prefix))
-})
-
-const displayedZips = computed(() => {
-  const prefix = zipFilter.value.trim()
-  if (prefix === '') return zips.value
-  return zips.value.filter(z => z.zipcode.startsWith(prefix))
-})
-
-// Select-all toggles act on the currently VISIBLE list (post-filter)
-// so a typed prefix scopes what gets checked / unchecked. Selections
-// outside the filter window are preserved across toggles.
-const selectAllStatesRef = ref<HTMLInputElement | null>(null)
-const allStatesSelected = computed(() =>
-  displayedStates.value.length > 0 &&
-  displayedStates.value.every(s => selectedStateIds.value.includes(s.id))
-)
-const someStatesSelected = computed(() => {
-  const visible = displayedStates.value
-  if (visible.length === 0) return false
-  const n = visible.filter(s => selectedStateIds.value.includes(s.id)).length
-  return n > 0 && n < visible.length
-})
-watchEffect(() => {
-  if (selectAllStatesRef.value) {
-    selectAllStatesRef.value.indeterminate = someStatesSelected.value
-  }
-})
-function toggleAllStates() {
-  const visibleIds = displayedStates.value.map(s => s.id)
-  if (allStatesSelected.value) {
-    const drop = new Set(visibleIds)
-    selectedStateIds.value = selectedStateIds.value.filter(id => !drop.has(id))
-  } else {
-    selectedStateIds.value = Array.from(
-      new Set([...selectedStateIds.value, ...visibleIds])
-    )
-  }
-}
-
-const selectAllCountiesRef = ref<HTMLInputElement | null>(null)
-const allCountiesSelected = computed(() =>
-  displayedCounties.value.length > 0 &&
-  displayedCounties.value.every(c => selectedCountyIds.value.includes(c.id))
-)
-const someCountiesSelected = computed(() => {
-  const visible = displayedCounties.value
-  if (visible.length === 0) return false
-  const n = visible.filter(c => selectedCountyIds.value.includes(c.id)).length
-  return n > 0 && n < visible.length
-})
-watchEffect(() => {
-  if (selectAllCountiesRef.value) {
-    selectAllCountiesRef.value.indeterminate = someCountiesSelected.value
-  }
-})
-
-function toggleAllCounties() {
-  const visibleIds = displayedCounties.value.map(c => c.id)
-  if (allCountiesSelected.value) {
-    const drop = new Set(visibleIds)
-    selectedCountyIds.value = selectedCountyIds.value.filter(id => !drop.has(id))
-  } else {
-    selectedCountyIds.value = Array.from(
-      new Set([...selectedCountyIds.value, ...visibleIds])
-    )
-  }
-}
-
-const selectAllZipsRef = ref<HTMLInputElement | null>(null)
-const allZipcodesSelected = computed(() =>
-  displayedZips.value.length > 0 &&
-  displayedZips.value.every(z => selectedZipcodes.value.includes(z.zipcode))
-)
-const someZipsSelected = computed(() => {
-  const visible = displayedZips.value
-  if (visible.length === 0) return false
-  const n = visible.filter(z => selectedZipcodes.value.includes(z.zipcode)).length
-  return n > 0 && n < visible.length
-})
-watchEffect(() => {
-  if (selectAllZipsRef.value) {
-    selectAllZipsRef.value.indeterminate = someZipsSelected.value
-  }
-})
-
-function toggleAllZipcodes() {
-  const visibleCodes = displayedZips.value.map(z => z.zipcode)
-  if (allZipcodesSelected.value) {
-    const drop = new Set(visibleCodes)
-    selectedZipcodes.value = selectedZipcodes.value.filter(z => !drop.has(z))
-  } else {
-    selectedZipcodes.value = Array.from(
-      new Set([...selectedZipcodes.value, ...visibleCodes])
-    )
-  }
-}
-
-// Section-level keydown shortcuts (bound on each <details>, so they fire
-// no matter which child has focus — input, checkbox, or summary):
-//   Enter / Escape          → clear the filter, return to the full list
-//                             (preserves every checkbox change just made)
-//   Ctrl/Cmd-A    or Shift-*→ add every visible item to the selection
-//   Ctrl/Cmd-Shift-A or Sh-)→ remove every visible item from the selection
-// Selections are additive/subtractive against the existing set, so a typed
-// prefix never wipes choices made outside the current filter window. Enter
-// stops propagation as well as preventing default — the component embeds
-// inside <form> elements (creator/admin request) where implicit submission
-// would otherwise fire on Enter.
-function onStateFilterKeydown(e: KeyboardEvent) {
-  if (e.key === 'Enter' || e.key === 'Escape') {
-    e.preventDefault()
-    e.stopPropagation()
-    stateFilter.value = ''
-    return
-  }
-  const ctrlOrCmd = e.ctrlKey || e.metaKey
-  const isA = e.key.toLowerCase() === 'a'
-  const isSelectAll = e.key === '*'
-    || (e.shiftKey && e.code === 'Digit8')
-    || (ctrlOrCmd && !e.shiftKey && isA)
-  const isDeselectAll = e.key === ')'
-    || (e.shiftKey && e.code === 'Digit0')
-    || (ctrlOrCmd && e.shiftKey && isA)
-  if (isSelectAll) {
-    e.preventDefault()
-    const visibleIds = displayedStates.value.map(s => s.id)
-    selectedStateIds.value = Array.from(
-      new Set([...selectedStateIds.value, ...visibleIds])
-    )
-  } else if (isDeselectAll) {
-    e.preventDefault()
-    const drop = new Set(displayedStates.value.map(s => s.id))
-    selectedStateIds.value = selectedStateIds.value.filter(id => !drop.has(id))
-  }
-}
-function onCountyFilterKeydown(e: KeyboardEvent) {
-  if (e.key === 'Enter' || e.key === 'Escape') {
-    e.preventDefault()
-    e.stopPropagation()
-    countyFilter.value = ''
-    return
-  }
-  const ctrlOrCmd = e.ctrlKey || e.metaKey
-  const isA = e.key.toLowerCase() === 'a'
-  const isSelectAll = e.key === '*'
-    || (e.shiftKey && e.code === 'Digit8')
-    || (ctrlOrCmd && !e.shiftKey && isA)
-  const isDeselectAll = e.key === ')'
-    || (e.shiftKey && e.code === 'Digit0')
-    || (ctrlOrCmd && e.shiftKey && isA)
-  if (isSelectAll) {
-    e.preventDefault()
-    const visibleIds = displayedCounties.value.map(c => c.id)
-    selectedCountyIds.value = Array.from(
-      new Set([...selectedCountyIds.value, ...visibleIds])
-    )
-  } else if (isDeselectAll) {
-    e.preventDefault()
-    const drop = new Set(displayedCounties.value.map(c => c.id))
-    selectedCountyIds.value = selectedCountyIds.value.filter(id => !drop.has(id))
-  }
-}
-function onZipFilterKeydown(e: KeyboardEvent) {
-  if (e.key === 'Enter' || e.key === 'Escape') {
-    e.preventDefault()
-    e.stopPropagation()
-    zipFilter.value = ''
-    return
-  }
-  const ctrlOrCmd = e.ctrlKey || e.metaKey
-  const isA = e.key.toLowerCase() === 'a'
-  const isSelectAll = e.key === '*'
-    || (e.shiftKey && e.code === 'Digit8')
-    || (ctrlOrCmd && !e.shiftKey && isA)
-  const isDeselectAll = e.key === ')'
-    || (e.shiftKey && e.code === 'Digit0')
-    || (ctrlOrCmd && e.shiftKey && isA)
-  if (isSelectAll) {
-    e.preventDefault()
-    const visibleCodes = displayedZips.value.map(z => z.zipcode)
-    selectedZipcodes.value = Array.from(
-      new Set([...selectedZipcodes.value, ...visibleCodes])
-    )
-  } else if (isDeselectAll) {
-    e.preventDefault()
-    const drop = new Set(displayedZips.value.map(z => z.zipcode))
-    selectedZipcodes.value = selectedZipcodes.value.filter(z => !drop.has(z))
-  }
-}
-
-watch(selectedStateIds, (ids) => {
-  loadCounties(ids)
-}, { deep: true })
-
-watch(selectedCountyIds, (ids) => {
-  loadZips(ids)
-}, { deep: true })
-
-watch(selectedZipcodes, (z) => {
+watch(zips.selected, (z) => {
   emit('update:modelValue', [...z])
 }, { deep: true })
 
-// Expose how many zipcodes are currently available in the visible list
-// so parents that summarize the selection know when "All" applies.
-watch(zips, (list) => {
+// Tell the parent how many zips are currently visible so summaries
+// ("All N selected") know when to apply.
+watch(zips.items, (list) => {
   emit('update:total', list.length)
 }, { deep: true, immediate: true })
-
-loadStates()
 </script>
 
 <template>
   <div data-component="zipsetter" class="flex flex-col gap-4">
     <details
       open
-      @keydown="onStateFilterKeydown"
+      @keydown="states.onFilterKeydown"
       class="group rounded-md border border-slate-200 [&_summary::-webkit-details-marker]:hidden"
     >
       <summary
@@ -341,50 +51,50 @@ loadStates()
             <path fill="currentColor" d="M5.25 7.5 10 12.25 14.75 7.5z" />
           </svg>
           <span class="text-sm font-semibold text-slate-700">
-            {{ $t('zipSetter.state') }}<template v-if="!loadingStates && states.length > 0">
+            {{ $t('zipSetter.state') }}<template v-if="!states.loading.value && states.items.value.length > 0">
               <span class="ml-1 text-xs font-normal text-slate-500">
-                {{ $t('zipSetter.selectedCount', { selected: selectedStateIds.length, total: states.length }) }}
+                {{ $t('zipSetter.selectedCount', { selected: states.selected.value.length, total: states.items.value.length }) }}
               </span>
             </template>
           </span>
         </div>
         <label
-          v-if="!loadingStates && states.length > 0"
+          v-if="!states.loading.value && states.items.value.length > 0"
           class="flex items-center gap-2 text-xs text-slate-600"
           @click.stop
         >
           <input
-            ref="selectAllStatesRef"
+            :ref="el => states.selectAllRef.value = el as HTMLInputElement | null"
             type="checkbox"
-            :checked="allStatesSelected"
-            @change="toggleAllStates"
+            :checked="states.allSelected.value"
+            @change="states.toggleAll"
           />
-          {{ $t('zipSetter.selectAll', { total: displayedStates.length }) }}
+          {{ $t('zipSetter.selectAll', { total: states.displayed.value.length }) }}
         </label>
       </summary>
       <div class="flex flex-col gap-2 border-t border-slate-200 p-3">
-        <p v-if="loadingStates" class="m-0 text-sm text-slate-500">{{ $t('common.loading') }}</p>
-        <p v-else-if="states.length === 0" class="m-0 text-sm text-slate-500">
+        <p v-if="states.loading.value" class="m-0 text-sm text-slate-500">{{ $t('common.loading') }}</p>
+        <p v-else-if="states.items.value.length === 0" class="m-0 text-sm text-slate-500">
           {{ $t('zipSetter.selectState') }}
         </p>
         <template v-else>
           <input
-            v-model="stateFilter"
+            v-model="states.filter.value"
             type="text"
             autocomplete="off"
             :placeholder="$t('search.filters.countyFilter')"
             class="rounded border border-slate-300 p-1.5 text-sm focus:border-slate-500 focus:outline-none"
           />
           <p
-            v-if="displayedStates.length === 0"
+            v-if="states.displayed.value.length === 0"
             class="m-0 text-sm text-slate-500"
           >{{ $t('search.filters.countyNoMatches') }}</p>
           <div
             v-else
             class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"
           >
-            <label v-for="s in displayedStates" :key="s.id" class="flex items-center gap-2 text-sm text-slate-700">
-              <input type="checkbox" :value="s.id" v-model="selectedStateIds" />
+            <label v-for="s in states.displayed.value" :key="s.id" class="flex items-center gap-2 text-sm text-slate-700">
+              <input type="checkbox" :value="s.id" v-model="states.selected.value" />
               {{ s.name }} ({{ s.initial }})
             </label>
           </div>
@@ -393,9 +103,9 @@ loadStates()
     </details>
 
     <details
-      v-if="selectedStateIds.length > 0"
+      v-if="states.selected.value.length > 0"
       open
-      @keydown="onCountyFilterKeydown"
+      @keydown="counties.onFilterKeydown"
       class="group rounded-md border border-slate-200 [&_summary::-webkit-details-marker]:hidden"
     >
       <summary
@@ -411,53 +121,53 @@ loadStates()
             <path fill="currentColor" d="M5.25 7.5 10 12.25 14.75 7.5z" />
           </svg>
           <span class="text-sm font-semibold text-slate-700">
-            {{ $t('zipSetter.counties') }}<template v-if="!loadingCounties && counties.length > 0">
+            {{ $t('zipSetter.counties') }}<template v-if="!counties.loading.value && counties.items.value.length > 0">
               <span class="ml-1 text-xs font-normal text-slate-500">
-                {{ $t('zipSetter.selectedCount', { selected: selectedCountyIds.length, total: counties.length }) }}
+                {{ $t('zipSetter.selectedCount', { selected: counties.selected.value.length, total: counties.items.value.length }) }}
               </span>
             </template>
           </span>
         </div>
         <label
-          v-if="!loadingCounties && counties.length > 0"
+          v-if="!counties.loading.value && counties.items.value.length > 0"
           class="flex items-center gap-2 text-xs text-slate-600"
           @click.stop
         >
           <input
-            ref="selectAllCountiesRef"
+            :ref="el => counties.selectAllRef.value = el as HTMLInputElement | null"
             type="checkbox"
-            :checked="allCountiesSelected"
-            @change="toggleAllCounties"
+            :checked="counties.allSelected.value"
+            @change="counties.toggleAll"
           />
-          {{ $t('zipSetter.selectAll', { total: displayedCounties.length }) }}
+          {{ $t('zipSetter.selectAll', { total: counties.displayed.value.length }) }}
         </label>
       </summary>
       <div class="flex flex-col gap-2 border-t border-slate-200 p-3">
-        <p v-if="loadingCounties" class="m-0 text-sm text-slate-500">{{ $t('common.loading') }}</p>
+        <p v-if="counties.loading.value" class="m-0 text-sm text-slate-500">{{ $t('common.loading') }}</p>
         <div
-          v-else-if="counties.length === 0"
+          v-else-if="counties.items.value.length === 0"
           class="rounded-md border border-orange-400 bg-orange-50 p-3 text-sm text-orange-900"
         >
           {{ $t('zipSetter.noCountiesSeeded') }}
         </div>
         <template v-else>
           <input
-            v-model="countyFilter"
+            v-model="counties.filter.value"
             type="text"
             autocomplete="off"
             :placeholder="$t('search.filters.countyFilter')"
             class="rounded border border-slate-300 p-1.5 text-sm focus:border-slate-500 focus:outline-none"
           />
           <p
-            v-if="displayedCounties.length === 0"
+            v-if="counties.displayed.value.length === 0"
             class="m-0 text-sm text-slate-500"
           >{{ $t('search.filters.countyNoMatches') }}</p>
           <div
             v-else
             class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"
           >
-            <label v-for="c in displayedCounties" :key="c.id" class="flex items-center gap-2 text-sm text-slate-700">
-              <input type="checkbox" :value="c.id" v-model="selectedCountyIds" />
+            <label v-for="c in counties.displayed.value" :key="c.id" class="flex items-center gap-2 text-sm text-slate-700">
+              <input type="checkbox" :value="c.id" v-model="counties.selected.value" />
               {{ c.name }}
             </label>
           </div>
@@ -466,9 +176,9 @@ loadStates()
     </details>
 
     <details
-      v-if="selectedCountyIds.length > 0"
+      v-if="counties.selected.value.length > 0"
       open
-      @keydown="onZipFilterKeydown"
+      @keydown="zips.onFilterKeydown"
       class="group rounded-md border border-slate-200 [&_summary::-webkit-details-marker]:hidden"
     >
       <summary
@@ -484,35 +194,35 @@ loadStates()
             <path fill="currentColor" d="M5.25 7.5 10 12.25 14.75 7.5z" />
           </svg>
           <span class="text-sm font-semibold text-slate-700">
-            {{ $t('zipSetter.zipcodes') }}<template v-if="!loadingZips && zips.length > 0">
+            {{ $t('zipSetter.zipcodes') }}<template v-if="!zips.loading.value && zips.items.value.length > 0">
               <span class="ml-1 text-xs font-normal text-slate-500">
-                {{ $t('zipSetter.selectedCount', { selected: selectedZipcodes.length, total: zips.length }) }}
+                {{ $t('zipSetter.selectedCount', { selected: zips.selected.value.length, total: zips.items.value.length }) }}
               </span>
             </template>
           </span>
         </div>
         <label
-          v-if="!loadingZips && zips.length > 0"
+          v-if="!zips.loading.value && zips.items.value.length > 0"
           class="flex items-center gap-2 text-xs text-slate-600"
           @click.stop
         >
           <input
-            ref="selectAllZipsRef"
+            :ref="el => zips.selectAllRef.value = el as HTMLInputElement | null"
             type="checkbox"
-            :checked="allZipcodesSelected"
-            @change="toggleAllZipcodes"
+            :checked="zips.allSelected.value"
+            @change="zips.toggleAll"
           />
-          {{ $t('zipSetter.selectAll', { total: displayedZips.length }) }}
+          {{ $t('zipSetter.selectAll', { total: zips.displayed.value.length }) }}
         </label>
       </summary>
       <div class="flex flex-col gap-2 border-t border-slate-200 p-3">
-        <p v-if="loadingZips" class="m-0 text-sm text-slate-500">{{ $t('common.loading') }}</p>
-        <p v-else-if="zips.length === 0" class="m-0 text-sm text-slate-500">
+        <p v-if="zips.loading.value" class="m-0 text-sm text-slate-500">{{ $t('common.loading') }}</p>
+        <p v-else-if="zips.items.value.length === 0" class="m-0 text-sm text-slate-500">
           {{ $t('zipSetter.noZipcodesAvailable') }}
         </p>
         <template v-else>
           <input
-            v-model="zipFilter"
+            v-model="zips.filter.value"
             type="text"
             inputmode="numeric"
             maxlength="5"
@@ -521,15 +231,15 @@ loadStates()
             class="rounded border border-slate-300 p-1.5 text-sm font-mono focus:border-slate-500 focus:outline-none"
           />
           <p
-            v-if="displayedZips.length === 0"
+            v-if="zips.displayed.value.length === 0"
             class="m-0 text-sm text-slate-500"
           >{{ $t('search.filters.zipcodeNone') }}</p>
           <div
             v-else
             class="grid gap-1 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))]"
           >
-            <label v-for="z in displayedZips" :key="z.id" class="flex items-center gap-2 text-sm text-slate-700">
-              <input type="checkbox" :value="z.zipcode" v-model="selectedZipcodes" />
+            <label v-for="z in zips.displayed.value" :key="z.id" class="flex items-center gap-2 text-sm text-slate-700">
+              <input type="checkbox" :value="z.zipcode" v-model="zips.selected.value" />
               {{ z.zipcode }}
             </label>
           </div>
