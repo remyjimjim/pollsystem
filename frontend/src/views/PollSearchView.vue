@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, ref, watch, watchEffect } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { useGeoPicker } from '@/composables/useGeoPicker'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -22,8 +23,9 @@ interface SearchSuggestions {
   titles: string[]
   candidates: string[]
 }
-interface StateRow { id: number; name: string; initial: string }
-interface CountyRow { id: number; stateId: number; name: string }
+// State and county row types come from the useGeoPicker composable
+// directly now — the only one this view still constructs by hand is
+// CountyZipRow, used by loadZipcodesByState's POST response binding.
 interface CountyZipRow { id: number; countyId: number; zipcode: string }
 
 // Which row's "extra zipcodes" popover is open. null = closed.
@@ -74,263 +76,70 @@ async function loadSuggestions() {
   }
 }
 
-// Geography cascade. Selections in state + county narrow the zipcode
-// dropdown; only the chosen zipcode is sent as a search param.
-const states = ref<StateRow[]>([])
-const counties = ref<CountyRow[]>([])
-const zipcodeOptions = ref<CountyZipRow[]>([])
-const selectedStateIds = ref<number[]>([])
+// Geography cascade. Shared logic (loadStates, loadCounties, loadZips,
+// per-section displayed/selected/filter refs, Select-all + indeterminate,
+// keystroke shortcuts, tooMany render-cap) lives in useGeoPicker. This
+// view's wiring keeps the popup-dropdown UX (open/closed state, summary
+// labels, shift-click ranges) and the PollSearch-specific quirk of
+// auto-loading zips by state when no county is picked yet.
+//
+// enablePrefixSearch: true → typing in the County/Zip filter without a
+// state context does a debounced prefix lookup against /api/counties or
+// /api/zipcodes, populating items in-place.
+const { states, counties, zips } = useGeoPicker({ enablePrefixSearch: true })
+
 const lastClickedStateIndex = ref<number | null>(null)
-const selectAllStatesRef = ref<HTMLInputElement | null>(null)
-
-const allStatesSelected = computed(() =>
-  states.value.length > 0 && selectedStateIds.value.length === states.value.length
-)
-const someStatesSelected = computed(() =>
-  selectedStateIds.value.length > 0 && selectedStateIds.value.length < states.value.length
-)
-// Native checkbox indeterminate is a JS property — not bindable via :attr.
-// watchEffect (rather than watch+immediate) so the indeterminate flag
-// re-applies when the dropdown closes/reopens and the template ref
-// gets re-mounted.
-watchEffect(() => {
-  if (selectAllStatesRef.value) {
-    selectAllStatesRef.value.indeterminate = someStatesSelected.value
-  }
-})
-
-function toggleAllStates() {
-  selectedStateIds.value = allStatesSelected.value
-    ? []
-    : states.value.map(s => s.id)
-  lastClickedStateIndex.value = null
-  onStateChange()
-}
-const selectedCountyIds = ref<number[]>([])
 const lastClickedCountyIndex = ref<number | null>(null)
+const lastClickedZipIndex = ref<number | null>(null)
 
-async function loadStates() {
-  try {
-    const res = await axios.get<StateRow[]>('/api/states')
-    states.value = res.data
-  } catch {
-    // Cascade is geography UX scaffolding; failures shouldn't block search.
-  }
-}
-async function loadCounties(stateIds: number[]) {
-  try {
-    const res = await axios.get<CountyRow[]>('/api/counties', {
-      params: { state_id: stateIds.join(',') }
-    })
-    counties.value = res.data
-  } catch {
-    counties.value = []
-  }
-}
-async function loadZipcodesByCounty(countyIds: number[]) {
-  try {
-    const res = await axios.post<CountyZipRow[]>('/api/zipcodes', { countyIds })
-    zipcodeOptions.value = res.data
-  } catch {
-    zipcodeOptions.value = []
-  }
-}
 async function loadZipcodesByState(stateIds: number[]) {
   try {
     const res = await axios.post<CountyZipRow[]>('/api/zipcodes', { stateIds })
-    zipcodeOptions.value = res.data
+    zips.items.value = res.data
   } catch {
-    zipcodeOptions.value = []
-  }
-}
-async function loadZipcodesByPrefix(prefix: string) {
-  try {
-    const res = await axios.post<CountyZipRow[]>('/api/zipcodes', { prefix })
-    zipcodeOptions.value = res.data
-  } catch {
-    zipcodeOptions.value = []
+    zips.items.value = []
   }
 }
 
-// User-typed county-search input. Drives a debounced prefix lookup
-// when no state is selected; when a state is selected, narrows the
-// already-loaded county list locally.
-const countyFilter = ref('')
-let countyFilterTimer: ReturnType<typeof setTimeout> | null = null
-async function loadCountiesByPrefix(prefix: string) {
-  try {
-    const res = await axios.get<CountyRow[]>('/api/counties', { params: { prefix } })
-    counties.value = res.data
-  } catch {
-    counties.value = []
-  }
-}
-watch(countyFilter, (newVal) => {
-  if (selectedStateIds.value.length > 0) return // state context: local filter only
-  if (countyFilterTimer) clearTimeout(countyFilterTimer)
-  const trimmed = newVal.trim()
-  if (trimmed === '') {
-    counties.value = []
+// "Auto-load zips by state when no county is picked" — useGeoPicker only
+// fetches zips when COUNTIES change. PollSearch wants the zip dropdown
+// populated immediately on state selection so the user can filter zip
+// codes without first picking a county. Derived key avoids double-firing
+// when a state change cascades into a county reset in the same tick.
+const stateZipQueryKey = computed(() => {
+  if (counties.selected.value.length > 0) return '' // county-mode: composable handles
+  if (states.selected.value.length === 0) return '' // empty-mode: composable handles
+  return states.selected.value.slice().sort((a, b) => a - b).join(',')
+})
+watch(stateZipQueryKey, async (key, prev) => {
+  if (key === '') {
+    // Falling out of state-mode (cleared, or counties just got picked).
+    // Composable's loadZips handles county-mode; on full clear, force [].
+    if (prev !== '' && states.selected.value.length === 0) {
+      zips.items.value = []
+    }
     return
   }
-  countyFilterTimer = setTimeout(() => loadCountiesByPrefix(trimmed), 200)
-})
-const displayedCounties = computed<CountyRow[]>(() => {
-  // When a state is selected, counties are pre-loaded and we filter
-  // locally. With no state the list comes from prefix-search already.
-  if (selectedStateIds.value.length === 0) return counties.value
-  const prefix = countyFilter.value.trim().toLowerCase()
-  if (prefix === '') return counties.value
-  return counties.value.filter(c => c.name.toLowerCase().startsWith(prefix))
+  if (key !== prev) await loadZipcodesByState(states.selected.value)
 })
 
-// User-typed zipcode-search input. Drives a debounced prefix lookup
-// when no state is selected; when a state is selected, narrows the
-// already-loaded state/county list locally.
-const zipFilter = ref('')
-let zipFilterTimer: ReturnType<typeof setTimeout> | null = null
-watch(zipFilter, (newVal) => {
-  if (selectedStateIds.value.length > 0) return // state context: local filter only
-  if (zipFilterTimer) clearTimeout(zipFilterTimer)
-  const trimmed = newVal.trim()
-  if (trimmed === '') {
-    zipcodeOptions.value = []
-    return
-  }
-  zipFilterTimer = setTimeout(() => loadZipcodesByPrefix(trimmed), 200)
-})
-
-const displayedZipcodes = computed<CountyZipRow[]>(() => {
-  const prefix = zipFilter.value.trim()
-  if (prefix === '') return zipcodeOptions.value
-  return zipcodeOptions.value.filter(z => z.zipcode.startsWith(prefix))
-})
-
-// Select-all wiring for counties and zips. Both target the currently
-// VISIBLE list (post-filter), so the toggle only adds/removes what the
-// user can see. Existing selections outside the visible window are
-// preserved when collapsing the filter.
-const selectAllCountiesRef = ref<HTMLInputElement | null>(null)
-const allCountiesSelected = computed(() =>
-  displayedCounties.value.length > 0 &&
-  displayedCounties.value.every(c => selectedCountyIds.value.includes(c.id))
-)
-const someCountiesSelected = computed(() => {
-  const visible = displayedCounties.value
-  if (visible.length === 0) return false
-  const checked = visible.filter(c => selectedCountyIds.value.includes(c.id)).length
-  return checked > 0 && checked < visible.length
-})
-watchEffect(() => {
-  if (selectAllCountiesRef.value) {
-    selectAllCountiesRef.value.indeterminate = someCountiesSelected.value
-  }
-})
-function toggleAllCounties() {
-  const visibleIds = displayedCounties.value.map(c => c.id)
-  if (allCountiesSelected.value) {
-    const drop = new Set(visibleIds)
-    selectedCountyIds.value = selectedCountyIds.value.filter(id => !drop.has(id))
-  } else {
-    selectedCountyIds.value = Array.from(new Set([...selectedCountyIds.value, ...visibleIds]))
-  }
+// PollSearchView clears the zip selection on any state/county change
+// (filter-bar UX, not authoring). Also resets shift-click anchors so
+// the next click starts a fresh range.
+watch(states.selected, () => {
+  zips.selected.value = []
   lastClickedCountyIndex.value = null
-  onCountyChange()
-}
-
-const selectAllZipsRef = ref<HTMLInputElement | null>(null)
-const allZipsSelected = computed(() =>
-  displayedZipcodes.value.length > 0 &&
-  displayedZipcodes.value.every(z => selectedZipcodes.value.includes(z.zipcode))
-)
-const someZipsSelected = computed(() => {
-  const visible = displayedZipcodes.value
-  if (visible.length === 0) return false
-  const checked = visible.filter(z => selectedZipcodes.value.includes(z.zipcode)).length
-  return checked > 0 && checked < visible.length
-})
-watchEffect(() => {
-  if (selectAllZipsRef.value) {
-    selectAllZipsRef.value.indeterminate = someZipsSelected.value
-  }
-})
-function toggleAllZips() {
-  const visibleCodes = displayedZipcodes.value.map(z => z.zipcode)
-  if (allZipsSelected.value) {
-    const drop = new Set(visibleCodes)
-    selectedZipcodes.value = selectedZipcodes.value.filter(z => !drop.has(z))
-  } else {
-    selectedZipcodes.value = Array.from(new Set([...selectedZipcodes.value, ...visibleCodes]))
-  }
   lastClickedZipIndex.value = null
-}
-
-async function onStateChange() {
-  selectedCountyIds.value = []
-  lastClickedCountyIndex.value = null
-  selectedZipcodes.value = []
+}, { deep: true })
+watch(counties.selected, () => {
+  zips.selected.value = []
   lastClickedZipIndex.value = null
-  // Drop any leftover typeahead text. Otherwise it would keep filtering
-  // the state-set dropdown — e.g. typed "982" + picked Arizona = empty.
-  zipFilter.value = ''
-  countyFilter.value = ''
-  counties.value = []
-  zipcodeOptions.value = []
-  if (selectedStateIds.value.length > 0) {
-    await loadCounties(selectedStateIds.value)
-    // Populate zips across all chosen states; user can narrow further
-    // with a county or by ticking specific zips.
-    await loadZipcodesByState(selectedStateIds.value)
-  }
-}
-async function onCountyChange() {
-  selectedZipcodes.value = []
-  lastClickedZipIndex.value = null
-  if (selectedCountyIds.value.length > 0) {
-    await loadZipcodesByCounty(selectedCountyIds.value)
-  } else if (selectedStateIds.value.length > 0) {
-    // No counties ticked — fall back to the full state-set zip list.
-    await loadZipcodesByState(selectedStateIds.value)
-  } else {
-    zipcodeOptions.value = []
-  }
-}
-
-function onZipKeydown(e: KeyboardEvent) {
-  if (e.key === 'Enter' || e.key === 'Escape') {
-    e.preventDefault()
-    e.stopPropagation()
-    zipFilter.value = ''
-    return
-  }
-  const ctrlOrCmd = e.ctrlKey || e.metaKey
-  const isA = e.key.toLowerCase() === 'a'
-  const isSelectAll = e.key === '*'
-    || (e.shiftKey && e.code === 'Digit8')
-    || (ctrlOrCmd && !e.shiftKey && isA)
-  const isDeselectAll = e.key === ')'
-    || (e.shiftKey && e.code === 'Digit0')
-    || (ctrlOrCmd && e.shiftKey && isA)
-  if (isSelectAll) {
-    e.preventDefault()
-    const visibleCodes = displayedZipcodes.value.map(z => z.zipcode)
-    selectedZipcodes.value = Array.from(
-      new Set([...selectedZipcodes.value, ...visibleCodes])
-    )
-    lastClickedZipIndex.value = null
-  } else if (isDeselectAll) {
-    e.preventDefault()
-    const drop = new Set(displayedZipcodes.value.map(z => z.zipcode))
-    selectedZipcodes.value = selectedZipcodes.value.filter(z => !drop.has(z))
-    lastClickedZipIndex.value = null
-  }
-}
+}, { deep: true })
 
 onMounted(() => {
   document.addEventListener('click', onDocClick)
   document.addEventListener('keydown', onEsc)
   loadSuggestions()
-  loadStates()
 })
 onBeforeUnmount(() => {
   document.removeEventListener('click', onDocClick)
@@ -356,42 +165,39 @@ watch(() => filters.type, () => {
   if (!candidateFilterApplicable.value) filters.candidateName = ''
 })
 
-// Zipcode picker: user checks one or more zipcodes from the county's
-// list. Shift+click toggles a range from the last single click.
-const selectedZipcodes = ref<string[]>([])
-const lastClickedZipIndex = ref<number | null>(null)
-const zipPickerOpen = ref(false)
-
-const zipPickerSummary = computed<string>(() => {
-  if (selectedZipcodes.value.length === 1) return selectedZipcodes.value[0]
-  if (selectedZipcodes.value.length > 1) {
-    return t('search.filters.zipcodeNSelected', { n: selectedZipcodes.value.length })
-  }
-  return displayedZipcodes.value[0]?.zipcode ?? ''
-})
-
-// State + County picker open state (same dropdown-trigger UX as the
-// zipcode picker; State is multi-select with shift-click + */Shift+0,
-// County stays single-select).
+// Picker open state (popup-dropdown UX). Outside-click and Escape are
+// handled at the document level (onDocClick, onEsc above).
 const statePickerOpen = ref(false)
 const countyPickerOpen = ref(false)
+const zipPickerOpen = ref(false)
+
 const statePickerSummary = computed<string>(() => {
-  if (selectedStateIds.value.length === 0) return t('search.filters.stateAny')
-  if (selectedStateIds.value.length === 1) {
-    return states.value.find(s => s.id === selectedStateIds.value[0])?.name
+  if (states.selected.value.length === 0) return t('search.filters.stateAny')
+  if (states.selected.value.length === 1) {
+    return states.items.value.find(s => s.id === states.selected.value[0])?.name
       ?? t('search.filters.stateAny')
   }
-  return t('search.filters.stateNSelected', { n: selectedStateIds.value.length })
+  return t('search.filters.stateNSelected', { n: states.selected.value.length })
 })
 const countyPickerSummary = computed<string>(() => {
-  if (selectedCountyIds.value.length === 0) return t('search.filters.countyAny')
-  if (selectedCountyIds.value.length === 1) {
-    return counties.value.find(c => c.id === selectedCountyIds.value[0])?.name
+  if (counties.selected.value.length === 0) return t('search.filters.countyAny')
+  if (counties.selected.value.length === 1) {
+    return counties.items.value.find(c => c.id === counties.selected.value[0])?.name
       ?? t('search.filters.countyAny')
   }
-  return t('search.filters.countyNSelected', { n: selectedCountyIds.value.length })
+  return t('search.filters.countyNSelected', { n: counties.selected.value.length })
+})
+const zipPickerSummary = computed<string>(() => {
+  if (zips.selected.value.length === 1) return zips.selected.value[0]
+  if (zips.selected.value.length > 1) {
+    return t('search.filters.zipcodeNSelected', { n: zips.selected.value.length })
+  }
+  return zips.displayed.value[0]?.zipcode ?? ''
 })
 
+// Shift-click range handlers — PollSearch-specific UX the composable
+// doesn't cover. Each picker tracks the last single-click index so a
+// subsequent shift-click adds the contiguous slice between them.
 function onStateClick(e: MouseEvent, idx: number, id: number) {
   const target = e.target as HTMLInputElement
   const willBeChecked = target.checked
@@ -399,54 +205,23 @@ function onStateClick(e: MouseEvent, idx: number, id: number) {
     const a = lastClickedStateIndex.value
     const b = idx
     const [start, end] = a < b ? [a, b] : [b, a]
-    const rangeIds = states.value.slice(start, end + 1).map(s => s.id)
+    const rangeIds = states.displayed.value.slice(start, end + 1).map(s => s.id)
     if (willBeChecked) {
-      const merged = new Set([...selectedStateIds.value, ...rangeIds])
-      selectedStateIds.value = Array.from(merged)
+      states.selected.value = Array.from(new Set([...states.selected.value, ...rangeIds]))
     } else {
       const remove = new Set(rangeIds)
-      selectedStateIds.value = selectedStateIds.value.filter(x => !remove.has(x))
+      states.selected.value = states.selected.value.filter(x => !remove.has(x))
     }
   } else {
     if (willBeChecked) {
-      if (!selectedStateIds.value.includes(id)) {
-        selectedStateIds.value = [...selectedStateIds.value, id]
+      if (!states.selected.value.includes(id)) {
+        states.selected.value = [...states.selected.value, id]
       }
     } else {
-      selectedStateIds.value = selectedStateIds.value.filter(x => x !== id)
+      states.selected.value = states.selected.value.filter(x => x !== id)
     }
   }
   lastClickedStateIndex.value = idx
-  onStateChange()
-}
-function onStateKeydown(e: KeyboardEvent) {
-  // State picker has no filter input — Enter/Escape just dismiss the
-  // dropdown rather than acting on a filter string.
-  if (e.key === 'Enter' || e.key === 'Escape') {
-    e.preventDefault()
-    e.stopPropagation()
-    statePickerOpen.value = false
-    return
-  }
-  const ctrlOrCmd = e.ctrlKey || e.metaKey
-  const isA = e.key.toLowerCase() === 'a'
-  const isSelectAll = e.key === '*'
-    || (e.shiftKey && e.code === 'Digit8')
-    || (ctrlOrCmd && !e.shiftKey && isA)
-  const isDeselectAll = e.key === ')'
-    || (e.shiftKey && e.code === 'Digit0')
-    || (ctrlOrCmd && e.shiftKey && isA)
-  if (isSelectAll) {
-    e.preventDefault()
-    selectedStateIds.value = states.value.map(s => s.id)
-    lastClickedStateIndex.value = null
-    onStateChange()
-  } else if (isDeselectAll) {
-    e.preventDefault()
-    selectedStateIds.value = []
-    lastClickedStateIndex.value = null
-    onStateChange()
-  }
 }
 function onCountyClick(e: MouseEvent, idx: number, id: number) {
   const target = e.target as HTMLInputElement
@@ -455,58 +230,53 @@ function onCountyClick(e: MouseEvent, idx: number, id: number) {
     const a = lastClickedCountyIndex.value
     const b = idx
     const [start, end] = a < b ? [a, b] : [b, a]
-    const rangeIds = displayedCounties.value.slice(start, end + 1).map(c => c.id)
+    const rangeIds = counties.displayed.value.slice(start, end + 1).map(c => c.id)
     if (willBeChecked) {
-      const merged = new Set([...selectedCountyIds.value, ...rangeIds])
-      selectedCountyIds.value = Array.from(merged)
+      counties.selected.value = Array.from(new Set([...counties.selected.value, ...rangeIds]))
     } else {
       const remove = new Set(rangeIds)
-      selectedCountyIds.value = selectedCountyIds.value.filter(x => !remove.has(x))
+      counties.selected.value = counties.selected.value.filter(x => !remove.has(x))
     }
   } else {
     if (willBeChecked) {
-      if (!selectedCountyIds.value.includes(id)) {
-        selectedCountyIds.value = [...selectedCountyIds.value, id]
+      if (!counties.selected.value.includes(id)) {
+        counties.selected.value = [...counties.selected.value, id]
       }
     } else {
-      selectedCountyIds.value = selectedCountyIds.value.filter(x => x !== id)
+      counties.selected.value = counties.selected.value.filter(x => x !== id)
     }
   }
   lastClickedCountyIndex.value = idx
-  onCountyChange()
 }
-function onCountyKeydown(e: KeyboardEvent) {
+// Keystroke handlers — most behavior comes from the composable's
+// onFilterKeydown (Enter/Esc/Ctrl-A/Ctrl-Shift-A/Shift-*/Shift-0). State
+// also wants Enter/Esc to close its popup (no filter input in the State
+// dropdown), so we override.
+function onStateKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter' || e.key === 'Escape') {
     e.preventDefault()
     e.stopPropagation()
-    countyFilter.value = ''
+    statePickerOpen.value = false
     return
   }
-  const ctrlOrCmd = e.ctrlKey || e.metaKey
-  const isA = e.key.toLowerCase() === 'a'
-  const isSelectAll = e.key === '*'
-    || (e.shiftKey && e.code === 'Digit8')
-    || (ctrlOrCmd && !e.shiftKey && isA)
-  const isDeselectAll = e.key === ')'
-    || (e.shiftKey && e.code === 'Digit0')
-    || (ctrlOrCmd && e.shiftKey && isA)
-  if (isSelectAll) {
-    e.preventDefault()
-    const visibleIds = displayedCounties.value.map(c => c.id)
-    selectedCountyIds.value = Array.from(
-      new Set([...selectedCountyIds.value, ...visibleIds])
-    )
+  // Reuse composable's select-all logic for the modifier shortcuts.
+  states.onFilterKeydown(e)
+  // Composable handler bumps lastClickedStateIndex out of sync — reset
+  // so the next single-click starts a fresh range.
+  if (e.defaultPrevented) lastClickedStateIndex.value = null
+}
+function onCountyKeydown(e: KeyboardEvent) {
+  counties.onFilterKeydown(e)
+  if (e.defaultPrevented && (e.ctrlKey || e.metaKey || e.shiftKey)) {
     lastClickedCountyIndex.value = null
-    onCountyChange()
-  } else if (isDeselectAll) {
-    e.preventDefault()
-    const drop = new Set(displayedCounties.value.map(c => c.id))
-    selectedCountyIds.value = selectedCountyIds.value.filter(id => !drop.has(id))
-    lastClickedCountyIndex.value = null
-    onCountyChange()
   }
 }
-
+function onZipKeydown(e: KeyboardEvent) {
+  zips.onFilterKeydown(e)
+  if (e.defaultPrevented && (e.ctrlKey || e.metaKey || e.shiftKey)) {
+    lastClickedZipIndex.value = null
+  }
+}
 function onZipClick(e: MouseEvent, idx: number, code: string) {
   const target = e.target as HTMLInputElement
   const willBeChecked = target.checked
@@ -514,21 +284,20 @@ function onZipClick(e: MouseEvent, idx: number, code: string) {
     const a = lastClickedZipIndex.value
     const b = idx
     const [start, end] = a < b ? [a, b] : [b, a]
-    const rangeCodes = displayedZipcodes.value.slice(start, end + 1).map(z => z.zipcode)
+    const rangeCodes = zips.displayed.value.slice(start, end + 1).map(z => z.zipcode)
     if (willBeChecked) {
-      const merged = new Set([...selectedZipcodes.value, ...rangeCodes])
-      selectedZipcodes.value = Array.from(merged)
+      zips.selected.value = Array.from(new Set([...zips.selected.value, ...rangeCodes]))
     } else {
       const remove = new Set(rangeCodes)
-      selectedZipcodes.value = selectedZipcodes.value.filter(z => !remove.has(z))
+      zips.selected.value = zips.selected.value.filter(z => !remove.has(z))
     }
   } else {
     if (willBeChecked) {
-      if (!selectedZipcodes.value.includes(code)) {
-        selectedZipcodes.value = [...selectedZipcodes.value, code]
+      if (!zips.selected.value.includes(code)) {
+        zips.selected.value = [...zips.selected.value, code]
       }
     } else {
-      selectedZipcodes.value = selectedZipcodes.value.filter(z => z !== code)
+      zips.selected.value = zips.selected.value.filter(z => z !== code)
     }
   }
   lastClickedZipIndex.value = idx
@@ -595,20 +364,20 @@ async function search() {
   try {
     const params: Record<string, string> = {}
     if (filters.title.trim()) params.title = filters.title.trim()
-    if (selectedStateIds.value.length === 0) {
+    if (states.selected.value.length === 0) {
       // Typeahead mode: no state picked. The text the user typed is
       // the single zipcode they're searching for.
-      const v = zipFilter.value.trim()
+      const v = zips.filter.value.trim()
       if (v) params.zipcode = v
-    } else if (selectedZipcodes.value.length > 0) {
+    } else if (zips.selected.value.length > 0) {
       // States + explicit zip picks → those zips.
-      params.zipcode = selectedZipcodes.value.join(',')
-    } else if (selectedCountyIds.value.length > 0) {
+      params.zipcode = zips.selected.value.join(',')
+    } else if (counties.selected.value.length > 0) {
       // States + counties, no zip picks → any zip in those counties.
-      params.countyId = selectedCountyIds.value.join(',')
+      params.countyId = counties.selected.value.join(',')
     } else {
       // States only, no picks → any zip in those states.
-      params.stateId = selectedStateIds.value.join(',')
+      params.stateId = states.selected.value.join(',')
     }
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
     if (filters.type) params.type = filters.type
@@ -679,26 +448,26 @@ async function search() {
             class="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-y-auto rounded border border-slate-300 bg-white p-1 text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
           >
             <label
-              v-if="states.length > 0"
+              v-if="states.displayed.value.length > 0"
               class="sticky top-0 flex items-center gap-2 rounded border-b border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700"
             >
               <input
-                ref="selectAllStatesRef"
+                :ref="el => states.selectAllRef.value = el as HTMLInputElement | null"
                 type="checkbox"
-                :checked="allStatesSelected"
-                @change="toggleAllStates"
+                :checked="states.allSelected.value"
+                @change="states.toggleAll"
                 class="h-3.5 w-3.5"
               />
-              <span>{{ $t('zipSetter.selectAll', { total: states.length }) }}</span>
+              <span>{{ $t('zipSetter.selectAll', { total: states.displayed.value.length }) }}</span>
             </label>
             <label
-              v-for="(s, idx) in states"
+              v-for="(s, idx) in states.displayed.value"
               :key="s.id"
               class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
             >
               <input
                 type="checkbox"
-                :checked="selectedStateIds.includes(s.id)"
+                :checked="states.selected.value.includes(s.id)"
                 @click="onStateClick($event, idx, s.id)"
                 class="h-3.5 w-3.5"
               />
@@ -707,7 +476,7 @@ async function search() {
           </div>
         </div>
         <span
-          v-if="statePickerOpen && states.length > 1"
+          v-if="statePickerOpen && states.displayed.value.length > 1"
           class="text-xs font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>
@@ -738,38 +507,38 @@ async function search() {
             class="absolute left-0 right-0 z-20 mt-1 rounded border border-slate-300 bg-white text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
           >
             <input
-              v-model="countyFilter"
+              v-model="counties.filter.value"
               type="text"
               autocomplete="off"
-              :placeholder="selectedStateIds.length === 0 ? $t('search.filters.countyTypeahead') : $t('search.filters.countyFilter')"
+              :placeholder="states.selected.value.length === 0 ? $t('search.filters.countyTypeahead') : $t('search.filters.countyFilter')"
               class="block w-full rounded-t border-b border-slate-300 p-2 text-xs font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
             />
             <div class="max-h-48 overflow-y-auto p-1">
               <div
-                v-if="displayedCounties.length === 0"
+                v-if="counties.displayed.value.length === 0"
                 class="px-2 py-1 text-xs text-slate-500"
-              >{{ selectedStateIds.length === 0 && countyFilter.trim() === '' ? $t('search.filters.countyStartHint') : $t('search.filters.countyNoMatches') }}</div>
+              >{{ states.selected.value.length === 0 && counties.filter.value.trim() === '' ? $t('search.filters.countyStartHint') : $t('search.filters.countyNoMatches') }}</div>
               <label
-                v-if="displayedCounties.length > 0"
+                v-if="counties.displayed.value.length > 0"
                 class="sticky top-0 z-10 flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700"
               >
                 <input
-                  ref="selectAllCountiesRef"
+                  :ref="el => counties.selectAllRef.value = el as HTMLInputElement | null"
                   type="checkbox"
-                  :checked="allCountiesSelected"
-                  @change="toggleAllCounties"
+                  :checked="counties.allSelected.value"
+                  @change="counties.toggleAll"
                   class="h-3.5 w-3.5"
                 />
-                <span>{{ $t('zipSetter.selectAll', { total: displayedCounties.length }) }}</span>
+                <span>{{ $t('zipSetter.selectAll', { total: counties.displayed.value.length }) }}</span>
               </label>
               <label
-                v-for="(c, idx) in displayedCounties"
+                v-for="(c, idx) in counties.displayed.value"
                 :key="c.id"
                 class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
               >
                 <input
                   type="checkbox"
-                  :checked="selectedCountyIds.includes(c.id)"
+                  :checked="counties.selected.value.includes(c.id)"
                   @click="onCountyClick($event, idx, c.id)"
                   class="h-3.5 w-3.5"
                 />
@@ -779,7 +548,7 @@ async function search() {
           </div>
         </div>
         <span
-          v-if="countyPickerOpen && displayedCounties.length > 1"
+          v-if="countyPickerOpen && counties.displayed.value.length > 1"
           class="text-xs font-normal text-slate-500"
         >{{ $t('search.filters.zipcodeShiftHint') }}</span>
       </label>
@@ -791,9 +560,9 @@ async function search() {
         <!-- Mode A: no state picked → typeahead input with native datalist
              of prefix matches. Single-zip search; multi-zip picking
              unlocks once any state is selected. -->
-        <template v-if="selectedStateIds.length === 0">
+        <template v-if="states.selected.value.length === 0">
           <input
-            v-model="zipFilter"
+            v-model="zips.filter.value"
             type="text"
             inputmode="numeric"
             maxlength="5"
@@ -803,7 +572,7 @@ async function search() {
             class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none"
           />
           <datalist id="zip-typeahead-options">
-            <option v-for="z in displayedZipcodes" :key="z.id" :value="z.zipcode" />
+            <option v-for="z in zips.displayed.value" :key="z.id" :value="z.zipcode" />
           </datalist>
         </template>
 
@@ -812,7 +581,7 @@ async function search() {
              checkboxes for multi-select. -->
         <template v-else>
           <div
-            v-if="displayedZipcodes.length === 0"
+            v-if="zips.displayed.value.length === 0"
             class="rounded border border-slate-300 bg-slate-50 p-2 text-xs font-normal text-slate-500"
           >{{ $t('search.filters.zipcodeNone') }}</div>
           <div v-else data-zip-picker class="relative">
@@ -843,7 +612,7 @@ async function search() {
               class="absolute left-0 right-0 z-20 mt-1 rounded border border-slate-300 bg-white text-sm font-normal text-slate-900 shadow-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
             >
               <input
-                v-model="zipFilter"
+                v-model="zips.filter.value"
                 type="text"
                 inputmode="numeric"
                 maxlength="5"
@@ -853,30 +622,30 @@ async function search() {
               />
               <div class="max-h-32 overflow-y-auto p-1">
                 <div
-                  v-if="displayedZipcodes.length === 0"
+                  v-if="zips.displayed.value.length === 0"
                   class="px-2 py-1 text-xs text-slate-500"
                 >{{ $t('search.filters.zipcodeNone') }}</div>
                 <label
-                  v-if="displayedZipcodes.length > 0"
+                  v-if="zips.displayed.value.length > 0"
                   class="sticky top-0 z-10 flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700"
                 >
                   <input
-                    ref="selectAllZipsRef"
+                    :ref="el => zips.selectAllRef.value = el as HTMLInputElement | null"
                     type="checkbox"
-                    :checked="allZipsSelected"
-                    @change="toggleAllZips"
+                    :checked="zips.allSelected.value"
+                    @change="zips.toggleAll"
                     class="h-3.5 w-3.5"
                   />
-                  <span>{{ $t('zipSetter.selectAll', { total: displayedZipcodes.length }) }}</span>
+                  <span>{{ $t('zipSetter.selectAll', { total: zips.displayed.value.length }) }}</span>
                 </label>
                 <label
-                  v-for="(z, idx) in displayedZipcodes"
+                  v-for="(z, idx) in zips.displayed.value"
                   :key="z.id"
                   class="flex items-center gap-2 rounded px-2 py-0.5 text-xs font-normal hover:bg-slate-50"
                 >
                   <input
                     type="checkbox"
-                    :checked="selectedZipcodes.includes(z.zipcode)"
+                    :checked="zips.selected.value.includes(z.zipcode)"
                     @click="onZipClick($event, idx, z.zipcode)"
                     class="h-3.5 w-3.5"
                   />
@@ -886,7 +655,7 @@ async function search() {
             </div>
           </div>
           <span
-            v-if="displayedZipcodes.length > 1 && zipPickerOpen"
+            v-if="zips.displayed.value.length > 1 && zipPickerOpen"
             class="text-xs font-normal text-slate-500"
           >{{ $t('search.filters.zipcodeShiftHint') }}</span>
         </template>
