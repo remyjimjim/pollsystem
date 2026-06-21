@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-06-21 — Convert GeographyControllerTest zipcode cases to POST
+
+**Requested:**
+
+> check backend test results after geography controller test conversion
+
+**Changed:**
+
+- Two pre-existing test methods (`GET zipcodes accepts comma-separated
+  county_ids…` and `GET zipcodes with empty county_ids returns 400`)
+  were broken by yesterday's controller-side GET → POST migration
+  (`8ec1df8`) but weren't caught at the time — the gradle daemon was
+  locked behind watchall while Docker Desktop was down, so the
+  Testcontainers-backed suite never actually executed against the new
+  code.
+- Both methods rewritten to send a JSON body via
+  `MockMvcRequestBuilders.post(...).contentType(APPLICATION_JSON).content("…")`.
+  Renamed to match the new contract.
+- Added a third "POST zipcodes with an empty body returns 200 and an
+  empty array" case to pin the no-filter shape — the picker relies on
+  it to disable downstream sections without an error toast.
+- Verified locally: `./gradlew test --no-daemon` → **BUILD
+  SUCCESSFUL, 184 tests, 0 failures**.
+
+**Commit:** `68ed9eb`
+
+---
+
 ## 2026-06-21 — Convert /api/zipcodes from GET to POST
 
 **Requested:**
