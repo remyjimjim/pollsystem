@@ -107,17 +107,17 @@ async function refreshCountiesForState() {
 /** Same pattern as `refreshCountiesForState` but for the zipcode picker. */
 async function refreshZipcodesForGeo() {
   if (!purview.value.unrestricted) return
-  const params: Record<string, string> = {}
+  let body: { countyIds?: number[]; stateIds?: number[] }
   if (selectedCountyIds.value.length > 0) {
-    params.county_ids = selectedCountyIds.value.join(',')
+    body = { countyIds: selectedCountyIds.value }
   } else if (selectedStateIds.value.length > 0) {
-    params.state_id = selectedStateIds.value.join(',')
+    body = { stateIds: selectedStateIds.value }
   } else {
     purview.value = { ...purview.value, zipcodes: [] }
     return
   }
   try {
-    const res = await axios.get<{ zipcode: string }[]>('/api/zipcodes', { params })
+    const res = await axios.post<{ zipcode: string }[]>('/api/zipcodes', body)
     purview.value = { ...purview.value, zipcodes: res.data.map(z => z.zipcode) }
   } catch { /* keep prior list */ }
 }

@@ -129,9 +129,7 @@ async function loadCounties(stateIds: number[]) {
 }
 async function loadZipcodesByCounty(countyIds: number[]) {
   try {
-    const res = await axios.get<CountyZipRow[]>('/api/zipcodes', {
-      params: { county_ids: countyIds.join(',') }
-    })
+    const res = await axios.post<CountyZipRow[]>('/api/zipcodes', { countyIds })
     zipcodeOptions.value = res.data
   } catch {
     zipcodeOptions.value = []
@@ -139,9 +137,7 @@ async function loadZipcodesByCounty(countyIds: number[]) {
 }
 async function loadZipcodesByState(stateIds: number[]) {
   try {
-    const res = await axios.get<CountyZipRow[]>('/api/zipcodes', {
-      params: { state_id: stateIds.join(',') }
-    })
+    const res = await axios.post<CountyZipRow[]>('/api/zipcodes', { stateIds })
     zipcodeOptions.value = res.data
   } catch {
     zipcodeOptions.value = []
@@ -149,7 +145,7 @@ async function loadZipcodesByState(stateIds: number[]) {
 }
 async function loadZipcodesByPrefix(prefix: string) {
   try {
-    const res = await axios.get<CountyZipRow[]>('/api/zipcodes', { params: { prefix } })
+    const res = await axios.post<CountyZipRow[]>('/api/zipcodes', { prefix })
     zipcodeOptions.value = res.data
   } catch {
     zipcodeOptions.value = []

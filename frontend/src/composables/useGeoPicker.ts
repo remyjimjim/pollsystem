@@ -154,8 +154,11 @@ export function useGeoPicker(opts: UseGeoPickerOptions = {}): UseGeoPickerReturn
     error.value = null
     zipFilter.value = ''
     try {
-      const res = await axios.get<CountyZip[]>('/api/zipcodes', {
-        params: { county_ids: countyIds.join(',') }
+      // POST so the body carries the countyIds array; the equivalent
+      // GET request line can exceed Tomcat's 8KB ceiling at a wide
+      // (~3000-county) selection.
+      const res = await axios.post<CountyZip[]>('/api/zipcodes', {
+        countyIds,
       })
       zipItems.value = res.data
       selectedZipcodes.value = selectedZipcodes.value.filter(z =>
@@ -186,7 +189,7 @@ export function useGeoPicker(opts: UseGeoPickerOptions = {}): UseGeoPickerReturn
 
   async function loadZipsByPrefix(prefix: string) {
     try {
-      const res = await axios.get<CountyZip[]>('/api/zipcodes', { params: { prefix } })
+      const res = await axios.post<CountyZip[]>('/api/zipcodes', { prefix })
       zipItems.value = res.data
     } catch {
       zipItems.value = []

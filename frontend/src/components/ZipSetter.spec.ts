@@ -59,7 +59,8 @@ describe('ZipSetter', () => {
       .mockResolvedValueOnce({  // counties (triggered by state tick)
         data: [{ id: 10, stateId: 5, name: 'Los Angeles' }]
       })
-      .mockResolvedValueOnce({  // zipcodes (triggered by county tick)
+    mockedAxios.post
+      .mockResolvedValueOnce({  // zipcodes (POST, triggered by county tick)
         data: [{ id: 100, countyId: 10, zipcode: '90001' }]
       })
 
@@ -73,8 +74,8 @@ describe('ZipSetter', () => {
     await wrapper.find('input[type="checkbox"][value="10"]').setValue(true)
     await flushPromises()
 
-    expect(mockedAxios.get).toHaveBeenNthCalledWith(3, '/api/zipcodes', {
-      params: { county_ids: '10' }
+    expect(mockedAxios.post).toHaveBeenCalledWith('/api/zipcodes', {
+      countyIds: [10],
     })
 
     await wrapper.find('input[type="checkbox"][value="90001"]').setValue(true)

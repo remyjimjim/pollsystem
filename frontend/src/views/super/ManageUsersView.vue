@@ -79,21 +79,17 @@ async function loadCountiesByPrefix(prefix: string) {
 }
 async function loadZipcodesByState(stateIds: number[]) {
   try {
-    zipcodeOptions.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
-      params: { state_id: stateIds.join(',') }
-    })).data
+    zipcodeOptions.value = (await axios.post<CountyZipRow[]>('/api/zipcodes', { stateIds })).data
   } catch { zipcodeOptions.value = [] }
 }
 async function loadZipcodesByCounty(countyIds: number[]) {
   try {
-    zipcodeOptions.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
-      params: { county_ids: countyIds.join(',') }
-    })).data
+    zipcodeOptions.value = (await axios.post<CountyZipRow[]>('/api/zipcodes', { countyIds })).data
   } catch { zipcodeOptions.value = [] }
 }
 async function loadZipcodesByPrefix(prefix: string) {
   try {
-    zipcodeOptions.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', { params: { prefix } })).data
+    zipcodeOptions.value = (await axios.post<CountyZipRow[]>('/api/zipcodes', { prefix })).data
   } catch { zipcodeOptions.value = [] }
 }
 
@@ -696,8 +692,8 @@ async function openEdit(row: UserRow) {
   // Seed the cascade from the user's current zipcode so the inputs open
   // already showing where the user is.
   try {
-    const meta = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
-      params: { prefix: row.zipcode }
+    const meta = (await axios.post<CountyZipRow[]>('/api/zipcodes', {
+      prefix: row.zipcode,
     })).data.find(z => z.zipcode === row.zipcode)
     if (meta) {
       const allStates = states.value.length > 0 ? states.value : (await axios.get<StateRow[]>('/api/states')).data
@@ -737,16 +733,16 @@ async function reloadEditCounties() {
 async function reloadEditZipcodes() {
   if (editCountyId.value !== '') {
     try {
-      editZipcodes.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
-        params: { county_ids: String(editCountyId.value) }
+      editZipcodes.value = (await axios.post<CountyZipRow[]>('/api/zipcodes', {
+        countyIds: [Number(editCountyId.value)],
       })).data
     } catch { editZipcodes.value = [] }
     return
   }
   if (editStateId.value !== '') {
     try {
-      editZipcodes.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
-        params: { state_id: String(editStateId.value) }
+      editZipcodes.value = (await axios.post<CountyZipRow[]>('/api/zipcodes', {
+        stateIds: [Number(editStateId.value)],
       })).data
     } catch { editZipcodes.value = [] }
     return
@@ -782,8 +778,8 @@ watch(editZipcode, (val) => {
   if (trimmed === '') { editZipcodes.value = []; return }
   editZipPrefixTimer = setTimeout(async () => {
     try {
-      editZipcodes.value = (await axios.get<CountyZipRow[]>('/api/zipcodes', {
-        params: { prefix: trimmed }
+      editZipcodes.value = (await axios.post<CountyZipRow[]>('/api/zipcodes', {
+        prefix: trimmed,
       })).data
     } catch { editZipcodes.value = [] }
   }, 200)
