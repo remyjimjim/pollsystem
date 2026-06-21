@@ -61,6 +61,48 @@ logged.
 
 ---
 
+## 2026-06-21 — Convert /api/zipcodes from GET to POST
+
+**Requested:**
+
+> convert /api/zipcodes to POST
+
+**Changed:**
+
+- Replaces the symptom-only Tomcat limit bump from `52bb4ee` with the
+  proper structural fix flagged in that commit's TODO. URLs of ~15KB
+  aren't routable through every CDN / proxy in production; a POST
+  body is the right shape for a multi-thousand-ID query.
+- Backend: new `ZipcodeQuery` DTO
+  `{countyIds?, stateIds?, prefix?}` in `GeographyController`. Same
+  three-way precedence the GET form had (prefix > countyIds >
+  stateIds-expand). `listZipcodes` is now `@PostMapping` taking
+  `@RequestBody`. The GET endpoint is removed — full cutover so a
+  second code path can't drift. `SecurityConfig` already permits
+  `/api/zipcodes/**` for any method and CSRF is disabled
+  project-wide, so the switch needed no security plumbing.
+- Frontend: all 15 call sites converted from
+  `axios.get('/api/zipcodes', { params: { county_ids: ids.join(',') } })`
+  to `axios.post('/api/zipcodes', { countyIds: ids })` (and the
+  parallel `stateIds` / `prefix` variants). Touches `useGeoPicker`,
+  `PollSearchView`, `PollResultsView`, `ManageUsersView` (6 sites),
+  `ManagePollsView`. Body uses camelCase array fields matching
+  Jackson's binding to the Kotlin DTO; the snake_case + comma-join
+  translation the GET layer needed is gone.
+- Tests: `ZipSetter.spec.ts` cascade case mocks the third axios call
+  as POST instead of GET, asserting body shape `{ countyIds: [10] }`.
+  **34 / 34 vitest passing**; `vue-tsc --noEmit` clean. Smoke
+  verification: `curl -X POST /api/zipcodes -d '{"prefix":"90001"}'`
+  → `200` with `[{id, countyId, zipcode:"90001"}]`.
+- The local `max-http-request-header-size: 64KB` setting added in
+  `52bb4ee` stays as a defensive measure for any *other* endpoint
+  that might run into a similar wall, but is no longer load-bearing
+  for `/api/zipcodes`.
+
+**Commit:** `8ec1df8`
+
+---
+
 ## 2026-06-21 — Raise Tomcat request-line limit to 64KB
 
 **Requested:**
