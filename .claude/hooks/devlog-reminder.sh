@@ -8,8 +8,14 @@
 # Exit 0  = nothing to flag.
 # Exit 2  = surface the reminder to Claude so the entry gets added.
 
-root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+# Pin to THIS project, not whatever repo the shell happens to be in — otherwise
+# a commit in an unrelated repo (worked on from the same session) gets flagged
+# against this project's docs/DEVLOG.md convention.
+root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null)}" || exit 0
 cd "$root" || exit 0
+
+# Only applies to a repo that actually uses docs/DEVLOG.md.
+[ -f docs/DEVLOG.md ] || exit 0
 
 # Newest commit that touched a file other than the DEVLOG itself.
 last=$(git log -1 --format='%H' -- . ':(exclude)docs/DEVLOG.md' 2>/dev/null)
