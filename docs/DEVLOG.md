@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-07-20 — Scope devlog-reminder hook to the project
+
+**Requested:**
+
+> [approving a fix for the devlog-reminder Stop hook, which was firing on a
+> commit made in an unrelated repo during the same session] yes please
+
+**Changed:**
+
+- `.claude/hooks/devlog-reminder.sh` now resolves its repo root from
+  `$CLAUDE_PROJECT_DIR` instead of `git rev-parse --show-toplevel`, so it
+  always inspects this project rather than whatever repo the shell is in.
+- Added a `[ -f docs/DEVLOG.md ] || exit 0` guard so it no-ops in repos that
+  don't use this convention.
+- Verified `bash -n` clean; exits 0 for both the cross-repo scenario and the
+  guard fallback, while still catching genuinely-unlogged project commits.
+
+**Commit:** `57419fc`
+
 ## 2026-06-21 — Verify /actuator/rolecache end-to-end after watchall restart
 
 **Requested:**
