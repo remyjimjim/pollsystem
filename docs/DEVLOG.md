@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-07-21 — Paid onboarding, phase 1: nullable phone + zipcode
+
+**Requested:**
+
+> going from what we have to the vision of a user getting access via substack
+> payment or directly [...] fix the paid-onboarding UX gap
+
+> Kick off phase 1 please...
+
+**Context:** The Stripe webhook only *links* a subscription to an already-
+registered user; a payment for an unknown email is ignored ("sign in first").
+The blocker is the schema — `User` required email + phone + zipcode, but a
+checkout event carries only email. Chosen fix (phased): provision a minimal paid
+user from the webhook + email a magic link, and collect phone + civic zipcode via
+a "complete your profile" step at first sign-in. Phase 1 lays the schema groundwork.
+
+**Changed:**
+
+- `V18` migration drops `NOT NULL` on `users.phone` / `users.zipcode`; phone
+  keeps `UNIQUE` (Postgres treats NULLs as distinct, so many incomplete users
+  coexist). `User.phone`/`zipcode` → `String?`.
+- `UserDto` + `SuperUserRow` expose them as nullable; the three results
+  controllers exclude no-zipcode responders from geo/purview filters (a user
+  with no location belongs to no geographic group).
+- Full backend suite green (191 tests, 0 failures/skips).
+
+**Commit:** `9138ddd`
+
 ## 2026-07-21 — UML: poll completion requires sign-in (no anonymous respondent link)
 
 **Requested:**
