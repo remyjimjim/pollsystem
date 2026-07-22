@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-07-21 — Paid onboarding, phase 5: document the flow + frontend test
+
+**Requested:**
+
+> Proceed with phase 5 please...
+
+**Changed:**
+
+- `USE-CASES.plantuml` now documents the real, implemented flow: checkout →
+  Provision Paid User → Send Magic Link → **Complete Profile** → Find and
+  Complete Polls. Notes explain that a payment-first account is provisioned from
+  the email alone and collects phone + zipcode at first sign-in, while direct
+  registrants supply them up front. This closes the earlier doc-vs-code gap where
+  the webhook merely *linked* to an existing user.
+- Added `CompleteProfileView.spec.ts` (submit → redirect; backend-error path).
+  Frontend 36 unit tests + type-check green.
+
+**Wraps up** the 5-phase paid-onboarding feature (commits `9138ddd`, `ac9477f`,
+`e2c10c0`, `d73df55`, and this). The gap is closed end to end: pay → provision +
+magic link → complete profile → participate, backstopped server-side.
+
+**Commit:** `b408627`
+
 ## 2026-07-21 — Paid onboarding, phase 4: frontend complete-profile gate
 
 **Requested:**
