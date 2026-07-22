@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-07-21 — UML: poll completion requires sign-in (no anonymous respondent link)
+
+**Requested:**
+
+> Login should be required; fix the UML to match [...]
+
+**Decision:** Poll submission is authenticated — there is **no** anonymous
+respondent flow. The UML's "opaque `/poll/<token>`, respondents don't
+authenticate" was never built and conflicts with the model: `QuestionResponse`
+(and the candidate/ballot equivalents) has a **non-null** `user`, and results
+geo-filtering + k-anonymity read `response.user.zipcode` / `user.id`. An
+anonymous respondent would have neither. So the authenticated-by-user model
+stays; anonymous links are explicitly **not** a goal.
+
+**Changed:**
+
+- `docs/UML/USE-CASES.plantuml`: removed `Generate Respondent Link`; renamed the
+  viewer's `Complete Poll via Link` → `Open Poll Link` routed through
+  `Sign In via Magic Link`; rewrote the note to state a poll link is just the
+  poll URL and submitting requires sign-in.
+
+**Commit:** `dc6f24f`
+
 ## 2026-07-21 — Cover PollSearchController; add e2e traceability matrix
 
 **Requested:**
