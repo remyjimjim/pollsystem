@@ -1,7 +1,11 @@
 package org.kodewerks.pollsystem.stripe
 
 import com.fasterxml.jackson.databind.JsonNode
+import org.kodewerks.pollsystem.auth.MagicLinkEmailer
+import org.kodewerks.pollsystem.auth.MagicLinkService
+import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.StripeEvent
+import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.StripeEventRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.slf4j.LoggerFactory
@@ -14,7 +18,9 @@ import java.time.Instant
  * a duplicate delivery becomes a no-op.
  *
  * Supported events:
- *  - checkout.session.completed       — link Stripe customer + subscription to existing user
+ *  - checkout.session.completed       — provision a new paid user (email only) and
+ *                                       email a magic link, or link Stripe ids to an
+ *                                       existing user
  *  - customer.subscription.updated    — refresh paid_until from current_period_end
  *  - customer.subscription.deleted    — clear paid_until (subscriber lost access)
  *  - invoice.paid                     — refresh paid_until on renewal
@@ -23,7 +29,9 @@ import java.time.Instant
 @Service
 class StripeWebhookService(
     private val users: UserRepository,
-    private val events: StripeEventRepository
+    private val events: StripeEventRepository,
+    private val magicLinks: MagicLinkService,
+    private val emailer: MagicLinkEmailer
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -59,15 +67,32 @@ class StripeWebhookService(
             log.warn("checkout.session.completed missing customer_details.email")
             return
         }
-        val user = users.findByEmail(email)
-        if (user == null) {
-            log.warn("checkout.session.completed for {} matches no existing user; ignoring (user must sign in via magic-link first)", email)
+        val existing = users.findByEmail(email)
+        if (existing != null) {
+            users.save(existing.copy(
+                stripeCustomerId = customerId ?: existing.stripeCustomerId,
+                stripeSubscriptionId = subscriptionId ?: existing.stripeSubscriptionId
+            ))
             return
         }
-        users.save(user.copy(
-            stripeCustomerId = customerId ?: user.stripeCustomerId,
-            stripeSubscriptionId = subscriptionId ?: user.stripeSubscriptionId
-        ))
+
+        // Payment-first onboarding: no account yet, so provision a minimal paid
+        // user from the checkout email alone (phone + zipcode are collected when
+        // they complete their profile at first sign-in) and email a magic link so
+        // they can get in. paid_until is set by the subsequent subscription/invoice
+        // event, which finds this user by stripe_subscription_id.
+        val provisioned = users.save(
+            User(
+                email = email,
+                access = AccessLevel.USER,
+                isEnabled = true,
+                stripeCustomerId = customerId,
+                stripeSubscriptionId = subscriptionId
+            )
+        )
+        val rawToken = magicLinks.issueToken(provisioned)
+        emailer.send(provisioned, rawToken)
+        log.info("Provisioned paid user {} from checkout and emailed a magic link", email)
     }
 
     private fun handleSubscriptionRefresh(data: JsonNode, type: String) {
