@@ -112,6 +112,15 @@
     "signInLink": "Sign in",
     "errorGeneric": "Could not send the sign-in link"
   },
+  "completeProfile": {
+    "heading": "Complete your profile",
+    "intro": "Thanks for subscribing! Add your phone and zipcode to finish setting up your account. Your zipcode is used to show poll results for your area.",
+    "phoneLabel": "Phone",
+    "zipcodeLabel": "Zipcode",
+    "submitButton": "Save and continue",
+    "submittingButton": "Saving…",
+    "errorGeneric": "Could not save your profile"
+  },
   "magicLink": {
     "signingIn": "Signing you in…",
     "failedHeading": "Sign-in failed",

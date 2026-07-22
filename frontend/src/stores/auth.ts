@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import axios from 'axios'
-import type { User, MagicLinkRequest, AuthResponse, AccessLevel } from '@/types'
+import type { User, MagicLinkRequest, AuthResponse, AccessLevel, CompleteProfileRequest } from '@/types'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
@@ -56,6 +56,16 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  /**
+   * Supply the phone + zipcode a payment-first user was provisioned without.
+   * On success the returned (now-complete) user replaces the store's, so the
+   * router guard lets them participate.
+   */
+  async function completeProfile(data: CompleteProfileRequest): Promise<void> {
+    const response = await axios.post<User>('/api/auth/complete-profile', data)
+    user.value = response.data
+  }
+
   function logout(): void {
     user.value = null
     token.value = null
@@ -71,6 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
     requestMagicLink,
     redeemMagicLink,
     fetchUser,
+    completeProfile,
     logout
   }
 })
