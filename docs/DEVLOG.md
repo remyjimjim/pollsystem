@@ -61,6 +61,26 @@ logged.
 
 ---
 
+## 2026-07-21 — Paid onboarding, phase 2: provision on payment + magic link
+
+**Requested:**
+
+> Proceed with phase 2 please...
+
+**Changed:**
+
+- `StripeWebhookService.handleCheckoutCompleted`: when the checkout email has no
+  account, provision a minimal paid user (email + Stripe ids, phone/zipcode null,
+  `access = USER`), issue a magic-link token, and email it — closing the gap
+  where a payment-first subscriber was silently ignored. Existing-user checkouts
+  still just link the Stripe ids. `paid_until` continues to arrive via the
+  following subscription/invoice event (matched by stripe_subscription_id).
+- Injected `MagicLinkService` + `MagicLinkEmailer` into the webhook service.
+- New test: unknown-email checkout provisions the user (null phone/zipcode,
+  USER) and issues a magic link. Stripe suite 6/6 green.
+
+**Commit:** `ac9477f`
+
 ## 2026-07-21 — Paid onboarding, phase 1: nullable phone + zipcode
 
 **Requested:**
