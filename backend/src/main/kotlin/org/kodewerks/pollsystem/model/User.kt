@@ -15,11 +15,14 @@ data class User(
     @Column(nullable = false, unique = true)
     val email: String,
 
-    @Column(nullable = false, unique = true)
-    val phone: String,
+    // Nullable for payment-first onboarding: a Stripe-provisioned user has only
+    // an email until they complete their profile at first sign-in. phone stays
+    // UNIQUE (Postgres treats NULLs as distinct). See V18.
+    @Column(unique = true)
+    val phone: String? = null,
 
-    @Column(nullable = false, length = 5)
-    val zipcode: String,
+    @Column(length = 5)
+    val zipcode: String? = null,
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)

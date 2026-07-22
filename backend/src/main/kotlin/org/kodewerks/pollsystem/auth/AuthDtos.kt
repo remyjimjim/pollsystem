@@ -26,8 +26,8 @@ data class MagicLinkRedeemRequest(
 data class UserDto(
     val id: Long,
     val email: String,
-    val phone: String,
-    val zipcode: String,
+    val phone: String?,
+    val zipcode: String?,
     val access: AccessLevel,
     val isEnabled: Boolean,
     val paidUntil: Instant?

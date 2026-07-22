@@ -68,8 +68,10 @@ class QuestionnaireResultsController(
         val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
         val all = responses.findByQuestionnaireId(id)
         var filtered = all
-        if (geoZips != null) filtered = filtered.filter { it.user.zipcode in geoZips }
-        if (onlyPurview) filtered = filtered.filter { it.user.zipcode in purviewZips }
+        // A responder with no zipcode (profile not yet completed) can't fall in
+        // any geographic group, so they're excluded from a filtered/purview view.
+        if (geoZips != null) filtered = filtered.filter { it.user.zipcode?.let { z -> z in geoZips } == true }
+        if (onlyPurview) filtered = filtered.filter { it.user.zipcode?.let { z -> z in purviewZips } == true }
 
         val respondents = filtered.map { it.user.id }.distinct().size
         val filterMap = describeFilter(zipcodes, stateIds, countyIds, onlyPurview)
