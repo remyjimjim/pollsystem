@@ -61,6 +61,22 @@ logged.
 
 ---
 
+## 2026-07-21 — Fix: make the registration e2e spec CI-safe
+
+**Context:** First real run of the new e2e job (PR #1) failed — the spec hit its
+240s timeout. Cause: `register-colorado-users.spec.ts` calls `pauseWithModal`
+before the final user (blocks until a human clicks Close — never happens in CI),
+plus three 4s per-screen demo "holds".
+
+**Changed:**
+
+- Gated the modal and the holds behind `INTERACTIVE = !process.env.CI` (via a
+  `hold()` helper). CI runs straight through; a local headed run still pauses for
+  watching. Added a `/// <reference types="node" />` so `process` resolves
+  (the `e2e/` dir is outside the `npm run type-check` scope anyway).
+
+**Commit:** `30cb02d`
+
 ## 2026-07-21 — CI: add an E2E (Playwright) job
 
 **Requested:**
