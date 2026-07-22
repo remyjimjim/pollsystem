@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-07-22 — E2E: Search→Complete spec
+
+**Requested:**
+
+> Let's hit the Search→Complete e2e spec please.
+
+**Changed:**
+
+- Dev-only `POST /api/dev/seed-questionnaire` (`@Profile("local")`, mirrors
+  `reset-test-users`): seeds a PUBLISHED questionnaire with a `zzz` creator and a
+  unique title, returns `{id, title, type}`. Thin glue over the tested
+  `QuestionnaireService`; the `zzz` prefix means it's cleaned up by
+  `reset-test-users` / global-teardown.
+- `search-complete.spec.ts`: seed a poll → register + magic-link sign-in → search
+  by the unique title → click **Vote** → answer the question → submit → assert
+  "Responses submitted successfully!". Confirmed submission needs no zipcode match
+  (only a complete profile), so a Colorado user can answer a 90001 poll.
+- Wired both e2e specs into the CI e2e job.
+
+**Verification:** backend compiles; the browser flow is validated by the CI e2e
+job (landing via branch/PR to prove it green before `main`, as with the first
+e2e job).
+
+**Commit:** `4c07412`
+
 ## 2026-07-22 — chore: gitignore session transcripts
 
 **Requested:**

@@ -164,7 +164,7 @@ jobs:
       # Add new non-interactive specs to this command as they're written.
       - name: Run e2e specs
         working-directory: frontend
-        run: npx playwright test register-colorado-users.spec.ts
+        run: npx playwright test register-colorado-users.spec.ts search-complete.spec.ts
 
       - name: Upload Playwright report
         if: failure()
