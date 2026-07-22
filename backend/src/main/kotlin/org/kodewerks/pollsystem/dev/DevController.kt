@@ -3,6 +3,11 @@ package org.kodewerks.pollsystem.dev
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.kodewerks.pollsystem.authz.RoleAuthCache
+import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.poll.QuestionInput
+import org.kodewerks.pollsystem.poll.QuestionnaireDraftRequest
+import org.kodewerks.pollsystem.poll.QuestionnaireService
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
@@ -26,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController
 class DevController(
     private val users: UserRepository,
     private val roleAuthCache: RoleAuthCache,
+    private val questionnaires: QuestionnaireService,
 ) {
 
     @PersistenceContext
@@ -127,6 +133,46 @@ class DevController(
             "ids" to ids,
             "rowsByTable" to deletions
         )
+    }
+
+    /**
+     * Seeds a single PUBLISHED questionnaire (with a `zzz`-prefixed creator, so
+     * `reset-test-users` / global-teardown cleans it up) and returns its id and
+     * unique title. Used by the search-and-complete e2e spec to have something
+     * to find and respond to. The title carries a nanoTime suffix so each run's
+     * poll is unique and a title search matches exactly it.
+     */
+    @PostMapping("/seed-questionnaire")
+    @Transactional
+    fun seedQuestionnaire(@RequestParam(defaultValue = "zzz") emailPrefix: String): Map<String, Any> {
+        require(emailPrefix.length >= 3) {
+            "emailPrefix must be at least 3 characters (safety guard)"
+        }
+        val n = System.nanoTime()
+        val creator = users.save(
+            User(
+                email = "$emailPrefix-seedcreator-$n@test.local",
+                phone = "+1555${(n % 10_000_000).toString().padStart(7, '0')}",
+                zipcode = "90001",
+                access = AccessLevel.CREATOR,
+                isEnabled = true,
+            )
+        )
+        val title = "E2E Search Poll $n"
+        val draft = questionnaires.saveDraft(
+            creator,
+            QuestionnaireDraftRequest(
+                pollTypeId = 2L,
+                title = title,
+                summary = "Seeded for the search-and-complete e2e test.",
+                closeDate = null,
+                questions = listOf(QuestionInput("Do you support automated testing?")),
+                zipcodes = listOf("90001"),
+            ),
+        )
+        questionnaires.publish(draft.id, creator, confirmed = false)
+        log.info("Seeded published questionnaire id={} title='{}'", draft.id, title)
+        return mapOf("id" to draft.id, "title" to title, "type" to "questionnaire")
     }
 
 }
