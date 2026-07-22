@@ -40,4 +40,12 @@ data class User(
 
     @Column(name = "paid_until")
     val paidUntil: Instant? = null
-)
+) {
+    /**
+     * A payment-first user is provisioned with only an email; they may view
+     * but not participate until they supply phone + zipcode. Not persisted —
+     * derived from those two columns.
+     */
+    val profileComplete: Boolean
+        @Transient get() = phone != null && zipcode != null
+}

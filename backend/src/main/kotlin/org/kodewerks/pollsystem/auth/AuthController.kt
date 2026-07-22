@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.auth
 
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.kodewerks.pollsystem.security.AppUserDetails
 import org.kodewerks.pollsystem.security.JwtTokenProvider
@@ -10,6 +11,7 @@ import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -33,6 +35,7 @@ class AuthController(
     private val tokenProvider: JwtTokenProvider,
     private val magicLinks: MagicLinkService,
     private val emailer: MagicLinkEmailer,
+    private val countyZips: CountyZipsRepository,
     private val env: Environment
 ) {
 
@@ -70,6 +73,30 @@ class AuthController(
         val user = principal?.user
             ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
         return UserDto.from(user)
+    }
+
+    /**
+     * Supply the phone + zipcode a payment-first user was provisioned without.
+     * Required before they can participate (submit responses). Idempotent: a
+     * user may re-submit their own phone; a phone held by another account 409s.
+     */
+    @PostMapping("/complete-profile")
+    @Transactional
+    fun completeProfile(
+        @AuthenticationPrincipal principal: AppUserDetails?,
+        @Valid @RequestBody req: CompleteProfileRequest
+    ): UserDto {
+        val current = principal?.user
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+        if (countyZips.findByZipcode(req.zipcode).isEmpty()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown zipcode: ${req.zipcode}")
+        }
+        val holder = users.findByPhone(req.phone)
+        if (holder != null && holder.id != current.id) {
+            throw ResponseStatusException(HttpStatus.CONFLICT, "Phone already registered to another account")
+        }
+        val updated = users.save(current.copy(phone = req.phone, zipcode = req.zipcode))
+        return UserDto.from(updated)
     }
 
     private fun provision(req: MagicLinkRequest): User {

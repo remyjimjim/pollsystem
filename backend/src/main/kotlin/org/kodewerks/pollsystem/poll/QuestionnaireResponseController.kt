@@ -91,6 +91,7 @@ class QuestionnaireResponseController(
         @PathVariable id: Long,
         @Valid @RequestBody body: SubmitResponsesRequest
     ): MyResponsesDto {
+        requireCompleteProfile(principal)
         val q = questionnaires.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
         }
