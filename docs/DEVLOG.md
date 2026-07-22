@@ -61,6 +61,19 @@ logged.
 
 ---
 
+## 2026-07-22 — chore: gitignore session transcripts
+
+**Requested:**
+
+> gitignore the transcript then push
+
+**Changed:**
+
+- Ignore `sessions.transcript.md` / `*.transcript.md` — `/export` writes the full
+  conversation into the repo root, which shouldn't land in history.
+
+**Commit:** `dcc6945`
+
 ## 2026-07-22 — i18n: localize the complete-profile view (8 locales)
 
 **Requested:**
