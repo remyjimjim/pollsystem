@@ -1,11 +1,15 @@
 package org.kodewerks.pollsystem.stripe
 
 import org.kodewerks.pollsystem.AbstractIntegrationTest
+import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.repository.MagicLinkTokenRepository
 import org.kodewerks.pollsystem.repository.StripeEventRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -25,6 +29,7 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var mockMvc: MockMvc
     @Autowired private lateinit var users: UserRepository
     @Autowired private lateinit var events: StripeEventRepository
+    @Autowired private lateinit var tokens: MagicLinkTokenRepository
 
     private val secret = "whsec_test_secret"
 
@@ -44,6 +49,31 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
         assertEquals("cus_abc", updated.stripeCustomerId)
         assertEquals("sub_xyz", updated.stripeSubscriptionId)
         assertEquals(true, events.existsByStripeEventId("evt_1"))
+    }
+
+    @Test
+    fun `checkout for unknown email provisions a paid user and issues a magic link`() {
+        // No account exists for this email — the payment arrived first.
+        assertNull(users.findByEmail("newpaid@test.local"))
+        val payload = """
+            {"id":"evt_prov","type":"checkout.session.completed","data":{"object":{
+              "customer":"cus_new","subscription":"sub_new",
+              "customer_details":{"email":"newpaid@test.local"}
+            }}}
+        """.trimIndent()
+
+        deliver(payload).andExpect(status().isOk)
+
+        val created = users.findByEmail("newpaid@test.local")
+        assertNotNull(created); created!!
+        assertEquals("cus_new", created.stripeCustomerId)
+        assertEquals("sub_new", created.stripeSubscriptionId)
+        assertEquals(AccessLevel.USER, created.access)
+        // Provisioned from email alone — profile completed at first sign-in.
+        assertNull(created.phone)
+        assertNull(created.zipcode)
+        // A magic link was issued so the new subscriber can get in.
+        assertTrue(tokens.findAll().any { it.userId == created.id })
     }
 
     @Test

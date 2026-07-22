@@ -24,11 +24,18 @@ export enum PollStatus {
 export interface User {
   id: number
   email: string
-  phone: string
-  zipcode: string
+  // Null for a payment-first user until they complete their profile.
+  phone: string | null
+  zipcode: string | null
   access: AccessLevel
   isEnabled: boolean
   paidUntil: string | null
+  profileComplete: boolean
+}
+
+export interface CompleteProfileRequest {
+  phone: string
+  zipcode: string
 }
 
 export interface RoleAssignment {

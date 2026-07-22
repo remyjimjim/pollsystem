@@ -61,6 +61,123 @@ logged.
 
 ---
 
+## 2026-07-21 — Paid onboarding, phase 5: document the flow + frontend test
+
+**Requested:**
+
+> Proceed with phase 5 please...
+
+**Changed:**
+
+- `USE-CASES.plantuml` now documents the real, implemented flow: checkout →
+  Provision Paid User → Send Magic Link → **Complete Profile** → Find and
+  Complete Polls. Notes explain that a payment-first account is provisioned from
+  the email alone and collects phone + zipcode at first sign-in, while direct
+  registrants supply them up front. This closes the earlier doc-vs-code gap where
+  the webhook merely *linked* to an existing user.
+- Added `CompleteProfileView.spec.ts` (submit → redirect; backend-error path).
+  Frontend 36 unit tests + type-check green.
+
+**Wraps up** the 5-phase paid-onboarding feature (commits `9138ddd`, `ac9477f`,
+`e2c10c0`, `d73df55`, and this). The gap is closed end to end: pay → provision +
+magic link → complete profile → participate, backstopped server-side.
+
+**Commit:** `b408627`
+
+## 2026-07-21 — Paid onboarding, phase 4: frontend complete-profile gate
+
+**Requested:**
+
+> yes please... [proceed with Phase 4, the frontend gate]
+
+**Changed:**
+
+- New `CompleteProfileView` (phone + zipcode form) at `/complete-profile`;
+  auth-store `completeProfile()` action POSTs and swaps in the now-complete user.
+- Router guard: an authenticated-but-incomplete user is redirected to
+  complete-profile before any `requiresAuth` route (viewing stays public); the
+  complete-profile route itself is exempt to avoid a loop.
+- `MagicLinkView` routes a freshly-redeemed incomplete user straight to
+  complete-profile — a Stripe-provisioned subscriber finishes setup at first
+  sign-in.
+- `User` type gains `profileComplete` + nullable phone/zipcode; `en.json` gets
+  the `completeProfile` strings (the other 8 locales fall back to English until
+  translated).
+- type-check clean, 34 frontend unit tests green, production build green.
+
+**Commit:** `d73df55`
+
+## 2026-07-21 — Paid onboarding, phase 3: complete-profile + participation guard
+
+**Requested:**
+
+> Continue with phase 3 once tests pass
+
+**Changed:**
+
+- `POST /api/auth/complete-profile` (authenticated): supplies the phone +
+  zipcode a payment-first user was provisioned without. Format-validated; 409 if
+  the phone belongs to another account, 400 for an unknown zipcode; idempotent on
+  the user's own phone.
+- `User.profileComplete` (derived: phone && zipcode, `@Transient`) surfaced on
+  `UserDto`. New `CompleteProfileRequest` DTO.
+- `requireCompleteProfile()` (new `ParticipationGuard.kt`) added to all three
+  response-submit endpoints, so an incomplete user may view but not participate —
+  the zipcode drives geo-filtering + k-anonymity, so a locationless response
+  can't be counted.
+- `CompleteProfileTest` (4): happy path, unknown-zip 400, dup-phone 409, and the
+  guard (incomplete blocked → completes → can submit). Full suite 196, green.
+
+**Commit:** `e2c10c0`
+
+## 2026-07-21 — Paid onboarding, phase 2: provision on payment + magic link
+
+**Requested:**
+
+> Proceed with phase 2 please...
+
+**Changed:**
+
+- `StripeWebhookService.handleCheckoutCompleted`: when the checkout email has no
+  account, provision a minimal paid user (email + Stripe ids, phone/zipcode null,
+  `access = USER`), issue a magic-link token, and email it — closing the gap
+  where a payment-first subscriber was silently ignored. Existing-user checkouts
+  still just link the Stripe ids. `paid_until` continues to arrive via the
+  following subscription/invoice event (matched by stripe_subscription_id).
+- Injected `MagicLinkService` + `MagicLinkEmailer` into the webhook service.
+- New test: unknown-email checkout provisions the user (null phone/zipcode,
+  USER) and issues a magic link. Stripe suite 6/6 green.
+
+**Commit:** `ac9477f`
+
+## 2026-07-21 — Paid onboarding, phase 1: nullable phone + zipcode
+
+**Requested:**
+
+> going from what we have to the vision of a user getting access via substack
+> payment or directly [...] fix the paid-onboarding UX gap
+
+> Kick off phase 1 please...
+
+**Context:** The Stripe webhook only *links* a subscription to an already-
+registered user; a payment for an unknown email is ignored ("sign in first").
+The blocker is the schema — `User` required email + phone + zipcode, but a
+checkout event carries only email. Chosen fix (phased): provision a minimal paid
+user from the webhook + email a magic link, and collect phone + civic zipcode via
+a "complete your profile" step at first sign-in. Phase 1 lays the schema groundwork.
+
+**Changed:**
+
+- `V18` migration drops `NOT NULL` on `users.phone` / `users.zipcode`; phone
+  keeps `UNIQUE` (Postgres treats NULLs as distinct, so many incomplete users
+  coexist). `User.phone`/`zipcode` → `String?`.
+- `UserDto` + `SuperUserRow` expose them as nullable; the three results
+  controllers exclude no-zipcode responders from geo/purview filters (a user
+  with no location belongs to no geographic group).
+- Full backend suite green (191 tests, 0 failures/skips).
+
+**Commit:** `9138ddd`
+
 ## 2026-07-21 — UML: poll completion requires sign-in (no anonymous respondent link)
 
 **Requested:**

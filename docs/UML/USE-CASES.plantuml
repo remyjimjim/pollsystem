@@ -28,6 +28,8 @@ rectangle "Poll System" {
   (Stripe Checkout) --> (Stripe Webhook: checkout.session.completed)
   (Stripe Webhook: checkout.session.completed) --> (Provision Paid User)
   (Provision Paid User) --> (Send Magic Link)
+  (Send Magic Link) --> (Complete Profile)
+  (Complete Profile) --> (Find and Complete Polls)
 
   registered_user --> (Find and Complete Polls)
   registered_user --> (Subscribe via Stripe)
@@ -73,9 +75,21 @@ end note
 note right of (Subscribe via Stripe)
   Substack hosts free content only.
   Paid tier link in Substack posts goes
-  to our Stripe Checkout. On payment,
-  webhook provisions the user as paid
-  and emails a magic link.
+  to our Stripe Checkout. On payment, the
+  webhook provisions a paid account from the
+  checkout email alone and emails a magic
+  link; the user completes their profile at
+  first sign-in (see Complete Profile).
+end note
+
+note right of (Complete Profile)
+  A payment-first account is provisioned with
+  only an email. Phone + zipcode are collected
+  here at first sign-in and are required before
+  participating — the zipcode drives the geo-
+  filtering and k-anonymity of results. Users
+  who register directly supply these up front,
+  so they skip this step.
 end note
 
 note right of (Open Poll Link)

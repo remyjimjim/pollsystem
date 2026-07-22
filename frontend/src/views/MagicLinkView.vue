@@ -22,7 +22,13 @@ onMounted(async () => {
   try {
     await auth.redeemMagicLink(token)
     const redirect = (route.query.redirect as string) || '/'
-    router.replace(redirect)
+    // Payment-first users sign in here for the first time with no phone/zipcode;
+    // send them straight to complete their profile before anything else.
+    if (auth.user && !auth.user.profileComplete) {
+      router.replace({ name: 'CompleteProfile', query: { redirect } })
+    } else {
+      router.replace(redirect)
+    }
   } catch (e: any) {
     status.value = 'error'
     error.value =

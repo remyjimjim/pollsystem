@@ -47,10 +47,10 @@ import java.time.ZoneOffset
 data class SuperUserRow(
     val id: Long,
     val email: String,
-    val phone: String,
+    val phone: String?,
     val access: AccessLevel,
     val isEnabled: Boolean,
-    val zipcode: String,
+    val zipcode: String?,
     val stateInitial: String?,
     val countyName: String?,
     val latestMessage: SuperUserMessageDto?,
@@ -172,7 +172,7 @@ class SuperUsersController(
 
         // Batch-resolve geography + latest message + poll counts for the result set.
         val poolIds = pool.map { it.id }
-        val poolZips = pool.map { it.zipcode }.distinct()
+        val poolZips = pool.mapNotNull { it.zipcode }.distinct()
         val zipToCounty = countyZips.findByZipcodeIn(poolZips)
             .associate { it.zipcode to it.county }
         val latestByUser = userMessages.findByUserIdInOrderByCreatedAtDesc(poolIds)
@@ -181,7 +181,7 @@ class SuperUsersController(
         val (createdByUser, completedByUser) = batchPollCounts(poolIds)
 
         return pool.sortedBy { it.email }.map { u ->
-            val county = zipToCounty[u.zipcode]
+            val county = u.zipcode?.let { zipToCounty[it] }
             SuperUserRow(
                 id = u.id,
                 email = u.email,
@@ -430,7 +430,7 @@ class SuperUsersController(
     }
 
     private fun rowFor(u: User): SuperUserRow {
-        val county = countyZips.findByZipcode(u.zipcode).firstOrNull()?.county
+        val county = u.zipcode?.let { countyZips.findByZipcode(it).firstOrNull()?.county }
         val latest = userMessages.findByUserIdOrderByCreatedAtDesc(u.id).firstOrNull()
         val (createdMap, completedMap) = batchPollCounts(listOf(u.id))
         return SuperUserRow(

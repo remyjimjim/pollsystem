@@ -23,14 +23,25 @@ data class MagicLinkRedeemRequest(
     @field:NotBlank val token: String
 )
 
+/**
+ * Supplies the phone + zipcode a payment-first user was provisioned without.
+ * Both required and format-validated (as in MagicLinkRequest); the controller
+ * additionally checks phone uniqueness and that the zipcode is a real one.
+ */
+data class CompleteProfileRequest(
+    @field:Pattern(regexp = "^[0-9+\\-() ]{7,20}$") @field:NotBlank val phone: String,
+    @field:Pattern(regexp = "^[0-9]{5}$") @field:NotBlank val zipcode: String
+)
+
 data class UserDto(
     val id: Long,
     val email: String,
-    val phone: String,
-    val zipcode: String,
+    val phone: String?,
+    val zipcode: String?,
     val access: AccessLevel,
     val isEnabled: Boolean,
-    val paidUntil: Instant?
+    val paidUntil: Instant?,
+    val profileComplete: Boolean
 ) {
     companion object {
         fun from(user: User) = UserDto(
@@ -40,7 +51,8 @@ data class UserDto(
             zipcode = user.zipcode,
             access = user.access,
             isEnabled = user.isEnabled,
-            paidUntil = user.paidUntil
+            paidUntil = user.paidUntil,
+            profileComplete = user.profileComplete
         )
     }
 }

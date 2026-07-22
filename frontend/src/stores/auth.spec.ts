@@ -15,7 +15,8 @@ function makeUser(access: AccessLevel = AccessLevel.USER): User {
     zipcode: '90001',
     access,
     isEnabled: true,
-    paidUntil: null
+    paidUntil: null,
+    profileComplete: true
   }
 }
 

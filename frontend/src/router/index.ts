@@ -27,6 +27,15 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/MagicLinkView.vue')
   },
   {
+    // Payment-first users (provisioned from a Stripe checkout) land here to
+    // supply phone + zipcode before they can participate. Requires auth but is
+    // exempt from the profile-completeness guard below (else it'd loop).
+    path: '/complete-profile',
+    name: 'CompleteProfile',
+    component: () => import('@/views/CompleteProfileView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/polls/:type/:id/results',
     name: 'PollResults',
     component: () => import('@/views/PollResultsView.vue')
@@ -185,6 +194,20 @@ router.beforeEach(async (to, _from, next) => {
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next({ name: 'Login', query: { redirect: to.fullPath } })
+    return
+  }
+
+  // A payment-first user must finish their profile (phone + zipcode) before any
+  // authenticated action — participation depends on their zipcode. Viewing is
+  // public (no requiresAuth), so this only gates the "do something" routes.
+  if (
+    to.meta.requiresAuth &&
+    authStore.isAuthenticated &&
+    authStore.user &&
+    !authStore.user.profileComplete &&
+    to.name !== 'CompleteProfile'
+  ) {
+    next({ name: 'CompleteProfile', query: { redirect: to.fullPath } })
     return
   }
 
