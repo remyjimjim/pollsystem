@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-07-21 — Paid onboarding, phase 4: frontend complete-profile gate
+
+**Requested:**
+
+> yes please... [proceed with Phase 4, the frontend gate]
+
+**Changed:**
+
+- New `CompleteProfileView` (phone + zipcode form) at `/complete-profile`;
+  auth-store `completeProfile()` action POSTs and swaps in the now-complete user.
+- Router guard: an authenticated-but-incomplete user is redirected to
+  complete-profile before any `requiresAuth` route (viewing stays public); the
+  complete-profile route itself is exempt to avoid a loop.
+- `MagicLinkView` routes a freshly-redeemed incomplete user straight to
+  complete-profile — a Stripe-provisioned subscriber finishes setup at first
+  sign-in.
+- `User` type gains `profileComplete` + nullable phone/zipcode; `en.json` gets
+  the `completeProfile` strings (the other 8 locales fall back to English until
+  translated).
+- type-check clean, 34 frontend unit tests green, production build green.
+
+**Commit:** `d73df55`
+
 ## 2026-07-21 — Paid onboarding, phase 3: complete-profile + participation guard
 
 **Requested:**
