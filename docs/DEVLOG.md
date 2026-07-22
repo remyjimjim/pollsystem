@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-07-21 — Paid onboarding, phase 3: complete-profile + participation guard
+
+**Requested:**
+
+> Continue with phase 3 once tests pass
+
+**Changed:**
+
+- `POST /api/auth/complete-profile` (authenticated): supplies the phone +
+  zipcode a payment-first user was provisioned without. Format-validated; 409 if
+  the phone belongs to another account, 400 for an unknown zipcode; idempotent on
+  the user's own phone.
+- `User.profileComplete` (derived: phone && zipcode, `@Transient`) surfaced on
+  `UserDto`. New `CompleteProfileRequest` DTO.
+- `requireCompleteProfile()` (new `ParticipationGuard.kt`) added to all three
+  response-submit endpoints, so an incomplete user may view but not participate —
+  the zipcode drives geo-filtering + k-anonymity, so a locationless response
+  can't be counted.
+- `CompleteProfileTest` (4): happy path, unknown-zip 400, dup-phone 409, and the
+  guard (incomplete blocked → completes → can submit). Full suite 196, green.
+
+**Commit:** `e2c10c0`
+
 ## 2026-07-21 — Paid onboarding, phase 2: provision on payment + magic link
 
 **Requested:**
