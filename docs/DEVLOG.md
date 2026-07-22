@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-07-21 — Fix: make the registration e2e spec CI-safe
+
+**Context:** First real run of the new e2e job (PR #1) failed — the spec hit its
+240s timeout. Cause: `register-colorado-users.spec.ts` calls `pauseWithModal`
+before the final user (blocks until a human clicks Close — never happens in CI),
+plus three 4s per-screen demo "holds".
+
+**Changed:**
+
+- Gated the modal and the holds behind `INTERACTIVE = !process.env.CI` (via a
+  `hold()` helper). CI runs straight through; a local headed run still pauses for
+  watching. Added a `/// <reference types="node" />` so `process` resolves
+  (the `e2e/` dir is outside the `npm run type-check` scope anyway).
+
+**Commit:** `30cb02d`
+
+## 2026-07-21 — CI: add an E2E (Playwright) job
+
+**Requested:**
+
+> Add a CI job to run the e2e specs
+
+**Changed:**
+
+- New `e2e` job in `.github/workflows/ci.yml`. Brings up the full stack —
+  Postgres + Mailpit as services, the Spring backend on the `local` profile
+  (Mailpit mail + the `/api/dev` endpoints the specs need), and the Vite dev
+  server — waits for each to be healthy, then runs
+  `register-colorado-users.spec.ts`.
+- The interactive `register-users-debug` spec (blocks on a Close modal) is
+  deliberately excluded by naming only the real spec. Playwright report + server
+  logs upload on failure.
+
+**Note:** this closes the traceability-matrix finding that e2e wasn't in CI, so
+coverage stops drifting. Correctness of a full-stack CI job can only be confirmed
+by an actual runner, so it's landing via a branch/PR to prove the job green
+before it reaches `main`.
+
+**Commit:** `fabc63c`
+
 ## 2026-07-21 — Paid onboarding, phase 5: document the flow + frontend test
 
 **Requested:**

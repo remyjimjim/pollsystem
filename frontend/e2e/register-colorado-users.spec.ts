@@ -1,6 +1,16 @@
-import { test, expect } from '@playwright/test'
+/// <reference types="node" />
+import { test, expect, type Page } from '@playwright/test'
 import { clearMailpit, fetchMagicLink } from './mailpit'
 import { pauseWithModal } from './pause-modal'
+
+// The per-screen pauses and the pre-final-user modal below exist only to make a
+// live, headed run watchable (hold on each screen; stop to inspect the DB). In
+// CI they're useless and the modal would hang forever, so skip them there.
+// GitHub Actions (and most CI) set CI=true.
+const INTERACTIVE = !process.env.CI
+async function hold(page: Page, ms = 4_000): Promise<void> {
+  if (INTERACTIVE) await page.waitForTimeout(ms)
+}
 
 // Role string is part of the email handle for traceability only. The
 // register form has no role field; access level is granted later via
@@ -60,7 +70,7 @@ test.describe('register Colorado users via magic link', () => {
           // 1. Home — no values to set; hold for 4s, then click Register CTA
           //    (disambiguated from the nav link by the trailing arrow).
           await page.goto('http://localhost:3000')
-          await page.waitForTimeout(4_000)               // hold on home (no values)
+          await hold(page)                               // hold on home (no values)
           await page.getByRole('link', { name: 'Register →' }).click()
           await expect(page).toHaveURL('http://localhost:3000/register')
 
@@ -69,12 +79,13 @@ test.describe('register Colorado users via magic link', () => {
           await page.getByLabel('Email').fill(email)
           await page.getByLabel('Phone').fill(phone)
           await page.getByLabel('Zipcode').fill(zipcode)
-          await page.waitForTimeout(4_000)               // hold on /register with form filled
+          await hold(page)                               // hold on /register with form filled
 
           // On the very last iteration, pause before submit so the user can
           // query the DB and see the state immediately before the 8th user
           // is registered. Resume by clicking Close in the injected modal.
-          if (n === TOTAL_USERS) {
+          // Interactive-only — skipped in CI (it would block until timeout).
+          if (n === TOTAL_USERS && INTERACTIVE) {
             await pauseWithModal(page, 'Last chance to query database', PAUSE_BODY)
           }
 
@@ -101,7 +112,7 @@ test.describe('register Colorado users via magic link', () => {
           const magicHref = await fetchMagicLink(email)
           await page.goto(magicHref)
           await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible({ timeout: 30_000 })
-          await page.waitForTimeout(4_000)               // hold on signed-in landing
+          await hold(page)                               // hold on signed-in landing
         } finally {
           // Closing the context drops the entire session (cookies, storage,
           // both pages). No explicit logout needed — next iteration starts

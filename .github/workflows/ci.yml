@@ -74,3 +74,107 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    # The Playwright specs drive the real app: they register users through the
+    # UI, and read the magic-link emails back out of Mailpit. So the whole stack
+    # has to be up — Postgres, Mailpit, the Spring backend (local profile), and
+    # the Vite dev server — before the specs run.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: polladmin
+          POSTGRES_PASSWORD: pollpass123
+          POSTGRES_DB: pollsystem
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U polladmin -d pollsystem"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+      mailpit:
+        image: axllent/mailpit:latest
+        ports:
+          - 1025:1025   # SMTP — MailConfig's local profile points here
+          - 8025:8025   # HTTP API — the specs read magic links from here
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Start the backend in the background on the `local` profile (Mailpit mail,
+      # Flyway migrations + seed-local, the /api/dev/* endpoints the specs use).
+      - name: Start backend
+        working-directory: backend
+        env:
+          SPRING_PROFILES_ACTIVE: local
+        run: |
+          nohup gradle bootRun --no-daemon > backend.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8080/actuator/health >/dev/null; then echo "backend up"; break; fi
+            if [ "$i" = 60 ]; then echo "backend failed to start"; tail -n 100 backend.log; exit 1; fi
+            sleep 3
+          done
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install --no-audit --no-fund
+
+      - name: Install Playwright browser
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+
+      - name: Start frontend dev server
+        working-directory: frontend
+        run: |
+          nohup npm run dev > frontend.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000 >/dev/null; then echo "frontend up"; break; fi
+            if [ "$i" = 30 ]; then echo "frontend failed to start"; tail -n 100 frontend.log; exit 1; fi
+            sleep 2
+          done
+
+      - name: Wait for Mailpit
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8025/api/v1/messages >/dev/null; then echo "mailpit up"; break; fi
+            if [ "$i" = 30 ]; then echo "mailpit not reachable"; exit 1; fi
+            sleep 2
+          done
+
+      # Runs the real registration spec only. `register-users-debug` is an
+      # interactive dev tool (it blocks on a Close modal) — never run it in CI.
+      # Add new non-interactive specs to this command as they're written.
+      - name: Run e2e specs
+        working-directory: frontend
+        run: npx playwright test register-colorado-users.spec.ts
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report
+          path: |
+            frontend/playwright-report
+            frontend/test-results
+            frontend/frontend.log
+            backend/backend.log
+          retention-days: 7
+          if-no-files-found: ignore
