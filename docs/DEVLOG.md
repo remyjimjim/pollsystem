@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-07-22 — i18n: localize the complete-profile view (8 locales)
+
+**Requested:**
+
+> translate the complete-profile view into the other 8 locales
+
+**Changed:**
+
+- Added the `completeProfile` block to `fr, es, de, it, ja, nb, pt-BR, zh-CN`,
+  closing the Phase-4 gap where those languages fell back to English on the
+  complete-profile view. Reused each locale's existing `register` phone/zipcode
+  labels and matched its formality (formal Sie/vous/usted/您 vs informal tu/du).
+- Inserted via a raw-text splice before each file's `magicLink` key, so the diff
+  is a clean +9 lines per file. Key parity with `en` verified; frontend build green.
+
+**Commit:** `ad9b098`
+
 ## 2026-07-21 — Fix: make the registration e2e spec CI-safe
 
 **Context:** First real run of the new e2e job (PR #1) failed — the spec hit its
