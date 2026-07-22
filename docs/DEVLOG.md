@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-07-21 — Cover PollSearchController; add e2e traceability matrix
+
+**Requested:**
+
+> I was going to define some more end to end (e2e) tests that map to our
+> docs/UML/USE-CASES.plantuml but am still working on mapping that out [...]
+> I'm open to any suggestions you may have.
+
+> add the two missing backend tests
+
+**Changed:**
+
+- Added `docs/E2E-TRACEABILITY.md`: every `USE-CASES.plantuml` use case mapped
+  to its backend/e2e coverage, with the e2e gaps risk-ranked. Key framing —
+  backend integration coverage is strong, so e2e priority tracks untested
+  browser/full-stack wiring, not untested logic.
+- Added `PollSearchControllerTest` (7 tests, green) for the public
+  `/api/polls/search` endpoint, which had no test at any level: title / type /
+  candidate / zipcode filters, the published-and-active gate, `includeClosed`,
+  and the `suggestions` datalist feed, across all three poll kinds.
+
+**Decision / finding:** the second "missing test" — *Generate Respondent Link*
+(the UML's opaque `/poll/<token>` for unauthenticated submission) — turned out
+to be **unbuilt**, not merely untested: no generation endpoint, no route, and
+poll submission is gated by `anyRequest().authenticated()`. No test was written;
+instead the discrepancy is recorded in the matrix to resolve deliberately (build
+the flow, or amend the UML to match today's authenticated-by-id completion).
+
+**Commit:** `ccb51d0`
+
 ## 2026-07-20 — Scope devlog-reminder hook to the project
 
 **Requested:**
