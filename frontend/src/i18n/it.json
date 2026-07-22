@@ -110,6 +110,15 @@
     "signInLink": "Accedi",
     "errorGeneric": "Impossibile inviare il link di accesso"
   },
+  "completeProfile": {
+    "heading": "Completa il tuo profilo",
+    "intro": "Grazie per l'abbonamento! Aggiungi il tuo telefono e il CAP per completare la configurazione del tuo account. Il tuo CAP viene usato per mostrare i risultati dei sondaggi della tua zona.",
+    "phoneLabel": "Telefono",
+    "zipcodeLabel": "CAP",
+    "submitButton": "Salva e continua",
+    "submittingButton": "Salvataggio…",
+    "errorGeneric": "Impossibile salvare il tuo profilo"
+  },
   "magicLink": {
     "signingIn": "Accesso in corso…",
     "failedHeading": "Accesso non riuscito",

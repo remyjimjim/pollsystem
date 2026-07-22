@@ -110,6 +110,15 @@
     "signInLink": "ログイン",
     "errorGeneric": "ログインリンクを送信できませんでした"
   },
+  "completeProfile": {
+    "heading": "プロフィールを完成させる",
+    "intro": "ご登録ありがとうございます！電話番号と郵便番号を追加して、アカウントの設定を完了してください。郵便番号は、お住まいの地域の投票結果を表示するために使用されます。",
+    "phoneLabel": "電話番号",
+    "zipcodeLabel": "郵便番号",
+    "submitButton": "保存して続行",
+    "submittingButton": "保存中…",
+    "errorGeneric": "プロフィールを保存できませんでした"
+  },
   "magicLink": {
     "signingIn": "ログイン中…",
     "failedHeading": "ログインに失敗しました",

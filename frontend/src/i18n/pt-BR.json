@@ -110,6 +110,15 @@
     "signInLink": "Entrar",
     "errorGeneric": "Não foi possível enviar o link de acesso"
   },
+  "completeProfile": {
+    "heading": "Complete seu perfil",
+    "intro": "Obrigado por assinar! Adicione seu telefone e CEP para terminar de configurar sua conta. Seu CEP é usado para mostrar os resultados das enquetes da sua região.",
+    "phoneLabel": "Telefone",
+    "zipcodeLabel": "CEP",
+    "submitButton": "Salvar e continuar",
+    "submittingButton": "Salvando…",
+    "errorGeneric": "Não foi possível salvar seu perfil"
+  },
   "magicLink": {
     "signingIn": "Entrando…",
     "failedHeading": "Falha ao entrar",

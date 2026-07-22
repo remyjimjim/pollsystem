@@ -110,6 +110,15 @@
     "signInLink": "Anmelden",
     "errorGeneric": "Anmeldelink konnte nicht gesendet werden"
   },
+  "completeProfile": {
+    "heading": "Vervollständigen Sie Ihr Profil",
+    "intro": "Danke für Ihr Abonnement! Fügen Sie Ihre Telefonnummer und Postleitzahl hinzu, um die Einrichtung Ihres Kontos abzuschließen. Ihre Postleitzahl wird verwendet, um Umfrageergebnisse für Ihre Region anzuzeigen.",
+    "phoneLabel": "Telefon",
+    "zipcodeLabel": "Postleitzahl",
+    "submitButton": "Speichern und fortfahren",
+    "submittingButton": "Wird gespeichert…",
+    "errorGeneric": "Ihr Profil konnte nicht gespeichert werden"
+  },
   "magicLink": {
     "signingIn": "Anmeldung läuft…",
     "failedHeading": "Anmeldung fehlgeschlagen",

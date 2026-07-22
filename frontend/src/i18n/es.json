@@ -110,6 +110,15 @@
     "signInLink": "Iniciar sesión",
     "errorGeneric": "No se pudo enviar el enlace de inicio de sesión"
   },
+  "completeProfile": {
+    "heading": "Complete su perfil",
+    "intro": "¡Gracias por suscribirse! Añada su teléfono y código postal para terminar de configurar su cuenta. Su código postal se usa para mostrar los resultados de las encuestas de su zona.",
+    "phoneLabel": "Teléfono",
+    "zipcodeLabel": "Código postal",
+    "submitButton": "Guardar y continuar",
+    "submittingButton": "Guardando…",
+    "errorGeneric": "No se pudo guardar su perfil"
+  },
   "magicLink": {
     "signingIn": "Iniciando sesión…",
     "failedHeading": "Error al iniciar sesión",

@@ -110,6 +110,15 @@
     "signInLink": "登录",
     "errorGeneric": "无法发送登录链接"
   },
+  "completeProfile": {
+    "heading": "完善您的资料",
+    "intro": "感谢您的订阅！请添加您的电话和邮政编码以完成账户设置。您的邮政编码用于显示您所在地区的投票结果。",
+    "phoneLabel": "电话",
+    "zipcodeLabel": "邮政编码",
+    "submitButton": "保存并继续",
+    "submittingButton": "正在保存…",
+    "errorGeneric": "无法保存您的资料"
+  },
   "magicLink": {
     "signingIn": "正在为您登录…",
     "failedHeading": "登录失败",

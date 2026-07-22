@@ -110,6 +110,15 @@
     "signInLink": "Logg inn",
     "errorGeneric": "Kunne ikke sende innloggingslenken"
   },
+  "completeProfile": {
+    "heading": "Fullfør profilen din",
+    "intro": "Takk for at du abonnerer! Legg til telefonnummer og postnummer for å fullføre oppsettet av kontoen din. Postnummeret ditt brukes til å vise avstemningsresultater for området ditt.",
+    "phoneLabel": "Telefon",
+    "zipcodeLabel": "Postnummer",
+    "submitButton": "Lagre og fortsett",
+    "submittingButton": "Lagrer…",
+    "errorGeneric": "Kunne ikke lagre profilen din"
+  },
   "magicLink": {
     "signingIn": "Logger deg inn…",
     "failedHeading": "Innlogging mislyktes",

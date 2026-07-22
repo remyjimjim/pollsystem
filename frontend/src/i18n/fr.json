@@ -110,6 +110,15 @@
     "signInLink": "Se connecter",
     "errorGeneric": "Impossible d'envoyer le lien de connexion"
   },
+  "completeProfile": {
+    "heading": "Complétez votre profil",
+    "intro": "Merci de votre abonnement ! Ajoutez votre téléphone et votre code postal pour terminer la configuration de votre compte. Votre code postal sert à afficher les résultats des sondages pour votre région.",
+    "phoneLabel": "Téléphone",
+    "zipcodeLabel": "Code postal",
+    "submitButton": "Enregistrer et continuer",
+    "submittingButton": "Enregistrement…",
+    "errorGeneric": "Impossible d'enregistrer votre profil"
+  },
   "magicLink": {
     "signingIn": "Connexion en cours…",
     "failedHeading": "Échec de la connexion",
