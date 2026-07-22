@@ -15,10 +15,14 @@ actor "Stripe" as stripe
 rectangle "Poll System" {
 
   viewer --> (View Poll Results)
-  viewer --> (Complete Poll via Link)
+  viewer --> (Open Poll Link)
   viewer --> (Sign In via Magic Link)
   viewer --> (Subscribe via Stripe)
 
+  ' A shared poll link is just the poll's URL. Viewing is open, but submitting
+  ' a response requires signing in first — so the link path routes through
+  ' magic-link sign-in, then Complete Poll.
+  (Open Poll Link) --> (Sign In via Magic Link)
   (Sign In via Magic Link) --> (Find and Complete Polls)
   (Subscribe via Stripe) --> (Stripe Checkout)
   (Stripe Checkout) --> (Stripe Webhook: checkout.session.completed)
@@ -35,7 +39,6 @@ rectangle "Poll System" {
   (Create Creator Request) --> (Submit Creator Request)
 
   creator --> (Create Poll)
-  creator --> (Generate Respondent Link)
 
   (Create Poll) --> (Select Poll Type and Domain)
   (Select Poll Type and Domain) --> (Questionnaire)
@@ -75,11 +78,14 @@ note right of (Subscribe via Stripe)
   and emails a magic link.
 end note
 
-note right of (Generate Respondent Link)
-  Respondents receive an opaque
-  /poll/<token> URL. They do not
-  authenticate; the token is the
-  capability to submit a response.
+note right of (Open Poll Link)
+  A poll link is simply the poll's URL
+  (/polls/<type>/<id>). Anyone may open it
+  and view it, but there is no anonymous
+  submission: completing a poll requires a
+  magic-link sign-in. Every response is tied
+  to a user, whose zipcode drives the geo-
+  filtering and k-anonymity of results.
 end note
 
 note right of creator
