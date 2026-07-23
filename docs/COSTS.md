@@ -10,6 +10,22 @@
 > is gated by **Stripe** subscriptions originating from a Substack-driven funnel.
 > Estimates are in USD and reflect public pricing as of early 2026.
 
+> **Mid-2026 pricing refresh (2026-07-22).** A validation pass re-checked live
+> pricing. The stack still holds up, with three corrections baked into the tables
+> below:
+> - **SendGrid's free tier no longer exists** — it's now a 60-day trial, then
+>   Essentials ~$19.95/mo. Switch magic-link delivery to **Resend** (free 3,000
+>   emails/mo, 100/day) or **Amazon SES** (~$0.10 per 1,000 emails ≈ $10/mo at
+>   100k sends). This is the one change that actually breaks the old $0 email line.
+> - **Frontend → Cloudflare Pages (free)** instead of a Fly app — global CDN, $0,
+>   one fewer machine to run.
+> - **Watch two things:** Neon's bill is cheap only while it autosuspends; a
+>   steady-traffic always-on 1 CU is ~$78/mo, so monitor CU-hours. And always use
+>   Neon's **pooled** connection endpoint — a JVM HikariCP pool × N autoscaled
+>   instances will otherwise exhaust Postgres connections. If Neon's always-on
+>   cost climbs, a fixed-price Postgres (Supabase Micro ~$25, or self-managed on a
+>   Hetzner box) gets cheaper. See "Alternatives considered" for the full comparison.
+
 ---
 
 ## TL;DR — Lowest-cost staging path
@@ -17,14 +33,14 @@
 | Layer | Choice | Monthly |
 |---|---|---|
 | Backend (JVM) | Spring Boot compiled with **GraalVM native image**, 3–5× Fly.io shared-cpu-1x @ 512 MB, autoscale | ~$15–$25 |
-| Frontend | 1× Fly.io shared-cpu-1x @ 256 MB, auto-stop | ~$3 |
+| Frontend | **Cloudflare Pages** (static Vue build, global CDN) | **$0** |
 | Database | **Neon Postgres — Launch plan** (10 GB, autoscaling compute) | ~$19 |
 | Cache / sessions / magic-link tokens | **Upstash Redis** pay-as-you-go (~3–5 M cmds/mo) | ~$5–$10 |
-| Email (magic-link delivery + transactional) | **SendGrid** free tier (3 k/mo) — sufficient for staging | $0 |
+| Email (magic-link delivery + transactional) | **Resend** free tier (3 k/mo) → **Amazon SES** (~$10 at 100k) once volume grows | $0–$10 |
 | Phone / SMS | **None** — phone is collected and formatting-validated only | $0 |
 | Payments | **Stripe** — no flat fee, per-transaction only (see below) | $0 fixed |
 | CI | GitHub Actions free tier | $0 |
-| **Recurring infrastructure total** | | **~$42–$57 / month** |
+| **Recurring infrastructure total** | | **~$40–$60 / month** |
 
 This config will hold 5,000 concurrent users and a 200 k registered-user pool with
 headroom on autoscale. Stripe takes a per-transaction cut on the revenue side
@@ -80,7 +96,7 @@ Two configurations are presented:
 | Fly Postgres (managed) | dedicated-cpu-1x, 10 GB volume, daily snapshots | ~$30 |
 | Database encryption (at rest) | Fly Postgres volume encryption — default-on, AES-256 | $0 |
 | Upstash Redis | Pay-as-you-go (~3–5 M commands/month) | ~$5–$10 |
-| SendGrid | Free tier (≤ 3,000 emails/month) | $0 |
+| Resend (email) | Free tier (≤ 3,000/mo); Amazon SES ~$10 at 100k sends | $0–$10 |
 | Object storage (R2 / S3) | Static assets, JSON exports, ~5 GB | ~$1 |
 | Backup storage | Off-site Postgres snapshots, ~10 GB retained | ~$1 |
 | GitHub Actions | Free tier (longer Java builds may push into paid mins) | $0–$4 |
@@ -95,7 +111,7 @@ Two configurations are presented:
 | Neon Postgres — Launch | 10 GB storage, autoscaling compute, branching | ~$19 |
 | Database encryption (at rest) | Neon storage encryption — default-on, AES-256 | $0 |
 | Upstash Redis | Pay-as-you-go (~3–5 M commands/month) | ~$5–$10 |
-| SendGrid | Free tier (≤ 3,000 emails/month) | $0 |
+| Resend (email) | Free tier (≤ 3,000/mo); Amazon SES ~$10 at 100k sends | $0–$10 |
 | GitHub Actions | Free tier; native-image build cached between runs | $0 |
 | **Monthly total** | | **~$42–$57 / month** |
 
@@ -194,10 +210,13 @@ Skip managed Postgres entirely and run vanilla `postgres:16` on a Fly machine wi
 volume. Saves ~$15–$30/mo but you own backups, point-in-time recovery, and version
 upgrades. Not recommended above the local-development tier.
 
-### F. Stay on SendGrid free
-3,000 emails/month covers staging-scale magic-link traffic indefinitely. Only move to
-SendGrid Essentials (100 k for $19.95/mo) when steady-state login volume exceeds the
-free tier — which, for this product, won't happen until thousands of monthly active users.
+### F. Use Resend's free tier (SendGrid's is gone)
+As of mid-2026 SendGrid no longer has a permanent free tier (60-day trial, then
+Essentials ~$19.95/mo). Use **Resend** instead — its free tier is 3,000 emails/mo
+(100/day), which covers staging-scale magic-link traffic. When steady-state login
+volume outgrows that, **Amazon SES** at $0.10 per 1,000 emails (~$10/mo for 100k
+sends) is the cheapest path at scale; Resend Pro ($20/mo, 50k) is the lower-effort
+alternative.
 
 ---
 
@@ -211,7 +230,8 @@ dedicated production tier when **any one** of these holds:
   riding on the platform — operational risk justifies the upgrade.
 - The 200 k user pool is exceeded by ≥ 2× and Neon Launch's storage is filling up.
 - Steady-state DB CPU on Neon exceeds the Launch plan's autoscale ceiling.
-- Magic-link email volume exceeds SendGrid's free tier sustainably.
+- Magic-link email volume exceeds Resend's free tier (3,000/mo) sustainably —
+  at which point move to Amazon SES (~$0.10 per 1,000).
 - Compliance, audit, or uptime SLAs are introduced — at that point you want Fly
   Postgres dedicated, off-site backups, and a read replica.
 
