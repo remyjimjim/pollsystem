@@ -1,0 +1,8 @@
+# Keep the build context small and reproducible — the image builds the JAR
+# itself, so local build artifacts and caches must not leak in.
+build/
+.gradle/
+bin/
+*.iml
+.idea/
+.git/

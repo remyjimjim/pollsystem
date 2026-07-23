@@ -70,71 +70,23 @@ that live outside Fly. This is the lowest-cost-path topology described in
 
 ## Part 2 — Backend app
 
-The backend currently has no `Dockerfile` or `fly.toml`. Both can be generated
-by `flyctl launch`, but Spring Boot apps run cleaner with an explicit Dockerfile.
+The backend now ships with `backend/Dockerfile`, `backend/.dockerignore`, and
+`backend/fly.toml` (added 2026-07-22) — no `flyctl launch` scaffolding needed.
 
-### Add a Dockerfile (one-time)
+- **`Dockerfile`** — two-stage: compiles the Spring Boot fat JAR with the repo's
+  pinned Gradle **wrapper** (`./gradlew bootJar`; the `eclipse-temurin` base has no
+  system `gradle`), then runs it on a JRE as a non-root user. Conservative-baseline
+  path — plain JVM, ~1–2 GB RAM per instance. The GraalVM native-image variant is at
+  the bottom of this doc.
+- **`fly.toml`** — `internal_port = 8080`, `force_https`, auto-stop/-start with one
+  machine kept warm, a `shared / 2 CPU / 2048 MB` VM, `SPRING_PROFILES_ACTIVE = "prod"`
+  in `[env]`, and an `/actuator/health` HTTP check. (`spring-boot-starter-actuator`
+  **is** now a dependency and `application.yml` exposes `health` — the older "add
+  actuator" caveat no longer applies.)
 
-Create `backend/Dockerfile`:
-
-```dockerfile
-# Build stage — compile to a Spring Boot fat JAR.
-FROM eclipse-temurin:17-jdk-jammy AS build
-WORKDIR /app
-COPY . .
-RUN --mount=type=cache,target=/root/.gradle \
-    gradle bootJar -x test --no-daemon
-
-# Runtime stage — JRE only, smaller image.
-FROM eclipse-temurin:17-jre-jammy
-WORKDIR /app
-COPY --from=build /app/build/libs/pollsystem-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-XX:MaxRAMPercentage=75.0","-jar","/app/app.jar"]
-```
-
-This is the **conservative-baseline** path — runs on the JVM, expects ~1 GB RAM
-per instance. The GraalVM native-image variant is at the bottom of this doc.
-
-### Launch the app
-
-From `backend/`:
-
-```bash
-flyctl launch --no-deploy --name pollsystem-backend --region iad
-```
-
-Answer "no" when asked to provision Postgres or Redis (we're using Neon and Upstash externally). The command writes a `fly.toml`. Edit it:
-
-```toml
-app = "pollsystem-backend"
-primary_region = "iad"
-
-[build]
-  dockerfile = "Dockerfile"
-
-[http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = true        # auto-stop when idle (saves $)
-  auto_start_machines = true
-  min_machines_running = 1         # keep at least one warm
-  processes = ["app"]
-
-[[vm]]
-  cpu_kind = "shared"
-  cpus = 2
-  memory_mb = 2048                 # 1024 is tight; 2048 is comfortable on JVM
-
-[[http_service.checks]]
-  grace_period = "30s"             # JVM cold-start headroom
-  interval = "15s"
-  timeout = "2s"
-  method = "GET"
-  path = "/actuator/health"        # enable spring-boot-starter-actuator
-```
-
-> **Note**: the project doesn't currently include `spring-boot-starter-actuator`. Either add it (`implementation("org.springframework.boot:spring-boot-starter-actuator")` in `build.gradle.kts`) and expose `/actuator/health`, or change the health-check path to any cheap GET endpoint that returns 200.
+Review `backend/fly.toml` and adjust the app name / region if you aren't using
+`pollsystem-backend` / `iad`. The image is verified to build with a local
+`docker build`; the first `flyctl deploy` just pushes it.
 
 ### Set secrets
 
