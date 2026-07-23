@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-07-22 — Cloudflare Pages config for the frontend
+
+**Requested:**
+
+> [...] then add cloudflare pages config for the frontend
+
+**Changed:**
+
+- `frontend/functions/api/[[path]].js`: a Pages Function that proxies `/api/*` to
+  the backend (`BACKEND_ORIGIN`), so the SPA's relative `/api` calls stay
+  same-origin — no CORS, no build-time API base URL, no frontend code change.
+- `frontend/public/_redirects`: SPA history fallback (`/* → /index.html 200`).
+- `docs/DEPLOYING-CLOUDFLARE-PAGES.md`: build settings (root `frontend`, `npm run
+  build`, output `dist`), `BACKEND_ORIGIN` env, custom domain, `APP_BASE_URL` on
+  the backend, and the subdomain+CORS alternative. Build verified; `_redirects`
+  lands in `dist/`.
+
+**Commit:** `3c4c8ae`
+
 ## 2026-07-22 — Stripe test-mode runbook + transcript gitignore
 
 **Requested:**
