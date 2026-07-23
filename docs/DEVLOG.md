@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-07-22 — Stripe test-mode runbook + transcript gitignore
+
+**Requested:**
+
+> Add sessions.transcript*.md to the gitignore then build the Stripe test-mode
+> runbook then push commits [...]
+
+**Changed:**
+
+- `docs/STRIPE-TEST-RUNBOOK.md`: verifies the revenue path in Stripe test mode —
+  Part A local (Stripe CLI → `localhost:8080/webhooks/stripe`, magic links in
+  Mailpit, DB checks), Part B a test-mode-first go-live gate on the deployed env
+  (real deliverability via Resend/SES) before swapping to live keys. Includes the
+  per-event effect table drawn from `StripeWebhookService`.
+- `.gitignore`: widened to `sessions.transcript*.md` so `claude-expand` output
+  (`sessions.transcript.expanded.md`) is ignored alongside `/export`'s file.
+
+**Commit:** `655f81a`
+
 ## 2026-07-22 — Hosting validation + Fly deploy files
 
 **Requested:**
