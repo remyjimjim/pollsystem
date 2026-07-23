@@ -1,0 +1,9 @@
+# Cloudflare Pages routing for the Vue SPA.
+#
+# /api/* is handled by the Pages Function (functions/api/[[path]].js), which
+# runs BEFORE this file, so those requests are proxied to the backend and never
+# fall through here.
+#
+# Everything else: serve the SPA shell so Vue Router history-mode deep links and
+# hard refreshes (e.g. /polls/search, /auth/magic-link, /complete-profile) work.
+/*    /index.html   200
