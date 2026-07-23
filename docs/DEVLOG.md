@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-07-22 — Hosting validation + Fly deploy files
+
+**Requested:**
+
+> look for the best fit for an inexpensive yet scalable to 100000 users host provider
+
+> (a) [update COSTS.md] then (b) [build the fly.toml + Dockerfile]
+
+**Decision (hosting):** A mid-2026 pricing validation confirmed the existing
+`COSTS.md` pick — **Fly.io + Neon + Upstash** — still holds for the ~100k-user
+target (~$40–60/mo). One assumption broke: **SendGrid's free tier is gone**, so
+magic-link email moves to **Resend** (free 3k/mo) → **Amazon SES** at scale.
+Also parked the Vue frontend on **Cloudflare Pages** (free). Watch items: Neon's
+always-on CU-hours cost, and using Neon's pooled endpoint under JVM autoscale.
+(Domain: `codehutch.org` confirmed available; register at Porkbun.)
+
+**Changed:**
+
+- `docs/COSTS.md`: dated refresh callout + corrected tables (email, frontend,
+  gotchas). — `bffb687`
+- `backend/Dockerfile` (+ `.dockerignore`), `backend/fly.toml`, and a
+  `DEPLOYING-FLY.md` update. The Dockerfile builds the fat JAR via the pinned
+  Gradle **wrapper** (the doc's old snippet called a `gradle` absent from the
+  base image) and runs non-root on a JRE. **Verified**: `docker build` succeeds
+  and the image boots Spring Boot; fixed a surfaced container bug where logback's
+  prod file appenders couldn't create `./logs` as non-root. — `994155e`
+
+**Commits:** `bffb687`, `994155e`
+
 ## 2026-07-22 — E2E: Search→Complete spec
 
 **Requested:**
