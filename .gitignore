@@ -20,6 +20,6 @@ frontend/playwright-report/
 .DS_Store
 Thumbs.db
 
-# Claude Code session transcripts (/export output)
-sessions.transcript.md
+# Claude Code session transcripts (/export and claude-expand output)
+sessions.transcript*.md
 *.transcript.md
