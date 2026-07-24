@@ -286,3 +286,11 @@ Caveats:
 - Multi-region failover.
 
 These are intentionally left out — they belong to a "leaving lowest-cost staging" follow-up, per `docs/COSTS.md`.
+
+## Test / staging environments
+
+We run **local + production**; a test site is a separate *environment* (a free
+subdomain like `staging.surveysays.buzz`), never a separate domain. The preferred
+free testing paths — local, Cloudflare Pages preview URLs, and the test-mode-first
+gate — plus the optional always-on staging subdomain (second Fly app + Neon
+branch) are all in **`docs/ENVIRONMENTS.md`**.

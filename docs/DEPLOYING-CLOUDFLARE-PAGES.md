@@ -68,3 +68,10 @@ If you'd rather not proxy, put the backend on `api.codehutch.org`, give the SPA 
 build-time `VITE_API_BASE_URL=https://api.codehutch.org` (and have the axios setup
 read it), and enable CORS for `https://codehutch.org` on the backend. That's a
 frontend + backend code change; the Pages Function proxy above avoids both.
+
+## Preview deployments & staging
+
+Pages automatically serves every non-production branch / PR at a free
+`https://<hash>.<project>.pages.dev` preview URL — an instant online frontend test
+site, no domain needed. That, and the optional always-on staging subdomain, are in
+**`docs/ENVIRONMENTS.md`**.
