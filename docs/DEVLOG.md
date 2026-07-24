@@ -61,6 +61,22 @@ logged.
 
 ---
 
+## 2026-07-24 — App domain → surveysays.buzz
+
+**Requested:**
+
+> knock out that domain swap
+
+**Changed:**
+
+- The app deploys to **surveysays.buzz**; **codehutch.org** is the separate
+  business site. Swapped the app-domain references (incl. `api.` subdomain) in
+  `DEPLOYING-CLOUDFLARE-PAGES.md`, `STRIPE-TEST-RUNBOOK.md` (`APP_BASE_URL`), and
+  the Pages Function comment. Deliberately left intact: `ENVIRONMENTS.md`'s
+  "codehutch.org (the business)" line and this log's earlier historical mention.
+
+**Commit:** `aba5db4`
+
 ## 2026-07-24 — Environments & test-site guide
 
 **Requested:**
