@@ -3,10 +3,10 @@
 // The SPA calls the API with relative paths (e.g. `/api/auth/me`). On Pages the
 // static site has no backend, so this Function forwards every /api/* request to
 // the backend origin. Because the browser only ever talks to its own origin
-// (codehutch.org), there is no CORS and no need for a build-time API base URL.
+// (surveysays.buzz), there is no CORS and no need for a build-time API base URL.
 //
 // Configure the backend origin as a Pages environment variable:
-//   BACKEND_ORIGIN = https://pollsystem-backend.fly.dev   (or api.codehutch.org)
+//   BACKEND_ORIGIN = https://pollsystem-backend.fly.dev   (or api.surveysays.buzz)
 //
 // Note: the Stripe webhook (POST /webhooks/stripe) is NOT under /api and is not
 // proxied here — Stripe posts directly to the backend URL (see DEPLOYING-FLY.md).

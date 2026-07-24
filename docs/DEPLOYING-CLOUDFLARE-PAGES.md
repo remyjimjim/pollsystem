@@ -5,11 +5,11 @@ CDN). API calls stay same-origin: a Pages **Function** proxies `/api/*` to the
 Fly backend, so there's no CORS and no build-time API URL to manage.
 
 ```
-  browser ──▶ codehutch.org ──▶ Cloudflare Pages
+  browser ──▶ surveysays.buzz ──▶ Cloudflare Pages
                  │  static SPA (dist/) + SPA history fallback (_redirects)
                  └─ /api/* ──▶ Pages Function ──▶ https://pollsystem-backend.fly.dev  (Fly)
   Stripe   ──────────────────────────────────▶ backend /webhooks/stripe  (direct, not via Pages)
-  magic link email ──▶ https://codehutch.org/auth/magic-link  (SPA route)
+  magic link email ──▶ https://surveysays.buzz/auth/magic-link  (SPA route)
 ```
 
 ## Files in the repo
@@ -39,34 +39,34 @@ proxy; the Pages Function only runs on Cloudflare.
 3. **Environment variables** (Settings → Environment variables):
    | Name | Value |
    |---|---|
-   | `BACKEND_ORIGIN` | `https://pollsystem-backend.fly.dev` (or `https://api.codehutch.org`) |
+   | `BACKEND_ORIGIN` | `https://pollsystem-backend.fly.dev` (or `https://api.surveysays.buzz`) |
 
 4. **Deploy.** Pages runs `npm run build` in `frontend/`, serves `dist/`, and
    deploys `frontend/functions/` automatically.
 
-5. **Custom domain**: Pages project → **Custom domains** → add `codehutch.org`.
+5. **Custom domain**: Pages project → **Custom domains** → add `surveysays.buzz`.
    If the domain's DNS is on Cloudflare, it's wired automatically; otherwise add
    the CNAME Cloudflare shows you at your registrar.
 
 6. **Point the backend's magic links at the frontend** — set on Fly so email
    links resolve to the SPA:
    ```bash
-   flyctl secrets set -a pollsystem-backend APP_BASE_URL=https://codehutch.org
+   flyctl secrets set -a pollsystem-backend APP_BASE_URL=https://surveysays.buzz
    ```
 
 ## Verify
 
-- `https://codehutch.org` loads the SPA; a hard refresh on `/polls/search` still
+- `https://surveysays.buzz` loads the SPA; a hard refresh on `/polls/search` still
   works (SPA fallback).
-- `https://codehutch.org/api/polls/search/suggestions` returns JSON (Function →
+- `https://surveysays.buzz/api/polls/search/suggestions` returns JSON (Function →
   backend proxy working).
-- Register → the magic-link email points at `https://codehutch.org/auth/magic-link`.
+- Register → the magic-link email points at `https://surveysays.buzz/auth/magic-link`.
 
 ## Alternative: separate API subdomain + CORS
 
-If you'd rather not proxy, put the backend on `api.codehutch.org`, give the SPA a
-build-time `VITE_API_BASE_URL=https://api.codehutch.org` (and have the axios setup
-read it), and enable CORS for `https://codehutch.org` on the backend. That's a
+If you'd rather not proxy, put the backend on `api.surveysays.buzz`, give the SPA a
+build-time `VITE_API_BASE_URL=https://api.surveysays.buzz` (and have the axios setup
+read it), and enable CORS for `https://surveysays.buzz` on the backend. That's a
 frontend + backend code change; the Pages Function proxy above avoids both.
 
 ## Preview deployments & staging

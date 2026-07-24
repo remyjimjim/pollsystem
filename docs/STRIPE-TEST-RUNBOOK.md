@@ -100,7 +100,7 @@ Do this once against the real deployment **before** switching to live keys.
    flyctl secrets set -a pollsystem-backend \
      STRIPE_SECRET_KEY=sk_test_xxx \
      STRIPE_WEBHOOK_SECRET=whsec_test_endpoint_xxx \
-     APP_BASE_URL=https://codehutch.org
+     APP_BASE_URL=https://surveysays.buzz
    ```
    `APP_BASE_URL` must be the **frontend** origin so magic links resolve to the SPA.
 
