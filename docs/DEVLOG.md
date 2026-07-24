@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-07-24 — Environments & test-site guide
+
+**Requested:**
+
+> Add the staging-subdomain approach to the deploy docs but make [the free
+> local / Pages-preview / test-mode-first points] the preferred option
+
+**Changed:**
+
+- `docs/ENVIRONMENTS.md`: a test site is a separate *environment*, not a domain —
+  subdomains are free and `.dev` is not a "test TLD". Preferred (free) paths on
+  top: local stack, Cloudflare Pages preview URLs, test-mode-first gate. The
+  always-on staging site (staging subdomain + second Fly app + Neon branch) is
+  documented as an optional extra. Cross-linked from `DEPLOYING-FLY.md` and
+  `DEPLOYING-CLOUDFLARE-PAGES.md`.
+
+**Commit:** `7e6830b`
+
 ## 2026-07-22 — Cloudflare Pages config for the frontend
 
 **Requested:**
