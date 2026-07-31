@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-07-31 — Decision: keep magic-link auth (no passwords)
+
+**Requested:**
+
+> I'm wondering if it may be better to go with a username/password login instead
+> of the [magic-link] route [...] pass the phone number to hash() [...] and email
+> that to the user and then they can use that as the password [...] My vote is 'D',
+> lean on the current setup.
+
+**Decision:** Keep the passwordless **magic-link** auth as-is. Rejected:
+
+- **`hash(phone)` as a password** — insecure: hash functions are public and
+  deterministic and phone numbers are semi-public/enumerable, so the "password"
+  is derivable by anyone who knows the number; it also can't be rotated and would
+  still be delivered by email (defeating the stated goal).
+- **Traditional username/password** — reintroduces the email dependency anyway
+  (signup verification + "forgot password" is itself an emailed link) and adds
+  password storage, breach surface, and reset-flow support the current design
+  deliberately avoids.
+- OTP-code and passkey variants were noted as future options if the email-switch
+  friction ever proves real.
+
+Rationale: the JWT session is already ~90 days, so a user hits the email step only
+a few times a year — the friction is rare, and the passwordless model's
+simplicity/security is worth keeping. Revisit (OTP or passkeys) only if real
+usage shows the email hop is a genuine drop-off point.
+
+**Commit:** none — decision only
+
 ## 2026-07-24 — App domain → surveysays.buzz
 
 **Requested:**
