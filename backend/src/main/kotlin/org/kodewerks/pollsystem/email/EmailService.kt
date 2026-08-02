@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.email
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
@@ -19,7 +20,9 @@ interface EmailService {
  */
 @Service
 class SmtpEmailService(
-    private val mailProvider: ObjectProvider<JavaMailSender>
+    private val mailProvider: ObjectProvider<JavaMailSender>,
+    // Verified sender (Resend rejects unverified From). Override via MAIL_FROM in prod.
+    @Value("\${MAIL_FROM:no-reply@surveysays.buzz}") private val from: String,
 ) : EmailService {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -30,6 +33,7 @@ class SmtpEmailService(
             return
         }
         val msg = SimpleMailMessage().apply {
+            setFrom(from)
             setTo(to)
             setSubject(subject)
             setText(body)

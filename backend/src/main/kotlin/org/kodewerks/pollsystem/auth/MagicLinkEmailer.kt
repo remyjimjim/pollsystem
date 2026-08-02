@@ -3,6 +3,7 @@ package org.kodewerks.pollsystem.auth
 import org.kodewerks.pollsystem.model.User
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
@@ -17,7 +18,11 @@ import org.springframework.stereotype.Service
 @Service
 class MagicLinkEmailer(
     private val mailProvider: ObjectProvider<JavaMailSender>,
-    private val magicLinks: MagicLinkService
+    private val magicLinks: MagicLinkService,
+    // Verified sender for the provider (Resend rejects unverified From). Override
+    // with MAIL_FROM in prod (e.g. login@surveysays.buzz); the default suffices
+    // for local Mailpit, which accepts anything.
+    @Value("\${MAIL_FROM:no-reply@surveysays.buzz}") private val from: String,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -29,6 +34,7 @@ class MagicLinkEmailer(
         }
         val url = magicLinks.buildRedeemUrl(rawToken)
         val msg = SimpleMailMessage().apply {
+            setFrom(from)
             setTo(user.email)
             setSubject("Your sign-in link")
             setText(

@@ -75,10 +75,10 @@ The app doesn't use Redis (see the note at the top). Nothing to provision.
    domain verification you can only send from `onboarding@resend.dev` (test only),
    and magic links would land in spam.
 3. Create an **API key**.
-4. Save it as `RESEND_API_KEY`. **Note:** `MailConfig` currently hardcodes
-   SendGrid's SMTP host — a small code change points the prod mail sender at
-   Resend's SMTP (`smtp.resend.com:587`, user `resend`, password = the API key).
-   Until that change lands, the secret name is still `SENDGRID_API_KEY`.
+4. Save it as `RESEND_API_KEY` — `MailConfig`'s non-local sender defaults to
+   Resend's SMTP (`smtp.resend.com:587`, user `resend`, password = this key).
+5. Set **`MAIL_FROM`** to a From address at your verified domain (e.g.
+   `login@surveysays.buzz`) — Resend rejects sends from an unverified address.
 
 ### Stripe
 
@@ -118,6 +118,7 @@ flyctl secrets set \
   SPRING_DATASOURCE_PASSWORD="$NEON_PASSWORD" \
   JWT_SECRET="$(openssl rand -hex 32)" \
   RESEND_API_KEY="$RESEND_API_KEY" \
+  MAIL_FROM="login@surveysays.buzz" \
   STRIPE_SECRET_KEY="$STRIPE_SECRET_KEY"
 ```
 
