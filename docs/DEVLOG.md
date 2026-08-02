@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-08-01 — Neon Flyway/pooler note + DB-access workflow
+
+**Requested:**
+
+> I have created Neon's launch plan [...] I'm thinking perhaps we create a
+> [...] directory wherein you could deposit psql command files to run [...]
+> you can certainly go ahead and do the checked items
+
+**Changed:**
+
+- Documented the Flyway-vs-pooler gotcha: Flyway's session advisory locks break
+  under Neon's transaction-mode pooler, so migrations run on the **direct**
+  endpoint. `application.yml` gains the note + the `SPRING_FLYWAY_URL/USER/PASSWORD`
+  escape hatch for when the runtime datasource later moves to the pooled endpoint;
+  `DEPLOYING-FLY.md` now says launch on the direct string (and that the schema
+  builds itself via Flyway — nothing to set up in the DB).
+- Added a gitignored `tmp/sql/` scratch dir + tracked README capturing the
+  DB-access model: schema changes always via Flyway migrations; ad-hoc reads via
+  the scratch dir / Neon SQL Editor / a read-only `claude` role. Also ignored the
+  neon CLI's local `.neon` context and editor swap files.
+
+**Commit:** `9e664e4`
+
 ## 2026-07-31 — Decision: keep magic-link auth (no passwords)
 
 **Requested:**
