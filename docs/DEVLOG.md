@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-08-01 — Switch email to Resend; Redis marked unused
+
+**Requested:**
+
+> update the docs and give me Resend setup pointers
+
+**Changed:**
+
+- **Redis is not used** (stateless JWT + Postgres tokens + in-process cache):
+  removed from `COSTS.md` / `DEPLOYING-FLY.md` as "add only at multi-instance
+  scale" (total now ~$35–50/mo).
+- **Email → Resend.** `MailConfig`'s non-local sender is now a generic env-driven
+  SMTP relay defaulting to Resend (`smtp.resend.com:587`, user `resend`, password
+  `RESEND_API_KEY`); `MAIL_SMTP_*` overrides let any provider swap in without code.
+- **From address:** neither mailer set one (Mailpit tolerates it, Resend rejects
+  it), so `MagicLinkEmailer` + `SmtpEmailService` now `setFrom(MAIL_FROM)` (default
+  `no-reply@surveysays.buzz`; prod override e.g. `login@surveysays.buzz`).
+- Full backend suite 196 green.
+
+**Commits:** `cd8191b`, `63bc663`
+
 ## 2026-08-01 — Neon Flyway/pooler note + DB-access workflow
 
 **Requested:**
