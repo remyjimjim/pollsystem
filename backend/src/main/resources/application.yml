@@ -26,6 +26,15 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   # Flyway Database Migration
+  #
+  # Flyway reuses spring.datasource by default. On Neon that's fine while the
+  # datasource points at the DIRECT endpoint. Once you move the runtime datasource
+  # to Neon's POOLED endpoint (for autoscale), Flyway must NOT go through the
+  # pooler: it takes session-level advisory locks that transaction-mode pooling
+  # breaks. At that point set these env vars to the DIRECT endpoint so migrations
+  # bypass the pooler (Spring binds SPRING_FLYWAY_URL -> spring.flyway.url, etc.):
+  #   SPRING_FLYWAY_URL, SPRING_FLYWAY_USER, SPRING_FLYWAY_PASSWORD
+  # Left unset here on purpose (an empty url would make Flyway try to use it).
   flyway:
     enabled: true
     locations: classpath:db/migration

@@ -39,14 +39,26 @@ that live outside Fly. This is the lowest-cost-path topology described in
 
 ### Neon Postgres
 
+Nothing to set up *inside* the database — Flyway (`V1..V18`) builds the whole
+schema on the backend's first boot. You just need a connection string.
+
 1. Create a project in the Neon console.
-2. Copy the **Pooled connection string** (port 5432 with `-pooler` in the host) — Spring's connection pool plus Neon's pooler avoids over-subscribing connections during autoscale.
-3. Save it for step 3 below as `DATABASE_URL`.
+2. **For launch, copy the DIRECT connection string** (the host *without* `-pooler`).
+   Flyway takes session-level advisory locks that Neon's transaction-mode pooler
+   breaks, so migrations must run on the direct endpoint. At one warm machine the
+   connection count is tiny, so direct is plenty.
+3. Save it for the secrets step below as `DATABASE_URL`.
 4. Verify locally:
 
    ```bash
    psql "$DATABASE_URL" -c '\l'
    ```
+
+> **Scaling later:** when you autoscale and want the runtime pool on Neon's
+> **pooled** endpoint, point the *datasource* at the pooled host **and** set
+> `SPRING_FLYWAY_URL` / `SPRING_FLYWAY_USER` / `SPRING_FLYWAY_PASSWORD` to the
+> **direct** endpoint, so migrations still bypass the pooler. See the Flyway note
+> in `application.yml`.
 
 ### Upstash Redis
 

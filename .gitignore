@@ -23,3 +23,16 @@ Thumbs.db
 # Claude Code session transcripts (/export and claude-expand output)
 sessions.transcript*.md
 *.transcript.md
+
+# Scratch dir for ad-hoc SQL / query files reviewed & run by hand. Ignore its
+# contents but keep the tracked README that documents the workflow. (Git can't
+# un-ignore a file under a fully-ignored dir, hence the step-wise re-includes.)
+tmp/*
+!tmp/sql/
+tmp/sql/*
+!tmp/sql/README.md
+
+# Neon CLI local context + editor swap files
+.neon
+*.swp
+*.swo
