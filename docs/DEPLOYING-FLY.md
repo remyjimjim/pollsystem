@@ -1,25 +1,28 @@
 # Deploying to Fly.io
 
-Two Fly apps — one for the backend (Spring Boot) and one for the frontend
-(static Vue/Vite bundle). They share a database (Neon) and a Redis (Upstash)
-that live outside Fly. This is the lowest-cost-path topology described in
-`docs/COSTS.md`.
+Backend (Spring Boot on Fly) + frontend (static Vue bundle — Cloudflare Pages,
+see `DEPLOYING-CLOUDFLARE-PAGES.md`). The backend uses a **Neon Postgres**
+database and **Resend** for email, both outside Fly.
+
+> **Redis/Upstash is NOT currently used.** `docs/COSTS.md` lists it as part of the
+> intended stateless-at-scale architecture, but the app is stateless-JWT +
+> Postgres-backed magic-link tokens + an in-process role cache — it never calls
+> Redis. Add it only when you scale to multiple backend instances (shared cache /
+> rate-limiting). Skip provisioning it for launch.
 
 ```
               ┌────────────────────┐
-   user ──▶   │  Fly app (frontend) │
+   user ──▶   │  frontend (Pages)  │
               │  static Vue bundle  │
               └─────────┬──────────┘
-                        │ /api proxy or fetch
+                        │ /api proxy
                         ▼
               ┌────────────────────┐         ┌──────────────────┐
               │  Fly app (backend) │ ───▶   │ Neon Postgres     │
-              │  Spring Boot       │         └──────────────────┘
-              │  Java 17 JVM        │         ┌──────────────────┐
-              └─────────┬──────────┘ ───▶   │ Upstash Redis     │
-                        │                    └──────────────────┘
+              │  Spring Boot / JVM │         └──────────────────┘
+              └─────────┬──────────┘
                         │ SMTP                ┌──────────────────┐
-                        ├───────────────▶   │ SendGrid          │
+                        ├───────────────▶   │ Resend (email)    │
                         │                    └──────────────────┘
                         │ webhook ◀── Stripe (subscription events)
 ```
@@ -28,9 +31,9 @@ that live outside Fly. This is the lowest-cost-path topology described in
 
 - A Fly.io account and `flyctl` installed (`curl -L https://fly.io/install.sh | sh`).
 - A Neon Postgres project (Launch plan recommended; Free works for very small staging — see `docs/COSTS.md` Option C).
-- An Upstash Redis database (pay-as-you-go).
-- A SendGrid API key (free tier is sufficient).
+- A Resend account with a verified sending domain + API key (free tier is plenty). See `### Resend` below.
 - A Stripe account in test mode (live mode for production).
+- (No Redis needed — see the note above.)
 - A logged-in `flyctl` session: `flyctl auth login`.
 
 ---
@@ -60,17 +63,22 @@ schema on the backend's first boot. You just need a connection string.
 > **direct** endpoint, so migrations still bypass the pooler. See the Flyway note
 > in `application.yml`.
 
-### Upstash Redis
+### Upstash Redis — skip (not used)
 
-1. Create a Redis database in the Upstash console (US region closest to your Fly primary region).
-2. Copy the **TLS connection URL** (`rediss://…`).
-3. Save it as `REDIS_URL`.
+The app doesn't use Redis (see the note at the top). Nothing to provision.
 
-### SendGrid
+### Resend (email)
 
-1. Create an API key with the **Mail Send** scope only.
-2. Verify the sender domain (or single-sender) so magic-link emails don't end up in spam.
-3. Save the key as `SENDGRID_API_KEY`.
+1. Sign up at resend.com (free tier: 3,000 emails/mo, 100/day).
+2. **Add + verify the sending domain** (`surveysays.buzz`): Resend gives you SPF,
+   DKIM, and a return-path (MX) record — add them in Porkbun's DNS panel. Without
+   domain verification you can only send from `onboarding@resend.dev` (test only),
+   and magic links would land in spam.
+3. Create an **API key**.
+4. Save it as `RESEND_API_KEY`. **Note:** `MailConfig` currently hardcodes
+   SendGrid's SMTP host — a small code change points the prod mail sender at
+   Resend's SMTP (`smtp.resend.com:587`, user `resend`, password = the API key).
+   Until that change lands, the secret name is still `SENDGRID_API_KEY`.
 
 ### Stripe
 
@@ -108,9 +116,8 @@ flyctl secrets set \
   SPRING_DATASOURCE_URL="$DATABASE_URL" \
   SPRING_DATASOURCE_USERNAME=neondb_owner \
   SPRING_DATASOURCE_PASSWORD="$NEON_PASSWORD" \
-  REDIS_URL="$REDIS_URL" \
   JWT_SECRET="$(openssl rand -hex 32)" \
-  SENDGRID_API_KEY="$SENDGRID_API_KEY" \
+  RESEND_API_KEY="$RESEND_API_KEY" \
   STRIPE_SECRET_KEY="$STRIPE_SECRET_KEY"
 ```
 

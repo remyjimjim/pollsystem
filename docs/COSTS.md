@@ -10,9 +10,13 @@
 > is gated by **Stripe** subscriptions originating from a Substack-driven funnel.
 > Estimates are in USD and reflect public pricing as of early 2026.
 
-> **Mid-2026 pricing refresh (2026-07-22).** A validation pass re-checked live
-> pricing. The stack still holds up, with three corrections baked into the tables
-> below:
+> **Mid-2026 pricing refresh (2026-07-22, +Redis note 2026-08-01).** A validation
+> pass re-checked live pricing. The stack still holds up, with these corrections
+> baked into the tables below:
+> - **Redis/Upstash isn't actually used.** The app is stateless-JWT + Postgres-
+>   backed magic-link tokens + an in-process role cache — it never calls Redis.
+>   Dropped from the plan below (saves ~$5–10/mo); add it only when scaling to
+>   multiple backend instances (shared cache / rate-limiting).
 > - **SendGrid's free tier no longer exists** — it's now a 60-day trial, then
 >   Essentials ~$19.95/mo. Switch magic-link delivery to **Resend** (free 3,000
 >   emails/mo, 100/day) or **Amazon SES** (~$0.10 per 1,000 emails ≈ $10/mo at
@@ -35,12 +39,12 @@
 | Backend (JVM) | Spring Boot compiled with **GraalVM native image**, 3–5× Fly.io shared-cpu-1x @ 512 MB, autoscale | ~$15–$25 |
 | Frontend | **Cloudflare Pages** (static Vue build, global CDN) | **$0** |
 | Database | **Neon Postgres — Launch plan** (10 GB, autoscaling compute) | ~$19 |
-| Cache / sessions / magic-link tokens | **Upstash Redis** pay-as-you-go (~3–5 M cmds/mo) | ~$5–$10 |
+| Cache / sessions / tokens | **Not used** — JWT sessions + Postgres tokens + in-process cache (add Redis only at multi-instance scale) | **$0** |
 | Email (magic-link delivery + transactional) | **Resend** free tier (3 k/mo) → **Amazon SES** (~$10 at 100k) once volume grows | $0–$10 |
 | Phone / SMS | **None** — phone is collected and formatting-validated only | $0 |
 | Payments | **Stripe** — no flat fee, per-transaction only (see below) | $0 fixed |
 | CI | GitHub Actions free tier | $0 |
-| **Recurring infrastructure total** | | **~$40–$60 / month** |
+| **Recurring infrastructure total** | | **~$35–$50 / month** |
 
 This config will hold 5,000 concurrent users and a 200 k registered-user pool with
 headroom on autoscale. Stripe takes a per-transaction cut on the revenue side
@@ -77,13 +81,13 @@ Notes:
 Two configurations are presented:
 
 1. **Conservative baseline** — plain Spring Boot on the JVM, managed Fly Postgres. Easy to operate, no native-image build, but ~2× the recurring cost.
-2. **Lowest-cost path (recommended)** — GraalVM native image, Neon Postgres, Upstash Redis. Slightly more upfront engineering, dramatically smaller monthly bill. This is the configuration in the TL;DR above.
+2. **Lowest-cost path (recommended)** — GraalVM native image, Neon Postgres. Slightly more upfront engineering, dramatically smaller monthly bill. This is the configuration in the TL;DR above.
 
 ### Sizing assumptions (both configs)
 
 - **5,000 concurrent users** ≈ 5,000 open HTTP connections, peak ~1,000–2,000 req/s assuming typical poll-response interaction patterns.
 - **200,000 registered users** ≈ 1–3 GB of relational data (users, role assignments, polls, responses, audit rows) over the life of staging.
-- Sessions and magic-link tokens kept in Redis so backend instances stay stateless and can autoscale freely.
+- Sessions are stateless JWTs and magic-link tokens live in Postgres, so backend instances are already stateless and autoscale freely — no shared store needed. (Redis would only be to share the in-process role cache across instances at scale.)
 - Magic-link email volume at staging: ~1–4 sign-ins per active user per month. With ~500 active users in staging, that's ~500–2,000 emails/month — comfortably inside SendGrid free.
 - Backend handles ~1,000 concurrent connections per shared-cpu-1x instance with virtual threads (Spring Boot 3.2+ on Java 17), so 3–5 instances cover peak with headroom.
 
@@ -95,7 +99,7 @@ Two configurations are presented:
 | Fly.io — frontend | 1× shared-cpu-1x, 256 MB RAM, auto-stop | ~$3 |
 | Fly Postgres (managed) | dedicated-cpu-1x, 10 GB volume, daily snapshots | ~$30 |
 | Database encryption (at rest) | Fly Postgres volume encryption — default-on, AES-256 | $0 |
-| Upstash Redis | Pay-as-you-go (~3–5 M commands/month) | ~$5–$10 |
+| Redis | **Not used** (optional; add at multi-instance scale) | $0 |
 | Resend (email) | Free tier (≤ 3,000/mo); Amazon SES ~$10 at 100k sends | $0–$10 |
 | Object storage (R2 / S3) | Static assets, JSON exports, ~5 GB | ~$1 |
 | Backup storage | Off-site Postgres snapshots, ~10 GB retained | ~$1 |
@@ -110,7 +114,7 @@ Two configurations are presented:
 | Fly.io — frontend | 1× shared-cpu-1x, 256 MB RAM, auto-stop | ~$3 |
 | Neon Postgres — Launch | 10 GB storage, autoscaling compute, branching | ~$19 |
 | Database encryption (at rest) | Neon storage encryption — default-on, AES-256 | $0 |
-| Upstash Redis | Pay-as-you-go (~3–5 M commands/month) | ~$5–$10 |
+| Redis | **Not used** (optional; add at multi-instance scale) | $0 |
 | Resend (email) | Free tier (≤ 3,000/mo); Amazon SES ~$10 at 100k sends | $0–$10 |
 | GitHub Actions | Free tier; native-image build cached between runs | $0 |
 | **Monthly total** | | **~$42–$57 / month** |

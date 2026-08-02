@@ -18,10 +18,13 @@ import java.util.Properties
  *   application.yml): mail goes to a Mailpit container at
  *   localhost:1025. No auth, no STARTTLS — Mailpit accepts anything and
  *   surfaces it at http://localhost:8025 for inspection.
- * - Any other profile: SendGrid SMTP relay. `SENDGRID_API_KEY` must be
- *   provided in the environment; if it's missing the bean still builds
- *   but sends will fail at runtime, which `MagicLinkEmailer` and
- *   `SmtpEmailService` log without throwing.
+ * - Any other profile: a generic authenticated SMTP relay, **defaulting to
+ *   Resend** (`smtp.resend.com:587`, username `resend`, password = the Resend
+ *   API key in `RESEND_API_KEY`). Every field is env-overridable, so switching
+ *   providers (SES, SendGrid, …) needs no code change — set `MAIL_SMTP_HOST` /
+ *   `MAIL_SMTP_PORT` / `MAIL_SMTP_USERNAME` / `MAIL_SMTP_PASSWORD`. If the
+ *   password is missing the bean still builds but sends fail at runtime, which
+ *   `MagicLinkEmailer` and `SmtpEmailService` log without throwing.
  */
 @Configuration
 class MailConfig {
@@ -35,13 +38,17 @@ class MailConfig {
 
     @Bean
     @Profile("!local")
-    fun sendgridMailSender(
-        @Value("\${SENDGRID_API_KEY:}") apiKey: String
+    fun smtpMailSender(
+        @Value("\${MAIL_SMTP_HOST:smtp.resend.com}") smtpHost: String,
+        @Value("\${MAIL_SMTP_PORT:587}") smtpPort: Int,
+        @Value("\${MAIL_SMTP_USERNAME:resend}") smtpUsername: String,
+        // Falls back to RESEND_API_KEY when MAIL_SMTP_PASSWORD isn't set.
+        @Value("\${MAIL_SMTP_PASSWORD:\${RESEND_API_KEY:}}") smtpPassword: String,
     ): JavaMailSender = JavaMailSenderImpl().apply {
-        host = "smtp.sendgrid.net"
-        port = 587
-        username = "apikey"
-        password = apiKey
+        host = smtpHost
+        port = smtpPort
+        username = smtpUsername
+        password = smtpPassword
         javaMailProperties = Properties().apply {
             setProperty("mail.smtp.auth", "true")
             setProperty("mail.smtp.starttls.enable", "true")

@@ -41,7 +41,7 @@ spring:
     baseline-on-migrate: true
 
 # Mail wiring lives in org.kodewerks.pollsystem.email.MailConfig — see it for the
-# `local` (Mailpit) vs default (SendGrid) JavaMailSender beans.
+# `local` (Mailpit) vs non-local (env-driven SMTP, defaulting to Resend) beans.
 
 # Application config
 app:
