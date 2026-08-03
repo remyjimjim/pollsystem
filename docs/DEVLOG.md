@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-08-02 — Frontend live on Cloudflare Pages
+
+**Requested:**
+
+> Let's do the Cloudflare [...] Here's the deployment dashboard and live site
+> respectively, no red in the logs
+
+**Verified:**
+
+- Created the Cloudflare **Pages** project `pollsystem` (Git-connected to
+  `remyjimjim/pollsystem`, root dir `frontend`, build `npm run build`, output
+  `dist`, `BACKEND_ORIGIN=https://pollsystem-backend.fly.dev`). Deployed from
+  commit `31d469e`; build green on Node 22, live at `pollsystem.pages.dev`.
+- Smoke-tested the live site: home page 200; SPA deep-link fallback
+  (`/polls/search` hard refresh → 200 + app shell) works via `_redirects`; the
+  `/api/*` Pages Function is running and forwarding to `BACKEND_ORIGIN` (returns
+  Cloudflare's origin-error page, not the Function's "not configured" 500 —
+  correct, since the Fly backend isn't deployed yet).
+- Custom domain (`surveysays.buzz`) not yet attached — deferred pending the
+  Porkbun-DNS-vs-move-to-Cloudflare decision (Resend records currently live at
+  Porkbun).
+
+**Commit:** `none — verification only` (exercised `31d469e`)
+
 ## 2026-08-02 — MAIL_FROM points at verified subdomain
 
 **Requested:**
