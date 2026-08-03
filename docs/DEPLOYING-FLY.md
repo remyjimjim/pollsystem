@@ -70,15 +70,20 @@ The app doesn't use Redis (see the note at the top). Nothing to provision.
 ### Resend (email)
 
 1. Sign up at resend.com (free tier: 3,000 emails/mo, 100/day).
-2. **Add + verify the sending domain** (`surveysays.buzz`): Resend gives you SPF,
-   DKIM, and a return-path (MX) record — add them in Porkbun's DNS panel. Without
-   domain verification you can only send from `onboarding@resend.dev` (test only),
-   and magic links would land in spam.
+2. **Add + verify the sending domain** — a subdomain like `contact.surveysays.buzz`
+   is recommended (keeps transactional-mail DNS separate from the root domain).
+   Resend gives you SPF, DKIM, and a return-path (MX) record — add them in Porkbun's
+   DNS panel. Leave Resend's optional inbound "Email Receiving" **off**: it adds an
+   inbound MX we don't need, and enabling it can leave the domain stuck "partially
+   verified." Without domain verification you can only send from
+   `onboarding@resend.dev` (test only), and magic links would land in spam.
 3. Create an **API key**.
 4. Save it as `RESEND_API_KEY` — `MailConfig`'s non-local sender defaults to
    Resend's SMTP (`smtp.resend.com:587`, user `resend`, password = this key).
 5. Set **`MAIL_FROM`** to a From address at your verified domain (e.g.
-   `login@surveysays.buzz`) — Resend rejects sends from an unverified address.
+   `login@contact.surveysays.buzz`) — Resend rejects sends from an unverified
+   address, and the From must sit on the exact domain you verified (the subdomain,
+   not the root).
 
 ### Stripe
 
@@ -118,7 +123,7 @@ flyctl secrets set \
   SPRING_DATASOURCE_PASSWORD="$NEON_PASSWORD" \
   JWT_SECRET="$(openssl rand -hex 32)" \
   RESEND_API_KEY="$RESEND_API_KEY" \
-  MAIL_FROM="login@surveysays.buzz" \
+  MAIL_FROM="login@contact.surveysays.buzz" \
   STRIPE_SECRET_KEY="$STRIPE_SECRET_KEY"
 ```
 

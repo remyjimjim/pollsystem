@@ -19,10 +19,11 @@ import org.springframework.stereotype.Service
 class MagicLinkEmailer(
     private val mailProvider: ObjectProvider<JavaMailSender>,
     private val magicLinks: MagicLinkService,
-    // Verified sender for the provider (Resend rejects unverified From). Override
-    // with MAIL_FROM in prod (e.g. login@surveysays.buzz); the default suffices
-    // for local Mailpit, which accepts anything.
-    @Value("\${MAIL_FROM:no-reply@surveysays.buzz}") private val from: String,
+    // Verified sender for the provider (Resend rejects unverified From). The
+    // default matches the verified Resend sending subdomain; override with
+    // MAIL_FROM in prod (e.g. login@contact.surveysays.buzz). Local Mailpit
+    // accepts anything, so the default suffices there too.
+    @Value("\${MAIL_FROM:no-reply@contact.surveysays.buzz}") private val from: String,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 

@@ -21,8 +21,9 @@ interface EmailService {
 @Service
 class SmtpEmailService(
     private val mailProvider: ObjectProvider<JavaMailSender>,
-    // Verified sender (Resend rejects unverified From). Override via MAIL_FROM in prod.
-    @Value("\${MAIL_FROM:no-reply@surveysays.buzz}") private val from: String,
+    // Verified sender (Resend rejects unverified From). Default matches the
+    // verified Resend sending subdomain; override via MAIL_FROM in prod.
+    @Value("\${MAIL_FROM:no-reply@contact.surveysays.buzz}") private val from: String,
 ) : EmailService {
     private val log = LoggerFactory.getLogger(javaClass)
 
