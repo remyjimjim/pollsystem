@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-08-02 — MAIL_FROM points at verified subdomain
+
+**Requested:**
+
+> Nice, I disabled 'Email Receiving' and resend.com shows 'verified'. Go ahead
+> and update the docs' MAIL_FROM example to contact.surveysays.buzz please.
+
+**Changed:**
+
+- Resend verifies the **subdomain** `contact.surveysays.buzz` as the sending
+  domain (not the root); leaving inbound "Email Receiving" off cleared the
+  earlier "partially verified" state.
+- Updated both mailer defaults (`MagicLinkEmailer`, `SmtpEmailService`) to
+  `no-reply@contact.surveysays.buzz` so a forgotten `MAIL_FROM` in prod still
+  sends from a Resend-verified address.
+- `DEPLOYING-FLY.md`: `MAIL_FROM` example + secrets block now use
+  `login@contact.surveysays.buzz`; Resend step 2 now recommends a sending
+  subdomain and calls out leaving "Email Receiving" off.
+- `compileKotlin` green.
+
+**Commit:** `a00eae0`
+
 ## 2026-08-01 — Switch email to Resend; Redis marked unused
 
 **Requested:**
