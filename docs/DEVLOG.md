@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-08-07 — Fix magic-link redeem (proxy leaked Origin → backend CORS 403)
+
+**Requested:**
+
+> I'm not able to login, when I click the login link from my protonmail inbox
+
+**Changed:**
+
+- Symptom: clicking the emailed link showed "Sign-in failed / Could not
+  complete sign-in", with no redeem activity in the backend logs.
+- Root cause: the redeem POST returned **403 "Invalid CORS request"** — from
+  Spring Security on the backend (reached via `via: 1.1 fly.io`), not
+  Cloudflare. Browsers attach `Origin` to every POST; the Pages `/api` proxy
+  forwarded it, so the backend saw a cross-origin call and its CORS allowlist
+  (`http://localhost:3000` only) rejected it. Deterministic: POST without
+  `Origin` → 401 (reaches backend); with `Origin` → 403. GET worked because
+  same-origin GETs carry no `Origin`.
+- Fix: the Pages Function (`functions/api/[[path]].js`) now strips `Origin` and
+  the `Access-Control-Request-*` headers before forwarding, making the proxy
+  genuinely same-origin from the backend's view. Origin-agnostic — the custom
+  domain will work with no backend CORS change. Ships via Pages auto-deploy;
+  no Fly change. Backend CORS stays `localhost:3000` for direct local dev.
+
+**Commit:** `758c5eb`
+
 ## 2026-08-07 — Fix magic-link email delivery on Resend
 
 **Requested:**
