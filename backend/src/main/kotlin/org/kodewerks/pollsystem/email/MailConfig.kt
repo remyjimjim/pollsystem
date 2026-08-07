@@ -44,6 +44,12 @@ class MailConfig {
         @Value("\${MAIL_SMTP_USERNAME:resend}") smtpUsername: String,
         // Falls back to RESEND_API_KEY when MAIL_SMTP_PASSWORD isn't set.
         @Value("\${MAIL_SMTP_PASSWORD:\${RESEND_API_KEY:}}") smtpPassword: String,
+        // Envelope reverse-path (SMTP `MAIL FROM`). Must match the sender the
+        // mailers use (see MagicLinkEmailer / SmtpEmailService). Resend rejects
+        // an empty envelope sender with "550 Invalid `from` field" — JavaMail
+        // leaves it empty by default, so set it explicitly. (Mailpit doesn't
+        // care, which is why this only surfaced against Resend in prod.)
+        @Value("\${MAIL_FROM:no-reply@contact.surveysays.buzz}") mailFrom: String,
     ): JavaMailSender = JavaMailSenderImpl().apply {
         host = smtpHost
         port = smtpPort
@@ -52,6 +58,7 @@ class MailConfig {
         javaMailProperties = Properties().apply {
             setProperty("mail.smtp.auth", "true")
             setProperty("mail.smtp.starttls.enable", "true")
+            setProperty("mail.smtp.from", mailFrom)
         }
     }
 }

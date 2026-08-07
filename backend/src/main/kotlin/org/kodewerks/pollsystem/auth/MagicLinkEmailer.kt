@@ -4,8 +4,8 @@ import org.kodewerks.pollsystem.model.User
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 
 /**
@@ -34,7 +34,13 @@ class MagicLinkEmailer(
             return
         }
         val url = magicLinks.buildRedeemUrl(rawToken)
-        val msg = SimpleMailMessage().apply {
+        // Build the MimeMessage explicitly. Resend's SMTP rejects the message
+        // that JavaMailSenderImpl derives from a SimpleMailMessage ("550 ...
+        // from field: undefined"), even though the From header looks correct;
+        // an explicitly-built MimeMessage sends cleanly. (Mailpit accepts both,
+        // so this only bit against Resend in prod.)
+        val mime = mail.createMimeMessage()
+        MimeMessageHelper(mime, false, "UTF-8").apply {
             setFrom(from)
             setTo(user.email)
             setSubject("Your sign-in link")
@@ -49,7 +55,7 @@ class MagicLinkEmailer(
             )
         }
         try {
-            mail.send(msg)
+            mail.send(mime)
         } catch (e: Exception) {
             log.warn("Magic-link email failed for user {}: {}", user.id, e.message)
         }

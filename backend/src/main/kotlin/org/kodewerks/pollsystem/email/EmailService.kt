@@ -3,8 +3,8 @@ package org.kodewerks.pollsystem.email
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 
 interface EmailService {
@@ -33,14 +33,18 @@ class SmtpEmailService(
             log.info("[EMAIL stub] to={} subject={}\n{}", to, subject, body)
             return
         }
-        val msg = SimpleMailMessage().apply {
+        // Explicit MimeMessage: Resend's SMTP rejects the message JavaMailSender
+        // derives from a SimpleMailMessage ("550 ... from field: undefined").
+        // See MagicLinkEmailer for the full write-up.
+        val mime = mail.createMimeMessage()
+        MimeMessageHelper(mime, false, "UTF-8").apply {
             setFrom(from)
             setTo(to)
             setSubject(subject)
             setText(body)
         }
         try {
-            mail.send(msg)
+            mail.send(mime)
         } catch (e: Exception) {
             log.warn("Email send failed (to={} subject={}): {}", to, subject, e.message)
         }
