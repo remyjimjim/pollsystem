@@ -32,7 +32,9 @@ database and **Resend** for email, both outside Fly.
 - A Fly.io account and `flyctl` installed (`curl -L https://fly.io/install.sh | sh`).
 - A Neon Postgres project (Launch plan recommended; Free works for very small staging — see `docs/COSTS.md` Option C).
 - A Resend account with a verified sending domain + API key (free tier is plenty). See `### Resend` below.
-- A Stripe account in test mode (live mode for production).
+- *(Optional)* A Stripe account — only needed to enable **paid creator onboarding**.
+  The app is webhook-only (reads no Stripe API key), so you can deploy and run the
+  whole app without Stripe; add `STRIPE_WEBHOOK_SECRET` later (Part 3).
 - (No Redis needed — see the note above.)
 - A logged-in `flyctl` session: `flyctl auth login`.
 
@@ -118,16 +120,22 @@ Review `backend/fly.toml` and adjust the app name / region if you aren't using
 ```bash
 flyctl secrets set \
   -a pollsystem-backend \
-  SPRING_DATASOURCE_URL="$DATABASE_URL" \
+  SPRING_DATASOURCE_URL="jdbc:postgresql://<neon-direct-host>/neondb?sslmode=require" \
   SPRING_DATASOURCE_USERNAME=neondb_owner \
   SPRING_DATASOURCE_PASSWORD="$NEON_PASSWORD" \
   JWT_SECRET="$(openssl rand -hex 32)" \
   RESEND_API_KEY="$RESEND_API_KEY" \
   MAIL_FROM="login@contact.surveysays.buzz" \
-  STRIPE_SECRET_KEY="$STRIPE_SECRET_KEY"
+  APP_BASE_URL="https://pollsystem.pages.dev"
 ```
 
-(Stripe webhook secret comes in Part 3.)
+- **`SPRING_DATASOURCE_URL` must be a JDBC URL** — `jdbc:postgresql://<host>/<db>?sslmode=require`,
+  not the raw `postgresql://…` Neon gives you. Use the **direct** host (no `-pooler`) and
+  drop the inline `user:pass@` (they go in the USERNAME/PASSWORD secrets).
+- **`APP_BASE_URL`** is where magic-link emails point — set it to the live frontend
+  (`https://pollsystem.pages.dev` now; the custom domain once attached).
+- **No Stripe secret.** The integration is webhook-only (no Stripe SDK, no API key read).
+  Only when you enable paid onboarding do you set `STRIPE_WEBHOOK_SECRET` — see Part 3.
 
 ### Deploy
 

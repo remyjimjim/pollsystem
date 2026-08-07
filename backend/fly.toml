@@ -1,7 +1,8 @@
 # Fly.io config for the pollsystem backend (Spring Boot / JVM).
 # Deploy from backend/:  flyctl deploy -a pollsystem-backend
-# Secrets (Neon Postgres URL, Upstash Redis, email + Stripe keys) are set via
-# `flyctl secrets set` — see docs/DEPLOYING-FLY.md.
+# Secrets (Neon Postgres URL/user/pass, JWT, Resend API key, MAIL_FROM,
+# APP_BASE_URL) are set via `flyctl secrets set` — see docs/DEPLOYING-FLY.md.
+# No Redis (unused) and no Stripe API key (webhook-only integration).
 
 app = "pollsystem-backend"
 primary_region = "iad"
