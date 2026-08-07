@@ -28,5 +28,15 @@ export async function onRequest(context) {
   proxied.headers.set('X-Forwarded-Host', url.host)
   proxied.headers.set('X-Forwarded-Proto', 'https')
 
+  // Make the proxied request genuinely same-origin from the backend's view.
+  // Browsers attach `Origin` to every POST/PUT/DELETE (even same-origin), and
+  // forwarding it makes Spring Security treat the call as cross-origin and
+  // reject it with 403 "Invalid CORS request" (its CORS allowlist is only the
+  // local dev origin). Stripping these keeps the proxy transparent and
+  // origin-agnostic — no backend CORS entry needed per frontend domain.
+  proxied.headers.delete('Origin')
+  proxied.headers.delete('Access-Control-Request-Method')
+  proxied.headers.delete('Access-Control-Request-Headers')
+
   return fetch(proxied, { redirect: 'manual' })
 }
