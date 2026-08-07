@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-08-07 — Fix magic-link email delivery on Resend
+
+**Requested:**
+
+> yes, start tailing the logs and I'll register
+>
+> I don't think resend is working, here's a screenshot of my register attempt
+
+**Changed:**
+
+- First live registration on prod succeeded (user row created) but the
+  magic-link email silently failed — the endpoint returns 202 regardless and
+  `MagicLinkEmailer` swallows send errors, so the UI looked fine.
+- Diagnosed via probes against Resend's SMTP + API (the API and raw `smtplib`
+  both sent fine from `login@contact.surveysays.buzz`; only Spring's send
+  failed). **Two bugs, both masked by local Mailpit's leniency:**
+  1. `JavaMailSender` left the SMTP envelope (`MAIL FROM`) empty → Resend
+     `550 Invalid \`from\` field` (email-format). Fixed by setting
+     `mail.smtp.from` in `MailConfig`.
+  2. The `MimeMessage` that `JavaMailSenderImpl` derives from a
+     `SimpleMailMessage` is rejected by Resend as `550 ... from field:
+     undefined` — even though the serialized headers show a valid `From`
+     (confirmed by logging the raw wire bytes in prod). Fixed by building the
+     message explicitly with `MimeMessageHelper` in both `MagicLinkEmailer`
+     and `SmtpEmailService`.
+- Verified end-to-end against prod Resend: send accepted, no failure logged.
+  Full backend suite green.
+- Ops note: diagnosis created prod user #1 (`remyjimjim@proton.me`, placeholder
+  phone/zip) and sent probe mail to Resend's `delivered@resend.dev` sink.
+
+**Commit:** `a07cc5c`
+
 ## 2026-08-07 — Backend live on Fly.io; full stack connected
 
 **Requested:**
