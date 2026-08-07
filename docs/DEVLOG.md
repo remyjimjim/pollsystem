@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-08-07 — Backend live on Fly.io; full stack connected
+
+**Requested:**
+
+> let's get some Fly [...] [deploy the Spring Boot backend to Fly and wire it to
+> the live Cloudflare Pages frontend + Neon]
+
+**Verified / Changed:**
+
+- Created Fly app `pollsystem-backend` (`personal` org, `iad`) and deployed the
+  JVM image (136 MB) from `backend/Dockerfile` + `fly.toml`. Two `shared-2x/2GB`
+  machines, both health-checks passing at `/actuator/health`.
+- Staged 7 secrets via `flyctl secrets import` (piped from the OS keychain, never
+  echoed): `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` (Neon **direct** endpoint),
+  `JWT_SECRET` (generated), `RESEND_API_KEY`, `MAIL_FROM=login@contact.surveysays.buzz`,
+  `APP_BASE_URL=https://pollsystem.pages.dev`.
+- **End-to-end verified:** backend health `{"status":"UP"}`; app boots under
+  `ddl-auto: validate` (so Flyway `V1..V18` built the Neon schema); and the
+  frontend proxy `pollsystem.pages.dev/api/…` now returns backend JSON (200,
+  empty result set — prod DB has no seed data, as expected under `prod`).
+- Doc corrections found during deploy: removed the phantom `STRIPE_SECRET_KEY`
+  from `DEPLOYING-FLY.md` (code is webhook-only, never reads it), added
+  `APP_BASE_URL`, documented that `SPRING_DATASOURCE_URL` must be the JDBC form
+  (`jdbc:postgresql://…`) on the direct host; fixed the stale "Upstash Redis /
+  Stripe keys" comment in `fly.toml`.
+- Note: Neon runs PostgreSQL 18.4; Flyway warns it's newer than its tested-max
+  (16) but migrated cleanly. Fly launched 2 machines (HA default) — cost/scale
+  decision pending. Custom domain still deferred.
+
+**Commit:** `9070409` (the doc/config fixes; the deploy itself is an ops action)
+
 ## 2026-08-02 — Frontend live on Cloudflare Pages
 
 **Requested:**
