@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-08-07 — Clean prod test user + bootstrap first SUPER admin
+
+**Requested:**
+
+> let's delete that remyjimjim@proton.me record in the users table then do a
+> clean run thru
+>
+> Go ahead with #1 [set my account's access to ADMIN/SUPER]
+
+**Changed (prod DB ops, no code):**
+
+- Deleted the debug-era test user (`remyjimjim@proton.me`, id 1) + its 11
+  `magic_link_tokens`; user then re-registered cleanly (id 2) and verified the
+  full register → magic-link → login flow end-to-end.
+- Confirmed prod reference data is fully seeded via Flyway (county_zips 31734,
+  counties 3143, states 51, poll_types 3); sample polls are dev-only fixtures,
+  so poll search is correctly empty in prod.
+- Bootstrapped the first admin: `UPDATE users SET access='SUPER'` for user 2.
+  Authorization reads `users.access` (→ `ROLE_*` in `AppUserDetails`); `SUPER`
+  gates `/api/super/**` (incl. `/api/super/polls` for poll creation),
+  `/api/admin/**`, and `/actuator/**`. No `role_assignments` row needed — those
+  are geo-scoped grants for the CREATOR/ADMIN workflow, which SUPER bypasses.
+  In-app effect after the operator re-logs in (frontend caches `/me`).
+
+**Commit:** `none — prod ops action`
+
 ## 2026-08-07 — Fix magic-link redeem (proxy leaked Origin → backend CORS 403)
 
 **Requested:**
