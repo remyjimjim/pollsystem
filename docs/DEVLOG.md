@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-09-04 — Local-stack launcher: BuildAndDeploy.bash
+
+**Requested:**
+
+> I'd like to write a script that starts up the app on docker and starts the
+> docker containers if they're not already running. I've got a decent start at
+> pollsystem/scripts/BuildAndDeploy.bash. Could you take a look at that script
+> and add the parts that check for docker containers running and start them if
+> they've not? And any other improvements you can think of?
+
+> Please do the fallback to a more portable 'wait -n'; Please leave the
+> script.test.bash as I use it to paste commands from the docs into and run
+> them, so let's not delete script.test.bash;
+
+**Changed:**
+
+- Rewrote `scripts/BuildAndDeploy.bash` into an idempotent local-stack
+  launcher tracking `docs/DEPLOYING-LOCAL.md`: ensures the Postgres
+  (`pollsystem-db`) and Mailpit containers are running — starting them if
+  not — waits for Postgres to accept connections, then runs the backend
+  (`gradlew bootRun`, `local` profile) and frontend (`vite dev`)
+  concurrently, with a Ctrl-C trap that tears down both processes but leaves
+  the containers up.
+- Fixed the prior script's bugs: unexpandable quoted-tilde root path, a
+  blocking `java -jar` that starved the frontend steps, no Docker checks, and
+  a missing `local` mail profile (magic-link email silently failed without
+  it).
+- Added `up`/`infra`/`down`/`status` subcommands, `SKIP_FRONT`/`SKIP_BACK`
+  toggles, prereq checks (Docker daemon, compose plugin), auto-generated
+  `JWT_SECRET`, and a portable `wait_any` helper so the script no longer
+  depends on bash 4.3+ `wait -n`.
+
+**Commit:** `882b790`
+
+---
+
 ## 2026-08-07 — Clean prod test user + bootstrap first SUPER admin
 
 **Requested:**
