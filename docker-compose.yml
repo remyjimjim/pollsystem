@@ -12,5 +12,15 @@ services:
     volumes:
       - pollsystem-data:/var/lib/postgresql/data
 
+  # Fake SMTP server that captures outbound mail for local dev. The `local`
+  # Spring profile points magic-link email here (localhost:1025); read the
+  # captured messages in the web UI at http://localhost:8025.
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    ports:
+      - "1025:1025"   # SMTP (backend sends here)
+      - "8025:8025"   # web UI (read captured email here)
+
 volumes:
   pollsystem-data:

@@ -32,7 +32,6 @@ cd "$ROOT"
 
 DB_CONTAINER="pollsystem-db"
 MAILPIT_CONTAINER="mailpit"
-MAILPIT_IMAGE="axllent/mailpit"
 
 # --- pretty logging ----------------------------------------------------------
 if [[ -t 1 ]]; then
@@ -68,7 +67,6 @@ wait_for() {
 }
 
 container_running() { [[ "$(docker inspect -f '{{.State.Running}}' "$1" 2>/dev/null)" == "true" ]]; }
-container_exists()  { docker inspect "$1" >/dev/null 2>&1; }
 
 # Block until the first of our app children exits. Portable substitute for
 # bash 4.3+ `wait -n` (absent on e.g. macOS's stock bash 3.2): poll the PIDs
@@ -108,16 +106,13 @@ ensure_postgres() {
 }
 
 ensure_mailpit() {
-  # Mailpit isn't in docker-compose.yml yet, so manage its plain `docker run`
-  # lifecycle by hand: running → skip; exists-but-stopped → start; absent → run.
+  # Mailpit is a docker-compose service. `up -d` is idempotent: no-op if
+  # running, starts it if stopped or absent. We branch only to log intent.
   if container_running "$MAILPIT_CONTAINER"; then
     ok "Mailpit ($MAILPIT_CONTAINER) already running"
-  elif container_exists "$MAILPIT_CONTAINER"; then
-    info "Starting existing Mailpit container…"
-    docker start "$MAILPIT_CONTAINER" >/dev/null
   else
-    info "Creating Mailpit container ($MAILPIT_IMAGE)…"
-    docker run -d --name "$MAILPIT_CONTAINER" -p 1025:1025 -p 8025:8025 "$MAILPIT_IMAGE" >/dev/null
+    info "Starting Mailpit ($MAILPIT_CONTAINER)…"
+    docker compose up -d mailpit
   fi
   ok "Mailpit SMTP :1025 · web UI http://localhost:8025"
 }
@@ -131,12 +126,8 @@ ensure_infra() {
 # --- teardown / status subcommands -------------------------------------------
 cmd_down() {
   check_prereqs
-  info "Stopping Postgres (keeps the data volume)…"
+  info "Stopping containers (Postgres + Mailpit; keeps the data volume)…"
   docker compose down || true
-  if container_exists "$MAILPIT_CONTAINER"; then
-    info "Removing Mailpit container…"
-    docker rm -f "$MAILPIT_CONTAINER" >/dev/null || true
-  fi
   ok "Containers stopped. (Add '-v' manually to wipe the DB volume: docker compose down -v)"
 }
 

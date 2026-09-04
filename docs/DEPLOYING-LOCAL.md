@@ -11,28 +11,28 @@ Node 20, Docker.
 
 ## 1. Start Postgres and Mailpit
 
-The repo's `docker-compose.yml` provisions Postgres. Mailpit runs from a
-plain `docker run` (it's not yet in the compose file).
+The repo's `docker-compose.yml` provisions both Postgres and Mailpit.
 
 From the repo root:
 
 ```bash
-docker compose up -d db
-docker run -d --name mailpit -p 1025:1025 -p 8025:8025 axllent/mailpit
+docker compose up -d
 ```
 
 This launches:
 - **Postgres** — container `pollsystem-db`, database `pollsystem`,
   user/password `polladmin` / `pollpass123`, host port `5432`,
   persistent volume `pollsystem-data`.
-- **Mailpit** — fake SMTP on `localhost:1025`, web UI at `http://localhost:8025`.
+- **Mailpit** — container `mailpit`, fake SMTP on `localhost:1025`, web UI at
+  `http://localhost:8025`.
 
 Verify both are up:
 
 ```bash
 docker compose ps
-docker ps --filter name=mailpit --format '{{.Names}} {{.Status}}'
 ```
+
+(Or let `scripts/BuildAndDeploy.bash` bring them up for you — see below.)
 
 ## 2. Configure environment
 
@@ -144,9 +144,8 @@ Use **test-mode keys only** locally — no real charges happen.
 ## Tearing down
 
 ```bash
-docker compose down            # stops Postgres, keeps the volume
+docker compose down            # stops Postgres + Mailpit, keeps the volume
 docker compose down -v         # also wipes the database
-docker stop mailpit && docker rm mailpit
 ```
 
 Backend and frontend run in your terminals — Ctrl-C stops them.
