@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-09-04 — Verify: BuildAndDeploy.bash full-stack smoke test
+
+**Requested:**
+
+> run it to test the full stack
+
+**Verified:**
+
+- Ran `scripts/BuildAndDeploy.bash` (from `882b790`) through every
+  subcommand against a fresh Docker state. All paths passed:
+  - `infra` — pulled `postgres:16` + `axllent/mailpit`, started both, and the
+    `pg_isready` wait gated correctly before returning.
+  - Re-run idempotency — containers reported "already running"; nothing was
+    re-created.
+  - `up` — `local` profile active (`The following 1 profile is active:
+    "local"`), backend healthy in ~20s (`/actuator/health` → `{"status":"UP"}`),
+    seeded `/api/poll-types` returned Election/Questionnaire/Referendum both
+    directly on :8080 and through the Vite proxy on :3000, and the frontend
+    index served on :3000.
+  - Magic-link → Mailpit — `POST /api/auth/magic-link/request` returned 202 and
+    the "Your sign-in link" email landed in Mailpit's inbox.
+  - Cleanup trap — SIGTERM stopped both app processes with no stray
+    Gradle/JVM/Vite processes left behind, while the containers stayed up.
+  - `status` and `down` — reported and then removed the containers, returning
+    to a clean state.
+- Note: the run left a `stacktest@local.test` record in the persistent
+  Postgres volume (`down` keeps the volume by design; `docker compose down -v`
+  wipes it).
+
+**Commit:** `none — verification only` (exercised `882b790`)
+
+---
+
 ## 2026-09-04 — Local-stack launcher: BuildAndDeploy.bash
 
 **Requested:**
