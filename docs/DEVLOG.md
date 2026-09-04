@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-09-04 — Manage Mailpit as a docker-compose service
+
+**Requested:**
+
+> Add mailpit to docker-compose.yml so it's managed too
+
+**Changed:**
+
+- Added a `mailpit` service (`axllent/mailpit`, container `mailpit`, SMTP
+  `:1025` / web UI `:8025`) to `docker-compose.yml`, so `docker compose up -d`
+  now provisions the full local infra — Postgres plus the fake SMTP server the
+  `local` profile targets for magic-link email — rather than a separately
+  hand-run container.
+- Reworked `scripts/BuildAndDeploy.bash` to match: `ensure_mailpit` brings it
+  up via `docker compose up -d mailpit` (dropping the `docker run`/`docker
+  start` lifecycle plus the now-dead `MAILPIT_IMAGE` constant and
+  `container_exists` helper), and `cmd_down` is a single `docker compose down`
+  that stops both services.
+- Updated `docs/DEPLOYING-LOCAL.md` §1 and teardown to use `docker compose up
+  -d` / `docker compose down` for both services.
+- Verified live: `infra` brings up both containers, a re-run reports both
+  "already running", and `down` removes both cleanly.
+
+**Commit:** `cd611e9`
+
+---
+
 ## 2026-09-04 — Verify: BuildAndDeploy.bash full-stack smoke test
 
 **Requested:**
