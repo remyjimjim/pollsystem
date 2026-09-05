@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-09-05 — Update todo.md for the launcher, staging env, and rotation
+
+**Requested:**
+
+> Update todo.md with staging + rotation, then commit
+
+**Changed:**
+
+- Refreshed `todo.md` to reflect completed work: updated the local-launcher
+  entry's command list (`local`/`test`/`test-secrets`/`infra`/`status`/`down`),
+  added **Done** entries for the staging/test deploy environment and the Neon
+  password rotation, and noted on item #2 that a staging env now exists with
+  keychain-sourced secrets. Bookkeeping that mirrors the two prior DEVLOG
+  entries; no code or behavior change.
+
+**Commit:** `bb04d93`
+
+---
+
 ## 2026-09-05 — Rotate the Neon DB password + scrub local creds cheatsheet
 
 **Requested:**
