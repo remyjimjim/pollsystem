@@ -1,0 +1,44 @@
+# Fly.io config for the pollsystem backend — STAGING/TEST environment.
+# Deploy from backend/:  flyctl deploy -a pollsystem-backend-staging -c fly.staging.toml
+# (scripts/BuildAndDeploy.bash test does this for you.)
+#
+# A separate Fly app from production (pollsystem-backend, fly.toml), with its
+# own secrets and a Neon *branch* database — see docs/ENVIRONMENTS.md. Secrets
+# (Neon branch URL/user/pass, JWT, Resend key, MAIL_FROM, APP_BASE_URL) are set
+# once via `scripts/BuildAndDeploy.bash test-secrets`, which imports them from
+# the OS keychain so no values touch the shell/history.
+
+app = "pollsystem-backend-staging"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  # Non-local profile: wires the production JavaMailSender (Resend), skips the
+  # db/seed-local dev fixtures, and provisions new sign-ups as USER — identical
+  # to prod behavior. Nothing in the code keys off the literal name, so
+  # "staging" reads clearly while behaving exactly like "prod".
+  SPRING_PROFILES_ACTIVE = "staging"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true        # stop when idle — no compute charge while stopped
+  auto_start_machines = true       # wake on the next request
+  min_machines_running = 0         # staging can fully sleep (cold-start ~10-30s on wake);
+                                   # prod keeps 1 warm, staging trades latency for cost
+  processes = ["app"]
+
+# Health check hits the actuator endpoint. Generous grace for JVM boot.
+[[http_service.checks]]
+  grace_period = "45s"
+  interval = "15s"
+  timeout = "3s"
+  method = "GET"
+  path = "/actuator/health"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 2
+  memory_mb = 2048                 # comfortable for the JVM; 1024 is tight

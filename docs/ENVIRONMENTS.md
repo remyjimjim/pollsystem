@@ -51,6 +51,15 @@ environment. The exact steps are `docs/STRIPE-TEST-RUNBOOK.md` (Part B).
 
 ## Optional: an always-on staging site
 
+> **Now implemented.** This staging environment is live and scripted —
+> `scripts/BuildAndDeploy.bash test` deploys the backend (Fly app
+> `pollsystem-backend-staging`, config `backend/fly.staging.toml`, Neon `staging`
+> branch) and pushes the `staging` git branch, which Cloudflare Pages serves at
+> `https://staging.pollsystem.pages.dev`. Setup, secrets, and the first-deploy
+> IP-allocation gotcha are documented in `docs/DEPLOYING-FLY.md` → "The
+> implemented staging deploy". It uses the free `*.pages.dev` subdomain, not
+> `staging.surveysays.buzz` (that custom subdomain remains optional).
+
 Only worth it once you want a persistent, prod-like environment to sit on before
 promoting changes (e.g. UAT, demoing to others, soak-testing migrations). It's
 **still one domain** — a subdomain plus a second deploy.

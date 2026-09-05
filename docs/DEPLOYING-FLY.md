@@ -327,3 +327,43 @@ subdomain like `staging.surveysays.buzz`), never a separate domain. The preferre
 free testing paths — local, Cloudflare Pages preview URLs, and the test-mode-first
 gate — plus the optional always-on staging subdomain (second Fly app + Neon
 branch) are all in **`docs/ENVIRONMENTS.md`**.
+
+### The implemented staging deploy
+
+An always-on staging environment is wired up and driven by
+`scripts/BuildAndDeploy.bash`:
+
+- **Backend** → Fly app **`pollsystem-backend-staging`**, config
+  `backend/fly.staging.toml` (separate app, `SPRING_PROFILES_ACTIVE = "staging"`,
+  `min_machines_running = 0` so it sleeps when idle), against a **Neon `staging`
+  branch** DB.
+- **Frontend** → the **`staging`** git branch; Cloudflare Pages auto-builds it and
+  serves **`https://staging.pollsystem.pages.dev`**. A **Preview**-scoped
+  `BACKEND_ORIGIN = https://pollsystem-backend-staging.fly.dev` in the Pages
+  project points the staging SPA's `/api` proxy at the staging backend.
+
+Commands:
+
+```bash
+./scripts/BuildAndDeploy.bash test-secrets  # one-time: import staging secrets
+                                            # (Neon branch URL/user/pass, JWT,
+                                            # RESEND_API_KEY) from the OS keychain
+                                            # (service=pollsystem-fly-staging) into Fly
+./scripts/BuildAndDeploy.bash test          # build frontend, flyctl deploy the
+                                            # backend, push the staging branch
+```
+
+> **First-deploy gotcha — allocate public IPs.** On the *first* `flyctl deploy` of
+> a brand-new app, Fly's automatic IP allocation can fail with
+> `error allocating ipv6 … org_slug is only supported with private_v6 type`. The
+> machines boot and pass health checks, but `pollsystem-backend-staging.fly.dev`
+> is unreachable until you allocate IPs manually:
+>
+> ```bash
+> flyctl ips allocate-v4 --shared -a pollsystem-backend-staging   # free shared v4
+> flyctl ips allocate-v6          -a pollsystem-backend-staging
+> flyctl ips list                 -a pollsystem-backend-staging   # confirm both
+> ```
+
+Stripe is inert on staging until you add test-mode keys (`STRIPE_WEBHOOK_SECRET`);
+see `docs/STRIPE-TEST-RUNBOOK.md`.
