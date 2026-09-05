@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-09-05 — Rotate the Neon DB password + scrub local creds cheatsheet
+
+**Requested:**
+
+> Absolutely #1, make it so
+
+**Changed:**
+
+- **Rotated the `neondb_owner` Neon password.** The old value had been exposed
+  (mis-stored as a plaintext keychain *attribute*, and surfaced in a session
+  transcript). Reconnaissance first confirmed the softer blast radius: the
+  password was **never in git** (0 commits contain it; the cheatsheet holding
+  it was untracked).
+- Learned that **Neon branches carry independent role passwords** (a branch is a
+  copy, so prod + staging *started* identical — matching Fly secret digests —
+  but resetting the prod branch did not touch staging). Rotated **both**
+  branches separately, so prod and staging now have **different** passwords
+  (better isolation).
+- Pushed each new password into its Fly app via keychain →
+  `flyctl secrets import` (value only through a stdin pipe, never argv/history),
+  triggering a rolling restart. Verified **both** apps reconnect: health `UP`
+  and `/api/poll-types` DB-backed on `pollsystem-backend` and
+  `pollsystem-backend-staging`.
+- Scrubbed the inline password from `docs/Pollsystem specific commands.txt`
+  (placeholder) and **gitignored** that file so the local cheatsheet can't be
+  committed.
+- Unaffected: local dev (its own docker Postgres creds) and the read-only
+  `claude` inspection role (separate password).
+
+**Commit:** `3f9cb46`
+
+---
+
 ## 2026-09-05 — Stand up a scripted staging/test environment
 
 **Requested:**
