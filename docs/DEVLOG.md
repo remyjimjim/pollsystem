@@ -61,6 +61,50 @@ logged.
 
 ---
 
+## 2026-09-05 — Stand up a scripted staging/test environment
+
+**Requested:**
+
+> update scripts/BuildAndDeploy.bash to build and deploy to the TEST
+> environment if the script is passed the "test" command line argument … if
+> passed 'local' then it does what it currently does, if passed 'test' then it
+> does what it needs to do to build and deploy to the test environment
+
+**Changed:**
+
+- Added a `test` command to `scripts/BuildAndDeploy.bash` (and made `local` the
+  default, aliasing the existing local-stack behavior). `test` builds the
+  frontend, `flyctl deploy`s the backend to a **separate** Fly app
+  `pollsystem-backend-staging`, and pushes the `staging` git branch so
+  Cloudflare Pages serves the SPA at `https://staging.pollsystem.pages.dev`.
+- Added `backend/fly.staging.toml` — separate app, `SPRING_PROFILES_ACTIVE =
+  "staging"` (behaves like prod; nothing keys off the literal name),
+  `min_machines_running = 0` so staging sleeps when idle.
+- Added a `test-secrets` command that imports the staging secrets (Neon
+  `staging` branch URL/user/pass, JWT, `RESEND_API_KEY`) from the OS keychain
+  (`service=pollsystem-fly-staging`) into Fly via `flyctl secrets import`,
+  assembling the payload in memory first so a missing key aborts before any
+  partial set and no value is echoed.
+- Provisioned the environment live: created the Fly app + a Neon `staging`
+  branch, imported secrets, set a **Preview**-scoped
+  `BACKEND_ORIGIN=https://pollsystem-backend-staging.fly.dev` in the Pages
+  project so the staging SPA's `/api` proxy hits the staging backend.
+- Docs: `DEPLOYING-FLY.md` gains an "implemented staging deploy" section with
+  the first-deploy **IP-allocation gotcha** (Fly's auto-allocation failed with
+  `org_slug is only supported with private_v6`; fixed via manual `flyctl ips
+  allocate-v4 --shared` + `allocate-v6`); `ENVIRONMENTS.md` notes the staging
+  site is now live and scripted.
+
+**Verified:** Backend healthy at `pollsystem-backend-staging.fly.dev`
+(`/actuator/health` UP, Flyway migrated + seeded the Neon branch, `/api/poll-types`
+returns the three seeded types). Frontend live at `staging.pollsystem.pages.dev`
+(HTTP 200); its `/api/poll-types` proxy returns the seeded data from the **staging**
+backend, confirming the Preview `BACKEND_ORIGIN` wiring.
+
+**Commit:** `0d52ad5`
+
+---
+
 ## 2026-09-04 — Manage Mailpit as a docker-compose service
 
 **Requested:**
