@@ -36,3 +36,6 @@ tmp/sql/*
 .neon
 *.swp
 *.swo
+
+# Local personal command cheatsheet — may hold connection strings; keep it off git
+docs/Pollsystem specific commands.txt
