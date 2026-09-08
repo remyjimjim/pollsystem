@@ -80,6 +80,39 @@ logged.
 
 ---
 
+## 2026-09-07 — Billing UI + test-mode Creator product/price
+
+**Requested:**
+
+> (c) both
+
+(create the test-mode product/price via the Stripe API, and wire the frontend
+Subscribe / Manage buttons)
+
+**Changed:**
+
+- Created the **Creator** product (`prod_VDfB1aS9dTfh40`) and a **$25/mo**
+  recurring price (`price_1UDDqu1YWwcaVC3Gk3jbBcWJ`) in the test account via the
+  Stripe API — this is the `STRIPE_PRICE_ID` value.
+- Frontend: `components/BillingBanner.vue` on the authenticated home view →
+  "Subscribe — $25/mo" (`POST /api/billing/checkout`) when `paidUntil` is unset
+  or past, "Manage subscription" (`POST /api/billing/portal`) when it's a live
+  subscription; both redirect to the Stripe-hosted page returned as `{ url }`.
+  Shows a message on the `?checkout=success|cancel` return. `composables/useBilling.ts`
+  wraps the calls; `i18n/en.json` gains a `billing` block (other locales fall
+  back to English).
+
+**Verified:** frontend `type-check` clean; 36 frontend unit tests pass.
+
+**Decision:** the paid subscription is an additional path to Creator alongside
+the existing free creator-request/approval flow (`/creator/request`); the
+banner is additive and doesn't alter that flow — reconciling the two is left to
+product design.
+
+**Commit:** `99f88b2`
+
+---
+
 ## 2026-09-07 — Stripe Checkout + Customer Portal endpoints
 
 **Requested:**
