@@ -758,5 +758,16 @@
       "saveFailed": "Save failed",
       "loadFailed": "Failed to load poll types"
     }
+  },
+  "billing": {
+    "subscribeTitle": "Become a Creator",
+    "subscribeBlurb": "Subscribe to create and run your own polls, questionnaires, and ballot measures.",
+    "subscribeCta": "Subscribe — $25/mo",
+    "manageTitle": "Creator subscription",
+    "manageBlurb": "You’re subscribed. Manage your plan or payment method, or cancel anytime.",
+    "manageCta": "Manage subscription",
+    "unavailable": "Billing isn’t available right now. Please try again later.",
+    "success": "Thanks! Your subscription is being activated — it may take a moment to appear.",
+    "canceled": "Checkout canceled — you weren’t charged."
   }
 }

@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { AccessLevel } from '@/types'
+import BillingBanner from '@/components/BillingBanner.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -89,6 +90,8 @@ const cards = computed<ActionCard[]>(() => {
           {{ auth.user?.access }}
         </span>
       </p>
+
+      <BillingBanner />
 
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article
