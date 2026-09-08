@@ -98,10 +98,9 @@ class StripeWebhookService(
     private fun handleSubscriptionRefresh(data: JsonNode, type: String) {
         val (subscriptionId, periodEndEpoch) = when (type) {
             "customer.subscription.updated" ->
-                data.path("id").asText() to data.path("current_period_end").asLong(0)
+                data.path("id").asText() to subscriptionPeriodEnd(data)
             "invoice.paid" ->
-                data.path("subscription").asText() to data.path("lines").path("data").firstOrNull()
-                    ?.path("period")?.path("end")?.asLong(0).let { it ?: 0L }
+                invoiceSubscriptionId(data) to invoicePeriodEnd(data)
             else -> return
         }
         if (subscriptionId.isBlank() || periodEndEpoch <= 0) {
@@ -115,6 +114,41 @@ class StripeWebhookService(
         }
         users.save(user.copy(paidUntil = Instant.ofEpochSecond(periodEndEpoch)))
     }
+
+    /**
+     * Current period end for a subscription object. Stripe's 2025 API versions
+     * moved `current_period_end` off the Subscription and onto each subscription
+     * item, so read the top-level field (older versions) and fall back to the
+     * first item (newer versions). Without this, a newer API version reports 0
+     * and paid_until silently stops refreshing at renewal.
+     */
+    private fun subscriptionPeriodEnd(subscription: JsonNode): Long {
+        val topLevel = subscription.path("current_period_end").asLong(0)
+        if (topLevel > 0) return topLevel
+        return subscription.path("items").path("data").firstOrNull()
+            ?.path("current_period_end")?.asLong(0) ?: 0L
+    }
+
+    /**
+     * Subscription id on an invoice: top-level `subscription` for older API
+     * versions, or `parent.subscription_details.subscription` for
+     * 2025-03-31.basil and later.
+     */
+    private fun invoiceSubscriptionId(invoice: JsonNode): String {
+        val topLevel = invoice.path("subscription").asText("")
+        if (topLevel.isNotBlank()) return topLevel
+        return invoice.path("parent").path("subscription_details").path("subscription").asText("")
+    }
+
+    /**
+     * New period end from an invoice: the latest `period.end` across all line
+     * items. An invoice can carry multiple lines (e.g. a proration credit whose
+     * period is in the past plus the subscription line for the new period); the
+     * max is the renewal we want, so this is safer than taking the first line.
+     */
+    private fun invoicePeriodEnd(invoice: JsonNode): Long =
+        invoice.path("lines").path("data")
+            .maxOfOrNull { it.path("period").path("end").asLong(0) } ?: 0L
 
     private fun handleSubscriptionDeleted(data: JsonNode) {
         val subscriptionId = data.path("id").asText().takeIf { it.isNotBlank() } ?: return

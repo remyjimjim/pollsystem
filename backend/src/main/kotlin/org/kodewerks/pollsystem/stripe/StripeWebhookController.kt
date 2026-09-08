@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.stripe
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -34,7 +35,16 @@ class StripeWebhookController(
             log.warn("Stripe webhook body is not valid JSON: {}", e.message)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid json")
         }
-        service.process(event)
-        return ResponseEntity.ok("ok")
+        return try {
+            service.process(event)
+            ResponseEntity.ok("ok")
+        } catch (e: DataIntegrityViolationException) {
+            // Concurrent duplicate delivery: two copies of the same event both
+            // passed the existsBy check, and the unique constraint on
+            // stripe_event_id rolled this one back (the winner already applied
+            // it). Ack 200 so Stripe doesn't needlessly retry a done event.
+            log.info("Duplicate Stripe event (race); already processed: {}", e.message)
+            ResponseEntity.ok("duplicate")
+        }
     }
 }

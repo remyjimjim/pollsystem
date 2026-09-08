@@ -151,6 +151,52 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
         assertEquals("cus_first", updated.stripeCustomerId)
     }
 
+    @Test
+    fun `subscription updated reads current_period_end from items (2025 API)`() {
+        val user = saveUser("itemrenew@test.local", "+15559990005")
+            .copy(stripeSubscriptionId = "sub_item")
+        users.save(user)
+        val periodEnd = Instant.now().plusSeconds(30 * 86400).epochSecond
+        // Newer Stripe API versions drop current_period_end from the subscription
+        // object and expose it per subscription item instead.
+        val payload = """
+            {"id":"evt_item","type":"customer.subscription.updated","data":{"object":{
+              "id":"sub_item",
+              "items":{"data":[{"current_period_end":$periodEnd}]}
+            }}}
+        """.trimIndent()
+
+        deliver(payload).andExpect(status().isOk)
+
+        val updated = users.findByEmail("itemrenew@test.local")!!
+        assertEquals(periodEnd, updated.paidUntil!!.epochSecond)
+    }
+
+    @Test
+    fun `invoice paid uses latest line period and parent subscription ref`() {
+        val user = saveUser("invrenew@test.local", "+15559990006")
+            .copy(stripeSubscriptionId = "sub_inv")
+        users.save(user)
+        val past = Instant.now().minusSeconds(5 * 86400).epochSecond    // proration credit line
+        val newEnd = Instant.now().plusSeconds(30 * 86400).epochSecond  // subscription renewal line
+        // 2025-03-31.basil+ shape: subscription id under parent.subscription_details,
+        // and multiple lines where the renewal is the latest period end.
+        val payload = """
+            {"id":"evt_inv","type":"invoice.paid","data":{"object":{
+              "parent":{"subscription_details":{"subscription":"sub_inv"}},
+              "lines":{"data":[
+                {"period":{"end":$past}},
+                {"period":{"end":$newEnd}}
+              ]}
+            }}}
+        """.trimIndent()
+
+        deliver(payload).andExpect(status().isOk)
+
+        val updated = users.findByEmail("invrenew@test.local")!!
+        assertEquals(newEnd, updated.paidUntil!!.epochSecond)
+    }
+
     private fun deliver(rawPayload: String) = mockMvc.perform(
         post("/webhooks/stripe")
             .contentType(MediaType.APPLICATION_JSON)
