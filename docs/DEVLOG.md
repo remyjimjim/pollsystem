@@ -80,6 +80,43 @@ logged.
 
 ---
 
+## 2026-09-07 — Stripe Checkout + Customer Portal endpoints
+
+**Requested:**
+
+> 1.
+
+(approving the secret-key/SDK gate, then building the purchase flow the Stripe
+`stripe_implementation_planner` recommended: Stripe-hosted Checkout + Portal)
+
+**Changed:**
+
+- Added `stripe/BillingService.kt` + `stripe/BillingController.kt` — the
+  purchase flow, and the **only** place the app calls Stripe's API (the webhook
+  stays keyless):
+  - `POST /api/billing/checkout` → a subscription-mode Checkout Session for the
+    logged-in user (line item = the Creator price; `client_reference_id = userId`
+    so the webhook links the subscription to the exact user; reuses an existing
+    `stripeCustomerId` or seeds `customer_email`) → `{ "url": … }`.
+  - `POST /api/billing/portal` → a Customer Portal session for the user's
+    `stripeCustomerId` (409 if none yet) → `{ "url": … }`.
+  - Both require auth (existing `anyRequest().authenticated()`); redirects use
+    the magic-link base URL (`MagicLinkProperties`, not a raw `@Value`, so it
+    resolves under the test profile).
+- `StripeProperties` gains `apiKey` / `priceId` (+ redirect paths), fed by
+  `STRIPE_API_KEY` / `STRIPE_PRICE_ID`. Blank ⇒ the endpoints return **503**, so
+  the app deploys and runs without Stripe configured. Added
+  `com.stripe:stripe-java:33.4.0` (the non-static `StripeClient`).
+- `BillingControllerTest` covers 401 (unauth), 503 (unconfigured), 409
+  (no customer) — no Stripe network call.
+
+**Verified:** `BillingControllerTest` green; full backend `./gradlew test`
+green (3m07s).
+
+**Commit:** `d199988`
+
+---
+
 ## 2026-09-07 — Fix Testcontainers on Docker 29 / Docker Desktop
 
 **Requested:**
