@@ -80,6 +80,40 @@ logged.
 
 ---
 
+## 2026-09-07 — Fix Testcontainers on Docker 29 / Docker Desktop
+
+**Requested:**
+
+> (A)
+
+(chose to bump Testcontainers so the new Stripe tests could actually run; the
+whole integration suite was blocked)
+
+**Changed:**
+
+- The integration suite failed with "Could not find a valid Docker
+  environment" on Docker Engine 29 + Docker Desktop for Linux. Fixed via the
+  `test` task in `backend/build.gradle.kts`:
+  - Pinned docker-java's API version to **1.41** via the `api.version` system
+    property (docker-java honors the sysprop over the `DOCKER_API_VERSION` env
+    var, which Gradle test workers weren't applying). Docker 29 rejects
+    docker-java's default 1.32 (MinAPIVersion 1.40). Bumped Testcontainers
+    `1.19.8 → 1.20.6`.
+  - Auto-detect the **raw** Docker Desktop socket (`~/.docker/desktop/docker.raw.sock`)
+    when `DOCKER_HOST` is unset and `/var/run/docker.sock` is absent — the
+    default `docker.sock` is a proxy that returns HTTP 400 to the Java client.
+    Keeps `./gradlew test` turnkey.
+  - Disabled **Ryuk** (fails to start on Docker Desktop — socket mount dies →
+    "404 No such container"); `AbstractIntegrationTest` already cleans up its
+    singleton container via the JVM shutdown hook.
+
+**Verified:** full backend `./gradlew test` green (2m52s), and a plain
+`./gradlew test` works with no environment variables set.
+
+**Commit:** `9a98bea`
+
+---
+
 ## 2026-09-07 — Harden Stripe webhook: 2025 API fields + idempotency race
 
 **Requested:**
