@@ -56,6 +56,11 @@ app:
   stripe:
     webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
     tolerance-seconds: 300
+    # Server-side API key + subscription price for the Checkout/Portal flow.
+    # Left empty by default: the billing endpoints return 503 until set. The
+    # webhook path needs neither.
+    api-key: ${STRIPE_API_KEY:}
+    price-id: ${STRIPE_PRICE_ID:}
 
 # Spring Boot Actuator. We expose only the endpoints we use
 # explicitly — `health` (public, for orchestrators / load balancers)

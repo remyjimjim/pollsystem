@@ -64,6 +64,12 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
+    // Stripe SDK — used server-side to create Checkout + Customer Portal
+    // sessions (the purchase flow). The webhook handler stays SDK-free and
+    // verifies signatures by hand; this is the one place we call Stripe's API,
+    // gated behind app.stripe.api-key.
+    implementation("com.stripe:stripe-java:33.4.0")
+
     // In-process cache for role_assignments authorization lookups —
     // see RoleAuthCache. We pull Caffeine directly rather than enabling
     // Spring's @Cacheable abstraction so eviction stays explicit at the
