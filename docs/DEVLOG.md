@@ -80,6 +80,39 @@ logged.
 
 ---
 
+## 2026-09-07 — Harden Stripe webhook: 2025 API fields + idempotency race
+
+**Requested:**
+
+> A then B
+
+(reviewing the existing Stripe integration against best practices, then
+applying the two fixes it surfaced)
+
+**Changed:**
+
+- `StripeWebhookService.kt` — `current_period_end` moved off the Subscription
+  onto its items in Stripe's 2025 API versions; `handleSubscriptionRefresh`
+  now reads the item-level field with a top-level fallback, so `paid_until`
+  keeps refreshing at renewal instead of silently stopping (which would strip
+  access from paying users). `invoice.paid` resolves the subscription id from
+  `parent.subscription_details` (2025-03-31.basil+, top-level fallback) and
+  takes the latest `period.end` across lines (not the first, which can be a
+  past proration credit).
+- `StripeWebhookController.kt` — catches the idempotency
+  `DataIntegrityViolationException` from a concurrent duplicate delivery and
+  returns `200 "duplicate"` instead of a 500 Stripe would retry.
+- Added two `StripeWebhookControllerTest` cases (item-level period end;
+  multi-line + parent-ref invoice).
+
+**Verified:** `StripeWebhookControllerTest` green (8 tests), full backend suite
+green — see the Testcontainers/Docker fix entry below, which was needed to run
+them locally.
+
+**Commit:** `99cf1a2`
+
+---
+
 ## 2026-09-05 — Rotate the Neon DB password + scrub local creds cheatsheet
 
 **Requested:**
