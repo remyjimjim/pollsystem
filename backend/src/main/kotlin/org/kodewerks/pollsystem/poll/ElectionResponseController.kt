@@ -87,7 +87,7 @@ class ElectionResponseController(
         @PathVariable id: Long,
         @Valid @RequestBody body: SubmitElectionResponsesRequest
     ): MyElectionResponsesDto {
-        requireCompleteProfile(principal)
+        requireParticipation(principal)
         val election = elections.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
         }

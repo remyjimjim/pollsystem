@@ -760,10 +760,10 @@
     }
   },
   "billing": {
-    "subscribeTitle": "Become a Creator",
-    "subscribeBlurb": "Subscribe to create and run your own polls, questionnaires, and ballot measures.",
+    "subscribeTitle": "Become a member",
+    "subscribeBlurb": "Subscribe to participate — vote and respond in polls, questionnaires, and ballot measures in your area.",
     "subscribeCta": "Subscribe — $25/mo",
-    "manageTitle": "Creator subscription",
+    "manageTitle": "Your membership",
     "manageBlurb": "You’re subscribed. Manage your plan or payment method, or cancel anytime.",
     "manageCta": "Manage subscription",
     "unavailable": "Billing isn’t available right now. Please try again later.",

@@ -82,7 +82,7 @@ class BallotMeasureResponseController(
         @PathVariable id: Long,
         @Valid @RequestBody body: SubmitBallotResponseRequest
     ): MyBallotResponseDto {
-        requireCompleteProfile(principal)
+        requireParticipation(principal)
         val measure = measures.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }

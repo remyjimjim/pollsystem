@@ -36,8 +36,13 @@ class CompleteProfileTest : AbstractIntegrationTest() {
     @Autowired private lateinit var questions: QuestionRepository
 
     /** A payment-first user: email only, no phone/zipcode. */
+    // Active subscription so the ONLY thing gating participation here is the
+    // incomplete profile (this test is about profile completeness, not the paywall).
     private fun incompleteUser(email: String = "paidfirst@test.local"): User =
-        users.save(User(email = email, access = AccessLevel.USER, isEnabled = true))
+        users.save(User(
+            email = email, access = AccessLevel.USER, isEnabled = true,
+            paidUntil = java.time.Instant.now().plusSeconds(30L * 24 * 3600),
+        ))
 
     @Test
     fun `complete-profile sets phone + zipcode and marks the profile complete`() {

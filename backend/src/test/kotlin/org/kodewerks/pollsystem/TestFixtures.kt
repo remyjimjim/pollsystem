@@ -9,6 +9,7 @@ import org.kodewerks.pollsystem.repository.StateRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.time.Instant
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -27,7 +28,10 @@ class TestFixtures @Autowired constructor(
     fun createUser(
         access: AccessLevel = AccessLevel.USER,
         zipcode: String = "90001",
-        emailPrefix: String = "user"
+        emailPrefix: String = "user",
+        // Active membership by default so participation tests aren't blocked by
+        // the paywall (requireParticipation). Pass null for an unpaid user.
+        paidUntil: Instant? = Instant.now().plusSeconds(30L * 24 * 3600)
     ): User {
         val n = seq.incrementAndGet()
         return users.save(
@@ -36,7 +40,8 @@ class TestFixtures @Autowired constructor(
                 phone = "+1555${n.toString().padStart(7, '0').takeLast(7)}",
                 zipcode = zipcode,
                 access = access,
-                isEnabled = true
+                isEnabled = true,
+                paidUntil = paidUntil
             )
         )
     }

@@ -48,4 +48,13 @@ data class User(
      */
     val profileComplete: Boolean
         @Transient get() = phone != null && zipcode != null
+
+    /**
+     * Whether the paid membership is currently active (paidUntil in the future).
+     * Participation (submitting responses) requires this for USER-tier accounts —
+     * paying is what turns a viewer into a participating member. Set/cleared by
+     * the Stripe webhook. Not persisted — derived from paidUntil.
+     */
+    val hasActiveSubscription: Boolean
+        @Transient get() = paidUntil?.isAfter(Instant.now()) == true
 }
