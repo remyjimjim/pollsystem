@@ -80,6 +80,23 @@ logged.
 
 ---
 
+## 2026-09-11 — Stop tracking backend/bin build output
+
+**Requested:**
+
+> the backend/bin/ tracked-build-output cleanup … yes and yes
+
+**Changed:**
+
+- Untracked 85 stale `backend/bin/**` files (Eclipse/Gradle compiled classes
+  under the old `com.pollsystem` package) and added `backend/bin/` to
+  `.gitignore`, so build output stops polluting diffs. Runtime build output
+  already lives in the ignored `backend/build/`.
+
+**Commit:** `cab8181`
+
+---
+
 ## 2026-09-11 — $10 membership price + creator discount coupon
 
 **Requested:**
