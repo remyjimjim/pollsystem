@@ -61,6 +61,8 @@ app:
     # webhook path needs neither.
     api-key: ${STRIPE_API_KEY:}
     price-id: ${STRIPE_PRICE_ID:}
+    # Coupon for the creator discount (applied on approval, removed on demotion).
+    creator-coupon-id: ${STRIPE_CREATOR_COUPON:}
 
 # Spring Boot Actuator. We expose only the endpoints we use
 # explicitly — `health` (public, for orchestrators / load balancers)
