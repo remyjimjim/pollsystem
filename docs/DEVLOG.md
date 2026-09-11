@@ -80,6 +80,37 @@ logged.
 
 ---
 
+## 2026-09-11 — $10 membership price + creator discount coupon
+
+**Requested:**
+
+> The full subscription price should be $10 and the creator discount should be
+> 30%. … Yes, go ahead and do your thing.
+
+**Changed:**
+
+- Membership base price is now **$10/mo** — new Stripe price
+  `price_1UEe8tLEdI7bvvox8osqGhBh`; the old $25 price is archived. Home banner
+  CTA updated to "$10/mo".
+- Creators get a **reduced rate** via a Stripe coupon `UPDsSiD6` (30% off,
+  `duration=forever` — so it scales if the base price rises):
+  - Applied to the creator's subscription when a request is **approved**
+    (`CreatorRequestService.decide`).
+  - Removed when a Super **demotes** them below CREATOR
+    (`SuperUsersController.demote`).
+  - `BillingService.apply/removeCreatorDiscount` update the subscription's
+    `discounts`. **Best-effort**: a Stripe failure is logged, never rolls back
+    the role change; a no-op when the coupon/api-key isn't configured or the
+    user has no subscription (so approval always succeeds).
+- `StripeProperties.creatorCouponId` ← `STRIPE_CREATOR_COUPON`.
+
+**Verified:** full backend suite + frontend type-check green (discount calls are
+no-ops in tests — api-key blank).
+
+**Commit:** `fae55e3`
+
+---
+
 ## 2026-09-11 — SUPER-only exemption + demote/promote on lapse
 
 **Requested:**
