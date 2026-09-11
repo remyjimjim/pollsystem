@@ -80,6 +80,51 @@ logged.
 
 ---
 
+## 2026-09-11 — Gate participation on an active subscription
+
+**Requested:**
+
+> Reword the banner copy from "Creator" → member/User (to match "paying =
+> viewer→user"), and the bigger piece: actually enforcing that access model …
+> gate participation on paid_until, webhook flips access.
+
+> the database will never have an access of 'VIEWER' since viewers never
+> register … a viewer can become a registered user not only via substack/stripe
+> but also through paying with a credit card by going to the home page and
+> registering.
+
+**Changed:**
+
+- Enforced the model **paying = what turns a viewer into a participating member**.
+  `VIEWER` is the anonymous, never-persisted state; every registered account is
+  `USER`+, and viewing/searching stay open — this gates only *submission*.
+- `User.hasActiveSubscription` (transient: `paidUntil` in the future),
+  set/cleared by the existing Stripe webhook.
+- `requireParticipation` (renamed from `requireCompleteProfile`) now requires an
+  **active subscription** for `USER`-tier accounts before submitting a response,
+  returning **402 Payment Required**; `CREATOR` and above are exempt (granted via
+  other flows). The profile-complete check (400) is unchanged and runs first.
+  Applied to the election / questionnaire / ballot-measure response controllers.
+- Frontend: reworded the home billing banner from "Creator" to
+  member/participate language.
+- No webhook change needed — it already sets/clears `paid_until`, which the gate
+  reads (payment "flips" participation on/off via that timestamp; the access
+  *level* stays `USER`, since there is no lower persisted level to flip to).
+
+**Verified:** new `ParticipationGuardTest` (402 unpaid/expired, 400 incomplete,
+CREATOR-exempt); full backend suite green (206 tests) with `TestFixtures`
+defaulting to an active subscription; frontend `type-check` clean.
+
+**Decision:** registration still creates the free `USER` row; the home-page
+**Subscribe** button (credit card via Stripe Checkout) and the Substack/Stripe
+webhook are the two payment paths that activate participation. Not changed:
+requiring payment *at* registration (kept register-then-pay), and proactively
+gating submit buttons in the UI on 402 — both deferred as follow-ups.
+
+**Commit:** `2c36b46`
+
+---
+
 ## 2026-09-07 — Billing UI + test-mode Creator product/price
 
 **Requested:**
