@@ -80,6 +80,45 @@ logged.
 
 ---
 
+## 2026-09-11 — SUPER-only exemption + demote/promote on lapse
+
+**Requested:**
+
+> users+ (except super) need an active subscription … If a creator+ (not SUPER)
+> subscription lapses then the creator+ demoted to VIEWER access. and if
+> ex-creator+ re-subscribes then they will have to re-apply for creator/admin
+> status all over again. yes to the "Shall I make…"
+
+**Changed:**
+
+- Narrowed the paywall exemption to **SUPER only** — `USER`, `CREATOR` and
+  `ADMIN` all require an active subscription to participate (creators will pay a
+  reduced rate; coupon is a follow-up).
+- The webhook now flips the **access level**, not just `paid_until`:
+  - `customer.subscription.deleted` demotes any non-SUPER account to `VIEWER`
+    (loses participation and any elevated role) and clears `paid_until`. A
+    demoted ex-creator/admin must **re-apply** after re-subscribing.
+  - Re-subscribing promotes a lapsed `VIEWER` back to `USER`
+    (`checkout.session.completed` and a paid invoice/renewal); an active `USER`+
+    keeps its level.
+  - `VIEWER` now legitimately appears in the DB as this dormant/lapsed state,
+    distinct from anonymous viewers (updates the earlier "never in DB" note).
+
+**Verified:** guard test (CREATOR blocked 402, SUPER exempt); webhook tests
+(checkout promotes VIEWER→USER, cancel demotes CREATOR→VIEWER, SUPER not
+demoted); full backend suite green.
+
+**Decision — creator discount (next feature, not yet built):** % off the full
+price, **forever** (scales if the base price rises), via a Stripe **Coupon**
+(`percent_off` + `duration=forever`) applied when `CREATOR` is granted in the
+approval flow (and removed on role loss). Chosen over literal refunds
+(`refunds_enabled`) to avoid custom refund math — Stripe applies the recurring
+discount automatically.
+
+**Commit:** `afbe017`
+
+---
+
 ## 2026-09-11 — Gate participation on an active subscription
 
 **Requested:**
