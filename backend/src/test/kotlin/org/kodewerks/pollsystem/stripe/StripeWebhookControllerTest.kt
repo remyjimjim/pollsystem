@@ -48,6 +48,8 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
         val updated = users.findById(user.id).get()
         assertEquals("cus_abc", updated.stripeCustomerId)
         assertEquals("sub_xyz", updated.stripeSubscriptionId)
+        // Paying promotes the (default VIEWER) account to USER.
+        assertEquals(AccessLevel.USER, updated.access)
         assertEquals(true, events.existsByStripeEventId("evt_1"))
     }
 
@@ -98,6 +100,7 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
     fun `subscription deleted clears paid_until`() {
         val user = saveUser("cancelled@test.local", "+15559990003")
             .copy(
+                access = AccessLevel.CREATOR,
                 stripeSubscriptionId = "sub_cancel",
                 paidUntil = Instant.now().plusSeconds(86400)
             )
@@ -113,6 +116,30 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
         val updated = users.findByEmail("cancelled@test.local")!!
         assertNull(updated.paidUntil)
         assertNull(updated.stripeSubscriptionId)
+        // A lapsed non-SUPER account is demoted to VIEWER.
+        assertEquals(AccessLevel.VIEWER, updated.access)
+    }
+
+    @Test
+    fun `subscription deleted does not demote SUPER`() {
+        val user = saveUser("boss@test.local", "+15559990009")
+            .copy(
+                access = AccessLevel.SUPER,
+                stripeSubscriptionId = "sub_super",
+                paidUntil = Instant.now().plusSeconds(86400)
+            )
+        users.save(user)
+        val payload = """
+            {"id":"evt_super","type":"customer.subscription.deleted","data":{"object":{
+              "id":"sub_super"
+            }}}
+        """.trimIndent()
+
+        deliver(payload).andExpect(status().isOk)
+
+        val updated = users.findByEmail("boss@test.local")!!
+        assertNull(updated.paidUntil)
+        assertEquals(AccessLevel.SUPER, updated.access)
     }
 
     @Test

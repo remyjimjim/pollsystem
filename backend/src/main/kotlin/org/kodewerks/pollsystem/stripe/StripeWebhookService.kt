@@ -69,9 +69,13 @@ class StripeWebhookService(
         }
         val existing = users.findByEmail(email)
         if (existing != null) {
+            // A re-subscribing lapsed VIEWER comes back as USER (they re-apply
+            // for any former creator/admin role); an active USER+ keeps its level.
+            val access = if (existing.access == AccessLevel.VIEWER) AccessLevel.USER else existing.access
             users.save(existing.copy(
                 stripeCustomerId = customerId ?: existing.stripeCustomerId,
-                stripeSubscriptionId = subscriptionId ?: existing.stripeSubscriptionId
+                stripeSubscriptionId = subscriptionId ?: existing.stripeSubscriptionId,
+                access = access
             ))
             return
         }
@@ -112,7 +116,9 @@ class StripeWebhookService(
             log.warn("Stripe {} for subscription={} matches no user", type, subscriptionId)
             return
         }
-        users.save(user.copy(paidUntil = Instant.ofEpochSecond(periodEndEpoch)))
+        // Reactivating a lapsed VIEWER via a paid invoice/renewal restores USER.
+        val access = if (user.access == AccessLevel.VIEWER) AccessLevel.USER else user.access
+        users.save(user.copy(paidUntil = Instant.ofEpochSecond(periodEndEpoch), access = access))
     }
 
     /**
@@ -153,6 +159,11 @@ class StripeWebhookService(
     private fun handleSubscriptionDeleted(data: JsonNode) {
         val subscriptionId = data.path("id").asText().takeIf { it.isNotBlank() } ?: return
         val user = users.findByStripeSubscriptionId(subscriptionId) ?: return
-        users.save(user.copy(paidUntil = null, stripeSubscriptionId = null))
+        // A lapsed subscription demotes the account to VIEWER (except SUPER): it
+        // loses participation and any elevated role, and must re-apply for
+        // creator/admin after re-subscribing. VIEWER thus legitimately appears
+        // in the DB as this dormant state, distinct from anonymous viewers.
+        val demoted = if (user.access == AccessLevel.SUPER) user.access else AccessLevel.VIEWER
+        users.save(user.copy(paidUntil = null, stripeSubscriptionId = null, access = demoted))
     }
 }

@@ -54,9 +54,17 @@ class ParticipationGuardTest {
     }
 
     @Test
-    fun `CREATOR may participate without a subscription`() {
-        assertDoesNotThrow {
+    fun `CREATOR without a subscription is blocked with 402`() {
+        val ex = assertThrows<ResponseStatusException> {
             requireParticipation(details(access = AccessLevel.CREATOR, paidUntil = null))
+        }
+        assertEquals(402, ex.statusCode.value())
+    }
+
+    @Test
+    fun `SUPER may participate without a subscription`() {
+        assertDoesNotThrow {
+            requireParticipation(details(access = AccessLevel.SUPER, paidUntil = null))
         }
     }
 

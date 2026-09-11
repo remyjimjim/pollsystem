@@ -11,10 +11,10 @@ import org.springframework.web.server.ResponseStatusException
  *  1. **Complete profile** (phone + zipcode) — the zipcode drives geo-filtering
  *     and k-anonymity of results, so a response with no location can't be counted.
  *  2. **Active paid membership** — a registered USER only becomes a *participating*
- *     member by paying (`paidUntil` in the future). Anonymous viewers (VIEWER,
- *     never stored) can search and view results; paying is what turns a viewer
- *     into a participant. Elevated roles (CREATOR and up) are granted through
- *     other flows and are exempt.
+ *     member by paying (`paidUntil` in the future); paying is what turns a viewer
+ *     into a participant. Only **SUPER** is exempt — USER, CREATOR and ADMIN all
+ *     need an active subscription (creators pay a reduced rate; see the coupon
+ *     follow-up). A lapsed subscription demotes the account to VIEWER (webhook).
  *
  * Viewing stays open to everyone; this only gates submission. The frontend
  * mirrors both checks; this is the server-side backstop. The subscription
@@ -28,7 +28,7 @@ fun requireParticipation(principal: AppUserDetails) {
             "Complete your profile (phone + zipcode) before submitting a response",
         )
     }
-    if (user.access.ordinal < AccessLevel.CREATOR.ordinal && !user.hasActiveSubscription) {
+    if (user.access != AccessLevel.SUPER && !user.hasActiveSubscription) {
         throw ResponseStatusException(
             HttpStatus.PAYMENT_REQUIRED,
             "An active subscription is required to participate",
