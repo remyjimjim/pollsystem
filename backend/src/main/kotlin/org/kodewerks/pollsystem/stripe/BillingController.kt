@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.stripe
 
+import org.kodewerks.pollsystem.payment.PaymentProvider
 import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/api/billing")
-class BillingController(private val billing: BillingService) {
+class BillingController(private val billing: PaymentProvider) {
 
     /** Start a subscription Checkout Session for the current user. */
     @PostMapping("/checkout")

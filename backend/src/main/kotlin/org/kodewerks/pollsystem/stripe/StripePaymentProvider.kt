@@ -8,6 +8,7 @@ import com.stripe.param.billingportal.SessionCreateParams as PortalSessionCreate
 import com.stripe.param.checkout.SessionCreateParams
 import org.kodewerks.pollsystem.auth.MagicLinkProperties
 import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.payment.PaymentProvider
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -21,12 +22,15 @@ import org.springframework.web.server.ResponseStatusException
  *
  * Checkout uses `client_reference_id = user.id` so the webhook can link the
  * resulting subscription to this exact user rather than matching by email.
+ *
+ * The Stripe implementation of [PaymentProvider]; see that interface and
+ * docs/payment-processors.md for the path to swapping processors.
  */
 @Service
-class BillingService(
+class StripePaymentProvider(
     private val props: StripeProperties,
     private val magicLink: MagicLinkProperties
-) {
+) : PaymentProvider {
     private val log = LoggerFactory.getLogger(javaClass)
 
     // Redirect back to the same frontend the magic-link emails point at.
@@ -40,7 +44,7 @@ class BillingService(
     }
 
     /** Create a subscription Checkout Session for [user]; returns the redirect URL. */
-    fun createCheckoutSession(user: User): String {
+    override fun createCheckoutSession(user: User): String {
         if (props.priceId.isBlank()) {
             throw ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Billing price is not configured")
         }
@@ -75,7 +79,7 @@ class BillingService(
     }
 
     /** Create a Customer Portal session for [user]; returns the redirect URL. */
-    fun createPortalSession(user: User): String {
+    override fun createPortalSession(user: User): String {
         val customerId = user.stripeCustomerId
         if (customerId.isNullOrBlank()) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "No billing account yet — subscribe first")
@@ -99,10 +103,10 @@ class BillingService(
      * a Stripe failure is logged, not thrown, so it never rolls back the role
      * grant that triggered it.
      */
-    fun applyCreatorDiscount(user: User) = updateSubscriptionDiscount(user, apply = true)
+    override fun applyCreatorDiscount(user: User) = updateSubscriptionDiscount(user, apply = true)
 
     /** Remove any discount from the user's subscription (best-effort; see above). */
-    fun removeCreatorDiscount(user: User) = updateSubscriptionDiscount(user, apply = false)
+    override fun removeCreatorDiscount(user: User) = updateSubscriptionDiscount(user, apply = false)
 
     private fun updateSubscriptionDiscount(user: User, apply: Boolean) {
         val subId = user.stripeSubscriptionId

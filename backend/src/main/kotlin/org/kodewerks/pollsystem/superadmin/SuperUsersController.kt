@@ -120,7 +120,7 @@ class SuperUsersController(
     private val candidateResponses: CandidateResponseRepository,
     private val ballotResponses: BallotResponseRepository,
     private val roleAuthCache: RoleAuthCache,
-    private val billing: org.kodewerks.pollsystem.stripe.BillingService,
+    private val billing: org.kodewerks.pollsystem.payment.PaymentProvider,
 ) {
 
     @GetMapping

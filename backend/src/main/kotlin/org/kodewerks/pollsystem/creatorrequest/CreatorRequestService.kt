@@ -11,8 +11,8 @@ import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.CreatorRequestRepository
 import org.kodewerks.pollsystem.repository.PollTypeRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.kodewerks.pollsystem.payment.PaymentProvider
 import org.kodewerks.pollsystem.repository.UserRepository
-import org.kodewerks.pollsystem.stripe.BillingService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -29,7 +29,7 @@ class CreatorRequestService(
     private val countyZips: CountyZipsRepository,
     private val email: EmailService,
     private val roleAuthCache: RoleAuthCache,
-    private val billing: org.kodewerks.pollsystem.stripe.BillingService,
+    private val billing: PaymentProvider,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
