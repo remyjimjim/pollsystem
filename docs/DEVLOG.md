@@ -80,6 +80,32 @@ logged.
 
 ---
 
+## 2026-09-11 — Payment-processors comparison doc
+
+**Requested:**
+
+> fill me in on the other options like Authorize.net, CyberCash, VeriSign
+> PayFlow, etc, comparing alongside Braintree, Paddle and Square and putting
+> that table under docs/payment-processors.md
+
+**Changed:**
+
+- Added `docs/payment-processors.md`: legacy gateways (CyberCash — defunct;
+  VeriSign Payflow — legacy/PayPal; Authorize.Net — active/Visa) plus the viable
+  modern options (Braintree, Paddle, Square) in a comparison table (status/owner,
+  model, recurring, sales-tax/MoR split, Java SDK, ~pricing, fit as a Stripe
+  fallback), the "what matters for this app" axes, and the small Stripe surface
+  a swap would touch.
+
+**Decision:** stay on Stripe; document **Braintree** as the like-for-like Plan B
+and **Paddle** (merchant of record) as the offload-tax Plan B. Lemon Squeezy is
+excluded for redundancy since Stripe acquired it (2024). Motivates the
+`PaymentProvider` abstraction (next).
+
+**Commit:** `394a35e`
+
+---
+
 ## 2026-09-11 — Stop tracking backend/bin build output
 
 **Requested:**
