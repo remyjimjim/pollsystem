@@ -80,6 +80,32 @@ logged.
 
 ---
 
+## 2026-09-11 — Extract a PaymentProvider abstraction
+
+**Requested:**
+
+> Let's do the PaymentProvider abstraction
+
+**Changed:**
+
+- Decoupled the app from Stripe behind a provider-agnostic interface so a future
+  processor swap (Braintree / Paddle — `docs/payment-processors.md`) is a
+  contained change, not surgery.
+- New `payment/PaymentProvider` interface — the outbound operations:
+  `createCheckoutSession`, `createPortalSession`, `apply/removeCreatorDiscount`.
+- `stripe/BillingService` renamed to `StripePaymentProvider` and now implements
+  it (git-tracked rename).
+- `BillingController`, `CreatorRequestService` and `SuperUsersController` inject
+  `PaymentProvider` instead of the concrete Stripe class.
+- The **inbound** webhook (`StripeWebhookController`/`Service`) stays a
+  Stripe-specific adapter; a new provider adds its own that updates the same
+  user state (`paid_until` / access). No behavior change; full backend suite
+  green.
+
+**Commit:** `459de5d`
+
+---
+
 ## 2026-09-11 — Payment-processors comparison doc
 
 **Requested:**
