@@ -20,7 +20,11 @@ import java.time.Instant
  * Supported events:
  *  - checkout.session.completed              — provision a new paid user (email only)
  *                                              and email a magic link, or link Stripe
- *                                              ids to an existing user
+ *                                              ids to an existing user; sets paid_until
+ *                                              from the subscription's period end so the
+ *                                              account activates without waiting on the
+ *                                              (possibly earlier-delivered) subscription
+ *                                              event
  *  - customer.subscription.created/updated   — refresh paid_until from current_period_end
  *                                              (created fires for a first-time subscriber;
  *                                              updated on later changes — same object shape)
@@ -33,7 +37,8 @@ class StripeWebhookService(
     private val users: UserRepository,
     private val events: StripeEventRepository,
     private val magicLinks: MagicLinkService,
-    private val emailer: MagicLinkEmailer
+    private val emailer: MagicLinkEmailer,
+    private val stripe: StripePaymentProvider
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -70,6 +75,14 @@ class StripeWebhookService(
             log.warn("checkout.session.completed missing customer_details.email")
             return
         }
+        // Set paid_until right here from the subscription's current period end,
+        // rather than waiting for the separate subscription/invoice events —
+        // those can arrive *before* this event provisions the account (Stripe
+        // doesn't guarantee delivery order), in which case they'd find no user
+        // and the account would never activate. Null if billing is unconfigured
+        // or the lookup fails; the events then remain the fallback.
+        val periodEnd = subscriptionId?.let { stripe.currentPeriodEnd(it) }
+
         val existing = users.findByEmail(email)
         if (existing != null) {
             // A re-subscribing lapsed VIEWER comes back as USER (they re-apply
@@ -78,15 +91,16 @@ class StripeWebhookService(
             users.save(existing.copy(
                 stripeCustomerId = customerId ?: existing.stripeCustomerId,
                 stripeSubscriptionId = subscriptionId ?: existing.stripeSubscriptionId,
-                access = access
+                access = access,
+                paidUntil = periodEnd ?: existing.paidUntil
             ))
             return
         }
 
-        // Payment-first onboarding: no account yet, so provision a paid user and
-        // email a magic link so they can get in. paid_until is set by the
-        // subsequent subscription/invoice event, which finds this user by
-        // stripe_subscription_id.
+        // Payment-first onboarding: no account yet, so provision a paid user
+        // (paid_until from the period end looked up above) and email a magic link
+        // so they can get in. If the lookup was unavailable, paid_until stays null
+        // and the subsequent subscription/invoice event sets it.
         //
         // The register form pre-collects phone + zipcode and stashes them in the
         // session metadata, so we can provision a *complete* account. The Substack
@@ -110,7 +124,8 @@ class StripeWebhookService(
                 access = AccessLevel.USER,
                 isEnabled = true,
                 stripeCustomerId = customerId,
-                stripeSubscriptionId = subscriptionId
+                stripeSubscriptionId = subscriptionId,
+                paidUntil = periodEnd
             )
         )
         val rawToken = magicLinks.issueToken(provisioned)

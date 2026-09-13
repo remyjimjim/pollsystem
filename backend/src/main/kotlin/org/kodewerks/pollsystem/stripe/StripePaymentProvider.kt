@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.stripe
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.stripe.StripeClient
 import com.stripe.exception.StripeException
 import com.stripe.param.SubscriptionUpdateParams
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.time.Instant
 
 /**
  * Creates Stripe-hosted Checkout and Customer Portal sessions for the Creator
@@ -29,7 +31,8 @@ import org.springframework.web.server.ResponseStatusException
 @Service
 class StripePaymentProvider(
     private val props: StripeProperties,
-    private val magicLink: MagicLinkProperties
+    private val magicLink: MagicLinkProperties,
+    private val objectMapper: ObjectMapper
 ) : PaymentProvider {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -141,6 +144,31 @@ class StripePaymentProvider(
 
     /** Remove any discount from the user's subscription (best-effort; see above). */
     override fun removeCreatorDiscount(user: User) = updateSubscriptionDiscount(user, apply = false)
+
+    /**
+     * Retrieve a subscription's current period end (when the paid access lapses),
+     * used by the webhook to set `paid_until` right at checkout completion — so
+     * activation doesn't depend on the ordering or delivery of the separate
+     * subscription/invoice events. Returns null if billing is unconfigured, the
+     * id is blank, or the lookup fails (the caller then falls back to those
+     * events). Parses the raw API JSON so it's robust to the SDK's field shape
+     * moving `current_period_end` onto subscription items in 2025 API versions.
+     */
+    fun currentPeriodEnd(subscriptionId: String): Instant? {
+        if (props.apiKey.isBlank() || subscriptionId.isBlank()) return null
+        return try {
+            val sub = client().subscriptions().retrieve(subscriptionId)
+            val raw = sub.lastResponse?.body() ?: return null
+            val node = objectMapper.readTree(raw)
+            val epoch = node.path("current_period_end").asLong(0).takeIf { it > 0 }
+                ?: node.path("items").path("data").firstOrNull()
+                    ?.path("current_period_end")?.asLong(0) ?: 0L
+            if (epoch > 0) Instant.ofEpochSecond(epoch) else null
+        } catch (e: StripeException) {
+            log.warn("Could not retrieve subscription {} for period end: {}", subscriptionId, e.message)
+            null
+        }
+    }
 
     private fun updateSubscriptionDiscount(user: User, apply: Boolean) {
         val subId = user.stripeSubscriptionId
