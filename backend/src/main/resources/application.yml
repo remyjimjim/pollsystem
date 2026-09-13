@@ -63,6 +63,12 @@ app:
     price-id: ${STRIPE_PRICE_ID:}
     # Coupon for the creator discount (applied on approval, removed on demotion).
     creator-coupon-id: ${STRIPE_CREATOR_COUPON:}
+  substack:
+    # Shared secret for the inbound Substack membership webhook (sent in the
+    # X-Webhook-Secret header). Empty by default: the endpoint returns 503 until
+    # set, so it can't be driven by forged calls before Substack is wired up.
+    webhook-secret: ${SUBSTACK_WEBHOOK_SECRET:}
+    membership-days: 32
 
 # Spring Boot Actuator. We expose only the endpoints we use
 # explicitly — `health` (public, for orchestrators / load balancers)

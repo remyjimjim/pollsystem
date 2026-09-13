@@ -58,6 +58,7 @@ class SecurityConfig(
                     "/api/auth/status",
                     "/api/auth/register-checkout",
                     "/webhooks/stripe",
+                    "/webhooks/substack",
                     "/api/states/**",
                     "/api/counties/**",
                     "/api/zipcodes/**",
