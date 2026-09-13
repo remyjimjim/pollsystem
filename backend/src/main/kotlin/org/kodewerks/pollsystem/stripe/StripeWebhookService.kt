@@ -18,13 +18,15 @@ import java.time.Instant
  * a duplicate delivery becomes a no-op.
  *
  * Supported events:
- *  - checkout.session.completed       — provision a new paid user (email only) and
- *                                       email a magic link, or link Stripe ids to an
- *                                       existing user
- *  - customer.subscription.updated    — refresh paid_until from current_period_end
- *  - customer.subscription.deleted    — clear paid_until (subscriber lost access)
- *  - invoice.paid                     — refresh paid_until on renewal
- *  - invoice.payment_failed           — log only; access is dropped on subscription.deleted
+ *  - checkout.session.completed              — provision a new paid user (email only)
+ *                                              and email a magic link, or link Stripe
+ *                                              ids to an existing user
+ *  - customer.subscription.created/updated   — refresh paid_until from current_period_end
+ *                                              (created fires for a first-time subscriber;
+ *                                              updated on later changes — same object shape)
+ *  - customer.subscription.deleted           — clear paid_until (subscriber lost access)
+ *  - invoice.paid                            — refresh paid_until on renewal
+ *  - invoice.payment_failed                  — log only; access is dropped on subscription.deleted
  */
 @Service
 class StripeWebhookService(
@@ -52,7 +54,8 @@ class StripeWebhookService(
         val data = event.path("data").path("object")
         when (type) {
             "checkout.session.completed" -> handleCheckoutCompleted(data)
-            "customer.subscription.updated", "invoice.paid" -> handleSubscriptionRefresh(data, type)
+            "customer.subscription.created", "customer.subscription.updated", "invoice.paid" ->
+                handleSubscriptionRefresh(data, type)
             "customer.subscription.deleted" -> handleSubscriptionDeleted(data)
             "invoice.payment_failed" -> log.info("Stripe payment failed for customer={}", data.path("customer").asText())
             else -> log.debug("Unhandled Stripe event type: {}", type)
@@ -117,7 +120,7 @@ class StripeWebhookService(
 
     private fun handleSubscriptionRefresh(data: JsonNode, type: String) {
         val (subscriptionId, periodEndEpoch) = when (type) {
-            "customer.subscription.updated" ->
+            "customer.subscription.created", "customer.subscription.updated" ->
                 data.path("id").asText() to subscriptionPeriodEnd(data)
             "invoice.paid" ->
                 invoiceSubscriptionId(data) to invoicePeriodEnd(data)

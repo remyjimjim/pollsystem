@@ -123,6 +123,27 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `subscription created sets paid_until for a first-time subscriber`() {
+        // Stripe fires customer.subscription.created (not .updated) for a brand-new
+        // subscription; without handling it, a first-time subscriber's paid_until
+        // never gets set and they stay LAPSED despite paying.
+        val user = saveUser("firsttimer@test.local", "+15559990007")
+            .copy(stripeSubscriptionId = "sub_created")
+        users.save(user)
+        val periodEnd = Instant.now().plusSeconds(30 * 86400).epochSecond
+        val payload = """
+            {"id":"evt_created","type":"customer.subscription.created","data":{"object":{
+              "id":"sub_created","current_period_end":$periodEnd
+            }}}
+        """.trimIndent()
+
+        deliver(payload).andExpect(status().isOk)
+
+        val updated = users.findByEmail("firsttimer@test.local")!!
+        assertEquals(periodEnd, updated.paidUntil!!.epochSecond)
+    }
+
+    @Test
     fun `subscription updated refreshes paid_until from current_period_end`() {
         val user = saveUser("renewer@test.local", "+15559990002")
             .copy(stripeSubscriptionId = "sub_renew")
