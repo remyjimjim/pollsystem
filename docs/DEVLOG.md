@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-09-13 — Fix: activate a first-time subscriber on subscription.created
+
+**Requested:**
+
+> Let's do the staging end-to-end test
+
+> Awesome, I made it to staging…dev/ but doesn't look like the membership is
+> active since I get "Your membership has lapsed…"
+
+**Context:** Staging E2E of the pay-first flow. Register → Stripe test checkout
+succeeded and the account was provisioned (`checkout.session.completed`), but the
+home page showed the lapsed/renew prompt and `/api/auth/status` reported `LAPSED`
+— `paid_until` was never set. The Stripe test endpoint's event log showed
+`customer.subscription.created` (not `.updated`), which the webhook didn't handle:
+`.created` fires for a brand-new subscription, `.updated` only on later changes.
+
+**Changed:**
+
+- `StripeWebhookService` now routes `customer.subscription.created` through the
+  same refresh path as `customer.subscription.updated` (identical Subscription
+  object / `current_period_end`), so a first-time subscriber activates on the
+  creation event instead of staying `LAPSED` until some later event.
+- Regression test in `StripeWebhookControllerTest` for the `created` event.
+
+**Verified:** full backend suite green (228), incl. the new `created` regression
+test. Staging redeploy + resend-of-event confirmation to follow.
+
+**Commit:** `246affe`
+
+---
+
 ## 2026-09-12 — Pay-first registration, phase 3 (Substack webhook)
 
 **Requested:**
