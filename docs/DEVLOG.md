@@ -61,6 +61,49 @@ logged.
 
 ---
 
+## 2026-09-12 — Pay-first registration, phase 2 (frontend)
+
+**Requested:**
+
+> i think the paying should be done on the register page […]
+
+> I think a non-substack user should go to /register and register and pay and
+> then get directed to /. I don't think an unpaid user should see the 'Become a
+> member' card or the 'Become a Creator' card on / page if they're not an active
+> paid user. I think /login should tell a user if their email doesn't exist
+> and/or the user's subscription has lapsed, if so then the user can be directed
+> to the payment page.
+
+**Context:** UI half of the pay-first model (backend in `f669f30`). No free
+accounts, so payment happens at registration and the home page stops upselling.
+
+**Changed:**
+
+- `RegisterView` collects email+phone+zip and redirects to Stripe Checkout
+  (`auth.registerCheckout`) instead of emailing a sign-in link. Surfaces 409
+  email/phone and 400 validation errors, with a "sign in" hint when the email is
+  already registered.
+- `LoginView` looks up `auth.accountStatus` first: `UNKNOWN` → register (no
+  dead-end link emailed), `LAPSED`/`ACTIVE` → email a link; a lapsed account is
+  told it can renew after signing in.
+- `BillingBanner` unpaid state is now a **renew** prompt (a logged-in unpaid
+  account is a lapsed member) rather than a "become a member" upsell.
+- `HomeView` gates the "Become a Creator" card on `isActiveMember`; a lapsed
+  member sees the renew prompt instead. Adds a "payment received — check your
+  email" notice when a pay-first registrant returns from Stripe logged out
+  (`?checkout=success`).
+- `auth` store: `isPaid` / `isActiveMember` getters + `accountStatus` /
+  `registerCheckout` actions. i18n: `renew*`, register error/checkout copy,
+  `home.checkoutSuccessGuest`, `login.lapsedNote`; dropped the now-unused
+  `subscribe*` / `register.checkEmail*` keys.
+
+**Verified:** `LoginView.spec` covers ACTIVE/UNKNOWN/LAPSED routing; full
+frontend unit suite green (38) and `type-check` clean.
+
+**Commit:** `69e7464`
+
+---
+
 ## 2026-09-12 — Pay-first registration, phase 1 (backend)
 
 **Requested:**
