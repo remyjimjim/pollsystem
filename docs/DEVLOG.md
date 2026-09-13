@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-09-12 — Pay-first registration, phase 3 (Substack webhook)
+
+**Requested:**
+
+> Hopefully, substack's webhook can send us the user's email so we can add it
+> as a paying member. I think substack should tell us about a paid subscriber
+> via a webhook so that the subscriber can go to /login and enter their email
+> and get an email with a link to login.
+
+> yes, push phases 1–2 now, and proceed with Phase 3 using option A
+
+**Context:** The second payment path. Substack bills members externally, so —
+per the option A decision — a subscribe/renewal event grants a rolling
+membership window rather than tracking a subscription object. Its exact
+payload/auth contract is still TBD (it may arrive via a relay such as Zapier),
+so the endpoint is deliberately generic for now.
+
+**Changed:**
+
+- `SubstackWebhookService.activate(email)` pushes `paid_until` to now +
+  `membership-days` (default 32); provisions an email-only `USER` and emails a
+  magic link if the address is new (phone/zip via complete-profile at first
+  sign-in); restores a lapsed `VIEWER` to `USER`. `deactivate(email)` clears
+  `paid_until` and demotes non-`SUPER` to `VIEWER` — the same access model as
+  the Stripe cancel path.
+- `SubstackWebhookController` `POST /webhooks/substack`: shared-secret gated
+  (`X-Webhook-Secret`, constant-time compare), 503 when unconfigured, 401 on a
+  bad/missing secret. Accepts a minimal `{email, event}` body and maps a
+  permissive set of event names onto activate/deactivate.
+- `SubstackProperties` (`app.substack.webhook-secret` / `membership-days`),
+  permitted in `SecurityConfig`, config in `application.yml` (secret blank by
+  default → endpoint disabled).
+
+**Verified:** `SubstackWebhookControllerTest` (7) + `SubstackWebhookUnconfiguredTest`
+(1). Full backend suite green (227 tests, 0 failures).
+
+**Commit:** `b9c4aca`
+
+---
+
 ## 2026-09-12 — Pay-first registration, phase 2 (frontend)
 
 **Requested:**
