@@ -80,14 +80,30 @@ class StripeWebhookService(
             return
         }
 
-        // Payment-first onboarding: no account yet, so provision a minimal paid
-        // user from the checkout email alone (phone + zipcode are collected when
-        // they complete their profile at first sign-in) and email a magic link so
-        // they can get in. paid_until is set by the subsequent subscription/invoice
-        // event, which finds this user by stripe_subscription_id.
+        // Payment-first onboarding: no account yet, so provision a paid user and
+        // email a magic link so they can get in. paid_until is set by the
+        // subsequent subscription/invoice event, which finds this user by
+        // stripe_subscription_id.
+        //
+        // The register form pre-collects phone + zipcode and stashes them in the
+        // session metadata, so we can provision a *complete* account. The Substack
+        // path (and any checkout without metadata) carries only an email, so those
+        // stay null and are gathered via "complete your profile" at first sign-in.
+        val metadata = data.path("metadata")
+        val phone = metadata.path(StripeMetadataKeys.PHONE).asText("").takeIf { it.isNotBlank() }
+        val zipcode = metadata.path(StripeMetadataKeys.ZIPCODE).asText("").takeIf { it.isNotBlank() }
+        // A phone claimed between the register-form check and now would violate
+        // the UNIQUE constraint. Drop it (null) rather than fail the webhook —
+        // the user completes their profile with a different phone at sign-in.
+        val safePhone = phone?.takeUnless { users.existsByPhone(it) }
+        if (phone != null && safePhone == null) {
+            log.warn("Phone from checkout metadata already in use; provisioning {} without it", email)
+        }
         val provisioned = users.save(
             User(
                 email = email,
+                phone = safePhone,
+                zipcode = if (safePhone != null) zipcode else null,
                 access = AccessLevel.USER,
                 isEnabled = true,
                 stripeCustomerId = customerId,

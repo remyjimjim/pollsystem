@@ -24,6 +24,26 @@ data class MagicLinkRedeemRequest(
 )
 
 /**
+ * Pay-first registration request. All three are required and format-validated;
+ * the controller additionally checks email/phone are free and the zipcode is
+ * real before handing back a Stripe Checkout URL.
+ */
+data class GuestCheckoutRequest(
+    @field:Email @field:NotBlank val email: String,
+    @field:Pattern(regexp = "^[0-9+\\-() ]{7,20}$") @field:NotBlank val phone: String,
+    @field:Pattern(regexp = "^[0-9]{5}$") @field:NotBlank val zipcode: String
+)
+
+/** Email lookup for the login screen's routing decision. */
+data class AccountStatusRequest(
+    @field:Email @field:NotBlank val email: String
+)
+
+enum class AccountStatus { UNKNOWN, LAPSED, ACTIVE }
+
+data class AccountStatusResponse(val status: AccountStatus)
+
+/**
  * Supplies the phone + zipcode a payment-first user was provisioned without.
  * Both required and format-validated (as in MagicLinkRequest); the controller
  * additionally checks phone uniqueness and that the zipcode is a real one.

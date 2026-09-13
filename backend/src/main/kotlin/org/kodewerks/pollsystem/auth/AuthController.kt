@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.auth
 
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.payment.PaymentProvider
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.kodewerks.pollsystem.security.AppUserDetails
@@ -36,22 +37,69 @@ class AuthController(
     private val magicLinks: MagicLinkService,
     private val emailer: MagicLinkEmailer,
     private val countyZips: CountyZipsRepository,
+    private val billing: PaymentProvider,
     private val env: Environment
 ) {
 
     /**
-     * Request a magic-link sign-in. If no user exists for the email, a new
-     * USER-tier account is provisioned. Email and phone are formatting-only
-     * validated (see DTO); we do not send a verification SMS or check MX
-     * records. Always returns 202 to avoid leaking which emails are registered.
+     * Request a magic-link sign-in for an *existing* account. In the pay-first
+     * model accounts are created only by payment (Stripe checkout or the
+     * Substack webhook), so an unknown email is **not** provisioned here —
+     * it returns 404 and the caller routes the visitor to /register to pay.
+     * (Under the `local` profile we still provision role-tagged fixtures so
+     * Playwright e2e can seed users without going through Stripe.)
      */
     @PostMapping("/magic-link/request")
     fun requestMagicLink(@Valid @RequestBody req: MagicLinkRequest): ResponseEntity<Void> {
-        val user = users.findByEmail(req.email)
-            ?: provision(req)
+        val user = users.findByEmail(req.email.lowercase())
+            ?: if ("local" in env.activeProfiles) provision(req)
+               else throw ResponseStatusException(HttpStatus.NOT_FOUND, "No account for that email")
         val rawToken = magicLinks.issueToken(user)
         emailer.send(user, rawToken)
         return ResponseEntity.accepted().build()
+    }
+
+    /**
+     * Tell the login screen whether an email is `UNKNOWN` (route to /register),
+     * `LAPSED` (account exists but no active membership — send a link so they
+     * can sign in and renew), or `ACTIVE` (send a link, straight in). This
+     * deliberately reveals registration status — a product choice to route
+     * visitors correctly, accepted as a trade-off against email enumeration.
+     */
+    @PostMapping("/status")
+    fun accountStatus(@Valid @RequestBody req: AccountStatusRequest): AccountStatusResponse {
+        val user = users.findByEmail(req.email.lowercase())
+        val status = when {
+            user == null || !user.isEnabled -> AccountStatus.UNKNOWN
+            // CREATOR+ are exempt from the subscription gate (granted via other
+            // flows); anyone else needs a live paid_until to count as active.
+            user.hasActiveSubscription || user.access.ordinal >= AccessLevel.CREATOR.ordinal ->
+                AccountStatus.ACTIVE
+            else -> AccountStatus.LAPSED
+        }
+        return AccountStatusResponse(status)
+    }
+
+    /**
+     * Pay-first registration entry point (public). Validates that the email and
+     * phone are free and the zipcode is real, then returns a Stripe Checkout URL
+     * that carries phone + zipcode in its metadata. The account itself is created
+     * by the checkout webhook once payment succeeds — nothing is persisted here,
+     * so a visitor who abandons checkout leaves no account behind.
+     */
+    @PostMapping("/register-checkout")
+    fun registerCheckout(@Valid @RequestBody req: GuestCheckoutRequest): Map<String, String> {
+        val email = req.email.lowercase()
+        if (users.findByEmail(email) != null) {
+            throw ResponseStatusException(HttpStatus.CONFLICT, "That email is already registered — sign in instead")
+        }
+        if (users.existsByPhone(req.phone)) {
+            throw ResponseStatusException(HttpStatus.CONFLICT, "That phone is already registered to another account")
+        }
+        if (countyZips.findByZipcode(req.zipcode).isEmpty()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown zipcode: ${req.zipcode}")
+        }
+        return mapOf("url" to billing.createGuestCheckoutSession(email, req.phone, req.zipcode))
     }
 
     @PostMapping("/magic-link/redeem")

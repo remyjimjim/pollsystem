@@ -6,7 +6,7 @@ import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.MagicLinkTokenRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -29,71 +29,35 @@ class AuthControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var tokens: MagicLinkTokenRepository
 
     @Test
-    fun `request creates a new USER and returns 202`() {
-        val body = mapOf(
-            "email" to "alice@test.local",
-            "phone" to "+15551234001",
-            "zipcode" to "90001"
-        )
+    fun `request for an unknown email returns 404 and creates no account`() {
+        // Pay-first model: accounts are created only by payment, never by a
+        // login attempt. (Provisioning still happens under the local profile
+        // for e2e fixtures, but tests run under the test profile.)
+        val body = mapOf("email" to "nobody@test.local")
         mockMvc.perform(
             post("/api/auth/magic-link/request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.writeValueAsString(body))
-        ).andExpect(status().isAccepted)
+        ).andExpect(status().isNotFound)
 
-        val created = users.findByEmail("alice@test.local")
-        assertNotNull(created)
-        assertEquals("90001", created!!.zipcode)
+        assertNull(users.findByEmail("nobody@test.local"))
     }
 
     @Test
-    fun `request for existing email reuses the user`() {
-        val body = mapOf(
-            "email" to "carol@test.local",
-            "phone" to "+15551234050",
-            "zipcode" to "90001"
-        )
-        mockMvc.perform(
-            post("/api/auth/magic-link/request")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(body))
-        ).andExpect(status().isAccepted)
+    fun `request for an existing email returns 202 and reuses the user`() {
+        saveUser("carol@test.local", "+15551234050")
+        val body = mapOf("email" to "carol@test.local")
 
-        // Same email, different phone — should NOT create a second user
-        val again = body + ("phone" to "+15551234051")
-        mockMvc.perform(
-            post("/api/auth/magic-link/request")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(again))
-        ).andExpect(status().isAccepted)
+        repeat(2) {
+            mockMvc.perform(
+                post("/api/auth/magic-link/request")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(json.writeValueAsString(body))
+            ).andExpect(status().isAccepted)
+        }
 
         val matches = users.findAll().filter { it.email == "carol@test.local" }
         assertEquals(1, matches.size)
-    }
-
-    @Test
-    fun `request rejects new email with phone already used by another account`() {
-        val first = mapOf(
-            "email" to "first@test.local",
-            "phone" to "+15551234100",
-            "zipcode" to "90001"
-        )
-        mockMvc.perform(
-            post("/api/auth/magic-link/request")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(first))
-        ).andExpect(status().isAccepted)
-
-        val collide = mapOf(
-            "email" to "second@test.local",
-            "phone" to "+15551234100", // same phone, different email -> conflict
-            "zipcode" to "90001"
-        )
-        mockMvc.perform(
-            post("/api/auth/magic-link/request")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(collide))
-        ).andExpect(status().isConflict)
     }
 
     @Test

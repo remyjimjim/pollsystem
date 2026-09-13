@@ -16,6 +16,15 @@ interface PaymentProvider {
     /** Start a subscription purchase for [user]; returns a hosted-page URL to redirect to. */
     fun createCheckoutSession(user: User): String
 
+    /**
+     * Start a subscription purchase for a not-yet-registered visitor (pay-first
+     * registration). No account exists yet: [email] seeds the hosted checkout,
+     * and [phone] + [zipcode] ride along in the session metadata so the inbound
+     * webhook can provision a *complete* account once payment succeeds. Returns
+     * a hosted-page URL to redirect to.
+     */
+    fun createGuestCheckoutSession(email: String, phone: String, zipcode: String): String
+
     /** Open the self-service billing portal for [user]; returns a hosted-page URL. */
     fun createPortalSession(user: User): String
 

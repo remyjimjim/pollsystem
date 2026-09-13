@@ -79,6 +79,50 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `checkout with phone+zip metadata provisions a complete paid user`() {
+        assertNull(users.findByEmail("payfirst@test.local"))
+        // Pay-first register stashes the pre-collected phone + zipcode in the
+        // session metadata so the account is provisioned already-complete.
+        val payload = """
+            {"id":"evt_meta","type":"checkout.session.completed","data":{"object":{
+              "customer":"cus_meta","subscription":"sub_meta",
+              "customer_details":{"email":"payfirst@test.local"},
+              "metadata":{"app_phone":"+15551239876","app_zipcode":"90001"}
+            }}}
+        """.trimIndent()
+
+        deliver(payload).andExpect(status().isOk)
+
+        val created = users.findByEmail("payfirst@test.local")!!
+        assertEquals("+15551239876", created.phone)
+        assertEquals("90001", created.zipcode)
+        assertEquals(AccessLevel.USER, created.access)
+        assertTrue(created.profileComplete)
+    }
+
+    @Test
+    fun `checkout metadata phone already in use falls back to an email-only account`() {
+        // Someone claimed this phone between the register-form check and the
+        // webhook; provisioning must not fail the UNIQUE constraint.
+        saveUser("holder@test.local", "+15550001111")
+        val payload = """
+            {"id":"evt_race","type":"checkout.session.completed","data":{"object":{
+              "customer":"cus_race","subscription":"sub_race",
+              "customer_details":{"email":"raced@test.local"},
+              "metadata":{"app_phone":"+15550001111","app_zipcode":"90001"}
+            }}}
+        """.trimIndent()
+
+        deliver(payload).andExpect(status().isOk)
+
+        val created = users.findByEmail("raced@test.local")!!
+        // Phone dropped (kept by the other account); profile completed later.
+        assertNull(created.phone)
+        assertNull(created.zipcode)
+        assertEquals(AccessLevel.USER, created.access)
+    }
+
+    @Test
     fun `subscription updated refreshes paid_until from current_period_end`() {
         val user = saveUser("renewer@test.local", "+15559990002")
             .copy(stripeSubscriptionId = "sub_renew")

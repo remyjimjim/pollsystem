@@ -78,6 +78,40 @@ class StripePaymentProvider(
         }
     }
 
+    /**
+     * Create a subscription Checkout Session for a pay-first visitor with no
+     * account yet. Seeds `customer_email` and stashes the pre-collected phone +
+     * zipcode in the session metadata; the webhook reads them back (keys in
+     * [StripeMetadataKeys]) to provision a complete account. No
+     * `client_reference_id` — the webhook matches the resulting checkout by email.
+     */
+    override fun createGuestCheckoutSession(email: String, phone: String, zipcode: String): String {
+        if (props.priceId.isBlank()) {
+            throw ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Billing price is not configured")
+        }
+        val params = SessionCreateParams.builder()
+            .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
+            .addLineItem(
+                SessionCreateParams.LineItem.builder()
+                    .setPrice(props.priceId)
+                    .setQuantity(1L)
+                    .build()
+            )
+            .setSuccessUrl("$baseUrl${props.checkoutSuccessPath}")
+            .setCancelUrl("$baseUrl${props.checkoutCancelPath}")
+            .setCustomerEmail(email)
+            .putMetadata(StripeMetadataKeys.PHONE, phone)
+            .putMetadata(StripeMetadataKeys.ZIPCODE, zipcode)
+            .build()
+
+        return try {
+            client().checkout().sessions().create(params).url
+        } catch (e: StripeException) {
+            log.error("Stripe guest checkout session creation failed for email={}", email, e)
+            throw ResponseStatusException(HttpStatus.BAD_GATEWAY, "Could not start checkout")
+        }
+    }
+
     /** Create a Customer Portal session for [user]; returns the redirect URL. */
     override fun createPortalSession(user: User): String {
         val customerId = user.stripeCustomerId

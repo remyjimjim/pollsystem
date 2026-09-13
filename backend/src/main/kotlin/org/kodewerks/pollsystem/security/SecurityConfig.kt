@@ -53,6 +53,10 @@ class SecurityConfig(
                 it.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 it.requestMatchers(
                     "/api/auth/magic-link/**",
+                    // Pay-first registration + login routing are used before the
+                    // visitor has any account or token, so they must be public.
+                    "/api/auth/status",
+                    "/api/auth/register-checkout",
                     "/webhooks/stripe",
                     "/api/states/**",
                     "/api/counties/**",
