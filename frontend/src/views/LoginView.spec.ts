@@ -26,18 +26,46 @@ describe('LoginView (magic-link)', () => {
     vi.restoreAllMocks()
   })
 
-  it('calls requestMagicLink with the entered email and shows a confirmation', async () => {
+  it('emails a link for an ACTIVE account and shows a confirmation', async () => {
     const wrapper = mountLogin()
     const auth = useAuthStore()
-    // createTestingPinia stubs actions; default returns undefined (resolves)
+    vi.mocked(auth.accountStatus).mockResolvedValueOnce('ACTIVE')
 
     await wrapper.find('input[type="email"]').setValue('alice@test.local')
     await wrapper.find('form').trigger('submit.prevent')
     await flushPromises()
 
+    expect(auth.accountStatus).toHaveBeenCalledWith('alice@test.local')
     expect(auth.requestMagicLink).toHaveBeenCalledWith({ email: 'alice@test.local' })
     expect(wrapper.text()).toContain('Check your email')
     expect(wrapper.text()).toContain('alice@test.local')
+  })
+
+  it('routes an UNKNOWN email to register without emailing a link', async () => {
+    const wrapper = mountLogin()
+    const auth = useAuthStore()
+    vi.mocked(auth.accountStatus).mockResolvedValueOnce('UNKNOWN')
+
+    await wrapper.find('input[type="email"]').setValue('nobody@test.local')
+    await wrapper.find('form').trigger('submit.prevent')
+    await flushPromises()
+
+    expect(auth.requestMagicLink).not.toHaveBeenCalled()
+    expect(wrapper.text()).toContain("don't have an account for that email")
+  })
+
+  it('emails a link for a LAPSED account and notes the lapse', async () => {
+    const wrapper = mountLogin()
+    const auth = useAuthStore()
+    vi.mocked(auth.accountStatus).mockResolvedValueOnce('LAPSED')
+
+    await wrapper.find('input[type="email"]').setValue('lapsed@test.local')
+    await wrapper.find('form').trigger('submit.prevent')
+    await flushPromises()
+
+    expect(auth.requestMagicLink).toHaveBeenCalledWith({ email: 'lapsed@test.local' })
+    expect(wrapper.text()).toContain('Check your email')
+    expect(wrapper.text()).toContain('membership has lapsed')
   })
 
   it('shows a "no account" message when the backend returns 400', async () => {

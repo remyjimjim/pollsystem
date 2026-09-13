@@ -8,11 +8,8 @@ const auth = useAuthStore()
 const route = useRoute()
 const { busy, error, startCheckout, openPortal } = useBilling()
 
-// A live subscription: paidUntil is set and still in the future.
-const isPaid = computed(() => {
-  const until = auth.user?.paidUntil
-  return !!until && new Date(until).getTime() > Date.now()
-})
+// A live subscription (from the store): paidUntil set and still in the future.
+const isPaid = computed(() => auth.isPaid)
 
 // Stripe redirects back to "/" with ?checkout=success|cancel.
 const checkoutStatus = computed(() => {
@@ -52,15 +49,17 @@ const checkoutStatus = computed(() => {
       </button>
     </template>
     <template v-else>
-      <h2 class="text-lg font-semibold text-slate-800">{{ $t('billing.subscribeTitle') }}</h2>
-      <p class="mt-1 mb-3 text-sm text-slate-600">{{ $t('billing.subscribeBlurb') }}</p>
+      <!-- No free accounts: a logged-in unpaid user is a lapsed member, so this
+           is a renewal prompt (not a "become a member" upsell). -->
+      <h2 class="text-lg font-semibold text-slate-800">{{ $t('billing.renewTitle') }}</h2>
+      <p class="mt-1 mb-3 text-sm text-slate-600">{{ $t('billing.renewBlurb') }}</p>
       <button
         type="button"
         :disabled="busy"
         class="rounded bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-60"
         @click="startCheckout"
       >
-        {{ $t('billing.subscribeCta') }}
+        {{ $t('billing.renewCta') }}
       </button>
     </template>
 

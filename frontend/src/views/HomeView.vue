@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { AccessLevel } from '@/types'
 import BillingBanner from '@/components/BillingBanner.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+const route = useRoute()
+
+// A pay-first registrant returns here from Stripe (logged out) as
+// ?checkout=success — payment landed, but they still need the emailed link.
+const guestCheckoutSuccess = computed(() => route.query.checkout === 'success')
 
 interface ActionCard {
   title: string
@@ -39,7 +45,9 @@ const cards = computed<ActionCard[]>(() => {
       to: '/creator/polls/new',
       cta: t('home.cards.newPoll.cta')
     })
-  } else {
+  } else if (auth.isActiveMember) {
+    // Only an active paying member can apply to become a Creator. A lapsed
+    // member sees the renewal prompt (BillingBanner) instead of this card.
     out.push({
       title: t('home.cards.becomeCreator.title'),
       description: t('home.cards.becomeCreator.description'),
@@ -112,6 +120,12 @@ const cards = computed<ActionCard[]>(() => {
     </template>
 
     <template v-else>
+      <p
+        v-if="guestCheckoutSuccess"
+        class="mb-6 rounded-md border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900"
+      >
+        {{ $t('home.checkoutSuccessGuest') }}
+      </p>
       <p class="mb-6 text-base text-slate-600">
         {{ $t('home.guestIntro') }}
       </p>

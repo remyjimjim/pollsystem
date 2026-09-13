@@ -30,6 +30,7 @@
   "home": {
     "welcomeBack": "Welcome back,",
     "guestIntro": "Anonymous polling and elections. Create an account to vote on published polls; apply for Creator access to publish your own.",
+    "checkoutSuccessGuest": "Payment received — thank you! Check your email for a one-time sign-in link to finish setting up your account. It may take a moment to arrive.",
     "cards": {
       "findPolls": {
         "title": "Find polls and view results",
@@ -94,23 +95,24 @@
     "checkEmailHeading": "Check your email.",
     "checkEmailBody": "We've sent a one-time sign-in link to {email}. The link expires in 15 minutes and can only be used once.",
     "wrongAddress": "Wrong address?",
+    "lapsedNote": "Your membership has lapsed. Sign in with the link, then renew from your home page to participate again.",
     "errorNoAccount": "We don't have an account for that email. Please register first.",
     "errorGeneric": "Could not send the sign-in link"
   },
   "register": {
     "heading": "Create an account",
-    "intro": "We use one-time email links instead of passwords. Enter your details and we'll send a sign-in link to your inbox.",
+    "intro": "Membership is $10/mo and lets you participate in polls, questionnaires, and ballot measures in your area. Enter your details and continue to secure checkout; we'll email a one-time sign-in link once payment is complete.",
     "emailLabel": "Email",
     "phoneLabel": "Phone",
     "zipcodeLabel": "Zipcode",
-    "submitButton": "Email me a sign-in link",
-    "submittingButton": "Sending link…",
-    "checkEmailHeading": "Check your email.",
-    "checkEmailBody": "We've sent a one-time sign-in link to {email}. Click the link to finish creating your account. The link expires in 15 minutes.",
-    "wrongAddress": "Wrong address?",
+    "submitButton": "Continue to payment — $10/mo",
+    "submittingButton": "Starting checkout…",
     "haveAccount": "Already have an account?",
     "signInLink": "Sign in",
-    "errorGeneric": "Could not send the sign-in link"
+    "errorEmailTaken": "That email is already registered.",
+    "errorPhoneTaken": "That phone number is already registered to another account.",
+    "errorInvalid": "Please check your details and try again.",
+    "errorGeneric": "Could not start checkout. Please try again."
   },
   "completeProfile": {
     "heading": "Complete your profile",
@@ -760,9 +762,9 @@
     }
   },
   "billing": {
-    "subscribeTitle": "Become a member",
-    "subscribeBlurb": "Subscribe to participate — vote and respond in polls, questionnaires, and ballot measures in your area.",
-    "subscribeCta": "Subscribe — $10/mo",
+    "renewTitle": "Your membership has lapsed",
+    "renewBlurb": "Renew to participate again — vote and respond in polls, questionnaires, and ballot measures in your area.",
+    "renewCta": "Renew — $10/mo",
     "manageTitle": "Your membership",
     "manageBlurb": "You’re subscribed. Manage your plan or payment method, or cancel anytime.",
     "manageCta": "Manage subscription",

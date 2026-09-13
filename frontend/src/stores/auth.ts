@@ -1,7 +1,18 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import axios from 'axios'
-import type { User, MagicLinkRequest, AuthResponse, AccessLevel, CompleteProfileRequest } from '@/types'
+import type { User, MagicLinkRequest, AuthResponse, CompleteProfileRequest } from '@/types'
+import { AccessLevel } from '@/types'
+
+/** Login routing decision from the backend; see AuthController.accountStatus. */
+export type AccountStatus = 'UNKNOWN' | 'LAPSED' | 'ACTIVE'
+
+/** Pay-first registration payload (all required; account created after payment). */
+export interface RegisterCheckoutRequest {
+  email: string
+  phone: string
+  zipcode: string
+}
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
@@ -17,6 +28,17 @@ export const useAuthStore = defineStore('auth', () => {
     return hierarchy[user.value.access] >= hierarchy[level]
   }
 
+  // A live paid membership: paidUntil set and still in the future.
+  const isPaid = computed(() => {
+    const until = user.value?.paidUntil
+    return !!until && new Date(until).getTime() > Date.now()
+  })
+
+  // Can participate / see member CTAs: either currently paid, or CREATOR+ (who
+  // are exempt from the subscription gate, granted access via other flows).
+  // A logged-in account that is neither is a *lapsed* member (no free accounts).
+  const isActiveMember = computed(() => isPaid.value || hasAccess(AccessLevel.CREATOR))
+
   // Set auth header for all requests
   if (token.value) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
@@ -29,6 +51,26 @@ export const useAuthStore = defineStore('auth', () => {
    */
   async function requestMagicLink(data: MagicLinkRequest): Promise<void> {
     await axios.post('/api/auth/magic-link/request', data)
+  }
+
+  /**
+   * Ask the backend how to route a login attempt: UNKNOWN (send to /register),
+   * LAPSED (email a link, they renew after signing in), or ACTIVE (email a link).
+   */
+  async function accountStatus(email: string): Promise<AccountStatus> {
+    const res = await axios.post<{ status: AccountStatus }>('/api/auth/status', { email })
+    return res.data.status
+  }
+
+  /**
+   * Pay-first registration: validate + start Stripe Checkout. Returns the
+   * hosted-checkout URL to redirect to; the account is created by the webhook
+   * once payment succeeds. Throws (409/400) if email/phone are taken or the
+   * zipcode is unknown.
+   */
+  async function registerCheckout(data: RegisterCheckoutRequest): Promise<string> {
+    const res = await axios.post<{ url: string }>('/api/auth/register-checkout', data)
+    return res.data.url
   }
 
   /**
@@ -78,7 +120,11 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     isAuthenticated,
     hasAccess,
+    isPaid,
+    isActiveMember,
     requestMagicLink,
+    accountStatus,
+    registerCheckout,
     redeemMagicLink,
     fetchUser,
     completeProfile,

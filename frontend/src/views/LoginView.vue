@@ -10,16 +10,28 @@ const form = reactive({ email: '' })
 const error = ref<string | null>(null)
 const submitting = ref(false)
 const sentTo = ref<string | null>(null)
+// True when the account exists but its membership has lapsed — we still email a
+// sign-in link, and note that they can renew once signed in.
+const lapsed = ref(false)
 
 async function onSubmit() {
   error.value = null
+  lapsed.value = false
   submitting.value = true
   try {
+    // Route by account status first: unknown emails have no account (pay-first
+    // model), so send them to register rather than emailing a dead-end link.
+    const status = await auth.accountStatus(form.email)
+    if (status === 'UNKNOWN') {
+      error.value = t('login.errorNoAccount')
+      return
+    }
+    lapsed.value = status === 'LAPSED'
     await auth.requestMagicLink({ email: form.email })
     sentTo.value = form.email
   } catch (e: any) {
     const status = e?.response?.status
-    if (status === 400) {
+    if (status === 400 || status === 404) {
       error.value = t('login.errorNoAccount')
     } else {
       error.value = e?.response?.data?.message ?? t('login.errorGeneric')
@@ -44,6 +56,9 @@ async function onSubmit() {
           <strong class="font-semibold">{{ sentTo }}</strong>
         </template>
       </i18n-t>
+      <p v-if="lapsed" class="mb-2 rounded bg-amber-50 px-3 py-2 text-amber-800">
+        {{ $t('login.lapsedNote') }}
+      </p>
       <p class="mt-3 text-center">
         {{ $t('login.wrongAddress') }}
         <a href="#" @click.prevent="sentTo = null" class="text-slate-700 underline">{{ $t('common.tryAgain') }}</a>
