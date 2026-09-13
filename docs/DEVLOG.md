@@ -61,6 +61,67 @@ logged.
 
 ---
 
+## 2026-09-12 — Pay-first registration, phase 1 (backend)
+
+**Requested:**
+
+> i noticed that when one goes to /register to create a new account then
+> submits the register page they land on the localhost:3000 then they need to
+> hit the subscribe button if they want be a paying member, i think the paying
+> should be done on the register page then there can be a 'Become a Creator'
+> for a 30% discount button.
+
+> Ok, so given that a user can "register" either thru going to /login directly
+> if not a substack member or via substack, can the /login page check if a
+> user's email is already in the system and if so then they've paid if
+> redirected from substack or if not then the user goes to /register where they
+> then have to pay via stripe then click on the email link from stripe?
+
+> 1. No free accounts. […] 2. Yes, absolutely. 3. Yes, continue collecting
+> phone/zip before before payment since one needs a unique phone number along
+> with the unique email to create an account. 4. Yes, fine.
+
+> Hopefully, substack's webhook can send us the user's email so we can add it
+> as a paying member. […] I think a non-substack user should go to /register
+> and register and pay and then get directed to /. […] I think /login should
+> tell a user if their email doesn't exist and/or the user's subscription has
+> lapsed, if so then the user can be directed to the payment page.
+
+**Context:** Registration created a free `USER` up front and only later prompted
+for payment. The new model is **no free accounts** — an account exists only
+after payment (Stripe checkout, or later the Substack webhook). This phase lays
+the backend; the register/login/home UI is phase 2, Substack phase 3.
+
+**Changed:**
+
+- `PaymentProvider.createGuestCheckoutSession(email, phone, zipcode)` — start a
+  subscription Checkout for a visitor with no account yet. The Stripe impl seeds
+  `customer_email` and stashes phone + zipcode in the session **metadata**
+  (`StripeMetadataKeys`); no `client_reference_id`, since the webhook matches by
+  email.
+- `StripeWebhookService.handleCheckoutCompleted` reads phone/zip back from the
+  metadata to provision a **complete** paid account. If the phone was claimed
+  between the register-form check and the webhook, it drops the phone (provisions
+  email-only) rather than fail the UNIQUE constraint; a checkout with no metadata
+  (the Substack path) stays email-only and uses complete-profile at first sign-in.
+- `AuthController`: `/magic-link/request` no longer provisions unknown emails —
+  they 404 so the caller routes to /register (provisioning still happens under
+  the `local` profile for Playwright fixtures). New public `POST /auth/status`
+  returns `UNKNOWN | LAPSED | ACTIVE` (CREATOR+ count as active — exempt from the
+  gate) to route the login screen, and `POST /auth/register-checkout` validates
+  email/phone are free + zipcode is real, then returns a Checkout URL. Both are
+  permitted in `SecurityConfig` (used pre-auth). Email lookups lowercased to
+  match the webhook.
+
+**Verified:** new `AccountStatusTest` (5) and `RegistrationCheckoutTest` (5);
+`StripeWebhookControllerTest` gains metadata-provisioning + phone-race cases (11);
+`AuthControllerTest` updated to the no-free-accounts behavior. Full backend suite
+green (219 tests, 0 failures).
+
+**Commit:** `f669f30`
+
+---
+
 ## 2026-09-05 — Update todo.md for the launcher, staging env, and rotation
 
 **Requested:**
