@@ -61,6 +61,44 @@ logged.
 
 ---
 
+## 2026-09-13 — Fix: activate on checkout via subscription period-end lookup
+
+**Requested:**
+
+> Awesome, I made it to staging…dev/ but doesn't look like the membership is
+> active…
+
+> [event log shows customer.subscription.created + invoice.paid at 3:23:04,
+> checkout.session.completed at 3:23:05]
+
+**Context:** After the `subscription.created` handling fix (`246affe`), a fresh
+staging signup *still* came back `LAPSED`. The Stripe event log revealed why:
+Stripe creates `customer.subscription.created` / `invoice.paid` ~1s **before**
+`checkout.session.completed`, and delivery order isn't guaranteed. Our
+`paid_until` handlers look the user up by subscription id, so when those events
+arrive before checkout has provisioned the account they match no user and are
+dropped — the account never activates. It also made activation hostage to which
+events the endpoint happens to subscribe to.
+
+**Changed:**
+
+- `StripePaymentProvider.currentPeriodEnd(subscriptionId)` retrieves the
+  subscription and reads `current_period_end` from the raw API JSON (robust to
+  the 2025 API moving it onto subscription items). Returns null if billing is
+  unconfigured or the lookup fails.
+- `StripeWebhookService.handleCheckoutCompleted` now sets `paid_until` from that
+  lookup right when it provisions/links the account, so activation no longer
+  depends on the ordering or delivery of the separate subscription/invoice
+  events. Those remain the fallback (null lookup) and drive renewals.
+
+**Verified:** full backend suite green (228; `currentPeriodEnd` returns null
+under the blank test api-key, so existing checkout assertions are unchanged).
+Staging redeploy + fresh-registration confirmation to follow.
+
+**Commit:** `5727d18`
+
+---
+
 ## 2026-09-13 — Fix: activate a first-time subscriber on subscription.created
 
 **Requested:**
