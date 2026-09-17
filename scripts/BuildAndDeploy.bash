@@ -18,7 +18,8 @@
 #   Secrets are set once via `test-secrets` (imported from the OS keychain).
 #
 # Usage:
-#   ./scripts/BuildAndDeploy.bash [local]  # default: run the full local stack
+#   ./scripts/BuildAndDeploy.bash [local]  # default: full local stack (gradle + vite on host)
+#   ./scripts/BuildAndDeploy.bash local-docker  # full stack, everything in Docker (compose `app` profile)
 #   ./scripts/BuildAndDeploy.bash test     # build + deploy to the staging env
 #   ./scripts/BuildAndDeploy.bash test-secrets  # (re)import staging secrets to Fly
 #   ./scripts/BuildAndDeploy.bash infra    # local containers only (no app)
@@ -218,6 +219,30 @@ cmd_up() {
   wait_any "$BACK_PID" "$FRONT_PID"
 }
 
+# --- LOCAL, fully containerized ----------------------------------------------
+# Same stack as `local`, but the backend and frontend run in Docker too (compose
+# `app` profile) instead of via gradle/vite on the host — one command, no local
+# JDK/Node needed. Detached: containers keep running after this returns.
+cmd_up_docker() {
+  check_prereqs
+  info "Building + starting the full containerized stack (db + mailpit + backend + frontend)…"
+  docker compose --profile app up -d --build
+
+  info "Waiting for the backend to report healthy…"
+  wait_for "backend health" 150 curl -sf http://localhost:8080/actuator/health
+  info "Waiting for the frontend dev server…"
+  wait_for "frontend dev server" 90 curl -sf -o /dev/null http://localhost:3000/
+
+  echo
+  ok "Containerized stack up (all services in Docker):"
+  echo "    Frontend   http://localhost:3000   (Vite dev server, HMR)"
+  echo "    Backend    http://localhost:8080/api"
+  echo "    Mailpit    http://localhost:8025   (magic-link emails land here)"
+  echo "    Postgres   localhost:5432          (polladmin / pollpass123)"
+  echo
+  info "Stop everything with:  ./scripts/BuildAndDeploy.bash down"
+}
+
 # --- TEST / staging deploy ---------------------------------------------------
 require_fly() {
   need flyctl "Install: curl -L https://fly.io/install.sh | sh"
@@ -292,11 +317,12 @@ cmd_test() {
 
 # --- dispatch ----------------------------------------------------------------
 case "${1:-local}" in
-  local|up)     cmd_up ;;
-  test)         cmd_test ;;
-  test-secrets) cmd_test_secrets ;;
-  infra)        ensure_infra ;;
-  down)         cmd_down ;;
-  status)       cmd_status ;;
-  *)            die "Unknown command '$1'. Use: local | test | test-secrets | infra | down | status" ;;
+  local|up)           cmd_up ;;
+  local-docker|docker) cmd_up_docker ;;
+  test)               cmd_test ;;
+  test-secrets)       cmd_test_secrets ;;
+  infra)              ensure_infra ;;
+  down)               cmd_down ;;
+  status)             cmd_status ;;
+  *)                  die "Unknown command '$1'. Use: local | local-docker | test | test-secrets | infra | down | status" ;;
 esac

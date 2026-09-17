@@ -15,9 +15,11 @@ import java.util.Properties
  * a property merge across multiple application-*.yml files.
  *
  * - `local` profile (the dev default; see `spring.profiles.default` in
- *   application.yml): mail goes to a Mailpit container at
- *   localhost:1025. No auth, no STARTTLS — Mailpit accepts anything and
- *   surfaces it at http://localhost:8025 for inspection.
+ *   application.yml): mail goes to a Mailpit container, by default at
+ *   localhost:1025 (override with `MAIL_SMTP_HOST` / `MAIL_SMTP_PORT` — e.g.
+ *   the backend running inside docker-compose reaches Mailpit at `mailpit:1025`
+ *   over the compose network). No auth, no STARTTLS — Mailpit accepts anything
+ *   and surfaces it at http://localhost:8025 for inspection.
  * - Any other profile: a generic authenticated SMTP relay, **defaulting to
  *   Resend** (`smtp.resend.com:587`, username `resend`, password = the Resend
  *   API key in `RESEND_API_KEY`). Every field is env-overridable, so switching
@@ -31,9 +33,15 @@ class MailConfig {
 
     @Bean
     @Profile("local")
-    fun mailpitMailSender(): JavaMailSender = JavaMailSenderImpl().apply {
-        host = "localhost"
-        port = 1025
+    fun mailpitMailSender(
+        // Default to localhost:1025 (Mailpit on the host, for `gradlew bootRun`);
+        // the containerized backend sets MAIL_SMTP_HOST=mailpit to reach it over
+        // the compose network. Same env vars as the non-local SMTP bean.
+        @Value("\${MAIL_SMTP_HOST:localhost}") mailHost: String,
+        @Value("\${MAIL_SMTP_PORT:1025}") mailPort: Int,
+    ): JavaMailSender = JavaMailSenderImpl().apply {
+        host = mailHost
+        port = mailPort
     }
 
     @Bean

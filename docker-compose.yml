@@ -11,6 +11,14 @@ services:
       - "5432:5432"
     volumes:
       - pollsystem-data:/var/lib/postgresql/data
+    # Let dependents wait for Postgres to actually accept connections, not just
+    # for the container to start (the backend's Flyway migration fails on a DB
+    # that isn't ready yet).
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U polladmin -d pollsystem"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
 
   # Fake SMTP server that captures outbound mail for local dev. The `local`
   # Spring profile points magic-link email here (localhost:1025); read the
@@ -22,5 +30,64 @@ services:
       - "1025:1025"   # SMTP (backend sends here)
       - "8025:8025"   # web UI (read captured email here)
 
+  # The Spring Boot backend, containerized (built from backend/Dockerfile — the
+  # same image used for Fly). Guarded by the `app` compose profile, so a plain
+  # `docker compose up` still brings up ONLY the infra (db + mailpit) the way
+  # `gradlew bootRun` local dev expects, with no clash on port 8080.
+  #
+  #   Full containerized stack:  docker compose --profile app up -d --build
+  #   Infra only (unchanged):    docker compose up -d
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pollsystem-backend
+    profiles: ["app"]
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    environment:
+      # `local` profile: seed-local fixtures, Mailpit mail, DevController enabled.
+      SPRING_PROFILES_ACTIVE: local
+      # Reach the sibling containers by compose service name, not localhost.
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pollsystem
+      SPRING_DATASOURCE_USERNAME: polladmin
+      SPRING_DATASOURCE_PASSWORD: pollpass123
+      MAIL_SMTP_HOST: mailpit
+      MAIL_SMTP_PORT: "1025"
+      # Magic-link emails link back to the Vite dev server on the host.
+      APP_BASE_URL: http://localhost:3000
+      # Dev-only secret; deployed environments set a real one via Fly secrets.
+      JWT_SECRET: local-dev-secret-not-for-production
+    ports:
+      - "8080:8080"
+
+  # Frontend Vite dev server, containerized with HMR (also under the `app`
+  # profile). The working tree is bind-mounted for live edits; node_modules is a
+  # named volume so the container keeps its own platform-native install. In prod
+  # the SPA is built + served by Cloudflare Pages, not this image.
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: pollsystem-frontend
+    profiles: ["app"]
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      # Proxy /api to the backend container (not localhost); poll for file
+      # changes so HMR fires reliably through the bind mount.
+      API_PROXY_TARGET: http://backend:8080
+      VITE_USE_POLLING: "1"
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    ports:
+      - "3000:3000"
+
 volumes:
   pollsystem-data:
+  frontend-node-modules:
