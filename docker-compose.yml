@@ -57,6 +57,11 @@ services:
       SPRING_DATASOURCE_PASSWORD: pollpass123
       MAIL_SMTP_HOST: mailpit
       MAIL_SMTP_PORT: "1025"
+      # Simulate Stripe offline (no keys/webhooks needed): register + checkout
+      # provision a paid account and email the magic link to Mailpit. See
+      # payment/MockPaymentProvider. Remove this (and set STRIPE_* + run
+      # `stripe listen`) to test against real Stripe test mode instead.
+      APP_PAYMENTS_PROVIDER: mock
       # Magic-link emails link back to the Vite dev server on the host.
       APP_BASE_URL: http://localhost:3000
       # Dev-only secret; deployed environments set a real one via Fly secrets.

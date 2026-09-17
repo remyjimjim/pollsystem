@@ -47,6 +47,28 @@ Three terminals, if you'd rather run the pieces yourself:
 
 ---
 
+## Payments in local dev
+
+- **`local-docker` mocks Stripe** (`APP_PAYMENTS_PROVIDER=mock`, set on the
+  backend service in `docker-compose.yml`) — no keys, no webhooks, no network.
+  Register → **Continue to payment** → you land on the success page → open
+  **Mailpit** (<http://localhost:8025>) → click the sign-in link → you're in as
+  an active paid member. Renew ("Manage/Renew") is simulated the same way. See
+  `payment/MockPaymentProvider`.
+- **To test *real* Stripe test-mode locally instead:** remove/override
+  `APP_PAYMENTS_PROVIDER`, set `STRIPE_API_KEY` / `STRIPE_PRICE_ID`
+  (`sk_test_…` / `price_…`), and forward webhooks with
+  `stripe listen --forward-to localhost:8080/webhooks/stripe`
+  (full steps in `docs/STRIPE-TEST-RUNBOOK.md`).
+- **Host `local`** uses real Stripe by default (so it 503s on checkout until you
+  configure keys + `stripe listen`); to mock it there too, run with
+  `APP_PAYMENTS_PROVIDER=mock ./scripts/BuildAndDeploy.bash local`.
+
+The mock provider is registered **only** when `app.payments.provider=mock`, so
+staging/prod (which never set it) always use real Stripe.
+
+---
+
 ## Entering the containers
 
 Container names exist while the relevant services are up. The db + mailpit
