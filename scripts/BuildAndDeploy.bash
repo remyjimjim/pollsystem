@@ -27,7 +27,8 @@
 #   ./scripts/BuildAndDeploy.bash down     # stop & remove local db + mailpit
 #
 # Env overrides (local): JWT_SECRET (generated per-run if unset),
-#   SKIP_FRONT=1 (backend only), SKIP_BACK=1 (frontend only).
+#   SKIP_FRONT=1 (backend only), SKIP_BACK=1 (frontend only),
+#   SKIP_WATCH=1 (no Kotlin watcher — disables backend hot reload).
 
 set -euo pipefail
 
@@ -163,7 +164,7 @@ cmd_status() {
 }
 
 # --- application: backend + frontend -----------------------------------------
-BACK_PID=""; FRONT_PID=""
+BACK_PID=""; FRONT_PID=""; WATCH_PID=""
 
 cleanup() {
   trap - INT TERM EXIT
@@ -172,6 +173,7 @@ cleanup() {
   # Kill each child's whole process group (setsid made each a group leader),
   # so gradle's spawned JVM and vite's node children go down too.
   [[ -n "$BACK_PID"  ]] && kill -TERM -"$BACK_PID"  2>/dev/null || true
+  [[ -n "$WATCH_PID" ]] && kill -TERM -"$WATCH_PID" 2>/dev/null || true
   [[ -n "$FRONT_PID" ]] && kill -TERM -"$FRONT_PID" 2>/dev/null || true
   wait 2>/dev/null || true
   ok "Stopped. Containers still up — './scripts/BuildAndDeploy.bash down' to remove them."
@@ -186,6 +188,17 @@ run_backend() {
   info "Starting backend (Spring Boot, profile=local) on :8080…"
   setsid bash -c 'cd backend && SPRING_PROFILES_ACTIVE=local ./gradlew bootRun' &
   BACK_PID=$!
+}
+
+# Continuous Kotlin compilation for backend hot reload. On save it recompiles
+# into build/classes, which Spring DevTools (a bootRun-only dependency) watches
+# — it then restarts the app context in ~2-3s, no manual restart. Runs as a
+# second gradle build alongside bootRun (verified fine on Gradle 8.10). Opt out
+# with SKIP_WATCH=1 (e.g. if your IDE already compiles to build/classes).
+run_backend_watch() {
+  info "Starting Kotlin watcher (continuous compile → DevTools hot reload)…"
+  setsid bash -c 'cd backend && ./gradlew -t classes' &
+  WATCH_PID=$!
 }
 
 run_frontend() {
@@ -203,10 +216,11 @@ cmd_up() {
 
   trap cleanup INT TERM EXIT
   [[ "${SKIP_BACK:-0}"  == "1" ]] || run_backend
+  [[ "${SKIP_BACK:-0}"  == "1" || "${SKIP_WATCH:-0}" == "1" ]] || run_backend_watch
   [[ "${SKIP_FRONT:-0}" == "1" ]] || run_frontend
 
   echo
-  ok "Stack coming up:"
+  ok "Stack coming up (backend + frontend hot-reload on save):"
   echo "    Frontend   http://localhost:3000"
   echo "    Backend    http://localhost:8080/api"
   echo "    Mailpit    http://localhost:8025   (magic-link emails land here)"
