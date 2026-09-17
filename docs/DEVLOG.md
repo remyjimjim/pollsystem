@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-09-17 — Default host `local` to the mock payment provider
+
+**Requested:**
+
+> I like the idea of having a mock stripe facility in local and local-docker
+> since I don't have to incure neondb charges […]
+
+> Yes, make local default to mock and push
+
+**Changed:**
+
+- `BuildAndDeploy.bash` `run_backend` now defaults `APP_PAYMENTS_PROVIDER=mock`
+  (exported so bootRun inherits it), so host `local` mocks Stripe out of the box
+  like `local-docker` — no more checkout 503 without keys. Opt into real Stripe
+  test mode with `APP_PAYMENTS_PROVIDER=stripe` (+ `STRIPE_*` + `stripe listen`).
+- `RUNNING.md`: "Payments in local dev" updated — both local modes mock by
+  default; real Stripe is the opt-in. (Clarified for the requester that `local`
+  and `local-docker` both use the local Postgres container, so neither incurs
+  Neon cost — only `BuildAndDeploy.bash test` uses the Neon staging branch.)
+
+**Commit:** `275ec62`
+
+---
+
 ## 2026-09-17 — Mock Stripe offline for local-docker
 
 **Requested:**
