@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-09-16 — Rewrite RUNNING.md as a local-dev cheat-sheet
+
+**Requested:**
+
+> can we update docs/RUNNING.md and get your magnificent table above describing
+> the use of ./scripts/BuildAndDeploy.bash and things like a) how to enter the
+> container that has the frontend, the tests, the backend, b) how to query the
+> db, etc?
+
+**Changed:**
+
+- `docs/RUNNING.md`: a table of the `BuildAndDeploy.bash` commands (local /
+  local-docker / infra / status / down / test / test-secrets) with the
+  `SKIP_*` env flags and a hot-reload explainer; an "entering the containers"
+  section (backend/frontend/db/mailpit `docker exec`, noting what each image
+  actually contains — the backend runtime image has no gradle/source); running
+  tests (backend on the host via Testcontainers, frontend Vitest in-container or
+  host, Playwright e2e); logs; and the port-in-use fix. The exec/query commands
+  were verified against the running containers.
+
+**Commit:** `ab0beac`
+
+---
+
 ## 2026-09-16 — Backend hot reload in `local` (Path A: host bootRun + DevTools)
 
 **Requested:**
