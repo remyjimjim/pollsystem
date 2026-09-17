@@ -28,7 +28,8 @@
 #
 # Env overrides (local): JWT_SECRET (generated per-run if unset),
 #   SKIP_FRONT=1 (backend only), SKIP_BACK=1 (frontend only),
-#   SKIP_WATCH=1 (no Kotlin watcher — disables backend hot reload).
+#   SKIP_WATCH=1 (no Kotlin watcher — disables backend hot reload),
+#   APP_PAYMENTS_PROVIDER=stripe (use real Stripe test mode; default is `mock`).
 
 set -euo pipefail
 
@@ -185,7 +186,12 @@ run_backend() {
   # silently fails (DEPLOYING-LOCAL.md §3).
   : "${JWT_SECRET:=$(openssl rand -hex 32 2>/dev/null || echo dev-only-insecure-secret-change-me)}"
   export JWT_SECRET
-  info "Starting backend (Spring Boot, profile=local) on :8080…"
+  # Default local dev to the offline mock payment provider (no Stripe keys or
+  # webhooks needed; see payment/MockPaymentProvider). To test real Stripe test
+  # mode instead: APP_PAYMENTS_PROVIDER=stripe + STRIPE_* + `stripe listen`.
+  : "${APP_PAYMENTS_PROVIDER:=mock}"
+  export APP_PAYMENTS_PROVIDER
+  info "Starting backend (Spring Boot, profile=local, payments=$APP_PAYMENTS_PROVIDER) on :8080…"
   setsid bash -c 'cd backend && SPRING_PROFILES_ACTIVE=local ./gradlew bootRun' &
   BACK_PID=$!
 }
