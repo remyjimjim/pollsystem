@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-09-16 — Backend hot reload in `local` (Path A: host bootRun + DevTools)
+
+**Requested:**
+
+> can we look into getting hot reload into into backend and frontend?
+
+> Let's go with A) [host bootRun + DevTools, vs. a fully-containerized
+> hot-reload rig], now that I think about it, I've never experienced hot reload
+> on anything but the frontend.
+
+> Yes, please work on 1. [bake `-t classes` into `local`] and 2. [DEVLOG note]
+
+**Context:** The frontend container already hot-reloads (Vite HMR watches source
+directly). The backend needs a Kotlin *recompile* to trigger a Spring DevTools
+restart, and `bootRun` holds Gradle's project lock for the app's lifetime — so
+the question was how to recompile-on-save. Decision: **Path A** — keep backend
+dev on the host `local` flow (best restart DX), rather than build a
+two-container continuous-compile rig. `local-docker` stays the "run the built
+image" path and does not hot-reload.
+
+**Changed:**
+
+- `BuildAndDeploy.bash`: `local` now also starts a continuous
+  `./gradlew -t classes` (`run_backend_watch`, tracked as `WATCH_PID`) beside
+  bootRun. A saved `.kt` recompiles into `build/classes`, which DevTools (a
+  `developmentOnly` dep, already present) watches — it restarts the app context
+  in ~2–3s. `cleanup()` tears the watcher down with the others on Ctrl-C; opt out
+  with `SKIP_WATCH=1` (also skipped under `SKIP_BACK=1`).
+
+**Verified (live):** confirmed a one-shot `compileKotlin` runs fine alongside
+bootRun on Gradle 8.10 (no lock conflict); then via the updated `local`: edit a
+`.kt` with no manual step → `Change detected` → `Restarting due to N class path
+changes` → `Started PollSystemApplicationKt in ~2s`; SIGINT (Ctrl-C) stopped
+backend + watcher + vite and released :8080/:3000.
+
+**Commit:** `8d9a370`
+
+---
+
 ## 2026-09-16 — Containerize the backend + frontend for local docker-compose
 
 **Requested:**
