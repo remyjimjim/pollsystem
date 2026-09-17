@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-09-17 — Mock Stripe offline for local-docker
+
+**Requested:**
+
+> I'm running in 'local docker' mode and when I try to register by clicking the
+> 'Continue to payment...' green button I get 'Could not start checkout. Please
+> try again.' […] is there a way to mock the stripe experience when running as
+> 'local docker'?
+
+**Context:** `local-docker` sets no `STRIPE_*` env, so
+`/api/auth/register-checkout` → `createGuestCheckoutSession` hit
+`StripePaymentProvider`'s "billing not configured" 503, which the frontend shows
+as a generic error. The `PaymentProvider` abstraction makes a local stand-in easy.
+
+**Changed:**
+
+- `payment/MockPaymentProvider`: implements `PaymentProvider`, simulating the
+  subscription round-trip offline. Guest checkout provisions a complete paid
+  account (30-day `paid_until`) and emails the magic link to Mailpit, then
+  returns the same `?checkout=success` redirect the real flow uses; re-subscribe
+  /renew and portal are simulated too. `@Primary` + `@ConditionalOnProperty(
+  app.payments.provider=mock)` — registered only when that property is set, so it
+  wins over Stripe locally while staging/prod always use real Stripe;
+  `StripePaymentProvider` stays a bean (the webhook injects it directly).
+- `docker-compose.yml`: `APP_PAYMENTS_PROVIDER=mock` on the backend service.
+- `RUNNING.md`: a "Payments in local dev" section (the mock, switching to real
+  Stripe test mode, enabling the mock on host `local`).
+
+**Verified (live, local-docker):** register-checkout → 200 + the mock success
+URL; `/auth/status` → ACTIVE; the sign-in email landed in Mailpit. Full backend
+suite green (the mock is absent under the test profile — no property set).
+
+**Commit:** `9583871`
+
+---
+
 ## 2026-09-16 — Rewrite RUNNING.md as a local-dev cheat-sheet
 
 **Requested:**
