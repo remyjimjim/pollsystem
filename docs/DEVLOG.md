@@ -61,6 +61,50 @@ logged.
 
 ---
 
+## 2026-09-16 — Containerize the backend + frontend for local docker-compose
+
+**Requested:**
+
+> given that we already have the db and mailpit running in docker containers,
+> I'd like to containerize the app too, can you help me with that?
+
+> After you do 1, 2 and 3 [frontend container, BuildAndDeploy command, commit],
+> can we look into getting hot reload into into backend and frontend?
+
+**Context:** compose already ran db + mailpit; the app itself ran via
+`gradlew bootRun` + `vite` on the host. Goal: run the whole stack in Docker with
+one command, without a host JDK/Node.
+
+**Changed:**
+
+- `docker-compose.yml`: `backend` service (built from `backend/Dockerfile`, the
+  same image as Fly) and `frontend` service (Vite dev server + HMR, new
+  `frontend/Dockerfile.dev`), both gated behind the compose **`app` profile** so
+  a plain `docker compose up` still starts infra only (no port-8080 clash with
+  gradle). Postgres healthcheck so the backend waits for a ready DB; the frontend
+  bind-mounts the working tree with a **named `node_modules` volume** so the
+  container keeps its platform-native binaries (esbuild, tailwind oxide).
+- `MailConfig`: the `local` Mailpit sender's host/port are now env-overridable
+  (`MAIL_SMTP_HOST`/`MAIL_SMTP_PORT`, default `localhost:1025`) so the
+  containerized backend reaches Mailpit at `mailpit:1025`. `gradlew bootRun`
+  unchanged.
+- `vite.config.ts`: `server.host=true`; `/api` proxy target from
+  `API_PROXY_TARGET` (→ `backend:8080` in compose); opt-in watch polling
+  (`VITE_USE_POLLING`) for reliable HMR through the bind mount. Host dev
+  behavior unchanged.
+- `BuildAndDeploy.bash`: new `local-docker` command brings up the full
+  containerized stack (`docker compose --profile app up -d --build`) and waits
+  for backend + frontend health.
+
+**Verified:** all four containers up; backend `/actuator/health` UP, returns the
+seeded poll-types from the db container, and a magic-link request lands an email
+in Mailpit; frontend serves the SPA and proxies `/api` through to the backend
+container; `local-docker` command runs clean.
+
+**Commit:** `b5078ee`
+
+---
+
 ## 2026-09-13 — Fix: activate on checkout via subscription period-end lookup
 
 **Requested:**
