@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-09-17 — Substack relay recipe + staging webhook verification
+
+**Requested:**
+
+> are you aware of a way to go to my account on substack.com and test adding a
+> new subsciber to test the process and how well it integrates with our staging
+> site?
+
+> Yes, run the test and write the relay recipe
+
+**Context:** Substack has no native outbound webhook, so a relay (Zapier/Make)
+must call our generic `/webhooks/substack`. Verified our side end-to-end on
+staging and documented the wiring.
+
+**Changed:**
+
+- `docs/SUBSTACK-INTEGRATION.md`: webhook contract (endpoint, `X-Webhook-Secret`,
+  `{email,event}` body, event→activate/deactivate mapping, response codes), the
+  shared-secret setup, a Zapier/Make relay recipe, how to comp/add a test
+  subscriber on Substack, a no-Substack curl simulation, and the rolling-window
+  (option A) renewal caveat.
+
+**Verified (live, staging):** set a temporary `SUBSTACK_WEBHOOK_SECRET`, then
+`subscribed` (valid secret) → 200 and `/auth/status` **ACTIVE**; wrong secret →
+**401**; `unsubscribed` → 200 and status **LAPSED** (demote); then unset the
+secret so the endpoint is disabled (503) again. (The throwaway test account —
+a demoted VIEWER with a fake `@example.com` address on the disposable staging
+branch — is pending deletion; Neon refused local connections this session,
+though it's reachable from the Fly backend.)
+
+**Commit:** `9161d0c`
+
+---
+
 ## 2026-09-17 — Default host `local` to the mock payment provider
 
 **Requested:**
