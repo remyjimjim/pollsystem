@@ -1,0 +1,70 @@
+{
+  "name": "pollsystem",
+  "build": { "dockerfile": "Dockerfile" },
+
+  // Java 17 + Node 22 via Features (well-behaved PATH/JAVA_HOME). Gradle comes
+  // from the repo wrapper, so we don't install a system gradle.
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "jdkDistro": "tem",
+      "installGradle": false
+    },
+    "ghcr.io/devcontainers/features/node:1": { "version": "22" }
+  },
+
+  // Mount the repo at the SAME absolute path it has on the host. This is the key
+  // to Docker-outside-of-Docker: `docker compose` bind-mounts (e.g. ./frontend)
+  // and Testcontainers resolve to identical host paths whether you run them from
+  // the host or from inside this container — so BuildAndDeploy.bash, local-docker,
+  // and ./gradlew test all work from either place. It also lines Claude Code's
+  // per-project history up (it's keyed by absolute path).
+  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+  "workspaceFolder": "${localWorkspaceFolder}",
+
+  "mounts": [
+    // Global Claude Code history + auth (the per-project .claude rides along in
+    // the repo). Shared with the host, so history stays continuous both ways.
+    "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind",
+    "source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind",
+    // The host's Docker Desktop socket → gives this container the host's Docker,
+    // so ./gradlew test (Testcontainers), local-docker, and BuildAndDeploy.bash
+    // all work from inside. (Desktop socket lives here, not /var/run/docker.sock.)
+    "source=${localEnv:HOME}/.docker/desktop/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+
+  "remoteUser": "vscode",
+
+  // Docker Desktop provides host.docker.internal; make it explicit so
+  // Testcontainers can reach the DB container it starts (mapped to the host).
+  "runArgs": ["--add-host=host.docker.internal:host-gateway"],
+  "containerEnv": {
+    "TESTCONTAINERS_HOST_OVERRIDE": "host.docker.internal",
+    "TESTCONTAINERS_RYUK_DISABLED": "true"
+  },
+
+  // Install Claude Code in the container (runs in the integrated terminal; uses
+  // the mounted ~/.claude for auth + history).
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code",
+
+  // Docker Desktop's file-sharing remaps the mounted socket to root:root 0660,
+  // so the vscode user can't reach it out of the box. Open it on every start
+  // (the mount resets each time) so docker / gradle test / local-docker work
+  // without sudo.
+  "postStartCommand": "sudo chmod 666 /var/run/docker.sock",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "fwcd.kotlin",
+        "vscjava.vscode-gradle",
+        "vmware.vscode-spring-boot",
+        "Vue.volar",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}
