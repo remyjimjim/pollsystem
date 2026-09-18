@@ -61,6 +61,49 @@ logged.
 
 ---
 
+## 2026-09-18 — Add a VS Code Dev Container
+
+**Requested:**
+
+> is there a scenario where I bring up my docker desktop, there are the
+> following containers - ubuntu, db, mailpit so I enter the ubuntu container
+> which is the normal ubuntu desktop […] run vscode with […] "Dev Containers"
+> extension and run claude code in my vscode and keep all of our lovely claude
+> history […]
+
+> yes it would be very nice to be able to run ./gradlew test and local-docker, I
+> am very fond of the BuildAndDeploy.bash script and would prefer to use it as
+> much as possible, preferably from the host machine. Go ahead and do that thing
+> you do...
+
+**Context:** The customer wanted a reproducible *dev environment* in a container
+(not just containerizing the app to run, which `b5078ee` covered). Delivered the
+standard **VS Code Dev Containers** shape — host UI, containerized toolchain —
+rather than a literal GUI desktop in a container.
+
+**Changed:**
+
+- `.devcontainer/Dockerfile`: MS `ubuntu-24.04` base + `docker-ce-cli` +
+  compose-plugin + `postgresql-client`; Java 17 / Node 22 via Features.
+- `.devcontainer/devcontainer.json`: repo mounted at the **same absolute path**
+  as the host (so `docker compose` bind-mounts + Testcontainers resolve
+  identically host-or-container — `BuildAndDeploy.bash`, `local-docker`, and
+  `./gradlew test` all work from inside); host `~/.claude` + `~/.claude.json` +
+  the **Docker Desktop socket** (`~/.docker/desktop/docker.sock`) mounted;
+  `TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal`; `postStart` chmods the
+  socket (Desktop remaps it `root:root 0660`) so `vscode` uses Docker without
+  sudo; `postCreate` installs Claude Code; stack extensions.
+- `.devcontainer/README.md`: usage + host-vs-container notes.
+
+**Verified (live, via the devcontainer CLI):** container builds + starts; mounts
+apply (uid 1000 `vscode`, `~/.claude` history + project `.claude` present); Docker
+via the mounted socket lists host containers; **`./gradlew test`
+(AccountStatusTest, Testcontainers) BUILD SUCCESSFUL inside the container**.
+
+**Commit:** `2d474a4`
+
+---
+
 ## 2026-09-17 — Substack relay recipe + staging webhook verification
 
 **Requested:**
