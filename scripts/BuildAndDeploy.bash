@@ -151,10 +151,17 @@ ensure_infra() {
 
 # --- teardown / status subcommands -------------------------------------------
 cmd_down() {
+  # Reap host dev processes from a `local` run first — this needs no Docker, and
+  # `down` used to leave orphaned bootRun/Vite/watcher squatting :8080/:3000.
+  info "Reaping any lingering dev processes (bootRun / Vite / watcher)…"
+  free_port 8080
+  free_port 3000
+  reap_watcher
+
   check_prereqs
   info "Stopping containers (Postgres + Mailpit; keeps the data volume)…"
   docker compose down || true
-  ok "Containers stopped. (Add '-v' manually to wipe the DB volume: docker compose down -v)"
+  ok "Stopped. (Add '-v' manually to wipe the DB volume: docker compose down -v)"
 }
 
 cmd_status() {
@@ -162,6 +169,37 @@ cmd_status() {
   info "Container status:"
   docker ps -a --filter "name=$DB_CONTAINER" --filter "name=$MAILPIT_CONTAINER" \
     --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+}
+
+# --- reap orphaned host dev processes ----------------------------------------
+# A `local` run's backend (bootRun, :8080), Kotlin watcher, and frontend (Vite,
+# :3000) run as HOST processes. If a run dies ungracefully (hard kill, closed
+# terminal) the Ctrl-C cleanup never fires, and a lingering Gradle daemon can
+# keep the JVM alive — orphaning it. `down` only stops containers, so a stale
+# JVM then squats :8080 and blocks the next `local`. These reap that.
+
+# Terminate whatever host process is LISTENING on a TCP port (TERM, then KILL).
+free_port() {
+  local port="$1" pids
+  pids=$(ss -ltnpH "sport = :$port" 2>/dev/null | grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u)
+  [[ -z "$pids" ]] && return 0
+  warn "freeing lingering process on :$port (pid $(echo "$pids" | tr '\n' ' '))"
+  kill $pids 2>/dev/null || true
+  sleep 1
+  pids=$(ss -ltnpH "sport = :$port" 2>/dev/null | grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u)
+  [[ -n "$pids" ]] && kill -9 $pids 2>/dev/null || true
+  return 0
+}
+
+# Reap a lingering continuous-compile watcher (it holds no port). Runs from the
+# script file, so the pattern can't match this process's own argv.
+reap_watcher() {
+  local pids
+  pids=$(pgrep -f 'gradlew -t classes' 2>/dev/null || true)
+  [[ -z "$pids" ]] && return 0
+  warn "reaping lingering Kotlin watcher (pid $(echo "$pids" | tr '\n' ' '))"
+  kill $pids 2>/dev/null || true
+  return 0
 }
 
 # --- application: backend + frontend -----------------------------------------
@@ -218,6 +256,12 @@ run_frontend() {
 }
 
 cmd_up() {
+  # Preflight: reap orphaned dev processes from a previous run so a stale bootRun
+  # JVM (or Vite) squatting :8080/:3000 can't block this start.
+  [[ "${SKIP_BACK:-0}"  == "1" ]] || free_port 8080
+  [[ "${SKIP_FRONT:-0}" == "1" ]] || free_port 3000
+  [[ "${SKIP_BACK:-0}" == "1" || "${SKIP_WATCH:-0}" == "1" ]] || reap_watcher
+
   ensure_infra
 
   trap cleanup INT TERM EXIT
