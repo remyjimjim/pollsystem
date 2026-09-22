@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-09-22 — Reap orphaned host dev processes in local + down
+
+**Requested:**
+
+> after starting the app via scripts/BuildAndDeploy.bash local I noticed that
+> […] the backend container was not started […] took the app down […] killed
+> the processes for the backend (port 8080) and frontend (port 3000) and retried
+> […] same issue
+
+> Yes, add the preflight and reap on down
+
+**Context:** In `local` the backend (bootRun, :8080), Kotlin watcher, and
+frontend (Vite, :3000) run as **host processes**, not containers. An ungraceful
+exit skips the Ctrl-C cleanup trap and a lingering Gradle daemon can keep the
+bootRun JVM alive — orphaned. `BuildAndDeploy.bash down` only stops containers,
+so the stale JVM kept squatting :8080 and blocked the next `local` (this bit the
+user twice; a manual `kill 2571122` fixed it). (Also clarified that `local` runs
+the backend/frontend on the host — there's no backend *container* to start in
+Docker Desktop under `local`.)
+
+**Changed:**
+
+- `BuildAndDeploy.bash`: `free_port()` (TERM→KILL a port's listener) and
+  `reap_watcher()` (kill a stray `gradlew -t classes`). `cmd_up` preflights
+  :8080/:3000 + the watcher before starting (honoring `SKIP_BACK/FRONT/WATCH`);
+  `cmd_down` reaps those host processes first (needs no Docker) before
+  `docker compose down`.
+
+**Verified:** `bash -n` clean; `free_port` detected + killed a dummy `:8080`
+listener and freed the port, leaving the real db/mailpit + free ports untouched.
+
+**Commit:** `4d9c910`
+
+---
+
 ## 2026-09-18 — Add a VS Code Dev Container
 
 **Requested:**
