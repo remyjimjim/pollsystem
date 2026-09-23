@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-09-23 — test-secrets from the Dev Container (fallback secrets file)
+
+**Requested:**
+
+> I'd rather never leave the container […] Be able to deploy locally or to
+> staging via BuildAndDeploy.bash local-docker or test or test-secrets or down.
+> How can we do that?
+
+**Context:** With `flyctl` + `~/.fly` added, only `test-secrets` still needed the
+host — it reads the OS keychain (`secret-tool`), absent in the container. Bridge
+it with a git-ignored fallback file so the full staging workflow runs inside.
+
+**Changed:**
+
+- `BuildAndDeploy.bash`: `cmd_test_secrets` now reads the OS keychain when
+  `secret-tool` is present (host) and otherwise parses a git-ignored
+  `$STAGING_SECRETS_FILE` (`.devcontainer/staging.secrets.env`) — KEY=VALUE,
+  parsed without sourcing so `& ? = space` in values survive. New host-only
+  `export-secrets` dumps the keychain keys into that file (umask 077).
+- `.gitignore`: `*.secrets.env` + the file path.
+- `docs/RUNNING.md`: `test-secrets` ✅ inside after a one-time host
+  `export-secrets`; documented the flow + plaintext caveat.
+
+**Verified:** `bash -n` clean; the KEY=VALUE parser preserved a Neon URL
+(`?…&…`) and a password containing `=`/`&`/space across all 5 keys;
+`git check-ignore` confirms the secrets file is ignored.
+
+**Commit:** `57d1dd3`
+
+---
+
 ## 2026-09-23 — Dev Container: add flyctl (+ mount host ~/.fly)
 
 **Requested:**
