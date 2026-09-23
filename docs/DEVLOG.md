@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-09-23 — Dev Container: install buildx (fixes local-docker build)
+
+**Requested:**
+
+> I used the scripts/BuildAndDeploy.bash local-docker to start the app but I
+> don't see the backend or frontend containers started […] do I need to […]
+> issue 'SPRING_PROFILES_ACTIVE=local ./gradlew bootRun'?
+
+**Context:** First run of `local-docker` from *inside* the Dev Container. The
+backend Dockerfile uses `RUN --mount=type=cache` (BuildKit). The Dev Container
+had `docker-ce-cli` + compose but **not `docker-buildx-plugin`**, so
+`docker compose build` fell back to the classic builder and failed with "the
+--mount option requires BuildKit" — db/mailpit still came up (no build), but the
+backend/frontend images never built. (The host is unaffected: Docker Desktop
+bundles buildx.) Also reassured the user that `local-docker` runs everything in
+containers — no manual `bootRun`.
+
+**Changed:**
+
+- `.devcontainer/Dockerfile`: add `docker-buildx-plugin` to the apt install.
+
+**Verified (live, from inside the Dev Container):** installed buildx into the
+running container, re-ran `docker compose --profile app up -d --build` — backend
++ frontend built and started; `host.docker.internal:8080/actuator/health` UP;
+the frontend serves 200 for a `localhost` host header and proxies `/api` to the
+backend (so `http://localhost:3000` works from the host browser).
+
+**Commit:** `3986037`
+
+---
+
 ## 2026-09-22 — Reap orphaned host dev processes in local + down
 
 **Requested:**
