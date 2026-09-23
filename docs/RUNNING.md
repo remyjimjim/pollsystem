@@ -45,6 +45,36 @@ Three terminals, if you'd rather run the pieces yourself:
 - **Frontend** (from `frontend/`): `npm run dev`
 (First bring up infra: `./scripts/BuildAndDeploy.bash infra`.)
 
+### Working inside the Dev Container
+
+You can drive all of this from the **Dev Container** (`.devcontainer/`,
+`docs/../.devcontainer/README.md`) instead of the host — it shares the host's
+Docker Desktop, so `docker`/compose commands act on the same containers.
+
+**Open it:**
+1. Open the repo folder in VS Code.
+2. Command Palette (**F1** / **Ctrl+Shift+P**) → **"Dev Containers: Reopen in
+   Container"**. VS Code reloads *inside* the container (first build takes a few
+   minutes).
+3. Open an integrated terminal (**Ctrl+`**) → run **`claude -c`** to continue the
+   most recent Claude Code conversation (your `~/.claude` history is mounted, so
+   it's the same history as on the host).
+
+**Which `BuildAndDeploy.bash` commands work from inside:**
+
+| Command | Inside the Dev Container? |
+|---|---|
+| `local-docker` | ✅ builds/starts the app containers on the host's Docker — open **`http://localhost:3000`** in your **host** browser (not inside the container) |
+| `down` | ✅ stops the containers |
+| `infra` / `status` | ✅ |
+| `cd backend && ./gradlew test` | ✅ (Testcontainers works via the mounted socket) |
+| `local` | ⚠️ run from the **host** — inside, bootRun can't reach `db`/`mailpit` at `localhost` |
+| **`test`** (staging *deploy*) | ❌ needs `flyctl` (not in the container) → **run on the host** |
+| **`test-secrets`** | ❌ needs `flyctl` + the OS keychain (`secret-tool`) → **run on the host** |
+
+> `test` is the *staging deploy*, not unit tests — for tests use `./gradlew test`.
+> If you want `flyctl` inside the container too, add it to `.devcontainer/`.
+
 ---
 
 ## Payments in local dev
