@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-09-24 — Fix: local-docker readiness probe from inside the Dev Container
+
+**Requested:**
+
+> after I run "./BuildAndDeploy.bash local-docker" everything goes along fine but
+> hangs at "Waiting for the backend to report healthy…" then timeouts […] but
+> backend looks healthy in the Docker Desktop GUI […] a) is the backend healthy
+> and if healthy b) why does the expected report value not get received?
+
+**Context:** Running `local-docker` from *inside* the Dev Container. The backend
+was healthy (port published `0.0.0.0:8080`, `Started PollSystemApplicationKt`
+logged, serving queries), but `cmd_up_docker` probed `curl localhost:8080` —
+which inside the container isn't the backend (its port publishes to the HOST),
+and `host.docker.internal` there resolved to a flaky IPv6 address. So the probe
+timed out despite a healthy app. (The `backend`/`frontend` containers also have
+no Docker healthcheck, so Docker Desktop's "Up" ≠ app-ready.)
+
+**Changed:**
+
+- `BuildAndDeploy.bash` `cmd_up_docker`: probe readiness via `docker logs`
+  (always reachable through the mounted socket, so identical on host and inside
+  the container) — wait for the backend's `Started PollSystemApplicationKt` and
+  the frontend's Vite `ready in …` lines, instead of curling a network address.
+
+**Verified:** `local-docker` run from inside the Dev Container now reaches the
+"Containerized stack up" banner (exit 0) instead of timing out; both probes
+detect the running containers.
+
+**Commit:** `fc32b94`
+
+---
+
 ## 2026-09-23 — Split RUNNING.md into host + docker guides
 
 **Requested:**
