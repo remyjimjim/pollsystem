@@ -17,6 +17,11 @@ frontend/playwright-report/
 .env
 .env.local
 
+# Plaintext staging secrets for the Dev Container (BuildAndDeploy.bash
+# export-secrets / test-secrets fallback) — NEVER commit.
+*.secrets.env
+.devcontainer/staging.secrets.env
+
 # OS
 .DS_Store
 Thumbs.db

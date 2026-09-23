@@ -21,7 +21,8 @@
 #   ./scripts/BuildAndDeploy.bash [local]  # default: full local stack (gradle + vite on host)
 #   ./scripts/BuildAndDeploy.bash local-docker  # full stack, everything in Docker (compose `app` profile)
 #   ./scripts/BuildAndDeploy.bash test     # build + deploy to the staging env
-#   ./scripts/BuildAndDeploy.bash test-secrets  # (re)import staging secrets to Fly
+#   ./scripts/BuildAndDeploy.bash test-secrets  # (re)import staging secrets to Fly (keychain, or the fallback file inside the Dev Container)
+#   ./scripts/BuildAndDeploy.bash export-secrets # (host) dump keychain secrets to a git-ignored file for use inside the Dev Container
 #   ./scripts/BuildAndDeploy.bash infra    # local containers only (no app)
 #   ./scripts/BuildAndDeploy.bash status   # local container status, then exit
 #   ./scripts/BuildAndDeploy.bash down     # stop & remove local db + mailpit
@@ -58,6 +59,10 @@ STAGING_SECRET_KEYS=(
   JWT_SECRET
   RESEND_API_KEY
 )
+# Fallback secrets source for environments without the OS keychain (e.g. the Dev
+# Container): a git-ignored KEY=VALUE file, generated on the host from the
+# keychain via `export-secrets`. Plaintext — keep it local, never commit it.
+STAGING_SECRETS_FILE="$ROOT/.devcontainer/staging.secrets.env"
 
 # --- pretty logging ----------------------------------------------------------
 if [[ -t 1 ]]; then
@@ -320,24 +325,61 @@ require_fly() {
 #     service pollsystem-fly-staging account JWT_SECRET
 cmd_test_secrets() {
   require_fly
-  need secret-tool "Install libsecret (Debian/Ubuntu: apt-get install libsecret-tools)."
   # Assemble the KEY=VALUE payload in memory FIRST (dies on any missing key,
   # before Fly is touched), then pipe it in — so a partial set can't happen and
-  # no value is ever echoed. Doing the lookups inside the pipe would swallow the
-  # die() in a subshell (pipefail) and could import a truncated set.
+  # no value is ever echoed. Source of the secrets: the OS keychain on the host,
+  # or the git-ignored fallback file inside the Dev Container (no keychain there).
   local payload="" k v
-  for k in "${STAGING_SECRET_KEYS[@]}"; do
-    v="$(secret-tool lookup service "$STAGING_KEYCHAIN_SERVICE" account "$k" 2>/dev/null)" \
-      || die "Missing keychain secret: service=$STAGING_KEYCHAIN_SERVICE account=$k
+  if command -v secret-tool >/dev/null 2>&1; then
+    info "Reading staging secrets from the OS keychain…"
+    for k in "${STAGING_SECRET_KEYS[@]}"; do
+      v="$(secret-tool lookup service "$STAGING_KEYCHAIN_SERVICE" account "$k" 2>/dev/null)" \
+        || die "Missing keychain secret: service=$STAGING_KEYCHAIN_SERVICE account=$k
   Store it with:  secret-tool store --label='staging $k' service $STAGING_KEYCHAIN_SERVICE account $k"
-    payload+="$k=$v"$'\n'
-  done
+      payload+="$k=$v"$'\n'
+    done
+  elif [[ -f "$STAGING_SECRETS_FILE" ]]; then
+    warn "No OS keychain here — reading staging secrets from $STAGING_SECRETS_FILE (plaintext)."
+    local -A _env
+    # Parse KEY=VALUE without sourcing — values may contain & ? = spaces. The
+    # `|| [[ -n "$fk" ]]` catches a final line with no trailing newline.
+    while IFS='=' read -r fk fv || [[ -n "$fk" ]]; do
+      [[ "$fk" =~ ^[[:space:]]*# || -z "${fk// /}" ]] && continue
+      _env["${fk// /}"]="$fv"
+    done < "$STAGING_SECRETS_FILE"
+    for k in "${STAGING_SECRET_KEYS[@]}"; do
+      v="${_env[$k]:-}"
+      [[ -n "$v" ]] || die "Missing '$k' in $STAGING_SECRETS_FILE — regenerate on the host: ./scripts/BuildAndDeploy.bash export-secrets"
+      payload+="$k=$v"$'\n'
+    done
+  else
+    die "No secret source found. Either run this on the host (with the keychain), or
+  generate the fallback file on the host first:  ./scripts/BuildAndDeploy.bash export-secrets
+  (writes $STAGING_SECRETS_FILE — git-ignored — for use inside the Dev Container)."
+  fi
   # Non-secret env, injected the same way (Fly relaxed binding).
   payload+="MAIL_FROM=login@contact.surveysays.buzz"$'\n'
   payload+="APP_BASE_URL=$STAGING_FRONTEND_URL"$'\n'
-  info "Importing staging secrets from keychain → $STAGING_FLY_APP (values not printed)…"
+  info "Importing staging secrets → $STAGING_FLY_APP (values not printed)…"
   printf '%s' "$payload" | flyctl secrets import -a "$STAGING_FLY_APP"
   ok "Staging secrets imported. The backend redeploys automatically on secret change."
+}
+
+# Export staging secrets from the OS keychain into the git-ignored fallback file,
+# so `test-secrets` works inside the Dev Container (which has no keychain). Run
+# this ONCE on the host (and after rotating a secret). The file is plaintext.
+cmd_export_secrets() {
+  need secret-tool "Install libsecret (host only): apt-get install libsecret-tools."
+  local content="" k v
+  for k in "${STAGING_SECRET_KEYS[@]}"; do
+    v="$(secret-tool lookup service "$STAGING_KEYCHAIN_SERVICE" account "$k" 2>/dev/null)" \
+      || die "Missing keychain secret: service=$STAGING_KEYCHAIN_SERVICE account=$k"
+    content+="$k=$v"$'\n'
+  done
+  mkdir -p "$(dirname "$STAGING_SECRETS_FILE")"
+  ( umask 077; printf '%s' "$content" > "$STAGING_SECRETS_FILE" )
+  ok "Wrote $STAGING_SECRETS_FILE (0600, git-ignored)."
+  warn "It holds PLAINTEXT staging secrets — keep it local, never commit it."
 }
 
 cmd_test() {
@@ -385,8 +427,9 @@ case "${1:-local}" in
   local-docker|docker) cmd_up_docker ;;
   test)               cmd_test ;;
   test-secrets)       cmd_test_secrets ;;
+  export-secrets)     cmd_export_secrets ;;
   infra)              ensure_infra ;;
   down)               cmd_down ;;
   status)             cmd_status ;;
-  *)                  die "Unknown command '$1'. Use: local | local-docker | test | test-secrets | infra | down | status" ;;
+  *)                  die "Unknown command '$1'. Use: local | local-docker | test | test-secrets | export-secrets | infra | down | status" ;;
 esac

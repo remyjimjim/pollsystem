@@ -70,9 +70,21 @@ Docker Desktop, so `docker`/compose commands act on the same containers.
 | `cd backend && ./gradlew test` | ✅ (Testcontainers works via the mounted socket) |
 | `local` | ⚠️ run from the **host** — inside, bootRun can't reach `db`/`mailpit` at `localhost` |
 | **`test`** (staging *deploy*) | ✅ `flyctl` is installed and the host's `~/.fly` auth is mounted |
-| **`test-secrets`** | ❌ needs the OS keychain (`secret-tool`) → **run on the host** |
+| **`test-secrets`** | ✅ *after* a one-time `export-secrets` on the host (see below) — otherwise it needs the OS keychain, which the container can't reach |
 
 > `test` is the *staging deploy*, not unit tests — for tests use `./gradlew test`.
+
+**One-time setup for `test-secrets` inside the container.** The container has no
+OS keychain, so `test-secrets` falls back to a **git-ignored** secrets file.
+Generate it once **on the host** (repeat after rotating a secret):
+
+```bash
+./scripts/BuildAndDeploy.bash export-secrets   # host: keychain → .devcontainer/staging.secrets.env (0600, git-ignored)
+```
+
+After that, `test-secrets` works from inside the container too — on the host it
+still prefers the keychain. ⚠️ The file holds **plaintext** staging secrets;
+it's git-ignored (`*.secrets.env`), keep it local and never commit it.
 
 ---
 
