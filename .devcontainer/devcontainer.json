@@ -27,6 +27,9 @@
     // the repo). Shared with the host, so history stays continuous both ways.
     "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind",
     "source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind",
+    // Fly.io auth (for `BuildAndDeploy.bash test`), shared with the host like
+    // ~/.claude. Requires ~/.fly to exist on the host (it does if you use flyctl).
+    "source=${localEnv:HOME}/.fly,target=/home/vscode/.fly,type=bind",
     // The host's Docker Desktop socket → gives this container the host's Docker,
     // so ./gradlew test (Testcontainers), local-docker, and BuildAndDeploy.bash
     // all work from inside. (Desktop socket lives here, not /var/run/docker.sock.)

@@ -16,3 +16,10 @@ RUN install -m 0755 -d /etc/apt/keyrings \
  && apt-get update \
  && apt-get install -y --no-install-recommends docker-ce-cli docker-buildx-plugin docker-compose-plugin postgresql-client \
  && rm -rf /var/lib/apt/lists/*
+
+# flyctl (Fly.io CLI) for `BuildAndDeploy.bash test` staging deploys. Installed
+# system-wide (/usr/local/bin); auth comes from the host's ~/.fly, mounted in
+# devcontainer.json. (`test-secrets` still needs the host OS keychain, so it
+# stays host-only.)
+RUN curl -fsSL https://fly.io/install.sh | FLYCTL_INSTALL=/usr/local sh \
+ && /usr/local/bin/flyctl version

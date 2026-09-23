@@ -69,11 +69,10 @@ Docker Desktop, so `docker`/compose commands act on the same containers.
 | `infra` / `status` | ✅ |
 | `cd backend && ./gradlew test` | ✅ (Testcontainers works via the mounted socket) |
 | `local` | ⚠️ run from the **host** — inside, bootRun can't reach `db`/`mailpit` at `localhost` |
-| **`test`** (staging *deploy*) | ❌ needs `flyctl` (not in the container) → **run on the host** |
-| **`test-secrets`** | ❌ needs `flyctl` + the OS keychain (`secret-tool`) → **run on the host** |
+| **`test`** (staging *deploy*) | ✅ `flyctl` is installed and the host's `~/.fly` auth is mounted |
+| **`test-secrets`** | ❌ needs the OS keychain (`secret-tool`) → **run on the host** |
 
 > `test` is the *staging deploy*, not unit tests — for tests use `./gradlew test`.
-> If you want `flyctl` inside the container too, add it to `.devcontainer/`.
 
 ---
 
