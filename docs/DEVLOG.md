@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-09-23 — Dev Container: add flyctl (+ mount host ~/.fly)
+
+**Requested:**
+
+> add flyctl to the dev container too
+
+**Changed:**
+
+- `.devcontainer/Dockerfile`: install `flyctl` system-wide
+  (`/usr/local/bin`, via the fly install script with `FLYCTL_INSTALL=/usr/local`).
+- `.devcontainer/devcontainer.json`: bind-mount the host's `~/.fly` (auth), same
+  pattern as `~/.claude`, so `BuildAndDeploy.bash test` (staging deploy) works
+  from inside. `test-secrets` still needs the host OS keychain (`secret-tool`),
+  so it stays host-only.
+- `docs/RUNNING.md`: flipped the `test` row to ✅ inside; `test-secrets` still ❌.
+
+**Verified:** ran the install method live in the running container — `flyctl
+v0.4.106` installed to `/usr/local/bin`; auth is (correctly) absent until the
+`~/.fly` mount lands on a Rebuild Container.
+
+**Commit:** `331c1f6`
+
+---
+
 ## 2026-09-23 — RUNNING.md: working inside the Dev Container
 
 **Requested:**
