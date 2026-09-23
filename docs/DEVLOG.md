@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-09-23 — Split RUNNING.md into host + docker guides
+
+**Requested:**
+
+> Can we […] break up docs/RUNNING.md into docs/RUNNING-on-host.md (mostly
+> RUNNING.md unchanged I think) and RUNNING-on-docker.md where RUNNING-on-host.md
+> ignores the existence of vscode's 'Dev Containers' and docs/RUNNING-on-docker.md
+> is highly biased to running fully dockerized?
+
+**Changed:**
+
+- `docs/RUNNING-on-host.md` (`git mv` from `RUNNING.md`): the host workflow, with
+  the "Working inside the Dev Container" section removed — reads as if Dev
+  Containers don't exist (0 mentions). Plus a one-line see-also to the docker guide.
+- `docs/RUNNING-on-docker.md` (new): the fully-containerized workflow — Reopen in
+  Container → `claude -c` → run everything from inside; the one-time
+  `export-secrets` + Rebuild setup; a what-runs-where table; access via the host
+  browser; payments/db/logs/tests framed for Docker.
+- `docs/RUNNING.md`: a short index pointing to both.
+
+**Commit:** `f04b453`
+
+---
+
 ## 2026-09-23 — test-secrets from the Dev Container (fallback secrets file)
 
 **Requested:**
