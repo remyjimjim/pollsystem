@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-09-23 — RUNNING.md: working inside the Dev Container
+
+**Requested:**
+
+> Can we add to docs/RUNNING.md where it talks about running
+> 'BuildAndDeploy.bash local-docker' a bit about how you need to a) open a
+> terminal b) Issue the vscode command pallette command 'Re-open in Dev
+> Containers' then issue 'claude -c' […] Also, can I just open a terminal and do
+> 'Re-open in Dev Containers' then run commands thru BuildAndDeploy.bash like
+> down or test or test-secrets?
+
+**Changed:**
+
+- `docs/RUNNING.md`: a "Working inside the Dev Container" subsection — Reopen in
+  Container + `claude -c` to resume, and a table of which `BuildAndDeploy.bash`
+  commands work from inside (`local-docker`/`down`/`infra`/`status`/`./gradlew
+  test`) vs. host-only. Verified in the running container that `flyctl` and
+  `secret-tool` are absent, so **`test` (staging deploy) and `test-secrets` must
+  run on the host**; `local` also stays on the host (bootRun can't reach
+  `db`/`mailpit` at `localhost` from inside).
+
+**Commit:** `3561c3a`
+
+---
+
 ## 2026-09-23 — Dev Container: install buildx (fixes local-docker build)
 
 **Requested:**
