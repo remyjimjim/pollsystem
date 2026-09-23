@@ -297,10 +297,17 @@ cmd_up_docker() {
   info "Building + starting the full containerized stack (db + mailpit + backend + frontend)…"
   docker compose --profile app up -d --build
 
-  info "Waiting for the backend to report healthy…"
-  wait_for "backend health" 150 curl -sf http://localhost:8080/actuator/health
+  # Probe readiness via Docker logs, not a network address. The socket is always
+  # reachable, so this works whether the command runs on the host OR inside the
+  # Dev Container — where `localhost:8080` isn't the backend (its port publishes
+  # to the host) and `host.docker.internal` can resolve to a flaky IPv6 address.
+  # Each app logs a clear line when it's up.
+  info "Waiting for the backend to finish starting…"
+  wait_for "backend startup" 180 bash -c \
+    'docker logs pollsystem-backend 2>&1 | grep -q "Started PollSystemApplicationKt"'
   info "Waiting for the frontend dev server…"
-  wait_for "frontend dev server" 90 curl -sf -o /dev/null http://localhost:3000/
+  wait_for "frontend dev server" 90 bash -c \
+    'docker logs pollsystem-frontend 2>&1 | grep -qiE "ready in|Local:"'
 
   echo
   ok "Containerized stack up (all services in Docker):"
