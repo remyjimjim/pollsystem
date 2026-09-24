@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-09-24 — RUNNING-on-docker.md: add a "Resetting the DB" section
+
+**Requested:**
+
+> [the wipe command] would `docker volume rm pollsystem_pollsystem-data` be run
+> from inside the container or from the host? […] Yes, fix the doc and commit it
+
+**Context:** A chat transcript had been pasted into `RUNNING-on-docker.md` under
+a half-written "zero out the db" heading (an editing slip).
+
+**Changed:**
+
+- `docs/RUNNING-on-docker.md`: replaced the pasted transcript with a proper
+  **Resetting the DB** section — full wipe (`docker compose down -v`) vs. clearing
+  just test users (`/api/dev/reset-test-users`, `local` profile), noting these run
+  from the host or inside the Dev Container (same Docker daemon via the mounted
+  socket) and that a plain `down` keeps the `pollsystem-data` volume.
+
+**Commit:** `68dee80`
+
+---
+
 ## 2026-09-24 — Fix: local-docker readiness probe from inside the Dev Container
 
 **Requested:**
