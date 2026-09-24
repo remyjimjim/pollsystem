@@ -1,5 +1,15 @@
 import { defineConfig, devices } from '@playwright/test'
 
+// Let specs read a `state=<name>` CLI token, e.g.
+//   npx playwright test register-colorado-users state=texas
+// Playwright runs specs in worker processes that do NOT inherit the CLI
+// positionals, but they DO inherit env vars set here in the main process —
+// so we translate the token into E2E_STATE for the spec to read. (Playwright
+// also treats the token as a filename filter, which matches no file and so
+// doesn't change which specs run.)
+const stateArg = process.argv.find((a) => /^state=/i.test(a))
+if (stateArg) process.env.E2E_STATE = stateArg.slice(stateArg.indexOf('=') + 1)
+
 // Scoping testDir to ./e2e keeps Playwright from picking up the *.spec.ts
 // files under src/ that belong to Vitest.
 export default defineConfig({

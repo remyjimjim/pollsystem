@@ -19,6 +19,48 @@ const ROLES = ['viewer', 'user', 'creator', 'admin'] as const
 
 const TOTAL_USERS = 2 * ROLES.length
 
+const API = 'http://localhost:8080'
+
+// Which state to register 8 users in. Pass any state on the command line as
+// `state=<name>` (translated to E2E_STATE in playwright.config.ts); defaults
+// to colorado. Accepts a full name or 2-letter initial (see resolveState).
+const STATE_INPUT = (process.env.E2E_STATE ?? 'colorado').trim()
+const STATE = STATE_INPUT.toLowerCase()
+// Email-safe form of the state for the address handle (e.g. "new york" → "newyork").
+const STATE_TAG = STATE.replace(/[^a-z0-9]/g, '') || 'state'
+
+// Resolve a REAL zipcode for the requested state at runtime — register-checkout
+// rejects any zipcode not present in county_zips, so we can't invent one. Match
+// the state by full name or initial (case-insensitive) via the public
+// /api/states, then take the lowest zipcode in the state from /api/zipcodes.
+// Also returns the state id, used to give each state a distinct phone range.
+// All 8 users share this one zipcode — zipcode isn't unique-constrained, and a
+// single area keeps the per-role scripts pointed at the same local polls.
+async function resolveState(input: string): Promise<{ id: number; zipcode: string }> {
+  const statesRes = await fetch(`${API}/api/states`)
+  if (!statesRes.ok) throw new Error(`GET /api/states failed: ${statesRes.status}`)
+  const states = (await statesRes.json()) as Array<{ id: number; name: string; initial: string }>
+  const want = input.toLowerCase()
+  const match = states.find((s) => s.name.toLowerCase() === want || s.initial.toLowerCase() === want)
+  if (!match) {
+    throw new Error(
+      `Unknown state '${input}'. Pass a full state name or 2-letter initial ` +
+        `(e.g. state=iowa or state=IA). Known initials: ${states.map((s) => s.initial).join(', ')}`
+    )
+  }
+  // stateIds expands to every county in the state, so we get a zipcode as long
+  // as the state has any (sorted by zipcode → deterministic lowest one).
+  const zipsRes = await fetch(`${API}/api/zipcodes`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ stateIds: [match.id] }),
+  })
+  if (!zipsRes.ok) throw new Error(`POST /api/zipcodes failed: ${zipsRes.status}`)
+  const zips = (await zipsRes.json()) as Array<{ zipcode: string }>
+  if (zips.length === 0) throw new Error(`No zipcodes seeded for state '${match.name}' (id=${match.id}).`)
+  return { id: match.id, zipcode: zips[0].zipcode }
+}
+
 const PAUSE_BODY = `
   The test is paused. Query the dev database now if you need to. Connect with:
   <code style="background:#f1f5f9;padding:2px 6px;border-radius:3px;display:inline-block;
@@ -30,7 +72,7 @@ const PAUSE_BODY = `
   </span>
 `
 
-test.describe('register Colorado users via magic link', () => {
+test.describe(`register ${STATE} users via magic link`, () => {
   // Clear leftover users from previous runs so the deterministic email
   // and phone numbers don't trip the UNIQUE constraints on re-registration.
   // The endpoint is dev-only (Spring @Profile("local")).
@@ -48,23 +90,26 @@ test.describe('register Colorado users via magic link', () => {
   // link, then Logout before the next user — matching the manual flow. A
   // single page (not a context-per-user) is what makes the explicit Logout
   // meaningful; the Logout is what separates the sessions.
-  test('register and log in 8 Colorado users, logging out between each', async ({ page }) => {
+  test(`register and log in ${TOTAL_USERS} ${STATE} users, logging out between each`, async ({ page }) => {
     test.setTimeout(240_000)
 
     // Start from a clean Mailpit inbox so fetchMagicLink can't be fooled by
     // stale tokens from earlier runs (tokens are single-use and expire).
     await clearMailpit()
 
+    // Look up a real zipcode (and the state id) for the requested state.
+    const { id: stateId, zipcode } = await resolveState(STATE_INPUT)
+    console.log(`[state=${STATE}] using zipcode ${zipcode} for ${TOTAL_USERS} users`)
+
     let n = 0
     for (let i = 1; i <= 2; i++) {
       for (const role of ROLES) {
         n++
-        const email = `zzz${i}test${role}@colorado.com`
-        // Colorado 303-534 numbers, one per user so each clears the UNIQUE
-        // phone constraint (a per-i number would collide across the 4 roles).
-        // 361 is another plausible exchange if more ranges are ever needed.
-        const phone   = String(3035341110 + n)   // 3035341111 … 3035341118
-        const zipcode = '80202'                   // Denver; zipcode isn't unique-constrained
+        const email = `zzz${i}-test${role}-${STATE_TAG}@protonmail.com`
+        // One phone per user, in a per-state range (state id * 100 + counter),
+        // so each clears the UNIQUE phone constraint and states don't overlap.
+        // Backend doesn't validate phone format, only uniqueness.
+        const phone = String(3030000000 + stateId * 100 + n)
 
         // 1. Home — no values to set; hold for 4s, then click the Register CTA
         //    under the "Create an account" card (the trailing arrow
@@ -82,7 +127,7 @@ test.describe('register Colorado users via magic link', () => {
         await hold(page)                               // hold on /register with form filled
 
         // On the very last iteration, pause before submit so the user can
-        // query the DB and see the state immediately before the 8th user
+        // query the DB and see the state immediately before the final user
         // is registered. Resume by clicking Close in the injected modal.
         // Interactive-only — skipped in CI (it would block until timeout).
         if (n === TOTAL_USERS && INTERACTIVE) {
