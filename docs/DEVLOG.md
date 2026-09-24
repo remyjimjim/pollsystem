@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-09-24 — e2e: parameterize register-colorado-users by `state=<name>`
+
+**Requested:**
+
+> Can we modify register-colorado-users such that one can pass in the "state" as
+> a parameter much like we did with keep so for instance the parameter could be
+> state=colorado for instance?
+
+> Instead of producing users from a group of states, can we just have 8 users
+> from the state passed in via state=IOWA or some such?
+
+**Changed:**
+
+- `playwright.config.ts` parses a `state=<name>` token from `process.argv` (main
+  process) into `process.env.E2E_STATE`. A probe confirmed the token itself does
+  not reach a spec **worker's** argv, but workers inherit env set here; Playwright
+  also treats the token as a filename filter that matches nothing, so spec
+  selection is unchanged.
+- The spec accepts any of the 51 seeded states by full name or 2-letter initial
+  (case-insensitive; defaults to colorado). `resolveState()` looks up a **real**
+  zipcode at runtime via the public `/api/states` + `/api/zipcodes` — required,
+  since `register-checkout` rejects any zipcode absent from `county_zips`. Unknown
+  state fails fast with the valid initials.
+- Each state gets a distinct phone range (`3030000000 + stateId*100 + n`) so
+  numbers never overlap; the backend only checks phone uniqueness, not format.
+  The state also goes into the email handle (`zzz{i}-test{role}-{state}@…`).
+- Restored the `viewer` role so it seeds 8 users (`viewer/user/creator/admin`
+  × 2), matching the per-role e2e strategy. Replaced the interim hardcoded
+  3-state table with this runtime lookup.
+
+**Commit:** `5e7c185`
+
 ## 2026-09-24 — e2e: `keep` token to preserve seeded users past teardown
 
 **Requested:**
