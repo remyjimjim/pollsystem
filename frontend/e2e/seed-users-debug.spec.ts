@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test'
 import { clearMailpit, fetchMagicLink } from './mailpit'
 import { pauseWithModal } from './pause-modal'
 
-// Parameterized debug variant of register-colorado-users.spec.ts: opens N
+// Parameterized debug variant of register-users.spec.ts: opens N
 // browser contexts (one per user), keeps every window open at the end, and
 // shows an HTML modal with a Close button to gate teardown. Run with:
 //
-//   npx playwright test register-users-debug --headed
+//   npx playwright test seed-users-debug --headed
 //
 // No --debug needed — pauseWithModal injects its own DOM overlay rather
 // than relying on Playwright's Inspector. Close the modal in any one of

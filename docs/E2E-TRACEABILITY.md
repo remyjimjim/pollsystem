@@ -17,7 +17,7 @@ Legend: ✅ covered · ➖ partial / indirect · ❌ none · **P1** build first 
 
 | Use case | Actor | Backend test | E2E | Prio | Notes |
 |---|---|---|---|---|---|
-| Sign In via Magic Link | Viewer | ✅ `AuthControllerTest` | ✅ `register-colorado-users` | — | Only use case with e2e today |
+| Sign In via Magic Link | Viewer | ✅ `AuthControllerTest` | ✅ `register-users` | — | Only use case with e2e today |
 | Send Magic Link | (system) | ✅ `AuthControllerTest` | ✅ via registration | — | Exercised through Mailpit |
 | Complete Poll via Link | Viewer | ➖ `*ResponsesTest` (submit logic) | ❌ | **P1** | Core unauth path; `/poll/<token>` UX unverified |
 | View Poll Results | Viewer | ✅ `*ResultsTest` | ❌ | **P2** | k-anonymity threshold (10) surfacing in UI |

@@ -1,35 +1,24 @@
 // Runs once after the entire `playwright test` invocation, regardless of
 // pass/fail counts or how many spec files ran.
 //
-// Calls /api/dev/reset-test-users on the local backend to drop every
-// zzz-prefixed user and the data anchored to them (magic_link_tokens,
-// role_assignments, plus the long tail of FK paths to users(id)).
+// By default this LEAVES the seeded (zzz-prefixed) users in place, so they
+// persist for the next script and for manual inspection — cleanliness is
+// owned by each "registers" script's beforeAll pre-wipe. Pass `wipe=yes` (or
+// WIPE=1 / SKIP_TEARDOWN unset is irrelevant now) to opt in to a post-run
+// wipe: /api/dev/reset-test-users drops every zzz user and the data anchored
+// to them (magic_link_tokens, role_assignments, plus the long tail of FK
+// paths to users(id)). Override the prefix with E2E_USER_PREFIX.
 //
-// Override the prefix with E2E_USER_PREFIX. Skip the wipe entirely — to
-// keep the seeded users in the DB (e.g. so the per-role e2e scripts can run
-// against them, or a paused test left state you want to inspect) — either
-// with SKIP_TEARDOWN=1 or by passing a `keep` token on the command line,
-// e.g. `npx playwright test register-colorado-users keep=yes --headed`.
-// (Playwright reads unknown positional args as filename filters, so an
-// extra `keep=yes` doesn't change which specs run; we just look for it in
-// process.argv here.)
+// `wipe=yes` is parsed into E2E_WIPE by playwright.config.ts (this teardown
+// runs in the main process, so it also inherits that env var).
 
-// Truthy forms: bare `keep`, or keep=yes|1|true|on (case-insensitive).
-function keepRequested(): boolean {
-  if (process.env.SKIP_TEARDOWN === '1') return true
-  for (const arg of process.argv.slice(2)) {
-    const m = /^keep(?:=(.*))?$/i.exec(arg)
-    if (m) {
-      const val = (m[1] ?? '').toLowerCase()
-      return val === '' || ['yes', '1', 'true', 'on'].includes(val)
-    }
-  }
-  return false
+function isTruthy(v: string | undefined): boolean {
+  return v != null && ['yes', '1', 'true', 'on'].includes(v.toLowerCase())
 }
 
 export default async function globalTeardown() {
-  if (keepRequested()) {
-    console.log('globalTeardown: keep flag set — leaving test data in place')
+  if (!isTruthy(process.env.E2E_WIPE)) {
+    console.log('globalTeardown: leaving test data in place (pass wipe=yes to clear it)')
     return
   }
 

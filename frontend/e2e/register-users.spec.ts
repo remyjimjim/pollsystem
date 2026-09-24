@@ -2,6 +2,7 @@
 import { test, expect, type Page } from '@playwright/test'
 import { clearMailpit, fetchMagicLink } from './mailpit'
 import { pauseWithModal } from './pause-modal'
+import { KEEP, STATE_INPUT, resolveLocation, resetTestUsers, seededEmail } from './seed'
 
 // The per-screen pauses and the pre-final-user modal below exist only to make a
 // live, headed run watchable (hold on each screen; stop to inspect the DB). In
@@ -19,47 +20,11 @@ const ROLES = ['viewer', 'user', 'creator', 'admin'] as const
 
 const TOTAL_USERS = 2 * ROLES.length
 
-const API = 'http://localhost:8080'
-
-// Which state to register 8 users in. Pass any state on the command line as
-// `state=<name>` (translated to E2E_STATE in playwright.config.ts); defaults
-// to colorado. Accepts a full name or 2-letter initial (see resolveState).
-const STATE_INPUT = (process.env.E2E_STATE ?? 'colorado').trim()
+// Which state to register users in. Pass `state=<name>` (full name or 2-letter
+// initial; default colorado, optionally narrowed by county=<name>) — parsed
+// into E2E_STATE by playwright.config.ts. The geography lookup and the
+// seeded-email convention live in ./seed.
 const STATE = STATE_INPUT.toLowerCase()
-// Email-safe form of the state for the address handle (e.g. "new york" → "newyork").
-const STATE_TAG = STATE.replace(/[^a-z0-9]/g, '') || 'state'
-
-// Resolve a REAL zipcode for the requested state at runtime — register-checkout
-// rejects any zipcode not present in county_zips, so we can't invent one. Match
-// the state by full name or initial (case-insensitive) via the public
-// /api/states, then take the lowest zipcode in the state from /api/zipcodes.
-// Also returns the state id, used to give each state a distinct phone range.
-// All 8 users share this one zipcode — zipcode isn't unique-constrained, and a
-// single area keeps the per-role scripts pointed at the same local polls.
-async function resolveState(input: string): Promise<{ id: number; zipcode: string }> {
-  const statesRes = await fetch(`${API}/api/states`)
-  if (!statesRes.ok) throw new Error(`GET /api/states failed: ${statesRes.status}`)
-  const states = (await statesRes.json()) as Array<{ id: number; name: string; initial: string }>
-  const want = input.toLowerCase()
-  const match = states.find((s) => s.name.toLowerCase() === want || s.initial.toLowerCase() === want)
-  if (!match) {
-    throw new Error(
-      `Unknown state '${input}'. Pass a full state name or 2-letter initial ` +
-        `(e.g. state=iowa or state=IA). Known initials: ${states.map((s) => s.initial).join(', ')}`
-    )
-  }
-  // stateIds expands to every county in the state, so we get a zipcode as long
-  // as the state has any (sorted by zipcode → deterministic lowest one).
-  const zipsRes = await fetch(`${API}/api/zipcodes`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ stateIds: [match.id] }),
-  })
-  if (!zipsRes.ok) throw new Error(`POST /api/zipcodes failed: ${zipsRes.status}`)
-  const zips = (await zipsRes.json()) as Array<{ zipcode: string }>
-  if (zips.length === 0) throw new Error(`No zipcodes seeded for state '${match.name}' (id=${match.id}).`)
-  return { id: match.id, zipcode: zips[0].zipcode }
-}
 
 const PAUSE_BODY = `
   The test is paused. Query the dev database now if you need to. Connect with:
@@ -73,17 +38,16 @@ const PAUSE_BODY = `
 `
 
 test.describe(`register ${STATE} users via magic link`, () => {
-  // Clear leftover users from previous runs so the deterministic email
-  // and phone numbers don't trip the UNIQUE constraints on re-registration.
-  // The endpoint is dev-only (Spring @Profile("local")).
+  // This script *registers* users, so it pre-wipes leftover zzz users from
+  // previous runs — the deterministic email/phone would otherwise trip the
+  // UNIQUE constraints. keep=yes skips the pre-wipe to layer onto existing
+  // data. (The global teardown leaves data in place; pass wipe=yes to clear.)
   test.beforeAll(async () => {
-    const res = await fetch(
-      'http://localhost:8080/api/dev/reset-test-users?emailPrefix=zzz',
-      { method: 'POST' }
-    )
-    if (!res.ok) {
-      throw new Error(`POST /api/dev/reset-test-users failed: ${res.status} ${await res.text()}`)
+    if (KEEP) {
+      console.log('[keep] skipping pre-wipe of zzz users')
+      return
     }
+    await resetTestUsers('zzz')
   })
 
   // One continuous browser session: register a user, sign in via the magic
@@ -98,14 +62,14 @@ test.describe(`register ${STATE} users via magic link`, () => {
     await clearMailpit()
 
     // Look up a real zipcode (and the state id) for the requested state.
-    const { id: stateId, zipcode } = await resolveState(STATE_INPUT)
+    const { stateId, zipcode } = await resolveLocation()
     console.log(`[state=${STATE}] using zipcode ${zipcode} for ${TOTAL_USERS} users`)
 
     let n = 0
     for (let i = 1; i <= 2; i++) {
       for (const role of ROLES) {
         n++
-        const email = `zzz${i}-test${role}-${STATE_TAG}@protonmail.com`
+        const email = seededEmail(role, i)
         // One phone per user, in a per-state range (state id * 100 + counter),
         // so each clears the UNIQUE phone constraint and states don't overlap.
         // Backend doesn't validate phone format, only uniqueness.

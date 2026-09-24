@@ -126,7 +126,7 @@ Creds live in `docker-compose.yml` (`polladmin` / `pollpass123`, db `pollsystem`
   Single class: `./gradlew test --tests "org.kodewerks.pollsystem.auth.*"`.
 - **Frontend unit (Vitest):** `cd frontend && npm test`.
   Type-check: `cd frontend && npm run type-check`.
-- **Playwright e2e:** `cd frontend && npx playwright test register-colorado-users --headed`
+- **Playwright e2e:** `cd frontend && npx playwright test register-users --headed`
 
 ---
 
