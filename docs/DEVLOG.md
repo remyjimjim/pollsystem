@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-09-24 — e2e: `keep` token to preserve seeded users past teardown
+
+**Requested:**
+
+> Alright, looking good, now would it be possible for me to pass a parameter like
+> keep=yes, so the entire call would be "npx playwright test register-colorado-users
+> keep=yes --headed"? The objective is to purge the users from the db aka
+> 'tearDown', let the script create them and then have the option to keep them in
+> the db. The overarching e2e strategy is to have scripts for each user role […]
+
+**Changed:**
+
+- `playwright/global-teardown.ts` now recognizes a `keep` token in
+  `process.argv` (bare `keep`, or `keep=yes|1|true|on`, case-insensitive), in
+  addition to the existing `SKIP_TEARDOWN=1`. When present it logs and skips the
+  `zzz`-user purge, leaving the seeded users in the DB.
+- Playwright reads the extra positional as a filename filter (OR'd with the
+  spec name), so `keep=yes` matches no files and doesn't change spec selection —
+  verified via `--list`.
+- Behavior is purge → create → (keep or purge): the spec's `beforeAll` reset is
+  untouched, so runs still start from a clean slate; `keep` only governs the
+  final teardown. Supports the per-role e2e strategy (seed once, keep, then run
+  the viewer/user/creator/admin scripts against the persisted users).
+
+**Commit:** `f520ac8`
+
 ## 2026-09-24 — e2e: rewrite register-colorado-users to the pseudo-code flow
 
 **Requested:**
