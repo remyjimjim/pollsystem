@@ -61,6 +61,51 @@ logged.
 
 ---
 
+## 2026-09-24 — e2e: seed-relying role scripts + shared seed helper
+
+**Requested:**
+
+> Make the role scripts rely on the seed instead of self-resetting
+
+> [in discussion] the actor is "user" who performs the registration/payment
+> process and the find-answer-submit-poll process … the 'registers' part of the
+> name indicates that the user should be wiped as a pre script action vs a post
+> script action … Maybe the starting point is to figure out the processes we
+> want to test then name the script accordingly?
+
+> [confirming] a) yes [flip teardown to leave-data by default] b) let's do #1 first
+
+> register-colorado-users should be renamed to register-users.spec.ts … Let's do
+> the renames [incl. the debug spec] and then commit
+
+**Decision (convention):** e2e specs are named `{actor}-{process}.spec.ts`. A
+name containing **"registers"** means the script creates its actor, so it
+**pre-wipes** in `beforeAll` (unless `keep=yes`); scripts that **reuse the seed**
+never wipe and sign in as an existing user. The global teardown **leaves data by
+default** (wipe only on `wipe=yes`) so seeds persist between scripts. `keep`
+means "don't wipe"; `state`/`county` place the user.
+
+**Changed:**
+
+- New `frontend/e2e/seed.ts`: `resolveLocation` (real zip via the public
+  geography API, optional `county=`), `seededEmail`, `resetTestUsers` /
+  `seedQuestionnaire`, `registerAndSignIn` (pay-first), `signInSeededUser`
+  (login → magic link, no reset), and the `state`/`county`/`keep` token readers.
+- `playwright/global-teardown.ts` now leaves data by default; wipes only on
+  `wipe=yes`. `playwright.config.ts` parses `state`/`county`/`keep`/`wipe`
+  tokens into env vars for the specs (workers don't see CLI positionals).
+- Renamed `search-complete.spec.ts` → **`user-registers-submits-poll.spec.ts`**
+  and refactored onto the helpers; fixed its stale pre-pay flow to the current
+  pay-first UI; `keep=yes` reuses seeded user #1 (signs in) instead of
+  re-registering.
+- Renamed `register-colorado-users.spec.ts` → **`register-users.spec.ts`**
+  (multi-state; `keep`-aware pre-wipe; DRY'd onto `seed.ts`), and
+  `register-users-debug.spec.ts` → **`seed-users-debug.spec.ts`** so the
+  `register-users` filter is unambiguous.
+- Updated `docs/E2E-TRACEABILITY.md` and `docs/RUNNING-on-host.md` to the new name.
+
+**Commit:** `ca12fce`
+
 ## 2026-09-24 — e2e: parameterize register-colorado-users by `state=<name>`
 
 **Requested:**
