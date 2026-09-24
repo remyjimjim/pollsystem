@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-09-24 — e2e: rewrite register-colorado-users to the pseudo-code flow
+
+**Requested:**
+
+> Can we modify frontend/e2e/register-colorado-users.spec.ts so that it conforms
+> to the following psuedo-code?
+
+(Pseudo-code: loop `i=1..2` × `[viewer, user, creator, admin]` — home → Register
+→ fill email/phone/zip → Continue to payment → open the sign-in email → click
+the magic link → Logout.)
+
+> I ran register-colorado-users.spec.ts and got the following msg: […] waiting
+> for getByText('Check your email.') to be visible […] navigated to
+> "http://localhost:3000/?checkout=success&mock=1"
+
+**Changed:**
+
+- Rewrote the test to the requested loop: `i=1..2` × `[viewer, user, creator,
+  admin]` → 8 users, email `zzz{i}test{role}@colorado.com`, zip `80202`.
+- Phone is `3035341110 + n` (`3035341111`…`3035341118`) — one per user, since a
+  per-`i` number would collide 4-ways on the UNIQUE phone constraint.
+- Runs as one continuous browser session with an explicit **Logout** between
+  users (replacing the isolated context-per-user), matching the manual flow. The
+  magic link is still fetched via the Mailpit REST helper (more robust than
+  scraping its UI iframe).
+- Fixed the success check: mock/real checkout redirects to `?checkout=success`
+  (the green "Payment received…" banner), so the test now waits on that redirect
+  + banner instead of the nonexistent `"Check your email."` string, which never
+  matched the mock success page and timed out.
+
+**Commit:** `b092f1d`
+
 ## 2026-09-24 — RUNNING-on-docker.md: add a "Resetting the DB" section
 
 **Requested:**
