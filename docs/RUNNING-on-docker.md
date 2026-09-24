@@ -116,6 +116,32 @@ PGPASSWORD=pollpass123 psql -h host.docker.internal -U polladmin -d pollsystem
 
 ---
 
+## Resetting the DB
+
+Postgres data lives in the **named volume `pollsystem-data`**, so it **survives
+`down`** (which only removes containers). To actually clear data:
+
+- **Wipe everything** (drop the volume → fresh, empty DB):
+  ```bash
+  docker compose down -v                        # removes containers + the pollsystem-data volume
+  ./scripts/BuildAndDeploy.bash local-docker    # bring it back up, empty
+  ```
+- **Clear just the test users** (keep the schema + volume): the `local` profile
+  exposes a dev cleanup endpoint —
+  ```bash
+  curl -X POST 'http://localhost:8080/api/dev/reset-test-users?emailPrefix=zzz'
+  ```
+  Deletes users whose email starts with `emailPrefix` (plus their poll data);
+  it refuses a prefix shorter than 3 characters as a safety guard. The Playwright
+  e2e specs call this in `beforeAll`.
+
+> These run from inside the Dev Container **or** the host — same Docker daemon via
+> the mounted socket. A plain `down` keeps the data; only `-v` (or
+> `docker volume rm pollsystem_pollsystem-data`) wipes it — and the volume can't
+> be removed while the `pollsystem-db` container still exists.
+
+---
+
 ## Notes
 
 - **Docker socket:** the container uses the host's Docker Desktop socket
