@@ -68,14 +68,23 @@
 
   "customizations": {
     "vscode": {
-      // Java/Kotlin/Gradle/Spring language servers are intentionally NOT
-      // installed here. This repo is driven through Claude Code + the terminal
-      // (BuildAndDeploy.bash), and JDT.ls + Spring Tools + the Gradle importer
-      // were running ~2-3 GB of JVMs inside this container — starving the app
-      // stack and causing VS Code disconnects / Docker hangs. Re-add
-      // "vscjava.vscode-java-pack", "fwcd.kotlin", "vscjava.vscode-gradle",
-      // "vmware.vscode-spring-boot" if you want full backend IntelliSense
-      // (and expect the memory cost back).
+      // Bound the Java language server REGARDLESS of whether the Java pack gets
+      // reinstalled. Removing the extensions from the list below doesn't stick —
+      // a host-side `dev.containers.defaultExtensions` / Settings Sync keeps
+      // re-adding redhat.java + vscjava.*, and JDT.ls then balloons to ~1.5 GB,
+      // starving the app stack (VS Code disconnects / Docker hangs). These caps
+      // hold JDT.ls to ~640 MB and stop the constant autobuild/indexing churn,
+      // so it's harmless even when present.
+      "settings": {
+        "java.jdt.ls.vmargs": "-Xmx640m -XX:MaxMetaspaceSize=256m",
+        "java.autobuild.enabled": false,
+        "java.configuration.updateBuildConfiguration": "disabled"
+      },
+      // This repo is driven through Claude Code + the terminal
+      // (BuildAndDeploy.bash), so the heavy Java/Kotlin/Gradle/Spring language
+      // servers aren't listed here. Re-add "vscjava.vscode-java-pack",
+      // "fwcd.kotlin", "vscjava.vscode-gradle", "vmware.vscode-spring-boot" if
+      // you want full backend IntelliSense (now bounded by the settings above).
       "extensions": [
         "Vue.volar",
         "dbaeumer.vscode-eslint",
