@@ -90,6 +90,36 @@ containers and caused the OOM-kills / disconnects / hangs.
 
 **Commit:** `b2645fc`
 
+## 2026-09-25 — e2e: viewer-searches-views-results (ballot-measure k-anonymity)
+
+**Requested:**
+
+> // viewer-searches-views-results
+> seed a ballot measure in zip 80202 created by a creator
+> seed 3 responses (from registered users; create them via API if none exist)
+> as a guest: /polls/search → find by title → open results
+> assert results are withheld (below the k-anonymity threshold)
+
+**Context:** The k-anonymity threshold is **10** (`application.yml`), and results
+are suppressed only when a geo filter or the "Only voters from poll's purview"
+box is applied — the default view shows real counts. So the spec asserts both
+sides of the boundary. This test is primarily **documentation** (screen-recorded
+to .mp4 with a voiceover), so it uses generous `hold()` beats.
+
+**Changed:**
+
+- `DevController`: `seed-ballot-measure` (zzz creator + draft election + published
+  measure at a zip) and `seed-ballot-responses` (≤6 real registered users in the
+  zip, saved directly via the repo — bypassing the paid-membership participation
+  guard; cleaned by `reset-test-users`).
+- `frontend/e2e/seed.ts`: `seedBallotMeasure` / `seedBallotResponses` wrappers.
+- New `frontend/e2e/viewer-searches-views-results.spec.ts`: guest → search by
+  title → "View results" → tally visible by default → tick "Only voters from
+  poll's purview" → withheld banner. Read-only actor, so no pre-wipe.
+- Verified passing headed against a rebuilt backend.
+
+**Commit:** `c596884`
+
 ## 2026-09-25 — e2e: watchable hold() pauses for headed runs
 
 **Requested:**
