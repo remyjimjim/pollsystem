@@ -13,6 +13,7 @@ const CLI_TOKENS: Record<string, string> = {
   county: 'E2E_COUNTY',
   keep: 'E2E_KEEP',
   wipe: 'E2E_WIPE',
+  hold: 'E2E_HOLD_MS', // watchable-pause length in ms for --headed runs (0 = off)
 }
 for (const arg of process.argv.slice(2)) {
   const eq = arg.indexOf('=')

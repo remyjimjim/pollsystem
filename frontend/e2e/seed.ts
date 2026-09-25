@@ -27,6 +27,17 @@ export const STATE_INPUT = (process.env.E2E_STATE ?? 'colorado').trim()
 export const COUNTY_INPUT = (process.env.E2E_COUNTY ?? '').trim()
 export const KEEP = isTruthy(process.env.E2E_KEEP)
 
+// Watchable pauses for --headed runs: hold on each key screen so a human can
+// follow along. Skipped entirely in CI (CI=true) and when hold=0. Tune per run
+// with the `hold=<ms>` CLI token (E2E_HOLD_MS); defaults to 1.5s.
+export const INTERACTIVE = !process.env.CI
+export const HOLD_MS = Number.isFinite(Number(process.env.E2E_HOLD_MS))
+  ? Number(process.env.E2E_HOLD_MS)
+  : 1500
+export async function hold(page: Page, ms: number = HOLD_MS): Promise<void> {
+  if (INTERACTIVE && ms > 0) await page.waitForTimeout(ms)
+}
+
 /** Email-safe form of a state name: "new york" -> "newyork". */
 export function stateTag(state: string = STATE_INPUT): string {
   return state.toLowerCase().replace(/[^a-z0-9]/g, '') || 'state'
@@ -135,13 +146,16 @@ export async function registerAndSignIn(
   await page.getByLabel('Email').fill(user.email)
   await page.getByLabel('Phone').fill(user.phone)
   await page.getByLabel('Zipcode').fill(user.zipcode)
+  await hold(page) // the filled registration form
   await page.getByRole('button', { name: /Continue to payment/ }).click()
   await page.waitForURL(/checkout=success/, { timeout: 30_000 })
   await expect(page.getByText(/Payment received/)).toBeVisible({ timeout: 10_000 })
+  await hold(page) // the "Payment received" landing
 
   const href = await fetchMagicLink(user.email)
   await page.goto(href)
   await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible({ timeout: 30_000 })
+  await hold(page) // signed in
 }
 
 /**
@@ -167,4 +181,5 @@ export async function signInSeededUser(page: Page, email: string): Promise<void>
   const href = await fetchMagicLink(email)
   await page.goto(href)
   await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible({ timeout: 30_000 })
+  await hold(page) // signed in
 }

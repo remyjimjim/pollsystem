@@ -5,6 +5,7 @@ import {
   KEEP,
   STATE_INPUT,
   type Location,
+  hold,
   registerAndSignIn,
   resetTestUsers,
   resolveLocation,
@@ -57,17 +58,22 @@ test.describe(`user registers and submits a poll (${STATE_INPUT.toLowerCase()})`
     // zip-scoped, so the actor's own zipcode doesn't need to match the poll's).
     await page.goto(`${BASE}/polls/search`)
     await expect(page.getByText('Find a Poll')).toBeVisible({ timeout: 15_000 })
+    await hold(page) // the search page
     await page.getByLabel('Title contains').fill(pollTitle)
     await page.getByRole('button', { name: 'Search' }).click()
 
     // Open it via its Vote link and submit a response.
     const row = page.locator('tr', { hasText: pollTitle })
     await expect(row).toBeVisible({ timeout: 15_000 })
+    await hold(page) // the search result row
     await row.getByRole('link', { name: /Vote/ }).click()
     await expect(page).toHaveURL(/\/polls\/questionnaire\/\d+$/)
     await page.locator('input[type="radio"][value="Yes"]').first().check()
+    await hold(page) // the answered question
     await page.getByRole('button', { name: 'Submit responses' }).click()
 
     await expect(page.getByText('Responses submitted successfully!')).toBeVisible({ timeout: 30_000 })
+    await hold(page) // the success confirmation
+
   })
 })
