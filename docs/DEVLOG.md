@@ -61,6 +61,58 @@ logged.
 
 ---
 
+## 2026-09-25 — dev: cut Docker VM memory pressure (VS Code / Docker stability)
+
+**Requested:**
+
+> I'm having a tough time keeping both vscode and docker desktop from
+> crashing/hanging/disconnecting, any tips?
+
+> Let's do: #1 (trim extensions) + #2 (Gradle cap) + #4 (dev-container memory
+> ceiling) + #5 (backend heap cap) …
+
+**Context:** `docker stats` showed the Dev Container (image `vsc-pollsystem-…`,
+no memory limit) using **4.4 GB of the 7.75 GB VM** — almost all of it IDE Java
+tooling: the `redhat.java` language server (JDT.ls, ~1.3 GB), a lingering Gradle
+daemon (~1.1 GB), Spring Tools (~0.3 GB) and helper JVMs. That starved the app
+containers and caused the OOM-kills / disconnects / hangs.
+
+**Changed:**
+
+- `.devcontainer/devcontainer.json`: removed the Java/Kotlin/Gradle/Spring
+  extensions (the repo is driven via Claude Code + `BuildAndDeploy.bash`, not
+  IntelliSense) and capped the container with `--memory=4g --memory-swap=5g` so
+  its tooling can't starve the app stack. **Requires a container rebuild.**
+- `backend/gradle.properties` (new): `org.gradle.jvmargs=-Xmx1g …` and a 10-min
+  daemon idle-timeout so a manual `./gradlew` daemon can't squat ~1 GB.
+- `docker-compose.yml`: `JAVA_TOOL_OPTIONS=-Xmx512m` on the backend so the JVM
+  can't balloon under the image's `MaxRAMPercentage`.
+
+**Commit:** `b2645fc`
+
+## 2026-09-25 — Decision: native Docker Engine as the fallback if instability recurs
+
+**Requested:**
+
+> expand on the why and how of using the native Docker Engine and make a note to
+> explore that avenue should we run into crashing vscode and docker again.
+
+**Decision:** Keep Docker Desktop for now (the memory-pressure fixes above
+should hold), but if the crashing/hanging/disconnecting recurs, migrate the dev
+workflow to Linux's **native Docker Engine (`docker-ce`)**. *Why:* on Linux,
+Docker Desktop runs everything inside a memory-capped qemu VM — the VM is itself
+a primary source of the hangs and the OOM cliff. Native Engine runs containers
+directly on the host kernel: no VM, no fixed memory ceiling, nothing to hang,
+and containers draw from the host's full ~14 GB. *How (sketch):* install
+`docker-ce` + the Compose plugin; repoint the Dev Container socket mount from
+`~/.docker/desktop/docker.sock` to `/var/run/docker.sock`; add the user to the
+`docker` group (drop the `postStart` socket chmod); re-check
+`host.docker.internal` (add `--add-host=host.docker.internal:host-gateway`,
+already present) and the Testcontainers host override. Tracked in memory
+([[dev-docker-native-engine-fallback]]).
+
+**Commit:** none — decision only.
+
 ## 2026-09-24 — e2e: seed-relying role scripts + shared seed helper
 
 **Requested:**
