@@ -40,7 +40,17 @@
 
   // Docker Desktop provides host.docker.internal; make it explicit so
   // Testcontainers can reach the DB container it starts (mapped to the host).
-  "runArgs": ["--add-host=host.docker.internal:host-gateway"],
+  //
+  // --memory caps THIS container's RAM so its tooling can't starve the app
+  // containers in the shared Docker Desktop VM (the cause of the earlier
+  // backend OOM-kills / VS Code disconnects). 4 GB is ample now that the heavy
+  // Java language servers are gone (see extensions below); +1 GB swap absorbs
+  // the occasional build spike.
+  "runArgs": [
+    "--add-host=host.docker.internal:host-gateway",
+    "--memory=4g",
+    "--memory-swap=5g"
+  ],
   "containerEnv": {
     "TESTCONTAINERS_HOST_OVERRIDE": "host.docker.internal",
     "TESTCONTAINERS_RYUK_DISABLED": "true"
@@ -58,11 +68,15 @@
 
   "customizations": {
     "vscode": {
+      // Java/Kotlin/Gradle/Spring language servers are intentionally NOT
+      // installed here. This repo is driven through Claude Code + the terminal
+      // (BuildAndDeploy.bash), and JDT.ls + Spring Tools + the Gradle importer
+      // were running ~2-3 GB of JVMs inside this container — starving the app
+      // stack and causing VS Code disconnects / Docker hangs. Re-add
+      // "vscjava.vscode-java-pack", "fwcd.kotlin", "vscjava.vscode-gradle",
+      // "vmware.vscode-spring-boot" if you want full backend IntelliSense
+      // (and expect the memory cost back).
       "extensions": [
-        "vscjava.vscode-java-pack",
-        "fwcd.kotlin",
-        "vscjava.vscode-gradle",
-        "vmware.vscode-spring-boot",
         "Vue.volar",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",

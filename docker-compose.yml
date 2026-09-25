@@ -66,6 +66,10 @@ services:
       APP_BASE_URL: http://localhost:3000
       # Dev-only secret; deployed environments set a real one via Fly secrets.
       JWT_SECRET: local-dev-secret-not-for-production
+      # Cap the JVM heap so the backend can't balloon under the image's
+      # MaxRAMPercentage against the shared Docker Desktop VM (guards against the
+      # earlier OOM-kills). An explicit -Xmx overrides MaxRAMPercentage.
+      JAVA_TOOL_OPTIONS: "-Xmx512m"
     ports:
       - "8080:8080"
 
