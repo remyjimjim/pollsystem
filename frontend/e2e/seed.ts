@@ -133,6 +133,37 @@ export async function seedQuestionnaire(prefix = 'zzz'): Promise<{ id: number; t
   return (await res.json()) as { id: number; title: string }
 }
 
+/** Seed a published ballot measure at a real zip; returns its id + unique title. */
+export async function seedBallotMeasure(
+  opts: { zipcode: string; prefix?: string },
+): Promise<{ id: number; title: string; zipcode: string; electionId: number }> {
+  const q = new URLSearchParams({ emailPrefix: opts.prefix ?? 'zzz', zipcode: opts.zipcode })
+  const res = await fetch(`${API}/api/dev/seed-ballot-measure?${q}`, { method: 'POST' })
+  if (!res.ok) throw new Error(`seed-ballot-measure failed: ${res.status} ${await res.text().catch(() => '')}`)
+  return (await res.json()) as { id: number; title: string; zipcode: string; electionId: number }
+}
+
+/**
+ * Seed up to 6 ballot-measure responses from real registered users (created in
+ * `zipcode` so they count in the poll's purview). Capped at 6 to stay below the
+ * ~10-response k-anonymity threshold — a purview/geo-filtered results view then
+ * withholds the tally.
+ */
+export async function seedBallotResponses(
+  opts: { measureId: number; count: number; zipcode: string; prefix?: string },
+): Promise<{ seeded: number }> {
+  if (opts.count > 6) throw new Error('seedBallotResponses: count must be <= 6 (below k-anonymity threshold)')
+  const q = new URLSearchParams({
+    emailPrefix: opts.prefix ?? 'zzz',
+    measureId: String(opts.measureId),
+    count: String(opts.count),
+    zipcode: opts.zipcode,
+  })
+  const res = await fetch(`${API}/api/dev/seed-ballot-responses?${q}`, { method: 'POST' })
+  if (!res.ok) throw new Error(`seed-ballot-responses failed: ${res.status} ${await res.text().catch(() => '')}`)
+  return (await res.json()) as { seeded: number }
+}
+
 /**
  * Register a brand-new paid member through the UI (pay-first flow; mock Stripe
  * in local / local-docker) and sign in via the Mailpit magic link. Leaves the

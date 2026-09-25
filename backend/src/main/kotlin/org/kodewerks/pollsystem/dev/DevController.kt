@@ -4,10 +4,16 @@ import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.BallotResponse
 import org.kodewerks.pollsystem.model.User
+import org.kodewerks.pollsystem.poll.BallotMeasureDraftRequest
+import org.kodewerks.pollsystem.poll.BallotMeasureService
+import org.kodewerks.pollsystem.poll.ElectionDraftRequest
+import org.kodewerks.pollsystem.poll.ElectionService
 import org.kodewerks.pollsystem.poll.QuestionInput
 import org.kodewerks.pollsystem.poll.QuestionnaireDraftRequest
 import org.kodewerks.pollsystem.poll.QuestionnaireService
+import org.kodewerks.pollsystem.repository.BallotResponseRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 
 // Dev-only utilities. @Profile("local") means the bean is not registered
 // under the `test` or `prod` profiles — in prod the path 404s because no
@@ -32,6 +39,9 @@ class DevController(
     private val users: UserRepository,
     private val roleAuthCache: RoleAuthCache,
     private val questionnaires: QuestionnaireService,
+    private val elections: ElectionService,
+    private val ballotMeasures: BallotMeasureService,
+    private val ballotResponses: BallotResponseRepository,
 ) {
 
     @PersistenceContext
@@ -173,6 +183,106 @@ class DevController(
         questionnaires.publish(draft.id, creator, confirmed = false)
         log.info("Seeded published questionnaire id={} title='{}'", draft.id, title)
         return mapOf("id" to draft.id, "title" to title, "type" to "questionnaire")
+    }
+
+    /**
+     * Seeds a single PUBLISHED ballot measure (with a `zzz`-prefixed creator, so
+     * `reset-test-users` cleans it up) and returns its id, unique title, and zip.
+     * A ballot measure hangs off an election (non-null FK), so this creates a
+     * DRAFT election first (same creator, same zip — it need not be published for
+     * the measure to appear in search). Used by the viewer-searches-views-results
+     * e2e spec.
+     */
+    @PostMapping("/seed-ballot-measure")
+    @Transactional
+    fun seedBallotMeasure(
+        @RequestParam(defaultValue = "zzz") emailPrefix: String,
+        @RequestParam(defaultValue = "80202") zipcode: String,
+    ): Map<String, Any> {
+        require(emailPrefix.length >= 3) {
+            "emailPrefix must be at least 3 characters (safety guard)"
+        }
+        require(zipcode.matches(Regex("^[0-9]{5}$"))) { "zipcode must be 5 digits" }
+        val n = System.nanoTime()
+        val creator = users.save(
+            User(
+                email = "$emailPrefix-bmcreator-$n@test.local",
+                phone = "+1555${(n % 10_000_000).toString().padStart(7, '0')}",
+                zipcode = zipcode,
+                access = AccessLevel.CREATOR,
+                isEnabled = true,
+            )
+        )
+        val election = elections.saveDraft(
+            creator,
+            ElectionDraftRequest(
+                pollTypeId = 1L, // Election
+                title = "E2E Ballot Election $n",
+                date = LocalDate.now(),
+                zipcode = zipcode,
+                closeDate = null,
+                candidates = emptyList(),
+            ),
+        )
+        val title = "E2E Ballot Measure $n"
+        val draft = ballotMeasures.saveDraft(
+            creator,
+            BallotMeasureDraftRequest(
+                pollTypeId = 3L, // Referendum / Ballot Measure
+                electionId = election.id,
+                title = title,
+                summary = "Seeded for the viewer-searches-views-results e2e test.",
+                effectiveDate = LocalDate.now(),
+                closeDate = null,
+            ),
+        )
+        ballotMeasures.publish(draft.id, creator, confirmed = false)
+        log.info("Seeded published ballot measure id={} title='{}' zip={}", draft.id, title, zipcode)
+        return mapOf("id" to draft.id, "title" to title, "zipcode" to zipcode, "electionId" to election.id)
+    }
+
+    /**
+     * Seeds up to 6 ballot-measure responses from REAL registered users (created
+     * here, `zzz`-prefixed, in the given zip so they count in the poll's purview).
+     * Saved directly via the repository, which bypasses the paid-membership
+     * participation guard — fine for seeding. Cap of 6 keeps totals below the
+     * k-anonymity threshold (10) so a purview/geo-filtered results view withholds.
+     */
+    @PostMapping("/seed-ballot-responses")
+    @Transactional
+    fun seedBallotResponses(
+        @RequestParam(defaultValue = "zzz") emailPrefix: String,
+        @RequestParam measureId: Long,
+        @RequestParam(defaultValue = "3") count: Int,
+        @RequestParam(defaultValue = "80202") zipcode: String,
+    ): Map<String, Any> {
+        require(emailPrefix.length >= 3) {
+            "emailPrefix must be at least 3 characters (safety guard)"
+        }
+        require(count in 1..6) {
+            "count must be between 1 and 6 (stays below the k-anonymity threshold)"
+        }
+        require(zipcode.matches(Regex("^[0-9]{5}$"))) { "zipcode must be 5 digits" }
+        val measure = ballotMeasures.get(measureId)
+        val userIds = mutableListOf<Long>()
+        repeat(count) { i ->
+            val n = System.nanoTime()
+            val voter = users.save(
+                User(
+                    email = "$emailPrefix-bmvoter-$n-$i@test.local",
+                    phone = "+1555${((n + i) % 10_000_000).toString().padStart(7, '0')}",
+                    zipcode = zipcode,
+                    access = AccessLevel.USER,
+                    isEnabled = true,
+                )
+            )
+            ballotResponses.save(
+                BallotResponse(measure = measure, user = voter, response = i % 2 == 0)
+            )
+            userIds.add(voter.id)
+        }
+        log.info("Seeded {} ballot responses for measure {} (zip {})", count, measureId, zipcode)
+        return mapOf("seeded" to count, "measureId" to measureId, "userIds" to userIds)
     }
 
 }
