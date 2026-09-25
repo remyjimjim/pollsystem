@@ -90,6 +90,30 @@ containers and caused the OOM-kills / disconnects / hangs.
 
 **Commit:** `b2645fc`
 
+## 2026-09-25 — dev: cap the Java language server (extensions kept reinstalling)
+
+**Requested:**
+
+> [after a rebuild the Java pack came back despite trimming devcontainer.json +
+> turning off Settings Sync] let's go with 2 [cap JDT.ls] please
+
+**Context:** Trimming the Java extensions out of `devcontainer.json` didn't hold
+— a fresh rebuild reinstalled `redhat.java` + `vscjava.*` (at the host's pinned
+1.56.0), so the source is a host-side `dev.containers.defaultExtensions` /
+Settings Sync, not something the repo controls. Chasing the reinstall path was a
+time sink; bounding the cost is reliable regardless.
+
+**Changed:**
+
+- `.devcontainer/devcontainer.json` `customizations.vscode.settings`:
+  `java.jdt.ls.vmargs=-Xmx640m -XX:MaxMetaspaceSize=256m` (was ballooning to
+  ~1.5 GB), plus `java.autobuild.enabled=false` and
+  `java.configuration.updateBuildConfiguration=disabled` to stop the indexing
+  churn. JDT.ls is now harmless (~640 MB) even when the pack reinstalls.
+- Needs a container rebuild to take effect.
+
+**Commit:** `ee23325`
+
 ## 2026-09-25 — Decision: native Docker Engine as the fallback if instability recurs
 
 **Requested:**
