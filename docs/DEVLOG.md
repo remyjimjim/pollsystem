@@ -90,6 +90,34 @@ containers and caused the OOM-kills / disconnects / hangs.
 
 **Commit:** `b2645fc`
 
+## 2026-09-25 — docs: TESTING-E2E.md (e2e conventions + seed toolkit)
+
+**Requested:**
+
+> Are we documenting our evolving conventions/dsl […] like docs/TESTING-E2E-LOCAL.md
+> or the like? […] if there's nothing that differs if it runs in staging then
+> maybe drop the LOCAL […] we don't want to do anything that creates/deletes/
+> updates […] in production so we might want […] e2e checks for production, but
+> like a last 'to do' […] thoughts?
+
+**Decision:** One doc, `docs/TESTING-E2E.md` (dropped `-LOCAL`), not three files.
+The conventions/DSL are shared across environments (duplicating them would
+drift); the real split — the seeding endpoints are `@Profile("local")` and 404
+on staging/prod — is captured in an "Environments" section (Local today,
+Staging-future = real Stripe-test registration/no seeding, Production-future =
+strictly read-only smoke checks). Also caught this session: Playwright only reads
+`playwright.config.ts` from the launch dir, so e2e must be run from `frontend/`
+(not `frontend/e2e/`) or all CLI tokens are silently ignored — documented in the
+Quick start.
+
+**Changed:**
+
+- Added `docs/TESTING-E2E.md`: naming, reset model, CLI-token table, the
+  `seed.ts` toolkit + seeding rules, the current specs + roadmap, and the
+  per-environment section. Complements `E2E-TRACEABILITY.md` (the coverage matrix).
+
+**Commit:** `9a6a246`
+
 ## 2026-09-25 — e2e: viewer-searches-views-results (ballot-measure k-anonymity)
 
 **Requested:**
