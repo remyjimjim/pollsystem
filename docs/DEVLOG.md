@@ -90,6 +90,28 @@ containers and caused the OOM-kills / disconnects / hangs.
 
 **Commit:** `b2645fc`
 
+## 2026-09-25 — e2e: watchable hold() pauses for headed runs
+
+**Requested:**
+
+> btw, it ran so fast I couldn't tell what it did, maybe make it pause for like
+> 2 seconds, but the performance was top shelf
+
+**Changed:**
+
+- Added a shared `hold(page, ms)` to `frontend/e2e/seed.ts` that pauses on each
+  key screen; runs only for `--headed`/interactive sessions (skipped when
+  `CI=true` or `hold=0`), tunable per run with a new `hold=<ms>` CLI token
+  (default 1.5s), parsed to `E2E_HOLD_MS` in `playwright.config.ts`.
+- Placed the beats through `registerAndSignIn` / `signInSeededUser` (register
+  form → payment landing → signed-in) and the `user-registers-submits-poll`
+  path (search page → result row → answered question → success), so any script
+  reusing those helpers inherits the pacing.
+- Verified: `user-registers-submits-poll state=colorado --headed` passes (`1
+  passed`) — the seed/role-script refactor works end to end.
+
+**Commit:** `6cf7476`
+
 ## 2026-09-25 — dev: cap the Java language server (extensions kept reinstalling)
 
 **Requested:**
