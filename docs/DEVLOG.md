@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-09-26 — dev: fix Dev Container docker socket group (native engine)
+
+**Requested:**
+
+> docker ps → permission denied while trying to connect to the docker API at
+> unix:///var/run/docker.sock
+
+**Context:** After the native-engine migration, `--group-add=984` put vscode in
+the docker group, but the mounted `/var/run/docker.sock` came up `root:root`
+(gid 0) inside the container, so group membership alone didn't grant access.
+
+**Changed:**
+
+- Re-added `postStartCommand: sudo chgrp 984 /var/run/docker.sock` to
+  `.devcontainer/devcontainer.json` — sets the socket's group to the host docker
+  GID on each start (matching `--group-add`), opening it to the docker group
+  only (not world, unlike the old `chmod 666`). Verified `docker ps` works as
+  vscode without sudo, with the full app stack visible under native Docker.
+
+**Commit:** `5948232`
+
 ## 2026-09-26 — dev: migrated Dev Container to native Docker Engine
 
 **Requested:**
