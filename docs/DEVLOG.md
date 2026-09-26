@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-09-26 — feat: creator scope levels, frontend (purview picker)
+
+**Requested:** (continuation of the approved `bright-doodling-axolotl` plan —
+the picker that lets a creator request "whole state" / "national" without
+enumerating zipcodes).
+
+**Changed (frontend):**
+
+- New `components/PurviewSetter.vue`: a scope-level selector (Nationwide / whole
+  state(s) / whole county(ies) / specific zipcodes) that reuses `useGeoPicker`
+  for state/county selection and the shared `ZipSetter` for the ZIP cascade,
+  emitting `{ scopeLevel, regionIds, zipcodes }`.
+- `CreatorRequestView` uses it and posts the new payload — resolving the original
+  **"Select at least one zipcode"** dead-end for whole-state / national requests.
+- Admin queue + detail views render the request's `regionLabel` (scope) instead
+  of a raw zip list.
+- `types`: `ScopeLevel` + `Purview` + new `CreatorRequest` fields; `en.json`
+  gains `purview.*` labels (other locales fall back to en). Frontend type-check
+  clean.
+
+**Commit:** `948a6b9` — completes the creator-scope-levels feature (backend was
+`59b266c`). Browser verification pending.
+
 ## 2026-09-26 — feat: creator scope levels, backend (ZIP|COUNTY|STATE|NATIONAL)
 
 **Requested:**
