@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-09-26 — e2e: user-submits-creator-request (#3) + seed-user endpoint
+
+**Requested:**
+
+> then user-submits-creator-request
+
+**Changed:**
+
+- New `/api/dev/seed-user` (`DevController`): creates a `zzz`-prefixed active
+  member (access USER, `paidUntil` +1y) via the API; `seedUser` wrapper in
+  `frontend/e2e/seed.ts`.
+- New `frontend/e2e/user-submits-creator-request.spec.ts`: seed a member → sign
+  in (reuse, no register) → `/creator/request` → pick "Whole state(s)" + the
+  resolved state + a poll type → Submit → assert the "request submitted"
+  confirmation. Exercises the scope-levels feature end to end; reuse-style
+  (no pre-wipe).
+- Verified: backend `compileKotlin` + e2e type-check + `--list`. Headed run
+  pending.
+
+**Commit:** `0e5c9a5`
+
 ## 2026-09-26 — Verified: creator scope levels work in the browser
 
 **Requested:**
