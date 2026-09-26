@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-09-26 — dev: migrated Dev Container to native Docker Engine
+
+**Requested:**
+
+> sorry about our last session crashing due to docker desktop shutting off,
+> something it'd doing continuously now after about 5 minutes of running […] I
+> think we may need to go that route.
+
+**Context:** Docker Desktop's qemu VM was crashing every ~5 min on Linux — the
+recurrence the 2026-09-25 "native Docker Engine fallback" decision was filed for.
+
+**Changed:**
+
+- Installed native `docker-ce` + `containerd.io` on the host (engine 29.8.1),
+  enabled `docker.service`, stopped Docker Desktop, switched the CLI to the
+  `default` context (socket `/var/run/docker.sock`). The host user was already in
+  the `docker` group.
+- `.devcontainer/devcontainer.json`: mount the native socket instead of
+  `~/.docker/desktop/docker.sock`; add `--group-add=984` (host `docker` GID) so
+  the vscode user can use it; removed the `chmod 666` postStart hack (it would
+  loosen the host's real socket).
+- Verified: daemon serves, `docker ps` without sudo, `hello-world` runs, and a
+  BuildKit `--mount=type=cache` build succeeds on the `default` builder (the
+  backend image's requirement). No qemu VM → the ~5-min crashes are gone.
+
+**Note:** native Docker has its own image/volume store (separate from Desktop's
+VM), so local images rebuild on first `local-docker` and the local dev DB starts
+empty. Realizes the native-engine fallback decision recorded on 2026-09-25.
+
+**Commit:** `e1ed29f`
+
 ## 2026-09-25 — dev: cut Docker VM memory pressure (VS Code / Docker stability)
 
 **Requested:**
