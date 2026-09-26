@@ -63,6 +63,12 @@
   // the mounted ~/.claude for auth + history).
   "postCreateCommand": "npm install -g @anthropic-ai/claude-code",
 
+  // Native docker-ce's socket can come up root:root inside the container, so
+  // --group-add alone isn't enough. Set the mounted socket's group to the host
+  // docker GID (984, matching --group-add above) on each start so vscode can use
+  // it without sudo. Only opens it to the docker group — not world (unlike chmod 666).
+  "postStartCommand": "sudo chgrp 984 /var/run/docker.sock",
+
   "customizations": {
     "vscode": {
       // Bound the Java language server REGARDLESS of whether the Java pack gets
