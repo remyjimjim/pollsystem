@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.Instant
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 // Dev-only utilities. @Profile("local") means the bean is not registered
 // under the `test` or `prod` profiles — in prod the path 404s because no
@@ -283,6 +285,38 @@ class DevController(
         }
         log.info("Seeded {} ballot responses for measure {} (zip {})", count, measureId, zipcode)
         return mapOf("seeded" to count, "measureId" to measureId, "userIds" to userIds)
+    }
+
+    /**
+     * Seeds a single registered, active (paid) user via the API — no UI, no
+     * Stripe. `zzz`-prefixed with a unique nanoTime email so re-runs don't
+     * collide (cleaned by reset-test-users). Used by reuse specs (e.g.
+     * user-submits-creator-request) that need an existing member to sign in as.
+     */
+    @PostMapping("/seed-user")
+    @Transactional
+    fun seedUser(
+        @RequestParam(defaultValue = "zzz") emailPrefix: String,
+        @RequestParam(defaultValue = "USER") access: String,
+        @RequestParam(defaultValue = "80202") zipcode: String,
+    ): Map<String, Any> {
+        require(emailPrefix.length >= 3) {
+            "emailPrefix must be at least 3 characters (safety guard)"
+        }
+        val n = System.nanoTime()
+        val user = users.save(
+            User(
+                email = "$emailPrefix-user-$n@test.local",
+                phone = "+1555${(n % 10_000_000).toString().padStart(7, '0')}",
+                zipcode = zipcode,
+                access = AccessLevel.valueOf(access.uppercase()),
+                isEnabled = true,
+                // Active member so member-gated flows (e.g. Become a Creator) work.
+                paidUntil = Instant.now().plus(365, ChronoUnit.DAYS),
+            )
+        )
+        log.info("Seeded {} user id={} email={}", user.access, user.id, user.email)
+        return mapOf("id" to user.id, "email" to user.email)
     }
 
 }

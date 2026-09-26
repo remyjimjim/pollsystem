@@ -133,6 +133,20 @@ export async function seedQuestionnaire(prefix = 'zzz'): Promise<{ id: number; t
   return (await res.json()) as { id: number; title: string }
 }
 
+/** Seed one registered, active member via the API; returns its unique email. */
+export async function seedUser(
+  opts: { access?: string; zipcode?: string; prefix?: string } = {},
+): Promise<{ id: number; email: string }> {
+  const q = new URLSearchParams({
+    emailPrefix: opts.prefix ?? 'zzz',
+    access: opts.access ?? 'USER',
+    zipcode: opts.zipcode ?? '80202',
+  })
+  const res = await fetch(`${API}/api/dev/seed-user?${q}`, { method: 'POST' })
+  if (!res.ok) throw new Error(`seed-user failed: ${res.status} ${await res.text().catch(() => '')}`)
+  return (await res.json()) as { id: number; email: string }
+}
+
 /** Seed a published ballot measure at a real zip; returns its id + unique title. */
 export async function seedBallotMeasure(
   opts: { zipcode: string; prefix?: string },
