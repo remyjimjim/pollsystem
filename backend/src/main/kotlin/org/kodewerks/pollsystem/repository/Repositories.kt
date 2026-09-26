@@ -42,6 +42,7 @@ interface RoleAssignmentRepository : JpaRepository<RoleAssignment, Long> {
     fun findByAdminRequestId(adminRequestId: Long): List<RoleAssignment>
     fun findByAdminRequestIdIn(adminRequestIds: List<Long>): List<RoleAssignment>
     fun findByUserIdInAndRole(userIds: List<Long>, role: AccessLevel): List<RoleAssignment>
+    fun findByRoleAndEnabled(role: AccessLevel, enabled: Boolean): List<RoleAssignment>
 
     @Query("""
         SELECT ra FROM RoleAssignment ra 

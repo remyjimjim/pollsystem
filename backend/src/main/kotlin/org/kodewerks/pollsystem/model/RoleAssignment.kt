@@ -21,20 +21,27 @@ data class RoleAssignment(
     @Column(nullable = false, columnDefinition = "access_level")
     val role: AccessLevel,
 
+    // Grant granularity. ZIP (default) fills state+county+zipcode; COUNTY fills
+    // state+county; STATE fills state; NATIONAL leaves all three null.
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "scope_level", nullable = false, columnDefinition = "scope_level")
+    val scopeLevel: ScopeLevel = ScopeLevel.ZIP,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "poll_type_id")
     val pollType: PollType? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "state_id", nullable = false)
-    val state: State,
+    @JoinColumn(name = "state_id")
+    val state: State? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "county_id", nullable = false)
-    val county: County,
+    @JoinColumn(name = "county_id")
+    val county: County? = null,
 
-    @Column(nullable = false, length = 5)
-    val zipcode: String,
+    @Column(length = 5)
+    val zipcode: String? = null,
 
     @Column(nullable = false)
     val enabled: Boolean = false,

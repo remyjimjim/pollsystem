@@ -115,13 +115,13 @@ class AdminPollsController(
             .findByUserIdAndRole(principal.user.id, AccessLevel.ADMIN)
             .filter { it.enabled }
         if (mine.isEmpty()) return PurviewDto(emptyList(), emptyList(), emptyList(), unrestricted = false)
-        val stateOpts = mine.map { it.state }.distinctBy { it.id }
+        val stateOpts = mine.mapNotNull { it.state }.distinctBy { it.id }
             .sortedBy { it.name }
             .map { StateOption(it.id, it.name, it.initial) }
-        val countyOpts = mine.map { it.county }.distinctBy { it.id }
+        val countyOpts = mine.mapNotNull { it.county }.distinctBy { it.id }
             .sortedBy { it.name }
             .map { CountyOption(it.id, it.state.id, it.name) }
-        val zips = mine.map { it.zipcode }.distinct().sorted()
+        val zips = mine.mapNotNull { it.zipcode }.distinct().sorted()
         return PurviewDto(stateOpts, countyOpts, zips, unrestricted = false)
     }
 
@@ -376,9 +376,9 @@ class AdminPollsController(
             .findByUserIdAndRole(principal.user.id, AccessLevel.ADMIN)
             .filter { it.enabled }
         return Purview(
-            zipcodes = mine.map { it.zipcode }.toSet(),
-            countyIds = mine.map { it.county.id }.toSet(),
-            stateIds = mine.map { it.state.id }.toSet()
+            zipcodes = mine.mapNotNull { it.zipcode }.toSet(),
+            countyIds = mine.mapNotNull { it.county?.id }.toSet(),
+            stateIds = mine.mapNotNull { it.state?.id }.toSet()
         )
     }
 

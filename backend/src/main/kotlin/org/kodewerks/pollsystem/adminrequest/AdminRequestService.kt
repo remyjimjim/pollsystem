@@ -152,7 +152,7 @@ class AdminRequestService(
 
     fun toDto(req: AdminRequest): AdminRequestDto {
         val zips = roleAssignments.findByAdminRequestId(req.id)
-            .map { it.zipcode }
+            .mapNotNull { it.zipcode }
             .distinct()
             .sorted()
         return AdminRequestDto.from(req, zips)

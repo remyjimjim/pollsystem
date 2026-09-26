@@ -4,6 +4,7 @@ import org.kodewerks.pollsystem.creatorrequest.CreatorRequestDto
 import org.kodewerks.pollsystem.creatorrequest.CreatorRequestService
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.RequestStatus
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.repository.CreatorRequestRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
 import org.kodewerks.pollsystem.security.AppUserDetails
@@ -58,15 +59,17 @@ class AdminDashboardController(
         // Zipcodes I administer
         val myAdminRows = roleAssignments
             .findByUserIdAndRole(me.id, AccessLevel.ADMIN)
-            .filter { it.enabled }
+            .filter { it.enabled && it.zipcode != null && it.state != null && it.county != null }
         val scope = myAdminRows.map {
             AdminZipcodeScope(
-                stateInitial = it.state.initial,
-                countyName = it.county.name,
-                zipcode = it.zipcode
+                stateInitial = it.state!!.initial,
+                countyName = it.county!!.name,
+                zipcode = it.zipcode!!
             )
         }.sortedWith(compareBy({ it.stateInitial }, { it.countyName }, { it.zipcode }))
         val myZipcodes = scope.map { it.zipcode }.toSet()
+        // States I administer — for scope-aware creator-request visibility below.
+        val myStateIds = myAdminRows.mapNotNull { it.state?.id }.toSet()
 
         // Pending requests routed to me
         val mine = creatorRequests.findByAssignedAdminAndStatus(me, RequestStatus.PENDING)
@@ -81,7 +84,8 @@ class AdminDashboardController(
         val unassigned = creatorRequests.findByStatus(RequestStatus.PENDING)
             .filter { it.assignedAdmin == null }
             .map(service::toDto)
-            .filter { dto -> dto.zipcodes.any { it in myZipcodes } }
+            // Visible if the request's scope intersects my states; NATIONAL to all.
+            .filter { dto -> dto.scopeLevel == ScopeLevel.NATIONAL || dto.stateIds.any { it in myStateIds } }
             .sortedByDescending { it.submittedAt }
         val staleCount = unassigned.count { it.submittedAt.isBefore(staleCutoff) }
 
