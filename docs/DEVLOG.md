@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-09-26 — feat: creator scope levels, backend (ZIP|COUNTY|STATE|NATIONAL)
+
+**Requested:**
+
+> if a user wants to create polls for an entire state then he/she should be able
+> to create a poll for any county and any zipcode in the state. Also, if one wants
+> to create a national election then one would select all states and submit.
+
+Followed the approved plan (`bright-doodling-axolotl`): scope levels across
+request → grant → routing/visibility. Decisions: scope-model only (no new
+poll-creation enforcement this pass), any admin approves any scope.
+
+**Changed (backend):**
+
+- `V19__creator_scope_levels.sql`: new `scope_level` enum; `role_assignments`
+  gains `scope_level` (default `ZIP` so existing rows backfill) with
+  `state_id`/`county_id`/`zipcode` made nullable so a coarse grant is one row.
+- `RoleAssignment` entity: `scopeLevel` + nullable state/county/zipcode.
+- `SubmitCreatorRequest` gains `scopeLevel` + `regionIds`; `submit` fans out per
+  scope (NATIONAL = 1 row/poll-type … ZIP unchanged) with level-aware validation;
+  `toDto` returns `scopeLevel` + `stateIds` + a human `regionLabel`.
+- `routeToAdmin` + `AdminDashboardController` visibility generalized from
+  zipcode- to state-set intersection (NATIONAL visible to all admins).
+- Null-safety for admin-side readers of the now-nullable geo columns.
+- Backward compatible (DTO defaults `ZIP`). Verified: compileKotlin + full test
+  suite green (Flyway V1→V19 applies). Frontend `PurviewSetter` is the next step.
+
+**Commit:** `59b266c`
+
 ## 2026-09-26 — dev: fix Dev Container docker socket group (native engine)
 
 **Requested:**
