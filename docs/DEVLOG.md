@@ -61,6 +61,21 @@ logged.
 
 ---
 
+## 2026-09-26 — Verified: creator scope levels work in the browser
+
+**Requested:**
+
+> I do believe it works... what's next?
+
+**Verified:** Manual browser pass on local-docker (native Docker). A user's
+creator request via the new `PurviewSetter` submits successfully at STATE (whole
+Colorado) and NATIONAL scope with **no "Select at least one zipcode"** error, and
+the coarse grant is stored. Backend health checked alongside: Flyway V19 applied,
+`role_assignments.scope_level` NOT NULL with `state_id`/`zipcode` nullable,
+`GET /api/states` → 200.
+
+**Commit:** none — verification only (exercised `948a6b9` / `59b266c`).
+
 ## 2026-09-26 — feat: creator scope levels, frontend (purview picker)
 
 **Requested:** (continuation of the approved `bright-doodling-axolotl` plan —
