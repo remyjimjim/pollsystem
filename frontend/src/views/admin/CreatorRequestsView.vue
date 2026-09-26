@@ -3,7 +3,6 @@ import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import type { RequestStatus } from '@/types'
-import { formatZipList } from '@/utils/formatZipList'
 
 const { t } = useI18n()
 
@@ -14,6 +13,7 @@ interface CreatorRequestDto {
   assignedAdminId: number | null
   status: RequestStatus
   reason: string
+  regionLabel: string
   zipcodes: string[]
   pollTypeIds: number[]
   submittedAt: string
@@ -141,8 +141,8 @@ onMounted(load)
             />
           </td>
           <td class="border-b border-slate-100 p-2 align-top">{{ r.userEmail }}</td>
-          <td class="border-b border-slate-100 p-2 align-top font-mono text-xs">
-            {{ formatZipList(r.zipcodes) }}
+          <td class="border-b border-slate-100 p-2 align-top text-xs">
+            {{ r.regionLabel }}
           </td>
           <td class="border-b border-slate-100 p-2 align-top" style="max-width: 360px">
             {{ r.reason }}

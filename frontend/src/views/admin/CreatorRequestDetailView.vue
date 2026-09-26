@@ -3,7 +3,6 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import axios from 'axios'
-import { formatZipList } from '@/utils/formatZipList'
 
 const { t } = useI18n()
 
@@ -14,6 +13,7 @@ interface CreatorRequestDto {
   assignedAdminId: number | null
   status: 'PENDING' | 'APPROVED' | 'REJECTED'
   reason: string
+  regionLabel: string
   zipcodes: string[]
   pollTypeIds: number[]
   submittedAt: string
@@ -94,8 +94,8 @@ onMounted(load)
         <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.requester') }}</dt>
         <dd>{{ data.userEmail }}</dd>
 
-        <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.zipcodes') }}</dt>
-        <dd class="font-mono text-xs">{{ formatZipList(data.zipcodes) }}</dd>
+        <dt class="font-semibold text-slate-700">{{ $t('common.geoScope') }}</dt>
+        <dd class="text-xs">{{ data.regionLabel }}</dd>
 
         <dt class="font-semibold text-slate-700">{{ $t('admin.creatorRequestDetail.pollTypes') }}</dt>
         <dd>{{ data.pollTypeIds.join(', ') }}</dd>

@@ -392,7 +392,15 @@
     "submitting": "Submitting…",
     "errorNoPollType": "Select at least one poll type",
     "errorNoZipcode": "Select at least one zipcode",
+    "errorNoScope": "Select at least one region for the chosen scope",
     "errorSubmission": "Submission failed"
+  },
+  "purview": {
+    "national": "Nationwide",
+    "state": "Whole state(s)",
+    "county": "Whole county(ies)",
+    "zip": "Specific zipcodes",
+    "nationalNote": "This request will cover every state, county, and zipcode nationwide."
   },
   "adminRequest": {
     "heading": "Request Admin Access",

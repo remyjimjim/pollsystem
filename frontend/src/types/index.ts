@@ -20,6 +20,21 @@ export enum PollStatus {
   ARCHIVED = 'ARCHIVED'
 }
 
+export enum ScopeLevel {
+  ZIP = 'ZIP',
+  COUNTY = 'COUNTY',
+  STATE = 'STATE',
+  NATIONAL = 'NATIONAL'
+}
+
+// The purview a creator request targets, emitted by PurviewSetter. regionIds are
+// stateIds for STATE, countyIds for COUNTY; zipcodes for ZIP; both empty for NATIONAL.
+export interface Purview {
+  scopeLevel: ScopeLevel
+  regionIds: number[]
+  zipcodes: string[]
+}
+
 // Core Types
 export interface User {
   id: number
@@ -56,6 +71,11 @@ export interface CreatorRequest {
   assignedAdminId: number | null
   status: RequestStatus
   reason: string
+  scopeLevel: ScopeLevel
+  stateIds: number[]
+  regionLabel: string
+  zipcodes: string[]
+  pollTypeIds: number[]
   submittedAt: string
   processedAt: string | null
 }

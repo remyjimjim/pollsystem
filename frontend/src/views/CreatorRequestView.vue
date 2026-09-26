@@ -2,16 +2,14 @@
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
-import type { PollType } from '@/types'
-import ZipSetter from '@/components/ZipSetter.vue'
-import { formatZipList } from '@/utils/formatZipList'
+import { ScopeLevel, type PollType, type Purview } from '@/types'
+import PurviewSetter from '@/components/PurviewSetter.vue'
 
 const { t } = useI18n()
 
 const pollTypes = ref<PollType[]>([])
 const selectedPollTypeIds = ref<number[]>([])
-const zipcodes = ref<string[]>([])
-const totalZipsAvailable = ref<number>(0)
+const purview = ref<Purview>({ scopeLevel: ScopeLevel.STATE, regionIds: [], zipcodes: [] })
 const reason = ref('')
 
 const submitting = ref(false)
@@ -31,21 +29,30 @@ onMounted(async () => {
   }
 })
 
+function scopeIncomplete(): boolean {
+  const p = purview.value
+  if (p.scopeLevel === ScopeLevel.NATIONAL) return false
+  if (p.scopeLevel === ScopeLevel.ZIP) return p.zipcodes.length === 0
+  return p.regionIds.length === 0 // STATE / COUNTY
+}
+
 async function onSubmit() {
   error.value = null
   if (selectedPollTypeIds.value.length === 0) {
     error.value = t('creatorRequest.errorNoPollType')
     return
   }
-  if (zipcodes.value.length === 0) {
-    error.value = t('creatorRequest.errorNoZipcode')
+  if (scopeIncomplete()) {
+    error.value = t('creatorRequest.errorNoScope')
     return
   }
   submitting.value = true
   try {
     await axios.post('/api/creator-requests', {
       pollTypeIds: selectedPollTypeIds.value,
-      zipcodes: zipcodes.value,
+      scopeLevel: purview.value.scopeLevel,
+      regionIds: purview.value.regionIds,
+      zipcodes: purview.value.zipcodes,
       reason: reason.value.trim()
     })
     submitted.value = true
@@ -77,10 +84,7 @@ async function onSubmit() {
 
       <fieldset class="rounded-md border border-slate-200 p-4">
         <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('common.geoScope') }}</legend>
-        <ZipSetter v-model="zipcodes" v-model:total="totalZipsAvailable" />
-        <p v-if="zipcodes.length > 0" class="mt-2 text-sm text-slate-600">
-          {{ $t('creatorRequest.selectedZipcodes') }} {{ formatZipList(zipcodes, { totalAvailable: totalZipsAvailable }) }}
-        </p>
+        <PurviewSetter v-model="purview" />
       </fieldset>
 
       <fieldset class="rounded-md border border-slate-200 p-4">
