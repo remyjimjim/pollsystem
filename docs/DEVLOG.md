@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: within/outside-purview results split + purview-aware search (Phases C, D)
+
+**Requested:**
+
+> a poll's purview means the polls results should be split into 2 groups […]
+> 'within purview' […] 'outside purview' […] 2 checkboxes […] If a user searches
+> on the zipcode 98225 then the user should [see] polls whose purview includes the
+> zipcode 98225
+
+> go cat go...
+
+**Changed:**
+
+The read side of the purview feature now consumes `poll_purviews` (backfilled in
+Phase A, kept in sync by B.1). See [[project_poll_purview]].
+
+- **Results (C)** — all three results controllers replace the single `onlyPurview`
+  flag with `withinPurview` + `outsidePurview` params. Respondents are partitioned
+  by whether their zipcode falls inside the poll's purview, via a new batch
+  classifier `PollPurviewService.classifyZips` (one geo query, level-based:
+  NATIONAL→all, STATE→zip's state, COUNTY→zip's county, ZIP→exact). k-anonymity
+  applies to the shown group; both-on is the unfiltered default. Shared
+  `filterByPurview` + `describeFilter(within,outside)` in `ResultsFilters`.
+  `PollResultsView` swaps its one checkbox for two.
+- **Search (D)** — `PollSearchController` now surfaces a poll on a geo search when
+  the *searched* location falls inside the poll's purview (zip ∈ county ∈ state ∈
+  nation), read from `poll_purviews` — instead of matching the poll's own stored
+  zip. Searched zips are resolved to their counties/states once; purview rows are
+  loaded only when a geo filter is active. Ballot measures use their election's
+  purview. No frontend change (same search params).
+- **Tests** — `classifyZips`, `filterByPurview`, the within/outside results split
+  (reusing the test-profile k-anon threshold of 3), and STATE/NATIONAL search
+  matching. Existing `onlyPurview` results test rewritten to the split.
+
+Still ahead: the coarse-purview *creation UI* (elections → County/State/National,
+questionnaires → full path), which will make `elections.zipcode` nullable with
+`poll_purviews` as the source of truth (pending the user's confirmation).
+
+**Commit:** `f4f4e1b`
+
 ## 2026-09-27 — feat: purview write path on poll create/edit (Phase B.1)
 
 **Requested:**
