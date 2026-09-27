@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: poll purview foundation (Phase A)
+
+**Requested:**
+
+> [purview design settled over discussion; see [[project_poll_purview]]]
+
+> Confirm all 3 [model decisions] […] start with Phase E first
+
+**Changed:**
+
+Phase A of the poll-purview initiative — the data model + membership service.
+Backend-only; nothing reads it yet, so no behavior change (Phases C/D wire it into
+results and search).
+
+- **Migration V22** — `poll_purviews`: polymorphic `(poll_type, poll_id)`,
+  `scope_level` (reusing the V19 enum) + nullable `state_id`/`county_id`/`zipcode`,
+  a target-match CHECK per level, and an index. Backfill: elections → a COUNTY row
+  from their `zipcode`; questionnaires → one ZIP row per `questionnaire_domains`
+  zip. Ballot measures store no rows (they inherit their election's purview).
+- **`PollPurview`** entity + **`PollPurviewRepository`**.
+- **`PollPurviewService`** — `includesZip` computed by scope LEVEL (NATIONAL → all,
+  STATE → zip's state, COUNTY → zip's county, ZIP → exact match; no rows =
+  nationwide); `purviewOf` resolves a ballot measure to its election's rows. Same
+  predicate serves both the results within/outside split and zip search.
+- **Tests** — each scope level, the null-zip cases, the nationwide default, and
+  ballot-measure inheritance.
+
+**Commit:** `9a5a91b`
+
 ## 2026-09-27 — feat: scope the poll kill-switch to submissions only
 
 **Requested:**
