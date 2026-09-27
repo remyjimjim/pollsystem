@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: purview write path on poll create/edit (Phase B.1)
+
+**Requested:**
+
+> go, you're doing wonderfully...
+
+**Changed:**
+
+The write half of Phase B. `PollPurviewService.replacePurview(kind, pollId,
+scopeLevel, regionIds, zipcodes)` — a delete-then-insert fan-out (ZIP/COUNTY/STATE/
+NATIONAL, setting only the level's own geo column per the V22 CHECK, strict
+validation, rejects ballot measures). Wired into `ElectionService` and
+`QuestionnaireService` create/edit, so `poll_purviews` now stays synced on every
+write (Phase A only backfilled existing rows). Mirror is ZIP-level from the current
+geo inputs; the election mirror is best-effort (an unknown legacy zip — only
+pattern-validated, not required to exist — must not block creation). Non-breaking:
+no user-facing path reads `poll_purviews` yet.
+
+**Coupling discovered (informs the remaining sequence):** the legacy geo columns
+(`elections.zipcode`, zip-only `questionnaire_domains`) can't represent a coarse
+(County/State/National) purview, and results/search still read them. So the
+coarse-purview *creation UI* is coupled to first switching results (Phase C) and
+search (Phase D) onto `poll_purviews`. Revised order: **C + D (read side) → then the
+County/State/National creation UI**, and that UI step will make `elections.zipcode`
+nullable with purview as the source of truth (pending the user's confirmation).
+
+**Commit:** `c4d5614`
+
 ## 2026-09-27 — test(e2e): super-disables-submissions kill-switch flow
 
 **Requested:**
