@@ -563,7 +563,19 @@
       "errorBlock": "Block change failed",
       "errorNotes": "Failed to load notes",
       "errorSaveNote": "Failed to save note",
-      "errorBodyLength": "Note must be 1–2000 characters."
+      "errorBodyLength": "Note must be 1–2000 characters.",
+      "colActions": "Actions",
+      "editButton": "Edit",
+      "editModalTitle": "Edit {title}",
+      "editStatus": "Status",
+      "statusPublished": "Published",
+      "statusClosed": "Closed",
+      "statusArchived": "Archived",
+      "editCloseDate": "Close date",
+      "editReason": "Reason (recorded as a note)",
+      "editSaved": "Poll updated.",
+      "errorReasonLength": "Reason must be 1–2000 characters.",
+      "errorSaveEdit": "Failed to update poll"
     }
   },
   "super": {

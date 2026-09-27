@@ -533,6 +533,70 @@ async function saveNote() {
   }
 }
 
+// ---------- edit modal (status / close date + reason + notify) ----------
+const EDITABLE_STATUSES = ['PUBLISHED', 'CLOSED', 'ARCHIVED'] as const
+const editModalOpen = ref(false)
+const editModalRow = ref<PollRow | null>(null)
+const editStatus = ref<string>('PUBLISHED')
+const editCloseDate = ref('')
+const editReason = ref('')
+const editNotify = ref(false)
+const editSaving = ref(false)
+const editError = ref<string | null>(null)
+
+/** ISO instant → value for a `datetime-local` input, in the admin's local zone. */
+function toLocalInput(iso: string | null): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+function openEditModal(row: PollRow) {
+  editModalRow.value = row
+  editStatus.value = (EDITABLE_STATUSES as readonly string[]).includes(row.status) ? row.status : 'PUBLISHED'
+  editCloseDate.value = toLocalInput(row.closeDate)
+  editReason.value = ''
+  editNotify.value = false
+  editError.value = null
+  editModalOpen.value = true
+}
+function closeEditModal() {
+  editModalOpen.value = false
+  editModalRow.value = null
+}
+async function saveEdit() {
+  if (!editModalRow.value) return
+  const reason = editReason.value.trim()
+  if (reason.length === 0 || reason.length > 2000) {
+    editError.value = t('admin.managePolls.errorReasonLength'); return
+  }
+  editSaving.value = true
+  editError.value = null
+  try {
+    // A pre-filled close date is sent back unchanged so it isn't cleared;
+    // an empty input leaves the (already-null) close date unchanged.
+    const closeDate = editCloseDate.value ? new Date(editCloseDate.value).toISOString() : null
+    const res = await axios.put<NoteDto>(
+      `/api/admin/polls/${editModalRow.value.type}/${editModalRow.value.id}`,
+      { status: editStatus.value, closeDate, reason, notifyCreator: editNotify.value }
+    )
+    const updated: PollRow = {
+      ...editModalRow.value,
+      status: editStatus.value,
+      closeDate: closeDate ?? editModalRow.value.closeDate,
+      latestNote: res.data,
+    }
+    results.value = results.value.map(r => (r.id === updated.id && r.type === updated.type ? updated : r))
+    message.value = t('admin.managePolls.editSaved')
+    closeEditModal()
+  } catch (e: any) {
+    editError.value = e?.response?.data?.message ?? t('admin.managePolls.errorSaveEdit')
+  } finally {
+    editSaving.value = false
+  }
+}
+
 // ---------- global UI ----------
 function onDocClick(e: MouseEvent) {
   const target = e.target as HTMLElement | null
@@ -547,6 +611,7 @@ function onEsc(e: KeyboardEvent) {
   zipPickerOpen.value = false
   if (noteModalOpen.value) closeNoteModal()
   if (blockModalOpen.value) closeBlockModal()
+  if (editModalOpen.value) closeEditModal()
 }
 function previewText(body: string): string {
   const flat = body.replace(/\s+/g, ' ').trim()
@@ -729,6 +794,7 @@ onBeforeUnmount(() => {
           <th @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCloses') }}{{ sortIndicator('closeDate') }}</th>
           <th @click="toggleSort('blocked')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colEnable') }}{{ sortIndicator('blocked') }}</th>
           <th @click="toggleSort('note')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colNote') }}{{ sortIndicator('note') }}</th>
+          <th class="select-none border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.managePolls.colActions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -769,6 +835,12 @@ onBeforeUnmount(() => {
                 {{ $t('admin.managePolls.noteNew') }}
               </button>
             </template>
+          </td>
+          <td class="border-b border-slate-100 p-2">
+            <button type="button" @click="openEditModal(row)"
+              class="rounded border border-slate-300 px-2 py-0.5 text-xs hover:bg-slate-50">
+              {{ $t('admin.managePolls.editButton') }}
+            </button>
           </td>
         </tr>
       </tbody>
@@ -879,6 +951,56 @@ onBeforeUnmount(() => {
           <button type="button" @click="saveNote" :disabled="noteModalSaving"
             class="rounded bg-slate-800 px-4 py-1.5 text-sm text-white hover:bg-slate-900 disabled:opacity-60">
             {{ noteModalSaving ? $t('common.saving') : $t('common.save') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit modal -->
+    <div v-if="editModalOpen" role="dialog" aria-modal="true"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" @click.self="closeEditModal">
+      <div class="w-full max-w-lg rounded-md bg-white p-4 shadow-lg">
+        <header class="mb-2 flex items-center justify-between">
+          <strong class="text-sm text-slate-800">{{ $t('admin.managePolls.editModalTitle', { title: editModalRow?.title ?? '' }) }}</strong>
+          <button @click="closeEditModal" :aria-label="$t('common.close')" class="rounded p-1 text-slate-500 hover:bg-slate-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="h-4 w-4" aria-hidden="true"><path fill="currentColor" d="M5.7 4.3 4.3 5.7 8.6 10l-4.3 4.3 1.4 1.4L10 11.4l4.3 4.3 1.4-1.4L11.4 10l4.3-4.3-1.4-1.4L10 8.6 5.7 4.3z" /></svg>
+          </button>
+        </header>
+
+        <label class="mb-3 flex flex-col gap-1 text-sm font-semibold text-slate-700">
+          {{ $t('admin.managePolls.editStatus') }}
+          <select v-model="editStatus" class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none">
+            <option value="PUBLISHED">{{ $t('admin.managePolls.statusPublished') }}</option>
+            <option value="CLOSED">{{ $t('admin.managePolls.statusClosed') }}</option>
+            <option value="ARCHIVED">{{ $t('admin.managePolls.statusArchived') }}</option>
+          </select>
+        </label>
+
+        <label class="mb-3 flex flex-col gap-1 text-sm font-semibold text-slate-700">
+          {{ $t('admin.managePolls.editCloseDate') }}
+          <input v-model="editCloseDate" type="datetime-local"
+            class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
+        </label>
+
+        <label class="mb-1 flex flex-col gap-1 text-sm font-semibold text-slate-700">
+          {{ $t('admin.managePolls.editReason') }}
+          <textarea v-model="editReason" maxlength="2000" rows="5"
+            class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
+        </label>
+        <p class="mb-2 text-right text-xs text-slate-500">{{ editReason.length }}/2000</p>
+        <p v-if="editError" class="mb-2 text-xs text-red-700">{{ editError }}</p>
+
+        <label class="mb-3 flex items-center gap-2 text-xs text-slate-700">
+          <input v-model="editNotify" type="checkbox" class="h-4 w-4" />
+          {{ $t('admin.managePolls.sendToCreator', { email: editModalRow?.creatorEmail ?? '' }) }}
+        </label>
+
+        <div class="flex justify-end gap-2">
+          <button type="button" @click="closeEditModal"
+            class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50">{{ $t('common.close') }}</button>
+          <button type="button" @click="saveEdit" :disabled="editSaving"
+            class="rounded bg-slate-800 px-4 py-1.5 text-sm text-white hover:bg-slate-900 disabled:opacity-60">
+            {{ editSaving ? $t('common.saving') : $t('common.save') }}
           </button>
         </div>
       </div>
