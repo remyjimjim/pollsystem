@@ -323,6 +323,9 @@ interface PollTypeBlockRepository : JpaRepository<PollTypeBlock, Long> {
 }
 
 @Repository
+interface AppFlagRepository : JpaRepository<AppFlag, Int>
+
+@Repository
 interface PollNoteRepository : JpaRepository<PollNote, Long> {
     fun findByPollTypeAndPollIdOrderByCreatedAtDesc(pollType: PollKind, pollId: Long): List<PollNote>
 

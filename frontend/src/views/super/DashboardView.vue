@@ -19,9 +19,43 @@ interface AdminWorkloadDto {
   rows: AdminWorkloadRow[]
 }
 
+interface FlagsDto {
+  pollsDisabled: boolean
+  updatedAt: string
+  updatedBy: number | null
+}
+
 const load = ref<AdminWorkloadDto | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
+
+const flag = ref<FlagsDto | null>(null)
+const flagBusy = ref(false)
+const flagError = ref<string | null>(null)
+
+async function fetchFlag() {
+  try {
+    flag.value = (await axios.get<FlagsDto>('/api/super/flags')).data
+  } catch (e: any) {
+    flagError.value = e?.response?.data?.message ?? t('super.dashboard.killSwitch.error')
+  }
+}
+
+async function setPollsDisabled(disabled: boolean) {
+  const msg = disabled
+    ? t('super.dashboard.killSwitch.confirmDisable')
+    : t('super.dashboard.killSwitch.confirmEnable')
+  if (!window.confirm(msg)) return
+  flagBusy.value = true
+  flagError.value = null
+  try {
+    flag.value = (await axios.put<FlagsDto>('/api/super/flags/polls-disabled', { disabled })).data
+  } catch (e: any) {
+    flagError.value = e?.response?.data?.message ?? t('super.dashboard.killSwitch.error')
+  } finally {
+    flagBusy.value = false
+  }
+}
 
 async function fetchLoad() {
   loading.value = true
@@ -40,7 +74,10 @@ function pct(share: number): string {
   return `${(share * 100).toFixed(1)}%`
 }
 
-onMounted(fetchLoad)
+onMounted(() => {
+  fetchLoad()
+  fetchFlag()
+})
 </script>
 
 <template>
@@ -91,6 +128,38 @@ onMounted(fetchLoad)
         <p class="m-0 text-sm text-slate-600">{{ $t('super.dashboard.linksManagePollsDesc') }}</p>
       </router-link>
     </div>
+
+    <section
+      class="mb-8 rounded-lg border p-5"
+      :class="flag?.pollsDisabled ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="font-semibold text-slate-800">{{ $t('super.dashboard.killSwitch.heading') }}</h2>
+          <p class="m-0 mt-1 text-sm text-slate-600">
+            <template v-if="flag">
+              <span :class="flag.pollsDisabled ? 'font-semibold text-red-700' : 'font-semibold text-green-700'">
+                {{ flag.pollsDisabled ? $t('super.dashboard.killSwitch.statusDisabled') : $t('super.dashboard.killSwitch.statusEnabled') }}
+              </span>
+              — {{ $t('super.dashboard.killSwitch.blurb') }}
+            </template>
+            <template v-else>{{ $t('common.loading') }}</template>
+          </p>
+          <p v-if="flagError" class="mt-1 text-xs text-red-700">{{ flagError }}</p>
+        </div>
+        <button
+          v-if="flag"
+          @click="setPollsDisabled(!flag.pollsDisabled)"
+          :disabled="flagBusy"
+          class="shrink-0 rounded px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+          :class="flag.pollsDisabled ? 'bg-green-700 hover:bg-green-800' : 'bg-red-700 hover:bg-red-800'"
+        >
+          {{ flagBusy
+            ? $t('common.saving')
+            : (flag.pollsDisabled ? $t('super.dashboard.killSwitch.enableButton') : $t('super.dashboard.killSwitch.disableButton')) }}
+        </button>
+      </div>
+    </section>
 
     <section>
       <div class="mb-2 flex items-center justify-between">

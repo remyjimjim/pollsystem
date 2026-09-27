@@ -604,7 +604,18 @@
       "colStale": "Stale (>48h)",
       "footnote": "⚠ flags admins whose pending share exceeds {threshold} (configurable via {key}).",
       "warnTitle": "Pending share exceeds {threshold}",
-      "errorLoad": "Failed to load admin workload"
+      "errorLoad": "Failed to load admin workload",
+      "killSwitch": {
+        "heading": "Poll availability",
+        "statusEnabled": "Polls are ENABLED",
+        "statusDisabled": "Polls are DISABLED",
+        "blurb": "Disabling takes every public poll page and submission offline immediately (503). Emergency use only.",
+        "disableButton": "Disable all polls",
+        "enableButton": "Re-enable polls",
+        "confirmDisable": "Disable ALL polls now? Every public poll page and submission will return 503 until you re-enable them.",
+        "confirmEnable": "Re-enable all polls?",
+        "error": "Failed to update poll availability"
+      }
     },
     "adminRequests": {
       "heading": "Admin Requests",
