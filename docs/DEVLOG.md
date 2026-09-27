@@ -61,6 +61,61 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: EVERYWHERE poll-block scope (whole-poll block)
+
+**Requested:**
+
+> Regarding #1: I'm not sure if this relates to the PollBlockService but I did
+> notice when I tried to edit the poll and unchecked the 'Enabled' checkbox I was
+> presented with some good options but it should have had one more option, namely
+> 'everywhere'. Could we add that?
+
+**Changed:**
+
+The block modal (opened by unchecking "Enabled") offered *This zipcode only /
+The whole county / The whole state* but no whole-poll option. Investigation
+confirmed `PollBlockService` ignores a block's `scope` entirely — any block row
+already hides the whole poll for everyone — so "Everywhere" is the honest label
+for current behavior, not new behavior.
+
+- **Backend** — `BlockScope` gains `EVERYWHERE`; `createBlock`/`deleteBlock`
+  handle it (purview-checked against the poll's geography, idempotent — one
+  EVERYWHERE block per poll, no zip/county/state discriminator).
+- **Migration V20** — widens the two `poll_type_blocks` CHECK constraints
+  (`…_scope_check` and `…_scope_targets_match`) to accept `EVERYWHERE`
+  (all geo ids NULL) and adds a partial unique index for it. (The scope column
+  is a constrained `VARCHAR`, not a free enum — the constraints, not the type,
+  are what needed changing.)
+- **Frontend** — a fourth "Everywhere (whole poll)" radio + active-blocks label;
+  `admin.managePolls.scopeEverywhere*` i18n keys. `npm run type-check` clean.
+- **Tests** — EVERYWHERE is idempotent, marks the poll blocked, and is
+  removable; an EVERYWHERE block outside the admin's purview → 403.
+
+Follow-up (still open): make the *narrower* scopes actually scope — right now
+zipcode/county/state blocks also hide the whole poll because `PollBlockService`
+doesn't read `scope`. Until then, only EVERYWHERE means literally what it says.
+
+**Commit:** `b21874f`
+
+## 2026-09-27 — Verified: Admin+ poll moderation Phase 1 (manual browser pass)
+
+**Requested:**
+
+> Works like a charm, what's next on the list
+
+**Verified:**
+
+Manual browser pass (local docker stack) of the Phase 1 admin poll edit: as an
+admin, edited a Questionnaire poll's status → Closed with a close date and a
+reason, via the new **Edit** modal → `PUT /api/admin/polls/{type}/{id}`. The
+change applied and the reason was recorded as a poll note. (A stale backend
+container initially 404'd the new route — "No static resource …" — which was a
+rebuild/restart gap, not a code fault; confirmed fixed once the container was
+rebuilt off `3faad48`, with the route then returning 401 unauthenticated rather
+than 404.)
+
+**Commit:** `none — verification only` (exercised `3faad48`, `0f1fcff`)
+
 ## 2026-09-27 — feat: Admin+ poll moderation (Phase 1) — edit status/close-date + reason + notify
 
 **Requested:**
