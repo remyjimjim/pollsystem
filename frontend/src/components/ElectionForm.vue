@@ -3,8 +3,13 @@ import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import PurviewSetter from '@/components/PurviewSetter.vue'
+import { ScopeLevel, type Purview } from '@/types'
 
 const { t } = useI18n()
+
+// Elections are purviewed at County / State / Nationwide (no single zip).
+const ELECTION_LEVELS = [ScopeLevel.COUNTY, ScopeLevel.STATE, ScopeLevel.NATIONAL]
 
 interface CandidateInputModel {
   name: string
@@ -17,7 +22,9 @@ interface ElectionInitial {
   pollTypeId: number
   title: string
   date: string  // YYYY-MM-DD
-  zipcode: string
+  scopeLevel: ScopeLevel
+  regionIds: number[]
+  regionStateIds: number[]
   closeDate: string | null
   candidates: CandidateInputModel[]
 }
@@ -42,13 +49,27 @@ function toLocalInput(iso: string | null): string {
 const form = reactive({
   title: props.initial?.title ?? '',
   date: props.initial?.date ?? '',
-  zipcode: props.initial?.zipcode ?? '',
   closeDate: toLocalInput(props.initial?.closeDate ?? null),
   candidates:
     props.initial && props.initial.candidates.length > 0
       ? props.initial.candidates.map(c => ({ ...c }))
       : ([{ name: '', affiliation: '', officeName: '' }] as CandidateInputModel[])
 })
+
+// Purview (County/State/Nationwide). Seeded from the draft on edit.
+const initialPurview = props.initial
+  ? {
+      scopeLevel: props.initial.scopeLevel,
+      regionIds: props.initial.regionIds,
+      zipcodes: [] as string[],
+      regionStateIds: props.initial.regionStateIds,
+    }
+  : null
+const purview = ref<Purview>(
+  props.initial
+    ? { scopeLevel: props.initial.scopeLevel, regionIds: props.initial.regionIds, zipcodes: [] }
+    : { scopeLevel: ScopeLevel.STATE, regionIds: [], zipcodes: [] },
+)
 
 const draftId = ref<number | null>(props.initial?.id ?? null)
 const submitting = ref(false)
@@ -68,7 +89,8 @@ function payload() {
     pollTypeId: props.pollTypeId,
     title: form.title.trim(),
     date: form.date,
-    zipcode: form.zipcode.trim(),
+    scopeLevel: purview.value.scopeLevel,
+    regionIds: purview.value.regionIds,
     closeDate: form.closeDate ? new Date(form.closeDate).toISOString() : null,
     candidates: form.candidates
       .map(c => ({
@@ -83,7 +105,9 @@ function payload() {
 function validate(): string | null {
   if (!form.title.trim()) return t('form.validation.titleRequired')
   if (!form.date) return t('form.validation.dateRequired')
-  if (!/^\d{5}$/.test(form.zipcode.trim())) return t('form.validation.zipcodeFormat')
+  if (purview.value.scopeLevel !== ScopeLevel.NATIONAL && purview.value.regionIds.length === 0) {
+    return t('form.validation.purviewRequired')
+  }
   const completeCandidates = form.candidates.filter(
     c => c.name.trim() && c.affiliation.trim() && c.officeName.trim()
   )
@@ -155,29 +179,21 @@ async function publish(confirmed = false) {
       />
     </label>
 
-    <div class="grid grid-cols-2 gap-3">
-      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-        {{ $t('form.election.electionDate') }}
-        <input
-          v-model="form.date"
-          type="date"
-          required
-          class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
-        />
-      </label>
-      <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-        {{ $t('form.election.zipcode') }}
-        <input
-          v-model="form.zipcode"
-          type="text"
-          maxlength="5"
-          pattern="[0-9]{5}"
-          inputmode="numeric"
-          required
-          class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
-        />
-      </label>
-    </div>
+    <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
+      {{ $t('form.election.electionDate') }}
+      <input
+        v-model="form.date"
+        type="date"
+        required
+        class="rounded border border-slate-300 p-2 text-base font-normal focus:border-slate-500 focus:outline-none"
+      />
+    </label>
+
+    <fieldset class="flex flex-col gap-2">
+      <legend class="text-sm font-semibold text-slate-700">{{ $t('form.election.purview') }}</legend>
+      <p class="m-0 text-xs text-slate-500">{{ $t('form.election.purviewHint') }}</p>
+      <PurviewSetter :allowed-levels="ELECTION_LEVELS" :initial="initialPurview" v-model="purview" />
+    </fieldset>
 
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.closeDateOptional') }}

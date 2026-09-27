@@ -49,8 +49,10 @@ data class Election(
     @Column(nullable = false)
     val date: LocalDate,
 
-    @Column(nullable = false, length = 5)
-    val zipcode: String,
+    // Legacy single zipcode. Elections now carry a County/State/National purview
+    // in poll_purviews; a coarse election leaves this null (see V23).
+    @Column(length = 5)
+    val zipcode: String? = null,
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)

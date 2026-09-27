@@ -38,7 +38,8 @@ data class BallotMeasureDto(
     val title: String,
     val summary: String,
     val effectiveDate: LocalDate,
-    val zipcode: String,
+    /** Inherited from the parent election; null now that elections use a coarse purview. */
+    val zipcode: String?,
     val status: PollStatus,
     val closeDate: Instant?,
     val dateCreated: Instant,

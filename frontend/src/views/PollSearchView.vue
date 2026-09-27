@@ -18,6 +18,7 @@ interface PollSearchResult {
   title: string
   closeDate: string | null
   zipcodes: ZipState[]
+  regionLabel: string | null
 }
 interface SearchSuggestions {
   titles: string[]
@@ -732,7 +733,10 @@ async function search() {
           </td>
           <td class="border-b border-slate-100 p-2">{{ r.type }}</td>
           <td class="border-b border-slate-100 p-2 font-mono text-xs">
-            <template v-if="r.zipcodes.length === 0">—</template>
+            <template v-if="r.zipcodes.length === 0">
+              <span v-if="r.regionLabel" class="text-slate-700">{{ r.regionLabel }}</span>
+              <template v-else>—</template>
+            </template>
             <template v-else-if="r.zipcodes.length === 1">
               {{ r.zipcodes[0].code }} <span class="text-slate-500">({{ r.zipcodes[0].state }})</span>
             </template>

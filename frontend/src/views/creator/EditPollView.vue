@@ -6,6 +6,7 @@ import axios from 'axios'
 import QuestionnaireForm from '@/components/QuestionnaireForm.vue'
 import ElectionForm from '@/components/ElectionForm.vue'
 import BallotMeasureForm from '@/components/BallotMeasureForm.vue'
+import { ScopeLevel } from '@/types'
 
 const { t } = useI18n()
 
@@ -34,7 +35,9 @@ interface ElectionDto {
   pollTypeId: number
   title: string
   date: string
-  zipcode: string
+  scopeLevel: ScopeLevel
+  regionIds: number[]
+  regionStateIds: number[]
   status: string
   closeDate: string | null
   candidates: CandidateDto[]
@@ -125,7 +128,9 @@ onMounted(async () => {
         pollTypeId: election.pollTypeId,
         title: election.title,
         date: election.date,
-        zipcode: election.zipcode,
+        scopeLevel: election.scopeLevel,
+        regionIds: election.regionIds,
+        regionStateIds: election.regionStateIds,
         closeDate: election.closeDate,
         candidates: election.candidates.map(c => ({
           name: c.name,

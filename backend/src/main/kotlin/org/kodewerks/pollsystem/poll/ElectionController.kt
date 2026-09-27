@@ -3,10 +3,10 @@ package org.kodewerks.pollsystem.poll
 import org.kodewerks.pollsystem.model.Candidate
 import org.kodewerks.pollsystem.model.Election
 import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -47,7 +47,10 @@ data class ElectionDraftRequest(
     val pollTypeId: Long,
     @field:NotBlank @field:Size(max = 500) val title: String,
     val date: LocalDate,
-    @field:NotBlank @field:Pattern(regexp = "^[0-9]{5}$") val zipcode: String,
+    // Election purview: County / State / Nationwide (no zip level). regionIds are
+    // countyIds for COUNTY, stateIds for STATE, empty for NATIONAL.
+    val scopeLevel: ScopeLevel = ScopeLevel.STATE,
+    val regionIds: List<Long> = emptyList(),
     val closeDate: Instant? = null,
     @field:Valid val candidates: List<CandidateInput> = emptyList()
 )
@@ -58,7 +61,14 @@ data class ElectionDto(
     val creatorId: Long,
     val title: String,
     val date: LocalDate,
-    val zipcode: String,
+    /** Legacy single zip; null for elections created under the coarse-purview model. */
+    val zipcode: String?,
+    /** Purview scope + selected regions (for edit prefill) and a display label. */
+    val scopeLevel: ScopeLevel,
+    val regionIds: List<Long>,
+    /** Parent state ids (for COUNTY edit prefill so the picker renders). */
+    val regionStateIds: List<Long>,
+    val regionLabel: String,
     val status: PollStatus,
     val closeDate: Instant?,
     val dateSubmitted: Instant,
@@ -74,6 +84,10 @@ data class ElectionDto(
         fun from(
             e: Election,
             candidates: List<Candidate>,
+            scopeLevel: ScopeLevel,
+            regionIds: List<Long>,
+            regionStateIds: List<Long>,
+            regionLabel: String,
             candidatesWidget: String?,
             candidatesGroupBy: String?
         ) = ElectionDto(
@@ -83,6 +97,10 @@ data class ElectionDto(
             title = e.title,
             date = e.date,
             zipcode = e.zipcode,
+            scopeLevel = scopeLevel,
+            regionIds = regionIds,
+            regionStateIds = regionStateIds,
+            regionLabel = regionLabel,
             status = e.status,
             closeDate = e.closeDate,
             dateSubmitted = e.dateSubmitted,

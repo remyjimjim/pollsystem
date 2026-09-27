@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceContext
 import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.BallotResponse
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.poll.BallotMeasureDraftRequest
 import org.kodewerks.pollsystem.poll.BallotMeasureService
@@ -221,7 +222,7 @@ class DevController(
                 pollTypeId = 1L, // Election
                 title = "E2E Ballot Election $n",
                 date = LocalDate.now(),
-                zipcode = zipcode,
+                scopeLevel = ScopeLevel.NATIONAL, // coarse purview; the measure inherits it
                 closeDate = null,
                 candidates = emptyList(),
             ),

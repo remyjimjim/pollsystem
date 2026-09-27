@@ -203,12 +203,14 @@ class AdminPollsController(
             val pool = elections.findAll()
             for (e in pool) {
                 if (needle != null && !e.title.contains(needle, ignoreCase = true)) continue
-                if (!matchesGeo(listOf(e.zipcode), purview, explicitZipFilter)) continue
-                val cz = countyZips.findByZipcode(e.zipcode).firstOrNull()
+                // Coarse elections have no single zip; matchesGeo on an empty list
+                // means scoped admins don't geo-match them (SUPER still sees all).
+                if (!matchesGeo(listOfNotNull(e.zipcode), purview, explicitZipFilter)) continue
+                val cz = e.zipcode?.let { countyZips.findByZipcode(it).firstOrNull() }
                 rows += AdminPollRow(
                     id = e.id, type = PollKind.ELECTION.name, title = e.title, status = e.status,
                     creatorEmail = e.creator.email, closeDate = e.closeDate,
-                    zipcodes = listOf(e.zipcode),
+                    zipcodes = listOfNotNull(e.zipcode),
                     stateInitial = cz?.county?.state?.initial,
                     countyName = cz?.county?.name,
                     blocked = false, latestNote = null
@@ -220,12 +222,12 @@ class AdminPollsController(
             for (bm in pool) {
                 if (needle != null && !bm.title.contains(needle, ignoreCase = true)) continue
                 val zip = bm.election.zipcode
-                if (!matchesGeo(listOf(zip), purview, explicitZipFilter)) continue
-                val cz = countyZips.findByZipcode(zip).firstOrNull()
+                if (!matchesGeo(listOfNotNull(zip), purview, explicitZipFilter)) continue
+                val cz = zip?.let { countyZips.findByZipcode(it).firstOrNull() }
                 rows += AdminPollRow(
                     id = bm.id, type = PollKind.BALLOT_MEASURE.name, title = bm.title, status = bm.status,
                     creatorEmail = bm.creator.email, closeDate = bm.closeDate,
-                    zipcodes = listOf(zip),
+                    zipcodes = listOfNotNull(zip),
                     stateInitial = cz?.county?.state?.initial,
                     countyName = cz?.county?.name,
                     blocked = false, latestNote = null
@@ -504,10 +506,10 @@ class AdminPollsController(
                 }
                 domains.findByQuestionnaireId(id).map { it.zipcode }.distinct()
             }
-            PollKind.ELECTION -> listOf(elections.findById(id).orElseThrow {
+            PollKind.ELECTION -> listOfNotNull(elections.findById(id).orElseThrow {
                 ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
             }.zipcode)
-            PollKind.BALLOT_MEASURE -> listOf(ballotMeasures.findById(id).orElseThrow {
+            PollKind.BALLOT_MEASURE -> listOfNotNull(ballotMeasures.findById(id).orElseThrow {
                 ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
             }.election.zipcode)
         }

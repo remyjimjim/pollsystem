@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.superadmin
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
 import org.kodewerks.pollsystem.email.EmailService
@@ -311,7 +312,7 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
                 pollTypeId = 1L,
                 title = "Sample mayoral race",
                 date = LocalDate.now().plusDays(30),
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(
                     CandidateInput("Alice", "Indep", "Mayor"),
                     CandidateInput("Bob", "Indep", "Mayor")
@@ -359,7 +360,7 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
                 pollTypeId = 1L,
                 title = "Parent election",
                 date = LocalDate.now().plusDays(30),
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(CandidateInput("X", "Y", "Mayor"))
             )
         )

@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
 import org.kodewerks.pollsystem.model.AccessLevel
@@ -31,7 +32,7 @@ class BallotMeasureServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "Parent Election",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(CandidateInput("A", "X", "Mayor"))
             )
         )

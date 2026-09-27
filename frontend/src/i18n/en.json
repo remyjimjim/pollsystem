@@ -346,11 +346,14 @@
       "zipcodeFormat": "Zipcode must be 5 digits",
       "completeCandidates": "Add at least one complete candidate (name, affiliation, office)",
       "pickElection": "Pick a parent Election",
-      "effectiveRequired": "Effective date is required"
+      "effectiveRequired": "Effective date is required",
+      "purviewRequired": "Select at least one region for the purview"
     },
     "election": {
       "electionDate": "Election date",
       "zipcode": "Zipcode",
+      "purview": "Purview",
+      "purviewHint": "Where is this election held? Choose a county, one or more states, or nationwide.",
       "candidates": "Candidates",
       "candidatesHelp": "Voters will mark Yes / No on each candidate.",
       "candidateName": "Name",

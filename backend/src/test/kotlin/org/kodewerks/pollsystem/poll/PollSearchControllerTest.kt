@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
 import org.kodewerks.pollsystem.model.AccessLevel
@@ -88,7 +89,7 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
                 pollTypeId = 1L,
                 title = title,
                 date = LocalDate.now().plusDays(30),
-                zipcode = zipcode,
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = candidates,
             ),
         )
@@ -103,7 +104,7 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
                 pollTypeId = 1L,
                 title = "$title (parent)",
                 date = LocalDate.now().plusDays(30),
-                zipcode = zipcode,
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(CandidateInput("Parent Candidate", "Ind", "Mayor")),
             ),
         )

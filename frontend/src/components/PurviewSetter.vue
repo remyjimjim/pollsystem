@@ -1,28 +1,57 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useGeoPicker } from '@/composables/useGeoPicker'
 import ZipSetter from '@/components/ZipSetter.vue'
 import { ScopeLevel, type Purview } from '@/types'
 
-// Lets a creator express their requested purview at a scope LEVEL — nationwide,
-// whole state(s), whole county(ies), or specific zipcodes — and emits
-// { scopeLevel, regionIds, zipcodes }. One useGeoPicker instance drives the
-// STATE/COUNTY selections; the shared ZipSetter (its own instance) handles the
-// ZIP cascade so we don't reimplement it.
+// Lets a creator express a purview at a scope LEVEL — nationwide, whole
+// state(s), whole county(ies), or specific zipcodes — and emits
+// { scopeLevel, regionIds, zipcodes }. `allowedLevels` restricts the offered
+// levels (elections use County/State/National, no ZIP). `initial` prefills the
+// picker on edit; for COUNTY it also carries the parent state ids so the county
+// list renders. One useGeoPicker drives STATE/COUNTY; ZipSetter handles ZIP.
 const { t } = useI18n()
+const props = withDefaults(
+  defineProps<{
+    allowedLevels?: ScopeLevel[]
+    initial?: (Purview & { regionStateIds?: number[] }) | null
+  }>(),
+  { allowedLevels: undefined, initial: null },
+)
 const emit = defineEmits<{ (e: 'update:modelValue', v: Purview): void }>()
 
-const level = ref<ScopeLevel>(ScopeLevel.STATE)
-const zipModel = ref<string[]>([])
-const { states, counties, error } = useGeoPicker()
-
-const LEVELS: { value: ScopeLevel; label: string }[] = [
+const ALL_LEVELS: { value: ScopeLevel; label: string }[] = [
   { value: ScopeLevel.NATIONAL, label: t('purview.national') },
   { value: ScopeLevel.STATE, label: t('purview.state') },
   { value: ScopeLevel.COUNTY, label: t('purview.county') },
   { value: ScopeLevel.ZIP, label: t('purview.zip') },
 ]
+const LEVELS = computed(() =>
+  props.allowedLevels ? ALL_LEVELS.filter(o => props.allowedLevels!.includes(o.value)) : ALL_LEVELS,
+)
+
+const { states, counties, error } = useGeoPicker()
+
+// Initial level: the initial purview's level if allowed, else the first allowed.
+const startLevel = (): ScopeLevel => {
+  const init = props.initial
+  if (init && (!props.allowedLevels || props.allowedLevels.includes(init.scopeLevel))) return init.scopeLevel
+  return LEVELS.value[0]?.value ?? ScopeLevel.STATE
+}
+const level = ref<ScopeLevel>(startLevel())
+const zipModel = ref<string[]>([])
+
+// Prefill selections on edit. Setting the selected refs preserves the value for
+// emission even before the picker's items finish loading.
+if (props.initial) {
+  const init = props.initial
+  if (init.scopeLevel === ScopeLevel.STATE) states.selected.value = [...init.regionIds]
+  else if (init.scopeLevel === ScopeLevel.COUNTY) {
+    if (init.regionStateIds?.length) states.selected.value = [...init.regionStateIds]
+    counties.selected.value = [...init.regionIds]
+  } else if (init.scopeLevel === ScopeLevel.ZIP) zipModel.value = [...init.zipcodes]
+}
 
 // Emit whenever the level or any relevant selection changes.
 watch(

@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
 import org.kodewerks.pollsystem.model.AccessLevel
@@ -33,7 +34,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "City Council",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(
                     CandidateInput("Alice", "Indep", "Mayor"),
                     CandidateInput("Bob", "Indep", "Mayor")
@@ -58,7 +59,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "First",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(CandidateInput("A", "X", "MAYOR"))
             )
         )
@@ -70,7 +71,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "Second",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(CandidateInput("B", "Y", "mayor"))  // different case
             )
         )
@@ -88,7 +89,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "v1",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(CandidateInput("A", "X", "Mayor"))
             )
         )
@@ -100,7 +101,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "v2",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(
                     CandidateInput("B", "Y", "Mayor"),
                     CandidateInput("C", "Z", "Mayor")
@@ -121,7 +122,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "Empty",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = emptyList()
             )
         )
@@ -141,7 +142,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "Mine",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(CandidateInput("A", "X", "Mayor"))
             )
         )
@@ -154,7 +155,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                     pollTypeId = electionPollTypeId,
                     title = "Hijack",
                     date = futureDate,
-                    zipcode = "90001",
+                    scopeLevel = ScopeLevel.NATIONAL,
                     candidates = listOf(CandidateInput("A", "X", "Mayor"))
                 )
             )
@@ -172,7 +173,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                 pollTypeId = electionPollTypeId,
                 title = "title",
                 date = futureDate,
-                zipcode = "90001",
+                scopeLevel = ScopeLevel.NATIONAL,
                 candidates = listOf(CandidateInput("A", "X", "Mayor"))
             )
         )
@@ -186,7 +187,7 @@ class ElectionServiceTest : AbstractIntegrationTest() {
                     pollTypeId = electionPollTypeId,
                     title = "modified",
                     date = futureDate,
-                    zipcode = "90001",
+                    scopeLevel = ScopeLevel.NATIONAL,
                     candidates = listOf(CandidateInput("A", "X", "Mayor"))
                 )
             )

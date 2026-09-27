@@ -44,13 +44,13 @@ class ElectionService(
                 pollType = pt,
                 title = dto.title.trim(),
                 date = dto.date,
-                zipcode = dto.zipcode,
+                zipcode = null,
                 status = PollStatus.DRAFT,
                 closeDate = dto.closeDate
             )
         )
         replaceCandidates(saved, dto.candidates)
-        mirrorPurview(saved.id, dto.zipcode)
+        applyPurview(saved.id, dto)
         return saved
     }
 
@@ -69,28 +69,24 @@ class ElectionService(
                 pollType = pt,
                 title = dto.title.trim(),
                 date = dto.date,
-                zipcode = dto.zipcode,
+                zipcode = null,
                 closeDate = dto.closeDate
             )
         )
         replaceCandidates(updated, dto.candidates)
-        mirrorPurview(updated.id, dto.zipcode)
+        applyPurview(updated.id, dto)
         return updated
     }
 
-    /**
-     * Best-effort mirror of the election's single zipcode into poll_purviews
-     * (ZIP level). An election's zip is only pattern-validated (5 digits), not
-     * required to exist in county_zips, so an unknown zip must NOT block
-     * creation — we just leave no purview row (the service treats that as
-     * nationwide). Strict validation belongs to the future purview UI.
-     */
-    private fun mirrorPurview(electionId: Long, zipcode: String) {
-        try {
-            purviews.replacePurview(PollKind.ELECTION, electionId, ScopeLevel.ZIP, zipcodes = listOf(zipcode))
-        } catch (_: ResponseStatusException) {
-            // Unknown zip: no purview row written (nationwide fallback).
+    /** Elections carry a County/State/Nationwide purview (poll_purviews); ZIP is rejected. */
+    private fun applyPurview(electionId: Long, dto: ElectionDraftRequest) {
+        if (dto.scopeLevel == ScopeLevel.ZIP) {
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Elections use a County, State, or Nationwide purview"
+            )
         }
+        purviews.replacePurview(PollKind.ELECTION, electionId, dto.scopeLevel, dto.regionIds)
     }
 
     @Transactional
@@ -123,9 +119,14 @@ class ElectionService(
     @Transactional(readOnly = true)
     fun toDto(e: Election): ElectionDto {
         val (widget, groupBy) = readCandidatesHints(e.pollType.templateJson)
+        val purviewRows = purviews.purviewOf(PollKind.ELECTION, e.id)
         return ElectionDto.from(
             e,
             candidates.findByElectionId(e.id),
+            scopeLevel = purviews.scopeLevelOf(purviewRows),
+            regionIds = purviews.regionIdsOf(purviewRows),
+            regionStateIds = purviews.regionStateIdsOf(purviewRows),
+            regionLabel = purviews.regionLabel(purviewRows),
             candidatesWidget = widget,
             candidatesGroupBy = groupBy
         )

@@ -151,4 +151,44 @@ class PollPurviewService(
     }
 
     private fun bad(msg: String) = ResponseStatusException(HttpStatus.BAD_REQUEST, msg)
+
+    // ---------- read helpers for DTOs / display ----------
+
+    /** The scope level of a poll's purview (NATIONAL when it has no rows). */
+    fun scopeLevelOf(rows: List<PollPurview>): ScopeLevel =
+        rows.firstOrNull()?.scopeLevel ?: ScopeLevel.NATIONAL
+
+    /** The selected region ids for STATE/COUNTY purviews (empty otherwise) — for edit prefill. */
+    fun regionIdsOf(rows: List<PollPurview>): List<Long> = when (scopeLevelOf(rows)) {
+        ScopeLevel.STATE -> rows.mapNotNull { it.stateId }.distinct().sorted()
+        ScopeLevel.COUNTY -> rows.mapNotNull { it.countyId }.distinct().sorted()
+        else -> emptyList()
+    }
+
+    /**
+     * Parent state ids of a COUNTY purview's counties (== regionIds for STATE) —
+     * lets the edit form pre-select the states so the county picker renders.
+     */
+    @Transactional(readOnly = true)
+    fun regionStateIdsOf(rows: List<PollPurview>): List<Long> = when (scopeLevelOf(rows)) {
+        ScopeLevel.STATE -> rows.mapNotNull { it.stateId }.distinct().sorted()
+        ScopeLevel.COUNTY ->
+            counties.findAllById(rows.mapNotNull { it.countyId }).map { it.state.id }.distinct().sorted()
+        else -> emptyList()
+    }
+
+    /** Human-readable purview, e.g. "Nationwide", "California", "Los Angeles (CA)", or a zip list. */
+    @Transactional(readOnly = true)
+    fun regionLabel(rows: List<PollPurview>): String = when (scopeLevelOf(rows)) {
+        ScopeLevel.NATIONAL -> "Nationwide"
+        ScopeLevel.STATE ->
+            states.findAllById(rows.mapNotNull { it.stateId }).map { it.name }.distinct().sorted().joinToString(", ")
+        ScopeLevel.COUNTY ->
+            counties.findAllById(rows.mapNotNull { it.countyId })
+                .map { "${it.name} (${it.state.initial})" }.distinct().sorted().joinToString(", ")
+        ScopeLevel.ZIP -> {
+            val zips = rows.mapNotNull { it.zipcode }.distinct().sorted()
+            if (zips.size <= 8) zips.joinToString(", ") else "${zips.size} zipcodes"
+        }
+    }
 }
