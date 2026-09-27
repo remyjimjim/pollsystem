@@ -326,6 +326,12 @@ interface PollTypeBlockRepository : JpaRepository<PollTypeBlock, Long> {
 interface AppFlagRepository : JpaRepository<AppFlag, Int>
 
 @Repository
+interface PollPurviewRepository : JpaRepository<PollPurview, Long> {
+    fun findByPollTypeAndPollId(pollType: PollKind, pollId: Long): List<PollPurview>
+    fun deleteByPollTypeAndPollId(pollType: PollKind, pollId: Long)
+}
+
+@Repository
 interface PollNoteRepository : JpaRepository<PollNote, Long> {
     fun findByPollTypeAndPollIdOrderByCreatedAtDesc(pollType: PollKind, pollId: Long): List<PollNote>
 
