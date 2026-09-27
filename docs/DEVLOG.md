@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: poll-creation role gate (CREATOR+)
+
+**Requested:**
+
+> I'd like users.access >= creator to be able to create polls […] a creator can
+> request a purview of 'Nationwide' and he/she gets it, but if an admin or above
+> thinks the purview should be narrowed/expanded then the creator's purview is
+> overwritten.
+
+Per the approved plan (`bright-doodling-axolotl`): **role gate only** — the
+purview is territorial (grantable/overwritable by admins), not a per-locality
+creation limit.
+
+**Changed:**
+
+- `poll/ParticipationGuard.kt`: new `requireCreator(user)` → 403 FORBIDDEN when
+  `access < CREATOR` (mirrors `requireParticipation`).
+- Called at the top of `saveDraft`/`update`/`publish` in `ElectionService`,
+  `QuestionnaireService`, `BallotMeasureService` (9 methods — the single choke;
+  covers controller traffic + DevController's CREATOR seeds). Method-level, so
+  `/responses` endpoints stay open to USER+; no frontend change (create routes
+  are already `minAccess=CREATOR`, so this is defense-in-depth).
+- `QuestionnaireServiceTest`: USER `saveDraft` → 403. Full `./gradlew test` green.
+
+**Follow-ups the user described (not in this pass):** admin+ poll moderation
+(edit any attribute + reason + review-email + creator↔admin messaging thread),
+admin overwrite of a creator's purview, super-admin password fallback.
+
+**Commit:** `b89d6d9`
+
 ## 2026-09-26 — e2e: user-submits-creator-request (#3) + seed-user endpoint
 
 **Requested:**
