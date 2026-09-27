@@ -61,6 +61,44 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: Admin+ poll moderation (Phase 1) — edit status/close-date + reason + notify
+
+**Requested:**
+
+> Admins and above can disable or modify any attribute of a poll like 'is it
+> enabled', 'is it enabled for zipcode x?', 'begin date', 'end date', etc. […] a
+> reason for modification and a review checkbox that sends an email to the creator
+
+> let's go with Admin+ poll moderation
+
+**Changed:**
+
+Phase 1 of admin poll moderation (per plan `bright-doodling-axolotl`): admins/supers
+can moderate a poll's lifecycle with a recorded reason, optionally emailing the creator.
+Scoped to the attributes the schema actually has — `status` and `closeDate` (no
+begin/start date; "enabled" == status/blocks).
+
+- **Backend** — `AdminPollsController`: new `PUT /api/admin/polls/{type}/{id}` taking
+  `AdminPollEditRequest(status?, closeDate?, reason, notifyCreator)`. Verifies the
+  admin's purview covers the poll (403 otherwise, SUPER bypasses), applies
+  `status`/`closeDate` per kind via `copy(...).save()`, records the reason as a
+  `PollNote` (body prefixed with a change summary, e.g. `[status → CLOSED] <reason>`),
+  and — when `notifyCreator` — emails the creator and sets the note's `emailed` flag.
+  Reuses the existing `locatePoll`/`resolvePurview`/`matchesGeo`/`creatorEmailFor`/note
+  machinery; no new migration or entity. Two tests added (status change + reason note +
+  notify email; out-of-purview → 403).
+- **Frontend** — `ManagePollsView.vue`: an **Edit** action per poll row opens a modal
+  with a status select (Published/Closed/Archived), a close-date input pre-filled from
+  the row (so it isn't accidentally cleared), a required reason textarea, and a "notify
+  creator" checkbox. Submits to the new endpoint and reflects status/closeDate/latestNote
+  in the row. Added `admin.managePolls.*` i18n keys.
+
+Deferred to later phases: creator↔admin two-way reply thread + inbox; true per-zipcode
+enablement (PollBlockService currently ignores block scope); begin/start date; admin
+overwrite of a creator's purview; super-admin password fallback.
+
+**Commits:** `3faad48` (backend), `0f1fcff` (frontend)
+
 ## 2026-09-27 — feat: poll-creation role gate (CREATOR+)
 
 **Requested:**
