@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: elections use a County/State/National purview (Phase F1)
+
+**Requested:**
+
+> Elections should be purviewed at either a Nationwide, State or County wide purview.
+
+> Yes, we're aligned, do what you've proposed and ask me any questions along the way
+
+**Changed:**
+
+Elections move off their single `zipcode` onto a coarse purview (`poll_purviews`)
+as source of truth — the creation-UI phase of [[project_poll_purview]] for elections.
+
+- **Migration V23**: `elections.zipcode` nullable. Existing rows keep their zip +
+  backfilled COUNTY purview; new/edited elections store a coarse purview and leave
+  zipcode null.
+- **Backend**: `ElectionDraftRequest` carries `scopeLevel` + `regionIds` (ZIP
+  rejected — elections are County/State/Nationwide); save/update write
+  `poll_purviews` via `replacePurview` and null the zipcode; `ElectionDto` exposes
+  `scopeLevel`/`regionIds`/`regionStateIds`/`regionLabel`. Null-safe reads of
+  `election.zipcode` in search (with a `regionLabel` on results) and the admin list;
+  `BallotMeasureDto.zipcode` nullable; dev seed uses a NATIONAL election.
+  `PollPurviewService` gains `scopeLevelOf`/`regionIdsOf`/`regionStateIdsOf`/`regionLabel`.
+- **Frontend**: `PurviewSetter` gains `allowedLevels` + edit prefill; `ElectionForm`
+  uses it (County/State/Nationwide); `EditPollView` prefills; search shows the region
+  label when a poll has no single zip; i18n keys.
+- **Tests** migrated to the coarse model (elections seed a NATIONAL purview; geo
+  assertions preserved via the explicit `zipcode` results filter).
+
+**Known follow-up:** scoped admins' Manage Polls list geo-matches by the poll's zip,
+so it won't surface coarse elections yet (SUPER sees all) — a purview-aware admin
+list is a separate task. And **F2** remains: questionnaires → full `PurviewSetter`
++ retiring `questionnaire_domains`.
+
+**Commit:** `4800334`
+
 ## 2026-09-27 — feat: within/outside-purview results split + purview-aware search (Phases C, D)
 
 **Requested:**
