@@ -197,6 +197,45 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         assertThat(recordedEmails.sent).isEmpty()
     }
 
+    @Test
+    fun `editPoll changes status, records a reason note, and emails the creator on notify`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "edit-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "edit-creator")
+        val e = newElection(creator, zipcode = "90001", title = "Editable")
+        recordedEmails.clear()
+
+        val note = controller.editPoll(
+            "ELECTION", e.id,
+            AdminPollEditRequest(status = PollStatus.CLOSED, reason = "Closing early for review", notifyCreator = true),
+            principalFor(admin)
+        )
+
+        assertThat(elections.findById(e.id).get().status).isEqualTo(PollStatus.CLOSED)
+        assertThat(note.body).contains("status → CLOSED").contains("Closing early for review")
+        assertThat(note.emailed).isTrue()
+        assertThat(recordedEmails.sent).hasSize(1)
+        assertThat(recordedEmails.sent[0].to).isEqualTo(creator.email)
+    }
+
+    @Test
+    fun `editPoll rejects a poll outside the admin's purview`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "editp-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "editp-creator")
+        val outside = newElection(creator, zipcode = "10001", title = "Outside")
+
+        assertThatThrownBy {
+            controller.editPoll(
+                "ELECTION", outside.id,
+                AdminPollEditRequest(status = PollStatus.CLOSED, reason = "nope"),
+                principalFor(admin)
+            )
+        }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
+            assertThat(it.statusCode.value()).isEqualTo(403)
+        }
+    }
+
     @TestConfiguration
     class RecordingEmailConfig {
         @Bean

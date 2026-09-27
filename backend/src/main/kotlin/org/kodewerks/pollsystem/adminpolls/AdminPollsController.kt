@@ -74,6 +74,18 @@ data class CreateBlockRequest(val scope: BlockScope, val zipcode: String?, val c
 data class CreateNoteRequest(val body: String, val sendEmail: Boolean = false)
 data class EditNoteRequest(val body: String)
 
+/**
+ * Admin moderation edit. A null field is left unchanged (Phase 1 does not clear
+ * closeDate). `reason` is required and recorded as a poll note (the audit
+ * trail); `notifyCreator` emails the creator a copy of that note.
+ */
+data class AdminPollEditRequest(
+    val status: PollStatus? = null,
+    val closeDate: Instant? = null,
+    val reason: String,
+    val notifyCreator: Boolean = false
+)
+
 data class BlockDto(
     val id: Long,
     val scope: BlockScope,
@@ -360,6 +372,68 @@ class AdminPollsController(
         val text = body.body.trim()
         if (text.isEmpty() || text.length > 2000) throw bad("Note must be 1–2000 chars")
         val saved = notes.save(existing.copy(body = text, updatedAt = Instant.now()))
+        return toDto(saved)
+    }
+
+    /**
+     * Moderation edit of a poll's status and/or close date, with a required
+     * reason recorded as a note (and optionally emailed to the creator). Only
+     * admins whose purview covers the poll (SUPER always) may edit it.
+     */
+    @PutMapping("/{type}/{id}")
+    @Transactional
+    fun editPoll(
+        @PathVariable type: String,
+        @PathVariable id: Long,
+        @RequestBody body: AdminPollEditRequest,
+        @AuthenticationPrincipal principal: AppUserDetails
+    ): NoteDto {
+        val (kind, zips) = locatePoll(type, id)
+        if (!matchesGeo(zips, resolvePurview(principal), null)) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "This poll is outside your purview")
+        }
+        val reason = body.reason.trim()
+        if (reason.isEmpty() || reason.length > 2000) throw bad("A reason (1–2000 chars) is required")
+        if (body.status == null && body.closeDate == null) {
+            throw bad("Nothing to change: provide a status and/or close date")
+        }
+
+        // Apply the change (null = leave unchanged; Phase 1 doesn't clear closeDate).
+        when (kind) {
+            PollKind.QUESTIONNAIRE -> {
+                val q = questionnaires.findById(id).orElseThrow { bad("Questionnaire not found") }
+                questionnaires.save(q.copy(status = body.status ?: q.status, closeDate = body.closeDate ?: q.closeDate))
+            }
+            PollKind.ELECTION -> {
+                val e = elections.findById(id).orElseThrow { bad("Election not found") }
+                elections.save(e.copy(status = body.status ?: e.status, closeDate = body.closeDate ?: e.closeDate))
+            }
+            PollKind.BALLOT_MEASURE -> {
+                val bm = ballotMeasures.findById(id).orElseThrow { bad("Ballot measure not found") }
+                ballotMeasures.save(bm.copy(
+                    status = body.status ?: bm.status,
+                    closeDate = body.closeDate ?: bm.closeDate,
+                    lastUpdated = Instant.now()
+                ))
+            }
+        }
+
+        // Record the reason as a note (audit trail) — prefixed with what changed
+        // so the creator sees the context — and optionally email the creator.
+        val changes = buildList {
+            body.status?.let { add("status → $it") }
+            body.closeDate?.let { add("close date → $it") }
+        }
+        val noteBody = "[${changes.joinToString(", ")}] $reason"
+        var emailed = false
+        if (body.notifyCreator) {
+            emailService.send(creatorEmailFor(kind, id), "A change to your poll", noteBody)
+            emailed = true
+        }
+        val saved = notes.save(PollNote(
+            pollType = kind, pollId = id, body = noteBody,
+            authorId = principal.user.id, emailed = emailed
+        ))
         return toDto(saved)
     }
 
