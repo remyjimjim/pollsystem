@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-09-27 — test(e2e): super-disables-submissions kill-switch flow
+
+**Requested:**
+
+> Can we make steps 1 thru 4 above into an e2e?
+
+**Changed:**
+
+Added `frontend/e2e/super-disables-submissions.spec.ts` covering the kill-switch:
+a seeded Super signs in, toggles "Disable all submissions" on the dashboard (native
+`window.confirm` accepted first); a seeded member then tries to submit a poll and
+gets the 503 "Poll submissions are temporarily disabled by an administrator" (while
+reads stay up); the Super re-enables. Reuse script (no pre-wipe); super + participant
+run in separate browser contexts; fixtures seeded via the dev API
+(`seedUser access=SUPER`, `seedUser`, `seedQuestionnaire`).
+
+Verified in-container up to `beforeAll` (proxied `localhost` → host stack; all dev-API
+seeding + `resolveLocation` succeed). The browser UI run is host-side — the dev
+container lacks Playwright's system libraries (`libglib-2.0.so.0`), so the spec is
+meant to be run from the host per `docs/TESTING-E2E.md`:
+`cd frontend && npx playwright test super-disables-submissions`.
+
+**Commit:** `f1b00ce`
+
 ## 2026-09-27 — feat: poll purview foundation (Phase A)
 
 **Requested:**
