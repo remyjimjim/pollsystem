@@ -606,15 +606,15 @@
       "warnTitle": "Pending share exceeds {threshold}",
       "errorLoad": "Failed to load admin workload",
       "killSwitch": {
-        "heading": "Poll availability",
-        "statusEnabled": "Polls are ENABLED",
-        "statusDisabled": "Polls are DISABLED",
-        "blurb": "Disabling takes every public poll page and submission offline immediately (503). Emergency use only.",
-        "disableButton": "Disable all polls",
-        "enableButton": "Re-enable polls",
-        "confirmDisable": "Disable ALL polls now? Every public poll page and submission will return 503 until you re-enable them.",
-        "confirmEnable": "Re-enable all polls?",
-        "error": "Failed to update poll availability"
+        "heading": "Poll submissions",
+        "statusEnabled": "Submissions ENABLED",
+        "statusDisabled": "Submissions DISABLED",
+        "blurb": "Disabling immediately blocks all new poll submissions (503). Viewing, search, and results stay available. Emergency use only.",
+        "disableButton": "Disable all submissions",
+        "enableButton": "Re-enable submissions",
+        "confirmDisable": "Disable ALL poll submissions now? No one can submit responses until you re-enable them. Viewing and results stay up.",
+        "confirmEnable": "Re-enable poll submissions?",
+        "error": "Failed to update submission availability"
       }
     },
     "adminRequests": {

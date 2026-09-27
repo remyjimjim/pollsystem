@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -23,19 +24,31 @@ class PollsKillSwitchTest : AbstractIntegrationTest() {
     @Autowired private lateinit var tokens: JwtTokenProvider
 
     @Test
-    fun `public poll endpoint serves when polls are enabled`() {
-        // Migration default is polls_disabled = false.
+    fun `submissions serve when polls are enabled`() {
+        // Migration default is polls_disabled = false: reads work regardless.
         mockMvc.perform(get("/api/polls/search"))
             .andExpect(status().isOk)
     }
 
     @Test
-    fun `public poll endpoint returns 503 when polls are disabled`() {
+    fun `submissions return 503 when disabled, but reads stay up`() {
+        val participant = fixtures.createUser(emailPrefix = "killswitch-participant")
+        val bearer = "Bearer ${tokens.generateToken(participant.id, participant.email)}"
         val su = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "killswitch-super")
         flags.setPollsDisabled(true, su.id)
 
+        // A submission (POST to a responses endpoint) is blocked before the
+        // controller runs — the poll id need not exist, the interceptor fires first.
+        mockMvc.perform(
+            post("/api/polls/elections/1/responses")
+                .header("Authorization", bearer)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}")
+        ).andExpect(status().isServiceUnavailable)
+
+        // Reads remain available while polls are disabled.
         mockMvc.perform(get("/api/polls/search"))
-            .andExpect(status().isServiceUnavailable)
+            .andExpect(status().isOk)
     }
 
     @Test
