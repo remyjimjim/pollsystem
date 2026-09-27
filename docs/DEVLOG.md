@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: Super "disable all polls" kill-switch (purview work, Phase E)
+
+**Requested:**
+
+> There should probably be a super-admin 'disable all polls' button on the Super
+> Admin dashboard. […] Admin disable is used to shutdown a poll that's doing bad
+> things to the system […] it's getting so much activity that it's greedily and
+> unnecessarily taking up resources.
+
+> Confirm all 3, start with Phase E first
+
+**Changed:**
+
+The first slice of the poll-purview initiative (see [[project_poll_purview]]) —
+built first as a standalone quick win because it's independent of purview. An
+emergency Super-admin switch that takes the entire public poll API offline.
+
+- **Migration V21** — singleton `app_flags` table (`polls_disabled` + `updated_at`/
+  `updated_by` audit cols), one row guarded by `CHECK (id = 1)`.
+- **Backend** — `AppFlag` entity + repo; `GlobalFlagService` (read/toggle);
+  `PollsDisabledInterceptor` registered (via `WebConfig`) on `/api/polls/**`,
+  returning **503** with a JSON message when the flag is set — before any
+  controller/DB work. Admin (`/api/admin`) and Super (`/api/super`) namespaces are
+  outside the interceptor, so the toggle stays reachable while polls are disabled.
+  `SuperFlagsController`: `GET /api/super/flags`, `PUT /api/super/flags/polls-disabled`.
+- **Frontend** — a red-when-active kill-switch card on the Super `DashboardView`
+  with a confirm-guarded toggle; `super.dashboard.killSwitch.*` i18n keys.
+- **Test** — `PollsKillSwitchTest` (MockMvc): `/api/polls/search` → 503 when
+  disabled, 200 otherwise; Super can toggle and the super namespace stays up.
+
+Scope note: the switch blocks the *whole* `/api/polls/**` surface (viewing,
+search, results, submissions), i.e. polls go fully dark — an intentional
+load-shed. It is orthogonal to the per-poll admin block feature.
+
+**Commit:** `a3068c7`
+
 ## 2026-09-27 — feat: EVERYWHERE poll-block scope (whole-poll block)
 
 **Requested:**
