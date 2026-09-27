@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-09-27 — feat: scope the poll kill-switch to submissions only
+
+**Requested:**
+
+> Regarding #1. Yes, let's only block submissions in that case.
+
+**Changed:**
+
+Narrowed the kill-switch shipped in `a3068c7` (which took the whole `/api/polls`
+surface offline) so it now blocks **only submissions**: the interceptor maps to
+`/api/polls/*/*/responses` and 503s only mutating methods (POST/PUT/PATCH/DELETE).
+Viewing, search, results, and "my responses" (GET) stay available while polls are
+disabled. Frontend copy and the test updated accordingly (submission → 503 while
+`/api/polls/search` → 200).
+
+**Commit:** `385eef4`
+
 ## 2026-09-27 — feat: Super "disable all polls" kill-switch (purview work, Phase E)
 
 **Requested:**
