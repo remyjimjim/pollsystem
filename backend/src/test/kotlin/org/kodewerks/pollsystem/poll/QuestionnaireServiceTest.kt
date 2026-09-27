@@ -47,6 +47,25 @@ class QuestionnaireServiceTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `save draft is rejected for a non-creator`() {
+        val user = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "plainuser")
+        assertThatThrownBy {
+            service.saveDraft(
+                user,
+                QuestionnaireDraftRequest(
+                    pollTypeId = questionnairePollTypeId,
+                    title = "Nope",
+                    summary = "Should be forbidden",
+                    questions = listOf(QuestionInput("Q?")),
+                    zipcodes = listOf("90001")
+                )
+            )
+        }
+            .isInstanceOf(ResponseStatusException::class.java)
+            .hasMessageContaining("Creator access")
+    }
+
+    @Test
     fun `update replaces questions and domains for a DRAFT`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
         val initial = service.saveDraft(

@@ -1,6 +1,7 @@
 package org.kodewerks.pollsystem.poll
 
 import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
@@ -32,6 +33,22 @@ fun requireParticipation(principal: AppUserDetails) {
         throw ResponseStatusException(
             HttpStatus.PAYMENT_REQUIRED,
             "An active subscription is required to participate",
+        )
+    }
+}
+
+/**
+ * Guards poll creation/editing: only CREATOR and above (CREATOR, ADMIN, SUPER)
+ * may create, edit, or publish polls. USER/VIEWER get 403. The /creator create
+ * UI is already access-gated in the router; this is the server-side backstop.
+ * A creator's *purview* is territorial (what they were granted) and does NOT
+ * limit which localities they may create for — only the role is checked here.
+ */
+fun requireCreator(user: User) {
+    if (user.access < AccessLevel.CREATOR) {
+        throw ResponseStatusException(
+            HttpStatus.FORBIDDEN,
+            "Creator access is required to create or edit polls",
         )
     }
 }

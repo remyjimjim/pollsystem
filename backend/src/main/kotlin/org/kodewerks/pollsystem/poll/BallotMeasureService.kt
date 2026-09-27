@@ -24,6 +24,7 @@ class BallotMeasureService(
 
     @Transactional
     fun saveDraft(creator: User, dto: BallotMeasureDraftRequest): BallotMeasure {
+        requireCreator(creator)
         val pt = pollTypes.findById(dto.pollTypeId).orElseThrow {
             ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type")
         }
@@ -52,6 +53,7 @@ class BallotMeasureService(
 
     @Transactional
     fun update(id: Long, creator: User, dto: BallotMeasureDraftRequest): BallotMeasure {
+        requireCreator(creator)
         val existing = loadOwned(id, creator)
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT can be edited")
@@ -83,6 +85,7 @@ class BallotMeasureService(
 
     @Transactional
     fun publish(id: Long, creator: User, confirmed: Boolean): BallotMeasure {
+        requireCreator(creator)
         val existing = loadOwned(id, creator)
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT can be published")

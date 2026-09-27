@@ -31,6 +31,7 @@ class ElectionService(
 
     @Transactional
     fun saveDraft(creator: User, dto: ElectionDraftRequest): Election {
+        requireCreator(creator)
         val pt = pollTypes.findById(dto.pollTypeId).orElseThrow {
             ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type")
         }
@@ -51,6 +52,7 @@ class ElectionService(
 
     @Transactional
     fun update(id: Long, creator: User, dto: ElectionDraftRequest): Election {
+        requireCreator(creator)
         val existing = loadOwned(id, creator)
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT can be edited")
@@ -73,6 +75,7 @@ class ElectionService(
 
     @Transactional
     fun publish(id: Long, creator: User, confirmed: Boolean): Election {
+        requireCreator(creator)
         val existing = loadOwned(id, creator)
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT can be published")

@@ -30,6 +30,7 @@ class QuestionnaireService(
 
     @Transactional
     fun saveDraft(creator: User, dto: QuestionnaireDraftRequest): Questionnaire {
+        requireCreator(creator)
         val pt = pollTypes.findById(dto.pollTypeId).orElseThrow {
             ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type")
         }
@@ -50,6 +51,7 @@ class QuestionnaireService(
 
     @Transactional
     fun update(id: Long, creator: User, dto: QuestionnaireDraftRequest): Questionnaire {
+        requireCreator(creator)
         val existing = loadOwned(id, creator)
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT questionnaires can be edited")
@@ -72,6 +74,7 @@ class QuestionnaireService(
 
     @Transactional
     fun publish(id: Long, creator: User, confirmed: Boolean): Questionnaire {
+        requireCreator(creator)
         val existing = loadOwned(id, creator)
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT questionnaires can be published")
