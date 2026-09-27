@@ -313,6 +313,19 @@ class AdminPollsController(
                     stateId = sId, createdBy = principal.user.id
                 ))
             }
+            BlockScope.EVERYWHERE -> {
+                // Whole-poll block: no zip/county/state discriminator. The admin
+                // still needs purview over the poll itself.
+                if (!matchesGeo(zips, purview, null)) {
+                    throw ResponseStatusException(HttpStatus.FORBIDDEN, "This poll is outside your purview")
+                }
+                val existing = blocks.findByPollTypeAndPollIdAndScope(kind, id, BlockScope.EVERYWHERE).firstOrNull()
+                if (existing != null) return toBlockDto(existing)
+                blocks.save(PollTypeBlock(
+                    pollType = kind, pollId = id, scope = BlockScope.EVERYWHERE,
+                    createdBy = principal.user.id
+                ))
+            }
         }
         return toBlockDto(saved)
     }
@@ -328,6 +341,12 @@ class AdminPollsController(
             BlockScope.ZIPCODE -> b.zipcode?.let { requirePurviewZipcode(purview, it) }
             BlockScope.COUNTY -> b.countyId?.let { requirePurviewCounty(purview, it) }
             BlockScope.STATE -> b.stateId?.let { requirePurviewState(purview, it) }
+            BlockScope.EVERYWHERE -> {
+                val (_, zips) = locatePoll(b.pollType.name, b.pollId)
+                if (!matchesGeo(zips, purview, null)) {
+                    throw ResponseStatusException(HttpStatus.FORBIDDEN, "This poll is outside your purview")
+                }
+            }
         }
         blocks.delete(b)
     }

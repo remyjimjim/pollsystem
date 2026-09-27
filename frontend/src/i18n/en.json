@@ -546,6 +546,8 @@
       "scopeZipcode": "This zipcode only",
       "scopeCounty": "The whole county",
       "scopeState": "The whole state",
+      "scopeEverywhere": "Everywhere (whole poll)",
+      "scopeEverywhereLabel": "everywhere",
       "removeBlock": "Remove",
       "disableButton": "Disable",
       "noteNone": "(none)",

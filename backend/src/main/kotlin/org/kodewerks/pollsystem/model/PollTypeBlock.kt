@@ -5,7 +5,7 @@ import java.time.Instant
 
 enum class PollKind { ELECTION, QUESTIONNAIRE, BALLOT_MEASURE }
 
-enum class BlockScope { ZIPCODE, COUNTY, STATE }
+enum class BlockScope { ZIPCODE, COUNTY, STATE, EVERYWHERE }
 
 @Entity
 @Table(name = "poll_type_blocks")

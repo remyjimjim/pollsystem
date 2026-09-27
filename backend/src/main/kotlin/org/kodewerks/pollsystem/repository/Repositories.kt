@@ -319,6 +319,7 @@ interface PollTypeBlockRepository : JpaRepository<PollTypeBlock, Long> {
     fun findByPollTypeAndPollIdAndScopeAndZipcode(pollType: PollKind, pollId: Long, scope: BlockScope, zipcode: String): PollTypeBlock?
     fun findByPollTypeAndPollIdAndScopeAndCountyId(pollType: PollKind, pollId: Long, scope: BlockScope, countyId: Long): PollTypeBlock?
     fun findByPollTypeAndPollIdAndScopeAndStateId(pollType: PollKind, pollId: Long, scope: BlockScope, stateId: Long): PollTypeBlock?
+    fun findByPollTypeAndPollIdAndScope(pollType: PollKind, pollId: Long, scope: BlockScope): List<PollTypeBlock>
 }
 
 @Repository

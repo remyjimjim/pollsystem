@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
 type Kind = 'ELECTION' | 'QUESTIONNAIRE' | 'BALLOT_MEASURE'
-type Scope = 'ZIPCODE' | 'COUNTY' | 'STATE'
+type Scope = 'ZIPCODE' | 'COUNTY' | 'STATE' | 'EVERYWHERE'
 type SortKey = 'title' | 'type' | 'creatorEmail' | 'stateInitial' | 'countyName' | 'zipcode' | 'closeDate' | 'blocked' | 'note'
 
 interface NoteDto { id: number; body: string; emailed: boolean; createdAt: string; updatedAt: string }
@@ -865,7 +865,8 @@ onBeforeUnmount(() => {
                 <strong>{{ b.scope }}</strong>
                 <template v-if="b.scope === 'ZIPCODE'"> · <span class="font-mono">{{ b.zipcode }}</span></template>
                 <template v-else-if="b.scope === 'COUNTY'"> · {{ b.countyName }}</template>
-                <template v-else> · {{ b.stateInitial }}</template>
+                <template v-else-if="b.scope === 'STATE'"> · {{ b.stateInitial }}</template>
+                <template v-else> · {{ $t('admin.managePolls.scopeEverywhereLabel') }}</template>
               </span>
               <button type="button" @click="removeBlock(b)" :disabled="blockModalBusy"
                 class="rounded border border-slate-300 px-2 py-0.5 text-xs hover:bg-slate-50 disabled:opacity-50">
@@ -894,6 +895,10 @@ onBeforeUnmount(() => {
             <input type="radio" value="STATE" v-model="blockModalScope" />
             <span>{{ $t('admin.managePolls.scopeState') }}</span>
             <span v-if="blockModalScope === 'STATE'" class="ml-2 text-slate-700">{{ blockModalRow?.stateInitial ?? '—' }}</span>
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="radio" value="EVERYWHERE" v-model="blockModalScope" />
+            <span>{{ $t('admin.managePolls.scopeEverywhere') }}</span>
           </label>
         </fieldset>
         <p v-if="blockModalError" class="mb-2 text-xs text-red-700">{{ blockModalError }}</p>

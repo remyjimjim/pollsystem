@@ -160,6 +160,53 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `EVERYWHERE block is idempotent, marks the poll blocked, and is removable`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "evw-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "evw-creator")
+        val e = newElection(creator, zipcode = "90001", title = "Everywhere-blockable")
+
+        val first = controller.createBlock(
+            type = "ELECTION", id = e.id,
+            body = CreateBlockRequest(scope = BlockScope.EVERYWHERE, zipcode = null, countyId = null, stateId = null),
+            principal = principalFor(admin)
+        )
+        assertThat(first.scope).isEqualTo(BlockScope.EVERYWHERE)
+
+        // A second EVERYWHERE request returns the same row (idempotent).
+        val second = controller.createBlock(
+            type = "ELECTION", id = e.id,
+            body = CreateBlockRequest(scope = BlockScope.EVERYWHERE, zipcode = null, countyId = null, stateId = null),
+            principal = principalFor(admin)
+        )
+        assertThat(second.id).isEqualTo(first.id)
+
+        val rows = controller.list(principalFor(admin), listOf("ELECTION"), null, null, null, null, null, true)
+        assertThat(rows.first { it.id == e.id }.blocked).isTrue()
+
+        controller.deleteBlock(first.id, principalFor(admin))
+        assertThat(blocks.findById(first.id)).isEmpty
+    }
+
+    @Test
+    fun `EVERYWHERE block on a poll outside the admin's purview is rejected`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "evw-oop-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "evw-oop-creator")
+        val outside = newElection(creator, zipcode = "10001", title = "Outside")
+
+        assertThatThrownBy {
+            controller.createBlock(
+                type = "ELECTION", id = outside.id,
+                body = CreateBlockRequest(scope = BlockScope.EVERYWHERE, zipcode = null, countyId = null, stateId = null),
+                principal = principalFor(admin)
+            )
+        }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
+            assertThat(it.statusCode.value()).isEqualTo(403)
+        }
+    }
+
+    @Test
     fun `note create + list + edit`() {
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "note-admin")
         fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
