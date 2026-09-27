@@ -148,6 +148,33 @@ class PollPurviewServiceTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `classifyZips batch-labels each zip within or outside`() {
+        val countyRows = listOf(row(ScopeLevel.COUNTY, countyId = laCountyId))
+        val m = service.classifyZips(countyRows, listOf("90001", "10001", null))
+        assertThat(m["90001"]).isTrue()
+        assertThat(m["10001"]).isFalse()
+        assertThat(m[null]).isFalse()
+
+        // NATIONAL (or no rows) → everyone within, even a null zip.
+        assertThat(service.classifyZips(listOf(row(ScopeLevel.NATIONAL)), listOf("10001", null)).values)
+            .containsOnly(true)
+        assertThat(service.classifyZips(emptyList(), listOf("10001")).values).containsOnly(true)
+    }
+
+    @Test
+    fun `filterByPurview keeps only the selected within-outside group`() {
+        val purview = listOf(row(ScopeLevel.STATE, stateId = caStateId)) // CA
+        val zips = listOf("90001", "10001") // CA, NY
+
+        assertThat(filterByPurview(zips, { it }, purview, withinPurview = true, outsidePurview = false, service))
+            .containsExactly("90001")
+        assertThat(filterByPurview(zips, { it }, purview, withinPurview = false, outsidePurview = true, service))
+            .containsExactly("10001")
+        assertThat(filterByPurview(zips, { it }, purview, withinPurview = true, outsidePurview = true, service))
+            .containsExactlyInAnyOrder("90001", "10001")
+    }
+
+    @Test
     fun `replacePurview rejects a ballot measure, unknown zips, and empty selections`() {
         assertThatThrownBy { service.replacePurview(PollKind.BALLOT_MEASURE, 1L, ScopeLevel.NATIONAL) }
             .isInstanceOf(ResponseStatusException::class.java)

@@ -90,20 +90,26 @@ class QuestionnaireResultsTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `onlyPurview narrows to submitters within the poll's zipcode set`() {
+    fun `within-outside purview split narrows to the selected group`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
-        val pollId = publishOneQuestionPoll(creator)  // domain zip = 90001
+        val pollId = publishOneQuestionPoll(creator)  // purview mirrored to ZIP 90001
 
         repeat(3) { submit(pollId, fixtures.createUser(zipcode = "90001", emailPrefix = "in$it"), "Yes") }
         repeat(2) { submit(pollId, fixtures.createUser(zipcode = "10001", emailPrefix = "out$it"), "No") }
 
-        val all = resultsController.get(pollId, onlyPurview = false)
+        // Both groups (default) → everyone.
+        val all = resultsController.get(pollId)
         assertThat(all.totalRespondents).isEqualTo(5)
 
-        val withinPurview = resultsController.get(pollId, onlyPurview = true)
-        assertThat(withinPurview.suppressed).isFalse
-        assertThat(withinPurview.totalRespondents).isEqualTo(3)
-        assertThat(withinPurview.filterApplied).containsEntry("onlyPurview", "true")
+        // Within-purview only → the 3 at 90001 (>= threshold 3, not suppressed).
+        val within = resultsController.get(pollId, withinPurview = true, outsidePurview = false)
+        assertThat(within.suppressed).isFalse
+        assertThat(within.totalRespondents).isEqualTo(3)
+        assertThat(within.filterApplied).containsEntry("outsidePurview", "false")
+
+        // Outside-purview only → the 2 at 10001 (< threshold 3, suppressed).
+        val outside = resultsController.get(pollId, withinPurview = false, outsidePurview = true)
+        assertThat(outside.suppressed).isTrue
     }
 
     @Test

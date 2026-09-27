@@ -70,6 +70,29 @@ class PollPurviewService(
         includesZip(purviewOf(kind, pollId), zip)
 
     /**
+     * Classify each of [zips] as within (true) / outside (false) [rows],
+     * batch-resolving geography in ONE query (avoids the N+1 that a per-zip
+     * [includesZip] would create when partitioning many respondents). A null or
+     * blank zip is "outside" unless the purview is nationwide.
+     */
+    fun classifyZips(rows: List<PollPurview>, zips: Collection<String?>): Map<String?, Boolean> {
+        val nationwide = rows.isEmpty() || rows.any { it.scopeLevel == ScopeLevel.NATIONAL }
+        if (nationwide) return zips.toSet().associateWith { true }
+        val zipRows = rows.filter { it.scopeLevel == ScopeLevel.ZIP }.mapNotNull { it.zipcode }.toSet()
+        val countyRows = rows.filter { it.scopeLevel == ScopeLevel.COUNTY }.mapNotNull { it.countyId }.toSet()
+        val stateRows = rows.filter { it.scopeLevel == ScopeLevel.STATE }.mapNotNull { it.stateId }.toSet()
+        val realZips = zips.filterNotNull().filter { it.isNotBlank() }.distinct()
+        val meta = if (realZips.isEmpty()) emptyMap() else countyZips.findByZipcodeIn(realZips).associateBy { it.zipcode }
+        return zips.toSet().associateWith { zip ->
+            when {
+                zip.isNullOrBlank() -> false
+                zip in zipRows -> true
+                else -> meta[zip]?.let { it.county.id in countyRows || it.county.state.id in stateRows } == true
+            }
+        }
+    }
+
+    /**
      * Replace a poll's purview rows (delete-then-insert, mirroring
      * QuestionnaireService.replaceDomains). Fans a {scopeLevel, regionIds,
      * zipcodes} selection out into rows, setting only the level's own geo column

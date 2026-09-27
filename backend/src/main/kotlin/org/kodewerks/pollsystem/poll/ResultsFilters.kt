@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.PollPurview
 import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
 
@@ -33,12 +34,17 @@ internal fun resolveGeoFilter(
     }
 }
 
-/** Describes the geo filter for `filterApplied`. Used by the three Results DTOs. */
+/**
+ * Describes the active filter for `filterApplied`. Used by the three Results
+ * DTOs. The purview split is reported only when it narrows (i.e. one of the two
+ * groups is excluded); both-on is the unfiltered default and adds nothing.
+ */
 internal fun describeFilter(
     zipcodes: List<String>?,
     stateIds: List<Long>?,
     countyIds: List<Long>?,
-    onlyPurview: Boolean
+    withinPurview: Boolean,
+    outsidePurview: Boolean
 ): Map<String, String>? = buildMap {
     zipcodes?.filter { it.isNotBlank() }?.takeIf { it.isNotEmpty() }
         ?.let { put("zipcode", it.joinToString(",")) }
@@ -46,5 +52,27 @@ internal fun describeFilter(
         ?.let { put("countyId", it.joinToString(",")) }
     stateIds?.takeIf { it.isNotEmpty() }
         ?.let { put("stateId", it.joinToString(",")) }
-    if (onlyPurview) put("onlyPurview", "true")
+    if (!withinPurview) put("withinPurview", "false")
+    if (!outsidePurview) put("outsidePurview", "false")
 }.takeIf { it.isNotEmpty() }
+
+/**
+ * Partition results by whether the respondent's zipcode falls inside the poll's
+ * purview, keeping only the selected group(s). Both-on is the no-op default.
+ * Batch-classifies via [PollPurviewService.classifyZips] (one geo query).
+ */
+internal fun <T> filterByPurview(
+    rows: List<T>,
+    zipOf: (T) -> String?,
+    purviewRows: List<PollPurview>,
+    withinPurview: Boolean,
+    outsidePurview: Boolean,
+    purviewService: PollPurviewService
+): List<T> {
+    if (withinPurview && outsidePurview) return rows
+    val classified = purviewService.classifyZips(purviewRows, rows.map(zipOf))
+    return rows.filter {
+        val within = classified[zipOf(it)] ?: false
+        (withinPurview && within) || (outsidePurview && !within)
+    }
+}

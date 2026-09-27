@@ -1,11 +1,13 @@
 package org.kodewerks.pollsystem.poll
 
 import org.kodewerks.pollsystem.model.PollKind
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
 import org.kodewerks.pollsystem.repository.CandidateRepository
 import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.ElectionRepository
+import org.kodewerks.pollsystem.repository.PollPurviewRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.springframework.web.bind.annotation.GetMapping
@@ -42,6 +44,7 @@ class PollSearchController(
     private val candidates: CandidateRepository,
     private val countyZips: CountyZipsRepository,
     private val counties: CountyRepository,
+    private val pollPurviews: PollPurviewRepository,
     private val blockService: PollBlockService
 ) {
 
@@ -88,6 +91,31 @@ class PollSearchController(
             else -> null
         }
 
+        // Purview-aware geo match: a poll surfaces for a geo search when the
+        // SEARCHED location falls inside the poll's purview (zip ∈ county ∈ state
+        // ∈ nation), read from poll_purviews — not when the poll's own stored zip
+        // happens to equal the searched one. Resolve the searched zips to their
+        // counties/states once; load purview rows only when a geo filter is set.
+        val searchedZips: Set<String> = geoFilter ?: emptySet()
+        val searchedMeta = if (searchedZips.isEmpty()) emptyList()
+            else countyZips.findByZipcodeIn(searchedZips.toList())
+        val searchedCounties = searchedMeta.map { it.county.id }.toSet()
+        val searchedStates = searchedMeta.map { it.county.state.id }.toSet()
+        val purviewByPoll = if (geoFilter == null) emptyMap()
+            else pollPurviews.findAll().groupBy { it.pollType to it.pollId }
+        fun purviewIncludesSearch(kind: PollKind, pollId: Long): Boolean {
+            val rows = purviewByPoll[kind to pollId].orEmpty()
+            if (rows.isEmpty()) return true // no declared purview = nationwide
+            return rows.any { r ->
+                when (r.scopeLevel) {
+                    ScopeLevel.NATIONAL -> true
+                    ScopeLevel.ZIP -> r.zipcode in searchedZips
+                    ScopeLevel.COUNTY -> r.countyId in searchedCounties
+                    ScopeLevel.STATE -> r.stateId in searchedStates
+                }
+            }
+        }
+
         val titleQuery = title?.takeIf { it.isNotBlank() }
         val candidateQuery = candidateName?.takeIf { it.isNotBlank() }
 
@@ -121,7 +149,7 @@ class PollSearchController(
                     .map { ZipState(it.zipcode, it.state.initial) }
                     .distinctBy { it.code }
                     .sortedBy { it.code }
-                if (geoFilter != null && zipStates.none { it.code in geoFilter }) continue
+                if (geoFilter != null && !purviewIncludesSearch(PollKind.QUESTIONNAIRE, q.id)) continue
                 results += PollSearchResult(
                     id = q.id,
                     type = "Questionnaire",
@@ -143,7 +171,7 @@ class PollSearchController(
                     )
                 ) continue
                 if (!matches(e.creator.email, creatorEmail)) continue
-                if (geoFilter != null && e.zipcode !in geoFilter) continue
+                if (geoFilter != null && !purviewIncludesSearch(PollKind.ELECTION, e.id)) continue
                 results += PollSearchResult(
                     id = e.id,
                     type = "Election",
@@ -163,7 +191,8 @@ class PollSearchController(
                 if (!textMatch(titleHit = titleHit(bm.title, titleQuery), candidateHit = false)) continue
                 if (!matches(bm.creator.email, creatorEmail)) continue
                 val zip = bm.election.zipcode
-                if (geoFilter != null && zip !in geoFilter) continue
+                // Ballot measures inherit their election's purview.
+                if (geoFilter != null && !purviewIncludesSearch(PollKind.ELECTION, bm.election.id)) continue
                 results += PollSearchResult(
                     id = bm.id,
                     type = "BallotMeasure",

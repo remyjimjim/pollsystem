@@ -65,7 +65,10 @@ const eData = ref<ElectionResultsDto | null>(null)
 const bData = ref<BallotMeasureResultsDto | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
-const onlyPurview = ref(false)
+// Two purview groups; both on = every respondent (the default). Turning one
+// off narrows the aggregate to the other group (within- or outside-purview).
+const withinPurview = ref(true)
+const outsidePurview = ref(true)
 
 // ---------- geo pickers (same UX as /polls/search) ----------
 const states = ref<StateRow[]>([])
@@ -239,7 +242,8 @@ async function load() {
     if (selectedZipcodes.value.length > 0) params.zipcode = selectedZipcodes.value.join(',')
     else if (selectedCountyIds.value.length > 0) params.countyId = selectedCountyIds.value.join(',')
     else if (selectedStateIds.value.length > 0) params.stateId = selectedStateIds.value.join(',')
-    if (onlyPurview.value) params.onlyPurview = 'true'
+    if (!withinPurview.value) params.withinPurview = 'false'
+    if (!outsidePurview.value) params.outsidePurview = 'false'
     if (type.value === 'questionnaire') {
       const res = await axios.get<QuestionnaireResultsDto>(
         `/api/polls/questionnaires/${id.value}/results`,
@@ -335,15 +339,19 @@ onBeforeUnmount(() => {
       <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
       <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
 
-      <!-- Purview note + checkbox. Default is "all respondents"; checking
-           the box re-fetches with onlyPurview=true so the aggregate is
-           narrowed to submitters whose user.zipcode is in the poll's set. -->
+      <!-- Purview split. Both boxes on (default) = every respondent. Unchecking
+           one narrows the aggregate to the other group; each toggle re-fetches so
+           k-anonymity is applied to the shown group. -->
       <div v-if="data" class="mb-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
         <p class="m-0">{{ $t('results.purviewNote') }}</p>
         <p class="m-0 mt-1 text-xs text-slate-500">{{ $t('results.purviewUsOnly') }}</p>
         <label class="mt-2 flex items-center gap-2 font-semibold text-slate-700">
-          <input v-model="onlyPurview" type="checkbox" @change="load" class="h-4 w-4" />
-          {{ $t('results.onlyPurview') }}
+          <input v-model="withinPurview" type="checkbox" @change="load" class="h-4 w-4" />
+          {{ $t('results.withinPurview') }}
+        </label>
+        <label class="mt-1 flex items-center gap-2 font-semibold text-slate-700">
+          <input v-model="outsidePurview" type="checkbox" @change="load" class="h-4 w-4" />
+          {{ $t('results.outsidePurview') }}
         </label>
       </div>
 

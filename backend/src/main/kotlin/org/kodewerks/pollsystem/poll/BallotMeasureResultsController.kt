@@ -32,6 +32,7 @@ class BallotMeasureResultsController(
     private val measures: BallotMeasureRepository,
     private val responses: BallotResponseRepository,
     private val blocks: PollBlockService,
+    private val purviews: PollPurviewService,
     private val countyZips: CountyZipsRepository,
     private val counties: CountyRepository,
     @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
@@ -44,7 +45,8 @@ class BallotMeasureResultsController(
         @RequestParam(name = "zipcode", required = false) zipcodes: List<String>? = null,
         @RequestParam(name = "stateId", required = false) stateIds: List<Long>? = null,
         @RequestParam(name = "countyId", required = false) countyIds: List<Long>? = null,
-        @RequestParam(required = false, defaultValue = "false") onlyPurview: Boolean = false
+        @RequestParam(required = false, defaultValue = "true") withinPurview: Boolean = true,
+        @RequestParam(required = false, defaultValue = "true") outsidePurview: Boolean = true
     ): BallotMeasureResultsDto {
         val measure = measures.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
@@ -52,19 +54,23 @@ class BallotMeasureResultsController(
         if (blocks.isBlocked(PollKind.BALLOT_MEASURE, measure.id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
-        val purviewZips = setOf(measure.election.zipcode)
         val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
         val all = responses.findByMeasureId(id)
         var filtered = all
         // A responder with no zipcode (profile not yet completed) can't fall in
         // any geographic group, so they're excluded from a filtered/purview view.
         if (geoZips != null) filtered = filtered.filter { it.user.zipcode?.let { z -> z in geoZips } == true }
-        if (onlyPurview) filtered = filtered.filter { it.user.zipcode?.let { z -> z in purviewZips } == true }
+        // Ballot measures inherit their election's purview (purviewOf resolves it).
+        filtered = filterByPurview(
+            filtered, { it.user.zipcode }, purviews.purviewOf(PollKind.BALLOT_MEASURE, id),
+            withinPurview, outsidePurview, purviews
+        )
 
         val respondents = filtered.size  // unique by (user, measure) constraint
-        val filterMap = describeFilter(zipcodes, stateIds, countyIds, onlyPurview)
+        val filterMap = describeFilter(zipcodes, stateIds, countyIds, withinPurview, outsidePurview)
+        val narrowed = geoZips != null || !(withinPurview && outsidePurview)
 
-        if ((geoZips != null || onlyPurview) && respondents < kThreshold) {
+        if (narrowed && respondents < kThreshold) {
             return BallotMeasureResultsDto(
                 measureId = id,
                 title = measure.title,

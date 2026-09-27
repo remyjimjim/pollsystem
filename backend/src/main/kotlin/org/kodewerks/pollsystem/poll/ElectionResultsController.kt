@@ -43,6 +43,7 @@ class ElectionResultsController(
     private val candidates: CandidateRepository,
     private val responses: CandidateResponseRepository,
     private val blocks: PollBlockService,
+    private val purviews: PollPurviewService,
     private val countyZips: CountyZipsRepository,
     private val counties: CountyRepository,
     @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
@@ -55,7 +56,8 @@ class ElectionResultsController(
         @RequestParam(name = "zipcode", required = false) zipcodes: List<String>? = null,
         @RequestParam(name = "stateId", required = false) stateIds: List<Long>? = null,
         @RequestParam(name = "countyId", required = false) countyIds: List<Long>? = null,
-        @RequestParam(required = false, defaultValue = "false") onlyPurview: Boolean = false
+        @RequestParam(required = false, defaultValue = "true") withinPurview: Boolean = true,
+        @RequestParam(required = false, defaultValue = "true") outsidePurview: Boolean = true
     ): ElectionResultsDto {
         val election = elections.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
@@ -65,19 +67,24 @@ class ElectionResultsController(
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
         }
         val candidateList = candidates.findByElectionId(id)
-        val purviewZips = setOf(election.zipcode)
         val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
         val all = responses.findByElectionId(id)
         var filtered = all
         // A responder with no zipcode (profile not yet completed) can't fall in
         // any geographic group, so they're excluded from a filtered/purview view.
         if (geoZips != null) filtered = filtered.filter { it.user.zipcode?.let { z -> z in geoZips } == true }
-        if (onlyPurview) filtered = filtered.filter { it.user.zipcode?.let { z -> z in purviewZips } == true }
+        // Split by within/outside the poll's purview (poll_purviews), keeping the
+        // selected group(s). Both-on is the unfiltered default.
+        filtered = filterByPurview(
+            filtered, { it.user.zipcode }, purviews.purviewOf(PollKind.ELECTION, id),
+            withinPurview, outsidePurview, purviews
+        )
 
         val respondents = filtered.map { it.user.id }.distinct().size
-        val filterMap = describeFilter(zipcodes, stateIds, countyIds, onlyPurview)
+        val filterMap = describeFilter(zipcodes, stateIds, countyIds, withinPurview, outsidePurview)
+        val narrowed = geoZips != null || !(withinPurview && outsidePurview)
 
-        if ((geoZips != null || onlyPurview) && respondents < kThreshold) {
+        if (narrowed && respondents < kThreshold) {
             return ElectionResultsDto(
                 electionId = id,
                 title = election.title,
