@@ -4,10 +4,14 @@ import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollPurview
 import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
+import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.PollPurviewRepository
+import org.kodewerks.pollsystem.repository.StateRepository
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.server.ResponseStatusException
 
 /**
  * A poll's PURVIEW (territorial scope) and the membership test that drives both
@@ -24,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional
 class PollPurviewService(
     private val purviews: PollPurviewRepository,
     private val countyZips: CountyZipsRepository,
-    private val ballotMeasures: BallotMeasureRepository
+    private val ballotMeasures: BallotMeasureRepository,
+    private val states: StateRepository,
+    private val counties: CountyRepository
 ) {
 
     /** The purview rows governing this poll (ballot measures resolve to their election's). */
@@ -62,4 +68,64 @@ class PollPurviewService(
     /** Convenience: does this poll's purview include [zip]? */
     fun includesZip(kind: PollKind, pollId: Long, zip: String?): Boolean =
         includesZip(purviewOf(kind, pollId), zip)
+
+    /**
+     * Replace a poll's purview rows (delete-then-insert, mirroring
+     * QuestionnaireService.replaceDomains). Fans a {scopeLevel, regionIds,
+     * zipcodes} selection out into rows, setting only the level's own geo column
+     * (per the V22 CHECK). Ballot measures inherit their election's purview, so
+     * writing rows for one is rejected.
+     */
+    @Transactional
+    fun replacePurview(
+        kind: PollKind,
+        pollId: Long,
+        scopeLevel: ScopeLevel,
+        regionIds: List<Long> = emptyList(),
+        zipcodes: List<String> = emptyList()
+    ) {
+        if (kind == PollKind.BALLOT_MEASURE) {
+            throw bad("Ballot measures inherit their election's purview")
+        }
+        purviews.deleteByPollTypeAndPollId(kind, pollId)
+        purviews.saveAll(buildRows(kind, pollId, scopeLevel, regionIds, zipcodes))
+    }
+
+    private fun buildRows(
+        kind: PollKind,
+        pollId: Long,
+        scopeLevel: ScopeLevel,
+        regionIds: List<Long>,
+        zipcodes: List<String>
+    ): List<PollPurview> = when (scopeLevel) {
+        ScopeLevel.NATIONAL ->
+            listOf(PollPurview(pollType = kind, pollId = pollId, scopeLevel = ScopeLevel.NATIONAL))
+
+        ScopeLevel.STATE -> {
+            val ids = regionIds.distinct()
+            if (ids.isEmpty()) throw bad("Select at least one state")
+            val found = states.findAllById(ids)
+            if (found.count() != ids.size) throw bad("One or more states are unknown")
+            found.map { PollPurview(pollType = kind, pollId = pollId, scopeLevel = ScopeLevel.STATE, stateId = it.id) }
+        }
+
+        ScopeLevel.COUNTY -> {
+            val ids = regionIds.distinct()
+            if (ids.isEmpty()) throw bad("Select at least one county")
+            val found = counties.findAllById(ids)
+            if (found.count() != ids.size) throw bad("One or more counties are unknown")
+            found.map { PollPurview(pollType = kind, pollId = pollId, scopeLevel = ScopeLevel.COUNTY, countyId = it.id) }
+        }
+
+        ScopeLevel.ZIP -> {
+            val zips = zipcodes.map { it.trim() }.filter { it.isNotEmpty() }.distinct()
+            if (zips.isEmpty()) throw bad("Select at least one zipcode")
+            val known = countyZips.findByZipcodeIn(zips).map { it.zipcode }.toSet()
+            val unknown = zips.filterNot { it in known }
+            if (unknown.isNotEmpty()) throw bad("Unknown zipcodes: $unknown")
+            zips.map { PollPurview(pollType = kind, pollId = pollId, scopeLevel = ScopeLevel.ZIP, zipcode = it) }
+        }
+    }
+
+    private fun bad(msg: String) = ResponseStatusException(HttpStatus.BAD_REQUEST, msg)
 }

@@ -16,8 +16,10 @@ import org.kodewerks.pollsystem.repository.ElectionRepository
 import org.kodewerks.pollsystem.repository.PollPurviewRepository
 import org.kodewerks.pollsystem.repository.PollTypeRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 import java.time.LocalDate
 
@@ -106,5 +108,52 @@ class PollPurviewServiceTest : AbstractIntegrationTest() {
             .containsExactly(ScopeLevel.STATE)
         assertThat(service.includesZip(PollKind.BALLOT_MEASURE, bm.id, "90001")).isTrue()
         assertThat(service.includesZip(PollKind.BALLOT_MEASURE, bm.id, "10001")).isFalse()
+    }
+
+    @Test
+    fun `replacePurview writes ZIP rows and replaces them on re-call`() {
+        service.replacePurview(PollKind.ELECTION, 987_001L, ScopeLevel.ZIP, zipcodes = listOf("90001", "10001"))
+        assertThat(purviews.findByPollTypeAndPollId(PollKind.ELECTION, 987_001L))
+            .allMatch { it.scopeLevel == ScopeLevel.ZIP }
+            .hasSize(2)
+
+        // Re-call replaces (delete-then-insert), not appends.
+        service.replacePurview(PollKind.ELECTION, 987_001L, ScopeLevel.ZIP, zipcodes = listOf("90001"))
+        assertThat(purviews.findByPollTypeAndPollId(PollKind.ELECTION, 987_001L)).hasSize(1)
+    }
+
+    @Test
+    fun `replacePurview fans STATE, COUNTY, and NATIONAL selections into the right columns`() {
+        service.replacePurview(PollKind.QUESTIONNAIRE, 987_002L, ScopeLevel.STATE, regionIds = listOf(caStateId))
+        purviews.findByPollTypeAndPollId(PollKind.QUESTIONNAIRE, 987_002L).single().let {
+            assertThat(it.scopeLevel).isEqualTo(ScopeLevel.STATE)
+            assertThat(it.stateId).isEqualTo(caStateId)
+            assertThat(it.countyId).isNull()
+            assertThat(it.zipcode).isNull()
+        }
+
+        service.replacePurview(PollKind.QUESTIONNAIRE, 987_002L, ScopeLevel.COUNTY, regionIds = listOf(laCountyId))
+        purviews.findByPollTypeAndPollId(PollKind.QUESTIONNAIRE, 987_002L).single().let {
+            assertThat(it.scopeLevel).isEqualTo(ScopeLevel.COUNTY)
+            assertThat(it.countyId).isEqualTo(laCountyId)
+        }
+
+        service.replacePurview(PollKind.QUESTIONNAIRE, 987_002L, ScopeLevel.NATIONAL)
+        purviews.findByPollTypeAndPollId(PollKind.QUESTIONNAIRE, 987_002L).single().let {
+            assertThat(it.scopeLevel).isEqualTo(ScopeLevel.NATIONAL)
+            assertThat(it.stateId).isNull()
+            assertThat(it.countyId).isNull()
+            assertThat(it.zipcode).isNull()
+        }
+    }
+
+    @Test
+    fun `replacePurview rejects a ballot measure, unknown zips, and empty selections`() {
+        assertThatThrownBy { service.replacePurview(PollKind.BALLOT_MEASURE, 1L, ScopeLevel.NATIONAL) }
+            .isInstanceOf(ResponseStatusException::class.java)
+        assertThatThrownBy { service.replacePurview(PollKind.ELECTION, 987_003L, ScopeLevel.ZIP, zipcodes = listOf("00000")) }
+            .isInstanceOf(ResponseStatusException::class.java)
+        assertThatThrownBy { service.replacePurview(PollKind.ELECTION, 987_003L, ScopeLevel.STATE, regionIds = emptyList()) }
+            .isInstanceOf(ResponseStatusException::class.java)
     }
 }

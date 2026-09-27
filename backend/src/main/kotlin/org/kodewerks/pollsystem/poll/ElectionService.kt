@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.kodewerks.pollsystem.model.Candidate
 import org.kodewerks.pollsystem.model.Election
 import org.kodewerks.pollsystem.model.Office
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollStatus
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.CandidateRepository
 import org.kodewerks.pollsystem.repository.CandidateResponseRepository
@@ -26,6 +28,7 @@ class ElectionService(
     private val candidateResponses: CandidateResponseRepository,
     private val offices: OfficeRepository,
     private val pollTypes: PollTypeRepository,
+    private val purviews: PollPurviewService,
     private val objectMapper: ObjectMapper
 ) {
 
@@ -47,6 +50,7 @@ class ElectionService(
             )
         )
         replaceCandidates(saved, dto.candidates)
+        mirrorPurview(saved.id, dto.zipcode)
         return saved
     }
 
@@ -70,7 +74,23 @@ class ElectionService(
             )
         )
         replaceCandidates(updated, dto.candidates)
+        mirrorPurview(updated.id, dto.zipcode)
         return updated
+    }
+
+    /**
+     * Best-effort mirror of the election's single zipcode into poll_purviews
+     * (ZIP level). An election's zip is only pattern-validated (5 digits), not
+     * required to exist in county_zips, so an unknown zip must NOT block
+     * creation — we just leave no purview row (the service treats that as
+     * nationwide). Strict validation belongs to the future purview UI.
+     */
+    private fun mirrorPurview(electionId: Long, zipcode: String) {
+        try {
+            purviews.replacePurview(PollKind.ELECTION, electionId, ScopeLevel.ZIP, zipcodes = listOf(zipcode))
+        } catch (_: ResponseStatusException) {
+            // Unknown zip: no purview row written (nationwide fallback).
+        }
     }
 
     @Transactional

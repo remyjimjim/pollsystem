@@ -1,9 +1,11 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.model.Question
 import org.kodewerks.pollsystem.model.Questionnaire
 import org.kodewerks.pollsystem.model.QuestionnaireDomain
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.PollTypeRepository
@@ -25,7 +27,8 @@ class QuestionnaireService(
     private val questionResponses: QuestionResponseRepository,
     private val domains: QuestionnaireDomainRepository,
     private val pollTypes: PollTypeRepository,
-    private val countyZips: CountyZipsRepository
+    private val countyZips: CountyZipsRepository,
+    private val purviews: PollPurviewService
 ) {
 
     @Transactional
@@ -46,6 +49,9 @@ class QuestionnaireService(
         )
         replaceQuestions(saved, dto.questions)
         replaceDomains(saved, dto.zipcodes)
+        // Mirror the questionnaire's zips into poll_purviews (ZIP level). A later
+        // phase swaps the ZipSetter for the full County/State/National path.
+        purviews.replacePurview(PollKind.QUESTIONNAIRE, saved.id, ScopeLevel.ZIP, zipcodes = dto.zipcodes)
         return saved
     }
 
@@ -69,6 +75,7 @@ class QuestionnaireService(
         )
         replaceQuestions(updated, dto.questions)
         replaceDomains(updated, dto.zipcodes)
+        purviews.replacePurview(PollKind.QUESTIONNAIRE, updated.id, ScopeLevel.ZIP, zipcodes = dto.zipcodes)
         return updated
     }
 
