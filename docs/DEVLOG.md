@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-09-28 — feat: questionnaires use the full purview; retire questionnaire_domains (Phase F2)
+
+**Requested:**
+
+> Other polls like questionnaire and ballot measure […] the normal purview path for
+> questionnaires.
+
+> Alright, let's go all claude on the F2!
+
+**Changed:**
+
+Questionnaires join the unified purview model, and the legacy `questionnaire_domains`
+table is retired — completing [[project_poll_purview]]'s creation UI.
+
+- **Backend**: `QuestionnaireDraftRequest` carries `scopeLevel` + `regionIds` +
+  `zipcodes`; the service writes `poll_purviews` via `replacePurview` (`replaceDomains`
+  removed); publish validates purview presence; `QuestionnaireDto` exposes
+  `scopeLevel`/`regionIds`/`regionStateIds`/`regionLabel`/`zipcodes`. Every domains
+  reader rewired: search row (zips + region label from purview), admin list +
+  `locatePoll` (ZIP-purview zips), and the unused domains injections dropped from the
+  results/response controllers. Dev-reset clears `poll_purviews` for test polls.
+- **Migration V24**: defensively re-backfills any questionnaire missing purview rows,
+  then `DROP TABLE questionnaire_domains`. Entity + repository removed.
+- **Frontend**: `QuestionnaireForm` uses the full `PurviewSetter` (zip/county/state/
+  national); `EditPollView` prefills from purview; search shows the region label.
+- **Tests**: `QuestionnaireServiceTest` asserts on `poll_purviews`.
+
+With F1 + F2 the purview initiative is feature-complete. Remaining known follow-up:
+scoped admins' Manage Polls list geo-matches by zip, so coarse (County/State/National)
+polls aren't surfaced to them yet — SUPER sees all; a purview-aware admin list is a
+separate task.
+
+**Commit:** `0dd19d2`
+
 ## 2026-09-27 — feat: elections use a County/State/National purview (Phase F1)
 
 **Requested:**
