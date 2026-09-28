@@ -20,6 +20,7 @@ interface PollRow {
   zipcodes: string[]
   stateInitial: string | null
   countyName: string | null
+  regionLabel: string
   blocked: boolean
   latestNote: NoteDto | null
 }
@@ -807,7 +808,8 @@ onBeforeUnmount(() => {
           <td class="border-b border-slate-100 p-2">{{ row.stateInitial ?? '—' }}</td>
           <td class="border-b border-slate-100 p-2">{{ row.countyName ?? '—' }}</td>
           <td class="border-b border-slate-100 p-2 font-mono">
-            <template v-if="row.zipcodes.length <= 1">{{ row.zipcodes[0] ?? '—' }}</template>
+            <template v-if="row.zipcodes.length === 0"><span class="text-slate-700">{{ row.regionLabel || '—' }}</span></template>
+            <template v-else-if="row.zipcodes.length === 1">{{ row.zipcodes[0] }}</template>
             <template v-else>{{ row.zipcodes[0] }} <span class="text-slate-500">+{{ row.zipcodes.length - 1 }}</span></template>
           </td>
           <td class="border-b border-slate-100 p-2">

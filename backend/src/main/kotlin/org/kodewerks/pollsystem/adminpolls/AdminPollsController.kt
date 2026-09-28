@@ -4,8 +4,10 @@ import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.BlockScope
 import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollNote
+import org.kodewerks.pollsystem.model.PollPurview
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.model.PollTypeBlock
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
 import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
@@ -48,6 +50,8 @@ data class AdminPollRow(
     val zipcodes: List<String>,
     val stateInitial: String?,
     val countyName: String?,
+    /** Human-readable purview (e.g. "California", "Nationwide"); shown when a poll has no single zip. */
+    val regionLabel: String,
     val blocked: Boolean,
     val latestNote: NoteDto?
 )
@@ -180,10 +184,9 @@ class AdminPollsController(
             val qPool = questionnaires.findAll()
             for (q in qPool) {
                 if (needle != null && !q.title.contains(needle, ignoreCase = true)) continue
-                // ZIP-purview zips (empty for a coarse questionnaire — those aren't
-                // geo-matched for scoped admins yet; SUPER sees all).
-                val qZips = purviews.zipcodesOf(purviews.purviewOf(PollKind.QUESTIONNAIRE, q.id))
-                if (!matchesGeo(qZips, purview, explicitZipFilter)) continue
+                val pollRows = purviews.purviewOf(PollKind.QUESTIONNAIRE, q.id)
+                if (!matchesAdminGeo(pollRows, purview, explicitZipFilter)) continue
+                val qZips = purviews.zipcodesOf(pollRows)
                 val meta = zipMetaFor(qZips)
                 rows += AdminPollRow(
                     id = q.id,
@@ -192,9 +195,10 @@ class AdminPollsController(
                     status = q.status,
                     creatorEmail = q.creator.email,
                     closeDate = q.closeDate,
-                    zipcodes = qZips.sorted(),
+                    zipcodes = qZips,
                     stateInitial = qZips.firstOrNull()?.let { meta[it]?.county?.state?.initial },
                     countyName = qZips.firstOrNull()?.let { meta[it]?.county?.name },
+                    regionLabel = purviews.regionLabel(pollRows),
                     blocked = false,
                     latestNote = null
                 )
@@ -204,9 +208,8 @@ class AdminPollsController(
             val pool = elections.findAll()
             for (e in pool) {
                 if (needle != null && !e.title.contains(needle, ignoreCase = true)) continue
-                // Coarse elections have no single zip; matchesGeo on an empty list
-                // means scoped admins don't geo-match them (SUPER still sees all).
-                if (!matchesGeo(listOfNotNull(e.zipcode), purview, explicitZipFilter)) continue
+                val pollRows = purviews.purviewOf(PollKind.ELECTION, e.id)
+                if (!matchesAdminGeo(pollRows, purview, explicitZipFilter)) continue
                 val cz = e.zipcode?.let { countyZips.findByZipcode(it).firstOrNull() }
                 rows += AdminPollRow(
                     id = e.id, type = PollKind.ELECTION.name, title = e.title, status = e.status,
@@ -214,6 +217,7 @@ class AdminPollsController(
                     zipcodes = listOfNotNull(e.zipcode),
                     stateInitial = cz?.county?.state?.initial,
                     countyName = cz?.county?.name,
+                    regionLabel = purviews.regionLabel(pollRows),
                     blocked = false, latestNote = null
                 )
             }
@@ -222,8 +226,9 @@ class AdminPollsController(
             val pool = ballotMeasures.findAll()
             for (bm in pool) {
                 if (needle != null && !bm.title.contains(needle, ignoreCase = true)) continue
+                val pollRows = purviews.purviewOf(PollKind.BALLOT_MEASURE, bm.id)
+                if (!matchesAdminGeo(pollRows, purview, explicitZipFilter)) continue
                 val zip = bm.election.zipcode
-                if (!matchesGeo(listOfNotNull(zip), purview, explicitZipFilter)) continue
                 val cz = zip?.let { countyZips.findByZipcode(it).firstOrNull() }
                 rows += AdminPollRow(
                     id = bm.id, type = PollKind.BALLOT_MEASURE.name, title = bm.title, status = bm.status,
@@ -231,6 +236,7 @@ class AdminPollsController(
                     zipcodes = listOfNotNull(zip),
                     stateInitial = cz?.county?.state?.initial,
                     countyName = cz?.county?.name,
+                    regionLabel = purviews.regionLabel(pollRows),
                     blocked = false, latestNote = null
                 )
             }
@@ -318,8 +324,8 @@ class AdminPollsController(
             }
             BlockScope.EVERYWHERE -> {
                 // Whole-poll block: no zip/county/state discriminator. The admin
-                // still needs purview over the poll itself.
-                if (!matchesGeo(zips, purview, null)) {
+                // still needs purview overlapping the poll.
+                if (!matchesAdminGeo(kind, id, purview, null)) {
                     throw ResponseStatusException(HttpStatus.FORBIDDEN, "This poll is outside your purview")
                 }
                 val existing = blocks.findByPollTypeAndPollIdAndScope(kind, id, BlockScope.EVERYWHERE).firstOrNull()
@@ -345,8 +351,7 @@ class AdminPollsController(
             BlockScope.COUNTY -> b.countyId?.let { requirePurviewCounty(purview, it) }
             BlockScope.STATE -> b.stateId?.let { requirePurviewState(purview, it) }
             BlockScope.EVERYWHERE -> {
-                val (_, zips) = locatePoll(b.pollType.name, b.pollId)
-                if (!matchesGeo(zips, purview, null)) {
+                if (!matchesAdminGeo(b.pollType, b.pollId, purview, null)) {
                     throw ResponseStatusException(HttpStatus.FORBIDDEN, "This poll is outside your purview")
                 }
             }
@@ -410,8 +415,8 @@ class AdminPollsController(
         @RequestBody body: AdminPollEditRequest,
         @AuthenticationPrincipal principal: AppUserDetails
     ): NoteDto {
-        val (kind, zips) = locatePoll(type, id)
-        if (!matchesGeo(zips, resolvePurview(principal), null)) {
+        val (kind, _) = locatePoll(type, id)
+        if (!matchesAdminGeo(kind, id, resolvePurview(principal), null)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "This poll is outside your purview")
         }
         val reason = body.reason.trim()
@@ -478,24 +483,41 @@ class AdminPollsController(
         )
     }
 
-    private fun matchesGeo(
-        pollZips: List<String>,
+    /**
+     * Geo gate for the admin list + moderation, computed from the poll's PURVIEW
+     * rows (so coarse County/State/National polls are matched, not just zip-level
+     * ones). Two gates: the poll's purview must overlap the admin's reach
+     * ([purview] null = SUPER, sees all), and — if the admin drilled the UI down
+     * to specific zips ([explicit]) — the poll's purview must include one of them.
+     */
+    private fun matchesAdminGeo(
+        pollRows: List<PollPurview>,
         purview: Purview?,
         explicit: Set<String>?
     ): Boolean {
-        if (purview != null) {
-            // Restrict to admin's purview at zip-or-county-or-state granularity.
-            val ok = pollZips.any { zip ->
-                if (zip in purview.zipcodes) return@any true
-                val meta = countyZips.findByZipcode(zip)
-                meta.any { it.county.id in purview.countyIds || it.county.state.id in purview.stateIds }
-            }
-            if (!ok) return false
-        }
-        if (explicit != null) {
-            return pollZips.any { it in explicit }
-        }
+        if (purview != null && !overlapsPurview(pollRows, purview)) return false
+        if (explicit != null && !explicit.any { purviews.includesZip(pollRows, it) }) return false
         return true
+    }
+
+    /** Convenience: load [kind]/[pollId]'s purview rows, then [matchesAdminGeo]. */
+    private fun matchesAdminGeo(kind: PollKind, pollId: Long, purview: Purview?, explicit: Set<String>?): Boolean =
+        matchesAdminGeo(purviews.purviewOf(kind, pollId), purview, explicit)
+
+    /** Does a poll's purview overlap the admin's reach? No purview rows = nationwide = visible to all. */
+    private fun overlapsPurview(pollRows: List<PollPurview>, admin: Purview): Boolean {
+        if (pollRows.isEmpty()) return true
+        return pollRows.any { r ->
+            when (r.scopeLevel) {
+                ScopeLevel.NATIONAL -> true
+                ScopeLevel.STATE -> r.stateId in admin.stateIds
+                ScopeLevel.COUNTY -> r.countyId in admin.countyIds ||
+                    counties.findById(r.countyId!!).map { it.state.id in admin.stateIds }.orElse(false)
+                ScopeLevel.ZIP -> r.zipcode in admin.zipcodes ||
+                    countyZips.findByZipcode(r.zipcode!!).firstOrNull()
+                        ?.let { it.county.id in admin.countyIds || it.county.state.id in admin.stateIds } == true
+            }
+        }
     }
 
     private fun locatePoll(type: String, id: Long): Pair<PollKind, List<String>> {

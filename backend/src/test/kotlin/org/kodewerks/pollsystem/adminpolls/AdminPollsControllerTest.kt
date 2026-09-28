@@ -37,12 +37,14 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var elections: ElectionRepository
     @Autowired private lateinit var pollTypes: PollTypeRepository
     @Autowired private lateinit var blocks: PollTypeBlockRepository
+    @Autowired private lateinit var pollPurviews: org.kodewerks.pollsystem.repository.PollPurviewRepository
+    @Autowired private lateinit var countyZips: org.kodewerks.pollsystem.repository.CountyZipsRepository
 
     private fun electionPollType(): PollType =
         pollTypes.findAll().first { it.name == "Election" }
 
-    private fun newElection(creator: org.kodewerks.pollsystem.model.User, zipcode: String, title: String): Election =
-        elections.save(
+    private fun newElection(creator: org.kodewerks.pollsystem.model.User, zipcode: String, title: String): Election {
+        val e = elections.save(
             Election(
                 creator = creator,
                 pollType = electionPollType(),
@@ -53,6 +55,16 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
                 closeDate = Instant.now().plusSeconds(86_400)
             )
         )
+        // Give the election a realistic COUNTY purview (mirrors how real elections
+        // + the V22 backfill populate poll_purviews) so admin geo-matching applies.
+        countyZips.findByZipcode(zipcode).firstOrNull()?.county?.let { county ->
+            pollPurviews.save(org.kodewerks.pollsystem.model.PollPurview(
+                pollType = PollKind.ELECTION, pollId = e.id,
+                scopeLevel = org.kodewerks.pollsystem.model.ScopeLevel.COUNTY, countyId = county.id
+            ))
+        }
+        return e
+    }
 
     private fun principalFor(u: org.kodewerks.pollsystem.model.User) = AppUserDetails(u)
 
@@ -281,6 +293,35 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
             assertThat(it.statusCode.value()).isEqualTo(403)
         }
+    }
+
+    @Test
+    fun `list surfaces a coarse poll whose purview overlaps a scoped admin's state, hides one outside`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "overlap-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001") // admin's purview covers CA
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "overlap-creator")
+        val caStateId = countyZips.findByZipcode("90001").first().county.state.id
+        val nyStateId = countyZips.findByZipcode("10001").first().county.state.id
+
+        // Coarse STATE-level elections (no single zip), one in CA, one in NY —
+        // replace newElection's default COUNTY purview with a clean STATE one.
+        val inState = newElection(creator, zipcode = "90001", title = "CA Statewide")
+        pollPurviews.deleteByPollTypeAndPollId(PollKind.ELECTION, inState.id)
+        pollPurviews.save(org.kodewerks.pollsystem.model.PollPurview(
+            pollType = PollKind.ELECTION, pollId = inState.id,
+            scopeLevel = org.kodewerks.pollsystem.model.ScopeLevel.STATE, stateId = caStateId
+        ))
+        val outState = newElection(creator, zipcode = "10001", title = "NY Statewide")
+        pollPurviews.deleteByPollTypeAndPollId(PollKind.ELECTION, outState.id)
+        pollPurviews.save(org.kodewerks.pollsystem.model.PollPurview(
+            pollType = PollKind.ELECTION, pollId = outState.id,
+            scopeLevel = org.kodewerks.pollsystem.model.ScopeLevel.STATE, stateId = nyStateId
+        ))
+
+        val ids = controller.list(principalFor(admin), listOf("ELECTION"), null, null, null, null, null, false)
+            .map { it.id }.toSet()
+        assertThat(ids).contains(inState.id)
+        assertThat(ids).doesNotContain(outState.id)
     }
 
     @TestConfiguration
