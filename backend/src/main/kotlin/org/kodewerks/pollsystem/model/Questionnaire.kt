@@ -42,28 +42,8 @@ data class Questionnaire(
     val submitDate: Instant? = null
 )
 
-@Entity
-@Table(name = "questionnaire_domains")
-data class QuestionnaireDomain(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "questionnaire_id", nullable = false)
-    val questionnaire: Questionnaire,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "state_id", nullable = false)
-    val state: State,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "county_id", nullable = false)
-    val county: County,
-
-    @Column(nullable = false, length = 5)
-    val zipcode: String
-)
+// questionnaire_domains was retired in V24: a questionnaire's geo now lives in
+// poll_purviews (see [[project_poll_purview]]), unified with the other poll types.
 
 @Entity
 @Table(name = "questions")

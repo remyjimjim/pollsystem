@@ -11,7 +11,6 @@ import { ScopeLevel } from '@/types'
 const { t } = useI18n()
 
 interface QuestionDto { id: number; text: string }
-interface DomainDto { zipcode: string; countyId: number; stateId: number }
 interface QuestionnaireDto {
   id: number
   pollTypeId: number
@@ -20,7 +19,10 @@ interface QuestionnaireDto {
   status: string
   closeDate: string | null
   questions: QuestionDto[]
-  domains: DomainDto[]
+  scopeLevel: ScopeLevel
+  regionIds: number[]
+  regionStateIds: number[]
+  zipcodes: string[]
 }
 
 interface CandidateDto {
@@ -116,7 +118,10 @@ onMounted(async () => {
         summary: questionnaire.summary,
         closeDate: questionnaire.closeDate,
         questions: questionnaire.questions.map(q => ({ text: q.text })),
-        zipcodes: questionnaire.domains.map(d => d.zipcode)
+        scopeLevel: questionnaire.scopeLevel,
+        regionIds: questionnaire.regionIds,
+        regionStateIds: questionnaire.regionStateIds,
+        zipcodes: questionnaire.zipcodes
       }"
     />
 

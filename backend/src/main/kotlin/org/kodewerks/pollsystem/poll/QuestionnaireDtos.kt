@@ -3,7 +3,7 @@ package org.kodewerks.pollsystem.poll
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.model.Question
 import org.kodewerks.pollsystem.model.Questionnaire
-import org.kodewerks.pollsystem.model.QuestionnaireDomain
+import org.kodewerks.pollsystem.model.ScopeLevel
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
@@ -16,7 +16,10 @@ data class QuestionnaireDraftRequest(
     @field:NotBlank val summary: String,
     val closeDate: Instant? = null,
     @field:NotEmpty @field:Valid val questions: List<QuestionInput>,
-    @field:NotEmpty val zipcodes: List<String>
+    // Purview: zip list (ZIP), county/state ids (COUNTY/STATE), or none (NATIONAL).
+    val scopeLevel: ScopeLevel = ScopeLevel.ZIP,
+    val regionIds: List<Long> = emptyList(),
+    val zipcodes: List<String> = emptyList()
 )
 
 data class QuestionInput(
@@ -26,13 +29,6 @@ data class QuestionInput(
 data class QuestionDto(val id: Long, val text: String) {
     companion object {
         fun from(q: Question) = QuestionDto(q.id, q.question)
-    }
-}
-
-data class DomainDto(val zipcode: String, val countyId: Long, val stateId: Long) {
-    companion object {
-        fun from(d: QuestionnaireDomain) =
-            DomainDto(d.zipcode, d.county.id, d.state.id)
     }
 }
 
@@ -47,13 +43,22 @@ data class QuestionnaireDto(
     val createDate: String,
     val submitDate: Instant?,
     val questions: List<QuestionDto>,
-    val domains: List<DomainDto>
+    /** Purview scope + selections (for edit prefill) and a display label. */
+    val scopeLevel: ScopeLevel,
+    val regionIds: List<Long>,
+    val regionStateIds: List<Long>,
+    val regionLabel: String,
+    val zipcodes: List<String>
 ) {
     companion object {
         fun from(
             q: Questionnaire,
             questions: List<Question>,
-            domains: List<QuestionnaireDomain>
+            scopeLevel: ScopeLevel,
+            regionIds: List<Long>,
+            regionStateIds: List<Long>,
+            regionLabel: String,
+            zipcodes: List<String>
         ) = QuestionnaireDto(
             id = q.id,
             pollTypeId = q.pollType.id,
@@ -65,7 +70,11 @@ data class QuestionnaireDto(
             createDate = q.createDate.toString(),
             submitDate = q.submitDate,
             questions = questions.map(QuestionDto::from),
-            domains = domains.map(DomainDto::from)
+            scopeLevel = scopeLevel,
+            regionIds = regionIds,
+            regionStateIds = regionStateIds,
+            regionLabel = regionLabel,
+            zipcodes = zipcodes
         )
     }
 }

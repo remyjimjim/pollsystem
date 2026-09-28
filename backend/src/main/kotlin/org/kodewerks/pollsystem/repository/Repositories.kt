@@ -289,12 +289,6 @@ interface QuestionnaireRepository : JpaRepository<Questionnaire, Long> {
 }
 
 @Repository
-interface QuestionnaireDomainRepository : JpaRepository<QuestionnaireDomain, Long> {
-    fun findByQuestionnaireId(questionnaireId: Long): List<QuestionnaireDomain>
-    fun findByZipcode(zipcode: String): List<QuestionnaireDomain>
-}
-
-@Repository
 interface QuestionRepository : JpaRepository<Question, Long> {
     fun findByQuestionnaireId(questionnaireId: Long): List<Question>
 }

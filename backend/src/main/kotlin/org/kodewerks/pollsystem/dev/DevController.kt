@@ -91,6 +91,11 @@ class DevController(
                 SELECT id FROM elections WHERE creator_id IN ($idList)
             )
         """).executeUpdate()
+        em.createNativeQuery("""
+            DELETE FROM poll_purviews WHERE poll_type = 'ELECTION' AND poll_id IN (
+                SELECT id FROM elections WHERE creator_id IN ($idList)
+            )
+        """).executeUpdate()
         nuke("elections", "creator_id IN ($idList)")
 
         em.createNativeQuery("""
@@ -112,7 +117,7 @@ class DevController(
             )
         """).executeUpdate()
         em.createNativeQuery("""
-            DELETE FROM questionnaire_domains WHERE questionnaire_id IN (
+            DELETE FROM poll_purviews WHERE poll_type = 'QUESTIONNAIRE' AND poll_id IN (
                 SELECT id FROM questionnaires WHERE creator_id IN ($idList)
             )
         """).executeUpdate()

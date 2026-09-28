@@ -5,7 +5,6 @@ import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.model.QuestionResponse
 import org.kodewerks.pollsystem.repository.QuestionRepository
 import org.kodewerks.pollsystem.repository.QuestionResponseRepository
-import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.kodewerks.pollsystem.security.AppUserDetails
 import jakarta.validation.Valid
@@ -54,7 +53,6 @@ class QuestionnaireResponseController(
     private val questionnaires: QuestionnaireRepository,
     private val questions: QuestionRepository,
     private val responses: QuestionResponseRepository,
-    private val domains: QuestionnaireDomainRepository,
     private val blocks: PollBlockService
 ) {
 

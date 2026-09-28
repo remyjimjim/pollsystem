@@ -3,9 +3,9 @@ package org.kodewerks.pollsystem.poll
 import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
 import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.repository.QuestionRepository
-import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -21,7 +21,7 @@ class QuestionnaireServiceTest : AbstractIntegrationTest() {
     @Autowired private lateinit var fixtures: TestFixtures
     @Autowired private lateinit var questionnaires: QuestionnaireRepository
     @Autowired private lateinit var questions: QuestionRepository
-    @Autowired private lateinit var domains: QuestionnaireDomainRepository
+    @Autowired private lateinit var purviews: PollPurviewService
 
     private val questionnairePollTypeId = 2L  // V1 seed: id=2 is Questionnaire
 
@@ -43,7 +43,8 @@ class QuestionnaireServiceTest : AbstractIntegrationTest() {
 
         assertThat(saved.status).isEqualTo(PollStatus.DRAFT)
         assertThat(questions.findByQuestionnaireId(saved.id)).hasSize(1)
-        assertThat(domains.findByQuestionnaireId(saved.id)).hasSize(1)
+        assertThat(purviews.zipcodesOf(purviews.purviewOf(PollKind.QUESTIONNAIRE, saved.id)))
+            .containsExactly("90001")
     }
 
     @Test
@@ -95,7 +96,7 @@ class QuestionnaireServiceTest : AbstractIntegrationTest() {
         assertThat(refreshed.title).isEqualTo("v2")
         assertThat(questions.findByQuestionnaireId(initial.id).map { it.question })
             .containsExactlyInAnyOrder("Q1 revised", "Q2 added")
-        assertThat(domains.findByQuestionnaireId(initial.id).map { it.zipcode })
+        assertThat(purviews.zipcodesOf(purviews.purviewOf(PollKind.QUESTIONNAIRE, initial.id)))
             .containsExactlyInAnyOrder("90001", "90012")
     }
 

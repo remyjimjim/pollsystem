@@ -158,6 +158,10 @@ class PollPurviewService(
     fun scopeLevelOf(rows: List<PollPurview>): ScopeLevel =
         rows.firstOrNull()?.scopeLevel ?: ScopeLevel.NATIONAL
 
+    /** The zipcodes of a ZIP-level purview (empty otherwise) — for display / edit prefill. */
+    fun zipcodesOf(rows: List<PollPurview>): List<String> =
+        rows.mapNotNull { it.zipcode }.distinct().sorted()
+
     /** The selected region ids for STATE/COUNTY purviews (empty otherwise) — for edit prefill. */
     fun regionIdsOf(rows: List<PollPurview>): List<Long> = when (scopeLevelOf(rows)) {
         ScopeLevel.STATE -> rows.mapNotNull { it.stateId }.distinct().sorted()

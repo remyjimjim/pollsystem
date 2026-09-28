@@ -8,7 +8,6 @@ import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.ElectionRepository
 import org.kodewerks.pollsystem.repository.PollPurviewRepository
-import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -40,7 +39,6 @@ data class SearchSuggestions(
 @RequestMapping("/api/polls/search")
 class PollSearchController(
     private val questionnaires: QuestionnaireRepository,
-    private val domains: QuestionnaireDomainRepository,
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
     private val candidates: CandidateRepository,
@@ -148,18 +146,19 @@ class PollSearchController(
                 // Questionnaires have no candidates, so only the title can hit.
                 if (!textMatch(titleHit = titleHit(q.title, titleQuery), candidateHit = false)) continue
                 if (!matches(q.creator.email, creatorEmail)) continue
-                val zipStates = domains.findByQuestionnaireId(q.id)
-                    .map { ZipState(it.zipcode, it.state.initial) }
-                    .distinctBy { it.code }
-                    .sortedBy { it.code }
                 if (geoFilter != null && !purviewIncludesSearch(PollKind.QUESTIONNAIRE, q.id)) continue
+                val qRows = purviewService.purviewOf(PollKind.QUESTIONNAIRE, q.id)
+                val zipStates = purviewService.zipcodesOf(qRows)
+                    .map { ZipState(it, lookupState(it)) }
+                    .sortedBy { it.code }
                 results += PollSearchResult(
                     id = q.id,
                     type = "Questionnaire",
                     title = q.title,
                     creatorEmail = q.creator.email,
                     closeDate = q.closeDate,
-                    zipcodes = zipStates
+                    zipcodes = zipStates,
+                    regionLabel = purviewService.regionLabel(qRows)
                 )
             }
         }

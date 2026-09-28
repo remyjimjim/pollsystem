@@ -3,7 +3,8 @@ import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import ZipSetter from '@/components/ZipSetter.vue'
+import PurviewSetter from '@/components/PurviewSetter.vue'
+import { ScopeLevel, type Purview } from '@/types'
 
 const { t } = useI18n()
 
@@ -14,6 +15,9 @@ interface QuestionnaireInitial {
   summary: string
   closeDate: string | null
   questions: { text: string }[]
+  scopeLevel: ScopeLevel
+  regionIds: number[]
+  regionStateIds: number[]
   zipcodes: string[]
 }
 
@@ -38,12 +42,26 @@ const form = reactive({
   title: props.initial?.title ?? '',
   summary: props.initial?.summary ?? '',
   closeDate: toLocalInput(props.initial?.closeDate ?? null),
-  zipcodes: [...(props.initial?.zipcodes ?? [])] as string[],
   questions:
     props.initial && props.initial.questions.length > 0
       ? props.initial.questions.map(q => ({ text: q.text }))
       : ([{ text: '' }] as { text: string }[])
 })
+
+// Purview: zipcodes, whole county/state, or nationwide. Seeded on edit.
+const initialPurview = props.initial
+  ? {
+      scopeLevel: props.initial.scopeLevel,
+      regionIds: props.initial.regionIds,
+      zipcodes: props.initial.zipcodes,
+      regionStateIds: props.initial.regionStateIds,
+    }
+  : null
+const purview = ref<Purview>(
+  props.initial
+    ? { scopeLevel: props.initial.scopeLevel, regionIds: props.initial.regionIds, zipcodes: props.initial.zipcodes }
+    : { scopeLevel: ScopeLevel.ZIP, regionIds: [], zipcodes: [] },
+)
 
 const draftId = ref<number | null>(props.initial?.id ?? null)
 const submitting = ref(false)
@@ -64,7 +82,9 @@ function payload() {
     title: form.title.trim(),
     summary: form.summary.trim(),
     closeDate: form.closeDate ? new Date(form.closeDate).toISOString() : null,
-    zipcodes: form.zipcodes,
+    scopeLevel: purview.value.scopeLevel,
+    regionIds: purview.value.regionIds,
+    zipcodes: purview.value.zipcodes,
     questions: form.questions
       .map(q => ({ text: q.text.trim() }))
       .filter(q => q.text.length > 0)
@@ -74,7 +94,15 @@ function payload() {
 function validate(): string | null {
   if (!form.title.trim()) return t('form.validation.titleRequired')
   if (!form.summary.trim()) return t('form.validation.summaryRequired')
-  if (form.zipcodes.length === 0) return t('form.validation.zipcodeRequired')
+  if (purview.value.scopeLevel === ScopeLevel.ZIP && purview.value.zipcodes.length === 0) {
+    return t('form.validation.zipcodeRequired')
+  }
+  if (
+    (purview.value.scopeLevel === ScopeLevel.STATE || purview.value.scopeLevel === ScopeLevel.COUNTY) &&
+    purview.value.regionIds.length === 0
+  ) {
+    return t('form.validation.purviewRequired')
+  }
   if (form.questions.every(q => !q.text.trim())) return t('form.validation.atLeastOneQuestion')
   return null
 }
@@ -133,7 +161,7 @@ async function publish(confirmed = false) {
   <div data-component="questionnaire-form" class="flex flex-col gap-4">
     <fieldset class="rounded-md border border-slate-200 p-4">
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('common.geoScope') }}</legend>
-      <ZipSetter v-model="form.zipcodes" />
+      <PurviewSetter :initial="initialPurview" v-model="purview" />
     </fieldset>
 
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">

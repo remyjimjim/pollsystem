@@ -4,14 +4,10 @@ import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.model.Question
 import org.kodewerks.pollsystem.model.Questionnaire
-import org.kodewerks.pollsystem.model.QuestionnaireDomain
-import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
-import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.PollTypeRepository
 import org.kodewerks.pollsystem.repository.QuestionRepository
 import org.kodewerks.pollsystem.repository.QuestionResponseRepository
-import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -25,9 +21,7 @@ class QuestionnaireService(
     private val questionnaires: QuestionnaireRepository,
     private val questions: QuestionRepository,
     private val questionResponses: QuestionResponseRepository,
-    private val domains: QuestionnaireDomainRepository,
     private val pollTypes: PollTypeRepository,
-    private val countyZips: CountyZipsRepository,
     private val purviews: PollPurviewService
 ) {
 
@@ -48,10 +42,7 @@ class QuestionnaireService(
             )
         )
         replaceQuestions(saved, dto.questions)
-        replaceDomains(saved, dto.zipcodes)
-        // Mirror the questionnaire's zips into poll_purviews (ZIP level). A later
-        // phase swaps the ZipSetter for the full County/State/National path.
-        purviews.replacePurview(PollKind.QUESTIONNAIRE, saved.id, ScopeLevel.ZIP, zipcodes = dto.zipcodes)
+        purviews.replacePurview(PollKind.QUESTIONNAIRE, saved.id, dto.scopeLevel, dto.regionIds, dto.zipcodes)
         return saved
     }
 
@@ -74,8 +65,7 @@ class QuestionnaireService(
             )
         )
         replaceQuestions(updated, dto.questions)
-        replaceDomains(updated, dto.zipcodes)
-        purviews.replacePurview(PollKind.QUESTIONNAIRE, updated.id, ScopeLevel.ZIP, zipcodes = dto.zipcodes)
+        purviews.replacePurview(PollKind.QUESTIONNAIRE, updated.id, dto.scopeLevel, dto.regionIds, dto.zipcodes)
         return updated
     }
 
@@ -87,9 +77,10 @@ class QuestionnaireService(
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT questionnaires can be published")
         }
         val q = questions.findByQuestionnaireId(existing.id)
-        val d = domains.findByQuestionnaireId(existing.id)
         if (q.isEmpty()) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one question required")
-        if (d.isEmpty()) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one zipcode required")
+        if (purviews.purviewOf(PollKind.QUESTIONNAIRE, existing.id).isEmpty()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "A purview is required")
+        }
 
         val close = existing.closeDate
         if (close != null) {
@@ -129,8 +120,15 @@ class QuestionnaireService(
     @Transactional(readOnly = true)
     fun toDto(q: Questionnaire): QuestionnaireDto {
         val qList = questions.findByQuestionnaireId(q.id)
-        val dList = domains.findByQuestionnaireId(q.id)
-        return QuestionnaireDto.from(q, qList, dList)
+        val rows = purviews.purviewOf(PollKind.QUESTIONNAIRE, q.id)
+        return QuestionnaireDto.from(
+            q, qList,
+            scopeLevel = purviews.scopeLevelOf(rows),
+            regionIds = purviews.regionIdsOf(rows),
+            regionStateIds = purviews.regionStateIdsOf(rows),
+            regionLabel = purviews.regionLabel(rows),
+            zipcodes = purviews.zipcodesOf(rows),
+        )
     }
 
     private fun loadOwned(id: Long, creator: User): Questionnaire {
@@ -162,25 +160,5 @@ class QuestionnaireService(
         }
         questions.deleteAll(existing)
         questions.saveAll(inputs.map { Question(questionnaire = q, question = it.text.trim()) })
-    }
-
-    private fun replaceDomains(q: Questionnaire, zipcodes: List<String>) {
-        domains.deleteAll(domains.findByQuestionnaireId(q.id))
-        val zipRows = countyZips.findByZipcodeIn(zipcodes.distinct())
-        val zipToCounty = zipRows.associateBy { it.zipcode }
-        val unknown = zipcodes.distinct().filterNot { it in zipToCounty }
-        if (unknown.isNotEmpty()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown zipcodes: $unknown")
-        }
-        val newDomains = zipcodes.distinct().map { zip ->
-            val cz = zipToCounty.getValue(zip)
-            QuestionnaireDomain(
-                questionnaire = q,
-                state = cz.county.state,
-                county = cz.county,
-                zipcode = zip
-            )
-        }
-        domains.saveAll(newDomains)
     }
 }

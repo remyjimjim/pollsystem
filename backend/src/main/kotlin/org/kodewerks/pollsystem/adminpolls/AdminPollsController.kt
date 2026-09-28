@@ -12,7 +12,6 @@ import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.ElectionRepository
 import org.kodewerks.pollsystem.repository.PollNoteRepository
 import org.kodewerks.pollsystem.repository.PollTypeBlockRepository
-import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
 import org.kodewerks.pollsystem.repository.StateRepository
@@ -104,7 +103,7 @@ class AdminPollsController(
     private val questionnaires: QuestionnaireRepository,
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
-    private val domains: QuestionnaireDomainRepository,
+    private val purviews: org.kodewerks.pollsystem.poll.PollPurviewService,
     private val countyZips: CountyZipsRepository,
     private val counties: CountyRepository,
     private val states: StateRepository,
@@ -181,7 +180,9 @@ class AdminPollsController(
             val qPool = questionnaires.findAll()
             for (q in qPool) {
                 if (needle != null && !q.title.contains(needle, ignoreCase = true)) continue
-                val qZips = domains.findByQuestionnaireId(q.id).map { it.zipcode }.distinct()
+                // ZIP-purview zips (empty for a coarse questionnaire — those aren't
+                // geo-matched for scoped admins yet; SUPER sees all).
+                val qZips = purviews.zipcodesOf(purviews.purviewOf(PollKind.QUESTIONNAIRE, q.id))
                 if (!matchesGeo(qZips, purview, explicitZipFilter)) continue
                 val meta = zipMetaFor(qZips)
                 rows += AdminPollRow(
@@ -504,7 +505,7 @@ class AdminPollsController(
                 questionnaires.findById(id).orElseThrow {
                     ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
                 }
-                domains.findByQuestionnaireId(id).map { it.zipcode }.distinct()
+                purviews.zipcodesOf(purviews.purviewOf(PollKind.QUESTIONNAIRE, id))
             }
             PollKind.ELECTION -> listOfNotNull(elections.findById(id).orElseThrow {
                 ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")

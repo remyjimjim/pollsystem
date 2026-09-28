@@ -5,7 +5,6 @@ import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.QuestionRepository
 import org.kodewerks.pollsystem.repository.QuestionResponseRepository
-import org.kodewerks.pollsystem.repository.QuestionnaireDomainRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -40,7 +39,6 @@ class QuestionnaireResultsController(
     private val questionnaires: QuestionnaireRepository,
     private val questions: QuestionRepository,
     private val responses: QuestionResponseRepository,
-    private val domains: QuestionnaireDomainRepository,
     private val blocks: PollBlockService,
     private val purviews: PollPurviewService,
     private val countyZips: CountyZipsRepository,
