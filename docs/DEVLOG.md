@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-09-28 — feat: purview-aware admin Manage Polls list + moderation
+
+**Requested:**
+
+> Ya, I think it's ok to allow the scoping of admins but in general, the common
+> path […] will be to associate admins either with the whole nation or a region of
+> states. But proceed #1...
+
+**Changed:**
+
+Closes the F1/F2 follow-up: a *scoped* admin's Manage Polls list geo-matched by a
+poll's zip, so coarse (County/State/National) polls weren't surfaced to them. Now
+matching compares the poll's `poll_purviews` rows to the admin's resolved reach.
+
+- `AdminPollsController` gains `matchesAdminGeo`/`overlapsPurview` (replacing the
+  zip-only `matchesGeo`): NATIONAL poll → visible to any admin; STATE → admin covers
+  the state; COUNTY → admin covers the county or its state; ZIP → by zip/county/state.
+  A poll with no purview rows is treated as nationwide. SUPER unchanged. Applied to
+  the list, `editPoll`, and EVERYWHERE block/unblock authorization.
+- `AdminPollRow` carries `regionLabel`; the list shows it in the zipcode column when
+  a poll has no single zip. Frontend `ManagePollsView` updated.
+- Test: a state-scoped admin sees an in-state statewide poll, not an out-of-state one.
+  The `newElection` test helper now writes a realistic COUNTY purview.
+
+The common path the user described (national or region-of-states admins) is the
+STATE/NATIONAL overlap, which this handles directly.
+
+**Commit:** `9aa80aa`
+
 ## 2026-09-28 — feat: questionnaires use the full purview; retire questionnaire_domains (Phase F2)
 
 **Requested:**
