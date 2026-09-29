@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-09-29 — feat: scope-level admin-coverage requests + relabel the dashboard card
+
+**Requested:**
+
+> When attempting to promote admin@local.test to super admin via /admin-request I
+> don't see any Whole Nation or Whole State... etc
+
+> I'd like to do (b) with the card relabelled to 'Request more admin coverage'.
+
+**Changed:**
+
+The admin-request flow was zipcode-only while creator-requests had scope levels;
+brought it to parity (admins are usually national or a region of states). See
+[[project_poll_purview]].
+
+- `SubmitAdminRequest` gains `scopeLevel` + `regionIds` (zipcodes optional);
+  `AdminRequestService.submit` fans out one disabled ADMIN `role_assignment` per
+  region at the chosen scope (NATIONAL/STATE/COUNTY/ZIP), and the confirmation +
+  Super-notification emails read a region label. `AdminRequestDto` carries
+  `scopeLevel`/`stateIds`/`regionLabel`.
+- Frontend: `AdminRequestView` uses `PurviewSetter` (default State); the Super
+  review queue shows the region label; the `/admin/dashboard` card is relabelled
+  **"Request more admin coverage"** (was the misleading "Request Super upgrade" —
+  there is no self-service Super path; Super is Super-granted).
+- Closes the loop with the purview-aware admin list: a State-level grant now
+  lights up that whole state's polls in Manage Polls.
+- Tests: zip cases pinned to `ZIP`; STATE-scope tests added; the obsolete
+  DTO-validation cases for empty/missing zipcodes removed (region selection is
+  validated per scope in the service now, not at the DTO layer).
+
+**Commit:** `2bdd8a2`
+
 ## 2026-09-28 — feat: purview-aware admin Manage Polls list + moderation
 
 **Requested:**
