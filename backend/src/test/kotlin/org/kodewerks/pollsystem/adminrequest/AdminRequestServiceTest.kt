@@ -4,6 +4,7 @@ import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.RequestStatus
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.repository.AdminRequestRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
 import org.kodewerks.pollsystem.repository.UserRepository
@@ -20,6 +21,7 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
     @Autowired private lateinit var adminRequests: AdminRequestRepository
     @Autowired private lateinit var roleAssignments: RoleAssignmentRepository
     @Autowired private lateinit var users: UserRepository
+    @Autowired private lateinit var countyZips: org.kodewerks.pollsystem.repository.CountyZipsRepository
 
     @Test
     fun `submit creates request and disabled ADMIN role assignments`() {
@@ -28,6 +30,7 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
         val req = service.submit(
             creator,
             SubmitAdminRequest(
+                scopeLevel = ScopeLevel.ZIP,
                 zipcodes = listOf("90001"),
                 reason = "I want to administer this zip"
             )
@@ -46,7 +49,7 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
         assertThatThrownBy {
             service.submit(
                 user,
-                SubmitAdminRequest(zipcodes = listOf("90001"), reason = "Skipping creator step")
+                SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "Skipping creator step")
             )
         }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
             assertThat(it.statusCode.value()).isEqualTo(403)
@@ -60,7 +63,7 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
 
         val req = service.submit(
             creator,
-            SubmitAdminRequest(zipcodes = listOf("90001", "90012"), reason = "Reason")
+            SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001", "90012"), reason = "Reason")
         )
 
         service.batchApprove(listOf(req.id), approver)
@@ -84,7 +87,7 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
 
         val req = service.submit(
             creator,
-            SubmitAdminRequest(zipcodes = listOf("90001"), reason = "Reason")
+            SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "Reason")
         )
 
         service.batchReject(listOf(req.id), approver)
@@ -105,8 +108,8 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
         val a = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "ca")
         val b = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "cb")
 
-        val req1 = service.submit(a, SubmitAdminRequest(listOf("90001"), "first"))
-        val req2 = service.submit(b, SubmitAdminRequest(listOf("90001"), "second"))
+        val req1 = service.submit(a, SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "first"))
+        val req2 = service.submit(b, SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "second"))
 
         // Approve req1 so it shouldn't appear in PENDING anymore
         service.batchApprove(listOf(req1.id), approver)
@@ -116,17 +119,49 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `submit at STATE scope creates one grant per state and labels the request`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "state-admin")
+        val caStateId = countyZips.findByZipcode("90001").first().county.state.id
+
+        val req = service.submit(
+            creator,
+            SubmitAdminRequest(scopeLevel = ScopeLevel.STATE, regionIds = listOf(caStateId), reason = "Cover CA")
+        )
+
+        val rows = roleAssignments.findByAdminRequestId(req.id)
+        assertThat(rows).hasSize(1)
+        assertThat(rows).allMatch {
+            it.role == AccessLevel.ADMIN && it.scopeLevel == ScopeLevel.STATE &&
+                it.state?.id == caStateId && it.county == null && it.zipcode == null && !it.enabled
+        }
+        val dto = service.toDto(req)
+        assertThat(dto.scopeLevel).isEqualTo(ScopeLevel.STATE)
+        assertThat(dto.stateIds).containsExactly(caStateId)
+        assertThat(dto.regionLabel).isNotBlank()
+    }
+
+    @Test
+    fun `submit at STATE scope with no regions is rejected`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "state-empty")
+        assertThatThrownBy {
+            service.submit(creator, SubmitAdminRequest(scopeLevel = ScopeLevel.STATE, regionIds = emptyList()))
+        }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
+            assertThat(it.statusCode.value()).isEqualTo(400)
+        }
+    }
+
+    @Test
     fun `unknown zipcode is rejected`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
 
         assertThatThrownBy {
             service.submit(
                 creator,
-                SubmitAdminRequest(zipcodes = listOf("00000"), reason = "no")
+                SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("00000"), reason = "no")
             )
         }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
             assertThat(it.statusCode.value()).isEqualTo(400)
-            assertThat(it.reason).contains("Unknown zipcodes")
+            assertThat(it.reason).contains("Unknown")
         }
     }
 }

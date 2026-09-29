@@ -115,9 +115,9 @@ class RequestValidationTest : AbstractIntegrationTest() {
 
     @Suppress("unused")
     private fun invalidAdminRequests(): List<Arguments> = listOf(
-        case("empty zipcodes",   validAdminRequest()) { it["zipcodes"] = emptyList<String>() },
-        case("missing zipcodes", validAdminRequest()) { it.remove("zipcodes") },
-        // Reason is optional now; only "too long" remains a 400.
+        // Region selection is validated per scope in the service (not the DTO) now
+        // that admins can request State/Nationwide coverage, so empty/missing
+        // zipcodes is no longer a DTO-level 400. Only an over-long reason remains.
         case("reason too long",  validAdminRequest()) { it["reason"] = "x".repeat(2001) }
     )
 

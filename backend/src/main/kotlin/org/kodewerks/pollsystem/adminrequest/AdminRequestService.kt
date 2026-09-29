@@ -6,10 +6,13 @@ import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.AdminRequest
 import org.kodewerks.pollsystem.model.RequestStatus
 import org.kodewerks.pollsystem.model.RoleAssignment
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.AdminRequestRepository
+import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.kodewerks.pollsystem.repository.StateRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -23,6 +26,8 @@ class AdminRequestService(
     private val roleAssignments: RoleAssignmentRepository,
     private val users: UserRepository,
     private val countyZips: CountyZipsRepository,
+    private val states: StateRepository,
+    private val counties: CountyRepository,
     private val email: EmailService,
     private val roleAuthCache: RoleAuthCache,
 ) {
@@ -35,13 +40,6 @@ class AdminRequestService(
                 "You must be a Creator before requesting Admin"
             )
         }
-        val zipRows = countyZips.findByZipcodeIn(dto.zipcodes.distinct())
-        val zipToCounty = zipRows.associateBy { it.zipcode }
-        val unknown = dto.zipcodes.distinct().filterNot { it in zipToCounty }
-        if (unknown.isNotEmpty()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown zipcodes: $unknown")
-        }
-
         val saved = adminRequests.save(
             AdminRequest(
                 user = user,
@@ -49,39 +47,76 @@ class AdminRequestService(
                 status = RequestStatus.PENDING
             )
         )
-        val rows = dto.zipcodes.distinct().map { zip ->
-            val cz = zipToCounty.getValue(zip)
-            RoleAssignment(
-                user = user,
-                role = AccessLevel.ADMIN,
-                state = cz.county.state,
-                county = cz.county,
-                zipcode = zip,
-                enabled = false,
-                adminRequest = saved
+        // Fan out one disabled grant row per region at the chosen scope. Admins
+        // moderate all poll types, so (unlike creator requests) there's no
+        // per-pollType multiplication — one row per region.
+        val rows: List<RoleAssignment> = when (dto.scopeLevel) {
+            ScopeLevel.NATIONAL -> listOf(
+                RoleAssignment(
+                    user = user, role = AccessLevel.ADMIN, scopeLevel = ScopeLevel.NATIONAL,
+                    enabled = false, adminRequest = saved
+                )
             )
+            ScopeLevel.STATE -> {
+                val ids = dto.regionIds.distinct()
+                val statesList = states.findAllById(ids).toList()
+                if (ids.isEmpty() || statesList.size != ids.size) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown or empty state selection")
+                }
+                statesList.map { st ->
+                    RoleAssignment(
+                        user = user, role = AccessLevel.ADMIN, scopeLevel = ScopeLevel.STATE,
+                        state = st, enabled = false, adminRequest = saved
+                    )
+                }
+            }
+            ScopeLevel.COUNTY -> {
+                val ids = dto.regionIds.distinct()
+                val countiesList = counties.findAllById(ids).toList()
+                if (ids.isEmpty() || countiesList.size != ids.size) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown or empty county selection")
+                }
+                countiesList.map { c ->
+                    RoleAssignment(
+                        user = user, role = AccessLevel.ADMIN, scopeLevel = ScopeLevel.COUNTY,
+                        state = c.state, county = c, enabled = false, adminRequest = saved
+                    )
+                }
+            }
+            ScopeLevel.ZIP -> {
+                val zips = dto.zipcodes.distinct()
+                val zipToCounty = countyZips.findByZipcodeIn(zips).associateBy { it.zipcode }
+                val unknown = zips.filterNot { it in zipToCounty }
+                if (zips.isEmpty() || unknown.isNotEmpty()) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown or empty zipcodes: $unknown")
+                }
+                zips.map { zip ->
+                    val cz = zipToCounty.getValue(zip)
+                    RoleAssignment(
+                        user = user, role = AccessLevel.ADMIN, scopeLevel = ScopeLevel.ZIP,
+                        state = cz.county.state, county = cz.county, zipcode = zip,
+                        enabled = false, adminRequest = saved
+                    )
+                }
+            }
         }
         roleAssignments.saveAll(rows)
         roleAuthCache.invalidateAuthorizations()
 
+        val label = regionLabel(rows)
         email.send(
             to = user.email,
             subject = "Your admin request was received",
-            body = "Your request to become an Admin is being reviewed. " +
+            body = "Your request for Admin coverage of $label is being reviewed. " +
                 "We will notify you once a Super reviews it."
         )
-        // Notify all Supers. Format the zipcode list as a sorted,
-        // comma-joined string so the email body reads as a human list
-        // rather than Kotlin's default `[90001, 90012]` toString.
-        val zipList = dto.zipcodes.distinct().sorted().joinToString(", ")
         users.findByAccess(AccessLevel.SUPER)
             .filter { it.isEnabled }
             .forEach { sup ->
                 email.send(
                     to = sup.email,
                     subject = "New Admin Request awaiting review",
-                    body = "User ${user.email} requested Admin access " +
-                        "for the following ${dto.zipcodes.distinct().size} zipcode(s): $zipList\n" +
+                    body = "User ${user.email} requested Admin coverage of: $label\n" +
                         "Reason: ${dto.reason}"
                 )
             }
@@ -151,10 +186,29 @@ class AdminRequestService(
     }
 
     fun toDto(req: AdminRequest): AdminRequestDto {
-        val zips = roleAssignments.findByAdminRequestId(req.id)
-            .mapNotNull { it.zipcode }
-            .distinct()
-            .sorted()
-        return AdminRequestDto.from(req, zips)
+        val rows = roleAssignments.findByAdminRequestId(req.id)
+        return AdminRequestDto.from(
+            req,
+            scopeLevel = scopeOf(rows),
+            stateIds = rows.mapNotNull { it.state?.id }.distinct().sorted(),
+            regionLabel = regionLabel(rows),
+            zipcodes = rows.mapNotNull { it.zipcode }.distinct().sorted()
+        )
+    }
+
+    private fun scopeOf(rows: List<RoleAssignment>): ScopeLevel =
+        rows.firstOrNull()?.scopeLevel ?: ScopeLevel.ZIP
+
+    /** Human-readable purview for emails and the Super review queue. */
+    private fun regionLabel(rows: List<RoleAssignment>): String = when (scopeOf(rows)) {
+        ScopeLevel.NATIONAL -> "Nationwide"
+        ScopeLevel.STATE -> rows.mapNotNull { it.state?.name }.distinct().sorted().joinToString(", ")
+        ScopeLevel.COUNTY ->
+            rows.mapNotNull { r -> r.county?.let { "${it.name} (${it.state.initial})" } }
+                .distinct().sorted().joinToString(", ")
+        ScopeLevel.ZIP -> {
+            val zips = rows.mapNotNull { it.zipcode }.distinct().sorted()
+            if (zips.size <= 8) zips.joinToString(", ") else "${zips.size} zipcodes"
+        }
     }
 }

@@ -2,29 +2,38 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
-import ZipSetter from '@/components/ZipSetter.vue'
-import { formatZipList } from '@/utils/formatZipList'
+import PurviewSetter from '@/components/PurviewSetter.vue'
+import { ScopeLevel, type Purview } from '@/types'
 
 const { t } = useI18n()
 
-const zipcodes = ref<string[]>([])
-const totalZipsAvailable = ref<number>(0)
+// Admins usually cover a nation or a region of states, so default to STATE.
+const purview = ref<Purview>({ scopeLevel: ScopeLevel.STATE, regionIds: [], zipcodes: [] })
 const reason = ref('')
 
 const submitting = ref(false)
 const submitted = ref(false)
 const error = ref<string | null>(null)
 
+function scopeIncomplete(): boolean {
+  const p = purview.value
+  if (p.scopeLevel === ScopeLevel.NATIONAL) return false
+  if (p.scopeLevel === ScopeLevel.ZIP) return p.zipcodes.length === 0
+  return p.regionIds.length === 0
+}
+
 async function onSubmit() {
   error.value = null
-  if (zipcodes.value.length === 0) {
-    error.value = t('adminRequest.errorNoZipcode')
+  if (scopeIncomplete()) {
+    error.value = t('adminRequest.errorNoScope')
     return
   }
   submitting.value = true
   try {
     await axios.post('/api/admin-requests', {
-      zipcodes: zipcodes.value,
+      scopeLevel: purview.value.scopeLevel,
+      regionIds: purview.value.regionIds,
+      zipcodes: purview.value.zipcodes,
       reason: reason.value.trim()
     })
     submitted.value = true
@@ -58,10 +67,7 @@ async function onSubmit() {
         <legend class="px-2 text-sm font-semibold text-slate-700">
           {{ $t('common.geoScope') }}
         </legend>
-        <ZipSetter v-model="zipcodes" v-model:total="totalZipsAvailable" />
-        <p v-if="zipcodes.length > 0" class="mt-2 text-sm text-slate-600">
-          {{ $t('adminRequest.selectedZipcodes') }} {{ formatZipList(zipcodes, { totalAvailable: totalZipsAvailable }) }}
-        </p>
+        <PurviewSetter v-model="purview" />
       </fieldset>
 
       <fieldset class="rounded-md border border-slate-200 p-4">

@@ -409,13 +409,14 @@
   "adminRequest": {
     "heading": "Request Admin Access",
     "submitted": "Your request has been submitted. A Super will review it and you'll receive an email once it's processed.",
-    "intro": "Pick the zipcodes you want to administer Creator Requests for. A Super will review your request.",
+    "intro": "Choose the area you want to administer — a whole nation, one or more states or counties, or specific zipcodes. A Super will review your request.",
     "selectedZipcodes": "Selected:",
     "reasonLabel": "Reason (optional)",
     "reasonPlaceholder": "Why would you like to be an admin in this area?",
     "submit": "Submit Request",
     "submitting": "Submitting…",
     "errorNoZipcode": "Select at least one zipcode you want to administer",
+    "errorNoScope": "Choose an area for your admin coverage",
     "errorSubmission": "Submission failed"
   },
   "admin": {
@@ -457,8 +458,8 @@
       "qlManageCreatorsDesc": "List, edit, and disable creators in your scope.",
       "qlManagePollsTitle": "Manage Polls",
       "qlManagePollsDesc": "Moderate polls in your zipcodes.",
-      "qlRequestSuperTitle": "Request Super upgrade",
-      "qlRequestSuperDesc": "Apply for additional admin / Super zipcodes.",
+      "qlRequestSuperTitle": "Request more admin coverage",
+      "qlRequestSuperDesc": "Apply for admin access to more regions — a nation, states, counties, or zipcodes.",
       "timeAgoMinutes": "{n}m ago",
       "timeAgoHours": "{n}h ago",
       "timeAgoDays": "{n}d ago",

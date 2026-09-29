@@ -13,6 +13,7 @@ interface AdminRequestDto {
   userEmail: string
   status: RequestStatus
   reason: string
+  regionLabel: string
   zipcodes: string[]
   submittedAt: string
   processedAt: string | null
@@ -133,8 +134,8 @@ onMounted(load)
             />
           </td>
           <td class="border-b border-slate-100 p-2 align-top">{{ r.userEmail }}</td>
-          <td class="border-b border-slate-100 p-2 align-top font-mono text-xs">
-            {{ formatZipList(r.zipcodes) }}
+          <td class="border-b border-slate-100 p-2 align-top text-xs">
+            {{ r.regionLabel || formatZipList(r.zipcodes) }}
           </td>
           <td class="border-b border-slate-100 p-2 align-top" style="max-width: 360px">
             {{ r.reason }}
