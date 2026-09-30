@@ -88,6 +88,19 @@ export const useAuthStore = defineStore('auth', () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
   }
 
+  /**
+   * Adopt a JWT another tab wrote to localStorage (cross-tab sign-in). The
+   * magic-link tab redeems and calls localStorage.setItem('token', …), which
+   * fires a `storage` event in every other tab on this origin; the login tab
+   * calls this to sync its in-memory session + auth header and load the user,
+   * so it signs itself in without the user leaving that tab.
+   */
+  async function adoptToken(newToken: string): Promise<void> {
+    token.value = newToken
+    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+    await fetchUser()
+  }
+
   async function fetchUser(): Promise<void> {
     if (!token.value) return
     try {
@@ -126,6 +139,7 @@ export const useAuthStore = defineStore('auth', () => {
     accountStatus,
     registerCheckout,
     redeemMagicLink,
+    adoptToken,
     fetchUser,
     completeProfile,
     logout

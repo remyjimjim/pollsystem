@@ -51,6 +51,19 @@ describe('useAuthStore', () => {
       expect(auth.user?.email).toBe('alice@test.local')
       expect(auth.token).toBe('tok')
     })
+
+    it('adopts a token from another tab and loads the user (cross-tab sign-in)', async () => {
+      // adoptToken sets the header + calls fetchUser (GET /api/auth/me).
+      mockedAxios.get.mockResolvedValueOnce({ data: makeUser() })
+
+      const auth = useAuthStore()
+      await auth.adoptToken('cross-tab-tok')
+
+      expect(auth.token).toBe('cross-tab-tok')
+      expect(auth.isAuthenticated).toBe(true)
+      expect(auth.user?.email).toBe('alice@test.local')
+      expect(mockedAxios.defaults.headers.common['Authorization']).toBe('Bearer cross-tab-tok')
+    })
   })
 
   describe('hasAccess', () => {

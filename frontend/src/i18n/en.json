@@ -96,6 +96,7 @@
     "checkEmailBody": "We've sent a one-time sign-in link to {email}. The link expires in 15 minutes and can only be used once.",
     "wrongAddress": "Wrong address?",
     "lapsedNote": "Your membership has lapsed. Sign in with the link, then renew from your home page to participate again.",
+    "autoContinue": "Keep this tab open — once you click the link, this page will sign you in automatically.",
     "errorNoAccount": "We don't have an account for that email. Please register first.",
     "errorGeneric": "Could not send the sign-in link"
   },

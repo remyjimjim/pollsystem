@@ -21,6 +21,12 @@ onMounted(async () => {
   }
   try {
     await auth.redeemMagicLink(token)
+    // redeemMagicLink wrote the JWT to localStorage, which signs in the tab the
+    // user started from (see LoginView's storage listener). If this is a pop-up
+    // tab, try to close it so focus returns there; browsers ignore close() for
+    // tabs they didn't script-open, so we still redirect as the fallback for
+    // single-tab sign-ins (e.g. clicking the link straight from an email client).
+    window.close()
     const redirect = (route.query.redirect as string) || '/'
     // Payment-first users sign in here for the first time with no phone/zipcode;
     // send them straight to complete their profile before anything else.

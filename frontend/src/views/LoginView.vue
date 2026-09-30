@@ -1,10 +1,30 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+const route = useRoute()
+const router = useRouter()
+
+// Cross-tab sign-in: when the user clicks the magic link (which opens in a new
+// tab and redeems there), that tab writes the JWT to localStorage, firing a
+// `storage` event here. We adopt it and continue on THIS tab, so the user ends
+// up signed in on the tab they started from rather than the pop-up tab.
+async function onTokenFromOtherTab(e: StorageEvent) {
+  if (e.key !== 'token' || !e.newValue || auth.isAuthenticated) return
+  await auth.adoptToken(e.newValue)
+  const redirect = (route.query.redirect as string) || '/'
+  if (auth.user && !auth.user.profileComplete) {
+    router.replace({ name: 'CompleteProfile', query: { redirect } })
+  } else {
+    router.replace(redirect)
+  }
+}
+onMounted(() => window.addEventListener('storage', onTokenFromOtherTab))
+onUnmounted(() => window.removeEventListener('storage', onTokenFromOtherTab))
 
 const form = reactive({ email: '' })
 const error = ref<string | null>(null)
@@ -59,6 +79,7 @@ async function onSubmit() {
       <p v-if="lapsed" class="mb-2 rounded bg-amber-50 px-3 py-2 text-amber-800">
         {{ $t('login.lapsedNote') }}
       </p>
+      <p class="mb-2 text-xs text-slate-500">{{ $t('login.autoContinue') }}</p>
       <p class="mt-3 text-center">
         {{ $t('login.wrongAddress') }}
         <a href="#" @click.prevent="sentTo = null" class="text-slate-700 underline">{{ $t('common.tryAgain') }}</a>
