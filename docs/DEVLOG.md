@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-09-29 — feat: cross-tab sign-in from the magic-link tab
+
+**Requested:**
+
+> Yes my friend, let us proceed down the natural next step of finishing cross-tab
+> sign-in: type-check + run the auth/login specs, then commit & push with a DEVLOG
+> entry.
+
+**Changed:**
+
+- Auth store gains `adoptToken(jwt)`: sets the `Authorization` header and loads
+  the user via `fetchUser`, turning a JWT minted in another tab into a live
+  session in this one.
+- `LoginView` adds a `storage` listener — when the magic-link tab writes the
+  `token` key, the login tab adopts it and continues here (honouring
+  `?redirect`, routing incomplete profiles to `CompleteProfile`), plus a
+  "keep this tab open" hint on the check-email panel (`login.autoContinue`).
+- `MagicLinkView` calls `window.close()` (best-effort) after redeeming so focus
+  returns to the original tab; the existing redirect stays as the single-tab
+  fallback (e.g. clicking the link straight from an email client).
+- Tests: `adoptToken` unit test in `auth.spec.ts`; three cross-tab specs in
+  `LoginView.spec.ts` (adopt+redirect, `?redirect` honoured, non-token storage
+  events ignored). Type-check clean; 27 frontend specs green.
+
+**Commit:** `285cbe9`
+
+---
+
 ## 2026-09-29 — feat: scope-level admin-coverage requests + relabel the dashboard card
 
 **Requested:**
