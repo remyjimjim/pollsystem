@@ -5,6 +5,15 @@ import ManagePollsView from './ManagePollsView.vue'
 
 vi.mock('axios')
 
+const { routeQuery, replaceMock } = vi.hoisted(() => ({
+  routeQuery: { value: {} as Record<string, string> },
+  replaceMock: vi.fn()
+}))
+vi.mock('vue-router', () => ({
+  useRoute: () => ({ query: routeQuery.value }),
+  useRouter: () => ({ replace: replaceMock })
+}))
+
 interface Row { id: number; type: string; title: string; blocked: boolean }
 function pollRow(r: Row) {
   return {
@@ -20,6 +29,7 @@ let serverRows: Row[] = []
 let lastListParams: Record<string, string> | undefined
 
 beforeEach(() => {
+  routeQuery.value = {}
   vi.useFakeTimers()
   serverRows = [
     { id: 1, type: 'QUESTIONNAIRE', title: 'Alpha', blocked: false },
@@ -110,6 +120,29 @@ describe('ManagePollsView: disabled rows', () => {
     expect(titles(w).sort()).toEqual(['Alpha', 'Bravo'])
     await showDisabled.setValue(false)
     expect(titles(w)).toEqual([])
+    w.unmount()
+  })
+})
+
+describe('ManagePollsView: deep link from Manage Creators', () => {
+  it('filters by creator, sorts by close date descending, and shows disabled polls', async () => {
+    routeQuery.value = { creator: 'c@test.local', sort: 'closeDate', dir: 'desc', showDisabled: '1' }
+    serverRows = [
+      { id: 1, type: 'QUESTIONNAIRE', title: 'Alpha', blocked: false },
+      { id: 2, type: 'QUESTIONNAIRE', title: 'Bravo', blocked: true }
+    ]
+    const w = await mountView()
+
+    expect(lastListParams?.creatorEmail).toBe('c@test.local')
+    expect(w.find('[data-test="creator-chip"]').text()).toContain('c@test.local')
+    expect(titles(w).sort()).toEqual(['Alpha', 'Bravo']) // disabled Bravo shown
+    expect(w.find('thead').text()).toContain('▼') // a descending sort indicator
+
+    await w.find('[data-test="creator-chip"] button').trigger('click')
+    expect(replaceMock).toHaveBeenCalledWith({ query: { sort: 'closeDate', dir: 'desc', showDisabled: '1' } })
+    vi.advanceTimersByTime(200)
+    await flushPromises()
+    expect(lastListParams?.creatorEmail).toBeUndefined()
     w.unmount()
   })
 })

@@ -2,8 +2,17 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 
 const { t } = useI18n()
+// Deep-link support, e.g. the Polls link on /admin/manage-creators:
+// ?creator=<email>&sort=closeDate&dir=desc&showDisabled=1
+const route = useRoute()
+const router = useRouter()
+const q = (k: string): string => {
+  const v = route?.query?.[k]
+  return typeof v === 'string' ? v : ''
+}
 
 type Kind = 'ELECTION' | 'QUESTIONNAIRE' | 'BALLOT_MEASURE'
 type Scope = 'ZIPCODE' | 'COUNTY' | 'STATE' | 'EVERYWHERE'
@@ -41,7 +50,15 @@ interface BlockDto {
 
 // ---------- filters ----------
 const kindFilter = ref<Record<Kind, boolean>>({ ELECTION: true, QUESTIONNAIRE: true, BALLOT_MEASURE: true })
-const showDisabled = ref(false)
+const showDisabled = ref(q('showDisabled') === '1')
+/** Exact creator email the list is narrowed to (from ?creator=). */
+const creatorFilter = ref(q('creator'))
+function clearCreatorFilter() {
+  creatorFilter.value = ''
+  const { creator: _drop, ...rest } = route?.query ?? {}
+  router?.replace({ query: rest })
+  scheduleFetch()
+}
 const titleFilter = ref('')
 const titleSuggestions = ref<string[]>([])
 const notesFilter = ref('')
@@ -181,6 +198,7 @@ async function fetchPolls() {
     // Always fetch disabled rows; visibleResults hides them unless "Show
     // disabled" is on or the row is sticky (just toggled by the admin).
     params.includeDisabled = 'true'
+    if (creatorFilter.value) params.creatorEmail = creatorFilter.value
     if (selectedZipcodes.value.length > 0) params.zipcode = selectedZipcodes.value.join(',')
     else if (selectedCountyIds.value.length > 0) params.countyId = selectedCountyIds.value.join(',')
     else if (selectedStateIds.value.length > 0) params.stateId = selectedStateIds.value.join(',')
@@ -303,8 +321,9 @@ const zipPickerSummary = computed<string>(() => {
 })
 
 // ---------- sorting ----------
-const sortKey = ref<SortKey>('title')
-const sortDir = ref<'asc' | 'desc'>('asc')
+const SORT_KEYS: SortKey[] = ['title', 'type', 'creatorEmail', 'stateInitial', 'countyName', 'zipcode', 'closeDate', 'blocked', 'note']
+const sortKey = ref<SortKey>(SORT_KEYS.includes(q('sort') as SortKey) ? (q('sort') as SortKey) : 'title')
+const sortDir = ref<'asc' | 'desc'>(q('dir') === 'desc' ? 'desc' : 'asc')
 function toggleSort(k: SortKey) {
   if (sortKey.value === k) sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
   else { sortKey.value = k; sortDir.value = 'asc' }
@@ -666,6 +685,12 @@ onBeforeUnmount(() => {
 <template>
   <div class="mx-auto max-w-6xl py-8">
     <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('admin.managePolls.heading') }}</h1>
+    <div v-if="creatorFilter" class="mb-3">
+      <span data-test="creator-chip" class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm text-blue-900">
+        {{ $t('admin.managePolls.creatorFilter', { email: creatorFilter }) }}
+        <button type="button" :aria-label="$t('admin.managePolls.clearCreator')" class="text-blue-700 hover:text-blue-950" @click="clearCreatorFilter">✕</button>
+      </span>
+    </div>
 
     <form
       @submit.prevent="searchNow"
