@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-10-04 — fix: VS Code port squatting + self-healing local-docker
+
+**Requested:**
+
+> looks like the old db process is still connected the 5432 port: "… failed
+> to bind host port 0.0.0.0:5432/tcp: address already in use"
+
+> The BuildAndDeploy.bash local-docker script returned: "… ✗ Timed out after
+> 180s waiting for backend startup."
+
+> yes, make both changes and commit with the devlog
+
+**Changed:**
+
+- Root cause 1: not an old db. VS Code's Dev Container port forwarder
+  (`code`) held host `127.0.0.1:5432/3000/8080`, so Docker couldn't publish
+  the db. `devcontainer.json` now sets `portsAttributes` to never
+  auto-forward 5432/8025/1025 (db and Mailpit are always published by Docker
+  on the host), and `remote.restoreForwardedPorts: false`. 3000/8080 stay
+  forwardable for `local` mode (vite/gradle inside the container).
+- Root cause 2: the half-failed `compose up` left `pollsystem-db` running
+  with **no network**; the next run left it alone and the backend died with
+  `UnknownHostException: db`. Fixed live with
+  `docker compose up -d --force-recreate db` (data is in the named volume).
+- `BuildAndDeploy.bash local-docker`: new `heal_detached_containers`
+  recreates any stack container missing from the project network;
+  `wait_for_container` fails fast with the last 25 log lines when the app
+  exits; readiness probes read `docker logs --since` the current start, so
+  a stale "Started" line can't pass as ready. Tested by detaching mailpit
+  (healed) and a deliberately crashing container (failed in ~2 s, not 60).
+
+**Commit:** `d0f2b11`
+
+---
+
 ## 2026-10-03 — chore: docker-doctor.bash for a revived Docker Desktop
 
 **Requested:**
