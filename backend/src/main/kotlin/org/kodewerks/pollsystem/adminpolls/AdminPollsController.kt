@@ -150,7 +150,9 @@ class AdminPollsController(
         @RequestParam(name = "countyId", required = false) countyIds: List<Long>?,
         @RequestParam(name = "zipcode", required = false) zipcodes: List<String>?,
         @RequestParam(required = false) notesContain: String?,
-        @RequestParam(required = false, defaultValue = "false") includeDisabled: Boolean
+        @RequestParam(required = false, defaultValue = "false") includeDisabled: Boolean,
+        // Exact creator email (case-insensitive) — the Polls link on /admin/manage-creators.
+        @RequestParam(required = false) creatorEmail: String? = null
     ): List<AdminPollRow> {
         val purview = resolvePurview(principal)
         if (purview != null && purview.isEmpty()) return emptyList()
@@ -264,6 +266,9 @@ class AdminPollsController(
             r.copy(latestNote = latestByKey[key]?.let { toDto(it) })
         }
         if (!includeDisabled) final = final.filter { !it.blocked }
+        creatorEmail?.trim()?.takeIf { it.isNotEmpty() }?.let { email ->
+            final = final.filter { it.creatorEmail.equals(email, ignoreCase = true) }
+        }
         if (!notesContain.isNullOrBlank()) {
             val keys = notes.findPollKeysWithBodyContaining(notesContain.trim())
                 .map { (it[0] as PollKind) to (it[1] as Long) }

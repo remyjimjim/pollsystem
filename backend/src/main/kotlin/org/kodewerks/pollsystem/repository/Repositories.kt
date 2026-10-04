@@ -43,6 +43,7 @@ interface RoleAssignmentRepository : JpaRepository<RoleAssignment, Long> {
     fun findByAdminRequestIdIn(adminRequestIds: List<Long>): List<RoleAssignment>
     fun findByUserIdInAndRole(userIds: List<Long>, role: AccessLevel): List<RoleAssignment>
     fun findByRoleAndEnabled(role: AccessLevel, enabled: Boolean): List<RoleAssignment>
+    fun findByRole(role: AccessLevel): List<RoleAssignment>
 
     @Query("""
         SELECT ra FROM RoleAssignment ra 
@@ -147,6 +148,14 @@ interface ElectionRepository : JpaRepository<Election, Long> {
     """)
     fun countByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
 
+    /** [creatorId, count, max(creatorEditedAt)] rows for /admin/manage-creators. */
+    @Query("""
+        SELECT e.creator.id, COUNT(e), MAX(e.creatorEditedAt) FROM Election e
+        WHERE e.creator.id IN :userIds
+        GROUP BY e.creator.id
+    """)
+    fun editStatsByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
+
     @Query("""
         SELECT e FROM Election e
         WHERE e.status = 'PUBLISHED'
@@ -225,6 +234,14 @@ interface BallotMeasureRepository : JpaRepository<BallotMeasure, Long> {
     """)
     fun countByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
 
+    /** [creatorId, count, max(creatorEditedAt)] rows for /admin/manage-creators. */
+    @Query("""
+        SELECT bm.creator.id, COUNT(bm), MAX(bm.creatorEditedAt) FROM BallotMeasure bm
+        WHERE bm.creator.id IN :userIds
+        GROUP BY bm.creator.id
+    """)
+    fun editStatsByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
+
     @Query("""
         SELECT bm FROM BallotMeasure bm
         WHERE bm.status = 'PUBLISHED'
@@ -271,6 +288,14 @@ interface QuestionnaireRepository : JpaRepository<Questionnaire, Long> {
         GROUP BY q.creator.id
     """)
     fun countByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
+
+    /** [creatorId, count, max(creatorEditedAt)] rows for /admin/manage-creators. */
+    @Query("""
+        SELECT q.creator.id, COUNT(q), MAX(q.creatorEditedAt) FROM Questionnaire q
+        WHERE q.creator.id IN :userIds
+        GROUP BY q.creator.id
+    """)
+    fun editStatsByCreatorIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
 
     @Query("""
         SELECT q FROM Questionnaire q
