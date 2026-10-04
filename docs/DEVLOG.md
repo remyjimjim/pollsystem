@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-04 — fix: manage-polls rows no longer vanish when disabled
+
+**Requested:**
+
+> BTW, on the admin/manage-polls page let's not make the row disappear if one
+> unchecks 'Enabled'.
+
+> Let go ahead and fix the vanishing disabled rows
+
+**Changed:**
+
+- `ManagePollsView` always fetches with `includeDisabled=true`; a
+  `visibleResults` computed hides disabled rows unless "Show disabled" is on
+  or the row is *sticky*.
+- A row toggled via its Enabled checkbox becomes sticky and stays visible
+  (unchecked) so the admin sees the result and can re-enable it in place.
+  Stickiness ends on the next filter change, Search, or Show-disabled toggle.
+- "Show disabled" now re-filters client-side instead of refetching.
+- New `ManagePollsView.spec.ts` (3 tests; all fail on the previous view).
+  Type-check clean; frontend suite 45/45.
+
+**Commit:** `f928f4b`
+
+---
+
 ## 2026-10-04 — fix: VS Code port squatting + self-healing local-docker
 
 **Requested:**
