@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-04 — copy: "access" instead of "grants" on Manage Creators
+
+**Requested:**
+
+> what specifically is a 'grant'?
+
+> yes, rename grants to access in the UI
+
+**Changed:**
+
+- English UI text on Manage Creators (Purview / Enabled help, the Edit
+  dialog's "Current access" / "No access yet.", the from-request note) now
+  says "access" instead of "grants".
+- French *autorisations* → *accès* and Japanese 権限 → アクセス権 to match;
+  Norwegian already used *tilgang*.
+- The three admin-creators API error messages that appear on the page say
+  "access" too. Code identifiers and i18n keys keep "grant", which is still
+  the internal term for a `role_assignments` row.
+- Frontend 50/50; `AdminCreatorsControllerTest` 5/5.
+
+**Commit:** `837678e`
+
+---
+
 ## 2026-10-04 — feat: Manage Creators page + info popovers
 
 **Requested:**
