@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-10-03 — chore: docker-doctor.bash for a revived Docker Desktop
+
+**Requested:**
+
+> The Dev Containers is continuing to have a hard time staying connected to
+> the Docker Desktop. Not sure the best way to fix this, any chance you can
+> write a bash script to diagnose and possiby fix the situation next time it
+> happens, like now. Usually I restart docker but that's not working any more.
+
+> Go ahead and commit the script and the Devlog entry
+
+**Changed:**
+
+- Root cause: Docker Desktop (retired 2026-09-26 in favour of native
+  docker-ce) had restarted itself despite its user unit being `disabled` —
+  it flipped the CLI context to `desktop-linux` (dead socket), held the
+  stack's host ports, and its VM pinned ~5–8 GB RAM with swap 100% full.
+- New `scripts/docker-doctor.bash` (host-only): default mode diagnoses the
+  native engine, CLI context, Desktop state, port owners, Dev Container and
+  memory; `--fix` stops Desktop, **masks** `docker-desktop` so nothing can
+  restart it, resets the context to `default`, starts `docker.service` if
+  needed, and re-checks.
+- Ran `--fix`: all checks green, available RAM 2.3 GB → 8.1 GB. Desktop is
+  no longer used (psql via `docker exec` instead); uninstall it if it
+  resurfaces. Undo the mask with `systemctl --user unmask docker-desktop`.
+
+**Commit:** `0caf0e4`
+
+---
+
 ## 2026-09-29 — feat: cross-tab sign-in from the magic-link tab
 
 **Requested:**
