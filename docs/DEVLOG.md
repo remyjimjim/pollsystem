@@ -61,6 +61,48 @@ logged.
 
 ---
 
+## 2026-10-04 — feat: stored per-admin creator disable, scoped to the overlap
+
+**Requested:**
+
+> I'm leaning on 'go with #1, and grey out creators with no access...' but in
+> my mind, a poll disabled in manage-polls for the current Admin's purview
+> should not appear as a poll connected to the creator in manage-creators. And
+> staying in manage-creators, if an admin disables a creator associated with
+> the admin's purview that should disable all the polls in the admin's purview
+> by that creator but the admin can still click on the on the link in the
+> 'polls' column and re-enable selected polls.
+
+> Stored for A (indicating the creator can not create/submit any polls while
+> the checkbox is checked), yes for B
+
+(A = the creator's checkbox stays unchecked after single polls are
+re-enabled; B = disabling also stops new polls in the admin's purview. "While
+the checkbox is checked" was read as *unchecked*, i.e. while disabled.)
+
+**Changed:**
+
+- `V26__creator_disables.sql` + `CreatorDisable`: the stored, per-admin
+  Enabled state. While it exists, `CreatorGrantGuard` refuses the creator's
+  saves / publishes anywhere in that admin's purview (enforced in the guard
+  rather than by switching grants off, since a creator's CA-wide access can't
+  be narrowed by a three-zip admin).
+- Unchecking blocks each of the creator's polls in purview at **poll ∩
+  creator ∩ admin** (zip / county / state blocks). Re-checking removes the
+  record and the blocks inside the admin's purview. Re-enabling single polls on
+  Manage Polls leaves the creator unchecked.
+- Polls shows the creator's *enabled* polls in purview; the link stays while
+  any (incl. disabled) exist. No-access creators: checkbox greyed with a hint.
+- Fixed a latent test bug: `PollSearchControllerTest` compared ids across
+  per-kind sequences. Backend 274/274, frontend 51/51.
+- Verified live as admin@local.test (zips 90001/90012/90210): unchecking the
+  seed creator blocked their 90001 poll at ZIPCODE 90001 only; Polls 0/1 with
+  the poll still listed; re-checking removed the block.
+
+**Commit:** `58a2858`
+
+---
+
 ## 2026-10-04 — feat: area-aware poll disables (blocks)
 
 **Requested:**
