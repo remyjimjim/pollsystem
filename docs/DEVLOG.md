@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-10-04 — feat: enforce creator grants on poll saves and publishes
+
+**Requested:**
+
+> Let's go with #1 and the rest of the suggestions...
+
+(#1 = "Enforce grants: saving or publishing a poll would require enabled
+grants that cover its purview and poll type", chosen while planning Manage
+Creators, after finding that `requireCreator` only checked the access level
+so disabling or editing a creator's grants restricted nothing.)
+
+**Changed:**
+
+- New `CreatorGrantGuard.requireCovers`: every region of a poll's purview
+  must be covered by an enabled grant for the poll's type, by scope level
+  (NATIONAL > STATE > COUNTY > ZIP; a NATIONAL/empty purview needs a
+  NATIONAL grant; a grant with no poll type covers all types). An ADMIN's
+  own enabled ADMIN grants count; SUPER is unrestricted. The 403 names the
+  uncovered regions (e.g. "New York", "10001", "Nationwide").
+- Called from Questionnaire / Election / BallotMeasure save, update and
+  publish, inside the transaction after the purview is written. Ballot
+  measures are checked against their election's purview; publish re-checks
+  in case grants were disabled since the draft.
+- Dev seeds and `TestFixtures.createUser(access = CREATOR)` grant an enabled
+  NATIONAL creator grant (fixtures can opt out). New `CreatorGrantGuardTest`
+  (8 cases); backend suite 258/258.
+- Local DB has no polls, so nothing is affected there. **Prod impact
+  unchecked** (no keychain inside the Dev Container): any existing creator
+  whose grants don't cover their polls can no longer edit/publish them.
+
+**Commit:** `4061a63`
+
+---
+
 ## 2026-10-04 — fix: manage-polls rows no longer vanish when disabled
 
 **Requested:**
