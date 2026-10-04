@@ -100,7 +100,7 @@ class QuestionnaireResponseController(
         if (close != null && !close.isAfter(Instant.now())) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
         }
-        if (blocks.isBlocked(PollKind.QUESTIONNAIRE, id)) {
+        if (blocks.isBlockedFor(PollKind.QUESTIONNAIRE, id, principal.user.zipcode)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
 

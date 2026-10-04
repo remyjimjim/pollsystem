@@ -192,20 +192,20 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `re-enabling leaves another admin's out-of-purview block in place, so the row reads partial`() {
+    fun `a block outside the admin's purview neither shows as disabled to them nor is lifted by them`() {
         val admin = caAdmin()
         val sup = superUser()
         val c = creator("mc-mixed").also { grant(it, ScopeLevel.STATE, "CA") }
-        questionnaires.saveDraft(c, draft("Free", "90001"))
         val held = questionnaires.saveDraft(c, draft("Held", "90001"))
 
-        controller.setPollsEnabled(admin, c.id, SetEnabledRequest(false))
-        // A super blocks "Held" for New York submitters: outside a CA admin's reach.
+        // A super blocks "Held" for New York submitters: outside a CA admin's purview.
         adminPolls.createBlock("QUESTIONNAIRE", held.id, CreateBlockRequest(BlockScope.STATE, null, null, state("NY").id), sup)
+        assertThat(rowOf(controller.list(admin), c).pollsState).isEqualTo(PollsState.ENABLED)
 
-        val row = controller.setPollsEnabled(admin, c.id, SetEnabledRequest(true))
-        assertThat(row.pollsState).isEqualTo(PollsState.PARTIAL)
-        assertThat(blockedByTitle(sup, c.email)).isEqualTo(mapOf("Free" to false, "Held" to true))
+        controller.setPollsEnabled(admin, c.id, SetEnabledRequest(false))
+        controller.setPollsEnabled(admin, c.id, SetEnabledRequest(true))
+        // The CA admin's own disable came and went; the NY block is still there.
+        assertThat(blockedByTitle(sup, c.email)).isEqualTo(mapOf("Held" to true))
     }
 
     @Test

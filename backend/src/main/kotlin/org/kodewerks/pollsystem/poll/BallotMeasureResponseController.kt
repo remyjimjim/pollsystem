@@ -93,7 +93,7 @@ class BallotMeasureResponseController(
         if (close != null && !close.isAfter(Instant.now())) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
         }
-        if (blocks.isBlocked(org.kodewerks.pollsystem.model.PollKind.BALLOT_MEASURE, measure.id)) {
+        if (blocks.isBlockedFor(org.kodewerks.pollsystem.model.PollKind.BALLOT_MEASURE, measure.id, principal.user.zipcode)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
 

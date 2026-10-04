@@ -114,7 +114,8 @@ class AdminPollsController(
     private val roleAssignments: RoleAssignmentRepository,
     private val blocks: PollTypeBlockRepository,
     private val notes: PollNoteRepository,
-    private val emailService: org.kodewerks.pollsystem.email.EmailService
+    private val emailService: org.kodewerks.pollsystem.email.EmailService,
+    private val regions: org.kodewerks.pollsystem.geography.RegionService
 ) {
 
     @GetMapping("/purview")
@@ -244,10 +245,12 @@ class AdminPollsController(
             }
         }
 
-        // Compute blocked + latestNote in one pass per kind.
+        // Compute blocked + latestNote in one pass per kind. "Blocked" means a
+        // block touches the caller's own purview (blocks are area-aware).
+        val mine = regions.adminRegions(principal.user)
         val withBlocks = rows.map { r ->
             val kind = PollKind.valueOf(r.type)
-            r.copy(blocked = isBlockedFor(kind, r.id))
+            r.copy(blocked = isBlockedFor(kind, r.id, mine))
         }
         val byKind = withBlocks.groupBy { PollKind.valueOf(it.type) }
         val latestByKey = mutableMapOf<Pair<PollKind, Long>, PollNote>()
@@ -298,7 +301,11 @@ class AdminPollsController(
         val saved = when (body.scope) {
             BlockScope.ZIPCODE -> {
                 val zip = body.zipcode ?: throw bad("zipcode required for ZIPCODE scope")
-                if (zip !in zips) throw bad("Zipcode $zip is not one of this poll's zipcodes")
+                // Any zip inside the poll's purview (not just zip-level polls' own zips):
+                // blocks are area-aware, so this disables the poll for that zip only.
+                if (zip !in zips && !purviews.includesZip(kind, id, zip)) {
+                    throw bad("Zipcode $zip is not inside this poll's purview")
+                }
                 requirePurviewZipcode(purview, zip)
                 val existing = blocks.findByPollTypeAndPollIdAndScopeAndZipcode(kind, id, BlockScope.ZIPCODE, zip)
                 if (existing != null) return toBlockDto(existing)
@@ -583,8 +590,12 @@ class AdminPollsController(
         }
     }
 
-    private fun isBlockedFor(kind: PollKind, pollId: Long): Boolean =
-        blocks.existsByPollTypeAndPollId(kind, pollId)
+    /** Is any of this poll's blocks inside [mine] (the caller's purview)? */
+    private fun isBlockedFor(kind: PollKind, pollId: Long, mine: List<org.kodewerks.pollsystem.geography.Region>): Boolean =
+        blocks.findByPollTypeAndPollId(kind, pollId).any { b ->
+            val area = regions.ofBlock(b) ?: return@any false
+            mine.any { it.overlaps(area) }
+        }
 
     private fun toBlockDto(b: PollTypeBlock): BlockDto {
         val county = b.countyId?.let { counties.findById(it).orElse(null) }

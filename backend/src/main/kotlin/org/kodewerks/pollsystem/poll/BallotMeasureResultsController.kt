@@ -51,7 +51,7 @@ class BallotMeasureResultsController(
         val measure = measures.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
-        if (blocks.isBlocked(PollKind.BALLOT_MEASURE, measure.id)) {
+        if (blocks.isBlockedEverywhere(PollKind.BALLOT_MEASURE, measure.id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
         val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)

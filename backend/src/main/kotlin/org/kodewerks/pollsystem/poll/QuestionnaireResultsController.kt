@@ -59,7 +59,7 @@ class QuestionnaireResultsController(
         val q = questionnaires.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
         }
-        if (blocks.isBlocked(PollKind.QUESTIONNAIRE, id)) {
+        if (blocks.isBlockedEverywhere(PollKind.QUESTIONNAIRE, id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
         }
 
