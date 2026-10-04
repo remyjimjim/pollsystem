@@ -63,7 +63,8 @@ class QuestionnaireService(
                 pollType = pt,
                 title = dto.title.trim(),
                 summary = dto.summary.trim(),
-                closeDate = dto.closeDate
+                closeDate = dto.closeDate,
+                creatorEditedAt = Instant.now()
             )
         )
         replaceQuestions(updated, dto.questions)
@@ -109,7 +110,7 @@ class QuestionnaireService(
         }
 
         return questionnaires.save(
-            existing.copy(status = PollStatus.PUBLISHED, submitDate = Instant.now())
+            existing.copy(status = PollStatus.PUBLISHED, submitDate = Instant.now(), creatorEditedAt = Instant.now())
         )
     }
 

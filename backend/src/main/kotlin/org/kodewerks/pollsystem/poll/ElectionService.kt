@@ -72,7 +72,8 @@ class ElectionService(
                 title = dto.title.trim(),
                 date = dto.date,
                 zipcode = null,
-                closeDate = dto.closeDate
+                closeDate = dto.closeDate,
+                creatorEditedAt = Instant.now()
             )
         )
         replaceCandidates(updated, dto.candidates)
@@ -113,7 +114,7 @@ class ElectionService(
         validateClose(existing.closeDate, confirmed, allowPast = hasBeenLive)
         // Re-checked at publish: grants may have been disabled since the draft.
         grants.requireCovers(creator, existing.pollType, purviews.purviewOf(PollKind.ELECTION, id))
-        return elections.save(existing.copy(status = PollStatus.PUBLISHED))
+        return elections.save(existing.copy(status = PollStatus.PUBLISHED, creatorEditedAt = Instant.now()))
     }
 
     @Transactional(readOnly = true)

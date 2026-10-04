@@ -46,7 +46,12 @@ data class BallotMeasure(
     val dateCreated: Instant = Instant.now(),
 
     @Column(name = "last_updated", nullable = false)
-    val lastUpdated: Instant = Instant.now()
+    val lastUpdated: Instant = Instant.now(),
+
+    // When the creator last created/edited/published/archived/restored this poll
+    // (admin moderation doesn't touch it). See V25.
+    @Column(name = "creator_edited_at", nullable = false)
+    val creatorEditedAt: Instant = Instant.now()
 )
 
 @Entity

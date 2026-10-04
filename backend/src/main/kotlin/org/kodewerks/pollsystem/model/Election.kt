@@ -63,7 +63,12 @@ data class Election(
     val closeDate: Instant? = null,
 
     @Column(name = "date_submitted", nullable = false)
-    val dateSubmitted: Instant = Instant.now()
+    val dateSubmitted: Instant = Instant.now(),
+
+    // When the creator last created/edited/published/archived/restored this poll
+    // (admin moderation doesn't touch it). See V25.
+    @Column(name = "creator_edited_at", nullable = false)
+    val creatorEditedAt: Instant = Instant.now()
 )
 
 @Entity

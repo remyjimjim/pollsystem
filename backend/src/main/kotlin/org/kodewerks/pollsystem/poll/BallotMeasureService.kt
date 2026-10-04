@@ -85,7 +85,8 @@ class BallotMeasureService(
                 summary = dto.summary.trim(),
                 effectiveDate = dto.effectiveDate,
                 closeDate = dto.closeDate,
-                lastUpdated = Instant.now()
+                lastUpdated = Instant.now(),
+                creatorEditedAt = Instant.now()
             )
         )
     }
@@ -106,7 +107,7 @@ class BallotMeasureService(
         // Re-checked at publish: grants may have been disabled since the draft.
         grants.requireCovers(creator, existing.pollType, purviews.purviewOf(PollKind.ELECTION, existing.election.id))
         return measures.save(
-            existing.copy(status = PollStatus.PUBLISHED, lastUpdated = Instant.now())
+            existing.copy(status = PollStatus.PUBLISHED, lastUpdated = Instant.now(), creatorEditedAt = Instant.now())
         )
     }
 

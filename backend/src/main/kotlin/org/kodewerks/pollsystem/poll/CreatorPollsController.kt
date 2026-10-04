@@ -83,17 +83,17 @@ class CreatorPollsController(
             "questionnaire" -> {
                 val q = questionnaires.findById(id).orElseThrow { notFound() }
                 if (q.creator.id != callerId) throw forbidden()
-                questionnaires.save(q.copy(status = PollStatus.ARCHIVED))
+                questionnaires.save(q.copy(status = PollStatus.ARCHIVED, creatorEditedAt = Instant.now()))
             }
             "election" -> {
                 val e = elections.findById(id).orElseThrow { notFound() }
                 if (e.creator.id != callerId) throw forbidden()
-                elections.save(e.copy(status = PollStatus.ARCHIVED))
+                elections.save(e.copy(status = PollStatus.ARCHIVED, creatorEditedAt = Instant.now()))
             }
             "ballot-measure" -> {
                 val bm = ballotMeasures.findById(id).orElseThrow { notFound() }
                 if (bm.creator.id != callerId) throw forbidden()
-                ballotMeasures.save(bm.copy(status = PollStatus.ARCHIVED))
+                ballotMeasures.save(bm.copy(status = PollStatus.ARCHIVED, creatorEditedAt = Instant.now()))
             }
             else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
         }
@@ -117,19 +117,19 @@ class CreatorPollsController(
                 val q = questionnaires.findById(id).orElseThrow { notFound() }
                 if (q.creator.id != callerId) throw forbidden()
                 if (q.status != PollStatus.ARCHIVED) return
-                questionnaires.save(q.copy(status = PollStatus.DRAFT))
+                questionnaires.save(q.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
             }
             "election" -> {
                 val e = elections.findById(id).orElseThrow { notFound() }
                 if (e.creator.id != callerId) throw forbidden()
                 if (e.status != PollStatus.ARCHIVED) return
-                elections.save(e.copy(status = PollStatus.DRAFT))
+                elections.save(e.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
             }
             "ballot-measure" -> {
                 val bm = ballotMeasures.findById(id).orElseThrow { notFound() }
                 if (bm.creator.id != callerId) throw forbidden()
                 if (bm.status != PollStatus.ARCHIVED) return
-                ballotMeasures.save(bm.copy(status = PollStatus.DRAFT))
+                ballotMeasures.save(bm.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
             }
             else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
         }

@@ -39,7 +39,12 @@ data class Questionnaire(
     val createDate: LocalDate = LocalDate.now(),
 
     @Column(name = "submit_date")
-    val submitDate: Instant? = null
+    val submitDate: Instant? = null,
+
+    // When the creator last created/edited/published/archived/restored this poll
+    // (admin moderation doesn't touch it). See V25.
+    @Column(name = "creator_edited_at", nullable = false)
+    val creatorEditedAt: Instant = Instant.now()
 )
 
 // questionnaire_domains was retired in V24: a questionnaire's geo now lives in
