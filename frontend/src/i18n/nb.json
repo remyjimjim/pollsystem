@@ -456,7 +456,7 @@
     },
     "manageCreators": {
       "heading": "Administrer Oppretterne",
-      "body": "Opprettere med tilgang innenfor ditt område. Når du deaktiverer eller begrenser tilgangen, kan de ikke lagre eller publisere avstemninger der.",
+      "body": "Opprettere med tilgang eller avstemninger innenfor ditt område.",
       "filterEmail": "Filtrer etter e-post",
       "count": "{n} oppretter | {n} opprettere",
       "none": "Ingen opprettere innenfor ditt område.",
@@ -467,9 +467,9 @@
       "colEnabled": "Aktivert",
       "colEdit": "Rediger",
       "infoPurview": "Hvor denne oppretteren kan lage avstemninger: aktiverte og deaktiverte tilganger (gjennomstreket). Hold over, trykk på eller fokuser radens nål for hele listen. Bare tilganger som overlapper ditt område vises.",
-      "infoPolls": "Hvor mange avstemninger oppretteren har laget. Lenken åpner Administrer avstemninger filtrert på dem (deaktiverte inkludert); den viser bare avstemninger innenfor ditt område.",
+      "infoPolls": "Hvor mange av oppretterens avstemninger som er innenfor ditt område, deaktiverte inkludert. Lenken åpner Administrer avstemninger med akkurat disse, sortert etter sluttdato med nyeste først.",
       "infoLastEdit": "Når oppretteren sist opprettet, endret, publiserte, arkiverte eller gjenopprettet en av sine avstemninger. Administratormoderering teller ikke.",
-      "infoEnabled": "Fjerner du haken, deaktiveres oppretterens tilganger innenfor ditt område: de kan ikke lagre eller publisere avstemninger der. Delvis betyr at noen av tilgangene er deaktivert; haker du av, aktiveres alle igjen. Grået ut når ingen av tilgangene ligger innenfor ditt område.",
+      "infoEnabled": "Avhuket så lenge minst én av oppretterens avstemninger innenfor ditt område er aktivert. Fjerner du haken, deaktiveres alle (de vises fortsatt under Avstemninger); huker du av, aktiveres de igjen. Delvis betyr at noen er deaktivert, for eksempel av en annen admin utenfor ditt område. For å hindre nye avstemninger her, slå av tilgangen under Rediger.",
       "purviewOf": "Område for {email}",
       "nCounties": "{n} fylke | {n} fylker",
       "nZips": "{n} postnummer | {n} postnumre",
@@ -496,7 +496,8 @@
       "pollTypesHint": "(ingen valgt = alle typer)",
       "addButton": "Legg til",
       "errorLoad": "Kunne ikke laste opprettere",
-      "errorSave": "Kunne ikke lagre endringen"
+      "errorSave": "Kunne ikke lagre endringen",
+      "noPolls": "Ingen avstemninger"
     },
     "managePolls": {
       "heading": "Administrer avstemninger",

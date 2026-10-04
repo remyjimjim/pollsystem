@@ -15,7 +15,7 @@ function grant(over: Record<string, unknown>) {
 }
 const ROWS = [
   {
-    userId: 10, email: 'alice@test.local', enabledState: 'ENABLED', manageable: true, pollCount: 3,
+    userId: 10, email: 'alice@test.local', pollsState: 'ENABLED', accessState: 'ENABLED', manageable: true, pollCount: 3,
     lastEditedAt: '2026-09-30T12:00:00Z',
     grants: [
       grant({ id: 1 }),
@@ -24,11 +24,11 @@ const ROWS = [
     ]
   },
   {
-    userId: 11, email: 'bob@test.local', enabledState: 'PARTIAL', manageable: true, pollCount: 0,
+    userId: 11, email: 'bob@test.local', pollsState: 'PARTIAL', accessState: 'ENABLED', manageable: true, pollCount: 2,
     lastEditedAt: null, grants: [grant({ id: 4, scopeLevel: 'ZIP', zipcode: '90001' })]
   },
   {
-    userId: 12, email: 'nat@test.local', enabledState: 'ENABLED', manageable: false, pollCount: 1,
+    userId: 12, email: 'nat@test.local', pollsState: 'NONE', accessState: 'ENABLED', manageable: false, pollCount: 0,
     lastEditedAt: null, grants: [grant({ id: 5, scopeLevel: 'NATIONAL', manageable: false })]
   }
 ]
@@ -42,7 +42,7 @@ beforeEach(() => {
   vi.mocked(axios.put).mockImplementation(async (url: string, body: any) => {
     const id = Number(url.split('/')[4])
     const row = structuredClone(ROWS.find(r => r.userId === id)!)
-    return { data: { ...row, enabledState: body.enabled ? 'ENABLED' : 'DISABLED' } }
+    return { data: { ...row, pollsState: body.enabled ? 'ENABLED' : 'DISABLED' } }
   })
 })
 afterEach(() => vi.resetAllMocks())
@@ -92,23 +92,36 @@ describe('ManageCreatorsView', () => {
       path: '/admin/manage-polls',
       query: { creator: 'alice@test.local', sort: 'closeDate', dir: 'desc', showDisabled: '1' }
     })
-    expect(row(w, 'bob@test.local').findComponent(RouterLinkStub).exists()).toBe(false) // 0 polls: no link
+    expect(row(w, 'nat@test.local').findComponent(RouterLinkStub).exists()).toBe(false) // 0 polls: no link
     w.unmount()
   })
 
-  it('toggles Enabled: enabled → disable, partial → enable; unmanageable is locked', async () => {
+  it('Enabled toggles the creator\'s polls: checked while any are live, uncheck disables, check re-enables', async () => {
     const w = await mountView()
-    await row(w, 'alice@test.local').find('input[type="checkbox"]').trigger('click')
+    const box = (email: string) => row(w, email).find('input[type="checkbox"]')
+
+    expect((box('alice@test.local').element as HTMLInputElement).checked).toBe(true)
+    await box('alice@test.local').trigger('click')
     await flushPromises()
-    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/10/enabled', { enabled: false })
+    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/10/polls-enabled', { enabled: false })
     expect(row(w, 'alice@test.local').text()).toContain('No')
+    expect((box('alice@test.local').element as HTMLInputElement).checked).toBe(false)
 
-    await row(w, 'bob@test.local').find('input[type="checkbox"]').trigger('click')
+    // Partial counts as checked, so clicking disables the rest.
+    expect((box('bob@test.local').element as HTMLInputElement).checked).toBe(true)
+    await box('bob@test.local').trigger('click')
     await flushPromises()
-    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/11/enabled', { enabled: true })
+    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/11/polls-enabled', { enabled: false })
 
-    const natBox = row(w, 'nat@test.local').find('input[type="checkbox"]')
-    expect((natBox.element as HTMLInputElement).disabled).toBe(true)
+    // Unchecked → re-enable.
+    await box('alice@test.local').trigger('click')
+    await flushPromises()
+    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/10/polls-enabled', { enabled: true })
+
+    // Never greyed out; a creator with no polls here just says so.
+    expect((box('alice@test.local').element as HTMLInputElement).disabled).toBe(false)
+    expect(row(w, 'nat@test.local').find('input[type="checkbox"]').exists()).toBe(false)
+    expect(row(w, 'nat@test.local').text()).toContain('No polls')
     w.unmount()
   })
 })

@@ -456,7 +456,7 @@
     },
     "manageCreators": {
       "heading": "Gérer les Créateurs",
-      "body": "Créateurs disposant d'un accès dans votre périmètre. Désactiver ou restreindre leur accès les empêche d'y enregistrer ou publier des sondages.",
+      "body": "Créateurs disposant d'un accès ou de sondages dans votre périmètre.",
       "filterEmail": "Filtrer par e-mail",
       "count": "{n} créateur | {n} créateurs",
       "none": "Aucun créateur dans votre périmètre.",
@@ -467,9 +467,9 @@
       "colEnabled": "Activé",
       "colEdit": "Modifier",
       "infoPurview": "Où ce créateur peut créer des sondages : ses accès actifs et désactivés (barrés). Survolez, touchez ou sélectionnez l'épingle de la ligne pour la liste complète. Seuls les accès qui recoupent votre périmètre sont affichés.",
-      "infoPolls": "Nombre de sondages créés par ce créateur. Le lien ouvre Gérer les sondages filtré sur lui (sondages désactivés inclus) ; seuls les sondages de votre périmètre y figurent.",
+      "infoPolls": "Nombre de sondages de ce créateur dans votre périmètre, sondages désactivés inclus. Le lien ouvre Gérer les sondages avec exactement ces sondages, triés par date de clôture, les plus récents d'abord.",
       "infoLastEdit": "Dernière fois que le créateur a créé, modifié, publié, archivé ou restauré l'un de ses sondages. La modération des administrateurs ne compte pas.",
-      "infoEnabled": "Décocher désactive les accès de ce créateur dans votre périmètre : il ne peut plus y enregistrer ni publier de sondages. Partiel signifie que certains sont désactivés ; cocher les réactive tous. Grisé lorsqu'aucun de ses accès n'est dans votre périmètre.",
+      "infoEnabled": "Coché tant qu'au moins un sondage de ce créateur dans votre périmètre est activé. Décocher les désactive tous (ils restent visibles sous Sondages) ; cocher les réactive. Partiel signifie que certains sont désactivés, par exemple par un autre administrateur hors de votre périmètre. Pour l'empêcher de créer de nouveaux sondages ici, désactivez son accès dans Modifier.",
       "purviewOf": "Périmètre de {email}",
       "nCounties": "{n} comté | {n} comtés",
       "nZips": "{n} code postal | {n} codes postaux",
@@ -496,7 +496,8 @@
       "pollTypesHint": "(aucun coché = tous les types)",
       "addButton": "Ajouter",
       "errorLoad": "Échec du chargement des créateurs",
-      "errorSave": "Impossible d'enregistrer la modification"
+      "errorSave": "Impossible d'enregistrer la modification",
+      "noPolls": "Aucun sondage"
     },
     "managePolls": {
       "heading": "Gérer les Sondages",

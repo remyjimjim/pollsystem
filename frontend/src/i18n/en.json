@@ -507,7 +507,7 @@
     },
     "manageCreators": {
       "heading": "Manage Creators",
-      "body": "Creators with access inside your purview. Disabling or narrowing their access stops them saving or publishing polls there.",
+      "body": "Creators with access or polls inside your purview.",
       "filterEmail": "Filter by email",
       "count": "{n} creator | {n} creators",
       "none": "No creators within your purview.",
@@ -518,9 +518,9 @@
       "colEnabled": "Enabled",
       "colEdit": "Edit",
       "infoPurview": "Where this creator may create polls: their enabled and disabled access (disabled is struck through). Hover, tap or focus a row's pin for the full list. Only access overlapping your purview is shown.",
-      "infoPolls": "How many polls this creator has made. The link opens Manage Polls filtered to them (closing soonest last, disabled polls included); it shows only polls within your purview.",
+      "infoPolls": "How many of this creator's polls are inside your purview, disabled ones included. The link opens Manage Polls showing exactly those polls, sorted by close date with the newest first.",
       "infoLastEdit": "When the creator last created, edited, published, archived or restored one of their polls. Admin moderation doesn't count.",
-      "infoEnabled": "Unchecking disables this creator's access inside your purview: they can't save or publish polls there. Partial means some of that access is disabled; checking re-enables it all. Greyed out when none of their access lies inside your purview.",
+      "infoEnabled": "Checked while any of this creator's polls inside your purview is enabled. Unchecking disables all of them (they still appear under Polls); checking re-enables them. Partial means some are disabled, for example by another admin outside your purview. To stop the creator making new polls here, turn their access off in Edit.",
       "purviewOf": "Purview of {email}",
       "nCounties": "{n} county | {n} counties",
       "nZips": "{n} zip | {n} zips",
@@ -547,7 +547,8 @@
       "pollTypesHint": "(none checked = all types)",
       "addButton": "Add",
       "errorLoad": "Failed to load creators",
-      "errorSave": "Could not save the change"
+      "errorSave": "Could not save the change",
+      "noPolls": "No polls"
     },
     "managePolls": {
       "heading": "Manage Polls",
