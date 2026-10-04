@@ -123,7 +123,7 @@ class AdminCreatorsController(
         val reach = reachOf(principal.user)
         val mine = roleAssignments.findByUserIdAndRole(userId, AccessLevel.CREATOR)
             .filter { counted(it) && reach.contains(it) }
-        if (mine.isEmpty()) throw forbidden("None of this creator's grants are inside your purview")
+        if (mine.isEmpty()) throw forbidden("None of this creator's access is inside your purview")
         roleAssignments.saveAll(mine.filter { it.enabled != body.enabled }.map { it.copy(enabled = body.enabled) })
         roleAuthCache.invalidateAuthorizations()
         return rowFor(userId, reach)
@@ -158,7 +158,7 @@ class AdminCreatorsController(
         val reach = reachOf(principal.user)
         val g = manageableGrant(userId, grantId, reach)
         if (g.creatorRequest != null) {
-            throw ResponseStatusException(HttpStatus.CONFLICT, "This grant came from a creator request; disable it instead")
+            throw ResponseStatusException(HttpStatus.CONFLICT, "This access came from a creator request; disable it instead")
         }
         roleAssignments.delete(g)
         roleAuthCache.invalidateAuthorizations()
@@ -205,8 +205,8 @@ class AdminCreatorsController(
         g.creatorRequest == null || g.creatorRequest.status == RequestStatus.APPROVED
 
     private fun manageableGrant(userId: Long, grantId: Long, reach: Reach): RoleAssignment {
-        val g = roleAssignments.findById(grantId).orElseThrow { notFound("Grant not found") }
-        if (g.user.id != userId || g.role != AccessLevel.CREATOR || !counted(g)) throw notFound("Grant not found")
+        val g = roleAssignments.findById(grantId).orElseThrow { notFound("Access not found") }
+        if (g.user.id != userId || g.role != AccessLevel.CREATOR || !counted(g)) throw notFound("Access not found")
         if (!reach.contains(g)) throw forbidden("${label(g)} is outside your purview")
         return g
     }
