@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-10-04 — feat: admin creators API (list, enable, edit grants)
+
+**Requested:**
+
+> A) It'd be great to see a list of creators with the following columns
+> (email, purview, polls, last edit date, enabled(Y/N), edit) where email is
+> the creator's email address; purview list's the creator's purview that when
+> hovered over a box pops up that lists the States and Counties a creator can
+> create for; "polls" lists a link to the 'admin/manage-polls' section listing
+> all the polls the creator has created sorted by 'Close' date descending and
+> 'Enabled' columns.
+
+> as far as #3: Partial-enable: is the Y / N / Partial display with
+> purview-limited toggling OK? sure, let's try it.
+
+**Changed:**
+
+- New `AdminCreatorsController` (`/api/admin/creators`): list creators whose
+  grants overlap the caller's purview, with grants, poll count, latest
+  `creator_edited_at` and an ENABLED / DISABLED / PARTIAL state. Toggle all
+  in-purview grants, toggle one, add region × poll-type grants, remove
+  admin-added grants. Request-originated grants can only be disabled (409 on
+  remove) so the request's history stays intact.
+- Only grants from APPROVED requests (or added directly) count; pending and
+  rejected requests' disabled rows are ignored.
+- ADMINs see creators overlapping their purview and manage only grants wholly
+  inside it; SUPER manages everything. Writes invalidate `RoleAuthCache`.
+- `GET /api/admin/polls` gains a `creatorEmail` filter for the Polls link.
+- New `AdminCreatorsControllerTest` (5 cases); backend suite 265/265.
+
+**Commit:** `8d40d76`
+
+---
+
 ## 2026-10-04 — feat: track when the creator last edited each poll
 
 **Requested:**
