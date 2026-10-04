@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-10-04 — feat: Manage Creators Enabled + Polls track polls in purview
+
+**Requested:**
+
+> I think the admin/manage-creators page column 'Enabled' should be checked if
+> the creator has polls within the admin's purview, and the polls column should
+> show count and polls within Admin's purview.
+
+> Using the top row of admin/manage-creators namely,
+> zzzmc-seedcreator-1822979688927@test.local for example, I think "Enabled"
+> should always be blue and should be checked/enabled if the creator has
+> enabled polls in the Admin's purview, in this example the purview is zipcode
+> 90001, 90012, 90210... if the Admin decides to uncheck the "Enabled" checkbox
+> then the polls within the Admin's purview are disabled/unchecked also, but
+> the polls still show up when one clicks on the "Polls" link in the
+> admin/manage-creators page.
+
+**Changed:**
+
+- **Polls** counts the creator's polls inside the admin's purview (disabled
+  included), using the Manage Polls list query, so it matches the page the
+  link opens.
+- **Enabled** reflects those polls: checked while any is enabled (Yes /
+  Partial), No when all are disabled, "No polls" when there are none, never
+  greyed out. Unchecking adds an Everywhere block to each live poll;
+  re-checking removes every block the admin may remove, i.e. the Manage Polls
+  Enabled checkbox in bulk. Disabled polls still show under the Polls link.
+  Blocks another admin set outside the purview stay, so the row reads Partial.
+- Creators who own polls in the purview are listed even after their access
+  there is removed. The row-level access toggle is gone; access is still
+  switched per entry in the Edit dialog.
+- Help text updated in en, nb, fr, ja. Backend 268/268 (3 new tests),
+  frontend 50/50. Verified on the rebuilt local stack as admin@local.test:
+  the seed creator's row unchecks → its poll is disabled but still listed →
+  re-checks.
+
+**Commit:** `ec100ce`
+
+---
+
 ## 2026-10-04 — copy: "access" instead of "grants" on Manage Creators
 
 **Requested:**
