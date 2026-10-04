@@ -10,6 +10,7 @@ import org.kodewerks.pollsystem.adminpolls.CreateBlockRequest
 import org.kodewerks.pollsystem.model.BlockScope
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.CreatorRequest
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.RequestStatus
 import org.kodewerks.pollsystem.model.RoleAssignment
 import org.kodewerks.pollsystem.model.ScopeLevel
@@ -36,6 +37,7 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var creatorRequests: CreatorRequestRepository
     @Autowired private lateinit var states: StateRepository
     @Autowired private lateinit var counties: CountyRepository
+    @Autowired private lateinit var pollBlocks: org.kodewerks.pollsystem.poll.PollBlockService
 
     private fun state(initial: String) = states.findByInitial(initial)!!
     private fun county(initial: String, name: String) = counties.findByStateId(state(initial).id).first { it.name == name }
@@ -111,8 +113,8 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
         val national = creator("mc-national").also { grant(it, ScopeLevel.NATIONAL) }
 
         val row = rowOf(controller.list(admin), national)
-        assertThat(row.manageable).isFalse()
-        assertThat(row.pollsState).isEqualTo(PollsState.NONE)
+        assertThat(row.manageable).isFalse() // can't edit nationwide access...
+        assertThat(row.canToggle).isTrue()   // ...but can disable them within CA
         assertStatus(HttpStatus.FORBIDDEN) {
             controller.setGrantEnabled(admin, national.id, row.grants.single().id, SetEnabledRequest(false))
         }
@@ -165,51 +167,99 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
     private fun draft(t: String, zip: String) = QuestionnaireDraftRequest(
         pollTypeId = 2L, title = t, summary = "s", questions = listOf(QuestionInput("Q?")), zipcodes = listOf(zip)
     )
-    private fun blockedByTitle(sup: AppUserDetails, email: String) =
-        adminPolls.list(sup, null, null, null, null, null, null, true, email).associate { it.title to it.blocked }
-
-    @Test
-    fun `Enabled and Polls cover only the creator's polls inside the purview`() {
-        val admin = caAdmin()
-        val sup = superUser()
-        val c = creator("mc-polls").also { grant(it, ScopeLevel.STATE, "CA"); grant(it, ScopeLevel.STATE, "NY") }
-        questionnaires.saveDraft(c, draft("LA one", "90001"))
-        questionnaires.saveDraft(c, draft("LA two", "90001"))
-        questionnaires.saveDraft(c, draft("NYC", "10001"))
-
-        val row = rowOf(controller.list(admin), c)
-        assertThat(row.pollCount).isEqualTo(2)
-        assertThat(row.pollsState).isEqualTo(PollsState.ENABLED)
-
-        val off = controller.setPollsEnabled(admin, c.id, SetEnabledRequest(false))
-        assertThat(off.pollsState).isEqualTo(PollsState.DISABLED)
-        assertThat(off.pollCount).isEqualTo(2) // disabled polls still counted and listed
-        assertThat(blockedByTitle(sup, c.email)).isEqualTo(mapOf("LA one" to true, "LA two" to true, "NYC" to false))
-
-        val on = controller.setPollsEnabled(admin, c.id, SetEnabledRequest(true))
-        assertThat(on.pollsState).isEqualTo(PollsState.ENABLED)
-        assertThat(blockedByTitle(sup, c.email).values).containsOnly(false)
+    private fun stateDraft(t: String, initial: String) = QuestionnaireDraftRequest(
+        pollTypeId = 2L, title = t, summary = "s", questions = listOf(QuestionInput("Q?")),
+        scopeLevel = ScopeLevel.STATE, regionIds = listOf(state(initial).id)
+    )
+    private fun blocksOf(sup: AppUserDetails, email: String) =
+        adminPolls.list(sup, null, null, null, null, null, null, true, email).associate { p ->
+            p.title to adminPolls.listBlocks(p.type, p.id).map { b -> b.zipcode ?: b.countyName ?: b.stateInitial ?: "EVERYWHERE" }
+        }
+    /** An ADMIN whose purview is the given zipcodes (like admin@local.test). */
+    private fun zipAdmin(vararg zips: String): AppUserDetails {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mczipadmin")
+        zips.forEach { z ->
+            val la = county("CA", "Los Angeles")
+            roleAssignments.save(RoleAssignment(user = admin, role = AccessLevel.ADMIN, scopeLevel = ScopeLevel.ZIP,
+                state = la.state, county = la, zipcode = z, enabled = true))
+        }
+        return AppUserDetails(admin)
     }
 
     @Test
-    fun `a block outside the admin's purview neither shows as disabled to them nor is lifted by them`() {
+    fun `disabling blocks only poll ∩ creator ∩ admin purview, and Polls counts enabled ones`() {
+        val admin = zipAdmin("90001", "90012")
+        val sup = superUser()
+        val c = creator("mc-x").also { grant(it, ScopeLevel.STATE, "CA") }
+        questionnaires.saveDraft(c, stateDraft("Statewide", "CA"))
+
+        val before = rowOf(controller.list(admin), c)
+        assertThat(before.enabled).isTrue()
+        assertThat(before.pollCount to before.pollTotal).isEqualTo(1 to 1)
+
+        val off = controller.setEnabled(admin, c.id, SetEnabledRequest(false))
+        assertThat(off.enabled).isFalse()
+        assertThat(off.pollCount to off.pollTotal).isEqualTo(0 to 1) // disabled here, still listed
+        // A CA-wide poll by a CA creator, disabled by a two-zip admin: just those zips.
+        assertThat(blocksOf(sup, c.email)).isEqualTo(mapOf("Statewide" to listOf("90001", "90012")))
+        val pollId = adminPolls.list(sup, null, null, null, null, null, null, true, c.email).single().id
+        assertThat(pollBlocks.isBlockedFor(PollKind.QUESTIONNAIRE, pollId, "90001")).isTrue()
+        assertThat(pollBlocks.isBlockedFor(PollKind.QUESTIONNAIRE, pollId, "94110")).isFalse()
+    }
+
+    @Test
+    fun `a disabled creator can't create polls in the admin's purview, only elsewhere`() {
+        val admin = zipAdmin("90001")
+        val c = creator("mc-guard").also { grant(it, ScopeLevel.STATE, "CA") }
+        controller.setEnabled(admin, c.id, SetEnabledRequest(false))
+
+        assertStatus(HttpStatus.FORBIDDEN) { questionnaires.saveDraft(c, draft("Here", "90001")) }
+        assertStatus(HttpStatus.FORBIDDEN) { questionnaires.saveDraft(c, stateDraft("Statewide", "CA")) }
+        questionnaires.saveDraft(c, draft("Elsewhere", "94110"))
+
+        controller.setEnabled(admin, c.id, SetEnabledRequest(true))
+        questionnaires.saveDraft(c, draft("Here again", "90001"))
+    }
+
+    @Test
+    fun `re-enabling one poll keeps the creator disabled, re-checking the creator lifts their blocks`() {
+        val admin = zipAdmin("90001")
+        val sup = superUser()
+        val c = creator("mc-stored").also { grant(it, ScopeLevel.STATE, "CA") }
+        questionnaires.saveDraft(c, draft("One", "90001"))
+        questionnaires.saveDraft(c, draft("Two", "90001"))
+        controller.setEnabled(admin, c.id, SetEnabledRequest(false))
+
+        // Re-enable "One" from Manage Polls.
+        val one = adminPolls.list(admin, null, "One", null, null, null, null, true, c.email).single()
+        adminPolls.listBlocks(one.type, one.id).forEach { adminPolls.deleteBlock(it.id, admin) }
+        val row = rowOf(controller.list(admin), c)
+        assertThat(row.enabled).isFalse()
+        assertThat(row.pollCount to row.pollTotal).isEqualTo(1 to 2)
+
+        val on = controller.setEnabled(admin, c.id, SetEnabledRequest(true))
+        assertThat(on.enabled).isTrue()
+        assertThat(on.pollCount).isEqualTo(2)
+        assertThat(blocksOf(sup, c.email).values.flatten()).isEmpty()
+    }
+
+    @Test
+    fun `a block outside the admin's purview neither counts against them nor is lifted by them`() {
         val admin = caAdmin()
         val sup = superUser()
         val c = creator("mc-mixed").also { grant(it, ScopeLevel.STATE, "CA") }
         val held = questionnaires.saveDraft(c, draft("Held", "90001"))
-
         // A super blocks "Held" for New York submitters: outside a CA admin's purview.
         adminPolls.createBlock("QUESTIONNAIRE", held.id, CreateBlockRequest(BlockScope.STATE, null, null, state("NY").id), sup)
-        assertThat(rowOf(controller.list(admin), c).pollsState).isEqualTo(PollsState.ENABLED)
+        assertThat(rowOf(controller.list(admin), c).pollCount).isEqualTo(1)
 
-        controller.setPollsEnabled(admin, c.id, SetEnabledRequest(false))
-        controller.setPollsEnabled(admin, c.id, SetEnabledRequest(true))
-        // The CA admin's own disable came and went; the NY block is still there.
-        assertThat(blockedByTitle(sup, c.email)).isEqualTo(mapOf("Held" to true))
+        controller.setEnabled(admin, c.id, SetEnabledRequest(false))
+        controller.setEnabled(admin, c.id, SetEnabledRequest(true))
+        assertThat(blocksOf(sup, c.email)).isEqualTo(mapOf("Held" to listOf("NY")))
     }
 
     @Test
-    fun `a creator stays listed for their polls after their access there is removed`() {
+    fun `a creator with polls but no access in the purview is listed but can't be toggled`() {
         val admin = caAdmin()
         val c = creator("mc-former")
         val g = grant(c, ScopeLevel.STATE, "CA")
@@ -218,7 +268,7 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
 
         val row = rowOf(controller.list(admin), c)
         assertThat(row.pollCount).isEqualTo(1)
-        assertThat(row.grants).isEmpty()
-        assertThat(row.manageable).isFalse()
+        assertThat(row.canToggle).isFalse()
+        assertStatus(HttpStatus.CONFLICT) { controller.setEnabled(admin, c.id, SetEnabledRequest(false)) }
     }
 }

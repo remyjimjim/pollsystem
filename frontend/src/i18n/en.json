@@ -518,9 +518,9 @@
       "colEnabled": "Enabled",
       "colEdit": "Edit",
       "infoPurview": "Where this creator may create polls: their enabled and disabled access (disabled is struck through). Hover, tap or focus a row's pin for the full list. Only access overlapping your purview is shown.",
-      "infoPolls": "How many of this creator's polls are inside your purview, disabled ones included. The link opens Manage Polls showing exactly those polls, sorted by close date with the newest first.",
+      "infoPolls": "How many of this creator's polls are enabled inside your purview; ones you've disabled don't count. The link opens Manage Polls with all of their polls in your purview, disabled ones included, so you can re-enable single polls.",
       "infoLastEdit": "When the creator last created, edited, published, archived or restored one of their polls. Admin moderation doesn't count.",
-      "infoEnabled": "Checked while any of this creator's polls inside your purview is enabled. Unchecking disables all of them (they still appear under Polls); checking re-enables them. Partial means some are disabled, for example by another admin outside your purview. To stop the creator making new polls here, turn their access off in Edit.",
+      "infoEnabled": "Unchecking disables this creator within your purview: they can't create or publish polls there, and their polls there are disabled where the poll, the creator's access and your purview overlap. Re-enabling single polls under Polls keeps the creator disabled; checking re-enables the creator and their polls here. Greyed out when they have no access in your purview.",
       "purviewOf": "Purview of {email}",
       "nCounties": "{n} county | {n} counties",
       "nZips": "{n} zip | {n} zips",
@@ -529,7 +529,6 @@
       "groupCounties": "Counties",
       "groupZips": "Zipcodes",
       "allTypes": "All poll types",
-      "partial": "Partial",
       "enabledFor": "Enabled: {email}",
       "outsidePurview": "Outside your purview",
       "edit": "Edit",
@@ -548,7 +547,7 @@
       "addButton": "Add",
       "errorLoad": "Failed to load creators",
       "errorSave": "Could not save the change",
-      "noPolls": "No polls"
+      "noAccessHint": "No access in your purview. Disable their polls one at a time on Manage Polls."
     },
     "managePolls": {
       "heading": "Manage Polls",

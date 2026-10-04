@@ -15,7 +15,7 @@ function grant(over: Record<string, unknown>) {
 }
 const ROWS = [
   {
-    userId: 10, email: 'alice@test.local', pollsState: 'ENABLED', accessState: 'ENABLED', manageable: true, pollCount: 3,
+    userId: 10, email: 'alice@test.local', enabled: true, canToggle: true, accessState: 'ENABLED', manageable: true, pollCount: 3, pollTotal: 3,
     lastEditedAt: '2026-09-30T12:00:00Z',
     grants: [
       grant({ id: 1 }),
@@ -24,11 +24,11 @@ const ROWS = [
     ]
   },
   {
-    userId: 11, email: 'bob@test.local', pollsState: 'PARTIAL', accessState: 'ENABLED', manageable: true, pollCount: 2,
+    userId: 11, email: 'bob@test.local', enabled: false, canToggle: true, accessState: 'ENABLED', manageable: true, pollCount: 1, pollTotal: 2,
     lastEditedAt: null, grants: [grant({ id: 4, scopeLevel: 'ZIP', zipcode: '90001' })]
   },
   {
-    userId: 12, email: 'nat@test.local', pollsState: 'NONE', accessState: 'ENABLED', manageable: false, pollCount: 0,
+    userId: 12, email: 'nat@test.local', enabled: true, canToggle: false, accessState: 'ENABLED', manageable: false, pollCount: 0, pollTotal: 0,
     lastEditedAt: null, grants: [grant({ id: 5, scopeLevel: 'NATIONAL', manageable: false })]
   }
 ]
@@ -42,7 +42,7 @@ beforeEach(() => {
   vi.mocked(axios.put).mockImplementation(async (url: string, body: any) => {
     const id = Number(url.split('/')[4])
     const row = structuredClone(ROWS.find(r => r.userId === id)!)
-    return { data: { ...row, pollsState: body.enabled ? 'ENABLED' : 'DISABLED' } }
+    return { data: { ...row, enabled: body.enabled } }
   })
 })
 afterEach(() => vi.resetAllMocks())
@@ -62,14 +62,14 @@ const row = (w: ReturnType<typeof mount>, email: string) =>
   w.findAll('[data-test="creator-row"]').find(r => r.text().includes(email))!
 
 describe('ManageCreatorsView', () => {
-  it('lists creators with a purview summary, poll count and Y / N / Partial', async () => {
+  it('lists creators with a purview summary, enabled-poll count and Yes / No', async () => {
     const w = await mountView()
     expect(w.findAll('[data-test="creator-row"]')).toHaveLength(3)
 
     const alice = row(w, 'alice@test.local')
     expect(alice.text()).toContain('CA · 2 counties')
     expect(alice.text()).toContain('Yes')
-    expect(row(w, 'bob@test.local').text()).toContain('Partial')
+    expect(row(w, 'bob@test.local').text()).toContain('No')
     expect(row(w, 'bob@test.local').text()).toContain('1 zip')
     expect(row(w, 'nat@test.local').text()).toContain('Nationwide')
     w.unmount()
@@ -96,32 +96,33 @@ describe('ManageCreatorsView', () => {
     w.unmount()
   })
 
-  it('Enabled toggles the creator\'s polls: checked while any are live, uncheck disables, check re-enables', async () => {
+  it('Enabled is the stored creator switch: uncheck disables, check re-enables, greyed without access', async () => {
     const w = await mountView()
     const box = (email: string) => row(w, email).find('input[type="checkbox"]')
 
     expect((box('alice@test.local').element as HTMLInputElement).checked).toBe(true)
     await box('alice@test.local').trigger('click')
     await flushPromises()
-    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/10/polls-enabled', { enabled: false })
-    expect(row(w, 'alice@test.local').text()).toContain('No')
+    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/10/enabled', { enabled: false })
     expect((box('alice@test.local').element as HTMLInputElement).checked).toBe(false)
 
-    // Partial counts as checked, so clicking disables the rest.
-    expect((box('bob@test.local').element as HTMLInputElement).checked).toBe(true)
+    expect((box('bob@test.local').element as HTMLInputElement).checked).toBe(false)
     await box('bob@test.local').trigger('click')
     await flushPromises()
-    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/11/polls-enabled', { enabled: false })
+    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/11/enabled', { enabled: true })
 
-    // Unchecked → re-enable.
-    await box('alice@test.local').trigger('click')
-    await flushPromises()
-    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/10/polls-enabled', { enabled: true })
+    const nat = box('nat@test.local')
+    expect((nat.element as HTMLInputElement).disabled).toBe(true)
+    await nat.trigger('click')
+    expect(axios.put).toHaveBeenCalledTimes(2)
+    w.unmount()
+  })
 
-    // Never greyed out; a creator with no polls here just says so.
-    expect((box('alice@test.local').element as HTMLInputElement).disabled).toBe(false)
-    expect(row(w, 'nat@test.local').find('input[type="checkbox"]').exists()).toBe(false)
-    expect(row(w, 'nat@test.local').text()).toContain('No polls')
+  it('shows the enabled-poll count but links whenever disabled polls exist too', async () => {
+    const w = await mountView()
+    const bob = row(w, 'bob@test.local').findComponent(RouterLinkStub)
+    expect(bob.exists()).toBe(true)
+    expect(bob.text()).toBe('1') // 1 enabled of 2
     w.unmount()
   })
 })

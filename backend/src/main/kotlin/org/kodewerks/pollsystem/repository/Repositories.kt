@@ -345,6 +345,13 @@ interface PollTypeBlockRepository : JpaRepository<PollTypeBlock, Long> {
 interface AppFlagRepository : JpaRepository<AppFlag, Int>
 
 @Repository
+interface CreatorDisableRepository : JpaRepository<CreatorDisable, Long> {
+    fun findByCreatorId(creatorId: Long): List<CreatorDisable>
+    fun findByCreatorIdAndAdminId(creatorId: Long, adminId: Long): CreatorDisable?
+    fun findByAdminId(adminId: Long): List<CreatorDisable>
+}
+
+@Repository
 interface PollPurviewRepository : JpaRepository<PollPurview, Long> {
     fun findByPollTypeAndPollId(pollType: PollKind, pollId: Long): List<PollPurview>
     fun deleteByPollTypeAndPollId(pollType: PollKind, pollId: Long)

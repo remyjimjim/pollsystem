@@ -135,10 +135,13 @@ class RegionService(
 
     /** A block's territory (EVERYWHERE = nationwide). */
     @Transactional(readOnly = true)
-    fun ofBlock(b: PollTypeBlock): Region? = when (b.scope) {
+    fun ofBlock(b: PollTypeBlock): Region? = ofBlock(b.scope, b.zipcode, b.countyId, b.stateId)
+
+    @Transactional(readOnly = true)
+    fun ofBlock(scope: BlockScope, zipcode: String?, countyId: Long?, stateId: Long?): Region? = when (scope) {
         BlockScope.EVERYWHERE -> Region.NATIONAL
-        BlockScope.STATE -> b.stateId?.let { state(it) }
-        BlockScope.COUNTY -> b.countyId?.let { county(it) }
-        BlockScope.ZIPCODE -> b.zipcode?.let { zip(it) }
+        BlockScope.STATE -> stateId?.let { state(it) }
+        BlockScope.COUNTY -> countyId?.let { county(it) }
+        BlockScope.ZIPCODE -> zipcode?.let { zip(it) }
     }
 }

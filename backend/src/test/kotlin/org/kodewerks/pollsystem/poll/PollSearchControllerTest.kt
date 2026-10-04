@@ -148,12 +148,15 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
         val eId = publishElection(creator, "Type E")
         val bmId = publishBallotMeasure(creator, "Type BM")
 
-        val elections = search(type = "Election")
-        assertThat(elections.map { it.id }).contains(eId).doesNotContain(qId, bmId)
-        assertThat(elections.filter { it.id == eId }.map { it.type }).containsExactly("Election")
+        // Ids are per-kind sequences and can coincide across kinds, so compare (type, id).
+        val q = "Questionnaire" to qId
+        val e = "Election" to eId
+        val bm = "BallotMeasure" to bmId
+        fun keys(type: String) = search(type = type).map { it.type to it.id }
 
-        assertThat(search(type = "Questionnaire").map { it.id }).contains(qId).doesNotContain(eId, bmId)
-        assertThat(search(type = "BallotMeasure").map { it.id }).contains(bmId).doesNotContain(qId, eId)
+        assertThat(keys("Election")).contains(e).doesNotContain(q, bm)
+        assertThat(keys("Questionnaire")).contains(q).doesNotContain(e, bm)
+        assertThat(keys("BallotMeasure")).contains(bm).doesNotContain(q, e)
     }
 
     @Test

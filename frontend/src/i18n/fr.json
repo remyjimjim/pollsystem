@@ -467,9 +467,9 @@
       "colEnabled": "Activé",
       "colEdit": "Modifier",
       "infoPurview": "Où ce créateur peut créer des sondages : ses accès actifs et désactivés (barrés). Survolez, touchez ou sélectionnez l'épingle de la ligne pour la liste complète. Seuls les accès qui recoupent votre périmètre sont affichés.",
-      "infoPolls": "Nombre de sondages de ce créateur dans votre périmètre, sondages désactivés inclus. Le lien ouvre Gérer les sondages avec exactement ces sondages, triés par date de clôture, les plus récents d'abord.",
+      "infoPolls": "Nombre de sondages de ce créateur activés dans votre périmètre ; ceux que vous avez désactivés ne comptent pas. Le lien ouvre Gérer les sondages avec tous ses sondages de votre périmètre, désactivés inclus, pour réactiver des sondages un par un.",
       "infoLastEdit": "Dernière fois que le créateur a créé, modifié, publié, archivé ou restauré l'un de ses sondages. La modération des administrateurs ne compte pas.",
-      "infoEnabled": "Coché tant qu'au moins un sondage de ce créateur dans votre périmètre est activé. Décocher les désactive tous (ils restent visibles sous Sondages) ; cocher les réactive. Partiel signifie que certains sont désactivés, par exemple par un autre administrateur hors de votre périmètre. Pour l'empêcher de créer de nouveaux sondages ici, désactivez son accès dans Modifier.",
+      "infoEnabled": "Décocher désactive ce créateur dans votre périmètre : il ne peut plus y créer ni publier de sondages, et ses sondages y sont désactivés là où le sondage, son accès et votre périmètre se recoupent. Réactiver des sondages un par un sous Sondages laisse le créateur désactivé ; cocher réactive le créateur et ses sondages ici. Grisé lorsqu'il n'a aucun accès dans votre périmètre.",
       "purviewOf": "Périmètre de {email}",
       "nCounties": "{n} comté | {n} comtés",
       "nZips": "{n} code postal | {n} codes postaux",
@@ -478,7 +478,6 @@
       "groupCounties": "Comtés",
       "groupZips": "Codes postaux",
       "allTypes": "Tous les types de sondage",
-      "partial": "Partiel",
       "enabledFor": "Activé : {email}",
       "outsidePurview": "Hors de votre périmètre",
       "edit": "Modifier",
@@ -497,7 +496,7 @@
       "addButton": "Ajouter",
       "errorLoad": "Échec du chargement des créateurs",
       "errorSave": "Impossible d'enregistrer la modification",
-      "noPolls": "Aucun sondage"
+      "noAccessHint": "Aucun accès dans votre périmètre. Désactivez ses sondages un par un dans Gérer les sondages."
     },
     "managePolls": {
       "heading": "Gérer les Sondages",

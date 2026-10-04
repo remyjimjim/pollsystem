@@ -4,8 +4,14 @@ import org.kodewerks.pollsystem.adminpolls.AdminPollRow
 import org.kodewerks.pollsystem.adminpolls.AdminPollsController
 import org.kodewerks.pollsystem.adminpolls.CreateBlockRequest
 import org.kodewerks.pollsystem.authz.RoleAuthCache
-import org.kodewerks.pollsystem.model.BlockScope
+import org.kodewerks.pollsystem.geography.Region
+import org.kodewerks.pollsystem.geography.RegionService
+import org.kodewerks.pollsystem.geography.intersectAll
+import org.kodewerks.pollsystem.geography.minimal
 import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.BlockScope
+import org.kodewerks.pollsystem.model.CreatorDisable
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.RequestStatus
 import org.kodewerks.pollsystem.model.RoleAssignment
 import org.kodewerks.pollsystem.model.ScopeLevel
@@ -13,12 +19,14 @@ import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
 import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
+import org.kodewerks.pollsystem.repository.CreatorDisableRepository
 import org.kodewerks.pollsystem.repository.ElectionRepository
 import org.kodewerks.pollsystem.repository.PollTypeRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
 import org.kodewerks.pollsystem.repository.StateRepository
 import org.kodewerks.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.poll.PollPurviewService
 import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -58,16 +66,17 @@ data class GrantDto(
 
 enum class EnabledState { ENABLED, DISABLED, PARTIAL }
 
-/** The creator's polls inside the caller's purview: all live, all disabled (blocked), mixed, or none. */
-enum class PollsState { ENABLED, DISABLED, PARTIAL, NONE }
-
 data class CreatorRow(
     val userId: Long,
     val email: String,
-    /** The "Enabled" column: their polls inside the caller's purview (same set as the Polls link). */
-    val pollsState: PollsState,
-    /** Their polls inside the caller's purview, disabled ones included. */
+    /** The Enabled column: false while the CALLER has disabled this creator (stored, see V26). */
+    val enabled: Boolean,
+    /** The caller may flip Enabled: the creator has access overlapping their purview, or is disabled by them. */
+    val canToggle: Boolean,
+    /** Enabled polls inside the caller's purview; polls disabled there don't count. */
     val pollCount: Int,
+    /** All their polls inside the caller's purview, disabled included: what the Polls link shows. */
+    val pollTotal: Int,
     /** Over the grants the caller can manage (or all visible ones if none are manageable). */
     val accessState: EnabledState,
     val manageable: Boolean,
@@ -88,8 +97,12 @@ data class AddGrantsRequest(
 /**
  * Backs /admin/manage-creators. A creator's purview is their CREATOR grants
  * (role_assignments), which CreatorGrantGuard enforces on every poll write.
- * The row's Enabled column and Polls count are about the creator's POLLS in
- * the caller's purview (shared with Manage Polls); access is edited per grant.
+ * The row's Enabled switch is a stored per-admin disable (creator_disables):
+ * unchecking stops the creator saving / publishing polls anywhere in the
+ * caller's purview (CreatorGrantGuard) and disables their polls at
+ * poll ∩ creator ∩ caller purview. Re-enabling single polls on Manage Polls
+ * doesn't re-check the creator. Polls counts their ENABLED polls in the
+ * caller's purview; access is edited per grant in the Edit dialog.
  *
  * Only grants from APPROVED creator requests (or added here, with no request)
  * count: pending/rejected requests also store disabled rows, which must not
@@ -113,6 +126,9 @@ class AdminCreatorsController(
     // The Manage Polls list + block endpoints, reused so the Polls count, the
     // page it links to, and the Enabled toggle all agree on "in your purview".
     private val adminPolls: AdminPollsController,
+    private val purviews: PollPurviewService,
+    private val regions: RegionService,
+    private val disables: CreatorDisableRepository,
     transactionManager: PlatformTransactionManager
 ) {
     private val tx = TransactionTemplate(transactionManager)
@@ -131,49 +147,86 @@ class AdminCreatorsController(
         pollsByEmail.keys.forEach { email ->
             users.findByEmail(email)?.let { usersById.putIfAbsent(it.id, it) }
         }
+        // Creators this admin has disabled stay listed so they can be re-enabled.
+        val disabledByMe = disables.findByAdminId(principal.user.id).map { it.creatorId }.toSet()
+        disabledByMe.filter { it !in usersById }.forEach { id -> users.findById(id).ifPresent { usersById[id] = it } }
         if (usersById.isEmpty()) return emptyList()
         val stats = editStats(usersById.keys.toList())
         return usersById.values
             .map { u ->
-                toRow(u, grantsByUser[u.id].orEmpty(), reach, stats[u.id], pollsByEmail[u.email.lowercase()].orEmpty())
+                toRow(
+                    u, grantsByUser[u.id].orEmpty(), reach, stats[u.id],
+                    pollsByEmail[u.email.lowercase()].orEmpty(), disabledByMe = u.id in disabledByMe
+                )
             }
             .sortedBy { it.email.lowercase() }
     }
 
     /**
-     * The Enabled column: disable (block Everywhere) or re-enable (remove every
-     * block the caller may remove) all of this creator's polls in the caller's
-     * purview, exactly as unchecking / re-checking each row on Manage Polls
-     * would. Not one transaction: each block write runs in its own (via the
-     * Manage Polls endpoints), so a block another admin set outside this
-     * purview can be skipped without rolling the rest back. Such polls stay
-     * disabled and the row reads PARTIAL.
+     * The Enabled column. Unchecking records that the caller disabled this
+     * creator (so they can't save / publish polls in the caller's purview) and
+     * blocks each of their polls there at poll ∩ creator ∩ caller purview.
+     * Re-checking removes the record and every block of theirs lying inside the
+     * caller's purview. Reads run in one transaction; each block write goes
+     * through the Manage Polls endpoints in its own, so one refusal doesn't roll
+     * the rest back.
      */
-    @PutMapping("/{userId}/polls-enabled")
-    fun setPollsEnabled(
+    @PutMapping("/{userId}/enabled")
+    fun setEnabled(
         @AuthenticationPrincipal principal: AppUserDetails,
         @PathVariable userId: Long,
         @RequestBody body: SetEnabledRequest
     ): CreatorRow {
-        val email = users.findById(userId).orElseThrow { notFound("User not found") }.email
-        val polls = pollsInPurview(principal, email)
-        if (polls.isEmpty()) throw ResponseStatusException(HttpStatus.CONFLICT, "This creator has no polls in your purview")
+        val me = principal.user
         if (!body.enabled) {
-            polls.filter { !it.blocked }.forEach {
-                adminPolls.createBlock(it.type, it.id, CreateBlockRequest(BlockScope.EVERYWHERE, null, null, null), principal)
-            }
+            val plan = tx.execute {
+                val creator = users.findById(userId).orElseThrow { notFound("User not found") }
+                val mine = regions.adminRegions(me)
+                val creatorArea = creatorRegions(userId)
+                val already = disables.findByCreatorIdAndAdminId(userId, me.id) != null
+                if (!already && creatorArea.none { c -> mine.any { it.overlaps(c) } }) {
+                    throw ResponseStatusException(HttpStatus.CONFLICT, "This creator has no access in your purview")
+                }
+                if (!already) disables.save(CreatorDisable(creatorId = userId, adminId = me.id))
+                pollsInPurview(principal, creator.email).map { p ->
+                    val pollArea = regions.ofPurview(purviews.purviewOf(PollKind.valueOf(p.type), p.id))
+                    p to intersectAll(intersectAll(pollArea, creatorArea), mine)
+                }
+            }!!
+            plan.forEach { (p, area) -> area.forEach { adminPolls.createBlock(p.type, p.id, blockRequest(it), principal) } }
         } else {
-            polls.filter { it.blocked }.forEach { p ->
-                adminPolls.listBlocks(p.type, p.id).forEach { b ->
-                    try {
-                        adminPolls.deleteBlock(b.id, principal)
-                    } catch (e: ResponseStatusException) {
-                        if (e.statusCode != HttpStatus.FORBIDDEN) throw e // out-of-purview block: leave it
+            val toLift = tx.execute {
+                val creator = users.findById(userId).orElseThrow { notFound("User not found") }
+                disables.findByCreatorIdAndAdminId(userId, me.id)?.let { disables.delete(it) }
+                val mine = regions.adminRegions(me)
+                pollsInPurview(principal, creator.email).flatMap { p ->
+                    adminPolls.listBlocks(p.type, p.id).filter { b ->
+                        val area = regions.ofBlock(b.scope, b.zipcode, b.countyId, b.stateId)
+                        area != null && mine.any { it.contains(area) }
                     }
+                }.map { it.id }
+            }!!
+            toLift.forEach { id ->
+                try {
+                    adminPolls.deleteBlock(id, principal)
+                } catch (e: ResponseStatusException) {
+                    if (e.statusCode != HttpStatus.FORBIDDEN) throw e
                 }
             }
         }
-        return tx.execute { rowFor(principal, userId, reachOf(principal.user)) }!!
+        return tx.execute { rowFor(principal, userId, reachOf(me)) }!!
+    }
+
+    /** The creator's territory: their counted grants (enabled or not), any poll type. */
+    private fun creatorRegions(userId: Long): List<Region> = minimal(
+        roleAssignments.findByUserIdAndRole(userId, AccessLevel.CREATOR).filter { counted(it) }.mapNotNull { regions.ofGrant(it) }
+    )
+
+    private fun blockRequest(r: Region): CreateBlockRequest = when (r.level) {
+        ScopeLevel.NATIONAL -> CreateBlockRequest(BlockScope.EVERYWHERE, null, null, null)
+        ScopeLevel.STATE -> CreateBlockRequest(BlockScope.STATE, null, null, r.id)
+        ScopeLevel.COUNTY -> CreateBlockRequest(BlockScope.COUNTY, null, r.id, null)
+        ScopeLevel.ZIP -> CreateBlockRequest(BlockScope.ZIPCODE, r.zipcode, null, null)
     }
 
     @PutMapping("/{userId}/grants/{grantId}")
@@ -262,7 +315,10 @@ class AdminCreatorsController(
         val user = users.findById(userId).orElseThrow { notFound("User not found") }
         val grants = roleAssignments.findByUserIdAndRole(userId, AccessLevel.CREATOR)
             .filter { counted(it) && reach.overlaps(it) }
-        return toRow(user, grants, reach, editStats(listOf(userId))[userId], pollsInPurview(principal, user.email))
+        return toRow(
+            user, grants, reach, editStats(listOf(userId))[userId], pollsInPurview(principal, user.email),
+            disabledByMe = disables.findByCreatorIdAndAdminId(userId, principal.user.id) != null
+        )
     }
 
     /** Polls in the caller's purview (disabled included), optionally one creator's: the Manage Polls list. */
@@ -274,7 +330,8 @@ class AdminCreatorsController(
         grants: List<RoleAssignment>,
         reach: Reach,
         stats: Pair<Long, Instant?>?,
-        polls: List<AdminPollRow>
+        polls: List<AdminPollRow>,
+        disabledByMe: Boolean
     ): CreatorRow {
         val manageable = grants.filter { reach.contains(it) }
         val basis = manageable.ifEmpty { grants }
@@ -283,17 +340,14 @@ class AdminCreatorsController(
             basis.none { it.enabled } -> EnabledState.DISABLED
             else -> EnabledState.PARTIAL
         }
-        val pollsState = when {
-            polls.isEmpty() -> PollsState.NONE
-            polls.none { it.blocked } -> PollsState.ENABLED
-            polls.all { it.blocked } -> PollsState.DISABLED
-            else -> PollsState.PARTIAL
-        }
         return CreatorRow(
             userId = user.id,
             email = user.email,
-            pollsState = pollsState,
-            pollCount = polls.size,
+            enabled = !disabledByMe,
+            // Visible grants are the ones overlapping the caller's purview.
+            canToggle = disabledByMe || grants.isNotEmpty(),
+            pollCount = polls.count { !it.blocked },
+            pollTotal = polls.size,
             accessState = state,
             manageable = manageable.isNotEmpty(),
             grants = grants.sortedWith(compareBy({ it.scopeLevel.ordinal }, { label(it) })).map { toDto(it, reach) },

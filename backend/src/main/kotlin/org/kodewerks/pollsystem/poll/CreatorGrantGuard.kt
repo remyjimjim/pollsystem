@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.geography.RegionService
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollPurview
@@ -9,8 +10,10 @@ import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
+import org.kodewerks.pollsystem.repository.CreatorDisableRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
 import org.kodewerks.pollsystem.repository.StateRepository
+import org.kodewerks.pollsystem.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -27,7 +30,9 @@ import org.springframework.web.server.ResponseStatusException
  * grant that county and its zips; a ZIP grant only that zip. A poll purview of
  * NATIONAL (or no rows) needs a NATIONAL grant. A grant with no poll type
  * covers every type. ADMINs' own enabled ADMIN grants count too (an admin may
- * create within their purview); SUPER is unrestricted.
+ * create within their purview); SUPER is unrestricted. Separately, an admin
+ * who disabled the creator on Manage Creators (creator_disables) shuts their
+ * whole purview to that creator, whatever the creator's grants say.
  *
  * Callers invoke this after writing the purview inside their transaction, so a
  * rejection (403) rolls the whole save back.
@@ -37,7 +42,10 @@ class CreatorGrantGuard(
     private val roleAssignments: RoleAssignmentRepository,
     private val countyZips: CountyZipsRepository,
     private val counties: CountyRepository,
-    private val states: StateRepository
+    private val states: StateRepository,
+    private val disables: CreatorDisableRepository,
+    private val users: UserRepository,
+    private val regions: RegionService
 ) {
 
     @Transactional(readOnly = true)
@@ -48,6 +56,27 @@ class CreatorGrantGuard(
                 HttpStatus.FORBIDDEN,
                 "Your creator access doesn't cover ${missing.joinToString(", ")} for ${pollType.name} polls"
             )
+        }
+        if (disabledHere(user, purviewRows)) {
+            throw ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "An admin has disabled your poll creation in part of this area"
+            )
+        }
+    }
+
+    /**
+     * Has an admin disabled [user] (the Enabled switch on Manage Creators) in
+     * any part of this purview? A disable covers that admin's whole purview.
+     */
+    private fun disabledHere(user: User, purviewRows: List<PollPurview>): Boolean {
+        if (user.access >= AccessLevel.SUPER) return false
+        val byAdmins = disables.findByCreatorId(user.id)
+        if (byAdmins.isEmpty()) return false
+        val area = regions.ofPurview(purviewRows)
+        return byAdmins.any { d ->
+            val admin = users.findById(d.adminId).orElse(null) ?: return@any false
+            regions.adminRegions(admin).any { r -> area.any { it.overlaps(r) } }
         }
     }
 

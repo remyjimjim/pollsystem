@@ -11,8 +11,6 @@ const { t } = useI18n()
 const auth = useAuthStore()
 
 type EnabledState = 'ENABLED' | 'DISABLED' | 'PARTIAL'
-/** The creator's polls inside your purview: all live, all disabled, mixed, or none. */
-type PollsState = EnabledState | 'NONE'
 interface Grant {
   id: number
   scopeLevel: ScopeLevel
@@ -31,10 +29,14 @@ interface Grant {
 interface CreatorRow {
   userId: number
   email: string
-  /** Drives the Enabled column. */
-  pollsState: PollsState
-  /** Their polls inside your purview (disabled included), same set as the Polls link. */
+  /** The Enabled column: false while YOU have disabled this creator. */
+  enabled: boolean
+  /** You can flip Enabled: they have access in your purview (or you disabled them). */
+  canToggle: boolean
+  /** Their ENABLED polls inside your purview. */
   pollCount: number
+  /** All their polls inside your purview, disabled included: what the Polls link opens. */
+  pollTotal: number
   /** Whether their access inside your purview is on; edited per entry in the Edit dialog. */
   accessState: EnabledState
   manageable: boolean
@@ -108,20 +110,16 @@ function purviewGroups(r: CreatorRow): [string, { text: string; enabled: boolean
     .filter(([, items]) => items.length > 0)
 }
 
-// ---------- enabled toggle (the creator's polls in your purview) ----------
-function stateLabel(s: EnabledState): string {
-  return s === 'ENABLED' ? t('common.yes') : s === 'DISABLED' ? t('common.no') : t('admin.manageCreators.partial')
-}
-/** Checked while any of their polls in your purview is live (Partial included). */
-function pollsChecked(r: CreatorRow): boolean { return r.pollsState === 'ENABLED' || r.pollsState === 'PARTIAL' }
+// ---------- enabled toggle (stored per admin) ----------
 async function toggleEnabled(r: CreatorRow) {
-  if (r.pollsState === 'NONE' || busyIds.value.has(r.userId)) return
-  // Unchecking disables all their polls in your purview; checking re-enables them.
-  const enabled = !pollsChecked(r)
+  if (!r.canToggle || busyIds.value.has(r.userId)) return
+  // Unchecking stops them creating polls in your purview and disables their
+  // polls here; checking lifts both. Single polls are re-enabled on Manage Polls.
+  const enabled = !r.enabled
   busyIds.value = new Set(busyIds.value).add(r.userId)
   error.value = null
   try {
-    replaceRow((await axios.put<CreatorRow>(`/api/admin/creators/${r.userId}/polls-enabled`, { enabled })).data)
+    replaceRow((await axios.put<CreatorRow>(`/api/admin/creators/${r.userId}/enabled`, { enabled })).data)
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('admin.manageCreators.errorSave')
   } finally {
@@ -267,22 +265,21 @@ onMounted(() => {
               </InfoPopover>
             </td>
             <td class="border-b border-slate-100 p-2">
-              <router-link v-if="r.pollCount > 0" :to="pollsLink(r)" class="text-blue-700 underline">{{ r.pollCount }}</router-link>
+              <router-link v-if="r.pollTotal > 0" :to="pollsLink(r)" class="text-blue-700 underline">{{ r.pollCount }}</router-link>
               <span v-else class="text-slate-400">0</span>
             </td>
             <td class="border-b border-slate-100 p-2">{{ formatDate(r.lastEditedAt) }}</td>
             <td class="border-b border-slate-100 p-2">
-              <span v-if="r.pollsState === 'NONE'" class="text-slate-400">{{ $t('admin.manageCreators.noPolls') }}</span>
-              <label v-else class="inline-flex items-center gap-2">
+              <label class="inline-flex items-center gap-2" :title="r.canToggle ? '' : $t('admin.manageCreators.noAccessHint')">
                 <input
                   type="checkbox"
                   class="h-4 w-4"
-                  :checked="pollsChecked(r)"
-                  :disabled="busyIds.has(r.userId)"
+                  :checked="r.enabled"
+                  :disabled="!r.canToggle || busyIds.has(r.userId)"
                   :aria-label="$t('admin.manageCreators.enabledFor', { email: r.email })"
                   @click.prevent="toggleEnabled(r)"
                 />
-                <span :class="r.pollsState === 'PARTIAL' ? 'text-amber-700' : 'text-slate-700'">{{ stateLabel(r.pollsState) }}</span>
+                <span :class="r.canToggle ? 'text-slate-700' : 'text-slate-400'">{{ r.enabled ? $t('common.yes') : $t('common.no') }}</span>
               </label>
             </td>
             <td class="border-b border-slate-100 p-2">
