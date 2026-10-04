@@ -29,6 +29,7 @@ class ElectionService(
     private val offices: OfficeRepository,
     private val pollTypes: PollTypeRepository,
     private val purviews: PollPurviewService,
+    private val grants: CreatorGrantGuard,
     private val objectMapper: ObjectMapper
 ) {
 
@@ -51,6 +52,7 @@ class ElectionService(
         )
         replaceCandidates(saved, dto.candidates)
         applyPurview(saved.id, dto)
+        grants.requireCovers(creator, pt, purviews.purviewOf(PollKind.ELECTION, saved.id))
         return saved
     }
 
@@ -75,6 +77,7 @@ class ElectionService(
         )
         replaceCandidates(updated, dto.candidates)
         applyPurview(updated.id, dto)
+        grants.requireCovers(creator, pt, purviews.purviewOf(PollKind.ELECTION, updated.id))
         return updated
     }
 
@@ -108,6 +111,8 @@ class ElectionService(
             candidateResponses.findByCandidateId(it.id).isNotEmpty()
         }
         validateClose(existing.closeDate, confirmed, allowPast = hasBeenLive)
+        // Re-checked at publish: grants may have been disabled since the draft.
+        grants.requireCovers(creator, existing.pollType, purviews.purviewOf(PollKind.ELECTION, id))
         return elections.save(existing.copy(status = PollStatus.PUBLISHED))
     }
 

@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem
 
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.RoleAssignment
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
@@ -31,10 +32,13 @@ class TestFixtures @Autowired constructor(
         emailPrefix: String = "user",
         // Active membership by default so participation tests aren't blocked by
         // the paywall (requireParticipation). Pass null for an unpaid user.
-        paidUntil: Instant? = Instant.now().plusSeconds(30L * 24 * 3600)
+        paidUntil: Instant? = Instant.now().plusSeconds(30L * 24 * 3600),
+        // Creator grants are enforced on poll writes, so a CREATOR gets an
+        // enabled NATIONAL grant by default. Pass false to test grant checks.
+        nationwideCreatorGrant: Boolean = access == AccessLevel.CREATOR
     ): User {
         val n = seq.incrementAndGet()
-        return users.save(
+        val user = users.save(
             User(
                 email = "$emailPrefix-$n@test.local",
                 phone = "+1555${n.toString().padStart(7, '0').takeLast(7)}",
@@ -44,6 +48,12 @@ class TestFixtures @Autowired constructor(
                 paidUntil = paidUntil
             )
         )
+        if (nationwideCreatorGrant) {
+            roleAssignments.save(
+                RoleAssignment(user = user, role = AccessLevel.CREATOR, scopeLevel = ScopeLevel.NATIONAL, enabled = true)
+            )
+        }
+        return user
     }
 
     /**

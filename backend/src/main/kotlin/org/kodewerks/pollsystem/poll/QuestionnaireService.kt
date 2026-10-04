@@ -22,7 +22,8 @@ class QuestionnaireService(
     private val questions: QuestionRepository,
     private val questionResponses: QuestionResponseRepository,
     private val pollTypes: PollTypeRepository,
-    private val purviews: PollPurviewService
+    private val purviews: PollPurviewService,
+    private val grants: CreatorGrantGuard
 ) {
 
     @Transactional
@@ -43,6 +44,7 @@ class QuestionnaireService(
         )
         replaceQuestions(saved, dto.questions)
         purviews.replacePurview(PollKind.QUESTIONNAIRE, saved.id, dto.scopeLevel, dto.regionIds, dto.zipcodes)
+        grants.requireCovers(creator, pt, purviews.purviewOf(PollKind.QUESTIONNAIRE, saved.id))
         return saved
     }
 
@@ -66,6 +68,7 @@ class QuestionnaireService(
         )
         replaceQuestions(updated, dto.questions)
         purviews.replacePurview(PollKind.QUESTIONNAIRE, updated.id, dto.scopeLevel, dto.regionIds, dto.zipcodes)
+        grants.requireCovers(creator, pt, purviews.purviewOf(PollKind.QUESTIONNAIRE, updated.id))
         return updated
     }
 
@@ -78,9 +81,12 @@ class QuestionnaireService(
         }
         val q = questions.findByQuestionnaireId(existing.id)
         if (q.isEmpty()) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one question required")
-        if (purviews.purviewOf(PollKind.QUESTIONNAIRE, existing.id).isEmpty()) {
+        val purviewRows = purviews.purviewOf(PollKind.QUESTIONNAIRE, existing.id)
+        if (purviewRows.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "A purview is required")
         }
+        // Re-checked at publish: grants may have been disabled since the draft.
+        grants.requireCovers(creator, existing.pollType, purviewRows)
 
         val close = existing.closeDate
         if (close != null) {

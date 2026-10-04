@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceContext
 import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.BallotResponse
+import org.kodewerks.pollsystem.model.RoleAssignment
 import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.poll.BallotMeasureDraftRequest
@@ -15,6 +16,7 @@ import org.kodewerks.pollsystem.poll.QuestionInput
 import org.kodewerks.pollsystem.poll.QuestionnaireDraftRequest
 import org.kodewerks.pollsystem.poll.QuestionnaireService
 import org.kodewerks.pollsystem.repository.BallotResponseRepository
+import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
@@ -45,6 +47,7 @@ class DevController(
     private val elections: ElectionService,
     private val ballotMeasures: BallotMeasureService,
     private val ballotResponses: BallotResponseRepository,
+    private val roleAssignments: RoleAssignmentRepository,
 ) {
 
     @PersistenceContext
@@ -176,6 +179,7 @@ class DevController(
                 isEnabled = true,
             )
         )
+        grantNationwideCreator(creator)
         val title = "E2E Search Poll $n"
         val draft = questionnaires.saveDraft(
             creator,
@@ -221,6 +225,7 @@ class DevController(
                 isEnabled = true,
             )
         )
+        grantNationwideCreator(creator)
         val election = elections.saveDraft(
             creator,
             ElectionDraftRequest(
@@ -321,8 +326,19 @@ class DevController(
                 paidUntil = Instant.now().plus(365, ChronoUnit.DAYS),
             )
         )
+        if (user.access == AccessLevel.CREATOR) grantNationwideCreator(user)
         log.info("Seeded {} user id={} email={}", user.access, user.id, user.email)
         return mapOf("id" to user.id, "email" to user.email)
     }
 
+    /**
+     * Creator grants are enforced on poll writes (CreatorGrantGuard), so seeded
+     * creators get an enabled NATIONAL grant covering every poll type.
+     */
+    private fun grantNationwideCreator(user: User) {
+        roleAssignments.save(
+            RoleAssignment(user = user, role = AccessLevel.CREATOR, scopeLevel = ScopeLevel.NATIONAL, enabled = true)
+        )
+        roleAuthCache.invalidateAuthorizations()
+    }
 }

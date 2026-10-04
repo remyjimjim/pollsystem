@@ -1,6 +1,7 @@
 package org.kodewerks.pollsystem.poll
 
 import org.kodewerks.pollsystem.model.BallotMeasure
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
@@ -19,7 +20,9 @@ class BallotMeasureService(
     private val measures: BallotMeasureRepository,
     private val ballotResponses: BallotResponseRepository,
     private val elections: ElectionRepository,
-    private val pollTypes: PollTypeRepository
+    private val pollTypes: PollTypeRepository,
+    private val purviews: PollPurviewService,
+    private val grants: CreatorGrantGuard
 ) {
 
     @Transactional
@@ -37,6 +40,9 @@ class BallotMeasureService(
                 "You can only attach ballot measures to elections you created"
             )
         }
+        // A ballot measure inherits its election's purview; check it against
+        // the measure's own poll type.
+        grants.requireCovers(creator, pt, purviews.purviewOf(PollKind.ELECTION, election.id))
         return measures.save(
             BallotMeasure(
                 creator = creator,
@@ -70,6 +76,7 @@ class BallotMeasureService(
                 "You can only attach ballot measures to elections you created"
             )
         }
+        grants.requireCovers(creator, pt, purviews.purviewOf(PollKind.ELECTION, election.id))
         return measures.save(
             existing.copy(
                 pollType = pt,
@@ -96,6 +103,8 @@ class BallotMeasureService(
         // as the "has been live" signal, but the response count is.
         val hasBeenLive = ballotResponses.findByMeasureId(id).isNotEmpty()
         validateClose(existing.closeDate, confirmed, allowPast = hasBeenLive)
+        // Re-checked at publish: grants may have been disabled since the draft.
+        grants.requireCovers(creator, existing.pollType, purviews.purviewOf(PollKind.ELECTION, existing.election.id))
         return measures.save(
             existing.copy(status = PollStatus.PUBLISHED, lastUpdated = Instant.now())
         )
