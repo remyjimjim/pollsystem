@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-10-04 — feat: Manage Creators page + info popovers
+
+**Requested:**
+
+> So I noticed that when navigating to admin/manage-creators as an admin
+> (admin@local.test) I see no creators. A) It'd be great to see a list of
+> creators with the following columns (email, purview, polls, last edit date,
+> enabled(Y/N), edit) … Should we add little 'd' icons that show the purview
+> on hover for instance and some 'i' icons for helpful info, etc?
+
+> question #2: open manage-polls filtered to that creator, sorted by close
+> date with the newest first, and with disabled polls included
+
+**Changed:**
+
+- `ManageCreatorsView` replaces the placeholder: Email, Purview (summary chip
+  with a map-pin popover listing states / counties / zips and poll types,
+  disabled grants struck through), Polls (count linking to Manage Polls
+  filtered to the creator, close date descending, disabled included), Last
+  edit, Enabled (Yes / No / Partial; locked when nothing is in your purview),
+  and an Edit modal (per-grant toggle, remove admin-added grants, add access
+  via `PurviewSetter` + poll types).
+- New shared `InfoPopover` (opens on hover, focus and tap; Esc / outside click
+  closes), used for the pin and for "i" help on the Purview, Polls, Last edit
+  and Enabled headers. Used a map pin instead of the suggested "d", which
+  wouldn't mean much to most people.
+- `ManagePollsView` honours `?creator`, `?sort`, `?dir`, `?showDisabled` and
+  shows a dismissible creator chip.
+- Strings in en, nb, fr, ja. Specs: ManageCreatorsView (4) + manage-polls deep
+  link (1); type-check clean; frontend 50/50.
+- Verified against the rebuilt local stack (V25 applied) as admin@local.test
+  via a real magic-link sign-in: in-purview vs locked creators, Partial →
+  Enabled round trip, 403 on a locked creator, creator-filtered poll list.
+  Not checked in a browser (browser tools weren't connected).
+
+**Commit:** `0dc4bdb`
+
+---
+
 ## 2026-10-04 — feat: admin creators API (list, enable, edit grants)
 
 **Requested:**
