@@ -58,6 +58,17 @@ const countyPickerOpen = ref(false)
 const zipPickerOpen = ref(false)
 
 const results = ref<PollRow[]>([])
+/**
+ * Rows the admin has toggled Enabled on since the last filter change. They stay
+ * visible even after being disabled (with "Show disabled" off) so the row
+ * doesn't vanish under the cursor, letting the admin re-enable it in place.
+ * Cleared whenever a filter changes, at which point normal hiding resumes.
+ */
+const stickyKeys = ref(new Set<string>())
+function rowKey(r: { type: Kind; id: number }): string { return `${r.type}-${r.id}` }
+const visibleResults = computed<PollRow[]>(() =>
+  results.value.filter(r => showDisabled.value || !r.blocked || stickyKeys.value.has(rowKey(r)))
+)
 const loading = ref(false)
 const error = ref<string | null>(null)
 const message = ref<string | null>(null)
@@ -146,11 +157,13 @@ async function loadTitleSuggestions() {
 // ---------- main fetch (debounced) ----------
 let fetchTimer: ReturnType<typeof setTimeout> | null = null
 function scheduleFetch() {
+  stickyKeys.value = new Set()
   if (fetchTimer) clearTimeout(fetchTimer)
   fetchTimer = setTimeout(fetchPolls, 150)
 }
 /** Run the search now — used by the Search button and Enter-in-form. */
 function searchNow() {
+  stickyKeys.value = new Set()
   if (fetchTimer) { clearTimeout(fetchTimer); fetchTimer = null }
   if (titleTimer) { clearTimeout(titleTimer); titleTimer = null }
   if (notesTimer) { clearTimeout(notesTimer); notesTimer = null }
@@ -165,7 +178,9 @@ async function fetchPolls() {
     if (kinds.length > 0) params.pollType = kinds.join(',')
     if (titleFilter.value.trim()) params.title = titleFilter.value.trim()
     if (notesFilter.value.trim()) params.notesContain = notesFilter.value.trim()
-    if (showDisabled.value) params.includeDisabled = 'true'
+    // Always fetch disabled rows; visibleResults hides them unless "Show
+    // disabled" is on or the row is sticky (just toggled by the admin).
+    params.includeDisabled = 'true'
     if (selectedZipcodes.value.length > 0) params.zipcode = selectedZipcodes.value.join(',')
     else if (selectedCountyIds.value.length > 0) params.countyId = selectedCountyIds.value.join(',')
     else if (selectedStateIds.value.length > 0) params.stateId = selectedStateIds.value.join(',')
@@ -178,7 +193,8 @@ async function fetchPolls() {
 }
 
 watch(kindFilter, scheduleFetch, { deep: true })
-watch(showDisabled, scheduleFetch)
+// Disabled rows are already fetched; toggling only re-filters (and ends stickiness).
+watch(showDisabled, () => { stickyKeys.value = new Set() })
 let titleTimer: ReturnType<typeof setTimeout> | null = null
 watch(titleFilter, () => {
   if (titleTimer) clearTimeout(titleTimer)
@@ -310,7 +326,7 @@ function sortValue(r: PollRow, k: SortKey): string {
 }
 const sortedResults = computed<PollRow[]>(() => {
   const dir = sortDir.value === 'asc' ? 1 : -1
-  return results.value.slice().sort((a, b) => {
+  return visibleResults.value.slice().sort((a, b) => {
     const av = sortValue(a, sortKey.value), bv = sortValue(b, sortKey.value)
     if (av < bv) return -dir; if (av > bv) return dir; return 0
   })
@@ -372,6 +388,7 @@ async function openBlockModal(row: PollRow) {
  * authoritative `!row.blocked`.
  */
 async function onBlockCheckboxClick(row: PollRow) {
+  stickyKeys.value = new Set(stickyKeys.value).add(rowKey(row))
   if (!row.blocked) {
     // Was checked (enabled), user wants to disable → ask for scope via modal.
     await openBlockModal(row)
@@ -781,9 +798,9 @@ onBeforeUnmount(() => {
     <p v-if="error" class="mb-2 text-sm text-red-700">{{ error }}</p>
     <p v-if="message" class="mb-2 text-sm text-green-700">{{ message }}</p>
     <p v-if="loading" class="mb-2 text-xs text-slate-500">{{ $t('common.loading') }}</p>
-    <p v-if="!loading && results.length === 0" class="text-sm text-slate-500">{{ $t('admin.managePolls.none') }}</p>
+    <p v-if="!loading && visibleResults.length === 0" class="text-sm text-slate-500">{{ $t('admin.managePolls.none') }}</p>
 
-    <table v-if="results.length > 0" class="w-full border-collapse text-sm">
+    <table v-if="visibleResults.length > 0" class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
           <th @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colTitle') }}{{ sortIndicator('title') }}</th>
