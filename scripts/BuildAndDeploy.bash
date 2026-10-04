@@ -99,6 +99,45 @@ wait_for() {
 
 container_running() { [[ "$(docker inspect -f '{{.State.Running}}' "$1" 2>/dev/null)" == "true" ]]; }
 
+# Like wait_for, but bails out as soon as the container stops (showing its last
+# log lines) instead of sitting out the full timeout on a crashed app.
+wait_for_container() {
+  local desc="$1" max="$2" name="$3"; shift 3
+  local i=0
+  until "$@" >/dev/null 2>&1; do
+    if ! container_running "$name"; then
+      docker logs --tail 25 "$name" 2>&1 | sed 's/^/    /' >&2
+      die "$name exited while waiting for ${desc} (last log lines above; full: docker logs $name)."
+    fi
+    i=$((i + 1))
+    if (( i > max )); then die "Timed out after ${max}s waiting for ${desc}."; fi
+    sleep 1
+  done
+  ok "$desc ready"
+}
+
+# A `compose up` that fails mid-way (e.g. a host port already taken) can leave a
+# container running but attached to NO network. The next `up` sees it running
+# and leaves it be, so its peers can't resolve it (backend: UnknownHostException:
+# db). Recreate any stack container missing from the project network. Data lives
+# in named volumes, so recreating is safe.
+heal_detached_containers() {
+  local name service project nets healed=false
+  for name in pollsystem-db mailpit pollsystem-backend pollsystem-frontend; do
+    container_running "$name" || continue
+    project=$(docker inspect -f '{{index .Config.Labels "com.docker.compose.project"}}' "$name")
+    service=$(docker inspect -f '{{index .Config.Labels "com.docker.compose.service"}}' "$name")
+    nets=$(docker inspect -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}} {{end}}' "$name")
+    if [[ " $nets " != *" ${project}_default "* ]]; then
+      warn "$name is not attached to ${project}_default; recreating it…"
+      docker compose --profile app up -d --force-recreate "$service"
+      healed=true
+    fi
+  done
+  # Dependents may have crashed while the detached one was unreachable.
+  if $healed; then docker compose --profile app up -d; fi
+}
+
 # Block until the first of our app children exits. Portable substitute for
 # bash 4.3+ `wait -n` (absent on e.g. macOS's stock bash 3.2): poll the PIDs
 # with `kill -0`. Returns as soon as one has gone, so cleanup can down the rest.
@@ -296,18 +335,20 @@ cmd_up_docker() {
   check_prereqs
   info "Building + starting the full containerized stack (db + mailpit + backend + frontend)…"
   docker compose --profile app up -d --build
+  heal_detached_containers
 
   # Probe readiness via Docker logs, not a network address. The socket is always
   # reachable, so this works whether the command runs on the host OR inside the
   # Dev Container — where `localhost:8080` isn't the backend (its port publishes
   # to the host) and `host.docker.internal` can resolve to a flaky IPv6 address.
-  # Each app logs a clear line when it's up.
+  # Each app logs a clear line when it's up; --since the current start, so a
+  # "Started" line left over from an earlier run can't pass as ready.
   info "Waiting for the backend to finish starting…"
-  wait_for "backend startup" 180 bash -c \
-    'docker logs pollsystem-backend 2>&1 | grep -q "Started PollSystemApplicationKt"'
+  wait_for_container "backend startup" 180 pollsystem-backend bash -c \
+    'docker logs --since "$(docker inspect -f {{.State.StartedAt}} pollsystem-backend)" pollsystem-backend 2>&1 | grep -q "Started PollSystemApplicationKt"'
   info "Waiting for the frontend dev server…"
-  wait_for "frontend dev server" 90 bash -c \
-    'docker logs pollsystem-frontend 2>&1 | grep -qiE "ready in|Local:"'
+  wait_for_container "frontend dev server" 90 pollsystem-frontend bash -c \
+    'docker logs --since "$(docker inspect -f {{.State.StartedAt}} pollsystem-frontend)" pollsystem-frontend 2>&1 | grep -qiE "ready in|Local:"'
 
   echo
   ok "Containerized stack up (all services in Docker):"

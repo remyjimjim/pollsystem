@@ -69,6 +69,18 @@
   // it without sudo. Only opens it to the docker group — not world (unlike chmod 666).
   "postStartCommand": "sudo chgrp 984 /var/run/docker.sock",
 
+  // Postgres + Mailpit always run as sibling containers that Docker publishes
+  // straight onto the host, never from inside this container. If VS Code
+  // auto-forwards these ports (it picks them up from terminal output), its
+  // forwarder binds 127.0.0.1:<port> on the host and the next `compose up`
+  // fails with "address already in use". 3000/8080 stay auto-forwardable: in
+  // `local` mode vite/gradle run in here and the host browser needs them.
+  "portsAttributes": {
+    "5432": { "onAutoForward": "ignore" },
+    "8025": { "onAutoForward": "ignore" },
+    "1025": { "onAutoForward": "ignore" }
+  },
+
   "customizations": {
     "vscode": {
       // Bound the Java language server REGARDLESS of whether the Java pack gets
@@ -81,7 +93,10 @@
       "settings": {
         "java.jdt.ls.vmargs": "-Xmx640m -XX:MaxMetaspaceSize=256m",
         "java.autobuild.enabled": false,
-        "java.configuration.updateBuildConfiguration": "disabled"
+        "java.configuration.updateBuildConfiguration": "disabled",
+        // Don't resurrect stale port forwards on reconnect; they squat host
+        // ports the compose stack publishes (see portsAttributes above).
+        "remote.restoreForwardedPorts": false
       },
       // This repo is driven through Claude Code + the terminal
       // (BuildAndDeploy.bash), so the heavy Java/Kotlin/Gradle/Spring language
