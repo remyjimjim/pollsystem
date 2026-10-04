@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-04 — feat: area-aware poll disables (blocks)
+
+**Requested:**
+
+> re: Disabling -- I'd rather a disable only cover the Admin's own zips,
+> counties or states, or put another way, a disable on manage-creators page
+> should affect the intersection of the poll's purview and poll's creator's
+> purview and the Admin's purview.
+
+> I'm leaning on 'go with #1, and grey out creators with no access...'
+
+(#1 = make blocks area-aware, chosen after finding that a block's zip /
+county / state was only a label: any block shut the poll everywhere.)
+
+**Changed:**
+
+- New `geography/Regions.kt`: `Region` (national / state / county / zip with
+  resolved ancestors; contains / intersect / overlaps) and `RegionService`
+  (regions from grants, purviews, blocks, zips, an admin's purview).
+- `PollBlockService`: submissions refused only when a block's area contains
+  the respondent's zip (`isBlockedFor`); public results hidden only by an
+  EVERYWHERE block (`isBlockedEverywhere`); search hides a poll only when
+  blocked everywhere or in every searched zip.
+- Manage Polls: a row reads disabled when a block touches the caller's own
+  purview; zip blocks may target any zip inside the poll's purview.
+- **Behaviour change:** existing zip / county / state blocks narrow to their
+  area on deploy; EVERYWHERE blocks are unchanged.
+- New `AreaAwareBlocksTest` (4); backend 272/272.
+
+**Commit:** `e031d8d`
+
+---
+
 ## 2026-10-04 — feat: Manage Creators Enabled + Polls track polls in purview
 
 **Requested:**
