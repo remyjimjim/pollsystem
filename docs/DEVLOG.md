@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-04 — feat: track when the creator last edited each poll
+
+**Requested:**
+
+> as far as question #1: (a) When the creator last edited any of their polls.
+> I'd recommend this one. It needs an updated_at migration on the three poll
+> tables, and dates only start being recorded after it ships
+
+> Let's go with #1 and the rest of the suggestions...
+
+(The "rest of the suggestions" included naming the column
+`creator_edited_at` instead of `updated_at`, so admin moderation doesn't
+count, and backfilling existing polls from their creation date.)
+
+**Changed:**
+
+- `V25__poll_creator_edited_at.sql`: `creator_edited_at` (timestamptz, NOT
+  NULL, default now()) on `questionnaires`, `elections` and
+  `ballot_measures`, backfilled from the best existing creator-side
+  timestamp, plus `(creator_id, creator_edited_at)` indexes.
+- Stamped only on the creator's own writes: create, update, publish,
+  archive, restore. Admin/super moderation leaves it untouched (unlike
+  `ballot_measures.last_updated`).
+- New `CreatorEditedAtTest` (2 cases); backend suite 260/260.
+
+**Commit:** `ae112eb`
+
+---
+
 ## 2026-10-04 — feat: enforce creator grants on poll saves and publishes
 
 **Requested:**
