@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-10-05 — Update todo.md: creds + transcripts done, new e2e / help-docs items
+
+**Requested:**
+
+> commit todo.md
+
+**Changed:**
+
+- Marked done: credentials handling for local (keyring) and prod/staging, and
+  session-transcript capture (`/export` + `claude-expand`).
+- Creator-request verification modal wording now refers to email.
+- e2e tests item: turn recordings into UML; noted as partly done.
+- New item: a help/documentation library (finding polls; creator, admin and
+  super tasks and reports).
+
+**Commit:** `4091d25`
+
+---
+
 ## 2026-10-05 — build: pin Flyway 11.20.3 for PostgreSQL 18
 
 **Requested:**
