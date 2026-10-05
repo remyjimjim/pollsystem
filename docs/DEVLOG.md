@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-05 — fix: claude-expand keeps every session instead of the newest only
+
+**Requested:**
+
+> It looks like claude-expand is replacing the ongoing
+> sessions.transcript.expand.md with .json conversation log instead of
+> appending it. The sessions.transcript.expand.md was 1.17 MB before the
+> /export + claude-expand but is now only 700K. Can we check the repo for a
+> bigger transcript and if not maybe we need to debug claude-expand?
+
+> done, it's copied to scripts/
+
+**Changed:**
+
+- No bigger copy existed: the transcripts are git-ignored and never committed,
+  and no other copy was on disk. But every session's raw log
+  (`~/.claude/projects/<project>/*.jsonl`) was intact, so nothing was lost.
+- Cause: `~/.claude/expand-session.py` expanded only the newest session log (by
+  mtime) and overwrote the output, so a new Claude Code session dropped the
+  previous one's transcript.
+- New `scripts/expand-session.py` (repo copy, rendering unchanged) expands all of
+  the project's sessions oldest-first with a heading each, rebuilding the file
+  every run (idempotent); `--latest` keeps the old behaviour; `-h/--help`;
+  unknown options rejected. `scripts/claude-expand` runs it (symlink-safe) and
+  falls back to the `~/.claude` copy. The original in `~/.claude` is untouched.
+- Rebuilt `sessions.transcript.expanded.md`: 3 sessions since 2026-06-25,
+  5.1 MB; the 700 KB version is backed up at
+  `tmp/sessions.transcript.expanded.before-fix.md`.
+
+**Commit:** `d0c5049`
+
+---
+
 ## 2026-10-05 — Update todo.md: creds + transcripts done, new e2e / help-docs items
 
 **Requested:**
