@@ -80,6 +80,9 @@ PostgreSQL 18.6 is newer than this version of Flyway".)
   rather than 12/13 to stay close to what Boot 3.3's auto-configuration targets.
 - Backend 274/274; the local dev DB (history written by 10.10.0) starts
   cleanly under 11.20.3: 26 migrations validated, schema at 26.
+- Deployed to staging (`7b5ca8a`): both Fly machines restarted (01:37 UTC),
+  health UP, and the "Flyway upgrade recommended: PostgreSQL 18.6" warning that
+  each machine logged on the previous deploy no longer appears.
 
 **Commit:** `5d562ef`
 
