@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-05 — docs: 'modest' and 'bare bones' cost projections
+
+**Requested:**
+
+> I'm assuming this is all going to docs/COSTS.md. If so, can we name that last
+> section you figured out as 'modest' projection. And can you figure out the net
+> costs one year using the same variables but a scenario where you start with
+> one paid user and progress with 1 more paid subscriber per month and label
+> that section 'bare bones' projection?
+
+**Changed:**
+
+- `docs/COSTS.md`: the year-one section is now the **'modest' projection**
+  (steady → ~200, viral → ~2,000 users).
+- New **'bare bones' projection** (1 → 12 paid members, same variables, with a
+  running total): **$229.09 net** for the year; four losing months (worst
+  cumulative −$74.20), profitable monthly from 5 members, early losses earned
+  back by month 8. Notes that letting production sleep would raise it to ~$670.
+- All three tables re-verified row by row.
+
+**Commit:** `de81b1d`
+
+---
+
 ## 2026-10-05 — docs: year-one P&L, actual bills, phone-verification costs
 
 **Requested:**
