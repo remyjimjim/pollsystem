@@ -54,8 +54,22 @@
        and questions, my answers and bash commands to a file called 
        sessions.transcript.md. 
        
-       Done: Yes.  run /export while in claude code from the chat and the output will go to sessions.transcript.md then run ~/.local/bin/claude-expand and it 
-       will expand sessions.transcript.md to sessions.transcript.expanded.md.  Test claude-expand while in a container.  If it doesn't work then try moving it to pollsystem/scripts.
+       Done: Yes.  Two independent transcripts (both git-ignored, in the repo root):
+       - /export (typed in the Claude Code chat) -> sessions.transcript.md.  Covers
+         the CURRENT session only, and bash commands are collapsed.
+       - scripts/claude-expand (run from the repo root, on the host or in the Dev
+         Container) -> sessions.transcript.expanded.md.  Reads Claude Code's raw
+         session logs (~/.claude/projects/<project>/*.jsonl), NOT
+         sessions.transcript.md, so /export isn't needed first.  Covers ALL
+         sessions, oldest first, with bash commands inlined; the file is rebuilt
+         from scratch each run, so re-running never duplicates or loses anything.
+         Options: --latest (current session only), --help.
+       - Host shortcut: ln -sf "$PWD/scripts/claude-expand" ~/.local/bin/claude-expand
+         (run once from the repo root) so plain `claude-expand` uses the repo
+         version.  Without it, ~/.local/bin/claude-expand still runs the old
+         ~/.claude/expand-session.py, which keeps only the newest session.
+       - Tested in the Dev Container: works (needed the full python3, now in
+         .devcontainer/Dockerfile).  Moved to pollsystem/scripts: done.
   5. - Ask Claude to estimate the emailing cost for the following scenario:  
        - App is popular and adds say 50K subscribers in 2 weeks.  What would be the 
          approximate cost to send all the registration and login link emails for said 50K users? 
