@@ -191,7 +191,7 @@ new code and run pending migrations, so it hasn't been done.
 
 ---
 
-## Year-one revenue vs costs (10 → 200 or 2,000 paid users)
+## Year-one revenue vs costs — 'modest' projection (10 → 200 or 2,000 paid users)
 
 Estimated 2026-10-05 for two growth paths, at **$10/month** with **no creator
 discount** and no churn. Costs use the actual bills above: Fly ~$12/month
@@ -245,6 +245,41 @@ Takeaways:
   combined); its fixed $0.30 per payment is what makes low price points
   expensive.
 - Twilio phone verification is the smallest line ($15/year steady, $148 viral).
+
+---
+
+## Year-one revenue vs costs — 'bare bones' projection (1 → 12 paid users)
+
+The floor case: **one** paid member in month 1 and **one more each month**,
+ending the year at 12. Same variables as the 'modest' projection: $10/month, no
+creator discount, no churn, Stripe $0.59 per payment, Fly ~$12/month and Neon
+~$30/month (production kept warm), Resend free, Twilio ~$0.074 per new member.
+
+| Mo | Users | Revenue | Stripe | Fly | Neon | Resend | Twilio | Total costs | Net | Cumulative |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 1 | $10.00 | $0.59 | $12.00 | $30.00 | $0.00 | $0.074 | $42.66 | −$32.66 | −$32.66 |
+| 2 | 2 | $20.00 | $1.18 | $12.00 | $30.00 | $0.00 | $0.074 | $43.25 | −$23.25 | −$55.92 |
+| 3 | 3 | $30.00 | $1.77 | $12.00 | $30.00 | $0.00 | $0.074 | $43.84 | −$13.84 | −$69.76 |
+| 4 | 4 | $40.00 | $2.36 | $12.00 | $30.00 | $0.00 | $0.074 | $44.43 | −$4.43 | −$74.20 |
+| 5 | 5 | $50.00 | $2.95 | $12.00 | $30.00 | $0.00 | $0.074 | $45.02 | $4.98 | −$69.22 |
+| 6 | 6 | $60.00 | $3.54 | $12.00 | $30.00 | $0.00 | $0.074 | $45.61 | $14.39 | −$54.83 |
+| 7 | 7 | $70.00 | $4.13 | $12.00 | $30.00 | $0.00 | $0.074 | $46.20 | $23.80 | −$31.04 |
+| 8 | 8 | $80.00 | $4.72 | $12.00 | $30.00 | $0.00 | $0.074 | $46.79 | $33.21 | $2.17 |
+| 9 | 9 | $90.00 | $5.31 | $12.00 | $30.00 | $0.00 | $0.074 | $47.38 | $42.62 | $44.78 |
+| 10 | 10 | $100.00 | $5.90 | $12.00 | $30.00 | $0.00 | $0.074 | $47.97 | $52.03 | $96.81 |
+| 11 | 11 | $110.00 | $6.49 | $12.00 | $30.00 | $0.00 | $0.074 | $48.56 | $61.44 | $158.25 |
+| 12 | 12 | $120.00 | $7.08 | $12.00 | $30.00 | $0.00 | $0.074 | $49.15 | $70.85 | $229.09 |
+| **Year** | | **$780.00** | **$46.02** | **$144.00** | **$360.00** | **$0.00** | **$0.89** | **$550.91** | **$229.09** | |
+
+- **Loses money for the first 4 months** (worst cumulative point −$74.20 in
+  month 4), turns monthly-profitable at **5 members (month 5)**, and has earned
+  back the early losses by **month 8**. Year: **$229.09 net**.
+- Nearly all of the cost is the fixed ~$42/month of keeping production warm, so
+  that is the lever at this size. Letting production sleep when idle
+  (`min_machines_running = 0`; see "Actual bills" above) would cut Fly + Neon
+  to roughly $5/month (a rough estimate) and lift the year to about **$670
+  net**, at the price of a ~10–30 s wake-up on the first visit after a quiet
+  spell.
 
 ---
 
