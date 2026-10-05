@@ -61,6 +61,26 @@ logged.
 
 ---
 
+## 2026-10-05 — fix: full python3 in the Dev Container
+
+**Requested:**
+
+> fix the container's python so claude-expand works there
+
+**Changed:**
+
+- Cause: the Dev Container base image ships only `python3-minimal`, which
+  lacks most of the standard library (`json`, …), so `scripts/claude-expand`
+  failed with `ModuleNotFoundError: No module named 'json'`.
+- `.devcontainer/Dockerfile`: `python3` added to the existing `apt-get install`.
+- Verified by building the image (Python 3.12.3 imports `json`; claude-expand
+  writes the full 3-session transcript), and installed the same package in the
+  running container, where `claude-expand` now works without a rebuild.
+
+**Commit:** `ba40a97`
+
+---
+
 ## 2026-10-05 — fix: claude-expand keeps every session instead of the newest only
 
 **Requested:**
