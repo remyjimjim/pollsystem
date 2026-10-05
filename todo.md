@@ -70,6 +70,23 @@
          ~/.claude/expand-session.py, which keeps only the newest session.
        - Tested in the Dev Container: works (needed the full python3, now in
          .devcontainer/Dockerfile).  Moved to pollsystem/scripts: done.
+       - Summary:
+         - Shortcut (from any directory; checks where you are, cds to the repo,
+           builds, then ls -lh's the file):
+             scripts/claude-expand -host        # in a host terminal
+             scripts/claude-expand -container   # in the Dev Container
+             scripts/claude-expand -help        # usage; extra opts pass through, e.g. -host --latest
+         - To run from host do (in a host terminal):
+             cd "/home/remy/Dev/Projects/Java/Spring/SpringBoot+Kotlin+Psql+Vue/pollsystem"
+             scripts/claude-expand          # or just `claude-expand` once the ln -sf above is done
+             ls -lh sessions.transcript.expanded.md
+         - To run from Dev Containers do (in VS Code's integrated terminal; the repo is
+           mounted at the same path, so the commands are the same):
+             cd "/home/remy/Dev/Projects/Java/Spring/SpringBoot+Kotlin+Psql+Vue/pollsystem"
+             scripts/claude-expand
+             ls -lh sessions.transcript.expanded.md
+         - Optional, either place: type /export in the Claude Code chat first if you also
+           want sessions.transcript.md (current session only).
   5. - Ask Claude to estimate the emailing cost for the following scenario:  
        - App is popular and adds say 50K subscribers in 2 weeks.  What would be the 
          approximate cost to send all the registration and login link emails for said 50K users? 
