@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-05 — build: pin Flyway 11.20.3 for PostgreSQL 18
+
+**Requested:**
+
+> upgrade Flyway
+
+(Following the staging deploy, whose logs warned "Flyway upgrade recommended:
+PostgreSQL 18.6 is newer than this version of Flyway".)
+
+**Changed:**
+
+- `backend/build.gradle.kts`: `extra["flyway.version"] = "11.20.3"` (was the
+  Boot 3.3.5-managed 10.10.0, which recognises PostgreSQL only up to 16).
+- Version choice from each release's `PostgreSQLDatabase.ensureSupported`:
+  11.14.0 is the first to recognise 18; even Spring Boot 3.5.16 manages 11.7.2
+  (tops out at 17), so upgrading Boot alone wouldn't help. Took the latest 11.x
+  rather than 12/13 to stay close to what Boot 3.3's auto-configuration targets.
+- Backend 274/274; the local dev DB (history written by 10.10.0) starts
+  cleanly under 11.20.3: 26 migrations validated, schema at 26.
+
+**Commit:** `5d562ef`
+
+---
+
 ## 2026-10-05 — Staging deploy of the Manage Creators work (V19–V26)
 
 **Requested:**
