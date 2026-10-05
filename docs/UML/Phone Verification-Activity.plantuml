@@ -1,0 +1,64 @@
+@startuml
+' PROPOSED (not built): verify that a member's phone number is real before they
+' can take part in polls. Per-step costs are Twilio list prices checked
+' 2026-10-05 (US). See docs/COSTS.md "Phone verification (SMS)" for the monthly
+' and election-spike estimates.
+title Phone verification (proposed) — who does what, and what each step costs
+
+|Member|
+start
+:Pays $10/mo via Stripe Checkout\n(existing flow; Stripe keeps ~$0.59);
+:Signs in via emailed magic link\n(existing; Resend email, ~free at our volume);
+:Enters phone + zipcode\non Complete Profile;
+
+|Backend (Fly.io)|
+:Normalise + validate format\n(Twilio Lookup basic: **free**);
+:Lookup Line Type + SMS-pumping risk\n(**$0.008**; pumping score free in N. America);
+if (Mobile number and low fraud risk?) then (no)
+  :Reject: "Please use a mobile number"\n(no text sent, no further cost);
+  |Member|
+  :Enters a different number;
+  stop
+else (yes)
+endif
+
+|Backend (Fly.io)|
+:Start verification\n(POST to Twilio Verify);
+
+|Twilio Verify|
+:Generate 6-digit code, send SMS\n($0.0083 per text + carrier fee ~$0.004);
+
+|Member|
+:Receives text, types the code\ninto the app's verification modal;
+if (Code arrived?) then (no — "Resend")
+  |Twilio Verify|
+  :Send another SMS\n(another ~$0.0125; ~15% of users);
+  |Member|
+  :Types the new code;
+else (yes)
+endif
+
+|Backend (Fly.io)|
+:Check code with Twilio Verify;
+
+|Twilio Verify|
+if (Code correct?) then (yes)
+  :Charge **$0.05** per successful verification;
+  |Neon Postgres|
+  :users.phone_verified_at = now()\n(one row update; negligible compute);
+  |Member|
+  :Can take part in polls;
+  stop
+else (no / expired)
+  |Member|
+  :Shown "wrong or expired code" —\nretry or resend (no $0.05 charge);
+  stop
+endif
+
+legend right
+  **Cost per verified member ≈ $0.066–0.074**
+  ($0.05 success + ~1.15 texts × ~$0.0125 + $0.008 Lookup)
+  Fly + Neon per verification: ~2 API calls + 1 row update (pennies per 100K)
+  The election cost driver is SMS, not Fly/Neon.
+endlegend
+@enduml

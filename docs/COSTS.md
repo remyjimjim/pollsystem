@@ -131,8 +131,9 @@ delivery. Stripe fees scale with paid conversions, not registrations.
 | **One-time demo total (excluding Stripe)** | | **~$20** |
 
 Compared with the previous SMS-based design, dropping phone verification removed
-**~$1,580** of one-time SMS cost from a full-population demo. That saving is
-permanent: there is no scenario in this architecture where Twilio is needed.
+**~$1,580** of one-time SMS cost from a full-population demo. Revisited
+2026-10-05: at realistic member counts phone verification is cheap
+(~$0.07 per new member); see **Phone verification (SMS)** below.
 
 ---
 
@@ -164,6 +165,143 @@ Two implications for the cost picture:
 - **Stripe Tax** — automatic VAT/sales-tax calculation. 0.5 % per transaction. Only relevant once you have EU/UK customers or pass US state economic-nexus thresholds.
 - **Radar for Fraud Teams** — $0.07 per screened transaction. Default Radar is included free.
 - **Billing** — Stripe's hosted invoicing/portal is free for the standard subscription model used here.
+
+---
+
+## Actual bills and an idle-production finding (October 2026)
+
+Real invoices, as a reality check on the estimates above:
+
+| Provider | August 2026 | September 2026 | What it is |
+|---|---|---|---|
+| Fly.io (pay as you go) | $9.49 | $11.54 | Mostly the **production** app's one always-on 2 GB machine |
+| Neon (Launch, $0.106 / CU-hour) | $31.58 (297.84 CU-h) | $28.79 (271.52 CU-h) | Compute that almost never suspends |
+| Resend | $0 | $0 | Free tier |
+| **Total** | **~$41** | **~$40** | |
+
+**Finding (2026-10-05):** production (`pollsystem-backend`, last deployed
+2026-09-05) runs with `min_machines_running = 1`, so one machine is always up.
+Fly health-checks it on `/actuator/health` every 15 s, and Spring Boot's health
+check includes a database check by default, so the production Neon compute is
+queried every 15 s and never scales to zero. Before launch that is ~$40/month
+for an unused app; setting `min_machines_running = 0` until launch would save
+roughly $35/month (staging already sleeps: both machines auto-stopped ~8 min
+after a deploy). Changing it means a production deploy, which would also ship
+new code and run pending migrations, so it hasn't been done.
+
+---
+
+## Year-one revenue vs costs (10 → 200 or 2,000 paid users)
+
+Estimated 2026-10-05 for two growth paths, at **$10/month** with **no creator
+discount** and no churn. Costs use the actual bills above: Fly ~$12/month
+(production kept warm once there are users; a second machine in viral months
+11–12), Neon ~$30/month (rising to $35–40 at viral scale), Resend free until
+the viral path needs the $20 plan for its 100/day cap (month 10 on), Twilio
+~$0.074 per *new* member (phone verification, next section), Stripe $0.59 per
+$10 payment. Excludes taxes, chargebacks/refunds and anyone's time.
+
+**Steady path (→ ~200 users):**
+
+| Mo | Users | Revenue | Stripe | Fly | Neon | Resend | Twilio | Total costs | Net |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 10 | $100 | $5.90 | $12 | $30 | $0 | $0.74 | $48.64 | $51.36 |
+| 2 | 15 | $150 | $8.85 | $12 | $30 | $0 | $0.37 | $51.22 | $98.78 |
+| 3 | 20 | $200 | $11.80 | $12 | $30 | $0 | $0.37 | $54.17 | $145.83 |
+| 4 | 25 | $250 | $14.75 | $12 | $30 | $0 | $0.37 | $57.12 | $192.88 |
+| 5 | 30 | $300 | $17.70 | $12 | $30 | $0 | $0.37 | $60.07 | $239.93 |
+| 6 | 50 | $500 | $29.50 | $12 | $30 | $0 | $1.48 | $72.98 | $427.02 |
+| 7 | 80 | $800 | $47.20 | $12 | $30 | $0 | $2.22 | $91.42 | $708.58 |
+| 8 | 110 | $1,100 | $64.90 | $12 | $30 | $0 | $2.22 | $109.12 | $990.88 |
+| 9 | 140 | $1,400 | $82.60 | $12 | $30 | $0 | $2.22 | $126.82 | $1,273.18 |
+| 10 | 170 | $1,700 | $100.30 | $12 | $30 | $0 | $2.22 | $144.52 | $1,555.48 |
+| 11 | 185 | $1,850 | $109.15 | $12 | $30 | $0 | $1.11 | $152.26 | $1,697.74 |
+| 12 | 200 | $2,000 | $118.00 | $12 | $30 | $0 | $1.11 | $161.11 | $1,838.89 |
+| **Year** | | **$10,350** | **$610.65** | **$144** | **$360** | **$0** | **$14.80** | **$1,129.45** | **$9,220.55** |
+
+**Viral path (→ ~2,000 users):**
+
+| Mo | Users | Revenue | Stripe | Fly | Neon | Resend | Twilio | Total costs | Net |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 10 | $100 | $5.90 | $12 | $30 | $0 | $0.74 | $48.64 | $51.36 |
+| 2 | 15 | $150 | $8.85 | $12 | $30 | $0 | $0.37 | $51.22 | $98.78 |
+| 3 | 20 | $200 | $11.80 | $12 | $30 | $0 | $0.37 | $54.17 | $145.83 |
+| 4 | 25 | $250 | $14.75 | $12 | $30 | $0 | $0.37 | $57.12 | $192.88 |
+| 5 | 30 | $300 | $17.70 | $12 | $30 | $0 | $0.37 | $60.07 | $239.93 |
+| 6 | 60 | $600 | $35.40 | $12 | $30 | $0 | $2.22 | $79.62 | $520.38 |
+| 7 | 150 | $1,500 | $88.50 | $12 | $30 | $0 | $6.66 | $137.16 | $1,362.84 |
+| 8 | 300 | $3,000 | $177.00 | $12 | $30 | $0 | $11.10 | $230.10 | $2,769.90 |
+| 9 | 550 | $5,500 | $324.50 | $12 | $35 | $0 | $18.50 | $390.00 | $5,110.00 |
+| 10 | 900 | $9,000 | $531.00 | $12 | $40 | $20 | $25.90 | $628.90 | $8,371.10 |
+| 11 | 1,400 | $14,000 | $826.00 | $24 | $40 | $20 | $37.00 | $947.00 | $13,053.00 |
+| 12 | 2,000 | $20,000 | $1,180.00 | $24 | $40 | $20 | $44.40 | $1,308.40 | $18,691.60 |
+| **Year** | | **$54,600** | **$3,221.40** | **$168** | **$395** | **$60** | **$148** | **$3,992.40** | **$50,607.60** |
+
+Takeaways:
+
+- Fixed infrastructure (Fly + Neon, ~$42/month) is covered by **5 paying
+  users**, so both paths are profitable from month 1.
+- **Stripe is the largest cost** (6% of revenue, more than all providers
+  combined); its fixed $0.30 per payment is what makes low price points
+  expensive.
+- Twilio phone verification is the smallest line ($15/year steady, $148 viral).
+
+---
+
+## Phone verification (SMS)
+
+**Status: proposed, not built.** Admin ↔ creator communication stays email +
+notes. SMS would be used only to establish that a member's phone number is real,
+e.g. ahead of a big election. Process diagram (with per-step costs):
+`docs/UML/Phone Verification-Activity.plantuml` (rendered `.svg` alongside).
+
+Twilio list prices, US, checked 2026-10-05:
+
+| Item | Price |
+|---|---|
+| SMS segment (long code / toll-free) | $0.0083 + carrier fee $0.0035–0.005 ≈ **$0.012–0.013** |
+| Phone number rental | $1.15/month (long code), $2.15 (toll-free) |
+| A2P 10DLC registration (own texts only) | Brand $4.50 (low volume) or ~$46 one-time; campaign vetting $15 one-time; campaign $1.50–10/month |
+| **Verify** (Twilio sends + checks the code) | **$0.05 per successful verification** + $0.0083 per SMS |
+| Lookup: format validation | Free |
+| Lookup: Line Type Intelligence (mobile vs landline vs VoIP) | **$0.008** |
+| Lookup: SMS-pumping risk score | Free in North America |
+
+**Cost per verified member ≈ $0.066–0.074:** $0.05 Verify + ~1.15 texts
+(~15% need a resend) × ~$0.0125 + $0.008 Lookup. Failed or abandoned attempts
+cost only their texts (no $0.05). Verifying **once per member** (when the phone
+is first entered), the monthly cost is **new members × ~$0.074** — see the
+year-one tables above.
+
+Load on our own infrastructure is negligible: ~2 API calls and one row update
+per verification. 100K verifications ≈ 200K small requests spread over days.
+
+**Election spike (100K members verifying in one month):**
+
+| Item | That month |
+|---|---|
+| Fly | ~$30–60 (autoscale to 3–5 machines for the busy days) |
+| Neon | ~$100–200 (more compute while busy; storage for 100K members < $1) |
+| Resend | ~$90–160 (~200K sign-in emails) |
+| **Twilio (100K verifications)** | **~$6,600–7,400** |
+| **Total extra** | **~$6,900–7,800** |
+
+Participation requires a paid membership (`ParticipationGuard`), so 100K
+election members would bring ~$941K that month after Stripe fees; the spike is
+< 1% of it. If an election ever allowed participation **without** paying, the
+cost is ~$0.078 per voter with no revenue against it.
+
+**Choices to make before building:**
+
+- **Lookup only ($0.008)** proves a real mobile number (not VoIP) but not that
+  the member holds it; **Lookup + Verify (~$0.07)** proves both.
+- Use **Verify** rather than our own texts: no 10DLC paperwork (as we
+  understand it), built-in SMS-pumping (toll-fraud) protection, and it handles
+  election-scale bursts that would hit per-brand 10DLC throughput caps.
+- **Price stability:** SMS prices have drifted up through carrier surcharges
+  (10DLC fees introduced 2021–23; T-Mobile raised pass-through fees in January
+  2026). Verify's flat $0.05 is the more predictable part. Doubling SMS prices
+  would add ~$140/year on the viral path.
 
 ---
 
@@ -266,6 +404,12 @@ config change, not a rewrite.
 | Stripe pricing | https://stripe.com/pricing |
 | Stripe Tax | https://stripe.com/tax |
 | GraalVM native image | https://www.graalvm.org/native-image/ |
+| Resend | https://resend.com/pricing |
+| Amazon SES | https://aws.amazon.com/ses/pricing/ |
+| Twilio SMS (US) | https://www.twilio.com/en-us/sms/pricing/us |
+| Twilio Verify | https://www.twilio.com/en-us/verify/pricing |
+| Twilio Lookup | https://www.twilio.com/en-us/user-authentication-identity/pricing/lookup |
+| Twilio A2P 10DLC fees | https://support.twilio.com/hc/en-us/articles/1260803965530 |
 
 > Prices were last verified in early 2026 and may have changed. Always check the
 > provider's current pricing page before budgeting a real deployment.
