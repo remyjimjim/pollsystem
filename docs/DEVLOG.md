@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-05 — Update todo.md: email cost estimate for 50K sign-ups
+
+**Requested:**
+
+> estimate the email cost for 50K sign-ups
+
+> yes, add it to todo.md and mark it done
+
+**Changed:**
+
+- Recorded the estimate under todo item 5 and marked it done. From the code:
+  one sign-in link per sign-up (Stripe webhook provisioning), ~0.5–1 extra links
+  per user (15-min links, second device), and ~no repeat logins thanks to the
+  90-day JWT → ~75K–100K emails (worst case ~150K).
+- Priced on 2026-10-05: Resend (current provider) ~$35–80 for the launch
+  fortnight, then its $20/mo plan; Amazon SES floor ~$8–15, not worth switching.
+  Flagged sending-domain warm-up and Resend's per-second rate limit as the real
+  launch risks.
+
+**Commit:** `52c3703`
+
+---
+
 ## 2026-10-05 — Update todo.md: run summary for the expanded transcript
 
 **Requested:**
