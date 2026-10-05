@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-05 — chore: ignore /export's default transcript files
+
+**Requested:**
+
+> add the ignore pattern and push it
+
+**Changed:**
+
+- `.gitignore`: `/[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}-*.txt` (spelled out as
+  character classes), next to the existing transcript rules. `/export` without a
+  path writes `YYYY-MM-DD-HHMMSS-<slug of the first prompt>.txt` to the repo
+  root; the slug varies per session, so the rule matches the timestamp.
+  Verified: the current export and future ones are ignored; files elsewhere or
+  with other names aren't.
+- Also confirmed for the previous entry: production's machines auto-stopped at
+  07:43 UTC, ~7 min after the v9 redeploy.
+
+**Commit:** `20fad0f`
+
+---
+
 ## 2026-10-05 — chore: production sleeps until launch
 
 **Requested:**
