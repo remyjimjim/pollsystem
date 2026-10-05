@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Expand this project's Claude Code sessions to Markdown with bash commands
+# inlined verbatim (unlike /export, which collapses them and only covers the
+# current session). Rebuilds the whole file from every session log each run.
+#
+#   claude-expand                 # all sessions -> ./sessions.transcript.expanded.md
+#   claude-expand OUT.md          # all sessions -> OUT.md
+#   claude-expand --latest        # newest session only (the old behaviour)
+#   claude-expand SESSION.jsonl OUT.md
+#
+# Runs the repo copy of expand-session.py next to this script (falls back to
+# ~/.claude/expand-session.py if this wrapper has been copied elsewhere).
+here="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+py="$here/expand-session.py"
+[[ -f "$py" ]] || py="$HOME/.claude/expand-session.py"
+exec python3 "$py" "$@"
