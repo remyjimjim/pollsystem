@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-05 — Staging deploy of the Manage Creators work (V19–V26)
+
+**Requested:**
+
+> push it and deploy to staging
+
+**Verified:**
+
+- Pre-deploy read-only check of prod Neon (`tmp/prod-precheck.py`, over HTTPS
+  because port 5432 is blocked behind the user's VPN): prod is pre-V19, has no
+  polls and no poll blocks, so creator-grant enforcement and area-aware blocks
+  affect no existing data. The `claude` read-only role had no SELECT on app
+  tables (granted when prod was empty); the user ran the owner GRANT +
+  ALTER DEFAULT PRIVILEGES to fix it.
+- Pushed 22 commits to `origin/main` (`3f9b534..867de23`) and ran
+  `BuildAndDeploy.bash test`: frontend pre-build OK, Fly backend
+  `pollsystem-backend-staging` deployed (both machines started), `staging`
+  branch at `867de23`, Cloudflare Pages frontend returns 200.
+- Schema: the backend uses `ddl-auto: validate` and started cleanly, so V19–V26
+  (scope_level, poll_purviews, creator_edited_at, creator_disables, …) are
+  applied on the staging DB; `/actuator/health` UP; `/api/polls/search` 200.
+  Flyway's own INFO lines are filtered at the staging log level; only a
+  "Flyway upgrade recommended: PostgreSQL 18.6" warning appears.
+
+**Commit:** none — verification only (deployed `867de23`)
+
+---
+
 ## 2026-10-04 — feat: stored per-admin creator disable, scoped to the overlap
 
 **Requested:**
