@@ -90,6 +90,22 @@
   5. - Ask Claude to estimate the emailing cost for the following scenario:  
        - App is popular and adds say 50K subscribers in 2 weeks.  What would be the 
          approximate cost to send all the registration and login link emails for said 50K users? 
+       Done: Yes (estimated 2026-10-05; prices from resend.com/pricing and
+       aws.amazon.com/ses/pricing that day).
+       - Emails: 1 sign-in link per sign-up (sent when the Stripe webhook creates
+         the account; Stripe's own receipts cost us nothing) + ~0.5-1 extra links
+         (15-min link expired / re-requested / second device). The 90-day login
+         means ~no repeat-login emails in the window. Creator/admin mail is tiny.
+         => ~1.5-2 emails/user = ~75K-100K emails (worst case ~150K).
+       - Resend (what we use; free tier is out at 100/day):
+         75K ~ $35-42.50 | 100K = $35 (100K plan) | 150K ~ $80 ($35 + $0.90/1K over).
+         Amazon SES floor: ~$8-15 ($0.10/1K). Not worth switching at this scale.
+       - Bottom line: ~$35-80 for the launch fortnight, then ~20-25K/month
+         (one link per user per device every 90 days) = Resend's $20/mo plan.
+       - Bigger risks than price: warm up the sending domain before launch (a cold
+         domain jumping to thousands/day lands in spam); check Resend's per-second
+         rate limit (unverified) and ask for a raise before a launch spike; a launch
+         straddling two billing months may fit two cheaper plans.
   6. - When a user clicks the link to become a 'creator' and fills out the form: Add text 
        msg reply verication via user's phone number, as in, add a modal that pops up 
        and says 'A text message has been sent to your email, please reply and your request will be submitted.'.  The modal should have a spinner and a 'Cancel' button.  
