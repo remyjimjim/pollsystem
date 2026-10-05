@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-05 — feat: claude-expand -host / -container / -help
+
+**Requested:**
+
+> Can we update pollsystem/scripts/claude-expand such that when
+> pollsystem/scripts/claude-expand is run with -host then the script does the
+> 'To run from host...' stuff and if a -container is passed then the 'To run
+> from Dev Containers' stuff is done and -help flag is passed then output a help
+> message?
+
+**Changed:**
+
+- `-host` / `-container`: verify the environment (mismatch exits 2 and names
+  the right flag), cd to the repo root found from the script's own location
+  (symlink-safe), build `sessions.transcript.expanded.md`, `ls -lh` it.
+  Detects a python3 without its stdlib and, in the container, says how to fix.
+- `-help` (also `--help` / `-h`) prints usage and the host symlink tip; extra
+  args pass through (e.g. `-host --latest`); no flag behaves as before.
+- Tested in the Dev Container (all paths except `-host`, which only runs on the
+  host). `todo.md`'s Summary also lists the flags (left uncommitted alongside
+  the user's own edits there).
+
+**Commit:** `1b27582`
+
+---
+
 ## 2026-10-05 — Update todo.md: correct the session-transcript instructions
 
 **Requested:**
