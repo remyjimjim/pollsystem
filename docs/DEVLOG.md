@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-10-05 — feat: Swagger UI for local dev + dev JWT endpoint
+
+**Requested:**
+
+> can you remind me of how to seed for instance a user of access level 'USER'
+> for instance, or better yet, do we have a Swagger UI type thing where we can
+> test API calls and see their signatures for instance?
+
+> yes, set up Swagger for local only and would I be able to run the api's with
+> appropriate args from the swagger pages?
+
+**Changed:**
+
+- springdoc-openapi 2.6.0 (Spring Boot 3.3 line): Swagger UI at
+  `http://localhost:8080/swagger-ui.html`, OpenAPI JSON at `/v3/api-docs`.
+  Enabled only by `application-local.yml`; off in the main and test
+  `application.yml` (the test one replaces the main one on the test classpath,
+  which a new guard test caught).
+- `OpenApiConfig` (local only) declares the Bearer JWT scheme → Authorize
+  button; Try-it-out is pre-enabled and the token persists across reloads.
+- Dev-only `POST /api/dev/token?email=…` mints a JWT for an existing user;
+  `/api/dev/seed-user` now returns one too.
+- `LocalOnlyToolsTest`: Swagger, api-docs and dev endpoints 404 outside local.
+  Backend 276/276. Verified locally: 90 endpoints documented; an admin token
+  makes `GET /api/admin/creators` return 200 (401 without).
+
+**Commit:** `9b0f31c`
+
+---
+
 ## 2026-10-05 — Update todo.md: email cost estimate for 50K sign-ups
 
 **Requested:**
