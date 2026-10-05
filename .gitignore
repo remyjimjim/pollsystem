@@ -29,6 +29,8 @@ Thumbs.db
 # Claude Code session transcripts (/export and claude-expand output)
 sessions.transcript*.md
 *.transcript.md
+# /export's default file name: YYYY-MM-DD-HHMMSS-<slug of the first prompt>.txt
+/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-*.txt
 
 # Scratch dir for ad-hoc SQL / query files reviewed & run by hand. Ignore its
 # contents but keep the tracked README that documents the workflow. (Git can't
