@@ -3,14 +3,82 @@
 # inlined verbatim (unlike /export, which collapses them and only covers the
 # current session). Rebuilds the whole file from every session log each run.
 #
-#   claude-expand                 # all sessions -> ./sessions.transcript.expanded.md
-#   claude-expand OUT.md          # all sessions -> OUT.md
-#   claude-expand --latest        # newest session only (the old behaviour)
-#   claude-expand SESSION.jsonl OUT.md
+#   claude-expand -host [opts]       # on the host: cd to the repo, build, show the file
+#   claude-expand -container [opts]  # same, inside the Dev Container
+#   claude-expand -help              # usage
+#   claude-expand [opts]             # build in the current directory (no checks)
 #
+# opts are passed to expand-session.py: OUT.md, --latest, SESSION.jsonl OUT.md.
 # Runs the repo copy of expand-session.py next to this script (falls back to
 # ~/.claude/expand-session.py if this wrapper has been copied elsewhere).
+set -euo pipefail
+
 here="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+repo="$(dirname "$here")"
 py="$here/expand-session.py"
 [[ -f "$py" ]] || py="$HOME/.claude/expand-session.py"
-exec python3 "$py" "$@"
+out_default="sessions.transcript.expanded.md"
+
+usage() {
+  cat <<EOF
+claude-expand — build sessions.transcript.expanded.md from this project's
+Claude Code session logs (~/.claude/projects/<project>/*.jsonl): every session,
+oldest first, bash commands inlined. The file is rebuilt from scratch on each
+run, so re-running never duplicates or loses anything. (/export, typed in the
+Claude Code chat, separately writes sessions.transcript.md for the current
+session only; claude-expand does not need it.)
+
+Usage:
+  claude-expand -host [opts]        Run on the HOST: cd to the repo, build, ls -lh
+  claude-expand -container [opts]   Run in the DEV CONTAINER: cd to the repo, build, ls -lh
+  claude-expand -help               This message
+  claude-expand [opts]              Build in the current directory, no checks
+
+opts (passed to expand-session.py):
+  OUT.md                 write to OUT.md instead of $out_default
+  --latest               only the newest session
+  SESSION.jsonl OUT.md   expand one specific session log
+
+Repo:   $repo
+Script: $py
+
+Host shortcut (once, from the repo root):
+  ln -sf "\$PWD/scripts/claude-expand" ~/.local/bin/claude-expand
+EOF
+}
+
+in_container() { [[ -f /.dockerenv || -n "${REMOTE_CONTAINERS:-}" ]]; }
+
+# cd to the repo, build, and show the result. $1 = where we expect to be.
+run_in() {
+  local where="$1"; shift
+  if [[ "$where" == host ]] && in_container; then
+    echo "claude-expand -host: this is the Dev Container. Use: claude-expand -container" >&2
+    exit 2
+  fi
+  if [[ "$where" == container ]] && ! in_container; then
+    echo "claude-expand -container: this is the host, not the Dev Container. Use: claude-expand -host" >&2
+    exit 2
+  fi
+  command -v python3 >/dev/null || { echo "claude-expand: python3 not found" >&2; exit 1; }
+  if ! python3 -c 'import json' 2>/dev/null; then
+    echo "claude-expand: this python3 lacks the standard library (no 'json')." >&2
+    [[ "$where" == container ]] && echo "  Rebuild the Dev Container (its Dockerfile installs python3), or for now:
+    sudo apt-get update && sudo apt-get install -y python3" >&2
+    exit 1
+  fi
+  cd "$repo"
+  echo "==> $where: building in $repo"
+  python3 "$py" "$@"
+  # Show whichever file was written (default, or an OUT.md argument).
+  local out="$out_default" a
+  for a in "$@"; do [[ "$a" == *.md ]] && out="$a"; done
+  ls -lh "$out"
+}
+
+case "${1:-}" in
+  -host|--host)           shift; run_in host "$@" ;;
+  -container|--container) shift; run_in container "$@" ;;
+  -help|--help|-h)        usage ;;
+  *)                      exec python3 "$py" "$@" ;;
+esac
