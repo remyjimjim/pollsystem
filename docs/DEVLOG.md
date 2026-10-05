@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-05 — docs: SWAGGER.md
+
+**Requested:**
+
+> Can we start a docs/SWAGGER.md doc with at least the following: [the
+> Swagger UI summary from the previous reply]
+
+**Changed:**
+
+- New `docs/SWAGGER.md`: opening Swagger UI, the three steps to call endpoints
+  (get a token, Authorize, Execute), what the token allows, seeding test users
+  and data (dev endpoints table + host / Dev Container `curl`), how "local only"
+  is enforced (configs, profiles, guard test, springdoc version), and
+  troubleshooting for 401 / 403 / 404.
+- Checked against the running stack: the token one-liner, admin 200, USER on an
+  admin endpoint 403, public search without a token 200, `local` as the default
+  profile.
+
+**Commit:** `9d7cdaa`
+
+---
+
 ## 2026-10-05 — feat: Swagger UI for local dev + dev JWT endpoint
 
 **Requested:**
