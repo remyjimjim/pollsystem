@@ -19,6 +19,11 @@ version = "0.0.1-SNAPSHOT"
 // active docker context (so Docker Desktop's socket is found without a
 // /var/run/docker.sock symlink).
 extra["testcontainers.version"] = "1.20.6"
+// Boot 3.3.5 manages Flyway 10.10.0, which only recognises PostgreSQL up to 16
+// and logs "Flyway upgrade recommended" against Neon's PostgreSQL 18. 11.14.0 is
+// the first release that recognises 18 (even Boot 3.5.x manages 11.7.x, which
+// tops out at 17), so pin the latest 11.x.
+extra["flyway.version"] = "11.20.3"
 
 java {
     // Gradle provisions a JDK 17 to compile and run the build, regardless of
