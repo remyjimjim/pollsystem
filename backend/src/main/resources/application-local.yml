@@ -10,3 +10,16 @@ spring:
     # the test database. Flyway is happy with the V11 "gap" in db/migration —
     # it applies whatever it finds, in version order.
     locations: classpath:db/migration,classpath:db/seed-local
+
+# Swagger UI at http://localhost:8080/swagger-ui.html (local only; off in
+# application.yml). Get a JWT from POST /api/dev/token?email=... or from
+# /api/dev/seed-user, then click Authorize and paste it.
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    persist-authorization: true   # keep the pasted token across page reloads
+    try-it-out-enabled: true      # request forms open ready to edit + Execute
+    tags-sorter: alpha
+    operations-sorter: alpha

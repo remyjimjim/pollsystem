@@ -18,8 +18,11 @@ import org.kodewerks.pollsystem.poll.QuestionnaireService
 import org.kodewerks.pollsystem.repository.BallotResponseRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
 import org.kodewerks.pollsystem.repository.UserRepository
+import org.kodewerks.pollsystem.security.JwtTokenProvider
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
+import org.springframework.web.server.ResponseStatusException
+import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -48,6 +51,7 @@ class DevController(
     private val ballotMeasures: BallotMeasureService,
     private val ballotResponses: BallotResponseRepository,
     private val roleAssignments: RoleAssignmentRepository,
+    private val tokens: JwtTokenProvider,
 ) {
 
     @PersistenceContext
@@ -328,7 +332,25 @@ class DevController(
         )
         if (user.access == AccessLevel.CREATOR) grantNationwideCreator(user)
         log.info("Seeded {} user id={} email={}", user.access, user.id, user.email)
-        return mapOf("id" to user.id, "email" to user.email)
+        // token: a ready JWT for Swagger UI's Authorize button / API testing.
+        return mapOf("id" to user.id, "email" to user.email, "token" to tokens.generateToken(user.id, user.email))
+    }
+
+    /**
+     * A JWT for an existing local user, so Swagger UI (/swagger-ui.html) and
+     * curl can call authenticated endpoints without the magic-link + Mailpit
+     * round trip. Local profile only, like the rest of this controller.
+     */
+    @PostMapping("/token")
+    fun token(@RequestParam email: String): Map<String, Any> {
+        val user = users.findByEmail(email.trim().lowercase())
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "No local user with email $email")
+        return mapOf(
+            "token" to tokens.generateToken(user.id, user.email),
+            "id" to user.id,
+            "email" to user.email,
+            "access" to user.access.name
+        )
     }
 
     /**

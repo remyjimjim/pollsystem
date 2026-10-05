@@ -14,3 +14,12 @@ app:
     k-anonymity-threshold: 3  # lower threshold makes results tests easier
   creator-requests:
     sweep-interval-ms: 3600000  # don't run the sweep cron during tests
+
+# This file REPLACES src/main/resources/application.yml on the test classpath,
+# so repeat its "springdoc off" default here (springdoc's own default is on).
+# LocalOnlyToolsTest guards it; only application-local.yml turns it on.
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

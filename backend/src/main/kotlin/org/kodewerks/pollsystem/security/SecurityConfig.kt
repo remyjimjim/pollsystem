@@ -69,6 +69,11 @@ class SecurityConfig(
                     // DevController is @Profile("local"), so under prod the
                     // path 404s and permitAll has no effect there.
                     "/api/dev/**",
+                    // Swagger UI + OpenAPI JSON: springdoc is enabled only by
+                    // application-local.yml, so elsewhere these paths 404.
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
                     // Liveness/readiness probe — orchestrators need
                     // unauthenticated access. Other actuator endpoints
                     // require SUPER below.

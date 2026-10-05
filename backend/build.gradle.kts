@@ -47,6 +47,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    // OpenAPI docs + Swagger UI (/swagger-ui.html). Disabled in application.yml
+    // and switched on only by application-local.yml. 2.6.x is the line built
+    // against Spring Boot 3.3 (2.7+ targets Boot 3.4+).
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+
     // Hot reload during local dev. The `developmentOnly` configuration
     // keeps devtools out of production builds. Recompiling Kotlin (IDE
     // auto-build, or `./gradlew compileKotlin` in a second terminal)
