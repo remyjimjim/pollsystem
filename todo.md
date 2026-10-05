@@ -37,9 +37,9 @@
 - Come up with a process to:
   1. Sets login values for ./docker-compose.yml based on values found in   
      encrypted file at root dir, e.g., ./.creds.txt for local env.
-     - Done: No
+     - Done: yes.  creds are in keyring. 
   2. Do #1 above for the prod/staging env.
-     - Done: No
+     - Done: yes
      - Notes:  Learned that a test/staging environment is probably needed cuz stripe   
                testing, etc. UPDATE: a staging env now exists (see "Staging /
                test deploy environment" above); its secrets currently come from
@@ -53,11 +53,23 @@
   4. - Find out if it's possible to capture claude CLI chat output including claude's output
        and questions, my answers and bash commands to a file called 
        sessions.transcript.md. 
+       
+       Done: Yes.  run /export while in claude code from the chat and the output will go to sessions.transcript.md then run ~/.local/bin/clause-expand and it 
+       will expand sessions.transcript.md to essions.transcript.expanded.md.  Test claude-expand while in a container.  If it doesn't work then try moving it to pollsystem/scripts.
   5. - Ask Claude to estimate the emailing cost for the following scenario:  
        - App is popular and adds say 50K subscribers in 2 weeks.  What would be the 
          approximate cost to send all the registration and login link emails for said 50K users? 
   6. - When a user clicks the link to become a 'creator' and fills out the form: Add text 
        msg reply verication via user's phone number, as in, add a modal that pops up 
-       and says 'A text message has been sent to your phone # (XXX-XXX-**55), please reply and your request will be submitted.'.  The modal should have a spinner and a 'Cancel' button.  
+       and says 'A text message has been sent to your email, please reply and your request will be submitted.'.  The modal should have a spinner and a 'Cancel' button.  
   
--  Add e2e tests to ./frontend/e2e/
+-  Add e2e tests to ./frontend/e2e/:
+   - Run some recordings and translate to uml for claude.
+   - Done.  No.  Some but not all.
+   
+-  Add a help/documentation library for things like:
+   - How to find polls by title, zipcode, state or county.
+   - How to be a creator along with creator tasks and reports
+   - How to be an admin along with admin tasks and reports
+   - How to be a super along with tasks and reports
+   - Done: No.
