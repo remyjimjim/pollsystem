@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-10-05 — Staging deploy: Swagger stays local-only
+
+**Requested:**
+
+> push it and deploy to staging
+
+**Verified:**
+
+- Pushed `5a95658..d50d4b9` and ran `BuildAndDeploy.bash test`: both Fly
+  machines restarted (04:57 UTC), health UP, `staging` branch at `d50d4b9`, no
+  Flyway upgrade warning.
+- Local-only tools are absent on staging: `/swagger-ui.html`,
+  `/swagger-ui/index.html`, `/v3/api-docs`, `POST /api/dev/token` and
+  `POST /api/dev/seed-user` all return 404.
+
+**Commit:** none — verification only (deployed `d50d4b9`)
+
+---
+
 ## 2026-10-05 — docs: SWAGGER.md
 
 **Requested:**
