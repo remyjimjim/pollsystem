@@ -186,8 +186,9 @@ check includes a database check by default, so the production Neon compute is
 queried every 15 s and never scales to zero. Before launch that is ~$40/month
 for an unused app; setting `min_machines_running = 0` until launch would save
 roughly $35/month (staging already sleeps: both machines auto-stopped ~8 min
-after a deploy). Changing it means a production deploy, which would also ship
-new code and run pending migrations, so it hasn't been done.
+after a deploy). **Done 2026-10-05** (Fly release v9): `min_machines_running = 0`
+applied by redeploying the image production was already running, so no new code
+or migrations shipped. **Set it back to 1 at launch.**
 
 ---
 
