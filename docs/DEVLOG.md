@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-05 — Update todo.md: correct the session-transcript instructions
+
+**Requested:**
+
+> Just to clarify, is the instrucitions in todo.md still correct regarding
+> claude-expand and capturing sessions … and if not can we make the necessary
+> changes in todo.md?
+
+**Changed:**
+
+- The note said claude-expand expands `sessions.transcript.md`; it actually
+  reads the raw session logs (`~/.claude/projects/<project>/*.jsonl`), so
+  `/export` isn't a prerequisite. Rewrote it to describe the two independent
+  transcripts: `/export` = current session only, collapsed commands;
+  `scripts/claude-expand` = all sessions, commands inlined, rebuilt each run
+  (`--latest`, `--help`).
+- Added the one-time host symlink so `~/.local/bin/claude-expand` runs the repo
+  version (otherwise it still runs the old newest-only script).
+- Marked the "test in a container / move to scripts" follow-ups done.
+
+**Commit:** `6149eb6`
+
+---
+
 ## 2026-10-05 — Update todo.md: fix typos in the transcript note
 
 **Requested:**
