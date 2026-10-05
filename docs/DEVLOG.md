@@ -61,6 +61,50 @@ logged.
 
 ---
 
+## 2026-10-05 — docs: year-one P&L, actual bills, phone-verification costs
+
+**Requested:**
+
+> let's work on the creator-request verification modal
+
+> … in the name of doing at least due dilligence, we probably want an estimate
+> on sms messages costs and price stability … after a year we're at
+> optimistically 2000 paid users …
+
+> … let's say there's a big election somewhere and we need to verify … 100K
+> users phone numbers via SMS, what does that do to the prices I've submitted
+> for fly.io and neon db? … feel free to help me with a uml process diagram for
+> this.
+
+> yes, write the COSTS.md section and commit both but before you do that, can
+> we estimate what the total costs will be for (fly.io, neon, Resend, twillio)
+> during that one year evolution … vs revenue … at a $10/mo subscription and
+> assuming there's no "creator" discount?
+
+**Changed:**
+
+- `docs/COSTS.md`: three new sections:
+  - **Actual bills** (Aug/Sep 2026, ~$40/month). Finding: the unused production
+    app runs warm and its health check keeps Neon from ever scaling to zero
+    (~$35/month avoidable before launch; not changed, since it needs a prod
+    deploy).
+  - **Year-one revenue vs costs**: net ~$9.2K on the steady path and ~$50.6K on
+    the viral path; tables checked to add up row by row.
+  - **Phone verification (SMS)**, proposed: ~$0.07 per verified member,
+    ~$6.9–7.8K for a 100K-member election spike, price-stability notes, and
+    decisions to make before building.
+
+  The old "no scenario needs Twilio" note now points to this.
+- New `docs/UML/Phone Verification-Activity.plantuml` (+ `.svg`): the proposed
+  verification flow with per-step costs.
+- The creator-request verification modal itself is not built: the user prefers
+  email + notes for admin ↔ creator communication, and SMS would only be for
+  proving members' phones.
+
+**Commit:** `09f64ce`
+
+---
+
 ## 2026-10-05 — Staging deploy: Swagger stays local-only
 
 **Requested:**
