@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-05 — Update todo.md: run summary for the expanded transcript
+
+**Requested:**
+
+> Can we replace lines 74-81 in the freshly edited pollsystem/todo.md with the
+> bash commands needed to build the sessions.transcript.expanded.md file?
+
+> commit todo.md and push it
+
+**Changed:**
+
+- The transcript note gains a Summary (the user's outline): a Shortcut using
+  `scripts/claude-expand -host` / `-container` / `-help`, then the step-by-step
+  host and Dev Container commands (`cd` to the repo, `scripts/claude-expand`,
+  `ls -lh`), and the optional `/export`. The Dev Container steps were run as
+  written and rebuilt the transcript.
+
+**Commit:** `a756857`
+
+---
+
 ## 2026-10-05 — feat: claude-expand -host / -container / -help
 
 **Requested:**
