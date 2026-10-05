@@ -61,6 +61,21 @@ logged.
 
 ---
 
+## 2026-10-05 — Update todo.md: fix typos in the transcript note
+
+**Requested:**
+
+> commit todo.md and push it
+
+**Changed:**
+
+- Transcript note: `clause-expand` → `claude-expand` and
+  `essions.transcript.expanded.md` → `sessions.transcript.expanded.md`.
+
+**Commit:** `fced7c5`
+
+---
+
 ## 2026-10-05 — fix: full python3 in the Dev Container
 
 **Requested:**
