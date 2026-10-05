@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-05 — chore: production sleeps until launch
+
+**Requested:**
+
+> let production sleep until launch
+
+**Changed:**
+
+- `backend/fly.toml`: `min_machines_running = 0` (was 1), with a comment to set
+  it back to 1 at launch. The warm machine's 15 s health check queried the DB,
+  so Neon never scaled to zero: ~$40/month for an app with no users.
+- Applied **without shipping code**: `flyctl deploy -a pollsystem-backend
+  --image <the image already running>` (the Sept 5 build; release v8 → v9). No
+  release command exists, so no new code and no pending migrations ran on
+  production. Both machines report `min_machines_running` 0; health UP.
+- `docs/COSTS.md` "Actual bills" now records it as done, with the launch
+  reminder; a memory note does too.
+- Auto-stop after idle was still being watched when this entry was written
+  (staging stops ~8 min after activity).
+
+**Commits:** `13e6fbe`, `d7fcc3f`
+
+---
+
 ## 2026-10-05 — docs: 'modest' and 'bare bones' cost projections
 
 **Requested:**
