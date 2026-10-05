@@ -54,8 +54,8 @@
        and questions, my answers and bash commands to a file called 
        sessions.transcript.md. 
        
-       Done: Yes.  run /export while in claude code from the chat and the output will go to sessions.transcript.md then run ~/.local/bin/clause-expand and it 
-       will expand sessions.transcript.md to essions.transcript.expanded.md.  Test claude-expand while in a container.  If it doesn't work then try moving it to pollsystem/scripts.
+       Done: Yes.  run /export while in claude code from the chat and the output will go to sessions.transcript.md then run ~/.local/bin/claude-expand and it 
+       will expand sessions.transcript.md to sessions.transcript.expanded.md.  Test claude-expand while in a container.  If it doesn't work then try moving it to pollsystem/scripts.
   5. - Ask Claude to estimate the emailing cost for the following scenario:  
        - App is popular and adds say 50K subscribers in 2 weeks.  What would be the 
          approximate cost to send all the registration and login link emails for said 50K users? 
