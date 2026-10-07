@@ -258,6 +258,32 @@ export async function createElectionAs(
   return { ok: true, status: pub.status, id }
 }
 
+/** Save (and by default publish) a ballot measure AS [creatorEmail], attached to one of their elections. */
+export async function createBallotMeasureAs(
+  creatorEmail: string,
+  electionId: number,
+  title: string,
+  opts: { publish?: boolean } = {},
+): Promise<{ ok: boolean; status: number; id?: number; message?: string }> {
+  const auth = { Authorization: `Bearer ${await devToken(creatorEmail)}`, 'Content-Type': 'application/json' }
+  const effectiveDate = new Date(Date.now() + 60 * 24 * 3600 * 1000).toISOString().slice(0, 10)
+  const draft = await fetch(`${API}/api/polls/ballot-measures`, {
+    method: 'POST',
+    headers: auth,
+    body: JSON.stringify({ pollTypeId: 3, electionId, title, summary: `Seeded by e2e: ${title}`, effectiveDate, closeDate: null }),
+  })
+  if (!draft.ok) {
+    return { ok: false, status: draft.status, message: ((await draft.json().catch(() => ({}))) as { message?: string }).message }
+  }
+  const id = ((await draft.json()) as { id: number }).id
+  if (opts.publish === false) return { ok: true, status: draft.status, id }
+  const pub = await fetch(`${API}/api/polls/ballot-measures/${id}/publish?confirmed=true`, { method: 'POST', headers: auth })
+  if (!pub.ok) {
+    return { ok: false, status: pub.status, id, message: ((await pub.json().catch(() => ({}))) as { message?: string }).message }
+  }
+  return { ok: true, status: pub.status, id }
+}
+
 /** Titles public search returns for [title] when searching from [zipcode] (as a guest). */
 export async function searchTitlesFrom(zipcode: string, title: string): Promise<string[]> {
   const q = new URLSearchParams({ title, zipcode })

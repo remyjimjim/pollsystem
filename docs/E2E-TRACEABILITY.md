@@ -15,7 +15,7 @@ Legend: ✅ covered · ➖ partial / indirect · ❌ none · **P1** build first 
 
 ## Matrix
 
-_Refreshed 2026-10-07 against `frontend/e2e/` (11 journey specs) and the backend
+_Refreshed 2026-10-07 against `frontend/e2e/` (12 journey specs) and the backend
 suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 
 | Use case | Actor | Backend test | E2E | Prio | Notes |
@@ -25,7 +25,7 @@ suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 | Complete Poll via Link | Viewer | — **not built** | — | — | Needs the unbuilt respondent link (below); completion today is authenticated |
 | View Poll Results | Viewer | ✅ `*ResultsTest` | ✅ `viewer-searches-views-results` | — | Asserts the k-anonymity *withheld* state (≤ 6 seeded responses) |
 | Search Polls | Registered | ✅ `PollSearchControllerTest`, `AreaAwareBlocksTest` | ✅ `viewer-searches-views-results`, `user-registers-submits-poll`, `creator-creates-questionnaire` | — | Guest + member search by title |
-| Complete Poll | Registered | ✅ `*ResponsesTest` | ➖ `user-registers-submits-poll` | **P1** | Questionnaire only; election + ballot-measure responses via UI unverified |
+| Complete Poll | Registered | ✅ `*ResponsesTest` | ✅ `user-registers-submits-poll`, `user-answers-election-and-measure` | — | All three poll types answered via the UI; votes confirmed in results |
 | Create Creator Request | Registered | ✅ `CreatorRequestServiceTest` | ✅ `user-submits-creator-request` | — | Whole-state scope |
 | Submit Creator Request | Registered | ✅ `CreatorRequestServiceTest` | ✅ `user-submits-creator-request` | — | |
 | Stripe Checkout | Viewer/Reg | ➖ session-create | ➖ `register-users`, `user-registers-submits-poll` | **P1** | E2E runs the pay-first flow against the local **MockPaymentProvider**; the real Stripe redirect is unverified |
@@ -34,8 +34,8 @@ suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 | Create Poll | Creator | ✅ `*ServiceTest`, `CreatorGrantGuardTest` | ✅ `creator-creates-questionnaire`, `creator-creates-election`, `creator-creates-ballot-measure` | — | All three poll types via the wizard |
 | Select Poll Type and Domain | Creator | ✅ `PollDraftValidationTest` | ✅ `creator-creates-questionnaire`, `creator-creates-election` | — | Type picker + whole-state purview |
 | Questionnaire | Creator | ✅ `Questionnaire*Test` | ✅ create: `creator-creates-questionnaire`; respond: `user-registers-submits-poll` | — | |
-| Election | Creator | ✅ `Election*Test` | ➖ create: `creator-creates-election` | **P1** | Responding via the UI remains |
-| Referendum / Ballot Measure | Creator | ✅ `BallotMeasure*Test` | ➖ create: `creator-creates-ballot-measure`; results: `viewer-searches-views-results` | **P1** | Responding via the UI remains |
+| Election | Creator | ✅ `Election*Test` | ✅ create: `creator-creates-election`; respond: `user-answers-election-and-measure` | — | selectOneRadio widget (the local Election template) |
+| Referendum / Ballot Measure | Creator | ✅ `BallotMeasure*Test` | ✅ create: `creator-creates-ballot-measure`; respond: `user-answers-election-and-measure`; results: `viewer-searches-views-results` | — | |
 | Generate Respondent Link | Creator | — **not built** | — | — | UML-only; see "Unbuilt use case" below |
 | Submit Admin Request | Creator | ✅ `AdminRequestServiceTest` | ❌ | P3 | |
 | Approve Creator | Admin | ✅ `AdminCreatorRequestsTest` | ✅ `admin-approves-creator` | — | Request → routed admin approves → creator email → wizard opens |
@@ -56,13 +56,12 @@ not a journey spec.
 
 **Done since the first version of this doc:** search → complete (questionnaire),
 view results with k-anonymity, creator request, the super kill switch, creator
-creates each poll type (questionnaire, election, ballot measure), admin approves
-a creator, admin manages creators, and admin manages polls.
+creates and answers each poll type (questionnaire, election, ballot measure),
+admin approves a creator, admin manages creators, and admin manages polls.
 
 **P1 — next:**
 
-1. **Member answers an election and a ballot measure** via the UI.
-2. **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode
+1. **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode
    (today's e2e uses the mock provider).
 
 **P2:**

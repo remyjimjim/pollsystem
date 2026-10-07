@@ -107,6 +107,7 @@ Shared setup helpers so specs stay short. Seeding is done **via the API**
 | `latestCreatorRequest(email)` | The member's newest creator request (`status`, `assignedAdminId`). |
 | `createQuestionnaireAs(email, title, scope, {publish?})` | Save (and publish) a questionnaire as that creator through the real API, so access checks apply; returns the status/message instead of throwing (assert refusals). |
 | `createElectionAs(email, title, scope, {publish?, candidates?})` | Save (and publish) an election as that creator through the real API (County/State/Nationwide; one default candidate). |
+| `createBallotMeasureAs(email, electionId, title, {publish?})` | Save (and publish) a ballot measure on one of that creator's elections through the real API. |
 | `searchTitlesFrom(zipcode, title)` | Titles a guest's public search returns from that zip (area-aware disables). |
 | `zipsInState(stateId, n)` | The first `n` real zips in a state (e.g. a zip-level poll covering two zips). |
 | `setPollsDisabled(superEmail, disabled)` | Flip the global kill switch via the API (cleanup safety net). |
@@ -152,6 +153,7 @@ first spec that needs them.
 | `creator-creates-ballot-measure` | creator | With a published state-wide election (via the API), build a measure in the wizard, attach it to that election, publish → dashboard PUBLISHED → a guest finds it under the election's state → the API shows the right parent election and effective date. |
 | `creator-creates-election` | creator | Build a whole-state election in the wizard (date + two candidates) → publish → dashboard shows PUBLISHED → a guest finds it → the API shows both candidates saved. |
 | `creator-creates-questionnaire` | creator | Build a whole-state questionnaire in the wizard → publish → dashboard shows PUBLISHED → a guest finds it in search. |
+| `user-answers-election-and-measure` | user | Find a state-wide election by title → vote for one Mayor candidate → find its ballot measure → vote Yes → the public results count both votes → revisiting shows "You voted on". |
 | `super-disables-submissions` | super | Kill switch: submissions blocked for a member, then re-enabled. |
 | `seed-users-debug` | — | Debug variant of the seeder (keeps windows open). |
 
