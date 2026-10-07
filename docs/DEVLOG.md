@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-07 — fix(super): "Saved." vanished after saving a template
+
+**Requested:**
+
+> here's the host output: [super-edits-poll-type-template failed waiting for
+> "Saved." after the restore save]
+
+**Changed:**
+
+- Root cause: `PollTemplatesView.save()` set "Saved." and then awaited `load()`,
+  which resets all messages, so the confirmation disappeared within one round
+  trip. The spec's first save happened to catch it; the restore save didn't. The
+  templates themselves saved correctly both times: the failure snapshot showed
+  the restored template, and the DB was back to `selectOneRadio`.
+- Fix: set the message after `load()`.
+- New `PollTemplatesView.spec.ts` (2 tests): "Saved." survives the reload (fails
+  on the old view); invalid JSON is rejected without a PUT.
+- Type-check clean; frontend 56/56. The e2e spec needed no change.
+
+**Commit:** `ae8b488`
+
+---
+
 ## 2026-10-07 — test(e2e): super-edits-poll-type-template
 
 **Requested:**
