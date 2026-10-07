@@ -61,6 +61,47 @@ logged.
 
 ---
 
+## 2026-10-08 — feat(help): help library at /help, sourced from docs/manual
+
+**Requested:**
+
+> start on the help/documentation library
+
+Answers to the design questions: in-app `/help` pages **and** Markdown in
+`docs/manual/`, organised by access level and broken down into processes; hover
+help in "one or more properties files hopefully with a key [that] indicates where
+it's used"; visibility by role; English first, with a todo entry for the
+translations; Markdown rendered in the app.
+
+**Decision:**
+
+- One copy of the text: `docs/manual/{viewer,user,creator,admin,super}/<process>.md`.
+  The app renders those same files, so the repo and the app can't drift apart.
+- Who sees what: anonymous visitors see `viewer`; each access level adds its own
+  folder and the ones below it.
+- Hover/click help lives in the i18n files under `help.<view>.<element>`.
+- English first. `todo.md` has the translation entry.
+
+**Changed:**
+
+- `docs/manual/`: a README covering layout, front matter, links and the planned
+  pages, plus the first page, `viewer/finding-polls.md`, checked against the
+  search code.
+- `src/help/manual.ts` uses a new `@manual` alias, `marked` and `DOMPurify`. It
+  rewrites links between pages so they work both on GitHub and in the app.
+- `HelpView` (`/help`, `/help/:section/:slug`) and a **Help** nav link. Its
+  labels exist in all 9 languages, and other languages get an "English for now"
+  note.
+- Manage Creators' four column help texts moved to `help.adminManageCreators.*`.
+- Vite `fs.allow`, a docker-compose mount and the Vite client types. New dev
+  dependency: jsdom, because DOMPurify mangles HTML under happy-dom.
+- 13 new tests; frontend 69/69; type-check and production build pass; the dev
+  server serves the manual.
+
+**Commit:** `942b84d`
+
+---
+
 ## 2026-10-07 — fix(super): "Saved." vanished after saving a template
 
 **Requested:**
