@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-07 — test(e2e): admin-manages-creators
+
+**Requested:**
+
+> yes, start on admin-manages-creators
+
+**Changed:**
+
+- New `frontend/e2e/admin-manages-creators.spec.ts`. Setup: an admin whose
+  purview is one state, and a nationwide creator with a nationwide poll. Via the
+  Manage Creators UI:
+  1. disable the creator → the poll is hidden only in the admin's state;
+  2. creation is refused there (403) but not elsewhere;
+  3. re-enable the poll via the Polls link → the creator stays unchecked and is
+     still refused;
+  4. re-check the creator → they can create there again.
+- `seed.ts`: `createQuestionnaireAs()` (real API, returns status/message to
+  assert refusals) and `searchTitlesFrom()`.
+- Docs: `TESTING-E2E.md` tables; `E2E-TRACEABILITY.md` marks Manage Creators
+  covered.
+- Verified in the Dev Container: listed, `tsc --strict` clean, and an API-only
+  dry run of every step. The browser run is host/CI.
+
+**Commit:** `32f6c5b`
+
+---
+
 ## 2026-10-07 — test(e2e): admin-approves-creator
 
 **Requested:**
