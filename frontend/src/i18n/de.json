@@ -9,7 +9,8 @@
     "login": "Anmelden",
     "register": "Registrieren",
     "logout": "Abmelden",
-    "language": "Sprache"
+    "language": "Sprache",
+    "help": "Hilfe"
   },
   "common": {
     "loading": "Lädt…",
@@ -567,6 +568,21 @@
       "invalidJson": "Ungültiges JSON",
       "saveFailed": "Speichern fehlgeschlagen",
       "loadFailed": "Umfragetypen konnten nicht geladen werden"
+    }
+  },
+  "manual": {
+    "heading": "Hilfe",
+    "intro": "Anleitungen für das Abstimmungssystem. Sie sehen die Anleitungen für Ihre Zugriffsstufe.",
+    "back": "Alle Hilfethemen",
+    "englishOnly": "Diese Hilfeseite ist vorerst nur auf Englisch verfügbar. Eine Übersetzung folgt.",
+    "signInToSee": "Diese Hilfeseite ist für angemeldete Mitglieder mit dem passenden Zugriff.",
+    "notFound": "Hier gibt es keine Hilfeseite, oder sie ist für Ihre Zugriffsstufe nicht verfügbar.",
+    "sections": {
+      "viewer": "Umfragen finden und ansehen",
+      "user": "Mitglieder",
+      "creator": "Ersteller",
+      "admin": "Admins",
+      "super": "Super-Admins"
     }
   }
 }

@@ -9,7 +9,8 @@
     "login": "Entrar",
     "register": "Cadastrar-se",
     "logout": "Sair",
-    "language": "Idioma"
+    "language": "Idioma",
+    "help": "Ajuda"
   },
   "common": {
     "loading": "Carregando…",
@@ -567,6 +568,21 @@
       "invalidJson": "JSON inválido",
       "saveFailed": "Falha ao salvar",
       "loadFailed": "Falha ao carregar tipos de enquete"
+    }
+  },
+  "manual": {
+    "heading": "Ajuda",
+    "intro": "Guias práticos do Sistema de Votação. Você vê os guias do seu nível de acesso.",
+    "back": "Todos os tópicos de ajuda",
+    "englishOnly": "Esta página de ajuda está em inglês por enquanto. Uma tradução está a caminho.",
+    "signInToSee": "Esta página de ajuda é para membros conectados com o acesso adequado.",
+    "notFound": "Não há página de ajuda aqui, ou ela não está disponível para o seu nível de acesso.",
+    "sections": {
+      "viewer": "Encontrar e ver enquetes",
+      "user": "Membros",
+      "creator": "Criadores",
+      "admin": "Administradores",
+      "super": "Super administradores"
     }
   }
 }

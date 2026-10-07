@@ -9,7 +9,8 @@
     "login": "Accedi",
     "register": "Registrati",
     "logout": "Esci",
-    "language": "Lingua"
+    "language": "Lingua",
+    "help": "Aiuto"
   },
   "common": {
     "loading": "Caricamento…",
@@ -567,6 +568,21 @@
       "invalidJson": "JSON non valido",
       "saveFailed": "Salvataggio non riuscito",
       "loadFailed": "Impossibile caricare i tipi di sondaggio"
+    }
+  },
+  "manual": {
+    "heading": "Aiuto",
+    "intro": "Guide pratiche per il Sistema di Voto. Vedi le guide del tuo livello di accesso.",
+    "back": "Tutti gli argomenti di aiuto",
+    "englishOnly": "Questa pagina di aiuto è per ora solo in inglese. È in arrivo una traduzione.",
+    "signInToSee": "Questa pagina di aiuto è per i membri che hanno effettuato l'accesso e dispongono dei permessi adeguati.",
+    "notFound": "Non c'è nessuna pagina di aiuto qui, oppure non è disponibile per il tuo livello di accesso.",
+    "sections": {
+      "viewer": "Trovare e consultare sondaggi",
+      "user": "Membri",
+      "creator": "Creatori",
+      "admin": "Amministratori",
+      "super": "Super amministratori"
     }
   }
 }

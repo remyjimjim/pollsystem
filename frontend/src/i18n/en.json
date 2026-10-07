@@ -9,7 +9,8 @@
     "login": "Login",
     "register": "Register",
     "logout": "Logout",
-    "language": "Language"
+    "language": "Language",
+    "help": "Help"
   },
   "common": {
     "loading": "Loading…",
@@ -517,10 +518,6 @@
       "colLastEdit": "Last edit",
       "colEnabled": "Enabled",
       "colEdit": "Edit",
-      "infoPurview": "Where this creator may create polls: their enabled and disabled access (disabled is struck through). Hover, tap or focus a row's pin for the full list. Only access overlapping your purview is shown.",
-      "infoPolls": "How many of this creator's polls are enabled inside your purview; ones you've disabled don't count. The link opens Manage Polls with all of their polls in your purview, disabled ones included, so you can re-enable single polls.",
-      "infoLastEdit": "When the creator last created, edited, published, archived or restored one of their polls. Admin moderation doesn't count.",
-      "infoEnabled": "Unchecking disables this creator within your purview: they can't create or publish polls there, and their polls there are disabled where the poll, the creator's access and your purview overlap. Re-enabling single polls under Polls keeps the creator disabled; checking re-enables the creator and their polls here. Greyed out when they have no access in your purview.",
       "purviewOf": "Purview of {email}",
       "nCounties": "{n} county | {n} counties",
       "nZips": "{n} zip | {n} zips",
@@ -852,5 +849,28 @@
     "unavailable": "Billing isn’t available right now. Please try again later.",
     "success": "Thanks! Your subscription is being activated — it may take a moment to appear.",
     "canceled": "Checkout canceled — you weren’t charged."
+  },
+  "manual": {
+    "heading": "Help",
+    "intro": "How-to guides for Poll System. You see the guides for your access level.",
+    "back": "All help topics",
+    "englishOnly": "This help page is in English for now. A translation is coming.",
+    "signInToSee": "This help page is for signed-in members with the right access.",
+    "notFound": "There is no help page here, or it isn't available at your access level.",
+    "sections": {
+      "viewer": "Finding and viewing polls",
+      "user": "Members",
+      "creator": "Creators",
+      "admin": "Admins",
+      "super": "Super Admins"
+    }
+  },
+  "help": {
+    "adminManageCreators": {
+      "purview": "Where this creator may create polls: their enabled and disabled access (disabled is struck through). Hover, tap or focus a row's pin for the full list. Only access overlapping your purview is shown.",
+      "polls": "How many of this creator's polls are enabled inside your purview; ones you've disabled don't count. The link opens Manage Polls with all of their polls in your purview, disabled ones included, so you can re-enable single polls.",
+      "lastEdit": "When the creator last created, edited, published, archived or restored one of their polls. Admin moderation doesn't count.",
+      "enabled": "Unchecking disables this creator within your purview: they can't create or publish polls there, and their polls there are disabled where the poll, the creator's access and your purview overlap. Re-enabling single polls under Polls keeps the creator disabled; checking re-enables the creator and their polls here. Greyed out when they have no access in your purview."
+    }
   }
 }

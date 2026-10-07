@@ -226,19 +226,19 @@ onMounted(() => {
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.manageCreators.colEmail') }}</th>
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
               {{ $t('admin.manageCreators.colPurview') }}
-              <InfoPopover :label="$t('admin.manageCreators.colPurview')">{{ $t('admin.manageCreators.infoPurview') }}</InfoPopover>
+              <InfoPopover :label="$t('admin.manageCreators.colPurview')">{{ $t('help.adminManageCreators.purview') }}</InfoPopover>
             </th>
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
               {{ $t('admin.manageCreators.colPolls') }}
-              <InfoPopover :label="$t('admin.manageCreators.colPolls')">{{ $t('admin.manageCreators.infoPolls') }}</InfoPopover>
+              <InfoPopover :label="$t('admin.manageCreators.colPolls')">{{ $t('help.adminManageCreators.polls') }}</InfoPopover>
             </th>
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
               {{ $t('admin.manageCreators.colLastEdit') }}
-              <InfoPopover :label="$t('admin.manageCreators.colLastEdit')">{{ $t('admin.manageCreators.infoLastEdit') }}</InfoPopover>
+              <InfoPopover :label="$t('admin.manageCreators.colLastEdit')">{{ $t('help.adminManageCreators.lastEdit') }}</InfoPopover>
             </th>
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
               {{ $t('admin.manageCreators.colEnabled') }}
-              <InfoPopover :label="$t('admin.manageCreators.colEnabled')" align="right">{{ $t('admin.manageCreators.infoEnabled') }}</InfoPopover>
+              <InfoPopover :label="$t('admin.manageCreators.colEnabled')" align="right">{{ $t('help.adminManageCreators.enabled') }}</InfoPopover>
             </th>
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.manageCreators.colEdit') }}</th>
           </tr>

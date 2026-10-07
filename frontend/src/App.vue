@@ -69,6 +69,14 @@ function onLocaleChange(e: Event) {
             {{ $t('nav.superAdmin') }}
           </RouterLink>
 
+          <RouterLink
+            to="/help"
+            class="text-white/85 hover:text-white"
+            active-class="!text-white"
+          >
+            {{ $t('nav.help') }}
+          </RouterLink>
+
           <template v-if="authStore.isAuthenticated">
             <span class="text-xs text-white/70">{{ authStore.user?.email }}</span>
             <button

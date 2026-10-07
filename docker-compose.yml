@@ -94,6 +94,8 @@ services:
     volumes:
       - ./frontend:/app
       - frontend-node-modules:/app/node_modules
+      # The help library (vite.config.ts resolves ../docs/manual from /app).
+      - ./docs/manual:/docs/manual:ro
     ports:
       - "3000:3000"
 

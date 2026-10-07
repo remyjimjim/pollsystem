@@ -9,7 +9,8 @@
     "login": "Connexion",
     "register": "S'inscrire",
     "logout": "Déconnexion",
-    "language": "Langue"
+    "language": "Langue",
+    "help": "Aide"
   },
   "common": {
     "loading": "Chargement…",
@@ -466,10 +467,6 @@
       "colLastEdit": "Dernière modification",
       "colEnabled": "Activé",
       "colEdit": "Modifier",
-      "infoPurview": "Où ce créateur peut créer des sondages : ses accès actifs et désactivés (barrés). Survolez, touchez ou sélectionnez l'épingle de la ligne pour la liste complète. Seuls les accès qui recoupent votre périmètre sont affichés.",
-      "infoPolls": "Nombre de sondages de ce créateur activés dans votre périmètre ; ceux que vous avez désactivés ne comptent pas. Le lien ouvre Gérer les sondages avec tous ses sondages de votre périmètre, désactivés inclus, pour réactiver des sondages un par un.",
-      "infoLastEdit": "Dernière fois que le créateur a créé, modifié, publié, archivé ou restauré l'un de ses sondages. La modération des administrateurs ne compte pas.",
-      "infoEnabled": "Décocher désactive ce créateur dans votre périmètre : il ne peut plus y créer ni publier de sondages, et ses sondages y sont désactivés là où le sondage, son accès et votre périmètre se recoupent. Réactiver des sondages un par un sous Sondages laisse le créateur désactivé ; cocher réactive le créateur et ses sondages ici. Grisé lorsqu'il n'a aucun accès dans votre périmètre.",
       "purviewOf": "Périmètre de {email}",
       "nCounties": "{n} comté | {n} comtés",
       "nZips": "{n} code postal | {n} codes postaux",
@@ -609,6 +606,29 @@
       "invalidJson": "JSON invalide",
       "saveFailed": "Échec de l'enregistrement",
       "loadFailed": "Échec du chargement des types de sondage"
+    }
+  },
+  "manual": {
+    "heading": "Aide",
+    "intro": "Guides pratiques pour le Système de Vote. Vous voyez les guides de votre niveau d'accès.",
+    "back": "Tous les sujets d'aide",
+    "englishOnly": "Cette page d'aide est pour l'instant en anglais. Une traduction est prévue.",
+    "signInToSee": "Cette page d'aide est réservée aux membres connectés disposant de l'accès requis.",
+    "notFound": "Il n'y a pas de page d'aide ici, ou elle n'est pas disponible pour votre niveau d'accès.",
+    "sections": {
+      "viewer": "Trouver et consulter des sondages",
+      "user": "Membres",
+      "creator": "Créateurs",
+      "admin": "Administrateurs",
+      "super": "Super administrateurs"
+    }
+  },
+  "help": {
+    "adminManageCreators": {
+      "purview": "Où ce créateur peut créer des sondages : ses accès actifs et désactivés (barrés). Survolez, touchez ou sélectionnez l'épingle de la ligne pour la liste complète. Seuls les accès qui recoupent votre périmètre sont affichés.",
+      "polls": "Nombre de sondages de ce créateur activés dans votre périmètre ; ceux que vous avez désactivés ne comptent pas. Le lien ouvre Gérer les sondages avec tous ses sondages de votre périmètre, désactivés inclus, pour réactiver des sondages un par un.",
+      "lastEdit": "Dernière fois que le créateur a créé, modifié, publié, archivé ou restauré l'un de ses sondages. La modération des administrateurs ne compte pas.",
+      "enabled": "Décocher désactive ce créateur dans votre périmètre : il ne peut plus y créer ni publier de sondages, et ses sondages y sont désactivés là où le sondage, son accès et votre périmètre se recoupent. Réactiver des sondages un par un sous Sondages laisse le créateur désactivé ; cocher réactive le créateur et ses sondages ici. Grisé lorsqu'il n'a aucun accès dans votre périmètre."
     }
   }
 }

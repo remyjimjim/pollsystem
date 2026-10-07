@@ -9,7 +9,8 @@
     "login": "登录",
     "register": "注册",
     "logout": "退出登录",
-    "language": "语言"
+    "language": "语言",
+    "help": "帮助"
   },
   "common": {
     "loading": "加载中…",
@@ -567,6 +568,21 @@
       "invalidJson": "无效的 JSON",
       "saveFailed": "保存失败",
       "loadFailed": "加载投票类型失败"
+    }
+  },
+  "manual": {
+    "heading": "帮助",
+    "intro": "投票系统使用指南。你会看到与你的访问级别相符的指南。",
+    "back": "全部帮助主题",
+    "englishOnly": "此帮助页面目前仅有英文版，翻译即将推出。",
+    "signInToSee": "此帮助页面面向已登录且拥有相应权限的成员。",
+    "notFound": "这里没有帮助页面，或者它不适用于你的访问级别。",
+    "sections": {
+      "viewer": "查找和查看投票",
+      "user": "成员",
+      "creator": "创建者",
+      "admin": "管理员",
+      "super": "超级管理员"
     }
   }
 }

@@ -9,7 +9,8 @@
     "login": "Logg inn",
     "register": "Registrer deg",
     "logout": "Logg ut",
-    "language": "Språk"
+    "language": "Språk",
+    "help": "Hjelp"
   },
   "common": {
     "loading": "Laster…",
@@ -466,10 +467,6 @@
       "colLastEdit": "Sist endret",
       "colEnabled": "Aktivert",
       "colEdit": "Rediger",
-      "infoPurview": "Hvor denne oppretteren kan lage avstemninger: aktiverte og deaktiverte tilganger (gjennomstreket). Hold over, trykk på eller fokuser radens nål for hele listen. Bare tilganger som overlapper ditt område vises.",
-      "infoPolls": "Hvor mange av oppretterens avstemninger som er aktivert innenfor ditt område; de du har deaktivert teller ikke. Lenken åpner Administrer avstemninger med alle avstemningene deres i ditt område, deaktiverte inkludert, så du kan aktivere enkeltavstemninger igjen.",
-      "infoLastEdit": "Når oppretteren sist opprettet, endret, publiserte, arkiverte eller gjenopprettet en av sine avstemninger. Administratormoderering teller ikke.",
-      "infoEnabled": "Fjerner du haken, deaktiveres oppretteren innenfor ditt område: de kan ikke opprette eller publisere avstemninger der, og avstemningene deres der deaktiveres der avstemningen, oppretterens tilgang og ditt område overlapper. Aktiverer du enkeltavstemninger under Avstemninger, forblir oppretteren deaktivert; huker du av, aktiveres oppretteren og avstemningene her igjen. Grået ut når de ikke har tilgang i ditt område.",
       "purviewOf": "Område for {email}",
       "nCounties": "{n} fylke | {n} fylker",
       "nZips": "{n} postnummer | {n} postnumre",
@@ -609,6 +606,29 @@
       "invalidJson": "Ugyldig JSON",
       "saveFailed": "Lagring mislyktes",
       "loadFailed": "Kunne ikke laste avstemningstyper"
+    }
+  },
+  "manual": {
+    "heading": "Hjelp",
+    "intro": "Veiledninger for Avstemmingssystem. Du ser veiledningene for ditt tilgangsnivå.",
+    "back": "Alle hjelpeemner",
+    "englishOnly": "Denne hjelpesiden er foreløpig bare på engelsk. En oversettelse kommer.",
+    "signInToSee": "Denne hjelpesiden er for innloggede medlemmer med riktig tilgang.",
+    "notFound": "Det finnes ingen hjelpeside her, eller den er ikke tilgjengelig for ditt tilgangsnivå.",
+    "sections": {
+      "viewer": "Finne og se avstemninger",
+      "user": "Medlemmer",
+      "creator": "Opprettere",
+      "admin": "Administratorer",
+      "super": "Superadministratorer"
+    }
+  },
+  "help": {
+    "adminManageCreators": {
+      "purview": "Hvor denne oppretteren kan lage avstemninger: aktiverte og deaktiverte tilganger (gjennomstreket). Hold over, trykk på eller fokuser radens nål for hele listen. Bare tilganger som overlapper ditt område vises.",
+      "polls": "Hvor mange av oppretterens avstemninger som er aktivert innenfor ditt område; de du har deaktivert teller ikke. Lenken åpner Administrer avstemninger med alle avstemningene deres i ditt område, deaktiverte inkludert, så du kan aktivere enkeltavstemninger igjen.",
+      "lastEdit": "Når oppretteren sist opprettet, endret, publiserte, arkiverte eller gjenopprettet en av sine avstemninger. Administratormoderering teller ikke.",
+      "enabled": "Fjerner du haken, deaktiveres oppretteren innenfor ditt område: de kan ikke opprette eller publisere avstemninger der, og avstemningene deres der deaktiveres der avstemningen, oppretterens tilgang og ditt område overlapper. Aktiverer du enkeltavstemninger under Avstemninger, forblir oppretteren deaktivert; huker du av, aktiveres oppretteren og avstemningene her igjen. Grået ut når de ikke har tilgang i ditt område."
     }
   }
 }

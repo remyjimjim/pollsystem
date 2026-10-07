@@ -121,4 +121,13 @@
    - How to be a creator along with creator tasks and reports
    - How to be an admin along with admin tasks and reports
    - How to be a super along with tasks and reports
+   - Decided 2026-10-08: one copy of the text in docs/manual/{viewer,user,creator,admin,super}/<process>.md,
+     rendered in the app at /help; topics shown by access level; hover/click help text in the i18n files
+     under a `help.<view>.<element>` section.
+   - Done: No.
+
+-  Translate the help library (docs/manual) into the app's other 8 languages (nb, fr, ja, de, es, it, pt-BR, zh-CN).
+   - Written in English first; until translated, other languages show the English page with a note.
+   - Wait until the English content settles, then translate per page.
+   - The hover/click help (i18n `help.*` keys) is translated with the rest of the app strings.
    - Done: No.

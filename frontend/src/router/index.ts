@@ -49,6 +49,19 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/PollSearchView.vue')
   },
 
+  // Help library (docs/manual). Public; pages for higher access levels are
+  // filtered in the view, so a signed-out visitor is asked to sign in.
+  {
+    path: '/help',
+    name: 'Help',
+    component: () => import('@/views/HelpView.vue')
+  },
+  {
+    path: '/help/:section/:slug',
+    name: 'HelpPage',
+    component: () => import('@/views/HelpView.vue')
+  },
+
   // User routes (requires USER+)
   {
     path: '/polls/:type/:id',

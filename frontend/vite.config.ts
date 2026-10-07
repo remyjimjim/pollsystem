@@ -1,14 +1,21 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
+import { defineConfig, searchForWorkspaceRoot } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
+
+// ../docs/manual locally and in CI/Pages builds (they check out the whole repo);
+// /docs/manual in the docker-compose frontend container (mounted there).
+const manualDir = fileURLToPath(new URL('../docs/manual', import.meta.url))
 
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // The help library lives outside the frontend, in docs/manual, so it
+      // reads the same on GitHub and renders at /help (src/help/manual.ts).
+      '@manual': manualDir
     }
   },
   server: {
@@ -16,6 +23,8 @@ export default defineConfig({
     // container. Harmless on the host (still reachable at localhost:3000).
     host: true,
     port: 3000,
+    // Let the dev server serve the help pages from outside the frontend root.
+    fs: { allow: [searchForWorkspaceRoot(process.cwd()), manualDir] },
     proxy: {
       '/api': {
         // Host dev proxies to localhost:8080; inside docker-compose the frontend
