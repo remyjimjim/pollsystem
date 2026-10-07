@@ -177,6 +177,54 @@ export async function latestCreatorRequest(
   return list.reduce((a, b) => (b.id > a.id ? b : a))
 }
 
+export interface QuestionnaireScope {
+  scopeLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
+  regionIds?: number[]
+  zipcodes?: string[]
+}
+
+/**
+ * Save (and by default publish) a questionnaire AS [creatorEmail] through the
+ * real API — the same calls the wizard makes, so creator access checks apply.
+ * Returns the HTTP status of the failing step instead of throwing, so specs can
+ * assert refusals (e.g. 403 when an admin has disabled the creator there).
+ */
+export async function createQuestionnaireAs(
+  creatorEmail: string,
+  title: string,
+  scope: QuestionnaireScope,
+  opts: { publish?: boolean } = {},
+): Promise<{ ok: boolean; status: number; id?: number; message?: string }> {
+  const auth = { Authorization: `Bearer ${await devToken(creatorEmail)}`, 'Content-Type': 'application/json' }
+  const draft = await fetch(`${API}/api/polls/questionnaires`, {
+    method: 'POST',
+    headers: auth,
+    body: JSON.stringify({
+      pollTypeId: 2, title, summary: `Seeded by e2e: ${title}`, closeDate: null,
+      scopeLevel: scope.scopeLevel, regionIds: scope.regionIds ?? [], zipcodes: scope.zipcodes ?? [],
+      questions: [{ text: 'Is this a seeded e2e question?' }],
+    }),
+  })
+  if (!draft.ok) {
+    return { ok: false, status: draft.status, message: ((await draft.json().catch(() => ({}))) as { message?: string }).message }
+  }
+  const id = ((await draft.json()) as { id: number }).id
+  if (opts.publish === false) return { ok: true, status: draft.status, id }
+  const pub = await fetch(`${API}/api/polls/questionnaires/${id}/publish?confirmed=true`, { method: 'POST', headers: auth })
+  if (!pub.ok) {
+    return { ok: false, status: pub.status, id, message: ((await pub.json().catch(() => ({}))) as { message?: string }).message }
+  }
+  return { ok: true, status: pub.status, id }
+}
+
+/** Titles public search returns for [title] when searching from [zipcode] (as a guest). */
+export async function searchTitlesFrom(zipcode: string, title: string): Promise<string[]> {
+  const q = new URLSearchParams({ title, zipcode })
+  const res = await fetch(`${API}/api/polls/search?${q}`)
+  if (!res.ok) throw new Error(`search failed: ${res.status}`)
+  return ((await res.json()) as Array<{ title: string }>).map((r) => r.title)
+}
+
 /**
  * Flip the super-admin kill switch through the API (as [superEmail]). Used as a
  * safety net so a failed kill-switch spec can't leave submissions disabled for

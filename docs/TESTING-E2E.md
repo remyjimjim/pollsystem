@@ -105,6 +105,8 @@ Shared setup helpers so specs stay short. Seeding is done **via the API**
 | `seedUser({access?, zipcode?, prefix?, adminStateId?})` | Create a paid member at any access level via the API; returns `{id, email, token}`. A `CREATOR` gets nationwide creator access; `adminStateId` gives an `ADMIN` state-wide admin access. |
 | `devToken(email)` / `devUser(id)` | A JWT for an existing local user / a user's email + access by id (dev-only endpoints). |
 | `latestCreatorRequest(email)` | The member's newest creator request (`status`, `assignedAdminId`). |
+| `createQuestionnaireAs(email, title, scope, {publish?})` | Save (and publish) a questionnaire as that creator through the real API, so access checks apply; returns the status/message instead of throwing (assert refusals). |
+| `searchTitlesFrom(zipcode, title)` | Titles a guest's public search returns from that zip (area-aware disables). |
 | `setPollsDisabled(superEmail, disabled)` | Flip the global kill switch via the API (cleanup safety net). |
 | `resetTestUsers(prefix?)` | Wipe `zzz` users + everything anchored to them. |
 | `seedQuestionnaire(prefix?)` | Seed one published questionnaire; returns its unique title. |
@@ -143,6 +145,7 @@ first spec that needs them.
 | `viewer-searches-views-results` | viewer (guest) | Search → open results → show the k-anonymity floor (tally shown, then withheld under purview). |
 | `user-submits-creator-request` | user | Request creator access for a whole state. |
 | `admin-approves-creator` | admin | Member is turned away from the poll wizard → requests creator access → the admin it was routed to approves it in the queue → member gets the email and can open the wizard. |
+| `admin-manages-creators` | admin | Disable a creator → their poll hidden only in the admin's state, creation refused there but not elsewhere → re-enable the poll via the Polls link (creator stays unchecked) → re-check the creator. |
 | `creator-creates-questionnaire` | creator | Build a whole-state questionnaire in the wizard → publish → dashboard shows PUBLISHED → a guest finds it in search. |
 | `super-disables-submissions` | super | Kill switch: submissions blocked for a member, then re-enabled. |
 | `seed-users-debug` | — | Debug variant of the seeder (keeps windows open). |

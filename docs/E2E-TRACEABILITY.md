@@ -15,7 +15,7 @@ Legend: ✅ covered · ➖ partial / indirect · ❌ none · **P1** build first 
 
 ## Matrix
 
-_Refreshed 2026-10-07 against `frontend/e2e/` (7 journey specs) and the backend
+_Refreshed 2026-10-07 against `frontend/e2e/` (8 journey specs) and the backend
 suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 
 | Use case | Actor | Backend test | E2E | Prio | Notes |
@@ -39,7 +39,7 @@ suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 | Generate Respondent Link | Creator | — **not built** | — | — | UML-only; see "Unbuilt use case" below |
 | Submit Admin Request | Creator | ✅ `AdminRequestServiceTest` | ❌ | P3 | |
 | Approve Creator | Admin | ✅ `AdminCreatorRequestsTest` | ✅ `admin-approves-creator` | — | Request → routed admin approves → creator email → wizard opens |
-| Manage Creators | Admin | ✅ `AdminCreatorsControllerTest` | ❌ | **P2** | Raised from P3 (Oct 2026): the stored creator disable now gates poll creation and blocks polls at poll ∩ creator ∩ admin purview |
+| Manage Creators | Admin | ✅ `AdminCreatorsControllerTest` | ✅ `admin-manages-creators` | — | Stored disable: area-scoped (poll ∩ creator ∩ admin), enforced on creation, survives single-poll re-enables |
 | Manage Polls | Admin | ✅ `AdminPollsControllerTest`, `AreaAwareBlocksTest` | ❌ | **P2** | Rows stay visible after disabling; zip/county/state disables are area-aware |
 | Disable All Poll Submissions (kill switch) | Super | ✅ `PollsKillSwitchTest` | ✅ `super-disables-submissions` | — | Not in the UML yet |
 | Manage IP allow/deny lists | Super | ✅ `SuperIpRuleControllerTest` | ❌ | P3 | |
@@ -56,7 +56,7 @@ not a journey spec.
 
 **Done since the first version of this doc:** search → complete (questionnaire),
 view results with k-anonymity, creator request, the super kill switch, creator
-creates a questionnaire, and admin approves a creator.
+creates a questionnaire, admin approves a creator, and admin manages creators.
 
 **P1 — next:**
 
@@ -68,12 +68,9 @@ creates a questionnaire, and admin approves a creator.
 
 **P2:**
 
-4. **Admin manages creators** (`admin-manages-creators`): disable a creator →
-   their poll is disabled only in the admin's area → re-enable one poll from the
-   Polls link (creator stays unchecked) → the creator is refused a new poll there.
-5. **Admin manages polls** (`admin-manages-polls`): the disabled row stays in
+4. **Admin manages polls** (`admin-manages-polls`): the disabled row stays in
    place; a zip-level disable.
-6. Super creates/edits a poll type with its JSON template.
+5. Super creates/edits a poll type with its JSON template.
 
 **P3 — low marginal value** (strongly backend-covered): the remaining
 request/approval and super-management flows, and the subscription webhooks.
