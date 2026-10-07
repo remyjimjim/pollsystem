@@ -61,6 +61,22 @@ logged.
 
 ---
 
+## 2026-10-07 — Update todo.md: remaining P1 e2e item
+
+**Requested:**
+
+> commit todo.md and push it
+
+**Changed:**
+
+- Under the e2e item, noted what's still needed: the P1 real Stripe test-mode
+  checkout (needs Stripe test keys and webhook forwarding, so a separate opt-in
+  run rather than part of every CI push; worth doing before launch).
+
+**Commit:** `0a242b9`
+
+---
+
 ## 2026-10-07 — fix(a11y): label the election candidate choices
 
 **Requested:**
