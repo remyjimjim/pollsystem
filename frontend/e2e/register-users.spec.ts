@@ -104,7 +104,9 @@ test.describe(`register ${STATE} users via magic link`, () => {
         // ?checkout=success, which renders the green "Payment received…"
         // banner. A dupe email/phone trips the UNIQUE constraint and the
         // backend keeps us on /register with a red error banner — race the
-        // two and skip the user on error (no need to wipe state for re-runs).
+        // two and skip the user on a duplicate (no need to wipe state for
+        // re-runs). Any OTHER error (e.g. "Could not start checkout" when no
+        // payment provider is configured) is a real failure, not a skip.
         const errorBanner = page.locator('p.text-red-700').first()
         const outcome = await Promise.race([
           page.waitForURL(/checkout=success/, { timeout: 30_000 })
@@ -114,7 +116,10 @@ test.describe(`register ${STATE} users via magic link`, () => {
         ])
         if (outcome === 'error') {
           const msg = (await errorBanner.textContent())?.trim() ?? '(no message)'
-          console.log(`[skip ${email}] backend rejected: ${msg}`)
+          if (!/already registered/i.test(msg)) {
+            throw new Error(`Registering ${email} failed: ${msg}`)
+          }
+          console.log(`[skip ${email}] already registered: ${msg}`)
           continue   // no session was established; still logged out for the next user
         }
         await expect(page.getByText(/Payment received/)).toBeVisible({ timeout: 10_000 })

@@ -143,6 +143,12 @@ class DevController(
         nuke("ip_rules", "created_by_id IN ($idList)")
         nuke("poll_type_blocks", "created_by IN ($idList)")
         nuke("poll_notes", "author_id IN ($idList)")
+        // app_flags is a one-row settings table: keep the row, just forget a
+        // test user as its last editor (e.g. the kill-switch e2e's super).
+        // creator_disables (creator_id, admin_id) cascades on its own.
+        deletions["app_flags.updated_by (nulled)"] = em.createNativeQuery(
+            "UPDATE app_flags SET updated_by = NULL WHERE updated_by IN ($idList)"
+        ).executeUpdate()
 
         nuke("users", "id IN ($idList)")
 

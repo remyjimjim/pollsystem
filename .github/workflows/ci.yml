@@ -125,6 +125,10 @@ jobs:
         working-directory: backend
         env:
           SPRING_PROFILES_ACTIVE: local
+          # Simulated checkout (payment/MockPaymentProvider), as docker-compose
+          # sets locally. Without it the backend tries real Stripe with no keys
+          # and every registration fails with "Could not start checkout".
+          APP_PAYMENTS_PROVIDER: mock
         run: |
           nohup gradle bootRun --no-daemon > backend.log 2>&1 &
           for i in $(seq 1 60); do

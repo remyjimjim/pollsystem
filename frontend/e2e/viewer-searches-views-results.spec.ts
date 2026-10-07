@@ -49,9 +49,11 @@ test.describe(`viewer searches and views ballot-measure results (${STATE_INPUT.t
     // 3. Open results — a guest row shows only "View results" (no "Vote").
     await row.getByRole('link', { name: 'View results' }).click()
     await expect(page).toHaveURL(/\/polls\/ballot-measure\/\d+\/results/)
-    // The purview checkbox only renders once results data has loaded.
-    const purview = page.getByRole('checkbox', { name: /Only voters from poll/i })
-    await expect(purview).toBeVisible({ timeout: 15_000 })
+    // The purview filter (two checkboxes, both ticked by default: responses from
+    // within / outside the poll's purview) renders once results data has loaded.
+    const outside = page.getByRole('checkbox', { name: /outside the poll's purview/i })
+    await expect(outside).toBeVisible({ timeout: 15_000 })
+    await expect(outside).toBeChecked()
     await hold(page)
 
     // 4. Default view (all respondents): below-threshold data is NOT withheld,
@@ -60,9 +62,10 @@ test.describe(`viewer searches and views ballot-measure results (${STATE_INPUT.t
     await expect(withheld).toBeHidden()
     await hold(page)
 
-    // 5. Narrow to the poll's purview → now under the k-anonymity threshold →
-    //    the tally is withheld behind the privacy-protection banner.
-    await purview.check()
+    // 5. Narrow to the poll's purview (untick "outside") → now under the
+    //    k-anonymity threshold → the tally is withheld behind the
+    //    privacy-protection banner.
+    await outside.uncheck()
     await expect(withheld).toBeVisible({ timeout: 15_000 })
     await hold(page)
   })
