@@ -224,6 +224,40 @@ export async function createQuestionnaireAs(
   return { ok: true, status: pub.status, id }
 }
 
+/**
+ * Save (and by default publish) an election AS [creatorEmail] through the real
+ * API. Elections take a County / State / Nationwide purview and need at least
+ * one candidate to publish. Returns status/message instead of throwing.
+ */
+export async function createElectionAs(
+  creatorEmail: string,
+  title: string,
+  scope: { scopeLevel: 'NATIONAL' | 'STATE' | 'COUNTY'; regionIds?: number[] },
+  opts: { publish?: boolean; candidates?: Array<{ name: string; affiliation: string; officeName: string }> } = {},
+): Promise<{ ok: boolean; status: number; id?: number; message?: string }> {
+  const auth = { Authorization: `Bearer ${await devToken(creatorEmail)}`, 'Content-Type': 'application/json' }
+  const date = new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString().slice(0, 10)
+  const draft = await fetch(`${API}/api/polls/elections`, {
+    method: 'POST',
+    headers: auth,
+    body: JSON.stringify({
+      pollTypeId: 1, title, date, closeDate: null,
+      scopeLevel: scope.scopeLevel, regionIds: scope.regionIds ?? [],
+      candidates: opts.candidates ?? [{ name: 'Seeded Candidate', affiliation: 'Independent', officeName: 'Mayor' }],
+    }),
+  })
+  if (!draft.ok) {
+    return { ok: false, status: draft.status, message: ((await draft.json().catch(() => ({}))) as { message?: string }).message }
+  }
+  const id = ((await draft.json()) as { id: number }).id
+  if (opts.publish === false) return { ok: true, status: draft.status, id }
+  const pub = await fetch(`${API}/api/polls/elections/${id}/publish?confirmed=true`, { method: 'POST', headers: auth })
+  if (!pub.ok) {
+    return { ok: false, status: pub.status, id, message: ((await pub.json().catch(() => ({}))) as { message?: string }).message }
+  }
+  return { ok: true, status: pub.status, id }
+}
+
 /** Titles public search returns for [title] when searching from [zipcode] (as a guest). */
 export async function searchTitlesFrom(zipcode: string, title: string): Promise<string[]> {
   const q = new URLSearchParams({ title, zipcode })
