@@ -292,6 +292,35 @@ export async function searchTitlesFrom(zipcode: string, title: string): Promise<
   return ((await res.json()) as Array<{ title: string }>).map((r) => r.title)
 }
 
+/** A poll type (by name) with its JSON template, read as [superEmail]. */
+export async function getPollType(
+  superEmail: string,
+  name: string,
+): Promise<{ id: number; name: string; template: Record<string, unknown> }> {
+  const res = await fetch(`${API}/api/super/poll-types`, {
+    headers: { Authorization: `Bearer ${await devToken(superEmail)}` },
+  })
+  if (!res.ok) throw new Error(`poll-types failed: ${res.status}`)
+  const pt = ((await res.json()) as Array<{ id: number; name: string; template: Record<string, unknown> }>)
+    .find((t) => t.name === name)
+  if (!pt) throw new Error(`No poll type named '${name}'`)
+  return pt
+}
+
+/**
+ * Replace a poll type's JSON template as [superEmail]. Templates are global
+ * (every election reads the Election template live), so specs that change one
+ * restore the original with this in afterAll.
+ */
+export async function setPollTypeTemplate(superEmail: string, id: number, template: unknown): Promise<void> {
+  const res = await fetch(`${API}/api/super/poll-types/${id}/template`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${await devToken(superEmail)}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(template),
+  })
+  if (!res.ok) throw new Error(`set template ${id} failed: ${res.status}`)
+}
+
 /**
  * Flip the super-admin kill switch through the API (as [superEmail]). Used as a
  * safety net so a failed kill-switch spec can't leave submissions disabled for

@@ -15,7 +15,7 @@ Legend: ✅ covered · ➖ partial / indirect · ❌ none · **P1** build first 
 
 ## Matrix
 
-_Refreshed 2026-10-07 against `frontend/e2e/` (12 journey specs) and the backend
+_Refreshed 2026-10-07 against `frontend/e2e/` (13 journey specs) and the backend
 suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 
 | Use case | Actor | Backend test | E2E | Prio | Notes |
@@ -43,7 +43,7 @@ suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 | Manage Polls | Admin | ✅ `AdminPollsControllerTest`, `AreaAwareBlocksTest` | ✅ `admin-manages-polls` | — | Zip-only disable via the dialog; row stays put; area-aware search; re-enable |
 | Disable All Poll Submissions (kill switch) | Super | ✅ `PollsKillSwitchTest` | ✅ `super-disables-submissions` | — | Not in the UML yet |
 | Manage IP allow/deny lists | Super | ✅ `SuperIpRuleControllerTest` | ❌ | P3 | |
-| Create/Edit Poll Types (+JSON) | Super | ✅ `SuperPollTypeControllerTest` | ❌ | P2 | JSON-template editor is fiddly UI |
+| Create/Edit Poll Types (+JSON) | Super | ✅ `SuperPollTypeControllerTest` | ✅ `super-edits-poll-type-template` | — | Edits the Election template (invalid JSON rejected; widget change reaches the voting form); restores it |
 | Approve Admin Request | Super | ✅ `AdminRequestServiceTest` | ❌ | P3 | |
 | Manage Admins | Super | ✅ `SuperUsersControllerTest` | ❌ | P3 | |
 | Webhook: subscription.updated | Stripe | ✅ `StripeWebhookControllerTest` | ➖ | P3 | `paid_until` refresh |
@@ -57,16 +57,15 @@ not a journey spec.
 **Done since the first version of this doc:** search → complete (questionnaire),
 view results with k-anonymity, creator request, the super kill switch, creator
 creates and answers each poll type (questionnaire, election, ballot measure),
-admin approves a creator, admin manages creators, and admin manages polls.
+admin approves a creator, admin manages creators, admin manages polls, and
+super edits a poll-type template.
 
 **P1 — next:**
 
 1. **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode
    (today's e2e uses the mock provider).
 
-**P2:**
-
-4. Super creates/edits a poll type with its JSON template.
+**P2:** none left.
 
 **P3 — low marginal value** (strongly backend-covered): the remaining
 request/approval and super-management flows, and the subscription webhooks.

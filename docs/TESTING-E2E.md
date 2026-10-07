@@ -76,8 +76,9 @@ parses them into env vars — **which is why they only work when run from
 `npx playwright test` (no file name) runs every spec, **one at a time**
 (`workers: 1` in `playwright.config.ts`). Specs share state, so they must not
 overlap: each clears Mailpit (which would delete another spec's magic link), and
-`super-disables-submissions` flips a global kill switch (it re-enables it in
-`afterAll`, so a failure there can't break the specs after it).
+`super-disables-submissions` flips a global kill switch and
+`super-edits-poll-type-template` changes the global Election template (each
+restores its change in `afterAll`, so a failure can't break the specs after it).
 
 CI (`.github/workflows/ci.yml`, job **E2E (Playwright)**) runs exactly that, so a
 new spec joins CI automatically. With `CI=true` the config skips the interactive
@@ -111,6 +112,7 @@ Shared setup helpers so specs stay short. Seeding is done **via the API**
 | `searchTitlesFrom(zipcode, title)` | Titles a guest's public search returns from that zip (area-aware disables). |
 | `zipsInState(stateId, n)` | The first `n` real zips in a state (e.g. a zip-level poll covering two zips). |
 | `setPollsDisabled(superEmail, disabled)` | Flip the global kill switch via the API (cleanup safety net). |
+| `getPollType(superEmail, name)` / `setPollTypeTemplate(superEmail, id, template)` | Read / replace a poll type's JSON template (global; restore it in `afterAll`). |
 | `resetTestUsers(prefix?)` | Wipe `zzz` users + everything anchored to them. |
 | `seedQuestionnaire(prefix?)` | Seed one published questionnaire; returns its unique title. |
 | `seedBallotMeasure({zipcode, prefix?})` | Seed a published ballot measure (creates a draft election to hang it on). |
@@ -154,6 +156,7 @@ first spec that needs them.
 | `creator-creates-election` | creator | Build a whole-state election in the wizard (date + two candidates) → publish → dashboard shows PUBLISHED → a guest finds it → the API shows both candidates saved. |
 | `creator-creates-questionnaire` | creator | Build a whole-state questionnaire in the wizard → publish → dashboard shows PUBLISHED → a guest finds it in search. |
 | `user-answers-election-and-measure` | user | Find a state-wide election by title → vote for one Mayor candidate → find its ballot measure → vote Yes → the public results count both votes → revisiting shows "You voted on". |
+| `super-edits-poll-type-template` | super | Edit the Election template: invalid JSON is rejected → switch candidates to multi-choice checkboxes → a member voting on an existing election gets checkboxes and both choices count → restore the original (also in `afterAll`). |
 | `super-disables-submissions` | super | Kill switch: submissions blocked for a member, then re-enabled. |
 | `seed-users-debug` | — | Debug variant of the seeder (keeps windows open). |
 
