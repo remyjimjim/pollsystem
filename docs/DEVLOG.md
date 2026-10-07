@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-08 — docs(manual): Viewing results
+
+**Requested:**
+
+> Awesome (such an overused term, except in this case), yes let's get us some
+> "Viewing results"...
+
+**Changed:**
+
+- New `docs/manual/viewer/viewing-results.md` covers:
+  - what each poll type shows. For elections, "No" means the voter chose
+    someone else for that office;
+  - the within/outside purview checkboxes;
+  - narrowing by state, county or zipcode with **Apply** and **Clear**;
+  - why results are hidden: a narrowed group of fewer than 10, while unfiltered
+    results always show.
+- Checked against the results view, the election form and the three results
+  controllers. `finding-polls` now links to it, and the README ticks it off.
+
+**Commit:** `fc5ae60`
+
+---
+
 ## 2026-10-08 — fix: CI red since 7cffa73 (reset order) + Node 22 for CI
 
 **Requested:**
