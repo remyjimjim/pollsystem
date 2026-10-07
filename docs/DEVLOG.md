@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-07 — test(e2e): admin-manages-polls
+
+**Requested:**
+
+> yes, start on admin-manages-polls
+
+**Changed:**
+
+- New `frontend/e2e/admin-manages-polls.spec.ts`: an admin whose purview is one
+  state, and a 2-zip poll. On Manage Polls:
+  1. disable the poll for zip A via the block dialog → the row stays in place,
+     unchecked, with "Show disabled" off;
+  2. zip A's search no longer finds it, zip B's does;
+  3. toggling "Show disabled" ends the stickiness;
+  4. re-enable → zip A finds it again.
+- `seed.ts`: `zipsInState()`.
+- Docs: `TESTING-E2E.md` tables; `E2E-TRACEABILITY.md` marks Manage Polls
+  covered.
+- Verified in the Dev Container (listed, `tsc --strict`, and an API-only dry run
+  of the backend side). The browser run is host/CI.
+
+**Commit:** `3ce0839`
+
+---
+
 ## 2026-10-07 — test(e2e): admin-manages-creators
 
 **Requested:**
