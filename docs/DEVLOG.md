@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-07 — fix(e2e): first full CI run's failures
+
+**Requested:**
+
+> I just ran npx playwright test creator-creates-questionnaire --headed
+
+> Her's the github actions output: [4 passed, 2 failed; register-users
+> skipped all 8 users with "Could not start checkout"]
+
+**Changed:**
+
+- `creator-creates-questionnaire` passed on the host (headed) and in CI.
+- CI backend now sets `APP_PAYMENTS_PROVIDER=mock`, as docker-compose does.
+  Without it every registration hit real Stripe with no keys.
+- `register-users` skips only "already registered" rejections and fails on
+  anything else. It had skipped all 8 users and still passed.
+- `reset-test-users` nulls `app_flags.updated_by` for wiped users, fixing the
+  500 when the kill-switch spec's super user was the flag's last editor. It was
+  the only unhandled FK to `users`, checked against the live schema; reproduced
+  and fixed locally.
+- `viewer-searches-views-results` uses the results page's current
+  within/outside purview checkboxes (it still looked for the single checkbox
+  removed in `f4f4e1b`).
+
+**Commit:** `273143e`
+
+---
+
 ## 2026-10-07 — ci(e2e): run every spec on one worker
 
 **Requested:**
