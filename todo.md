@@ -113,6 +113,8 @@
 -  Add e2e tests to ./frontend/e2e/:
    - Run some recordings and translate to uml for claude.
    - Done.  No.  Some but not all.
+     - Still need: P1: a real Stripe test-mode checkout. It needs Stripe test keys and webhook forwarding, so
+       it would be a separate, opt-in run rather than part of every CI push. Worth doing before launch, since it's the money path.
    
 -  Add a help/documentation library for things like:
    - How to find polls by title, zipcode, state or county.
