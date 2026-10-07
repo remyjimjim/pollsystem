@@ -55,10 +55,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node 20
+      - name: Set up Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           # Enable npm cache once frontend/package-lock.json is committed:
           # cache: npm
           # cache-dependency-path: frontend/package-lock.json
@@ -114,10 +114,10 @@ jobs:
         with:
           gradle-version: 8.10.2
 
-      - name: Set up Node 20
+      - name: Set up Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       # Start the backend in the background on the `local` profile (Mailpit mail,
       # Flyway migrations + seed-local, the /api/dev/* endpoints the specs use).
