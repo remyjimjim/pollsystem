@@ -51,7 +51,7 @@ app's language files (`frontend/src/i18n/*.json`) under `help.<view>.<element>`.
 ## Pages
 
 - [x] `viewer/finding-polls.md`: finding polls by title, state, county or zipcode
-- [ ] `viewer/viewing-results.md`: reading results, the within/outside split, the privacy threshold
+- [x] `viewer/viewing-results.md`: reading results, the within/outside split, the privacy threshold
 - [ ] `user/signing-up.md`: registering, membership, signing in with a magic link
 - [ ] `user/answering-polls.md`: voting, changing your answers
 - [ ] `user/becoming-a-creator.md`: requesting creator access

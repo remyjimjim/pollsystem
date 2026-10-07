@@ -57,7 +57,7 @@ link for the rest. Click a column heading to sort by it.
 - **Vote →** opens the poll so you can answer it. It only appears when you're
   signed in as a member.
 - **View results** shows how people have answered so far. Anyone can view
-  results.
+  results; see [Viewing results](viewing-results.md).
 
 If nothing matches, you'll see "No active polls match your filters". Try fewer
 filters, or tick **See closed polls too**.
