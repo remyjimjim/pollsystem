@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-07 — fix(a11y): label the election candidate choices
+
+**Requested:**
+
+> the small accessibility fix I mentioned: give the election's candidate radio
+> buttons proper labels.
+
+**Changed:**
+
+- `ElectionResponseForm`: in the three choice widgets (one-choice radio,
+  one-choice checkbox, multi-choice checkbox), each input gets
+  `id="candidate-<id>"`, and the candidate's name + affiliation become its
+  `<label for>`. Screen readers now announce e.g. "Avery Stone Independent", and
+  clicking the name selects it. The layout is unchanged and the comment box
+  stays outside the label. The legacy Yes/No widget was already labelled.
+- New `ElectionResponseForm.spec.ts` (3 tests, one per widget): each input is
+  named by its candidate, and clicking the name checks it. The tests fail on the
+  old markup.
+- The `user-answers-election-and-measure` e2e spec now picks the candidate by
+  name, dropping its workaround.
+- Type-check clean; frontend 54/54.
+
+**Commit:** `934709b`
+
+---
+
 ## 2026-10-07 — test(e2e): user-answers-election-and-measure
 
 **Requested:**
