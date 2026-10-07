@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-07 — test(e2e): creator-creates-election
+
+**Requested:**
+
+> yes, start on creator-creates-election
+
+**Changed:**
+
+- New `frontend/e2e/creator-creates-election.spec.ts`:
+  1. a seeded creator builds a whole-state election in the wizard (date + two
+     candidates) and publishes it;
+  2. the dashboard shows it PUBLISHED;
+  3. a guest finds it in search;
+  4. the API reads it back with the right scope, state, date and both
+     candidates.
+- Docs: `TESTING-E2E.md` specs table; `E2E-TRACEABILITY.md` marks election
+  creation covered. The P1 remainder is ballot-measure creation and answering
+  elections / ballot measures.
+- Verified in the Dev Container (listed, `tsc --strict`, and an API-only dry
+  run). The browser run is host/CI.
+
+**Commit:** `9569136`
+
+---
+
 ## 2026-10-07 — test(e2e): admin-manages-polls
 
 **Requested:**
