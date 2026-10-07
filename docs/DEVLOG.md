@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-08 — fix(docker): frontend container reinstalls on lockfile change
+
+**Requested:**
+
+> I'm assuming I received the following err msg after clicking the hompage's
+> 'Help' link because I need to run BuildAndDeploy local-docker: [Failed to
+> resolve import "marked"]
+
+then, about reinstalling packages on every container start:
+
+> yes please
+
+**Changed:**
+
+- Cause: the compose frontend's `node_modules` is a named volume, and Docker
+  fills it from the image only on first creation. New packages never reached
+  it, even after `up --build`.
+- `frontend/Dockerfile.dev`: on start, if `package-lock.json` differs from a
+  stamp kept in the volume, run `npm ci` and update the stamp; otherwise start
+  Vite straight away. The image writes the stamp at build time, and the lockfile
+  is never rewritten.
+- Tested with the real image: a fresh volume doesn't reinstall; a stale volume
+  reinstalls and `marked` resolves; an unchanged restart doesn't reinstall.
+
+**Commit:** `813123c`
+
+---
+
 ## 2026-10-08 — feat(help): help library at /help, sourced from docs/manual
 
 **Requested:**
