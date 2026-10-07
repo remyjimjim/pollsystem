@@ -15,29 +15,33 @@ Legend: ✅ covered · ➖ partial / indirect · ❌ none · **P1** build first 
 
 ## Matrix
 
+_Refreshed 2026-10-07 against `frontend/e2e/` (6 journey specs) and the backend
+suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
+
 | Use case | Actor | Backend test | E2E | Prio | Notes |
 |---|---|---|---|---|---|
-| Sign In via Magic Link | Viewer | ✅ `AuthControllerTest` | ✅ `register-users` | — | Only use case with e2e today |
-| Send Magic Link | (system) | ✅ `AuthControllerTest` | ✅ via registration | — | Exercised through Mailpit |
-| Complete Poll via Link | Viewer | ➖ `*ResponsesTest` (submit logic) | ❌ | **P1** | Core unauth path; `/poll/<token>` UX unverified |
-| View Poll Results | Viewer | ✅ `*ResultsTest` | ❌ | **P2** | k-anonymity threshold (10) surfacing in UI |
-| Search Polls | Registered | ✅ `PollSearchControllerTest` | ❌ | **P1** | Backend covered 2026-07-21; e2e still a gap |
-| Complete Poll | Registered | ✅ `*ResponsesTest` | ❌ | **P1** | Authenticated completion via UI |
-| Create Creator Request | Registered | ✅ `CreatorRequestServiceTest` | ❌ | P3 | Backend well-covered |
-| Submit Creator Request | Registered | ✅ `CreatorRequestServiceTest` | ❌ | P3 | |
-| Stripe Checkout | Viewer/Reg | ➖ session-create | ❌ | **P1** | Revenue entry; redirect flow unverified |
-| Webhook: checkout.completed | Stripe | ✅ `StripeWebhookControllerTest` | ➖ | P2 | e2e needs Stripe CLI / test event |
-| Provision Paid User | (system) | ✅ `StripeWebhookControllerTest` | ➖ | P2 | Tail of the checkout chain |
-| Create Poll | Creator | ✅ `*ServiceTest` | ❌ | **P1** | UI creation wizard unverified |
-| Select Poll Type and Domain | Creator | ✅ `PollDraftValidationTest` | ❌ | **P1** | Part of Create Poll flow |
-| Questionnaire | Creator | ✅ `Questionnaire*Test` | ❌ | **P1** | Create + respond via UI |
+| Sign In via Magic Link | Viewer | ✅ `AuthControllerTest` | ✅ `register-users` + every spec's sign-in | — | Magic link read from Mailpit |
+| Send Magic Link | (system) | ✅ `AuthControllerTest` | ✅ via registration / sign-in | — | |
+| Complete Poll via Link | Viewer | — **not built** | — | — | Needs the unbuilt respondent link (below); completion today is authenticated |
+| View Poll Results | Viewer | ✅ `*ResultsTest` | ✅ `viewer-searches-views-results` | — | Asserts the k-anonymity *withheld* state (≤ 6 seeded responses) |
+| Search Polls | Registered | ✅ `PollSearchControllerTest`, `AreaAwareBlocksTest` | ✅ `viewer-searches-views-results`, `user-registers-submits-poll`, `creator-creates-questionnaire` | — | Guest + member search by title |
+| Complete Poll | Registered | ✅ `*ResponsesTest` | ➖ `user-registers-submits-poll` | **P1** | Questionnaire only; election + ballot-measure responses via UI unverified |
+| Create Creator Request | Registered | ✅ `CreatorRequestServiceTest` | ✅ `user-submits-creator-request` | — | Whole-state scope |
+| Submit Creator Request | Registered | ✅ `CreatorRequestServiceTest` | ✅ `user-submits-creator-request` | — | |
+| Stripe Checkout | Viewer/Reg | ➖ session-create | ➖ `register-users`, `user-registers-submits-poll` | **P1** | E2E runs the pay-first flow against the local **MockPaymentProvider**; the real Stripe redirect is unverified |
+| Webhook: checkout.completed | Stripe | ✅ `StripeWebhookControllerTest` | ➖ | P2 | Mock provider provisions directly; real event needs Stripe CLI |
+| Provision Paid User | (system) | ✅ `StripeWebhookControllerTest` | ➖ | P2 | Via the mock provider |
+| Create Poll | Creator | ✅ `*ServiceTest`, `CreatorGrantGuardTest` | ➖ `creator-creates-questionnaire` | **P1** | Questionnaire done; election + ballot measure remain |
+| Select Poll Type and Domain | Creator | ✅ `PollDraftValidationTest` | ✅ `creator-creates-questionnaire` | — | Type picker + whole-state purview |
+| Questionnaire | Creator | ✅ `Questionnaire*Test` | ✅ create: `creator-creates-questionnaire`; respond: `user-registers-submits-poll` | — | |
 | Election | Creator | ✅ `Election*Test` | ❌ | **P1** | Create + respond via UI |
-| Referendum / Ballot Measure | Creator | ✅ `BallotMeasure*Test` | ❌ | **P1** | Create + respond via UI |
+| Referendum / Ballot Measure | Creator | ✅ `BallotMeasure*Test` | ➖ results only (`viewer-searches-views-results`) | **P1** | Create + respond via UI unverified (seeded via API) |
 | Generate Respondent Link | Creator | — **not built** | — | — | UML-only; see "Unbuilt use case" below |
 | Submit Admin Request | Creator | ✅ `AdminRequestServiceTest` | ❌ | P3 | |
-| Approve Creator | Admin | ✅ `AdminCreatorRequestsTest` | ❌ | P2 | Queue → approve → access granted |
-| Manage Creators | Admin | ➖ `SuperUsersControllerTest` | ❌ | P3 | |
-| Manage Polls | Admin | ✅ `AdminPollsControllerTest` | ❌ | P2 | Block/note within purview |
+| Approve Creator | Admin | ✅ `AdminCreatorRequestsTest` | ❌ | **P2** | Natural continuation of `user-submits-creator-request` |
+| Manage Creators | Admin | ✅ `AdminCreatorsControllerTest` | ❌ | **P2** | Raised from P3 (Oct 2026): the stored creator disable now gates poll creation and blocks polls at poll ∩ creator ∩ admin purview |
+| Manage Polls | Admin | ✅ `AdminPollsControllerTest`, `AreaAwareBlocksTest` | ❌ | **P2** | Rows stay visible after disabling; zip/county/state disables are area-aware |
+| Disable All Poll Submissions (kill switch) | Super | ✅ `PollsKillSwitchTest` | ✅ `super-disables-submissions` | — | Not in the UML yet |
 | Manage IP allow/deny lists | Super | ✅ `SuperIpRuleControllerTest` | ❌ | P3 | |
 | Create/Edit Poll Types (+JSON) | Super | ✅ `SuperPollTypeControllerTest` | ❌ | P2 | JSON-template editor is fiddly UI |
 | Approve Admin Request | Super | ✅ `AdminRequestServiceTest` | ❌ | P3 | |
@@ -45,31 +49,36 @@ Legend: ✅ covered · ➖ partial / indirect · ❌ none · **P1** build first 
 | Webhook: subscription.updated | Stripe | ✅ `StripeWebhookControllerTest` | ➖ | P3 | `paid_until` refresh |
 | Webhook: subscription.deleted | Stripe | ✅ `StripeWebhookControllerTest` | ➖ | P3 | Revoke paid access |
 
+`seed-users-debug` is an interactive dev tool (bulk seeding with a Close modal),
+not a journey spec.
+
 ## Recommended e2e build order (risk-ranked)
 
-**P1 — build first** (critical path × untested wiring):
+**Done since the first version of this doc:** search → complete (questionnaire),
+view results with k-anonymity, creator request, the super kill switch, and
+creator creates a questionnaire.
 
-1. **Search → Complete** (registered) — search, open a result, submit. Backend
-   search is now covered (`PollSearchControllerTest`); the browser round-trip is
-   not.
-2. **Stripe Checkout → provision → magic-link login** — the revenue path,
-   end-to-end (Stripe test mode + CLI-forwarded webhook), landing on a
-   provisioned, signed-in paid user.
-4. **Creator creates each poll type via the UI** — questionnaire, election,
-   ballot measure through the creation wizard (backend logic is covered; the
-   wizard wiring is not).
+**P1 — next:**
 
-**P2 — next:**
+1. **Creator creates an election and a ballot measure** — same wizard pattern as
+   `creator-creates-questionnaire`.
+2. **Member answers an election and a ballot measure** via the UI.
+3. **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode
+   (today's e2e uses the mock provider).
 
-5. View Poll Results incl. k-anonymity (fewer than 10 responses hides
-   aggregates).
-6. Admin approves a creator request end-to-end (queue → approve → creator gains
-   access on next login).
+**P2:**
+
+4. **Admin approves a creator** (`admin-approves-creator`), chained after
+   `user-submits-creator-request`.
+5. **Admin manages creators** (`admin-manages-creators`): disable a creator →
+   their poll is disabled only in the admin's area → re-enable one poll from the
+   Polls link (creator stays unchecked) → the creator is refused a new poll there.
+6. **Admin manages polls** (`admin-manages-polls`): the disabled row stays in
+   place; a zip-level disable.
 7. Super creates/edits a poll type with its JSON template.
 
-**P3 — low marginal value** (already strongly backend-covered; add e2e only if a
-regression appears): the remaining request/approval and super-management flows,
-and the subscription webhooks.
+**P3 — low marginal value** (strongly backend-covered): the remaining
+request/approval and super-management flows, and the subscription webhooks.
 
 ## Unbuilt use case: Generate Respondent Link
 
@@ -90,10 +99,12 @@ and now has `PollSearchControllerTest`.)_
 
 ## Also recommended
 
-- **Run e2e in CI.** Today `ci.yml` runs backend `gradle test` + frontend
-  type-check/test/build, but **not Playwright** — which is why e2e has drifted to
-  1-of-N coverage. Even a P1-only job (spin up db + backend + Mailpit, run the
-  critical specs) stops the drift.
+- **Fix the CI e2e job.** `ci.yml` does have an E2E (Playwright) job that
+  boots the whole stack, but its run step still names
+  `register-colorado-users.spec.ts` and `search-complete.spec.ts` — specs that
+  were since renamed — so it finds no tests. Point it at the current
+  non-interactive specs (never `seed-users-debug`).
 - **Reuse exists.** New specs inherit the hard parts already solved: magic-link
-  extraction via Mailpit (`e2e/mailpit.ts`), per-role isolated browser contexts,
-  and `zzz`-prefixed teardown (`playwright/global-teardown.ts`).
+  extraction via Mailpit (`e2e/mailpit.ts`), API seeding (`e2e/seed.ts`, backed by
+  the local-only `/api/dev/*` endpoints), per-role isolated browser contexts, and
+  `zzz`-prefixed teardown (`playwright/global-teardown.ts`).
