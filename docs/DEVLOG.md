@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-08 — Update todo.md: help hover screenshots
+
+**Requested:**
+
+> I like it. My only idea on making it next level would be to add some images
+> that would pop up on hover when some of the bolded text is hovered over, that
+> indicate the target with a red circle around it. I could furnish the bolded
+> text candidates for hover images. Can we make that an item on the todo.md?
+
+**Changed:**
+
+- New `todo.md` item covering:
+  - hover, focus or tap on a bold UI term shows a screenshot with the target
+    circled in red;
+  - the user supplies the bold-text candidates;
+  - suggested approach: generate the images with Playwright, so they stay
+    current as the UI changes.
+
+**Commit:** `bfbefb0`
+
+---
+
 ## 2026-10-08 — fix(docker): frontend container reinstalls on lockfile change
 
 **Requested:**
