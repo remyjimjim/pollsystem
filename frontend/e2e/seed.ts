@@ -116,6 +116,13 @@ async function postJson(url: string, body: unknown): Promise<unknown> {
   return res.json()
 }
 
+/** The first [n] real zipcodes in a state (e.g. a zip-level poll covering two zips). */
+export async function zipsInState(stateId: number, n: number): Promise<string[]> {
+  const zips = (await postJson(`${API}/api/zipcodes`, { stateIds: [stateId] })) as Array<{ zipcode: string }>
+  if (zips.length < n) throw new Error(`Only ${zips.length} zipcodes seeded for state ${stateId}; need ${n}.`)
+  return zips.slice(0, n).map((z) => z.zipcode)
+}
+
 /** Wipe every zzz-prefixed user (and everything anchored to them). Dev-only. */
 export async function resetTestUsers(prefix = 'zzz'): Promise<void> {
   const res = await fetch(`${API}/api/dev/reset-test-users?emailPrefix=${encodeURIComponent(prefix)}`, {
