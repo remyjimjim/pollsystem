@@ -26,7 +26,14 @@ for (const arg of process.argv.slice(2)) {
 // files under src/ that belong to Vitest.
 export default defineConfig({
   testDir: './e2e',
-  fullyParallel: false, // the suite hits a shared backend + Mailpit
+  fullyParallel: false, // tests within a file run in order
+  // One worker: spec FILES would otherwise run concurrently, and they share
+  // state — each clears Mailpit (deleting another spec's magic link) and
+  // super-disables-submissions flips a global kill switch.
+  workers: 1,
+  // seed-users-debug is an interactive dev tool (blocks on a Close modal); never
+  // run it in CI. Every other spec runs, so new ones join CI automatically.
+  testIgnore: process.env.CI ? ['**/seed-users-debug.spec.ts'] : [],
   reporter: 'list',
   // Runs once after every spec file finishes. Wipes the zzz-prefixed test
   // users + everything anchored to them. Skip with SKIP_TEARDOWN=1.

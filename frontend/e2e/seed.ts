@@ -148,6 +148,27 @@ export async function seedUser(
 }
 
 /** Seed a published ballot measure at a real zip; returns its id + unique title. */
+/** A JWT for an existing local user (local-profile-only `/api/dev/token`). */
+export async function devToken(email: string): Promise<string> {
+  const res = await fetch(`${API}/api/dev/token?${new URLSearchParams({ email })}`, { method: 'POST' })
+  if (!res.ok) throw new Error(`dev token failed for ${email}: ${res.status}`)
+  return ((await res.json()) as { token: string }).token
+}
+
+/**
+ * Flip the super-admin kill switch through the API (as [superEmail]). Used as a
+ * safety net so a failed kill-switch spec can't leave submissions disabled for
+ * every spec that runs after it.
+ */
+export async function setPollsDisabled(superEmail: string, disabled: boolean): Promise<void> {
+  const res = await fetch(`${API}/api/super/flags/polls-disabled`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${await devToken(superEmail)}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ disabled }),
+  })
+  if (!res.ok) throw new Error(`set polls-disabled=${disabled} failed: ${res.status}`)
+}
+
 export async function seedBallotMeasure(
   opts: { zipcode: string; prefix?: string },
 ): Promise<{ id: number; title: string; zipcode: string; electionId: number }> {

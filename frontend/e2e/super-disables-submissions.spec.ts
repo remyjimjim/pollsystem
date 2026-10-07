@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { clearMailpit } from './mailpit'
-import { BASE, STATE_INPUT, type Location, hold, resolveLocation, seedQuestionnaire, seedUser, signInSeededUser } from './seed'
+import { BASE, STATE_INPUT, type Location, hold, resolveLocation, seedQuestionnaire, seedUser, setPollsDisabled, signInSeededUser } from './seed'
 
 /**
  * Super-admin global kill-switch: disabling poll submissions makes every
@@ -14,6 +14,12 @@ test.describe(`super disables poll submissions (${STATE_INPUT.toLowerCase()})`, 
   let superEmail = ''
   let participantEmail = ''
   let pollTitle = ''
+
+  // Safety net: the suite runs on one worker, so a failure between "disable"
+  // and "re-enable" would otherwise leave submissions off for every later spec.
+  test.afterAll(async () => {
+    if (superEmail) await setPollsDisabled(superEmail, false)
+  })
   let loc: Location
 
   test.beforeAll(async () => {

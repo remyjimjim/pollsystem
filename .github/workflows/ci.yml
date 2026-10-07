@@ -159,12 +159,13 @@ jobs:
             sleep 2
           done
 
-      # Runs the real registration spec only. `register-users-debug` is an
-      # interactive dev tool (it blocks on a Close modal) — never run it in CI.
-      # Add new non-interactive specs to this command as they're written.
+      # Runs every spec under frontend/e2e on one worker (playwright.config.ts),
+      # so new specs are picked up automatically. The interactive
+      # seed-users-debug spec is excluded there when CI is set. (This used to
+      # list spec files by name, which went stale when the specs were renamed.)
       - name: Run e2e specs
         working-directory: frontend
-        run: npx playwright test register-colorado-users.spec.ts search-complete.spec.ts
+        run: npx playwright test
 
       - name: Upload Playwright report
         if: failure()
