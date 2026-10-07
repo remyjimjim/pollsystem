@@ -299,6 +299,9 @@ onMounted(load)
         </select>
       </div>
 
+      <!-- Each choice input is labelled by the candidate's name + affiliation
+           (<label for>), so screen readers announce it and clicking the name
+           selects it; the comment box stays outside the label. -->
       <!-- selectOneRadio: radio group, one selected per office -->
       <div
         v-else-if="widget === 'selectOneRadio'"
@@ -307,6 +310,7 @@ onMounted(load)
         class="grid grid-cols-[auto_1fr] gap-2 border-b border-slate-100 py-2 last:border-b-0"
       >
         <input
+          :id="`candidate-${c.id}`"
           type="radio"
           :name="`office-${officeName}`"
           :checked="isSelected(officeName, c.id)"
@@ -314,8 +318,10 @@ onMounted(load)
           class="mt-1"
         />
         <div class="flex flex-col">
-          <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
-          <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+          <label :for="`candidate-${c.id}`" class="flex cursor-pointer flex-col">
+            <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
+            <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+          </label>
           <input
             v-model="comments[c.id]"
             type="text"
@@ -333,14 +339,17 @@ onMounted(load)
         class="grid grid-cols-[auto_1fr] gap-2 border-b border-slate-100 py-2 last:border-b-0"
       >
         <input
+          :id="`candidate-${c.id}`"
           type="checkbox"
           :checked="isSelected(officeName, c.id)"
           @change="selectOnly(officeName, c.id)"
           class="mt-1"
         />
         <div class="flex flex-col">
-          <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
-          <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+          <label :for="`candidate-${c.id}`" class="flex cursor-pointer flex-col">
+            <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
+            <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+          </label>
           <input
             v-model="comments[c.id]"
             type="text"
@@ -358,14 +367,17 @@ onMounted(load)
         class="grid grid-cols-[auto_1fr] gap-2 border-b border-slate-100 py-2 last:border-b-0"
       >
         <input
+          :id="`candidate-${c.id}`"
           type="checkbox"
           :checked="isSelected(officeName, c.id)"
           @change="toggleSelection(officeName, c.id)"
           class="mt-1"
         />
         <div class="flex flex-col">
-          <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
-          <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+          <label :for="`candidate-${c.id}`" class="flex cursor-pointer flex-col">
+            <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
+            <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+          </label>
           <input
             v-model="comments[c.id]"
             type="text"

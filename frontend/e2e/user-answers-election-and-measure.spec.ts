@@ -20,7 +20,8 @@ import {
 //
 // Setup via the API: a creator publishes the election (two Mayor candidates)
 // and the measure. The local Election type uses the selectOneRadio widget (one
-// choice per office). Read-mostly: no pre-wipe.
+// choice per office, each radio labelled by its candidate). Read-mostly: no
+// pre-wipe.
 test.describe(`user answers an election and a ballot measure (${STATE_INPUT.toLowerCase()})`, () => {
   let loc: Location
   let memberEmail = ''
@@ -65,14 +66,12 @@ test.describe(`user answers an election and a ballot measure (${STATE_INPUT.toLo
     await clearMailpit()
     await signInSeededUser(page, memberEmail)
 
-    // 1. Election: one choice for Mayor (the radios sit next to, not inside,
-    //    the candidate's name, so pick the radio via its row).
+    // 1. Election: one choice for Mayor. Each radio is labelled by its
+    //    candidate's name + affiliation, so pick it by name.
     await openFromSearch(page, electionTitle, new RegExp(`/polls/election/${electionId}$`))
     await expect(page.getByRole('heading', { name: electionTitle })).toBeVisible({ timeout: 15_000 })
-    const avery = page.locator('div')
-      .filter({ has: page.getByText('Avery Stone', { exact: true }) })
-      .locator('> input[type="radio"]')
-    await avery.check()
+    await page.getByRole('radio', { name: /Avery Stone/ }).check()
+    await expect(page.getByRole('radio', { name: /Jordan Reyes/ })).not.toBeChecked()
     await hold(page)
     await page.getByRole('button', { name: 'Submit votes' }).click()
     // The success message shows for ~600 ms, then the form moves to the results
