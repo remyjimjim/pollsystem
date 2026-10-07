@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-08 — docs(manual): Signing up and signing in
+
+**Requested:**
+
+> Signing up sounds good
+
+**Changed:**
+
+- New `docs/manual/viewer/signing-up.md`. It covers:
+  - membership and registration;
+  - the one-time sign-in link;
+  - lapsing, Renew and Manage subscription;
+  - troubleshooting with the app's real error messages.
+- It lives in `viewer/` rather than `user/`: signed-out visitors need it, and
+  `user/` is hidden from them. The README plan is updated to match.
+- Two draft claims were corrected against the code:
+  - auto sign-in only works in the same browser (it listens for a `storage`
+    event), so it doesn't happen "from your phone";
+  - a membership lapses when the subscription ends, not on the first failed
+    payment.
+
+**Commit:** `a5c89b2`
+
+---
+
 ## 2026-10-08 — Update todo.md: help bold terms, a hybrid of spotlight links and screenshots
 
 **Requested:**
