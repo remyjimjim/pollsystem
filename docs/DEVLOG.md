@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-07 — test(e2e): creator-creates-questionnaire + matrix refresh
+
+**Requested:**
+
+> Hello Claude, what's next, e2e tests?
+
+> let's start with creator-creates-questionnaire and the matrix refresh
+
+**Changed:**
+
+- New `frontend/e2e/creator-creates-questionnaire.spec.ts`: a seeded creator
+  signs in, builds a whole-state questionnaire in the wizard, publishes it, sees
+  it PUBLISHED on the dashboard, and a guest finds it in public search.
+  Verified in the Dev Container (Playwright lists it; `tsc --strict` clean; the
+  same backend steps via the API succeed). The browser run is host-only.
+- `docs/E2E-TRACEABILITY.md`: the matrix was stale (it said sign-in was the only
+  e2e coverage). It now maps all 6 journey specs and the newer backend tests,
+  marks mock-payment coverage as partial, raises Manage Creators to P2, and
+  re-ranks the build order. Every test and spec it names was checked to exist.
+- Found: the CI E2E job still runs `register-colorado-users.spec.ts` and
+  `search-complete.spec.ts`, which were renamed, so it finds no tests. Noted in
+  the doc, not yet fixed.
+
+**Commit:** `9831ffe`
+
+---
+
 ## 2026-10-05 — chore: ignore /export's default transcript files
 
 **Requested:**
