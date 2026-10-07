@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-10-07 — test(e2e): user-answers-election-and-measure
+
+**Requested:**
+
+> yes, start on user-answers-election-and-measure
+
+**Changed:**
+
+- New `frontend/e2e/user-answers-election-and-measure.spec.ts`. Setup: a
+  state-wide election with two Mayor candidates and a ballot measure on it,
+  created via the API. In the UI, a member:
+  1. votes for one candidate;
+  2. votes Yes on the measure.
+
+  The public results count both votes, and revisiting the election shows "You
+  voted on".
+- Asserts the post-submit redirect, because the success message is only on
+  screen for ~600 ms.
+- Finding: the election radios have no accessible name (the candidate's name
+  isn't in a `<label>`), so the spec selects the radio via the candidate's row.
+  This is an accessibility gap, not fixed here.
+- `seed.ts`: `createBallotMeasureAs()`. Docs: answering is now covered for all
+  three poll types; the only P1 left is real Stripe Checkout.
+- Verified in the Dev Container (listed, `tsc --strict`, and an API-only dry
+  run). The browser run is host/CI.
+
+**Commit:** `ec666ae`
+
+---
+
 ## 2026-10-07 — test(e2e): creator-creates-ballot-measure
 
 **Requested:**
