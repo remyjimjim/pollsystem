@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-08 — Update todo.md: help bold terms, a hybrid of spotlight links and screenshots
+
+**Requested:**
+
+> One thought, building on the hover image for bolded text, would it work to
+> instead of popping up an image, make the bolded image a link to the exact
+> place on the page it's referring to with a "Go Back" button positioned exactly
+> over the desired selector?
+
+then:
+
+> yes, update the todo item with the hybrid
+
+**Decision:**
+
+- **Spotlight links** for elements visible on a page's first load:
+  - a `data-help="<view>.<element>"` marker on the element;
+  - a `?spotlight=` link from the manual;
+  - a red ring around the element, plus a "Back to help" button **beside** the
+    target, not over it, so it doesn't hide what it points at.
+- **Playwright hover screenshots** only for state-dependent elements a live link
+  can't reach: search-result rows, the privacy message, later wizard steps, and
+  a specific poll's pages.
+- Optionally both on one term.
+
+**Changed:**
+
+- `todo.md`: the help hover-screenshots item is rewritten as this hybrid.
+
+**Commit:** `05859b6`
+
+---
+
 ## 2026-10-08 — docs(manual): Viewing results
 
 **Requested:**
