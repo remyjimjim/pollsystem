@@ -90,6 +90,19 @@ class DevController(
 
         // Polls the user authored: cascade child responses, candidates,
         // questions, domains, then the polls themselves.
+        // Ballot measures first: each hangs off an election (FK), so the
+        // test users' measures AND any measure on a test user's election must
+        // go before the elections do.
+        val testMeasures = """
+            SELECT id FROM ballot_measures WHERE creator_id IN ($idList)
+               OR election_id IN (SELECT id FROM elections WHERE creator_id IN ($idList))
+        """
+        em.createNativeQuery("DELETE FROM ballot_responses WHERE measure_id IN ($testMeasures)").executeUpdate()
+        em.createNativeQuery(
+            "DELETE FROM poll_purviews WHERE poll_type = 'BALLOT_MEASURE' AND poll_id IN ($testMeasures)"
+        ).executeUpdate()
+        nuke("ballot_measures", "id IN ($testMeasures)")
+
         em.createNativeQuery("""
             DELETE FROM candidate_responses WHERE candidate_id IN (
                 SELECT c.id FROM candidates c
@@ -107,13 +120,6 @@ class DevController(
             )
         """).executeUpdate()
         nuke("elections", "creator_id IN ($idList)")
-
-        em.createNativeQuery("""
-            DELETE FROM ballot_responses WHERE measure_id IN (
-                SELECT id FROM ballot_measures WHERE creator_id IN ($idList)
-            )
-        """).executeUpdate()
-        nuke("ballot_measures", "creator_id IN ($idList)")
 
         em.createNativeQuery("""
             DELETE FROM question_responses WHERE question_id IN (
