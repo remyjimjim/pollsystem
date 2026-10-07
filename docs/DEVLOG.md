@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-07 — test(e2e): admin-approves-creator
+
+**Requested:**
+
+> yes, start on admin-approves-creator
+
+**Changed:**
+
+- New `frontend/e2e/admin-approves-creator.spec.ts`:
+  1. a member is turned away from the poll wizard;
+  2. they request creator access for their whole state;
+  3. the admin the request was routed to approves it in the Creator Requests
+     queue;
+  4. the member gets "You are now a Creator!" and the wizard opens.
+- Requests route to one covering admin, and data persists between runs, so the
+  spec seeds a fresh state admin, then asks the API which admin got the request
+  and signs in as them.
+- Dev-only seeding: `seed-user?adminStateId=` (state-wide admin access) and
+  `GET /api/dev/user?id=`. `seed.ts` gains `seedUser({adminStateId})`,
+  `devUser()` and `latestCreatorRequest()`; `mailpit.ts` gains
+  `waitForEmail()`.
+- `docs/TESTING-E2E.md`'s seed toolkit and specs table are brought up to date,
+  including fixing a stale purview-checkbox note. `E2E-TRACEABILITY.md` marks
+  Approve Creator covered.
+- Verified in the Dev Container (listed, `tsc --strict`, and an API-only dry run
+  of the whole approval chain through the real helpers). The browser run is
+  host/CI.
+
+**Commit:** `7e556be`
+
+---
+
 ## 2026-10-07 — fix(e2e): first full CI run's failures
 
 **Requested:**
