@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-08 — fix: CI red since 7cffa73 (reset order) + Node 22 for CI
+
+**Requested:**
+
+> yes, watch the CI run
+
+**Found:**
+
+- The run for `2587cec` failed in two jobs.
+- **Frontend unit tests:** jsdom 30, added for the help tests, needs Node
+  ^22.22, but CI used Node 20.
+- **E2E**, which had been **failing since `7cffa73`**, five pushes unnoticed:
+  `reset-test-users` deleted elections before the ballot measures attached to
+  them (500, `ballot_measures_election_id_fkey`). Each new spec passed on its
+  own; only the full suite tripped it. Earlier reports of a green CI weren't
+  rechecked after each push.
+
+**Changed:**
+
+- `94777af`: `ci.yml` moves both Node steps to 22. Node 20 is end-of-life, and
+  the dev container and Docker image already use 22.
+- `f5448e5`: `DevController.resetTestUsers` deletes ballot measures first (the
+  test users' own, plus any on their elections), then elections, and also
+  clears ballot-measure purview rows. The new `ResetTestUsersTest` reproduces
+  the CI error on the old code.
+- Verified: backend 277/277. The full e2e suite ran headless with `CI=1` in the
+  Playwright 1.61.0 image against the rebuilt local backend: 13/13, up from
+  11/13.
+
+**Commits:** `94777af`, `f5448e5`
+
+---
+
 ## 2026-10-08 — Update todo.md: help hover screenshots
 
 **Requested:**
