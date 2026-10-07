@@ -99,11 +99,11 @@ and now has `PollSearchControllerTest`.)_
 
 ## Also recommended
 
-- **Fix the CI e2e job.** `ci.yml` does have an E2E (Playwright) job that
-  boots the whole stack, but its run step still names
-  `register-colorado-users.spec.ts` and `search-complete.spec.ts` — specs that
-  were since renamed — so it finds no tests. Point it at the current
-  non-interactive specs (never `seed-users-debug`).
+- **CI runs every spec (fixed 2026-10-07).** The E2E (Playwright) job in
+  `ci.yml` used to name `register-colorado-users.spec.ts` and
+  `search-complete.spec.ts`, which had been renamed, so it ran nothing. It now
+  runs the whole suite on one worker, skipping only the interactive
+  `seed-users-debug`; see `docs/TESTING-E2E.md`.
 - **Reuse exists.** New specs inherit the hard parts already solved: magic-link
   extraction via Mailpit (`e2e/mailpit.ts`), API seeding (`e2e/seed.ts`, backed by
   the local-only `/api/dev/*` endpoints), per-role isolated browser contexts, and

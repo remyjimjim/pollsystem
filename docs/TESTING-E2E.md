@@ -71,6 +71,18 @@ parses them into env vars — **which is why they only work when run from
 > Spec bodies run in **worker** processes that don't inherit CLI positionals, so
 > the config sets these as env vars in the main process; workers inherit them.
 
+### Running the whole suite, and CI
+
+`npx playwright test` (no file name) runs every spec, **one at a time**
+(`workers: 1` in `playwright.config.ts`). Specs share state, so they must not
+overlap: each clears Mailpit (which would delete another spec's magic link), and
+`super-disables-submissions` flips a global kill switch (it re-enables it in
+`afterAll`, so a failure there can't break the specs after it).
+
+CI (`.github/workflows/ci.yml`, job **E2E (Playwright)**) runs exactly that, so a
+new spec joins CI automatically. With `CI=true` the config skips the interactive
+`seed-users-debug` spec, and the per-screen `hold` pauses are off.
+
 ### Watchable / recordable runs
 
 `hold=<ms>` pauses on each key screen — only for `--headed`/interactive runs
