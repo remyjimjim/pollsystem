@@ -15,7 +15,7 @@ Legend: ✅ covered · ➖ partial / indirect · ❌ none · **P1** build first 
 
 ## Matrix
 
-_Refreshed 2026-10-07 against `frontend/e2e/` (9 journey specs) and the backend
+_Refreshed 2026-10-07 against `frontend/e2e/` (10 journey specs) and the backend
 suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 
 | Use case | Actor | Backend test | E2E | Prio | Notes |
@@ -31,10 +31,10 @@ suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 | Stripe Checkout | Viewer/Reg | ➖ session-create | ➖ `register-users`, `user-registers-submits-poll` | **P1** | E2E runs the pay-first flow against the local **MockPaymentProvider**; the real Stripe redirect is unverified |
 | Webhook: checkout.completed | Stripe | ✅ `StripeWebhookControllerTest` | ➖ | P2 | Mock provider provisions directly; real event needs Stripe CLI |
 | Provision Paid User | (system) | ✅ `StripeWebhookControllerTest` | ➖ | P2 | Via the mock provider |
-| Create Poll | Creator | ✅ `*ServiceTest`, `CreatorGrantGuardTest` | ➖ `creator-creates-questionnaire` | **P1** | Questionnaire done; election + ballot measure remain |
-| Select Poll Type and Domain | Creator | ✅ `PollDraftValidationTest` | ✅ `creator-creates-questionnaire` | — | Type picker + whole-state purview |
+| Create Poll | Creator | ✅ `*ServiceTest`, `CreatorGrantGuardTest` | ➖ `creator-creates-questionnaire`, `creator-creates-election` | **P1** | Questionnaire + election done; ballot measure remains |
+| Select Poll Type and Domain | Creator | ✅ `PollDraftValidationTest` | ✅ `creator-creates-questionnaire`, `creator-creates-election` | — | Type picker + whole-state purview |
 | Questionnaire | Creator | ✅ `Questionnaire*Test` | ✅ create: `creator-creates-questionnaire`; respond: `user-registers-submits-poll` | — | |
-| Election | Creator | ✅ `Election*Test` | ❌ | **P1** | Create + respond via UI |
+| Election | Creator | ✅ `Election*Test` | ➖ create: `creator-creates-election` | **P1** | Responding via the UI remains |
 | Referendum / Ballot Measure | Creator | ✅ `BallotMeasure*Test` | ➖ results only (`viewer-searches-views-results`) | **P1** | Create + respond via UI unverified (seeded via API) |
 | Generate Respondent Link | Creator | — **not built** | — | — | UML-only; see "Unbuilt use case" below |
 | Submit Admin Request | Creator | ✅ `AdminRequestServiceTest` | ❌ | P3 | |
@@ -61,8 +61,9 @@ admin manages polls.
 
 **P1 — next:**
 
-1. **Creator creates an election and a ballot measure** — same wizard pattern as
-   `creator-creates-questionnaire`.
+1. **Creator creates a ballot measure** — same wizard pattern as
+   `creator-creates-questionnaire` / `creator-creates-election` (it attaches to
+   one of the creator's elections).
 2. **Member answers an election and a ballot measure** via the UI.
 3. **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode
    (today's e2e uses the mock provider).

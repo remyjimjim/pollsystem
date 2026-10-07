@@ -148,6 +148,7 @@ first spec that needs them.
 | `admin-approves-creator` | admin | Member is turned away from the poll wizard → requests creator access → the admin it was routed to approves it in the queue → member gets the email and can open the wizard. |
 | `admin-manages-creators` | admin | Disable a creator → their poll hidden only in the admin's state, creation refused there but not elsewhere → re-enable the poll via the Polls link (creator stays unchecked) → re-check the creator. |
 | `admin-manages-polls` | admin | Disable a 2-zip poll for ONE zip via the block dialog → the row stays in place (unchecked) → that zip's search no longer finds it, the other zip's does → toggling "Show disabled" ends the stickiness → re-enable. |
+| `creator-creates-election` | creator | Build a whole-state election in the wizard (date + two candidates) → publish → dashboard shows PUBLISHED → a guest finds it → the API shows both candidates saved. |
 | `creator-creates-questionnaire` | creator | Build a whole-state questionnaire in the wizard → publish → dashboard shows PUBLISHED → a guest finds it in search. |
 | `super-disables-submissions` | super | Kill switch: submissions blocked for a member, then re-enabled. |
 | `seed-users-debug` | — | Debug variant of the seeder (keeps windows open). |
