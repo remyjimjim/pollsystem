@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-07 — test(e2e): super-edits-poll-type-template
+
+**Requested:**
+
+> start on the poll-type JSON editor e2e spec
+
+**Changed:**
+
+- New `frontend/e2e/super-edits-poll-type-template.spec.ts`. The super edits
+  the Election template:
+  1. invalid JSON is rejected in the editor;
+  2. the candidates widget is switched to multi-choice checkboxes;
+  3. a member voting on an existing election gets checkboxes, picks both
+     candidates, and both are counted;
+  4. the super restores the original through the editor.
+- Templates are global state, so the spec saves the original in `beforeAll` and
+  restores it in `afterAll` even if a step fails.
+- `seed.ts`: `getPollType()`, `setPollTypeTemplate()`. Docs: no P2 left on the
+  roadmap.
+- Verified in the Dev Container (listed, `tsc --strict`, and an API-only dry
+  run: the change is live for existing elections, and the restored template
+  equals the original). The browser run is host/CI.
+
+**Commit:** `ee6153d`
+
+---
+
 ## 2026-10-07 — Update todo.md: remaining P1 e2e item
 
 **Requested:**
