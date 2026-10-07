@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-07 — test(e2e): creator-creates-ballot-measure
+
+**Requested:**
+
+> yes, start on creator-creates-ballot-measure
+
+**Changed:**
+
+- New `frontend/e2e/creator-creates-ballot-measure.spec.ts`. Setup: a published
+  state-wide election by the same creator, created via the API. In the wizard:
+  1. pick that election as the parent;
+  2. fill title, summary and effective date, then publish;
+  3. the dashboard shows it PUBLISHED;
+  4. a guest finds it, labelled with the election's state (inherited purview);
+  5. the API shows it attached to that election, with the effective date.
+- `seed.ts`: `createElectionAs()`.
+- Docs: `TESTING-E2E.md` tables; `E2E-TRACEABILITY.md` now shows creation
+  covered for all three poll types. The P1 remainder is answering elections /
+  ballot measures and real Stripe Checkout.
+- Verified in the Dev Container (listed, `tsc --strict`, and an API-only dry
+  run). The browser run is host/CI.
+
+**Commit:** `ae31dd8`
+
+---
+
 ## 2026-10-07 — test(e2e): creator-creates-election
 
 **Requested:**
