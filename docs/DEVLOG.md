@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-10-08 — Update todo.md: help guided tours + videos
+
+**Requested:**
+
+> So, now that I think about it, how about the bolded text also has an option to
+> watch the e2e movie and if the page referred to by the bold text is currently
+> loaded in a tab then offer to watch the movie inside the actually loaded tab,
+> if you get what I mean.
+
+then:
+
+> yes, add it to the todo item
+
+**Decision:**
+
+- Tours are written once, as data (steps: a `data-help` target plus a caption).
+  The same steps drive:
+  - a **live tour** in an already-open tab, found via `BroadcastChannel`;
+  - a **recorded video**, made by Playwright;
+  - a **CI check** that every tour still works.
+- A live tour can't rerun the e2e spec itself, since that drives the browser
+  from outside and acts on seeded data. It only points and explains: no Submit,
+  votes, payments, or overwriting what the reader typed.
+- To be built after the content pages exist. The layers on a bold term become:
+  spotlight → tour → video → hover screenshot.
+
+**Changed:**
+
+- `todo.md`: the help bold-terms item gains this as its next layer.
+
+**Commit:** `cd9d8b1`
+
+---
+
 ## 2026-10-08 — docs(manual): Signing up and signing in
 
 **Requested:**
