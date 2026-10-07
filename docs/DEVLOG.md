@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-07 — ci(e2e): run every spec on one worker
+
+**Requested:**
+
+> fix the CI e2e job first, then push
+
+**Changed:**
+
+- `.github/workflows/ci.yml`: the E2E job ran two since-renamed spec files
+  (`register-colorado-users`, `search-complete`), so it found no tests. It now
+  runs `npx playwright test`, the whole suite, so new specs join CI
+  automatically.
+- `frontend/playwright.config.ts`: `workers: 1`. `fullyParallel: false` only
+  orders tests within a file; spec files still ran concurrently, but they share
+  state (Mailpit clearing, the global kill switch). Under `CI`, the interactive
+  `seed-users-debug` is ignored.
+- `frontend/e2e/seed.ts`: `devToken()` and `setPollsDisabled()`.
+  `super-disables-submissions` re-enables submissions in `afterAll`, so a
+  mid-test failure can't cascade into later specs.
+- Docs: `TESTING-E2E.md` explains the one-worker suite and CI;
+  `E2E-TRACEABILITY.md` records the fix.
+- Verified in the Dev Container: `ci.yml` parses; 7 specs listed locally, 6
+  under `CI=true`; `tsc --strict` clean; `setPollsDisabled` toggled the real
+  flag on and off. The CI run itself is first exercised by this push.
+
+**Commits:** `3dfa104`, `996b657`
+
+---
+
 ## 2026-10-07 — test(e2e): creator-creates-questionnaire + matrix refresh
 
 **Requested:**
