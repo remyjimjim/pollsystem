@@ -126,6 +126,13 @@
      under a `help.<view>.<element>` section.
    - Done: No.
 
+-  Help library: hover screenshots for bold UI terms (e.g. **Search**, **See closed polls too**).
+   - Hovering (or focusing/tapping) a bold term shows a screenshot of that screen with the target circled in red.
+   - Remy furnishes the list of bold-text candidates per page.
+   - Idea: generate the screenshots with Playwright (the e2e specs already reach every screen), drawing the
+     red circle around the target element, so the images are regenerated whenever the UI changes.
+   - Done: No.
+
 -  Translate the help library (docs/manual) into the app's other 8 languages (nb, fr, ja, de, es, it, pt-BR, zh-CN).
    - Written in English first; until translated, other languages show the English page with a note.
    - Wait until the English content settles, then translate per page.
