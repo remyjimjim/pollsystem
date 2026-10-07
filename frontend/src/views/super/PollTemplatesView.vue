@@ -57,10 +57,11 @@ async function save(pt: PollTypeAdminDto) {
   }
   try {
     await axios.put(`/api/super/poll-types/${pt.id}/template`, parsed)
-    messages.value = { ...messages.value, [pt.id]: t('super.pollTemplates.saved') }
-    errors.value = { ...errors.value, [pt.id]: '' }
     editing.value = null
     await load()
+    // After load(): it resets messages, which used to wipe "Saved." within one
+    // round trip, so the confirmation was barely visible.
+    messages.value = { ...messages.value, [pt.id]: t('super.pollTemplates.saved') }
   } catch (e: any) {
     errors.value = {
       ...errors.value,
