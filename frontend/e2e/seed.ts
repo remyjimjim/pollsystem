@@ -135,13 +135,15 @@ export async function seedQuestionnaire(prefix = 'zzz'): Promise<{ id: number; t
 
 /** Seed one registered, active member via the API; returns its unique email. */
 export async function seedUser(
-  opts: { access?: string; zipcode?: string; prefix?: string } = {},
+  // adminStateId (access 'ADMIN' only): also grant state-wide admin access.
+  opts: { access?: string; zipcode?: string; prefix?: string; adminStateId?: number } = {},
 ): Promise<{ id: number; email: string }> {
   const q = new URLSearchParams({
     emailPrefix: opts.prefix ?? 'zzz',
     access: opts.access ?? 'USER',
     zipcode: opts.zipcode ?? '80202',
   })
+  if (opts.adminStateId != null) q.set('adminStateId', String(opts.adminStateId))
   const res = await fetch(`${API}/api/dev/seed-user?${q}`, { method: 'POST' })
   if (!res.ok) throw new Error(`seed-user failed: ${res.status} ${await res.text().catch(() => '')}`)
   return (await res.json()) as { id: number; email: string }
@@ -153,6 +155,26 @@ export async function devToken(email: string): Promise<string> {
   const res = await fetch(`${API}/api/dev/token?${new URLSearchParams({ email })}`, { method: 'POST' })
   if (!res.ok) throw new Error(`dev token failed for ${email}: ${res.status}`)
   return ((await res.json()) as { token: string }).token
+}
+
+/** A local user's email + access by id (local-profile-only `/api/dev/user`). */
+export async function devUser(id: number): Promise<{ id: number; email: string; access: string }> {
+  const res = await fetch(`${API}/api/dev/user?id=${id}`)
+  if (!res.ok) throw new Error(`dev user ${id} failed: ${res.status}`)
+  return (await res.json()) as { id: number; email: string; access: string }
+}
+
+/** The member's most recent creator request (as they see it via /api/creator-requests/me). */
+export async function latestCreatorRequest(
+  memberEmail: string,
+): Promise<{ id: number; status: string; assignedAdminId: number | null }> {
+  const res = await fetch(`${API}/api/creator-requests/me`, {
+    headers: { Authorization: `Bearer ${await devToken(memberEmail)}` },
+  })
+  if (!res.ok) throw new Error(`creator-requests/me failed: ${res.status}`)
+  const list = (await res.json()) as Array<{ id: number; status: string; assignedAdminId: number | null }>
+  if (list.length === 0) throw new Error(`${memberEmail} has no creator requests`)
+  return list.reduce((a, b) => (b.id > a.id ? b : a))
 }
 
 /**

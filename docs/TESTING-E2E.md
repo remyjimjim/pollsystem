@@ -102,11 +102,18 @@ Shared setup helpers so specs stay short. Seeding is done **via the API**
 | `seededEmail(role, i?, state?)` | The canonical address `zzz{i}-test{role}-{state}@protonmail.com`. |
 | `registerAndSignIn(page, {email,phone,zipcode})` | Real UI pay-first registration → magic-link sign-in. |
 | `signInSeededUser(page, email)` | Sign in an existing seeded user via `/login` → magic link (no reset). |
+| `seedUser({access?, zipcode?, prefix?, adminStateId?})` | Create a paid member at any access level via the API; returns `{id, email, token}`. A `CREATOR` gets nationwide creator access; `adminStateId` gives an `ADMIN` state-wide admin access. |
+| `devToken(email)` / `devUser(id)` | A JWT for an existing local user / a user's email + access by id (dev-only endpoints). |
+| `latestCreatorRequest(email)` | The member's newest creator request (`status`, `assignedAdminId`). |
+| `setPollsDisabled(superEmail, disabled)` | Flip the global kill switch via the API (cleanup safety net). |
 | `resetTestUsers(prefix?)` | Wipe `zzz` users + everything anchored to them. |
 | `seedQuestionnaire(prefix?)` | Seed one published questionnaire; returns its unique title. |
 | `seedBallotMeasure({zipcode, prefix?})` | Seed a published ballot measure (creates a draft election to hang it on). |
 | `seedBallotResponses({measureId, count, zipcode, prefix?})` | Add responses from real registered users (see rules below). |
 | `hold(page, ms?)` | Watchable pause (interactive-only). |
+
+Mail helpers live in `frontend/e2e/mailpit.ts`: `clearMailpit()`,
+`fetchMagicLink(recipient)`, and `waitForEmail(recipient, subject)`.
 
 ### Seeding rules (non-negotiable)
 
@@ -116,7 +123,8 @@ Shared setup helpers so specs stay short. Seeding is done **via the API**
   **k-anonymity threshold of 10** (`app.results.k-anonymity-threshold`), so a
   purview/geo-filtered results view correctly **withholds** the tally. (Note:
   the *unfiltered* results view shows real counts even below 10 — suppression
-  only fires when "Only voters from poll's purview" or a geo filter is applied.)
+  only fires when the view is narrowed: unticking "outside the poll's purview"
+  (or "within"), or applying a geo filter.)
 - **Zips must be real** (present in `county_zips`) — always source them from
   `resolveLocation`.
 
@@ -133,11 +141,15 @@ first spec that needs them.
 | `register-users` | — | Bulk seeder: 8 users (2 per role) in a state; `keep`/`state`/`county` aware. |
 | `user-registers-submits-poll` | user | Register + pay → find a poll by title → submit a response. |
 | `viewer-searches-views-results` | viewer (guest) | Search → open results → show the k-anonymity floor (tally shown, then withheld under purview). |
+| `user-submits-creator-request` | user | Request creator access for a whole state. |
+| `admin-approves-creator` | admin | Member is turned away from the poll wizard → requests creator access → the admin it was routed to approves it in the queue → member gets the email and can open the wizard. |
+| `creator-creates-questionnaire` | creator | Build a whole-state questionnaire in the wizard → publish → dashboard shows PUBLISHED → a guest finds it in search. |
+| `super-disables-submissions` | super | Kill switch: submissions blocked for a member, then re-enabled. |
 | `seed-users-debug` | — | Debug variant of the seeder (keeps windows open). |
 
-**Roadmap:** `user-submits-creator-request`, `admin-approves-creator-request`,
-`creator-creates-poll`. Hand over pseudo-code in the seed-toolkit vocabulary and
-the endpoints/helpers get built to match.
+**Roadmap:** see `docs/E2E-TRACEABILITY.md` ("Recommended e2e build order").
+Hand over pseudo-code in the seed-toolkit vocabulary and the endpoints/helpers
+get built to match.
 
 ---
 

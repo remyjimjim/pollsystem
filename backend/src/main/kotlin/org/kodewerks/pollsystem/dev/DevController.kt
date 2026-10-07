@@ -17,6 +17,7 @@ import org.kodewerks.pollsystem.poll.QuestionnaireDraftRequest
 import org.kodewerks.pollsystem.poll.QuestionnaireService
 import org.kodewerks.pollsystem.repository.BallotResponseRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.kodewerks.pollsystem.repository.StateRepository
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.kodewerks.pollsystem.security.JwtTokenProvider
 import org.slf4j.LoggerFactory
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -52,6 +54,7 @@ class DevController(
     private val ballotResponses: BallotResponseRepository,
     private val roleAssignments: RoleAssignmentRepository,
     private val tokens: JwtTokenProvider,
+    private val states: StateRepository,
 ) {
 
     @PersistenceContext
@@ -320,9 +323,18 @@ class DevController(
         @RequestParam(defaultValue = "zzz") emailPrefix: String,
         @RequestParam(defaultValue = "USER") access: String,
         @RequestParam(defaultValue = "80202") zipcode: String,
+        // ADMIN only: also grant enabled, state-wide admin access for this
+        // state, so creator requests there route to (or are claimable by) them.
+        @RequestParam(required = false) adminStateId: Long? = null,
     ): Map<String, Any> {
         require(emailPrefix.length >= 3) {
             "emailPrefix must be at least 3 characters (safety guard)"
+        }
+        require(adminStateId == null || access.equals("ADMIN", ignoreCase = true)) {
+            "adminStateId is only for access=ADMIN"
+        }
+        val adminState = adminStateId?.let {
+            states.findById(it).orElseThrow { ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown state $it") }
         }
         val n = System.nanoTime()
         val user = users.save(
@@ -337,6 +349,15 @@ class DevController(
             )
         )
         if (user.access == AccessLevel.CREATOR) grantNationwideCreator(user)
+        if (adminState != null) {
+            roleAssignments.save(
+                RoleAssignment(
+                    user = user, role = AccessLevel.ADMIN, scopeLevel = ScopeLevel.STATE,
+                    state = adminState, enabled = true
+                )
+            )
+            roleAuthCache.invalidateAuthorizations()
+        }
         log.info("Seeded {} user id={} email={}", user.access, user.id, user.email)
         // token: a ready JWT for Swagger UI's Authorize button / API testing.
         return mapOf("id" to user.id, "email" to user.email, "token" to tokens.generateToken(user.id, user.email))
@@ -347,6 +368,15 @@ class DevController(
      * curl can call authenticated endpoints without the magic-link + Mailpit
      * round trip. Local profile only, like the rest of this controller.
      */
+    /** A local user's email and access by id (e.g. to sign in as whichever admin a request was routed to). */
+    @GetMapping("/user")
+    fun user(@RequestParam id: Long): Map<String, Any> {
+        val u = users.findById(id).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "No local user with id $id")
+        }
+        return mapOf("id" to u.id, "email" to u.email, "access" to u.access.name)
+    }
+
     @PostMapping("/token")
     fun token(@RequestParam email: String): Map<String, Any> {
         val user = users.findByEmail(email.trim().lowercase())

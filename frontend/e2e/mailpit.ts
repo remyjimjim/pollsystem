@@ -32,3 +32,21 @@ export async function fetchMagicLink(
   }
   throw new Error(`No magic link found for ${recipient} after ${(attempts * delayMs) / 1000}s`)
 }
+
+/** Wait for an email to [recipient] whose subject contains [subject]; returns its subject. */
+export async function waitForEmail(
+  recipient: string,
+  subject: string,
+  opts: { attempts?: number; delayMs?: number } = {}
+): Promise<string> {
+  const attempts = opts.attempts ?? 60
+  const delayMs  = opts.delayMs  ?? 500
+  const query = encodeURIComponent(`to:${recipient} subject:"${subject}"`)
+  for (let n = 0; n < attempts; n++) {
+    const data = await fetch(`${MAILPIT}/api/v1/search?query=${query}&limit=1`)
+      .then(r => r.json()) as { messages?: Array<{ Subject: string }> }
+    if (data.messages && data.messages.length > 0) return data.messages[0].Subject
+    await new Promise(r => setTimeout(r, delayMs))
+  }
+  throw new Error(`No "${subject}" email for ${recipient} after ${(attempts * delayMs) / 1000}s`)
+}
