@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-08 — docs(manual): Becoming a creator
+
+**Requested:**
+
+> start on Becoming a creator
+
+**Changed:**
+
+- New `docs/manual/user/becoming-a-creator.md`. It covers:
+  - sending a request: scope, poll types and reason;
+  - routing, including the 2-day fallback to any admin;
+  - the decision emails;
+  - what access covers;
+  - admins revising or disabling access;
+  - lapsing, which removes creator access and means re-applying.
+- Found, not fixed, pending the user's decision:
+  - once someone is a creator, no UI links to `/creator/request`, so they
+    can't easily widen their access. The page links there directly for now;
+  - the creator discount coupon (`STRIPE_CREATOR_COUPON`) is applied on
+    approval when configured, but the page doesn't promise a discount.
+
+**Commit:** `81541b4`
+
+---
+
 ## 2026-10-08 — fix(billing): creators and admins pay too; only super is exempt
 
 **Requested:**
