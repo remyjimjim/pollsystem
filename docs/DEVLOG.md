@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-08 — fix(creator): election form's candidate help text
+
+**Requested:**
+
+> ok
+
+This was in reply to the offer to replace the election form's out-of-date
+"Voters will mark Yes / No on each candidate" line.
+
+**Changed:**
+
+- `form.election.candidatesHelp`, in all 9 languages, now reads: "Candidates
+  are grouped by office on the ballot. How voters choose is set for all
+  elections by the site's administrators." The voting layout comes from the
+  super's Election template, currently one choice per office.
+- Frontend 81/81; type-check clean.
+
+**Commit:** `fd6e436`
+
+---
+
 ## 2026-10-08 — docs(manual): creator pages (drafts/publishing + each poll type)
 
 **Requested:**
