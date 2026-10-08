@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-08 — docs(manual): Answering polls
+
+**Requested:**
+
+> push it then start on Answering polls
+
+**Changed:**
+
+- New `docs/manual/user/answering-polls.md`. It covers:
+  - voting in each poll type;
+  - changing your answers until the poll closes;
+  - who can see comments: not the results or the creator, only supers;
+  - "Why can't I answer?", using the server's real messages.
+- Checked against the response forms, `ParticipationGuard`, the response
+  controllers, the kill-switch interceptor, and where comments are exposed.
+- Found, not fixed, pending the user's decision: membership exemption
+  differs. The backend exempts only SUPER; the frontend's `isActiveMember`
+  also exempts CREATOR and ADMIN, though only on the home page cards.
+
+**Commit:** `8f3c57d`
+
+---
+
 ## 2026-10-08 — Update todo.md: help guided tours + videos
 
 **Requested:**
