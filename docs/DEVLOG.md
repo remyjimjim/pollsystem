@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-08 — Grants rework, step 2: statewide or nationwide access only
+
+**Requested:** see step 1 (decisions A and B).
+
+**Changed:**
+
+- Backend: `requireGrantLevel()` rejects county and zipcode levels, in creator
+  requests, admin requests and Manage Creators' **Add access**.
+  `SubmitCreatorRequest` now defaults to STATE.
+- Frontend: a shared `GRANT_LEVELS`.
+  - The request forms offer only Nationwide and States, starting on States.
+  - **Add access** offers States to admins, and Nationwide or States to supers.
+- Existing finer grants are kept, and stay manageable (A).
+- The "Becoming a creator" help page is updated.
+- Tests:
+  - request tests now use statewide access;
+  - new rejection tests;
+  - a test of the form options.
+
+  Backend 287/287, frontend 89/89, e2e 13/13.
+
+**Commit:** `f49e48e`
+
+---
+
 ## 2026-10-08 — Grants rework, step 1: admins hold real creator grants
 
 **Requested:**
