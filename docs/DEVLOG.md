@@ -61,6 +61,66 @@ logged.
 
 ---
 
+## 2026-10-08 — Grants rework, step 1: admins hold real creator grants
+
+**Requested:**
+
+> I think for instance the user with admin access level should be able to
+> disable his creator grants via admin/manage-creators but that does not seem
+> to be the case currently.
+
+then, on the proposal:
+
+> I like your proposal, which is to say that if someone is being migrated over
+> and they somehow became an admin before becoming a creator or lost their
+> creator grants somehow via the db then they should definitely have the
+> creator grants map directly to the admin grants. But I think we should try
+> to enforce a "default" granularity which would be the most granular level
+> (admin, creator) should be the state level. [...] if he/she wants to disable
+> his/her creator grants because he/she is going on vacation for instance then
+> there should be a "reason" comment box pop up. Thoughts.
+
+and the decisions:
+
+> Decision A = a, Decision B = statewide and nationwide, Decision C = what you
+> said, D = later
+
+**Decision:**
+
+- Admins hold real CREATOR grants that mirror their ADMIN grants, and poll
+  creation counts CREATOR grants only.
+- Creator and admin access is granted **statewide or nationwide only**:
+  requests, and Manage Creators' "Add access" (B). Finding polls and a poll's
+  own area are unaffected.
+- **A:** existing finer grants are kept. Nobody gets access that wasn't
+  approved.
+- **C:** every disable asks for a reason, **required when disabling
+  yourself**. It's stored with the grant (reason, who, when), shown on hover,
+  and cleared on re-enable.
+- **D:** the "until" auto re-enable date comes later (`todo.md`).
+- Built in three steps:
+  1. creator grants that mirror admin grants;
+  2. statewide-only access;
+  3. the reason box.
+
+**Changed (step 1):**
+
+- `V27` mirrors every enabled ADMIN grant as a CREATOR grant. It only adds
+  rows, and leaves a region alone if a CREATOR grant already exists there.
+- `AdminCreatorGrants.mirror()` applies the same rule on admin approval and in
+  the dev seed.
+- The guard counts CREATOR grants only.
+- Manage Creators: admins are listed via their mirrored grants, including the
+  caller. Your own grants are switchable; the row's Enabled still can't target
+  yourself. The read-only "Admin access" rows from `ca33158` are removed.
+- seed-local `V28`: `admin@local.test` becomes a California admin and creator.
+  The next schema migration is `V29`.
+- Backend 286/286. The local DB migrated, and the e2e suite passed 13/13.
+
+**Commit:** `4fd3cf6`
+
+---
+
 ## 2026-10-08 — Manage Creators lists admins as creators (access is additive)
 
 **Requested:**
