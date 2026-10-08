@@ -61,6 +61,53 @@ logged.
 
 ---
 
+## 2026-10-08 — Creator reports: plan + phase 1 (at a glance)
+
+**Requested:**
+
+> I'm not sure what creator reports should look like, if you have some ideas
+> feel free to expound.
+
+then:
+
+> es, record it in todo.md and build idea 1
+
+**Decision:**
+
+- Creator reports come in phases:
+  1. at a glance on the dashboard;
+  2. a report page per poll: participation over time, reach, inside vs.
+     outside, highlights, engagement;
+  3. CSV, a printable summary and milestone emails;
+  4. later, an overview across all polls.
+- Privacy guardrails for every phase:
+  - totals only;
+  - groups under 10 are hidden, including against working them out by
+    subtraction;
+  - over-time views stay coarse;
+  - comment counts only, never the text.
+- A separate decision item records the gap that unfiltered public results
+  show even with 1–2 respondents.
+
+**Changed:**
+
+- New `PollParticipationService`. `GET /api/creator/polls` now returns
+  `respondents` and `inArea`. `inArea` is withheld unless both the inside and
+  outside groups are empty or at least the threshold.
+- The Creator dashboard gets:
+  - a Responses column showing the in-area share, or "withheld";
+  - "closes today / tomorrow / in N days";
+  - a Results link.
+
+  Labels are in all 9 languages.
+- Help page: `creator/how-your-polls-are-doing.md`. The `todo.md` items are
+  added.
+- Tests: backend 280/280 (`CreatorPollsParticipationTest`), frontend 86/86.
+
+**Commit:** `4e99511`
+
+---
+
 ## 2026-10-08 — fix(creator): election form's candidate help text
 
 **Requested:**
