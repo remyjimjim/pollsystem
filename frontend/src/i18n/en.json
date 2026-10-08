@@ -551,7 +551,11 @@
       "addButton": "Add",
       "errorLoad": "Failed to load creators",
       "errorSave": "Could not save the change",
-      "noAccessHint": "No access in your purview. Disable their polls one at a time on Manage Polls."
+      "noAccessHint": "No access in your purview. Disable their polls one at a time on Manage Polls.",
+      "you": "(you)",
+      "youHint": "You can't disable yourself.",
+      "adminAccess": "Admin access",
+      "adminAccessInfo": "Admin access lets them create polls here too. A super manages it, not this page."
     },
     "managePolls": {
       "heading": "Manage Polls",

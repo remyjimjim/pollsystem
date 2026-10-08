@@ -500,7 +500,11 @@
       "addButton": "Legg til",
       "errorLoad": "Kunne ikke laste opprettere",
       "errorSave": "Kunne ikke lagre endringen",
-      "noAccessHint": "Ingen tilgang i ditt område. Deaktiver avstemningene deres én etter én under Administrer avstemninger."
+      "noAccessHint": "Ingen tilgang i ditt område. Deaktiver avstemningene deres én etter én under Administrer avstemninger.",
+      "you": "(deg)",
+      "youHint": "Du kan ikke deaktivere deg selv.",
+      "adminAccess": "Admin-tilgang",
+      "adminAccessInfo": "Admin-tilgang lar dem også opprette avstemninger her. Den administreres av en super, ikke på denne siden."
     },
     "managePolls": {
       "heading": "Administrer avstemninger",

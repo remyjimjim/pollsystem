@@ -44,9 +44,11 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
-/** One creator grant as shown on /admin/manage-creators. */
+/** One grant as shown on /admin/manage-creators: a CREATOR grant, or an admin's ADMIN grant (read-only here). */
 data class GrantDto(
     val id: Long,
+    /** CREATOR, or ADMIN: access is additive, so an admin can create polls across their ADMIN grants. */
+    val role: AccessLevel,
     val scopeLevel: ScopeLevel,
     val stateId: Long?,
     val stateName: String?,
@@ -58,7 +60,7 @@ data class GrantDto(
     val pollTypeId: Long?,
     val pollTypeName: String?,
     val enabled: Boolean,
-    /** Inside the caller's purview, so they may toggle / remove it. */
+    /** A CREATOR grant inside the caller's purview, so they may toggle / remove it. ADMIN grants never are. */
     val manageable: Boolean,
     /** Came from an approved creator request (kept for its history: disable, don't remove). */
     val fromRequest: Boolean
@@ -71,8 +73,10 @@ data class CreatorRow(
     val email: String,
     /** The Enabled column: false while the CALLER has disabled this creator (stored, see V26). */
     val enabled: Boolean,
-    /** The caller may flip Enabled: the creator has access overlapping their purview, or is disabled by them. */
+    /** The caller may flip Enabled: the creator has access overlapping their purview, or is disabled by them. Never for yourself. */
     val canToggle: Boolean,
+    /** This row is the caller. */
+    val isYou: Boolean,
     /** Enabled polls inside the caller's purview; polls disabled there don't count. */
     val pollCount: Int,
     /** All their polls inside the caller's purview, disabled included: what the Polls link shows. */
@@ -109,6 +113,12 @@ data class AddGrantsRequest(
  * read as "disabled creator". An ADMIN sees creators with a grant overlapping
  * their own purview and may toggle / add / remove only the grants fully inside
  * it; SUPER sees and manages everything.
+ *
+ * Access is additive by level: an admin can create polls across their enabled
+ * ADMIN grants (CreatorGrantGuard counts them), so admins whose ADMIN grants
+ * overlap the caller's purview are listed as creators too, including the
+ * caller. Their ADMIN grants show read-only (a super manages them), and nobody
+ * can disable themselves.
  */
 @RestController
 @RequestMapping("/api/admin/creators")
@@ -137,8 +147,9 @@ class AdminCreatorsController(
     @Transactional(readOnly = true)
     fun list(@AuthenticationPrincipal principal: AppUserDetails): List<CreatorRow> {
         val reach = reachOf(principal.user)
-        val grantsByUser = roleAssignments.findByRole(AccessLevel.CREATOR)
-            .filter { counted(it) && reach.overlaps(it) }
+        val grantsByUser = (roleAssignments.findByRole(AccessLevel.CREATOR).filter { counted(it) } +
+            roleAssignments.findByRole(AccessLevel.ADMIN).filter { it.enabled })
+            .filter { reach.overlaps(it) }
             .groupBy { it.user.id }
         // Creators also appear when they own polls in the purview, even if their
         // access there has since been removed (old polls still need moderating).
@@ -156,7 +167,8 @@ class AdminCreatorsController(
             .map { u ->
                 toRow(
                     u, grantsByUser[u.id].orEmpty(), reach, stats[u.id],
-                    pollsByEmail[u.email.lowercase()].orEmpty(), disabledByMe = u.id in disabledByMe
+                    pollsByEmail[u.email.lowercase()].orEmpty(), disabledByMe = u.id in disabledByMe,
+                    callerId = principal.user.id
                 )
             }
             .sortedBy { it.email.lowercase() }
@@ -178,6 +190,7 @@ class AdminCreatorsController(
         @RequestBody body: SetEnabledRequest
     ): CreatorRow {
         val me = principal.user
+        if (userId == me.id) throw ResponseStatusException(HttpStatus.CONFLICT, "You can't disable yourself")
         if (!body.enabled) {
             val plan = tx.execute {
                 val creator = users.findById(userId).orElseThrow { notFound("User not found") }
@@ -217,10 +230,15 @@ class AdminCreatorsController(
         return tx.execute { rowFor(principal, userId, reachOf(me)) }!!
     }
 
-    /** The creator's territory: their counted grants (enabled or not), any poll type. */
+    /** The creator's territory: their counted CREATOR grants (enabled or not) and enabled ADMIN grants, any poll type. */
     private fun creatorRegions(userId: Long): List<Region> = minimal(
-        roleAssignments.findByUserIdAndRole(userId, AccessLevel.CREATOR).filter { counted(it) }.mapNotNull { regions.ofGrant(it) }
+        visibleGrants(userId).mapNotNull { regions.ofGrant(it) }
     )
+
+    /** A user's grants that make them a creator: counted CREATOR grants, plus enabled ADMIN grants (access is additive). */
+    private fun visibleGrants(userId: Long): List<RoleAssignment> =
+        roleAssignments.findByUserIdAndRole(userId, AccessLevel.CREATOR).filter { counted(it) } +
+            roleAssignments.findByUserIdAndRole(userId, AccessLevel.ADMIN).filter { it.enabled }
 
     private fun blockRequest(r: Region): CreateBlockRequest = when (r.level) {
         ScopeLevel.NATIONAL -> CreateBlockRequest(BlockScope.EVERYWHERE, null, null, null)
@@ -313,11 +331,11 @@ class AdminCreatorsController(
 
     private fun rowFor(principal: AppUserDetails, userId: Long, reach: Reach): CreatorRow {
         val user = users.findById(userId).orElseThrow { notFound("User not found") }
-        val grants = roleAssignments.findByUserIdAndRole(userId, AccessLevel.CREATOR)
-            .filter { counted(it) && reach.overlaps(it) }
+        val grants = visibleGrants(userId).filter { reach.overlaps(it) }
         return toRow(
             user, grants, reach, editStats(listOf(userId))[userId], pollsInPurview(principal, user.email),
-            disabledByMe = disables.findByCreatorIdAndAdminId(userId, principal.user.id) != null
+            disabledByMe = disables.findByCreatorIdAndAdminId(userId, principal.user.id) != null,
+            callerId = principal.user.id
         )
     }
 
@@ -331,9 +349,10 @@ class AdminCreatorsController(
         reach: Reach,
         stats: Pair<Long, Instant?>?,
         polls: List<AdminPollRow>,
-        disabledByMe: Boolean
+        disabledByMe: Boolean,
+        callerId: Long
     ): CreatorRow {
-        val manageable = grants.filter { reach.contains(it) }
+        val manageable = grants.filter { isManageable(it, reach) }
         val basis = manageable.ifEmpty { grants }
         val state = when {
             basis.all { it.enabled } -> EnabledState.ENABLED
@@ -345,7 +364,8 @@ class AdminCreatorsController(
             email = user.email,
             enabled = !disabledByMe,
             // Visible grants are the ones overlapping the caller's purview.
-            canToggle = disabledByMe || grants.isNotEmpty(),
+            canToggle = user.id != callerId && (disabledByMe || grants.isNotEmpty()),
+            isYou = user.id == callerId,
             pollCount = polls.count { !it.blocked },
             pollTotal = polls.size,
             accessState = state,
@@ -360,8 +380,12 @@ class AdminCreatorsController(
         stateId = g.state?.id, stateName = g.state?.name, stateInitial = g.state?.initial,
         countyId = g.county?.id, countyName = g.county?.name, zipcode = g.zipcode,
         pollTypeId = g.pollType?.id, pollTypeName = g.pollType?.name,
-        enabled = g.enabled, manageable = reach.contains(g), fromRequest = g.creatorRequest != null
+        enabled = g.enabled, manageable = isManageable(g, reach), fromRequest = g.creatorRequest != null,
+        role = g.role
     )
+
+    /** Only CREATOR grants are edited here; ADMIN grants belong to a super's admin management. */
+    private fun isManageable(g: RoleAssignment, reach: Reach) = g.role == AccessLevel.CREATOR && reach.contains(g)
 
     /** userId → (poll count across all kinds, latest creator_edited_at). */
     private fun editStats(userIds: List<Long>): Map<Long, Pair<Long, Instant?>> {

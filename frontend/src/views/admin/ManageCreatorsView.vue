@@ -25,6 +25,8 @@ interface Grant {
   enabled: boolean
   manageable: boolean
   fromRequest: boolean
+  /** ADMIN grants are listed too (access is additive) but are read-only here. */
+  role: 'CREATOR' | 'ADMIN'
 }
 interface CreatorRow {
   userId: number
@@ -33,6 +35,8 @@ interface CreatorRow {
   enabled: boolean
   /** You can flip Enabled: they have access in your purview (or you disabled them). */
   canToggle: boolean
+  /** This row is you (listed via your own admin access; can't be disabled). */
+  isYou: boolean
   /** Their ENABLED polls inside your purview. */
   pollCount: number
   /** All their polls inside your purview, disabled included: what the Polls link opens. */
@@ -105,7 +109,10 @@ function purviewGroups(r: CreatorRow): [string, { text: string; enabled: boolean
   return order
     .map(([lvl, heading]) => [
       heading,
-      r.grants.filter(g => g.scopeLevel === lvl).map(g => ({ text: `${regionLabel(g)} — ${typeLabel(g)}`, enabled: g.enabled })),
+      r.grants.filter(g => g.scopeLevel === lvl).map(g => ({
+        text: `${regionLabel(g)} — ${g.role === 'ADMIN' ? t('admin.manageCreators.adminAccess') : typeLabel(g)}`,
+        enabled: g.enabled,
+      })),
     ] as [string, { text: string; enabled: boolean }[]])
     .filter(([, items]) => items.length > 0)
 }
@@ -245,7 +252,10 @@ onMounted(() => {
         </thead>
         <tbody>
           <tr v-for="r in visibleRows" :key="r.userId" data-test="creator-row">
-            <td class="border-b border-slate-100 p-2">{{ r.email }}</td>
+            <td class="border-b border-slate-100 p-2">
+              {{ r.email }}
+              <span v-if="r.isYou" class="ml-1 text-xs text-slate-500">{{ $t('admin.manageCreators.you') }}</span>
+            </td>
             <td class="border-b border-slate-100 p-2">
               <InfoPopover :label="$t('admin.manageCreators.purviewOf', { email: r.email })" icon="pin" width-class="w-80">
                 <template #trigger>
@@ -270,7 +280,10 @@ onMounted(() => {
             </td>
             <td class="border-b border-slate-100 p-2">{{ formatDate(r.lastEditedAt) }}</td>
             <td class="border-b border-slate-100 p-2">
-              <label class="inline-flex items-center gap-2" :title="r.canToggle ? '' : $t('admin.manageCreators.noAccessHint')">
+              <label
+                class="inline-flex items-center gap-2"
+                :title="r.canToggle ? '' : r.isYou ? $t('admin.manageCreators.youHint') : $t('admin.manageCreators.noAccessHint')"
+              >
                 <input
                   type="checkbox"
                   class="h-4 w-4"
@@ -304,7 +317,7 @@ onMounted(() => {
           <tbody>
             <tr v-for="g in editRow.grants" :key="g.id" :class="g.manageable ? '' : 'text-slate-400'">
               <td class="py-1 pr-2">{{ regionLabel(g) }}</td>
-              <td class="py-1 pr-2 text-slate-500">{{ typeLabel(g) }}</td>
+              <td class="py-1 pr-2 text-slate-500">{{ g.role === 'ADMIN' ? $t('admin.manageCreators.adminAccess') : typeLabel(g) }}</td>
               <td class="py-1 pr-2">
                 <label class="inline-flex items-center gap-1">
                   <input
@@ -317,7 +330,10 @@ onMounted(() => {
                 </label>
               </td>
               <td class="py-1 text-right">
-                <span v-if="!g.manageable" class="text-xs">{{ $t('admin.manageCreators.outsidePurview') }}</span>
+                <InfoPopover v-if="g.role === 'ADMIN'" :label="$t('admin.manageCreators.adminAccess')" align="right">
+                  {{ $t('admin.manageCreators.adminAccessInfo') }}
+                </InfoPopover>
+                <span v-else-if="!g.manageable" class="text-xs">{{ $t('admin.manageCreators.outsidePurview') }}</span>
                 <button
                   v-else-if="!g.fromRequest"
                   type="button" :disabled="editBusy"

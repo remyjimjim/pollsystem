@@ -271,4 +271,55 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
         assertThat(row.canToggle).isFalse()
         assertStatus(HttpStatus.CONFLICT) { controller.setEnabled(admin, c.id, SetEnabledRequest(false)) }
     }
+
+    // ---------- access is additive: admins are creators too ----------
+
+    @Test
+    fun `admins whose admin access overlaps are listed as creators, including yourself`() {
+        val me = zipAdmin("90001", "90012")
+        val other = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-other-admin")
+            .also { grant(it, ScopeLevel.COUNTY, "CA", "Los Angeles", role = AccessLevel.ADMIN) }
+        val farAdmin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-far-admin")
+            .also { grant(it, ScopeLevel.STATE, "TX", role = AccessLevel.ADMIN) }
+
+        val rows = controller.list(me)
+        assertThat(rows.map { it.userId }).contains(me.user.id, other.id).doesNotContain(farAdmin.id)
+
+        val mine = rowOf(rows, me.user)
+        assertThat(mine.isYou).isTrue()
+        assertThat(mine.canToggle).isFalse()
+        assertThat(mine.grants.map { it.role }.distinct()).containsExactly(AccessLevel.ADMIN)
+        assertThat(mine.grants.none { it.manageable }).isTrue()
+
+        val them = rowOf(rows, other)
+        assertThat(them.isYou).isFalse()
+        assertThat(them.canToggle).isTrue()
+        assertThat(them.grants.single().let { it.role to it.manageable }).isEqualTo(AccessLevel.ADMIN to false)
+    }
+
+    @Test
+    fun `you can't disable yourself, nor edit an admin's admin grants here`() {
+        val me = zipAdmin("90001")
+        assertStatus(HttpStatus.CONFLICT) { controller.setEnabled(me, me.user.id, SetEnabledRequest(false)) }
+
+        val other = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-other-admin")
+        val adminGrant = grant(other, ScopeLevel.COUNTY, "CA", "Los Angeles", role = AccessLevel.ADMIN)
+        assertStatus(HttpStatus.NOT_FOUND) { controller.setGrantEnabled(superUser(), other.id, adminGrant.id, SetEnabledRequest(false)) }
+    }
+
+    @Test
+    fun `disabling another admin stops their poll creation in your purview`() {
+        val me = zipAdmin("90001")
+        val other = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-other-admin")
+            .also { grant(it, ScopeLevel.COUNTY, "CA", "Los Angeles", role = AccessLevel.ADMIN) }
+        questionnaires.saveDraft(other, draft("Before", "90001")) // their ADMIN grant covers it
+
+        controller.setEnabled(me, other.id, SetEnabledRequest(false))
+        assertThat(rowOf(controller.list(me), other).enabled).isFalse()
+        assertStatus(HttpStatus.FORBIDDEN) { questionnaires.saveDraft(other, draft("Here", "90001")) }
+        questionnaires.saveDraft(other, draft("Elsewhere in LA", "90012"))
+
+        controller.setEnabled(me, other.id, SetEnabledRequest(true))
+        questionnaires.saveDraft(other, draft("Here again", "90001"))
+    }
 }
