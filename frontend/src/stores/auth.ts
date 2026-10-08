@@ -34,10 +34,10 @@ export const useAuthStore = defineStore('auth', () => {
     return !!until && new Date(until).getTime() > Date.now()
   })
 
-  // Can participate / see member CTAs: either currently paid, or CREATOR+ (who
-  // are exempt from the subscription gate, granted access via other flows).
-  // A logged-in account that is neither is a *lapsed* member (no free accounts).
-  const isActiveMember = computed(() => isPaid.value || hasAccess(AccessLevel.CREATOR))
+  // Can participate / see member CTAs: currently paid. Creators and admins pay
+  // too; only SUPER is exempt (mirrors the backend's ParticipationGuard). A
+  // logged-in account that is neither is a *lapsed* member (no free accounts).
+  const isActiveMember = computed(() => isPaid.value || hasAccess(AccessLevel.SUPER))
 
   // Set auth header for all requests
   if (token.value) {

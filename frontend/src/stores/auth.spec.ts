@@ -90,6 +90,30 @@ describe('useAuthStore', () => {
     })
   })
 
+  describe('isActiveMember', () => {
+    const future = new Date(Date.now() + 86_400_000).toISOString()
+    const past = new Date(Date.now() - 86_400_000).toISOString()
+
+    // Creators and admins pay like everyone else; only SUPER is exempt
+    // (the backend's ParticipationGuard).
+    it.each([
+      [AccessLevel.USER, future, true],
+      [AccessLevel.USER, null, false],
+      [AccessLevel.USER, past, false],
+      [AccessLevel.CREATOR, future, true],
+      [AccessLevel.CREATOR, null, false],
+      [AccessLevel.ADMIN, null, false],
+      [AccessLevel.SUPER, null, true]
+    ])('%s with paidUntil=%s → %s', async (access, paidUntil, expected) => {
+      mockedAxios.post.mockResolvedValueOnce({
+        data: { token: 'tok', user: { ...makeUser(access), paidUntil } }
+      })
+      const auth = useAuthStore()
+      await auth.redeemMagicLink('raw')
+      expect(auth.isActiveMember).toBe(expected)
+    })
+  })
+
   describe('requestMagicLink', () => {
     it('POSTs to the magic-link request endpoint', async () => {
       mockedAxios.post.mockResolvedValueOnce({ status: 202, data: {} })

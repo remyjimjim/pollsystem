@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useBilling } from '@/composables/useBilling'
+import { AccessLevel } from '@/types'
 
 const auth = useAuthStore()
 const route = useRoute()
@@ -10,6 +11,9 @@ const { busy, error, startCheckout, openPortal } = useBilling()
 
 // A live subscription (from the store): paidUntil set and still in the future.
 const isPaid = computed(() => auth.isPaid)
+// SUPER is exempt from the subscription (as in the backend's ParticipationGuard),
+// so an unpaid super gets no renewal prompt.
+const isExempt = computed(() => auth.hasAccess(AccessLevel.SUPER))
 
 // Stripe redirects back to "/" with ?checkout=success|cancel.
 const checkoutStatus = computed(() => {
@@ -20,7 +24,7 @@ const checkoutStatus = computed(() => {
 
 <template>
   <div
-    v-if="auth.isAuthenticated"
+    v-if="auth.isAuthenticated && (isPaid || !isExempt || checkoutStatus)"
     class="mb-6 rounded-md border border-slate-200 bg-white p-5"
   >
     <p
@@ -48,7 +52,7 @@ const checkoutStatus = computed(() => {
         {{ $t('billing.manageCta') }}
       </button>
     </template>
-    <template v-else>
+    <template v-else-if="!isExempt">
       <!-- No free accounts: a logged-in unpaid user is a lapsed member, so this
            is a renewal prompt (not a "become a member" upsell). -->
       <h2 class="text-lg font-semibold text-slate-800">{{ $t('billing.renewTitle') }}</h2>
