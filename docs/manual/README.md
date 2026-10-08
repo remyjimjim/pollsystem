@@ -55,6 +55,8 @@ app's language files (`frontend/src/i18n/*.json`) under `help.<view>.<element>`.
 - [x] `viewer/signing-up.md`: registering, membership, signing in with a magic link (in `viewer/`: signed-out visitors need it)
 - [x] `user/answering-polls.md`: voting, changing your answers
 - [x] `user/becoming-a-creator.md`: requesting creator access
-- [ ] `creator/*`: creating questionnaires, elections and ballot measures; purview; editing, publishing, archiving; reports
+- [x] `creator/drafts-and-publishing.md`: dashboard, drafts, publishing checks, closing, revising, archiving
+- [x] `creator/creating-a-questionnaire.md`, `creating-an-election.md`, `creating-a-ballot-measure.md`
+- [ ] `creator/*`: reports
 - [ ] `admin/*`: approving creators, managing creators, managing polls; reports
 - [ ] `super/*`: admin requests, users, IP management, poll-type templates, the submissions kill switch; reports
