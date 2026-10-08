@@ -61,6 +61,62 @@ logged.
 
 ---
 
+## 2026-10-08 — Manage Creators lists admins as creators (access is additive)
+
+**Requested:**
+
+> let's look at why my admin access user admin@local.test doesn't show up in
+> admin/manage-creators...
+
+then:
+
+> Operating on the premise that grants are additive by access level, in that
+> creators have all grants of a user plus grants of creators, all admins have
+> the grants of users + creators + admins, etc, I'd say A. follows the premise,
+> B follow as admins should be able to see admins whose ADMIN grants overlap
+> your area, as creators (rule 4) and I think it'd be good for a logged in
+> admin to see creators with create access in your (the logged in admin)
+> purview.
+
+**Found:**
+
+- `admin@local.test` has only ADMIN grants (3 LA zipcodes), no CREATOR grants
+  and no polls. Manage Creators only listed people who had:
+  - CREATOR grants overlapping the caller's purview;
+  - polls in that purview; or
+  - a disable by the caller.
+- There was also no self-exclusion: an admin could have disabled their own
+  poll creation.
+
+**Decision:**
+
+- Access is additive by level, so an admin is a creator across their ADMIN
+  grants.
+- Manage Creators also lists admins whose ADMIN grants overlap the caller's
+  area, including the caller.
+- ADMIN grants are read-only on this page; a super manages them.
+- Nobody can disable themselves.
+
+**Changed:**
+
+- Backend:
+  - the rows include enabled, overlapping ADMIN grants;
+  - grants gain `role`, and ADMIN ones are never manageable;
+  - rows gain `isYou`;
+  - your own row can't be toggled, and a self-disable returns 409;
+  - disabling another admin uses their ADMIN grants as creator territory, and
+    the guard enforces it.
+- Frontend:
+  - "(you)" on your row, with a "You can't disable yourself." hint;
+  - "Admin access" on admin grants, read-only with an info popover;
+  - strings in en, nb, fr and ja.
+- Tests: 3 backend, 1 frontend. Backend 283/283, frontend 87/87. Verified on
+  the local DB as `admin@local.test`; the admin e2e specs pass headless (3/3).
+
+**Commit:** `ca33158`
+
+---
+
 ## 2026-10-08 — Creator reports: plan + phase 1 (at a glance)
 
 **Requested:**
