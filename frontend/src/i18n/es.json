@@ -316,7 +316,7 @@
       "electionDate": "Fecha de la elección",
       "zipcode": "Código postal",
       "candidates": "Candidatos",
-      "candidatesHelp": "Los votantes marcarán Sí / No para cada candidato.",
+      "candidatesHelp": "Los candidatos se agrupan por cargo en la papeleta. Los administradores del sitio definen para todas las elecciones cómo eligen los votantes.",
       "candidateName": "Nombre",
       "candidateAffiliation": "Afiliación",
       "candidateOffice": "Cargo (ej. Alcalde)",

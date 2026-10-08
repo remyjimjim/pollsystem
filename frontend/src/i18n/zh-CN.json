@@ -316,7 +316,7 @@
       "electionDate": "选举日期",
       "zipcode": "邮政编码",
       "candidates": "候选人",
-      "candidatesHelp": "选民将对每位候选人选择“是”或“否”。",
+      "candidatesHelp": "候选人在选票上按职位分组。选民的选择方式由网站管理员为所有选举统一设置。",
       "candidateName": "姓名",
       "candidateAffiliation": "所属",
       "candidateOffice": "职位（例如：市长）",

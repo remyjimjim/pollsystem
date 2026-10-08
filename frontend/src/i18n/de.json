@@ -316,7 +316,7 @@
       "electionDate": "Wahltag",
       "zipcode": "Postleitzahl",
       "candidates": "Kandidaten",
-      "candidatesHelp": "Wähler stimmen für jeden Kandidaten mit Ja / Nein ab.",
+      "candidatesHelp": "Kandidaten werden auf dem Stimmzettel nach Amt gruppiert. Wie Wähler auswählen, legen die Administratoren der Website für alle Wahlen fest.",
       "candidateName": "Name",
       "candidateAffiliation": "Zugehörigkeit",
       "candidateOffice": "Amt (z. B. Bürgermeister)",

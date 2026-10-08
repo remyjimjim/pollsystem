@@ -316,7 +316,7 @@
       "electionDate": "Date de l'élection",
       "zipcode": "Code postal",
       "candidates": "Candidats",
-      "candidatesHelp": "Les électeurs marqueront Oui / Non pour chaque candidat.",
+      "candidatesHelp": "Les candidats sont regroupés par poste sur le bulletin. La façon dont les électeurs choisissent est définie pour toutes les élections par les administrateurs du site.",
       "candidateName": "Nom",
       "candidateAffiliation": "Affiliation",
       "candidateOffice": "Fonction (ex. Maire)",

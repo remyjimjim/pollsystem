@@ -316,7 +316,7 @@
       "electionDate": "Data da eleição",
       "zipcode": "CEP",
       "candidates": "Candidatos",
-      "candidatesHelp": "Os eleitores marcarão Sim / Não para cada candidato.",
+      "candidatesHelp": "Os candidatos são agrupados por cargo na cédula. A forma como os eleitores escolhem é definida para todas as eleições pelos administradores do site.",
       "candidateName": "Nome",
       "candidateAffiliation": "Filiação",
       "candidateOffice": "Cargo (ex. Prefeito)",

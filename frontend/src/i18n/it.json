@@ -316,7 +316,7 @@
       "electionDate": "Data dell'elezione",
       "zipcode": "CAP",
       "candidates": "Candidati",
-      "candidatesHelp": "Gli elettori indicheranno Sì / No per ogni candidato.",
+      "candidatesHelp": "I candidati sono raggruppati per carica nella scheda. Il modo in cui gli elettori scelgono è stabilito per tutte le elezioni dagli amministratori del sito.",
       "candidateName": "Nome",
       "candidateAffiliation": "Affiliazione",
       "candidateOffice": "Carica (es. Sindaco)",

@@ -358,7 +358,7 @@
       "purview": "Purview",
       "purviewHint": "Where is this election held? Choose a county, one or more states, or nationwide.",
       "candidates": "Candidates",
-      "candidatesHelp": "Voters will mark Yes / No on each candidate.",
+      "candidatesHelp": "Candidates are grouped by office on the ballot. How voters choose is set for all elections by the site's administrators.",
       "candidateName": "Name",
       "candidateAffiliation": "Affiliation",
       "candidateOffice": "Office (e.g. Mayor)",

@@ -316,7 +316,7 @@
       "electionDate": "Valgdato",
       "zipcode": "Postnummer",
       "candidates": "Kandidater",
-      "candidatesHelp": "Velgerne markerer Ja / Nei for hver kandidat.",
+      "candidatesHelp": "Kandidatene grupperes etter verv på stemmeseddelen. Hvordan velgerne velger, bestemmes for alle valg av nettstedets administratorer.",
       "candidateName": "Navn",
       "candidateAffiliation": "Tilknytning",
       "candidateOffice": "Verv (f.eks. Ordfører)",

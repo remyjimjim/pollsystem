@@ -316,7 +316,7 @@
       "electionDate": "選挙日",
       "zipcode": "郵便番号",
       "candidates": "候補者",
-      "candidatesHelp": "投票者は各候補者に「はい」または「いいえ」を選びます。",
+      "candidatesHelp": "候補者は投票用紙上で役職ごとにまとめて表示されます。投票者の選び方は、サイト管理者がすべての選挙に共通で設定します。",
       "candidateName": "名前",
       "candidateAffiliation": "所属",
       "candidateOffice": "役職（例：市長）",
