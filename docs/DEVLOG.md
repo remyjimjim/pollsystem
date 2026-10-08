@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-08 — docs(manual): creator pages (drafts/publishing + each poll type)
+
+**Requested:**
+
+> push the commits then we'll start on creating each poll type...
+
+**Changed:**
+
+- `creator/drafts-and-publishing.md` covers the cycle all three types share:
+  - dashboard statuses;
+  - the checks on save and on publish;
+  - the 5-day close-date confirmation;
+  - closing;
+  - revising a poll: archive → restore → edit → publish;
+  - archiving.
+- One page per type:
+  - `creating-a-questionnaire.md`;
+  - `creating-an-election.md`, whose area is counties, states or nationwide
+    (no zipcodes);
+  - `creating-a-ballot-measure.md`, which attaches to your own election and
+    needs ballot-measure access for its area.
+- Checked against the forms, services, `CreatorPollsController` and
+  `CreatorGrantGuard`.
+- Found, not fixed, pending the user's decision: the election form's help text
+  says "Voters will mark Yes / No on each candidate", but the voting layout
+  comes from the Election template, currently one choice per office.
+
+**Commit:** `cbca107`
+
+---
+
 ## 2026-10-08 — No creator discount; "Request more creator access" button
 
 **Requested:**
