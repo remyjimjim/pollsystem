@@ -147,6 +147,10 @@
    - Later: an overview across all of a creator's polls (totals, trends, most engaged areas).
      - Done: No.
 
+-  Creator grants: an optional "until" date when disabling a grant (e.g. vacation), re-enabled automatically by a
+   nightly job. Deferred 2026-10-08 (decision D); the reason box (decision C) comes first.
+   - Done: No.
+
 -  Decide: close the small-poll gap in public results.
    - The full, unfiltered results always show, even with 1-2 respondents. Anyone who knows who voted (e.g. the creator,
      three respondents in) can infer how they voted, and live updates make it easier.

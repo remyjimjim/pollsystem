@@ -29,8 +29,9 @@ import org.springframework.web.server.ResponseStatusException
  * everything; a STATE grant covers that state and its counties/zips; a COUNTY
  * grant that county and its zips; a ZIP grant only that zip. A poll purview of
  * NATIONAL (or no rows) needs a NATIONAL grant. A grant with no poll type
- * covers every type. ADMINs' own enabled ADMIN grants count too (an admin may
- * create within their purview); SUPER is unrestricted. Separately, an admin
+ * covers every type. Only CREATOR grants count: an admin creates through the
+ * CREATOR grants that mirror their ADMIN grants (AdminCreatorGrants, V27), so
+ * switching one off really stops them creating there. SUPER is unrestricted. Separately, an admin
  * who disabled the creator on Manage Creators (creator_disables) shuts their
  * whole purview to that creator, whatever the creator's grants say.
  *
@@ -118,8 +119,7 @@ class CreatorGrantGuard(
     }
 
     private fun usable(g: RoleAssignment, user: User, pollType: PollType): Boolean =
-        g.enabled &&
-            (g.role == AccessLevel.CREATOR || (g.role == AccessLevel.ADMIN && user.access >= AccessLevel.ADMIN)) &&
+        g.enabled && g.role == AccessLevel.CREATOR &&
             (g.pollType == null || g.pollType.id == pollType.id)
 
     private companion object {

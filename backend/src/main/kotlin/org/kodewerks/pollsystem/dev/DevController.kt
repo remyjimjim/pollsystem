@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.dev
 
+import org.kodewerks.pollsystem.authz.AdminCreatorGrants
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.kodewerks.pollsystem.authz.RoleAuthCache
@@ -55,6 +56,7 @@ class DevController(
     private val roleAssignments: RoleAssignmentRepository,
     private val tokens: JwtTokenProvider,
     private val states: StateRepository,
+    private val adminCreatorGrants: AdminCreatorGrants
 ) {
 
     @PersistenceContext
@@ -356,12 +358,13 @@ class DevController(
         )
         if (user.access == AccessLevel.CREATOR) grantNationwideCreator(user)
         if (adminState != null) {
-            roleAssignments.save(
+            val adminGrant = roleAssignments.save(
                 RoleAssignment(
                     user = user, role = AccessLevel.ADMIN, scopeLevel = ScopeLevel.STATE,
                     state = adminState, enabled = true
                 )
             )
+            adminCreatorGrants.mirror(user, listOf(adminGrant))
             roleAuthCache.invalidateAuthorizations()
         }
         log.info("Seeded {} user id={} email={}", user.access, user.id, user.email)

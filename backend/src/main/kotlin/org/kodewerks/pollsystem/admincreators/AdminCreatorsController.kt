@@ -44,11 +44,9 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
-/** One grant as shown on /admin/manage-creators: a CREATOR grant, or an admin's ADMIN grant (read-only here). */
+/** One creator grant as shown on /admin/manage-creators. */
 data class GrantDto(
     val id: Long,
-    /** CREATOR, or ADMIN: access is additive, so an admin can create polls across their ADMIN grants. */
-    val role: AccessLevel,
     val scopeLevel: ScopeLevel,
     val stateId: Long?,
     val stateName: String?,
@@ -60,7 +58,7 @@ data class GrantDto(
     val pollTypeId: Long?,
     val pollTypeName: String?,
     val enabled: Boolean,
-    /** A CREATOR grant inside the caller's purview, so they may toggle / remove it. ADMIN grants never are. */
+    /** Inside the caller's purview, so they may toggle / remove it (your own grants included). */
     val manageable: Boolean,
     /** Came from an approved creator request (kept for its history: disable, don't remove). */
     val fromRequest: Boolean
@@ -114,11 +112,10 @@ data class AddGrantsRequest(
  * their own purview and may toggle / add / remove only the grants fully inside
  * it; SUPER sees and manages everything.
  *
- * Access is additive by level: an admin can create polls across their enabled
- * ADMIN grants (CreatorGrantGuard counts them), so admins whose ADMIN grants
- * overlap the caller's purview are listed as creators too, including the
- * caller. Their ADMIN grants show read-only (a super manages them), and nobody
- * can disable themselves.
+ * Access is additive by level: every admin also holds CREATOR grants mirroring
+ * their ADMIN grants (AdminCreatorGrants, V27), so admins are listed like any
+ * creator, the caller included, and can switch their own creator grants off
+ * here. Nobody can use the row's Enabled switch on themselves.
  */
 @RestController
 @RequestMapping("/api/admin/creators")
@@ -147,9 +144,8 @@ class AdminCreatorsController(
     @Transactional(readOnly = true)
     fun list(@AuthenticationPrincipal principal: AppUserDetails): List<CreatorRow> {
         val reach = reachOf(principal.user)
-        val grantsByUser = (roleAssignments.findByRole(AccessLevel.CREATOR).filter { counted(it) } +
-            roleAssignments.findByRole(AccessLevel.ADMIN).filter { it.enabled })
-            .filter { reach.overlaps(it) }
+        val grantsByUser = roleAssignments.findByRole(AccessLevel.CREATOR)
+            .filter { counted(it) && reach.overlaps(it) }
             .groupBy { it.user.id }
         // Creators also appear when they own polls in the purview, even if their
         // access there has since been removed (old polls still need moderating).
@@ -230,15 +226,14 @@ class AdminCreatorsController(
         return tx.execute { rowFor(principal, userId, reachOf(me)) }!!
     }
 
-    /** The creator's territory: their counted CREATOR grants (enabled or not) and enabled ADMIN grants, any poll type. */
+    /** The creator's territory: their counted grants (enabled or not), any poll type. */
     private fun creatorRegions(userId: Long): List<Region> = minimal(
-        visibleGrants(userId).mapNotNull { regions.ofGrant(it) }
+        creatorGrants(userId).mapNotNull { regions.ofGrant(it) }
     )
 
-    /** A user's grants that make them a creator: counted CREATOR grants, plus enabled ADMIN grants (access is additive). */
-    private fun visibleGrants(userId: Long): List<RoleAssignment> =
-        roleAssignments.findByUserIdAndRole(userId, AccessLevel.CREATOR).filter { counted(it) } +
-            roleAssignments.findByUserIdAndRole(userId, AccessLevel.ADMIN).filter { it.enabled }
+    /** A user's counted CREATOR grants (admins hold them too, mirroring their admin area). */
+    private fun creatorGrants(userId: Long): List<RoleAssignment> =
+        roleAssignments.findByUserIdAndRole(userId, AccessLevel.CREATOR).filter { counted(it) }
 
     private fun blockRequest(r: Region): CreateBlockRequest = when (r.level) {
         ScopeLevel.NATIONAL -> CreateBlockRequest(BlockScope.EVERYWHERE, null, null, null)
@@ -331,7 +326,7 @@ class AdminCreatorsController(
 
     private fun rowFor(principal: AppUserDetails, userId: Long, reach: Reach): CreatorRow {
         val user = users.findById(userId).orElseThrow { notFound("User not found") }
-        val grants = visibleGrants(userId).filter { reach.overlaps(it) }
+        val grants = creatorGrants(userId).filter { reach.overlaps(it) }
         return toRow(
             user, grants, reach, editStats(listOf(userId))[userId], pollsInPurview(principal, user.email),
             disabledByMe = disables.findByCreatorIdAndAdminId(userId, principal.user.id) != null,
@@ -352,7 +347,7 @@ class AdminCreatorsController(
         disabledByMe: Boolean,
         callerId: Long
     ): CreatorRow {
-        val manageable = grants.filter { isManageable(it, reach) }
+        val manageable = grants.filter { reach.contains(it) }
         val basis = manageable.ifEmpty { grants }
         val state = when {
             basis.all { it.enabled } -> EnabledState.ENABLED
@@ -380,12 +375,8 @@ class AdminCreatorsController(
         stateId = g.state?.id, stateName = g.state?.name, stateInitial = g.state?.initial,
         countyId = g.county?.id, countyName = g.county?.name, zipcode = g.zipcode,
         pollTypeId = g.pollType?.id, pollTypeName = g.pollType?.name,
-        enabled = g.enabled, manageable = isManageable(g, reach), fromRequest = g.creatorRequest != null,
-        role = g.role
+        enabled = g.enabled, manageable = reach.contains(g), fromRequest = g.creatorRequest != null
     )
-
-    /** Only CREATOR grants are edited here; ADMIN grants belong to a super's admin management. */
-    private fun isManageable(g: RoleAssignment, reach: Reach) = g.role == AccessLevel.CREATOR && reach.contains(g)
 
     /** userId → (poll count across all kinds, latest creator_edited_at). */
     private fun editStats(userIds: List<Long>): Map<Long, Pair<Long, Instant?>> {

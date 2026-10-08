@@ -126,26 +126,23 @@ describe('ManageCreatorsView', () => {
     w.unmount()
   })
 
-  it('lists you via your admin access: tagged, box locked, admin grants read-only', async () => {
+  it('lists you: tagged, row switch locked, but your own creator grant is switchable', async () => {
     const me = {
       userId: 1, email: 'me@test.local', enabled: true, canToggle: false, isYou: true, accessState: 'ENABLED',
-      manageable: false, pollCount: 0, pollTotal: 0, lastEditedAt: null,
-      grants: [grant({ id: 9, role: 'ADMIN', manageable: false, scopeLevel: 'ZIP', zipcode: '90001' })],
+      manageable: true, pollCount: 0, pollTotal: 0, lastEditedAt: null,
+      grants: [grant({ id: 9, manageable: true })],
     }
     vi.mocked(axios.get).mockImplementation(async (url: string) =>
       ({ data: url === '/api/admin/creators' ? [me] : [] }))
     const w = await mountView()
     const r = row(w, 'me@test.local')
     expect(r.text()).toContain('(you)')
-    const box = r.find('input[type="checkbox"]')
-    expect(box.attributes('disabled')).toBeDefined()
+    expect(r.find('input[type="checkbox"]').attributes('disabled')).toBeDefined()
     expect(r.find('label').attributes('title')).toBe("You can't disable yourself.")
 
     await r.findAll('button').find(b => b.text() === 'Edit')!.trigger('click')
     const dialog = w.find('[role="dialog"]')
-    expect(dialog.text()).toContain('Admin access')
-    expect(dialog.text()).not.toContain('Outside your purview')
-    expect(dialog.find('input[type="checkbox"]').attributes('disabled')).toBeDefined()
+    expect(dialog.find('input[type="checkbox"]').attributes('disabled')).toBeUndefined()
     w.unmount()
   })
 })

@@ -29,6 +29,7 @@ class CreatorGrantGuardTest : AbstractIntegrationTest() {
     @Autowired private lateinit var states: StateRepository
     @Autowired private lateinit var counties: CountyRepository
     @Autowired private lateinit var pollTypes: PollTypeRepository
+    @Autowired private lateinit var adminCreatorGrants: org.kodewerks.pollsystem.authz.AdminCreatorGrants
 
     private val electionType = 1L
     private val questionnaireType = 2L
@@ -167,9 +168,14 @@ class CreatorGrantGuardTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `an admin's own admin grants count, and SUPER is unrestricted`() {
+    fun `an admin creates through the creator grants mirroring their admin area, and SUPER is unrestricted`() {
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "grantadmin")
-        fixtures.assignAdmin(admin) // ZIP-level: CA / Los Angeles / 90001
+        val adminGrant = fixtures.assignAdmin(admin) // ZIP-level: CA / Los Angeles / 90001
+        // The ADMIN grant alone doesn't count: only CREATOR grants do (access is additive via the mirror).
+        assertForbidden("90001") {
+            questionnaires.saveDraft(admin, questionnaire(ScopeLevel.ZIP, zipcodes = listOf("90001")))
+        }
+        adminCreatorGrants.mirror(admin, listOf(adminGrant))
         questionnaires.saveDraft(admin, questionnaire(ScopeLevel.ZIP, zipcodes = listOf("90001")))
         assertForbidden("10001") {
             questionnaires.saveDraft(admin, questionnaire(ScopeLevel.ZIP, zipcodes = listOf("10001")))

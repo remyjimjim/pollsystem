@@ -502,9 +502,7 @@
       "errorSave": "Impossible d'enregistrer la modification",
       "noAccessHint": "Aucun accès dans votre périmètre. Désactivez ses sondages un par un dans Gérer les sondages.",
       "you": "(vous)",
-      "youHint": "Vous ne pouvez pas vous désactiver vous-même.",
-      "adminAccess": "Accès admin",
-      "adminAccessInfo": "L'accès admin lui permet aussi de créer des sondages ici. Il est géré par un super, pas sur cette page."
+      "youHint": "Vous ne pouvez pas vous désactiver vous-même."
     },
     "managePolls": {
       "heading": "Gérer les Sondages",

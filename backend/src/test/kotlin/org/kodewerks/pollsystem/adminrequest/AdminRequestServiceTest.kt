@@ -76,6 +76,11 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
         val rows = roleAssignments.findByAdminRequestId(req.id)
         assertThat(rows).hasSize(2).allMatch { it.enabled }
 
+        // Access is additive: matching creator grants for the new admin area.
+        val creatorZips = roleAssignments.findByUserIdAndRole(creator.id, AccessLevel.CREATOR)
+            .filter { it.enabled && it.scopeLevel == ScopeLevel.ZIP }.map { it.zipcode }
+        assertThat(creatorZips).containsExactlyInAnyOrder("90001", "90012")
+
         val refreshed = users.findById(creator.id).orElseThrow()
         assertThat(refreshed.access).isEqualTo(AccessLevel.ADMIN)
     }

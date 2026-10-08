@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.adminrequest
 
+import org.kodewerks.pollsystem.authz.AdminCreatorGrants
 import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.email.EmailService
 import org.kodewerks.pollsystem.model.AccessLevel
@@ -30,6 +31,7 @@ class AdminRequestService(
     private val counties: CountyRepository,
     private val email: EmailService,
     private val roleAuthCache: RoleAuthCache,
+    private val adminCreatorGrants: AdminCreatorGrants
 ) {
 
     @Transactional
@@ -161,7 +163,9 @@ class AdminRequestService(
             )
             val rows = rowsByRequest[req.id].orEmpty()
             if (decision == RequestStatus.APPROVED) {
-                roleAssignments.saveAll(rows.map { it.copy(enabled = true) })
+                val enabled = roleAssignments.saveAll(rows.map { it.copy(enabled = true) })
+                // Access is additive: the new admin is also a creator there.
+                adminCreatorGrants.mirror(req.user, enabled)
                 if (req.user.access.ordinal < AccessLevel.ADMIN.ordinal) {
                     users.save(req.user.copy(access = AccessLevel.ADMIN))
                 }

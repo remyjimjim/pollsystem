@@ -38,6 +38,7 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var states: StateRepository
     @Autowired private lateinit var counties: CountyRepository
     @Autowired private lateinit var pollBlocks: org.kodewerks.pollsystem.poll.PollBlockService
+    @Autowired private lateinit var adminCreatorGrants: org.kodewerks.pollsystem.authz.AdminCreatorGrants
 
     private fun state(initial: String) = states.findByInitial(initial)!!
     private fun county(initial: String, name: String) = counties.findByStateId(state(initial).id).first { it.name == name }
@@ -274,45 +275,60 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
 
     // ---------- access is additive: admins are creators too ----------
 
-    @Test
-    fun `admins whose admin access overlaps are listed as creators, including yourself`() {
-        val me = zipAdmin("90001", "90012")
-        val other = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-other-admin")
-            .also { grant(it, ScopeLevel.COUNTY, "CA", "Los Angeles", role = AccessLevel.ADMIN) }
-        val farAdmin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-far-admin")
-            .also { grant(it, ScopeLevel.STATE, "TX", role = AccessLevel.ADMIN) }
-
-        val rows = controller.list(me)
-        assertThat(rows.map { it.userId }).contains(me.user.id, other.id).doesNotContain(farAdmin.id)
-
-        val mine = rowOf(rows, me.user)
-        assertThat(mine.isYou).isTrue()
-        assertThat(mine.canToggle).isFalse()
-        assertThat(mine.grants.map { it.role }.distinct()).containsExactly(AccessLevel.ADMIN)
-        assertThat(mine.grants.none { it.manageable }).isTrue()
-
-        val them = rowOf(rows, other)
-        assertThat(them.isYou).isFalse()
-        assertThat(them.canToggle).isTrue()
-        assertThat(them.grants.single().let { it.role to it.manageable }).isEqualTo(AccessLevel.ADMIN to false)
+    /** An ADMIN over [initial] (or LA county), with the creator grants that mirror it (V27 / approval). */
+    private fun admin(prefix: String, initial: String? = null, laCounty: Boolean = false): User {
+        val a = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = prefix)
+        val g = if (laCounty) grant(a, ScopeLevel.COUNTY, "CA", "Los Angeles", role = AccessLevel.ADMIN)
+                else grant(a, ScopeLevel.STATE, initial!!, role = AccessLevel.ADMIN)
+        adminCreatorGrants.mirror(a, listOf(g))
+        return a
     }
 
     @Test
-    fun `you can't disable yourself, nor edit an admin's admin grants here`() {
-        val me = zipAdmin("90001")
-        assertStatus(HttpStatus.CONFLICT) { controller.setEnabled(me, me.user.id, SetEnabledRequest(false)) }
+    fun `admins are listed through the creator grants mirroring their admin area, yourself included`() {
+        val me = AppUserDetails(admin("mc-me", "CA"))
+        val other = admin("mc-other-admin", laCounty = true)
+        val far = admin("mc-far-admin", "TX")
 
-        val other = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-other-admin")
-        val adminGrant = grant(other, ScopeLevel.COUNTY, "CA", "Los Angeles", role = AccessLevel.ADMIN)
-        assertStatus(HttpStatus.NOT_FOUND) { controller.setGrantEnabled(superUser(), other.id, adminGrant.id, SetEnabledRequest(false)) }
+        val rows = controller.list(me)
+        assertThat(rows.map { it.userId }).contains(me.user.id, other.id).doesNotContain(far.id)
+
+        val mine = rowOf(rows, me.user)
+        assertThat(mine.isYou).isTrue()
+        assertThat(mine.canToggle).isFalse()                  // the row's Enabled switch: never on yourself
+        assertThat(mine.grants.single().manageable).isTrue()   // but your own creator grant is yours to switch off
+        assertThat(rowOf(rows, other).canToggle).isTrue()
+    }
+
+    @Test
+    fun `switching off your own creator grant stops you creating there, and Enabled can't target yourself`() {
+        val meUser = admin("mc-me", "CA")
+        val me = AppUserDetails(meUser)
+        val g = controller.list(me).let { rowOf(it, meUser) }.grants.single()
+        questionnaires.saveDraft(meUser, draft("Before", "90001"))
+
+        controller.setGrantEnabled(me, meUser.id, g.id, SetEnabledRequest(false))
+        assertStatus(HttpStatus.FORBIDDEN) { questionnaires.saveDraft(meUser, draft("While away", "90001")) }
+        controller.setGrantEnabled(me, meUser.id, g.id, SetEnabledRequest(true))
+        questionnaires.saveDraft(meUser, draft("Back", "90001"))
+
+        assertStatus(HttpStatus.CONFLICT) { controller.setEnabled(me, meUser.id, SetEnabledRequest(false)) }
+    }
+
+    @Test
+    fun `an admin grant alone no longer lets an admin create polls`() {
+        val a = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-bare-admin")
+        val g = grant(a, ScopeLevel.STATE, "CA", role = AccessLevel.ADMIN)
+        assertStatus(HttpStatus.FORBIDDEN) { questionnaires.saveDraft(a, draft("No creator grant", "90001")) }
+        adminCreatorGrants.mirror(a, listOf(g))
+        questionnaires.saveDraft(a, draft("Mirrored", "90001"))
     }
 
     @Test
     fun `disabling another admin stops their poll creation in your purview`() {
         val me = zipAdmin("90001")
-        val other = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "mc-other-admin")
-            .also { grant(it, ScopeLevel.COUNTY, "CA", "Los Angeles", role = AccessLevel.ADMIN) }
-        questionnaires.saveDraft(other, draft("Before", "90001")) // their ADMIN grant covers it
+        val other = admin("mc-other-admin", laCounty = true)
+        questionnaires.saveDraft(other, draft("Before", "90001"))
 
         controller.setEnabled(me, other.id, SetEnabledRequest(false))
         assertThat(rowOf(controller.list(me), other).enabled).isFalse()
