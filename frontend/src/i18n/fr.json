@@ -246,6 +246,7 @@
     "dashboard": {
       "title": "Tableau de bord Créateur",
       "requestAdminAccess": "Demander l'accès admin",
+      "requestMoreAccess": "Demander plus d'accès créateur",
       "newPoll": "+ Nouveau sondage",
       "showArchived": "Afficher les archivés",
       "hideArchived": "Masquer les archivés",

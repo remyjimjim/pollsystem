@@ -246,6 +246,7 @@
     "dashboard": {
       "title": "作成者ダッシュボード",
       "requestAdminAccess": "管理者アクセスを申請",
+      "requestMoreAccess": "作成者アクセスの追加を申請",
       "newPoll": "+ 新しい投票",
       "showArchived": "アーカイブを表示",
       "hideArchived": "アーカイブを非表示",

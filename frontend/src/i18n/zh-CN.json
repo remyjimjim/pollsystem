@@ -246,6 +246,7 @@
     "dashboard": {
       "title": "创建者控制面板",
       "requestAdminAccess": "申请管理员权限",
+      "requestMoreAccess": "申请更多创建者权限",
       "newPoll": "+ 新建投票",
       "showArchived": "显示已归档",
       "hideArchived": "隐藏已归档",

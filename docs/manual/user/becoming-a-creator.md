@@ -44,8 +44,9 @@ You'll get an email confirming the request.
 ## What your access covers
 
 Your access is the area and poll types you were approved for. You can create
-and publish polls only of those types, and only in that area. To widen it, send
-another request from the [Creator Request](/creator/request) page.
+and publish polls only of those types, and only in that area. To widen it, click
+**Request more creator access** on your Creator dashboard and send another
+request.
 
 An admin can also:
 

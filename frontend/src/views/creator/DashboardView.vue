@@ -103,6 +103,14 @@ onMounted(load)
     <div class="mb-4 flex items-center justify-between">
       <h1 class="m-0 text-2xl font-semibold text-slate-800">{{ $t('creator.dashboard.title') }}</h1>
       <div class="flex gap-2">
+        <!-- Widen access (more area or poll types): the home page's "Become a
+             Creator" card is gone once someone is a creator. -->
+        <router-link
+          to="/creator/request"
+          class="rounded border border-slate-800 bg-white px-4 py-2 text-sm text-slate-800 no-underline hover:bg-slate-50"
+        >
+          {{ $t('creator.dashboard.requestMoreAccess') }}
+        </router-link>
         <router-link
           v-if="!auth.hasAccess(AccessLevel.ADMIN)"
           to="/admin-request"

@@ -246,6 +246,7 @@
     "dashboard": {
       "title": "Painel do Criador",
       "requestAdminAccess": "Solicitar acesso de admin",
+      "requestMoreAccess": "Solicitar mais acesso de criador",
       "newPoll": "+ Nova enquete",
       "showArchived": "Mostrar arquivadas",
       "hideArchived": "Ocultar arquivadas",

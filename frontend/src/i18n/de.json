@@ -246,6 +246,7 @@
     "dashboard": {
       "title": "Ersteller-Dashboard",
       "requestAdminAccess": "Admin-Zugang beantragen",
+      "requestMoreAccess": "Mehr Ersteller-Zugang beantragen",
       "newPoll": "+ Neue Umfrage",
       "showArchived": "Archivierte anzeigen",
       "hideArchived": "Archivierte ausblenden",

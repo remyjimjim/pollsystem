@@ -246,6 +246,7 @@
     "dashboard": {
       "title": "Panel de Creador",
       "requestAdminAccess": "Solicitar acceso de admin",
+      "requestMoreAccess": "Solicitar más acceso de creador",
       "newPoll": "+ Nueva encuesta",
       "showArchived": "Mostrar archivados",
       "hideArchived": "Ocultar archivados",

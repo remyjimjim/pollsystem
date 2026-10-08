@@ -246,6 +246,7 @@
     "dashboard": {
       "title": "Oppretter-panel",
       "requestAdminAccess": "Søk om admin-tilgang",
+      "requestMoreAccess": "Søk om mer oppretter-tilgang",
       "newPoll": "+ Ny avstemning",
       "showArchived": "Vis arkiverte",
       "hideArchived": "Skjul arkiverte",

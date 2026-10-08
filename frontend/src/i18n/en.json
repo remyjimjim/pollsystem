@@ -285,6 +285,7 @@
     "dashboard": {
       "title": "Creator Dashboard",
       "requestAdminAccess": "Request admin access",
+      "requestMoreAccess": "Request more creator access",
       "newPoll": "+ New Poll",
       "showArchived": "Show archived",
       "hideArchived": "Hide archived",
