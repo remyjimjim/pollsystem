@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-08 — fix(billing): creators and admins pay too; only super is exempt
+
+**Requested:**
+
+> Creators and admins must be on a paid subscription, yes.
+
+**Decision:**
+
+- Every role needs an active subscription to participate except SUPER. This
+  matches the backend's `ParticipationGuard`.
+
+**Changed:**
+
+- `auth.isActiveMember` is now `isPaid || SUPER`; it used to also exempt
+  CREATOR and above.
+- `BillingBanner`: an unpaid super, who is exempt, no longer gets a renewal
+  prompt or an empty banner.
+- New tests: an `isActiveMember` table and `BillingBanner.spec.ts`. Three of
+  them fail on the old code. Frontend 79/79; type-check clean.
+
+**Commit:** `b460449`
+
+---
+
 ## 2026-10-08 — docs(manual): Answering polls
 
 **Requested:**
