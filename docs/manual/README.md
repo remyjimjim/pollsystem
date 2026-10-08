@@ -57,6 +57,7 @@ app's language files (`frontend/src/i18n/*.json`) under `help.<view>.<element>`.
 - [x] `user/becoming-a-creator.md`: requesting creator access
 - [x] `creator/drafts-and-publishing.md`: dashboard, drafts, publishing checks, closing, revising, archiving
 - [x] `creator/creating-a-questionnaire.md`, `creating-an-election.md`, `creating-a-ballot-measure.md`
-- [ ] `creator/*`: reports
+- [x] `creator/how-your-polls-are-doing.md`: dashboard responses, in-area share, closing, results (creator reports phase 1)
+- [ ] `creator/*`: detailed reports (phases 2-3 in `todo.md`)
 - [ ] `admin/*`: approving creators, managing creators, managing polls; reports
 - [ ] `super/*`: admin requests, users, IP management, poll-type templates, the submissions kill switch; reports

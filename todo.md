@@ -126,6 +126,33 @@
      under a `help.<view>.<element>` section.
    - Done: No.
 
+-  Creator reports, in phases. Privacy guardrails apply to every phase:
+   - Totals only, never one row per respondent. Every breakdown hides groups under 10 (app.results.k-anonymity-threshold).
+   - Hide enough cells that a hidden one can't be worked out by subtraction (e.g. state 52, counties 20 + 25 -> 7).
+   - Over-time views stay coarse: whole days, grouped further for small polls.
+   - Comments stay private: show a count, never the text.
+   - Phase 1 (at a glance): the Creator dashboard shows each poll's Responses (with the in-area share), "Closes in N days",
+     and a Results link. Help page creator/how-your-polls-are-doing.md.
+     - Done: Yes (2026-10-08).
+   - Phase 2: a report page for each poll, visible only to its creator:
+     - participation over time (per day + running total);
+     - reach: respondents per county/state in the area, and coverage, e.g. "9 of 14 counties";
+     - inside vs. outside results side by side;
+     - highlights per type (election leaders/margins, measure margin, questionnaire most-agreed -> most-divided);
+     - engagement: answers changed, comment count.
+     - Done: No.
+   - Phase 3: CSV download of the report's totals, a printable summary page, and milestone emails
+     ("10 responses: results by area are now visible", plus a final report at close).
+     - Done: No.
+   - Later: an overview across all of a creator's polls (totals, trends, most engaged areas).
+     - Done: No.
+
+-  Decide: close the small-poll gap in public results.
+   - The full, unfiltered results always show, even with 1-2 respondents. Anyone who knows who voted (e.g. the creator,
+     three respondents in) can infer how they voted, and live updates make it easier.
+   - Options: hide all results until at least 10 people have answered, and/or show a delayed snapshot instead of live.
+   - Done: No.
+
 -  Help library: show readers where bold UI terms are (e.g. **Search**, **See closed polls too**). Hybrid:
    - Spotlight links (default) for elements visible when their page first loads (most filters, buttons, checkboxes, nav):
      - The bold term links to the live page, e.g. /polls/search?spotlight=search.includeClosed.

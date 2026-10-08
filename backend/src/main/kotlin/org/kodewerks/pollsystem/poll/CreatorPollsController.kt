@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
 import org.kodewerks.pollsystem.repository.ElectionRepository
@@ -24,7 +25,11 @@ data class CreatorPollSummary(
     val title: String,
     val status: PollStatus,
     val closeDate: Instant?,
-    val createdAt: Instant
+    val createdAt: Instant,
+    /** People who have answered (0 for drafts). */
+    val respondents: Int = 0,
+    /** How many of them live inside the poll's purview; null = withheld (small group). */
+    val inArea: Int? = 0
 )
 
 @RestController
@@ -32,7 +37,8 @@ data class CreatorPollSummary(
 class CreatorPollsController(
     private val questionnaires: QuestionnaireRepository,
     private val elections: ElectionRepository,
-    private val ballotMeasures: BallotMeasureRepository
+    private val ballotMeasures: BallotMeasureRepository,
+    private val participation: PollParticipationService
 ) {
     @GetMapping
     fun list(
@@ -62,7 +68,12 @@ class CreatorPollsController(
                 )
             }
         val all = (q + e + b).sortedByDescending { it.createdAt }
-        return if (showArchived) all else all.filterNot { it.status == PollStatus.ARCHIVED }
+        val listed = if (showArchived) all else all.filterNot { it.status == PollStatus.ARCHIVED }
+        // Drafts have no responses; count the rest (a creator has few polls).
+        return listed.map { p ->
+            if (p.status == PollStatus.DRAFT) p
+            else participation.of(kindOf(p.type), p.id).let { p.copy(respondents = it.respondents, inArea = it.inArea) }
+        }
     }
 
     /**
@@ -137,4 +148,10 @@ class CreatorPollsController(
 
     private fun notFound() = ResponseStatusException(HttpStatus.NOT_FOUND, "Poll not found")
     private fun forbidden() = ResponseStatusException(HttpStatus.FORBIDDEN, "Not your poll")
+
+    private fun kindOf(type: String): PollKind = when (type) {
+        "Questionnaire" -> PollKind.QUESTIONNAIRE
+        "Election" -> PollKind.ELECTION
+        else -> PollKind.BALLOT_MEASURE
+    }
 }

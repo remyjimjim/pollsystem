@@ -16,6 +16,10 @@ interface CreatorPollSummary {
   status: PollStatus
   closeDate: string | null
   createdAt: string
+  /** People who have answered (0 for drafts). */
+  respondents: number
+  /** How many live inside the poll's area; null = withheld (a group is too small). */
+  inArea: number | null
 }
 
 const polls = ref<CreatorPollSummary[]>([])
@@ -36,6 +40,23 @@ function closeDatePast(iso: string | null): boolean {
   const end = new Date()
   end.setHours(23, 59, 59, 999)
   return new Date(iso).getTime() <= end.getTime()
+}
+
+// Whole days until a live poll closes (0 = closes today); null if no close
+// date, already closed, or not live.
+function daysToClose(p: CreatorPollSummary): number | null {
+  if (p.status !== 'PUBLISHED' || !p.closeDate) return null
+  const ms = new Date(p.closeDate).getTime() - Date.now()
+  return ms < 0 ? null : Math.floor(ms / 86_400_000)
+}
+
+function inAreaPct(p: CreatorPollSummary): number | null {
+  return p.inArea === null || p.respondents === 0 ? null : Math.round((p.inArea / p.respondents) * 100)
+}
+
+// Results are public once a poll has been published.
+function hasResults(p: CreatorPollSummary): boolean {
+  return p.status === 'PUBLISHED' || p.status === 'CLOSED'
 }
 
 function statusClasses(status: PollStatus): string {
@@ -149,6 +170,8 @@ onMounted(load)
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableType') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableStatus') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableCloseDate') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableResponses') }}</th>
+          <th class="border-b border-slate-200 p-2"></th>
           <th class="border-b border-slate-200 p-2"></th>
           <th class="border-b border-slate-200 p-2"></th>
         </tr>
@@ -169,6 +192,28 @@ onMounted(load)
             :class="closeDatePast(p.closeDate) ? 'bg-orange-50 text-orange-900' : ''"
           >
             {{ p.closeDate ? new Date(p.closeDate).toLocaleString() : '—' }}
+            <span v-if="daysToClose(p) !== null" class="block text-xs text-slate-500">
+              {{ $t('creator.dashboard.closesIn', { n: daysToClose(p) }, daysToClose(p)!) }}
+            </span>
+          </td>
+          <td class="border-b border-slate-100 p-2" data-test="responses">
+            <template v-if="p.status === 'DRAFT'">—</template>
+            <template v-else>
+              {{ p.respondents }}
+              <span v-if="inAreaPct(p) !== null" class="text-slate-500">· {{ $t('creator.dashboard.inAreaShare', { pct: inAreaPct(p) }) }}</span>
+              <span
+                v-else-if="p.respondents > 0"
+                class="text-slate-500"
+                :title="$t('creator.dashboard.inAreaHiddenWhy')"
+              >· {{ $t('creator.dashboard.inAreaHidden') }}</span>
+            </template>
+          </td>
+          <td class="border-b border-slate-100 p-2">
+            <router-link
+              v-if="hasResults(p)"
+              :to="`/polls/${editSlug(p.type)}/${p.id}/results`"
+              class="text-slate-800 underline"
+            >{{ $t('creator.dashboard.results') }}</router-link>
           </td>
           <td class="border-b border-slate-100 p-2">
             <router-link
