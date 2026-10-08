@@ -27,10 +27,4 @@ interface PaymentProvider {
 
     /** Open the self-service billing portal for [user]; returns a hosted-page URL. */
     fun createPortalSession(user: User): String
-
-    /** Apply the creator discount to [user]'s subscription. Best-effort; no-op if unconfigured. */
-    fun applyCreatorDiscount(user: User)
-
-    /** Remove any discount from [user]'s subscription. Best-effort. */
-    fun removeCreatorDiscount(user: User)
 }

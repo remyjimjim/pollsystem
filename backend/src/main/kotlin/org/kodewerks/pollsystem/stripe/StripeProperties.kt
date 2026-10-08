@@ -17,12 +17,6 @@ data class StripeProperties(
     /** Price id of the membership subscription (`price_…`). Blank ⇒ checkout 503s. */
     val priceId: String = "",
     /**
-     * Coupon id for the creator discount (`percent_off`, `duration=forever`),
-     * applied to a creator's subscription on approval and removed on demotion.
-     * Blank ⇒ no discount is applied (approval still succeeds).
-     */
-    val creatorCouponId: String = "",
-    /**
      * Frontend paths Stripe redirects back to, appended to
      * `app.magic-link.base-url`. `{CHECKOUT_SESSION_ID}` is substituted by Stripe.
      */

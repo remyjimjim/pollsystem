@@ -14,7 +14,6 @@ import org.kodewerks.pollsystem.repository.CreatorRequestRepository
 import org.kodewerks.pollsystem.repository.PollTypeRepository
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
 import org.kodewerks.pollsystem.repository.StateRepository
-import org.kodewerks.pollsystem.payment.PaymentProvider
 import org.kodewerks.pollsystem.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -34,7 +33,6 @@ class CreatorRequestService(
     private val counties: CountyRepository,
     private val email: EmailService,
     private val roleAuthCache: RoleAuthCache,
-    private val billing: PaymentProvider,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -206,8 +204,6 @@ class CreatorRequestService(
                 roleAssignments.saveAll(rows.map { it.copy(enabled = true) })
                 if (req.user.access.ordinal < AccessLevel.CREATOR.ordinal) {
                     users.save(req.user.copy(access = AccessLevel.CREATOR))
-                    // Reward the new creator with the discounted subscription rate.
-                    billing.applyCreatorDiscount(req.user)
                 }
                 email.send(
                     to = req.user.email,

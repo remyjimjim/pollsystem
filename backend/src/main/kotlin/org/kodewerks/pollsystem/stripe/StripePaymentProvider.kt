@@ -3,8 +3,6 @@ package org.kodewerks.pollsystem.stripe
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.stripe.StripeClient
 import com.stripe.exception.StripeException
-import com.stripe.param.SubscriptionUpdateParams
-import com.stripe.param.common.EmptyParam
 import com.stripe.param.billingportal.SessionCreateParams as PortalSessionCreateParams
 import com.stripe.param.checkout.SessionCreateParams
 import org.kodewerks.pollsystem.auth.MagicLinkProperties
@@ -134,18 +132,6 @@ class StripePaymentProvider(
     }
 
     /**
-     * Apply the creator discount coupon to the user's subscription (an incentive
-     * for the create/moderate work creators contribute). No-op if the coupon or
-     * API key isn't configured, or the user has no subscription. **Best-effort**:
-     * a Stripe failure is logged, not thrown, so it never rolls back the role
-     * grant that triggered it.
-     */
-    override fun applyCreatorDiscount(user: User) = updateSubscriptionDiscount(user, apply = true)
-
-    /** Remove any discount from the user's subscription (best-effort; see above). */
-    override fun removeCreatorDiscount(user: User) = updateSubscriptionDiscount(user, apply = false)
-
-    /**
      * Retrieve a subscription's current period end (when the paid access lapses),
      * used by the webhook to set `paid_until` right at checkout completion — so
      * activation doesn't depend on the ordering or delivery of the separate
@@ -167,31 +153,6 @@ class StripePaymentProvider(
         } catch (e: StripeException) {
             log.warn("Could not retrieve subscription {} for period end: {}", subscriptionId, e.message)
             null
-        }
-    }
-
-    private fun updateSubscriptionDiscount(user: User, apply: Boolean) {
-        val subId = user.stripeSubscriptionId
-        if (props.apiKey.isBlank() || subId.isNullOrBlank()) return
-        if (apply && props.creatorCouponId.isBlank()) return
-        val params = if (apply) {
-            SubscriptionUpdateParams.builder()
-                .addDiscount(
-                    SubscriptionUpdateParams.Discount.builder().setCoupon(props.creatorCouponId).build()
-                )
-                .build()
-        } else {
-            // An empty discounts list clears any existing discount.
-            SubscriptionUpdateParams.builder().setDiscounts(EmptyParam.EMPTY).build()
-        }
-        try {
-            StripeClient(props.apiKey).subscriptions().update(subId, params)
-            log.info("{} creator discount for user={} sub={}", if (apply) "Applied" else "Removed", user.id, subId)
-        } catch (e: StripeException) {
-            log.warn(
-                "Failed to {} creator discount for user={} sub={}: {}",
-                if (apply) "apply" else "remove", user.id, subId, e.message
-            )
         }
     }
 }

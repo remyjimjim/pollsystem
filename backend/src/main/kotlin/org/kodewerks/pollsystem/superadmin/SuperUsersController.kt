@@ -120,7 +120,6 @@ class SuperUsersController(
     private val candidateResponses: CandidateResponseRepository,
     private val ballotResponses: BallotResponseRepository,
     private val roleAuthCache: RoleAuthCache,
-    private val billing: org.kodewerks.pollsystem.payment.PaymentProvider,
 ) {
 
     @GetMapping
@@ -365,8 +364,6 @@ class SuperUsersController(
         roleAssignments.findByUserIdAndRole(userId, u.access)
             .let { rows -> roleAssignments.saveAll(rows.map { ra: RoleAssignment -> ra.copy(enabled = false) }) }
         roleAuthCache.invalidateAuthorizations()
-        // Dropping below CREATOR ends the creator discount.
-        if (newAccess.ordinal < AccessLevel.CREATOR.ordinal) billing.removeCreatorDiscount(updated)
         return rowFor(updated)
     }
 

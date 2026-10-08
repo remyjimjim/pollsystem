@@ -85,12 +85,4 @@ class MockPaymentProvider(
         log.info("Mock portal for user {} (no-op)", user.id)
         return "$baseUrl/?portal=mock"
     }
-
-    override fun applyCreatorDiscount(user: User) {
-        log.info("Mock: applyCreatorDiscount (no-op) for user {}", user.id)
-    }
-
-    override fun removeCreatorDiscount(user: User) {
-        log.info("Mock: removeCreatorDiscount (no-op) for user {}", user.id)
-    }
 }

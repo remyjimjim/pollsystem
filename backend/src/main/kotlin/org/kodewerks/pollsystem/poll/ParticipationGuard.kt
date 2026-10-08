@@ -14,8 +14,8 @@ import org.springframework.web.server.ResponseStatusException
  *  2. **Active paid membership** — a registered USER only becomes a *participating*
  *     member by paying (`paidUntil` in the future); paying is what turns a viewer
  *     into a participant. Only **SUPER** is exempt — USER, CREATOR and ADMIN all
- *     need an active subscription (creators pay a reduced rate; see the coupon
- *     follow-up). A lapsed subscription demotes the account to VIEWER (webhook).
+ *     need an active subscription, at the same price (no creator discount).
+ *     A lapsed subscription demotes the account to VIEWER (webhook).
  *
  * Viewing stays open to everyone; this only gates submission. The frontend
  * mirrors both checks; this is the server-side backstop. The subscription

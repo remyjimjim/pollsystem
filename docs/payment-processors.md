@@ -91,15 +91,14 @@ decision axes that matter:
 
 Stripe touches a small, well-contained surface of the app:
 
-- `stripe/BillingService.kt` — creates Checkout + Customer Portal sessions and
-  applies/removes the creator discount.
+- `stripe/BillingService.kt` — creates Checkout + Customer Portal sessions.
 - `stripe/StripeWebhookService.kt` + `StripeWebhookController.kt` — verifies and
   applies webhook events (sets `paid_until`, promotes/demotes access).
 - Three columns on `users`: `stripe_customer_id`, `stripe_subscription_id`,
   `paid_until`.
 
 Everything downstream — the `paid_until` participation gate, the
-VIEWER↔USER demote/promote, the creator discount rules — is **provider-agnostic**.
+VIEWER↔USER demote/promote — is **provider-agnostic**.
 
 A switch therefore means: implement the new provider behind the **`PaymentProvider`
 abstraction** (checkout/portal/discount + a webhook adapter), re-map those three
