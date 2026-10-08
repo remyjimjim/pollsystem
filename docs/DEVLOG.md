@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-08 — No creator discount; "Request more creator access" button
+
+**Requested:**
+
+> yes, add the button; no creator discount
+
+**Decision:**
+
+- No creator discount. Creators and admins pay the same membership as
+  everyone; only SUPER is exempt.
+
+**Changed:**
+
+- `56f6b25`: the creator-discount code is removed.
+  - Payment providers: `applyCreatorDiscount` and `removeCreatorDiscount`, plus
+    the Stripe discount helper.
+  - Config: `creatorCouponId`, `app.stripe.creator-coupon-id` and the
+    `STRIPE_CREATOR_COUPON` variable.
+  - Callers: the calls on approval and demotion, and their unused `billing`
+    fields.
+  - Docs: `ParticipationGuard`'s comment and `docs/payment-processors.md`.
+  - Backend 277/277.
+- `c4f9bb0`: the creator dashboard gets **Request more creator access**, linking to
+  `/creator/request`, in all 9 languages. Before, nothing linked there once
+  someone was a creator. A new `DashboardView.spec.ts`; the help page now points
+  at the button; frontend 81/81.
+
+**Commits:** `56f6b25`, `c4f9bb0`
+
+---
+
 ## 2026-10-08 — docs(manual): Becoming a creator
 
 **Requested:**
