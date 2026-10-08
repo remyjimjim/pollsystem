@@ -17,13 +17,10 @@ membership like every other member.
 
 1. On your home page, click **Request Creator access** (on the **Become a
    Creator** card).
-2. Under **Geographic scope**, choose how wide an area you're asking for:
-   - **Specific zipcodes**
-   - **Whole county(ies)**
-   - **Whole state(s)**
-   - **Nationwide**
-
-   Then pick the states, counties or zipcodes.
+2. Under **Geographic scope**, choose **Whole state(s)** and pick the states,
+   or **Nationwide**. Creator access is granted for whole states or the whole
+   country. Your polls can still cover a smaller area, such as a county or
+   zipcode, inside the states you're approved for.
 3. Under **Poll Types**, tick the kinds of poll you want to create: Election,
    Questionnaire, and/or Referendum/Ballot Measure.
 4. Optionally, add a **Reason**: why you'd like to create polls in this area.

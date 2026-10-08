@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size
 import java.time.Instant
 
 data class SubmitAdminRequest(
-    // Requested admin reach: Nationwide / whole state(s) / whole county(ies) / zips.
+    // Requested admin reach: Nationwide / whole state(s) (statewide or nationwide only, see GRANT_LEVELS).
     val scopeLevel: ScopeLevel = ScopeLevel.STATE,
     val regionIds: List<Long> = emptyList(),   // stateIds for STATE, countyIds for COUNTY
     val zipcodes: List<String> = emptyList(),   // ZIP only

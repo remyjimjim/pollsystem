@@ -30,9 +30,9 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
         val req = service.submit(
             creator,
             SubmitAdminRequest(
-                scopeLevel = ScopeLevel.ZIP,
-                zipcodes = listOf("90001"),
-                reason = "I want to administer this zip"
+                scopeLevel = ScopeLevel.STATE,
+                regionIds = listOf(fixtures.stateId("CA")),
+                reason = "I want to administer this state"
             )
         )
 
@@ -49,7 +49,7 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
         assertThatThrownBy {
             service.submit(
                 user,
-                SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "Skipping creator step")
+                SubmitAdminRequest(scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")), reason = "Skipping creator step")
             )
         }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
             assertThat(it.statusCode.value()).isEqualTo(403)
@@ -63,7 +63,7 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
 
         val req = service.submit(
             creator,
-            SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001", "90012"), reason = "Reason")
+            SubmitAdminRequest(scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA"), fixtures.stateId("NV")), reason = "Reason")
         )
 
         service.batchApprove(listOf(req.id), approver)
@@ -77,9 +77,9 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
         assertThat(rows).hasSize(2).allMatch { it.enabled }
 
         // Access is additive: matching creator grants for the new admin area.
-        val creatorZips = roleAssignments.findByUserIdAndRole(creator.id, AccessLevel.CREATOR)
-            .filter { it.enabled && it.scopeLevel == ScopeLevel.ZIP }.map { it.zipcode }
-        assertThat(creatorZips).containsExactlyInAnyOrder("90001", "90012")
+        val creatorStates = roleAssignments.findByUserIdAndRole(creator.id, AccessLevel.CREATOR)
+            .filter { it.enabled && it.scopeLevel == ScopeLevel.STATE }.map { it.state?.initial }
+        assertThat(creatorStates).containsExactlyInAnyOrder("CA", "NV")
 
         val refreshed = users.findById(creator.id).orElseThrow()
         assertThat(refreshed.access).isEqualTo(AccessLevel.ADMIN)
@@ -92,7 +92,7 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
 
         val req = service.submit(
             creator,
-            SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "Reason")
+            SubmitAdminRequest(scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")), reason = "Reason")
         )
 
         service.batchReject(listOf(req.id), approver)
@@ -113,8 +113,8 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
         val a = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "ca")
         val b = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "cb")
 
-        val req1 = service.submit(a, SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "first"))
-        val req2 = service.submit(b, SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "second"))
+        val req1 = service.submit(a, SubmitAdminRequest(scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")), reason = "first"))
+        val req2 = service.submit(b, SubmitAdminRequest(scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")), reason = "second"))
 
         // Approve req1 so it shouldn't appear in PENDING anymore
         service.batchApprove(listOf(req1.id), approver)
@@ -156,17 +156,22 @@ class AdminRequestServiceTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `unknown zipcode is rejected`() {
+    fun `county and zipcode levels are rejected, access is statewide or nationwide only`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
 
         assertThatThrownBy {
             service.submit(
                 creator,
-                SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("00000"), reason = "no")
+                SubmitAdminRequest(scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001"), reason = "no")
             )
         }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
             assertThat(it.statusCode.value()).isEqualTo(400)
-            assertThat(it.reason).contains("Unknown")
+            assertThat(it.reason).contains("statewide or nationwide only")
+        }
+        assertThatThrownBy {
+            service.submit(creator, SubmitAdminRequest(scopeLevel = ScopeLevel.COUNTY, regionIds = listOf(1L), reason = "no"))
+        }.isInstanceOfSatisfying(ResponseStatusException::class.java) {
+            assertThat(it.statusCode.value()).isEqualTo(400)
         }
     }
 }

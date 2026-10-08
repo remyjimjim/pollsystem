@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.adminrequest
 
+import org.kodewerks.pollsystem.authz.requireGrantLevel
 import org.kodewerks.pollsystem.authz.AdminCreatorGrants
 import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.email.EmailService
@@ -36,6 +37,7 @@ class AdminRequestService(
 
     @Transactional
     fun submit(user: User, dto: SubmitAdminRequest): AdminRequest {
+        requireGrantLevel(dto.scopeLevel)
         if (user.access.ordinal < AccessLevel.CREATOR.ordinal) {
             throw ResponseStatusException(
                 HttpStatus.FORBIDDEN,

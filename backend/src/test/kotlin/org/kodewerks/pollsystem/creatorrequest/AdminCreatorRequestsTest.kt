@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.creatorrequest
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
@@ -52,7 +53,7 @@ class AdminCreatorRequestsTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L),
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "Reason"
             )
         )
@@ -74,7 +75,7 @@ class AdminCreatorRequestsTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L),
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "Reason"
             )
         )

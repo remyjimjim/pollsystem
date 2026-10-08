@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
-import { ScopeLevel, type PollType, type Purview } from '@/types'
+import { GRANT_LEVELS, ScopeLevel, type PollType, type Purview } from '@/types'
 import PurviewSetter from '@/components/PurviewSetter.vue'
 
 const { t } = useI18n()
@@ -84,7 +84,8 @@ async function onSubmit() {
 
       <fieldset class="rounded-md border border-slate-200 p-4">
         <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('common.geoScope') }}</legend>
-        <PurviewSetter v-model="purview" />
+        <!-- Access is granted statewide or nationwide only. -->
+        <PurviewSetter v-model="purview" :allowed-levels="GRANT_LEVELS" :initial="purview" />
       </fieldset>
 
       <fieldset class="rounded-md border border-slate-200 p-4">

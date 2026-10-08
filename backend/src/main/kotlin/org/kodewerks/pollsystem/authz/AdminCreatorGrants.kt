@@ -2,9 +2,12 @@ package org.kodewerks.pollsystem.authz
 
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.RoleAssignment
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.repository.RoleAssignmentRepository
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ResponseStatusException
 
 /**
  * Access is additive: an admin is also a creator across their admin area. Poll
@@ -37,4 +40,18 @@ class AdminCreatorGrants(private val roleAssignments: RoleAssignmentRepository) 
     private fun sameRegion(a: RoleAssignment, b: RoleAssignment) =
         a.scopeLevel == b.scopeLevel && a.state?.id == b.state?.id &&
             a.county?.id == b.county?.id && a.zipcode == b.zipcode
+}
+
+/**
+ * Creator and admin access is granted statewide or nationwide only: requests
+ * and Manage Creators' "Add access" reject county and zipcode levels (decided
+ * 2026-10-08). Existing finer grants are kept. A poll's own area (its purview)
+ * can still be any level.
+ */
+val GRANT_LEVELS = setOf(ScopeLevel.STATE, ScopeLevel.NATIONAL)
+
+fun requireGrantLevel(level: ScopeLevel) {
+    if (level !in GRANT_LEVELS) {
+        throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Access is granted statewide or nationwide only")
+    }
 }

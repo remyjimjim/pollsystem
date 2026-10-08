@@ -26,6 +26,9 @@ class TestFixtures @Autowired constructor(
 ) {
     private val seq = AtomicLong(System.nanoTime())
 
+    /** A state's id by initial: creator/admin access is requested statewide or nationwide only. */
+    fun stateId(initial: String = "CA"): Long = states.findByInitial(initial)!!.id
+
     fun createUser(
         access: AccessLevel = AccessLevel.USER,
         zipcode: String = "90001",

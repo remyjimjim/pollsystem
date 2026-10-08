@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.creatorrequest
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
 import org.kodewerks.pollsystem.model.AccessLevel
@@ -29,7 +30,7 @@ class CreatorRequestServiceTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L, 2L),  // Election + Questionnaire from V1 seed
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "I want to host local polls."
             )
         )
@@ -38,7 +39,7 @@ class CreatorRequestServiceTest : AbstractIntegrationTest() {
         assertThat(request.assignedAdmin?.id).isEqualTo(admin.id)
 
         val rows = roleAssignments.findByCreatorRequestId(request.id)
-        // 1 zipcode × 2 poll types = 2 rows, all enabled=false
+        // 1 state × 2 poll types = 2 rows, all enabled=false
         assertThat(rows).hasSize(2)
         assertThat(rows).allMatch { !it.enabled }
         assertThat(rows.map { it.pollType?.id }.toSet()).containsExactlyInAnyOrder(1L, 2L)
@@ -54,7 +55,7 @@ class CreatorRequestServiceTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L),
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "Reason"
             )
         )
@@ -83,7 +84,7 @@ class CreatorRequestServiceTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L),
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "Reason"
             )
         )
@@ -110,12 +111,28 @@ class CreatorRequestServiceTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L),
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "No admin to route to"
             )
         )
 
         assertThat(req.assignedAdmin).isNull()
         assertThat(req.status).isEqualTo(RequestStatus.PENDING)
+    }
+
+    @Test
+    fun `creator access is requested statewide or nationwide only`() {
+        val applicant = fixtures.createUser()
+        for (bad in listOf(
+            SubmitCreatorRequest(pollTypeIds = listOf(2L), scopeLevel = ScopeLevel.ZIP, zipcodes = listOf("90001")),
+            SubmitCreatorRequest(pollTypeIds = listOf(2L), scopeLevel = ScopeLevel.COUNTY, regionIds = listOf(1L)),
+        )) {
+            org.assertj.core.api.Assertions.assertThatThrownBy { service.submit(applicant, bad) }
+                .isInstanceOfSatisfying(org.springframework.web.server.ResponseStatusException::class.java) {
+                    assertThat(it.statusCode.value()).isEqualTo(400)
+                    assertThat(it.reason).contains("statewide or nationwide only")
+                }
+        }
+        service.submit(applicant, SubmitCreatorRequest(pollTypeIds = listOf(2L), scopeLevel = ScopeLevel.NATIONAL))
     }
 }

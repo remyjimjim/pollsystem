@@ -17,7 +17,7 @@ import java.time.Instant
  */
 data class SubmitCreatorRequest(
     @field:NotEmpty val pollTypeIds: List<Long>,
-    val scopeLevel: ScopeLevel = ScopeLevel.ZIP,
+    val scopeLevel: ScopeLevel = ScopeLevel.STATE,
     val regionIds: List<Long> = emptyList(),
     val zipcodes: List<String> = emptyList(),
     @field:Size(max = 2000) val reason: String = ""

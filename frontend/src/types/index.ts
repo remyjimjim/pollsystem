@@ -27,6 +27,9 @@ export enum ScopeLevel {
   NATIONAL = 'NATIONAL'
 }
 
+/** Creator and admin access is granted statewide or nationwide only (requests and "Add access"). */
+export const GRANT_LEVELS: ScopeLevel[] = [ScopeLevel.STATE, ScopeLevel.NATIONAL]
+
 // The purview a creator request targets, emitted by PurviewSetter. regionIds are
 // stateIds for STATE, countyIds for COUNTY; zipcodes for ZIP; both empty for NATIONAL.
 export interface Purview {

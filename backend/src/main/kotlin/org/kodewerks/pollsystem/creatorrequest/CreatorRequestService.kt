@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.creatorrequest
 
+import org.kodewerks.pollsystem.authz.requireGrantLevel
 import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.email.EmailService
 import org.kodewerks.pollsystem.model.AccessLevel
@@ -38,6 +39,7 @@ class CreatorRequestService(
 
     @Transactional
     fun submit(user: User, dto: SubmitCreatorRequest): CreatorRequest {
+        requireGrantLevel(dto.scopeLevel)
         val pollTypeList = pollTypes.findAllById(dto.pollTypeIds).toList()
         if (pollTypeList.size != dto.pollTypeIds.distinct().size) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type")

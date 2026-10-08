@@ -126,7 +126,17 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
         val admin = caAdmin()
         val c = creator("mc-add").also { grant(it, ScopeLevel.COUNTY, "CA", "Los Angeles") }
 
-        val row = controller.addGrants(admin, c.id, AddGrantsRequest(ScopeLevel.COUNTY, regionIds = listOf(county("CA", "Orange").id)))
+        // Access is added statewide or nationwide only.
+        assertStatus(HttpStatus.BAD_REQUEST) {
+            controller.addGrants(admin, c.id, AddGrantsRequest(ScopeLevel.COUNTY, regionIds = listOf(county("CA", "Orange").id)))
+        }
+        val added = controller.addGrants(admin, c.id, AddGrantsRequest(ScopeLevel.STATE, regionIds = listOf(state("CA").id)))
+        assertThat(added.grants.map { it.stateInitial to it.countyName }).contains("CA" to null)
+        controller.removeGrant(admin, c.id, added.grants.single { it.scopeLevel == ScopeLevel.STATE }.id)
+
+        // An existing finer grant (from before the rule) stays manageable.
+        val orangeGrant = grant(c, ScopeLevel.COUNTY, "CA", "Orange")
+        val row = controller.list(admin).let { rowOf(it, c) }
         assertThat(row.grants.map { it.countyName }).contains("Los Angeles", "Orange")
 
         assertStatus(HttpStatus.FORBIDDEN) {
@@ -134,7 +144,7 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
         }
         assertStatus(HttpStatus.FORBIDDEN) { controller.addGrants(admin, c.id, AddGrantsRequest(ScopeLevel.NATIONAL)) }
 
-        val orange = row.grants.single { it.countyName == "Orange" }
+        val orange = row.grants.single { it.id == orangeGrant.id }
         assertThat(controller.removeGrant(admin, c.id, orange.id).grants.map { it.countyName }).containsExactly("Los Angeles")
 
         val req = creatorRequests.save(CreatorRequest(user = c, reason = "r", status = RequestStatus.APPROVED))

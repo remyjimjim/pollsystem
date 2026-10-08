@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import InfoPopover from '@/components/InfoPopover.vue'
 import PurviewSetter from '@/components/PurviewSetter.vue'
 import { useAuthStore } from '@/stores/auth'
-import { AccessLevel, ScopeLevel, type PollType, type Purview } from '@/types'
+import { AccessLevel, ScopeLevel, type PollType, type Purview, GRANT_LEVELS } from '@/types'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -146,9 +146,8 @@ const addPurview = ref<Purview>({ scopeLevel: ScopeLevel.STATE, regionIds: [], z
 const addTypeIds = ref<number[]>([])
 const setterKey = ref(0) // remount PurviewSetter to clear it after an add
 const isSuper = computed(() => auth.hasAccess(AccessLevel.SUPER))
-const addLevels = computed(() =>
-  isSuper.value ? undefined : [ScopeLevel.STATE, ScopeLevel.COUNTY, ScopeLevel.ZIP],
-)
+// Access is added statewide or nationwide only; nationwide is a super's call.
+const addLevels = computed(() => (isSuper.value ? GRANT_LEVELS : [ScopeLevel.STATE]))
 const canAdd = computed(() => {
   const p = addPurview.value
   return p.scopeLevel === ScopeLevel.NATIONAL

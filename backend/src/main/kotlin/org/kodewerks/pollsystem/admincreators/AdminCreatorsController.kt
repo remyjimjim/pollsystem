@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.admincreators
 
+import org.kodewerks.pollsystem.authz.requireGrantLevel
 import org.kodewerks.pollsystem.adminpolls.AdminPollRow
 import org.kodewerks.pollsystem.adminpolls.AdminPollsController
 import org.kodewerks.pollsystem.adminpolls.CreateBlockRequest
@@ -286,6 +287,7 @@ class AdminCreatorsController(
         @PathVariable userId: Long,
         @RequestBody body: AddGrantsRequest
     ): CreatorRow {
+        requireGrantLevel(body.scopeLevel)
         val reach = reachOf(principal.user)
         val user = users.findById(userId).orElseThrow { notFound("User not found") }
         if (user.access < AccessLevel.CREATOR) throw bad("${user.email} is not a creator")

@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.creatorrequest
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.AbstractIntegrationTest
 import org.kodewerks.pollsystem.TestFixtures
 import org.kodewerks.pollsystem.model.AccessLevel
@@ -32,7 +33,7 @@ class StaleRequestSweeperTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L),
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "Reason"
             )
         )
@@ -58,7 +59,7 @@ class StaleRequestSweeperTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L),
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "Reason"
             )
         )
@@ -78,7 +79,7 @@ class StaleRequestSweeperTest : AbstractIntegrationTest() {
             applicant,
             SubmitCreatorRequest(
                 pollTypeIds = listOf(1L),
-                zipcodes = listOf("90001"),
+                scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA")),
                 reason = "Reason"
             )
         )
