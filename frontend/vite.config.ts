@@ -9,7 +9,14 @@ import { fileURLToPath } from 'node:url'
 const manualDir = fileURLToPath(new URL('../docs/manual', import.meta.url))
 
 export default defineConfig({
-  plugins: [vue(), tailwindcss()],
+  plugins: [
+    vue(),
+    tailwindcss(),
+    // Vite only watches its own root for NEW files, so pages added to
+    // docs/manual after the dev server started never reached the help
+    // library's import.meta.glob. Watch the manual folder too.
+    { name: 'watch-manual', configureServer: server => { server.watcher.add(manualDir) } },
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
