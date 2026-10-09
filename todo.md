@@ -188,3 +188,14 @@
    - Wait until the English content settles, then translate per page.
    - The hover/click help (i18n `help.*` keys) is translated with the rest of the app strings.
    - Done: No.
+
+# Possible add ons for a later date if needed:
+
+-  Narrow a creator's access below statewide (an admin's "scalpel").
+   - Not planned: no good case for it yet (2026-10-09). Today an admin restricts a creator per state only: switch off their
+     state grant (with a reason) or untick the row's Enabled.
+   - If needed, the safe version, which only removes access:
+     - only an admin of that state;
+     - only inside a state grant the creator already has;
+     - in one step, switch the state grant off (with a reason) and add the county/zipcode grants inside it.
+   - Done: No.
