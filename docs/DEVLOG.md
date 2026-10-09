@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-09 — Grants rework, step 3: a reason when switching access off
+
+**Requested:** see step 1 (decision C).
+
+**Changed:**
+
+- `V29` adds `disabled_reason`, `disabled_by` and `disabled_at` to
+  `role_assignments`, and `reason` to `creator_disables`.
+- Backend:
+  - a reason is optional on every disable, and **required for your own
+    grant** (400 without one);
+  - reasons are trimmed and capped at 500 characters;
+  - re-enabling, or re-approving a request, clears the reason;
+  - grants and rows report why, by whom and when.
+- Frontend: a reason dialog on every switch-off, where Switch off stays
+  disabled until a reason is typed for your own grant. The reason shows in
+  Edit and on hover. Strings in en, nb, fr and ja.
+- The e2e spec now gives a reason when unchecking.
+- Backend 288/288, frontend 90/90, e2e 13/13.
+
+**Commit:** `5632a39`
+
+---
+
 ## 2026-10-08 — Grants rework, step 2: statewide or nationwide access only
 
 **Requested:** see step 1 (decisions A and B).
