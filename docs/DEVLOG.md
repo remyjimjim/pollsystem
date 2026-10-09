@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-10-09 — Decision: no narrowing of creator access below statewide (for now)
+
+**Requested:**
+
+> I'm not sure if I communicated the following so I'll suggest it here: Admins
+> for state A should be able to downgrade a state A creator's purview to county
+> or zipcode. Does that align with our current system? If so we may not want to
+> do it.
+
+then:
+
+> No, you're right, I don't see a good case for narrowing but I guess we can
+> add it to the todo under the heading "Possible add ons for a later date if
+> needed:".
+
+**Decision:**
+
+- Admins can't narrow a creator below statewide, and that stays for now.
+  Since step 2, "Add access" is statewide only, and the per-state switches
+  cover the clear cases.
+- If it's ever needed, the safe design only removes access:
+  - only for admins of that state;
+  - only inside the creator's existing state grant;
+  - it switches the state grant off, with a reason, and adds smaller grants
+    inside it.
+
+**Changed:**
+
+- `todo.md` gets a new section, "Possible add ons for a later date if
+  needed:", with this item.
+
+**Commit:** `38444e3`
+
+---
+
 ## 2026-10-09 — Grants rework, step 3: a reason when switching access off
 
 **Requested:** see step 1 (decision C).
