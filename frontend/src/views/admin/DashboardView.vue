@@ -3,20 +3,14 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
-import { formatZipList } from '@/utils/formatZipList'
 
 const { t } = useI18n()
-
-interface AdminZipcodeScope {
-  stateInitial: string
-  countyName: string
-  zipcode: string
-}
 
 interface CreatorRequestRow {
   id: number
   userEmail: string
-  zipcodes: string[]
+  /** The requested area, e.g. "California" or "Nationwide". */
+  regionLabel: string
   pollTypeIds: number[]
   status: string
   submittedAt: string
@@ -26,13 +20,14 @@ interface CreatorRequestRow {
 interface RecentDecisionRow {
   requestId: number
   userEmail: string
-  zipcodes: string[]
+  regionLabel: string
   status: 'APPROVED' | 'REJECTED'
   processedAt: string | null
 }
 
 interface AdminDashboardDto {
-  scope: AdminZipcodeScope[]
+  /** Your admin area, one label per grant: "California", "Nationwide", ... */
+  areas: string[]
   pendingAssignedToMe: CreatorRequestRow[]
   unassignedInScope: CreatorRequestRow[]
   staleCount: number
@@ -91,10 +86,10 @@ function isStale(iso: string): boolean {
 
 const scopeSummary = computed(() => {
   if (!data.value) return ''
-  const zips = data.value.scope.map(s => s.zipcode)
-  if (zips.length === 0) return t('admin.dashboard.noZipcodes')
-  if (zips.length <= 4) return zips.join(', ')
-  return `${zips.slice(0, 3).join(', ')} ${t('admin.dashboard.moreZips', { n: zips.length - 3 })}`
+  const areas = data.value.areas
+  if (areas.length === 0) return t('admin.dashboard.noArea')
+  if (areas.length <= 4) return areas.join(', ')
+  return `${areas.slice(0, 3).join(', ')} ${t('admin.dashboard.moreAreas', { n: areas.length - 3 })}`
 })
 
 // Refetch when the page is restored from the browser's bfcache (e.g. user
@@ -164,7 +159,7 @@ onBeforeUnmount(() => {
           <p class="my-1 text-3xl font-semibold text-slate-800">
             {{ data.creatorsInScopeCount }}
           </p>
-          <p class="text-xs text-slate-500">{{ $t('admin.dashboard.kpiInYourZipcodes') }}</p>
+          <p class="text-xs text-slate-500">{{ $t('admin.dashboard.kpiInYourArea') }}</p>
         </article>
       </div>
 
@@ -187,7 +182,7 @@ onBeforeUnmount(() => {
             <tr class="bg-slate-50 text-left">
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colId') }}</th>
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colUser') }}</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colZipcodes') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colArea') }}</th>
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colPollTypes') }}</th>
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colSubmitted') }}</th>
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colActions') }}</th>
@@ -206,9 +201,7 @@ onBeforeUnmount(() => {
                 >#{{ r.id }}</router-link>
               </td>
               <td class="border-b border-slate-100 p-2 align-top">{{ r.userEmail }}</td>
-              <td class="border-b border-slate-100 p-2 align-top font-mono text-xs">
-                {{ formatZipList(r.zipcodes) }}
-              </td>
+              <td class="border-b border-slate-100 p-2 align-top text-xs">{{ r.regionLabel }}</td>
               <td class="border-b border-slate-100 p-2 align-top">
                 {{ r.pollTypeIds.join(', ') }}
               </td>
@@ -260,7 +253,7 @@ onBeforeUnmount(() => {
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colAction') }}</th>
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colId') }}</th>
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colUser') }}</th>
-              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colZipcodes') }}</th>
+              <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colArea') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -283,9 +276,7 @@ onBeforeUnmount(() => {
                 >#{{ d.requestId }}</router-link>
               </td>
               <td class="border-b border-slate-100 p-2">{{ d.userEmail }}</td>
-              <td class="border-b border-slate-100 p-2 font-mono text-xs">
-                {{ formatZipList(d.zipcodes) }}
-              </td>
+              <td class="border-b border-slate-100 p-2 text-xs">{{ d.regionLabel }}</td>
             </tr>
           </tbody>
         </table>
