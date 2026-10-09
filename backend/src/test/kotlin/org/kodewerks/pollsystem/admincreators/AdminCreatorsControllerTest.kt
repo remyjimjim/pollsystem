@@ -317,9 +317,17 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
         val g = controller.list(me).let { rowOf(it, meUser) }.grants.single()
         questionnaires.saveDraft(meUser, draft("Before", "90001"))
 
-        controller.setGrantEnabled(me, meUser.id, g.id, SetEnabledRequest(false))
+        // A reason is required when switching off your own access.
+        assertStatus(HttpStatus.BAD_REQUEST) { controller.setGrantEnabled(me, meUser.id, g.id, SetEnabledRequest(false)) }
+        assertStatus(HttpStatus.BAD_REQUEST) { controller.setGrantEnabled(me, meUser.id, g.id, SetEnabledRequest(false, "   ")) }
+        val off = controller.setGrantEnabled(me, meUser.id, g.id, SetEnabledRequest(false, "  On vacation until Nov 3 "))
+            .grants.single()
+        assertThat(off.disabledReason).isEqualTo("On vacation until Nov 3")
+        assertThat(off.disabledByEmail).isEqualTo(meUser.email)
+        assertThat(off.disabledAt).isNotNull()
         assertStatus(HttpStatus.FORBIDDEN) { questionnaires.saveDraft(meUser, draft("While away", "90001")) }
-        controller.setGrantEnabled(me, meUser.id, g.id, SetEnabledRequest(true))
+        val back = controller.setGrantEnabled(me, meUser.id, g.id, SetEnabledRequest(true)).grants.single()
+        assertThat(listOf(back.disabledReason, back.disabledByEmail, back.disabledAt)).containsOnlyNulls()
         questionnaires.saveDraft(meUser, draft("Back", "90001"))
 
         assertStatus(HttpStatus.CONFLICT) { controller.setEnabled(me, meUser.id, SetEnabledRequest(false)) }
@@ -347,5 +355,27 @@ class AdminCreatorsControllerTest : AbstractIntegrationTest() {
 
         controller.setEnabled(me, other.id, SetEnabledRequest(true))
         questionnaires.saveDraft(other, draft("Here again", "90001"))
+    }
+
+    @Test
+    fun `a reason is optional when disabling someone else, and shown with the grant or the row`() {
+        val admin = caAdmin()
+        val c = creator("mc-reason").also { grant(it, ScopeLevel.STATE, "CA") }
+        val gId = rowOf(controller.list(admin), c).grants.single().id
+
+        val noReason = controller.setGrantEnabled(admin, c.id, gId, SetEnabledRequest(false)).grants.single()
+        assertThat(noReason.enabled).isFalse()
+        assertThat(noReason.disabledReason).isNull()
+        assertThat(noReason.disabledByEmail).isEqualTo(admin.user.email)
+        controller.setGrantEnabled(admin, c.id, gId, SetEnabledRequest(true))
+
+        controller.setEnabled(admin, c.id, SetEnabledRequest(false, "Spam polls"))
+        assertThat(rowOf(controller.list(admin), c).disabledReason).isEqualTo("Spam polls")
+        controller.setEnabled(admin, c.id, SetEnabledRequest(true))
+        assertThat(rowOf(controller.list(admin), c).disabledReason).isNull()
+
+        assertStatus(HttpStatus.BAD_REQUEST) {
+            controller.setGrantEnabled(admin, c.id, gId, SetEnabledRequest(false, "x".repeat(501)))
+        }
     }
 }

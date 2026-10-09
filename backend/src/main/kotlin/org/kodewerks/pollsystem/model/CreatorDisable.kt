@@ -26,5 +26,9 @@ data class CreatorDisable(
     val adminId: Long,
 
     @Column(name = "created_at", nullable = false)
-    val createdAt: Instant = Instant.now()
+    val createdAt: Instant = Instant.now(),
+
+    /** Why the admin disabled this creator (optional, V29). */
+    @Column(length = 500)
+    val reason: String? = null
 )

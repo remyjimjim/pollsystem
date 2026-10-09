@@ -62,7 +62,11 @@ data class GrantDto(
     /** Inside the caller's purview, so they may toggle / remove it (your own grants included). */
     val manageable: Boolean,
     /** Came from an approved creator request (kept for its history: disable, don't remove). */
-    val fromRequest: Boolean
+    val fromRequest: Boolean,
+    /** Why it was switched off, by whom and when (null while enabled). */
+    val disabledReason: String? = null,
+    val disabledByEmail: String? = null,
+    val disabledAt: Instant? = null
 )
 
 enum class EnabledState { ENABLED, DISABLED, PARTIAL }
@@ -76,6 +80,8 @@ data class CreatorRow(
     val canToggle: Boolean,
     /** This row is the caller. */
     val isYou: Boolean,
+    /** Why the CALLER disabled this creator (the Enabled switch), if they gave a reason. */
+    val disabledReason: String? = null,
     /** Enabled polls inside the caller's purview; polls disabled there don't count. */
     val pollCount: Int,
     /** All their polls inside the caller's purview, disabled included: what the Polls link shows. */
@@ -87,7 +93,16 @@ data class CreatorRow(
     val lastEditedAt: Instant?
 )
 
-data class SetEnabledRequest(val enabled: Boolean)
+/**
+ * Switch something on or off. [reason] is asked for on every disable and is
+ * required when switching off your own creator access; re-enabling clears it.
+ */
+data class SetEnabledRequest(val enabled: Boolean, val reason: String? = null) {
+    /** The trimmed reason, or null if blank; 400 if over 500 characters. */
+    fun cleanReason(): String? = reason?.trim()?.takeIf { it.isNotEmpty() }?.also {
+        if (it.length > 500) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Reason is too long (500 characters max)")
+    }
+}
 
 /** Grant [scopeLevel] regions to a creator; empty [pollTypeIds] = every poll type. */
 data class AddGrantsRequest(
@@ -156,7 +171,8 @@ class AdminCreatorsController(
             users.findByEmail(email)?.let { usersById.putIfAbsent(it.id, it) }
         }
         // Creators this admin has disabled stay listed so they can be re-enabled.
-        val disabledByMe = disables.findByAdminId(principal.user.id).map { it.creatorId }.toSet()
+        val myDisables = disables.findByAdminId(principal.user.id).associateBy { it.creatorId }
+        val disabledByMe = myDisables.keys
         disabledByMe.filter { it !in usersById }.forEach { id -> users.findById(id).ifPresent { usersById[id] = it } }
         if (usersById.isEmpty()) return emptyList()
         val stats = editStats(usersById.keys.toList())
@@ -165,7 +181,7 @@ class AdminCreatorsController(
                 toRow(
                     u, grantsByUser[u.id].orEmpty(), reach, stats[u.id],
                     pollsByEmail[u.email.lowercase()].orEmpty(), disabledByMe = u.id in disabledByMe,
-                    callerId = principal.user.id
+                    callerId = principal.user.id, disableReason = myDisables[u.id]?.reason
                 )
             }
             .sortedBy { it.email.lowercase() }
@@ -197,7 +213,7 @@ class AdminCreatorsController(
                 if (!already && creatorArea.none { c -> mine.any { it.overlaps(c) } }) {
                     throw ResponseStatusException(HttpStatus.CONFLICT, "This creator has no access in your purview")
                 }
-                if (!already) disables.save(CreatorDisable(creatorId = userId, adminId = me.id))
+                if (!already) disables.save(CreatorDisable(creatorId = userId, adminId = me.id, reason = body.cleanReason()))
                 pollsInPurview(principal, creator.email).map { p ->
                     val pollArea = regions.ofPurview(purviews.purviewOf(PollKind.valueOf(p.type), p.id))
                     p to intersectAll(intersectAll(pollArea, creatorArea), mine)
@@ -253,7 +269,16 @@ class AdminCreatorsController(
     ): CreatorRow {
         val reach = reachOf(principal.user)
         val g = manageableGrant(userId, grantId, reach)
-        if (g.enabled != body.enabled) roleAssignments.save(g.copy(enabled = body.enabled))
+        val reason = body.cleanReason()
+        if (!body.enabled && userId == principal.user.id && reason == null) {
+            throw bad("A reason is required when disabling your own access")
+        }
+        val updated = when {
+            body.enabled -> g.copy(enabled = true, disabledReason = null, disabledBy = null, disabledAt = null)
+            g.enabled -> g.copy(enabled = false, disabledReason = reason, disabledBy = principal.user.id, disabledAt = Instant.now())
+            else -> g // already off: keep who/when/why
+        }
+        if (updated != g) roleAssignments.save(updated)
         roleAuthCache.invalidateAuthorizations()
         return rowFor(principal, userId, reach)
     }
@@ -332,7 +357,8 @@ class AdminCreatorsController(
         return toRow(
             user, grants, reach, editStats(listOf(userId))[userId], pollsInPurview(principal, user.email),
             disabledByMe = disables.findByCreatorIdAndAdminId(userId, principal.user.id) != null,
-            callerId = principal.user.id
+            callerId = principal.user.id,
+            disableReason = disables.findByCreatorIdAndAdminId(userId, principal.user.id)?.reason
         )
     }
 
@@ -347,7 +373,8 @@ class AdminCreatorsController(
         stats: Pair<Long, Instant?>?,
         polls: List<AdminPollRow>,
         disabledByMe: Boolean,
-        callerId: Long
+        callerId: Long,
+        disableReason: String? = null
     ): CreatorRow {
         val manageable = grants.filter { reach.contains(it) }
         val basis = manageable.ifEmpty { grants }
@@ -363,21 +390,26 @@ class AdminCreatorsController(
             // Visible grants are the ones overlapping the caller's purview.
             canToggle = user.id != callerId && (disabledByMe || grants.isNotEmpty()),
             isYou = user.id == callerId,
+            disabledReason = if (disabledByMe) disableReason else null,
             pollCount = polls.count { !it.blocked },
             pollTotal = polls.size,
             accessState = state,
             manageable = manageable.isNotEmpty(),
-            grants = grants.sortedWith(compareBy({ it.scopeLevel.ordinal }, { label(it) })).map { toDto(it, reach) },
+            grants = grants.sortedWith(compareBy({ it.scopeLevel.ordinal }, { label(it) })).let { gs ->
+                val emails = users.findAllById(gs.mapNotNull { it.disabledBy }.distinct()).associate { it.id to it.email }
+                gs.map { toDto(it, reach, emails) }
+            },
             lastEditedAt = stats?.second
         )
     }
 
-    private fun toDto(g: RoleAssignment, reach: Reach) = GrantDto(
+    private fun toDto(g: RoleAssignment, reach: Reach, emails: Map<Long, String> = emptyMap()) = GrantDto(
         id = g.id, scopeLevel = g.scopeLevel,
         stateId = g.state?.id, stateName = g.state?.name, stateInitial = g.state?.initial,
         countyId = g.county?.id, countyName = g.county?.name, zipcode = g.zipcode,
         pollTypeId = g.pollType?.id, pollTypeName = g.pollType?.name,
-        enabled = g.enabled, manageable = reach.contains(g), fromRequest = g.creatorRequest != null
+        enabled = g.enabled, manageable = reach.contains(g), fromRequest = g.creatorRequest != null,
+        disabledReason = g.disabledReason, disabledByEmail = g.disabledBy?.let { emails[it] }, disabledAt = g.disabledAt
     )
 
     /** userId → (poll count across all kinds, latest creator_edited_at). */

@@ -502,7 +502,12 @@
       "errorSave": "Kunne ikke lagre endringen",
       "noAccessHint": "Ingen tilgang i ditt område. Deaktiver avstemningene deres én etter én under Administrer avstemninger.",
       "you": "(deg)",
-      "youHint": "Du kan ikke deaktivere deg selv."
+      "youHint": "Du kan ikke deaktivere deg selv.",
+      "reasonPrompt": "Hvorfor slår du av denne tilgangen?",
+      "reasonHintSelf": "Påkrevd når du slår av din egen tilgang, f.eks. «På ferie til 3. nov.». Andre admins i denne staten og supers ser den.",
+      "reasonHintOther": "Valgfritt. Andre admins i denne staten og supers ser den.",
+      "reasonConfirm": "Slå av",
+      "disabledBy": "av {email} den {date}"
     },
     "managePolls": {
       "heading": "Administrer avstemninger",

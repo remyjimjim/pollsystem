@@ -502,7 +502,12 @@
       "errorSave": "Impossible d'enregistrer la modification",
       "noAccessHint": "Aucun accès dans votre périmètre. Désactivez ses sondages un par un dans Gérer les sondages.",
       "you": "(vous)",
-      "youHint": "Vous ne pouvez pas vous désactiver vous-même."
+      "youHint": "Vous ne pouvez pas vous désactiver vous-même.",
+      "reasonPrompt": "Pourquoi désactivez-vous cet accès ?",
+      "reasonHintSelf": "Obligatoire pour désactiver votre propre accès, par ex. « En vacances jusqu'au 3 nov. ». Les autres admins de cet État et les supers le verront.",
+      "reasonHintOther": "Facultatif. Les autres admins de cet État et les supers le verront.",
+      "reasonConfirm": "Désactiver",
+      "disabledBy": "par {email} le {date}"
     },
     "managePolls": {
       "heading": "Gérer les Sondages",

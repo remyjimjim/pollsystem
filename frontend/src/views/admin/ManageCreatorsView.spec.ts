@@ -101,15 +101,25 @@ describe('ManageCreatorsView', () => {
     const box = (email: string) => row(w, email).find('input[type="checkbox"]')
 
     expect((box('alice@test.local').element as HTMLInputElement).checked).toBe(true)
+    // Unchecking asks why (optional for someone else); Cancel sends nothing.
     await box('alice@test.local').trigger('click')
+    expect(w.find('[data-test="reason-dialog"]').exists()).toBe(true)
+    await w.find('[data-test="reason-dialog"]').findAll('button').find(b => b.text() === 'Cancel')!.trigger('click')
     await flushPromises()
-    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/10/enabled', { enabled: false })
+    expect(axios.put).not.toHaveBeenCalled()
+
+    await box('alice@test.local').trigger('click')
+    await w.find('[data-test="reason-dialog"] textarea').setValue('  Spam polls ')
+    await w.find('[data-test="reason-dialog"]').findAll('button').find(b => b.text() === 'Switch off')!.trigger('click')
+    await flushPromises()
+    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/10/enabled', { enabled: false, reason: 'Spam polls' })
     expect((box('alice@test.local').element as HTMLInputElement).checked).toBe(false)
 
+    // Re-checking needs no reason.
     expect((box('bob@test.local').element as HTMLInputElement).checked).toBe(false)
     await box('bob@test.local').trigger('click')
     await flushPromises()
-    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/11/enabled', { enabled: true })
+    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/11/enabled', { enabled: true, reason: null })
 
     const nat = box('nat@test.local')
     expect((nat.element as HTMLInputElement).disabled).toBe(true)
@@ -143,6 +153,39 @@ describe('ManageCreatorsView', () => {
     await r.findAll('button').find(b => b.text() === 'Edit')!.trigger('click')
     const dialog = w.find('[role="dialog"]')
     expect(dialog.find('input[type="checkbox"]').attributes('disabled')).toBeUndefined()
+    w.unmount()
+  })
+
+  it('switching off your own grant requires a reason, then shows why, by whom and when', async () => {
+    const me = {
+      userId: 1, email: 'me@test.local', enabled: true, canToggle: false, isYou: true, accessState: 'ENABLED',
+      manageable: true, pollCount: 0, pollTotal: 0, lastEditedAt: null, disabledReason: null,
+      grants: [grant({ id: 9, manageable: true })],
+    }
+    vi.mocked(axios.get).mockImplementation(async (url: string) =>
+      ({ data: url === '/api/admin/creators' ? [structuredClone(me)] : [] }))
+    vi.mocked(axios.put).mockImplementation(async (_url: string, body: any) => ({
+      data: { ...me, grants: [grant({ id: 9, manageable: true, enabled: body.enabled,
+        disabledReason: body.reason, disabledByEmail: 'me@test.local', disabledAt: '2026-10-09T12:00:00Z' })] },
+    }))
+    const w = await mountView()
+    await row(w, 'me@test.local').findAll('button').find(b => b.text() === 'Edit')!.trigger('click')
+    const grantBox = w.find('[role="dialog"]').find('input[type="checkbox"]')
+    await grantBox.trigger('click')
+
+    const ask = w.find('[data-test="reason-dialog"]')
+    const confirm = ask.findAll('button').find(b => b.text() === 'Switch off')!
+    expect(ask.text()).toContain('Required when switching off your own access')
+    expect(confirm.attributes('disabled')).toBeDefined()
+    await ask.find('textarea').setValue('On vacation until Nov 3')
+    expect(confirm.attributes('disabled')).toBeUndefined()
+    await confirm.trigger('click')
+    await flushPromises()
+
+    expect(axios.put).toHaveBeenLastCalledWith('/api/admin/creators/1/grants/9', { enabled: false, reason: 'On vacation until Nov 3' })
+    const note = w.find('[data-test="disabled-note"]').text()
+    expect(note).toContain('On vacation until Nov 3')
+    expect(note).toContain('by me@test.local')
     w.unmount()
   })
 })

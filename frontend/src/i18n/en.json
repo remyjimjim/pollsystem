@@ -553,7 +553,12 @@
       "errorSave": "Could not save the change",
       "noAccessHint": "No access in your purview. Disable their polls one at a time on Manage Polls.",
       "you": "(you)",
-      "youHint": "You can't disable yourself."
+      "youHint": "You can't disable yourself.",
+      "reasonPrompt": "Why are you switching this off?",
+      "reasonHintSelf": "Required when switching off your own access, e.g. \"On vacation until Nov 3\". Other admins of this state and supers will see it.",
+      "reasonHintOther": "Optional. Other admins of this state and supers will see it.",
+      "reasonConfirm": "Switch off",
+      "disabledBy": "by {email} on {date}"
     },
     "managePolls": {
       "heading": "Manage Polls",

@@ -55,5 +55,16 @@ data class RoleAssignment(
     val adminRequest: AdminRequest? = null,
 
     @Column(name = "assigned_at", nullable = false)
-    val assignedAt: Instant = Instant.now()
+    val assignedAt: Instant = Instant.now(),
+
+    // Why, by whom and when this grant was switched off on Manage Creators (V29);
+    // all null while enabled.
+    @Column(name = "disabled_reason", length = 500)
+    val disabledReason: String? = null,
+
+    @Column(name = "disabled_by")
+    val disabledBy: Long? = null,
+
+    @Column(name = "disabled_at")
+    val disabledAt: Instant? = null
 )

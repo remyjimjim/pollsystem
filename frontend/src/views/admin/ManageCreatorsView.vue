@@ -25,6 +25,10 @@ interface Grant {
   enabled: boolean
   manageable: boolean
   fromRequest: boolean
+  /** Why it was switched off, by whom and when (null while enabled). */
+  disabledReason: string | null
+  disabledByEmail: string | null
+  disabledAt: string | null
 }
 interface CreatorRow {
   userId: number
@@ -35,6 +39,8 @@ interface CreatorRow {
   canToggle: boolean
   /** This row is you: your own creator grants are switchable, but not the row's Enabled. */
   isYou: boolean
+  /** Why YOU disabled this creator (the Enabled switch), if you gave a reason. */
+  disabledReason: string | null
   /** Their ENABLED polls inside your purview. */
   pollCount: number
   /** All their polls inside your purview, disabled included: what the Polls link opens. */
@@ -97,7 +103,7 @@ function purviewSummary(r: CreatorRow): string {
   return parts.join(' · ') || '—'
 }
 /** Grants grouped by level for the popover: [[heading, ["Los Angeles (CA) — All types", …]], …]. */
-function purviewGroups(r: CreatorRow): [string, { text: string; enabled: boolean }[]][] {
+function purviewGroups(r: CreatorRow): [string, { text: string; enabled: boolean; note: string }[]][] {
   const order: [ScopeLevel, string][] = [
     [ScopeLevel.NATIONAL, t('admin.manageCreators.groupNational')],
     [ScopeLevel.STATE, t('admin.manageCreators.groupStates')],
@@ -107,21 +113,48 @@ function purviewGroups(r: CreatorRow): [string, { text: string; enabled: boolean
   return order
     .map(([lvl, heading]) => [
       heading,
-      r.grants.filter(g => g.scopeLevel === lvl).map(g => ({ text: `${regionLabel(g)} — ${typeLabel(g)}`, enabled: g.enabled })),
-    ] as [string, { text: string; enabled: boolean }[]])
+      r.grants.filter(g => g.scopeLevel === lvl).map(g => ({ text: `${regionLabel(g)} — ${typeLabel(g)}`, enabled: g.enabled, note: disabledNote(g) })),
+    ] as [string, { text: string; enabled: boolean; note: string }[]])
     .filter(([, items]) => items.length > 0)
 }
 
 // ---------- enabled toggle (stored per admin) ----------
+// ---------- reason for switching off ----------
+// Every disable asks why; it's required when switching off your own access
+// (e.g. "On vacation until Nov 3"). Resolves null if cancelled.
+const reasonAsk = ref<{ required: boolean; resolve: (reason: string | null) => void } | null>(null)
+const reasonText = ref('')
+function askReason(required: boolean): Promise<string | null> {
+  reasonText.value = ''
+  return new Promise(resolve => { reasonAsk.value = { required, resolve } })
+}
+function answerReason(ok: boolean) {
+  const ask = reasonAsk.value
+  if (!ask) return
+  const text = reasonText.value.trim()
+  if (ok && ask.required && !text) return
+  reasonAsk.value = null
+  ask.resolve(ok ? text : null)
+}
+/** "On vacation — by me@x on 10/8/2026" for a switched-off grant. */
+function disabledNote(g: Grant): string {
+  const who = g.disabledByEmail && g.disabledAt
+    ? t('admin.manageCreators.disabledBy', { email: g.disabledByEmail, date: formatDate(g.disabledAt) })
+    : ''
+  return [g.disabledReason, who].filter(Boolean).join(' — ')
+}
+
 async function toggleEnabled(r: CreatorRow) {
   if (!r.canToggle || busyIds.value.has(r.userId)) return
   // Unchecking stops them creating polls in your purview and disables their
   // polls here; checking lifts both. Single polls are re-enabled on Manage Polls.
   const enabled = !r.enabled
+  const reason = enabled ? null : await askReason(false)
+  if (!enabled && reason === null) return // cancelled
   busyIds.value = new Set(busyIds.value).add(r.userId)
   error.value = null
   try {
-    replaceRow((await axios.put<CreatorRow>(`/api/admin/creators/${r.userId}/enabled`, { enabled })).data)
+    replaceRow((await axios.put<CreatorRow>(`/api/admin/creators/${r.userId}/enabled`, { enabled, reason })).data)
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('admin.manageCreators.errorSave')
   } finally {
@@ -178,9 +211,12 @@ async function editCall(fn: () => Promise<{ data: CreatorRow }>) {
     editBusy.value = false
   }
 }
-function setGrantEnabled(g: Grant, enabled: boolean) {
+async function setGrantEnabled(g: Grant, enabled: boolean) {
   const r = editRow.value!
-  return editCall(() => axios.put<CreatorRow>(`/api/admin/creators/${r.userId}/grants/${g.id}`, { enabled }))
+  // Switching off your own access needs a reason; for others it's optional.
+  const reason = enabled ? null : await askReason(r.isYou)
+  if (!enabled && reason === null) return // cancelled
+  return editCall(() => axios.put<CreatorRow>(`/api/admin/creators/${r.userId}/grants/${g.id}`, { enabled, reason }))
 }
 function removeGrant(g: Grant) {
   const r = editRow.value!
@@ -263,7 +299,7 @@ onMounted(() => {
                 <div v-for="[heading, items] in purviewGroups(r)" :key="heading" class="mb-2 last:mb-0">
                   <div class="mb-0.5 font-semibold text-slate-800">{{ heading }}</div>
                   <ul class="max-h-40 overflow-y-auto">
-                    <li v-for="it in items" :key="it.text" :class="it.enabled ? '' : 'text-slate-400 line-through'">{{ it.text }}</li>
+                    <li v-for="it in items" :key="it.text" :class="it.enabled ? '' : 'text-slate-400 line-through'" :title="it.note || undefined">{{ it.text }}</li>
                   </ul>
                 </div>
               </InfoPopover>
@@ -286,7 +322,7 @@ onMounted(() => {
                   :aria-label="$t('admin.manageCreators.enabledFor', { email: r.email })"
                   @click.prevent="toggleEnabled(r)"
                 />
-                <span :class="r.canToggle ? 'text-slate-700' : 'text-slate-400'">{{ r.enabled ? $t('common.yes') : $t('common.no') }}</span>
+                <span :class="r.canToggle ? 'text-slate-700' : 'text-slate-400'" :title="r.disabledReason || undefined">{{ r.enabled ? $t('common.yes') : $t('common.no') }}</span>
               </label>
             </td>
             <td class="border-b border-slate-100 p-2">
@@ -322,6 +358,7 @@ onMounted(() => {
                   />
                   {{ g.enabled ? $t('admin.manageCreators.enabled') : $t('admin.manageCreators.disabled') }}
                 </label>
+                <div v-if="!g.enabled && disabledNote(g)" class="text-xs text-slate-500" data-test="disabled-note">{{ disabledNote(g) }}</div>
               </td>
               <td class="py-1 text-right">
                 <span v-if="!g.manageable" class="text-xs">{{ $t('admin.manageCreators.outsidePurview') }}</span>
@@ -359,6 +396,34 @@ onMounted(() => {
             class="rounded bg-slate-800 px-3 py-1 text-sm text-white hover:bg-slate-900 disabled:opacity-50"
             @click="addGrants"
           >{{ $t('admin.manageCreators.addButton') }}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reason for switching off (every disable; required for your own access) -->
+    <div v-if="reasonAsk" role="dialog" aria-modal="true" data-test="reason-dialog" class="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4" @click.self="answerReason(false)">
+      <div class="mt-24 w-full max-w-md rounded bg-white p-5 shadow-xl">
+        <h2 class="mb-1 text-base font-semibold text-slate-800">{{ $t('admin.manageCreators.reasonPrompt') }}</h2>
+        <p class="mb-3 text-xs text-slate-500">
+          {{ reasonAsk.required ? $t('admin.manageCreators.reasonHintSelf') : $t('admin.manageCreators.reasonHintOther') }}
+        </p>
+        <textarea
+          v-model="reasonText"
+          rows="3"
+          maxlength="500"
+          :aria-label="$t('admin.manageCreators.reasonPrompt')"
+          class="w-full rounded border border-slate-300 p-2 text-sm"
+        />
+        <div class="mt-3 flex justify-end gap-2">
+          <button type="button" class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50" @click="answerReason(false)">
+            {{ $t('form.cancel') }}
+          </button>
+          <button
+            type="button"
+            :disabled="reasonAsk.required && !reasonText.trim()"
+            class="rounded bg-slate-800 px-3 py-1 text-sm text-white hover:bg-slate-900 disabled:opacity-50"
+            @click="answerReason(true)"
+          >{{ $t('admin.manageCreators.reasonConfirm') }}</button>
         </div>
       </div>
     </div>

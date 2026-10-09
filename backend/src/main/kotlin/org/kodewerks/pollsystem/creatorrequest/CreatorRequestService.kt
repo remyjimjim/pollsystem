@@ -203,7 +203,8 @@ class CreatorRequestService(
             )
             val rows = rowsByRequest[req.id].orEmpty()
             if (decision == RequestStatus.APPROVED) {
-                roleAssignments.saveAll(rows.map { it.copy(enabled = true) })
+                // Enabled by the decision: any earlier disable reason no longer applies.
+                roleAssignments.saveAll(rows.map { it.copy(enabled = true, disabledReason = null, disabledBy = null, disabledAt = null) })
                 if (req.user.access.ordinal < AccessLevel.CREATOR.ordinal) {
                     users.save(req.user.copy(access = AccessLevel.CREATOR))
                 }

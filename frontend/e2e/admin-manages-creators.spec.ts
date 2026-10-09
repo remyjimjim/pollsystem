@@ -59,10 +59,16 @@ test.describe(`admin manages creators (${STATE_INPUT.toLowerCase()})`, () => {
     await expect(row.getByRole('link', { name: '1', exact: true })).toBeVisible()
     await hold(page)
 
-    // 2. Uncheck the creator: "No", and no enabled polls left in the purview.
+    // 2. Uncheck the creator, giving a reason (optional for someone else):
+    //    "No" with the reason on hover, and no enabled polls left in the purview.
     await enabled.click()
+    const ask = page.getByRole('dialog').filter({ hasText: 'Why are you switching this off?' })
+    await ask.getByRole('textbox').fill('E2E: spam polls')
+    await hold(page)
+    await ask.getByRole('button', { name: 'Switch off' }).click()
     await expect(enabled).not.toBeChecked({ timeout: 15_000 })
     await expect(row).toContainText('No')
+    await expect(row.getByText('No', { exact: true })).toHaveAttribute('title', 'E2E: spam polls')
     await expect(row.getByRole('link', { name: '0', exact: true })).toBeVisible()
     await hold(page)
 
