@@ -61,6 +61,43 @@ logged.
 
 ---
 
+## 2026-10-09 — Admin help pages; admin dashboard fixed for statewide admins
+
+**Requested:**
+
+> start on the Admin help pages
+
+**Found and fixed (`ee101f6`):** the admin dashboard read only zipcode-level
+admin grants, so for a statewide admin:
+- the "Reviewing requests for" line said "no zipcodes";
+- unassigned requests in their states were hidden;
+- "Creators in scope" was 0.
+
+The fix:
+- the area now comes from every admin grant, as `areas`;
+- unassigned requests show for any of the admin's states, or all of them for a
+  nationwide admin;
+- creators are counted by overlap with the admin's area;
+- recent decisions carry the request's area.
+
+The "Area" columns and the wording ("in your area", "states or nationwide")
+are updated in all 9 languages. New `AdminDashboardControllerTest`. Backend
+290/290, frontend 90/90, e2e 13/13. Checked as `admin@local.test`: area
+California, 3 creators in scope.
+
+**Changed (`0154fa6`):**
+
+- `creator/becoming-an-admin.md`.
+- Admin pages:
+  - `admin/reviewing-creator-requests.md`;
+  - `managing-creators.md`;
+  - `managing-polls.md`.
+- The README is updated, and all links are checked.
+
+**Commits:** `ee101f6`, `0154fa6`
+
+---
+
 ## 2026-10-09 — Decision: no narrowing of creator access below statewide (for now)
 
 **Requested:**
