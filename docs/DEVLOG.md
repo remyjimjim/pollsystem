@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-09 — fix(help): new manual pages appear without restarting the dev server
+
+**Requested:**
+
+> I'm logged in as admin@local.test and I see: [only Finding polls and
+> Viewing results]
+
+**Changed:**
+
+- Cause: Vite watches only its own root for **new** files, and `docs/manual`
+  is outside it. So the local frontend container, started 27 hours earlier,
+  listed only the 2 pages that existed then. Production builds were never
+  affected.
+- `vite.config.ts`: a small plugin adds `docs/manual` to the dev server's
+  watcher.
+- Verified: a page added after startup appears (14 → 15 → 14). The local
+  container was restarted and now serves all 14 pages.
+
+**Commit:** `e011bfd`
+
+---
+
 ## 2026-10-09 — Admin help pages; admin dashboard fixed for statewide admins
 
 **Requested:**
