@@ -3,6 +3,7 @@ package org.kodewerks.pollsystem.superadmin
 import org.kodewerks.pollsystem.authz.RoleAuthCache
 import org.kodewerks.pollsystem.email.EmailService
 import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.model.RoleAssignment
 import org.kodewerks.pollsystem.model.User
@@ -71,7 +72,17 @@ data class SuperUserMessageDto(
 data class CreateMessageRequest(val body: String, val sendEmail: Boolean = false)
 data class EditMessageRequest(val body: String)
 data class BulkToggleRequest(val userIds: List<Long>, val enable: Boolean)
-data class EditUserRequest(val role: String?, val zipcode: String?)
+/**
+ * Edit a user's role and/or zipcode. Raising the role needs the area for the
+ * new access ([scopeLevel] STATE or NATIONAL, [regionIds] = state ids), exactly
+ * like Promote; lowering it behaves like Demote (see RoleChanges).
+ */
+data class EditUserRequest(
+    val role: String?,
+    val zipcode: String?,
+    val scopeLevel: ScopeLevel? = null,
+    val regionIds: List<Long> = emptyList()
+)
 
 /** A poll authored by a given user, used by GET /{userId}/polls-created. */
 data class SuperUserPollCreated(
@@ -112,7 +123,7 @@ class SuperUsersController(
     private val roleAssignments: RoleAssignmentRepository,
     private val userMessages: UserMessageRepository,
     private val emailService: EmailService,
-    private val roleAssignmentBulkOps: RoleAssignmentBulkOps,
+    private val roleChanges: RoleChanges,
     private val questionnaires: QuestionnaireRepository,
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
@@ -265,9 +276,9 @@ class SuperUsersController(
      * Edit a listable user's role and/or zipcode. Both fields are
      * optional — only the fields the super-admin actually changes get
      * persisted. The role is restricted to LISTABLE_ROLES so this
-     * endpoint can't create or unmake a SUPER. When the role changes,
-     * every existing RoleAssignment for the user is updated to the new
-     * role so the per-zipcode rows stay aligned with the access level.
+     * endpoint can't create or unmake a SUPER. A role change goes through
+     * RoleChanges, like Promote / Demote: raising it grants the chosen area,
+     * lowering it switches off the higher level's grants.
      */
     @PutMapping("/{userId}")
     @Transactional
@@ -297,31 +308,15 @@ class SuperUsersController(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Nothing to update")
         }
 
-        // Snapshot the old access level BEFORE the save — JPA's merge
-        // mutates `u`'s backing field even though the Kotlin property is
-        // `val`, so a post-save `u.access` already reflects the new
-        // value and a `newAccess != u.access` check would always be
-        // false.
-        val previousAccess = u.access
-        val updated = users.save(
-            u.copy(
-                access = newAccess ?: u.access,
-                zipcode = newZipcode ?: u.zipcode
-            )
-        )
-        // Mirror the role change onto every existing assignment so the
-        // per-zipcode rows reflect the user's new access level. Per the
-        // super-admin's directive, all of the user's RoleAssignments are
-        // rewritten — not just the ones currently matching the old role.
-        if (newAccess != null && newAccess != previousAccess) {
-            roleAssignmentBulkOps.updateRoleForUser(userId, newAccess)
-        }
+        val area = body.scopeLevel?.let { GrantArea(it, body.regionIds) }
+        val moved = if (newAccess != null) roleChanges.change(u, newAccess, area) else u
+        val updated = if (newZipcode != null) users.save(moved.copy(zipcode = newZipcode)) else moved
         return rowFor(updated)
     }
 
     @PostMapping("/{userId}/promote")
     @Transactional
-    fun promote(@PathVariable userId: Long): SuperUserRow {
+    fun promote(@PathVariable userId: Long, @RequestBody area: GrantArea): SuperUserRow {
         val u = users.findById(userId).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         }
@@ -335,12 +330,9 @@ class SuperUsersController(
             else ->
                 throw ResponseStatusException(HttpStatus.CONFLICT, "Only Users or Creators can be promoted")
         }
-        // Promote only adjusts the access level. Old-level role
-        // assignments stay enabled — they're still valid below the new
-        // level — and the new powers are granted explicitly via the
-        // existing assignment workflow.
-        val updated = users.save(u.copy(access = newAccess))
-        return rowFor(updated)
+        // Grants the chosen area for the new level (and, for an admin, the
+        // mirroring creator access); lower-level grants stay as they are.
+        return rowFor(roleChanges.change(u, newAccess, area))
     }
 
     @PostMapping("/{userId}/demote")
@@ -357,14 +349,8 @@ class SuperUsersController(
             else ->
                 throw ResponseStatusException(HttpStatus.CONFLICT, "Only Admins or Creators can be demoted")
         }
-        val updated = users.save(u.copy(access = newAccess))
-        // Disable any assignments at the OLD access level alongside the
-        // demotion so the user can't still act in that role on those
-        // zipcodes via stale rows.
-        roleAssignments.findByUserIdAndRole(userId, u.access)
-            .let { rows -> roleAssignments.saveAll(rows.map { ra: RoleAssignment -> ra.copy(enabled = false) }) }
-        roleAuthCache.invalidateAuthorizations()
-        return rowFor(updated)
+        // Switches off the old level's grants, so they can't still act in that role.
+        return rowFor(roleChanges.change(u, newAccess, null))
     }
 
     @GetMapping("/{userId}/messages")

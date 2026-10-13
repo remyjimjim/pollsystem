@@ -136,19 +136,45 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
         assertThat(users.findById(s.id).orElseThrow().isEnabled).isTrue()
     }
 
+    private fun area(vararg initials: String) = GrantArea(ScopeLevel.STATE, initials.map { fixtures.stateId(it) })
+    private fun enabled(userId: Long, role: AccessLevel) =
+        roleAssignments.findByUserIdAndRole(userId, role).filter { it.enabled }
+            .map { if (it.scopeLevel == ScopeLevel.NATIONAL) "NATIONAL" else it.state!!.initial }.sorted()
+
     @Test
-    fun `edit updates role and propagates onto every RoleAssignment`() {
+    fun `edit lowering a role switches off the higher level's grants, never rewrites them`() {
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "edit-role")
-        fixtures.assignAdmin(admin)
+        controller.promote(fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "x").id, area("NV")) // unrelated
+        controller.edit(admin.id, EditUserRequest(role = "USER", zipcode = null)).let { assertThat(it.access).isEqualTo(AccessLevel.USER) }
+        controller.edit(admin.id, EditUserRequest(role = "ADMIN", zipcode = null, scopeLevel = ScopeLevel.STATE, regionIds = listOf(fixtures.stateId("CA"))))
+        assertThat(enabled(admin.id, AccessLevel.ADMIN)).containsExactly("CA")
+        assertThat(enabled(admin.id, AccessLevel.CREATOR)).containsExactly("CA") // mirrored
 
         val after = controller.edit(admin.id, EditUserRequest(role = "CREATOR", zipcode = null))
         assertThat(after.access).isEqualTo(AccessLevel.CREATOR)
+        assertThat(enabled(admin.id, AccessLevel.ADMIN)).isEmpty()
+        assertThat(enabled(admin.id, AccessLevel.CREATOR)).containsExactly("CA") // kept, not duplicated
+        assertThat(roleAssignments.findByUserIdAndRole(admin.id, AccessLevel.CREATOR)).hasSize(1)
 
-        // RoleAssignmentBulkOps already flushed + cleared the persistence
-        // context, so a fresh read shows the new role.
-        val rows = roleAssignments.findByUserId(admin.id)
-        assertThat(rows).isNotEmpty
-        assertThat(rows.map { it.role }.toSet()).containsExactly(AccessLevel.CREATOR)
+        controller.edit(admin.id, EditUserRequest(role = "USER", zipcode = null))
+        assertThat(enabled(admin.id, AccessLevel.CREATOR)).isEmpty()
+    }
+
+    @Test
+    fun `edit raising a role needs an area, statewide or nationwide`() {
+        val u = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "edit-up")
+        for (bad in listOf(
+            EditUserRequest(role = "CREATOR", zipcode = null),
+            EditUserRequest(role = "CREATOR", zipcode = null, scopeLevel = ScopeLevel.COUNTY, regionIds = listOf(1L)),
+            EditUserRequest(role = "CREATOR", zipcode = null, scopeLevel = ScopeLevel.STATE),
+        )) {
+            assertThatThrownBy { controller.edit(u.id, bad) }
+                .isInstanceOfSatisfying(ResponseStatusException::class.java) { assertThat(it.statusCode.value()).isEqualTo(400) }
+        }
+        assertThat(users.findById(u.id).get().access).isEqualTo(AccessLevel.USER)
+
+        controller.edit(u.id, EditUserRequest(role = "CREATOR", zipcode = null, scopeLevel = ScopeLevel.NATIONAL))
+        assertThat(enabled(u.id, AccessLevel.CREATOR)).containsExactly("NATIONAL")
     }
 
     @Test
@@ -181,21 +207,31 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
     @Test
     fun `promote walks User to Creator and Creator to Admin, rejects Admin and Super`() {
         val user = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "promote-user")
-        val afterUser = controller.promote(user.id)
+        val afterUser = controller.promote(user.id, area("CA", "NV"))
         assertThat(afterUser.access).isEqualTo(AccessLevel.CREATOR)
+        assertThat(enabled(user.id, AccessLevel.CREATOR)).containsExactly("CA", "NV")
 
-        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "promote-creator")
-        val afterCreator = controller.promote(creator.id)
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "promote-creator", nationwideCreatorGrant = false)
+        val afterCreator = controller.promote(creator.id, area("TX"))
         assertThat(afterCreator.access).isEqualTo(AccessLevel.ADMIN)
+        assertThat(enabled(creator.id, AccessLevel.ADMIN)).containsExactly("TX")
+        assertThat(enabled(creator.id, AccessLevel.CREATOR)).containsExactly("TX") // access is additive
+
+        // An area is required, statewide or nationwide only.
+        val another = fixtures.createUser(access = AccessLevel.USER, emailPrefix = "promote-bad")
+        assertThatThrownBy { controller.promote(another.id, GrantArea(ScopeLevel.ZIP)) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) { assertThat(it.statusCode.value()).isEqualTo(400) }
+        assertThatThrownBy { controller.promote(another.id, GrantArea(ScopeLevel.STATE)) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) { assertThat(it.statusCode.value()).isEqualTo(400) }
 
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "alreadyadmin")
-        assertThatThrownBy { controller.promote(admin.id) }
+        assertThatThrownBy { controller.promote(admin.id, area("CA")) }
             .isInstanceOfSatisfying(ResponseStatusException::class.java) {
                 assertThat(it.statusCode.value()).isEqualTo(409)
             }
 
         val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "superpromoter")
-        assertThatThrownBy { controller.promote(sup.id) }
+        assertThatThrownBy { controller.promote(sup.id, area("CA")) }
             .isInstanceOfSatisfying(ResponseStatusException::class.java) {
                 assertThat(it.statusCode.value()).isEqualTo(403)
             }
@@ -204,8 +240,13 @@ class SuperUsersControllerTest : AbstractIntegrationTest() {
     @Test
     fun `demote walks Admin to Creator and Creator to User, rejects User and Super`() {
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "demote-admin")
+        controller.edit(admin.id, EditUserRequest(role = "USER", zipcode = null))
+        controller.promote(admin.id, area("CA"))
+        controller.promote(admin.id, area("CA"))
         val afterAdmin = controller.demote(admin.id)
         assertThat(afterAdmin.access).isEqualTo(AccessLevel.CREATOR)
+        assertThat(enabled(admin.id, AccessLevel.ADMIN)).isEmpty()
+        assertThat(enabled(admin.id, AccessLevel.CREATOR)).containsExactly("CA") // an ex-admin stays a creator
 
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "demote-creator")
         val afterCreator = controller.demote(creator.id)

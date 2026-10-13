@@ -2,6 +2,8 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
+import PurviewSetter from '@/components/PurviewSetter.vue'
+import { GRANT_LEVELS, ScopeLevel, type Purview } from '@/types'
 
 const { t } = useI18n()
 
@@ -512,17 +514,39 @@ function demoteTarget(row: UserRow): LadderLevel | null {
   return null
 }
 
-async function promote(row: UserRow) {
+// ---------- promote: choose the area for the new access ----------
+// Raising a role grants an area (statewide or nationwide): creator access for
+// a creator, admin access plus matching creator access for an admin.
+const emptyArea = (): Purview => ({ scopeLevel: ScopeLevel.STATE, regionIds: [], zipcodes: [] })
+const promoteFor = ref<{ row: UserRow; target: LadderLevel } | null>(null)
+const promoteArea = ref<Purview>(emptyArea())
+const promoteBusy = ref(false)
+function areaChosen(a: Purview): boolean {
+  return a.scopeLevel === ScopeLevel.NATIONAL || a.regionIds.length > 0
+}
+function areaBody(a: Purview) {
+  return { scopeLevel: a.scopeLevel, regionIds: a.scopeLevel === ScopeLevel.NATIONAL ? [] : a.regionIds }
+}
+function promote(row: UserRow) {
   const target = promoteTarget(row)
   if (!target) return
   roleMenuOpenFor.value = null
-  if (!confirm(t('super.manageUsers.promoteConfirm', { email: row.email, level: target }))) return
+  promoteArea.value = emptyArea()
+  promoteFor.value = { row, target }
+}
+async function confirmPromote() {
+  const p = promoteFor.value
+  if (!p || !areaChosen(promoteArea.value)) return
+  promoteBusy.value = true
   try {
-    const res = await axios.post<UserRow>(`/api/super/users/${row.id}/promote`)
+    const res = await axios.post<UserRow>(`/api/super/users/${p.row.id}/promote`, areaBody(promoteArea.value))
     replaceRow(res.data)
-    message.value = t('super.manageUsers.promoted', { email: row.email, level: target })
+    message.value = t('super.manageUsers.promoted', { email: p.row.email, level: p.target })
+    promoteFor.value = null
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('super.manageUsers.errorPromote')
+  } finally {
+    promoteBusy.value = false
   }
 }
 
@@ -674,6 +698,7 @@ let suppressEditWatchers = false
 
 async function openEdit(row: UserRow) {
   editUser.value = row
+  editArea.value = emptyArea()
   editRole.value = (row.access === 'ADMIN' || row.access === 'CREATOR' || row.access === 'USER')
     ? row.access
     : 'USER'
@@ -784,13 +809,19 @@ watch(editZipcode, (val) => {
     } catch { editZipcodes.value = [] }
   }, 200)
 })
+const RANK: Record<string, number> = { USER: 1, CREATOR: 2, ADMIN: 3 }
+const editArea = ref<Purview>(emptyArea())
+/** Edit raises the role: it needs an area, like Promote. */
+const editRaises = computed(() => !!editUser.value && (RANK[editRole.value] ?? 0) > (RANK[editUser.value.access] ?? 0))
 async function saveEdit() {
   if (!editUser.value) return
+  if (editRaises.value && !areaChosen(editArea.value)) return
   editBusy.value = true
   editError.value = null
   try {
-    const body: { role?: string; zipcode?: string } = {}
+    const body: { role?: string; zipcode?: string; scopeLevel?: ScopeLevel; regionIds?: number[] } = {}
     if (editRole.value !== editUser.value.access) body.role = editRole.value
+    if (editRaises.value) Object.assign(body, areaBody(editArea.value))
     if (editZipcode.value && editZipcode.value !== editUser.value.zipcode) body.zipcode = editZipcode.value
     if (!body.role && !body.zipcode) { closeEdit(); return }
     const res = await axios.put<UserRow>(`/api/super/users/${editUser.value.id}`, body)
@@ -1266,6 +1297,12 @@ onBeforeUnmount(() => {
               <option value="ADMIN">{{ $t('super.manageUsers.roleAdmin') }}</option>
             </select>
           </label>
+          <!-- Raising the role grants an area, like Promote (separate from where they live, below). -->
+          <fieldset v-if="editRaises" class="rounded border border-slate-200 p-2" data-test="edit-area">
+            <legend class="px-1 font-semibold text-slate-700">{{ $t('super.manageUsers.areaLabel') }}</legend>
+            <p class="mb-2 text-xs text-slate-500">{{ editRole === 'ADMIN' ? $t('super.manageUsers.areaHintAdmin') : $t('super.manageUsers.areaHintCreator') }}</p>
+            <PurviewSetter :key="editUser?.id" v-model="editArea" :allowed-levels="GRANT_LEVELS" :initial="editArea" />
+          </fieldset>
           <!-- State / County / Zipcode are <input list> typeaheads: the
                browser filters the <datalist> as the user types. Watchers
                on the bound name strings map the picked value back to the
@@ -1325,9 +1362,33 @@ onBeforeUnmount(() => {
           <button
             type="button"
             @click="saveEdit"
-            :disabled="editBusy"
+            :disabled="editBusy || (editRaises && !areaChosen(editArea))"
             class="rounded bg-slate-800 px-4 py-1.5 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
           >{{ editBusy ? $t('common.saving') : $t('common.save') }}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promote: choose the area for the new access -->
+    <div v-if="promoteFor" role="dialog" aria-modal="true" data-test="promote-dialog" class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4" @click.self="promoteFor = null">
+      <div class="mt-16 w-full max-w-lg rounded bg-white p-5 shadow-xl">
+        <h2 class="mb-1 text-base font-semibold text-slate-800">
+          {{ $t('super.manageUsers.promoteConfirm', { email: promoteFor.row.email, level: promoteFor.target }) }}
+        </h2>
+        <p class="mb-3 text-xs text-slate-500">
+          {{ promoteFor.target === 'ADMIN' ? $t('super.manageUsers.areaHintAdmin') : $t('super.manageUsers.areaHintCreator') }}
+        </p>
+        <PurviewSetter v-model="promoteArea" :allowed-levels="GRANT_LEVELS" :initial="promoteArea" />
+        <div class="mt-4 flex justify-end gap-2">
+          <button type="button" class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50" @click="promoteFor = null">
+            {{ $t('form.cancel') }}
+          </button>
+          <button
+            type="button"
+            :disabled="promoteBusy || !areaChosen(promoteArea)"
+            class="rounded bg-slate-800 px-4 py-1.5 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+            @click="confirmPromote"
+          >{{ $t('super.manageUsers.promoteTo', { level: promoteFor.target }) }}</button>
         </div>
       </div>
     </div>

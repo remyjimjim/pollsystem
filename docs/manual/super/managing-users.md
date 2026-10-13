@@ -27,18 +27,24 @@ toggles a range.
 
 ## Changing a role
 
-**Role actions** offer **Promote to …** and **Demote to …**:
+The small **⋮** next to someone's role badge (USER, CREATOR, ADMIN) opens
+**Promote to …** and **Demote to …**. Clicking the badge itself opens **Edit**,
+where you can also pick a role. Both work the same way.
 
-- **Promote** only raises the person's level. It **doesn't give them any
-  area**. Someone promoted to creator can't create polls until they have
-  creator access: add it on [Manage Creators](../admin/managing-creators.md).
-  Admin areas come from an approved [admin request](admin-requests.md).
-- **Demote** lowers them one level and switches off the access that came
-  with the old level. An admin demoted to creator keeps their creator access.
-  A creator demoted to member loses their creator access.
+- **Raising a role** asks for the **area** of the new access: one or more whole
+  states, or nationwide.
+  - Promoted to **creator**, they get creator access there.
+  - Promoted to **admin**, they get admin access there, plus creator access
+    across the same area.
+- **Lowering a role** switches off the access of the level they left.
+  - An admin demoted to creator loses their admin access but keeps their
+    creator access.
+  - Anyone demoted to member loses their creator access.
 
-You can't promote or demote a super. Click someone's role to edit their role
-or location (state, county, zipcode) directly.
+You can't promote or demote a super, and admins can't go higher than admin.
+
+**Edit** also changes where someone lives (state, county, zipcode). That's
+separate from the access they're granted.
 
 ## Their polls and answers
 

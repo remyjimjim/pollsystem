@@ -784,7 +784,10 @@
       "editPickState": "Type a state name…",
       "editPickCounty": "Type a county name…",
       "editZipPlaceholder": "5 digits",
-      "errorSaveEdit": "Edit failed"
+      "errorSaveEdit": "Edit failed",
+      "areaLabel": "Area for their new access",
+      "areaHintCreator": "They get creator access here: whole states, or nationwide.",
+      "areaHintAdmin": "They get admin access here (whole states, or nationwide), plus creator access across the same area."
     },
     "managePolls": {
       "heading": "Manage All Polls",
