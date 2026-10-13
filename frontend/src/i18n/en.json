@@ -687,7 +687,7 @@
       "approvedVerb": "approved",
       "rejectedVerb": "rejected",
       "colUser": "User",
-      "colZipcodes": "Zipcodes",
+      "colArea": "Area",
       "colReason": "Reason",
       "colSubmitted": "Submitted",
       "errorLoad": "Failed to load requests"

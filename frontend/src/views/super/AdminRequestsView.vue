@@ -119,7 +119,7 @@ onMounted(load)
             <input type="checkbox" :checked="allChecked" @change="toggleAll" />
           </th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.adminRequests.colUser') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.adminRequests.colZipcodes') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.adminRequests.colArea') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.adminRequests.colReason') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.adminRequests.colSubmitted') }}</th>
         </tr>

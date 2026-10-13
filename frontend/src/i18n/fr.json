@@ -551,7 +551,7 @@
       "approvedVerb": "approuvée(s)",
       "rejectedVerb": "rejetée(s)",
       "colUser": "Utilisateur",
-      "colZipcodes": "Codes postaux",
+      "colArea": "Zone",
       "colReason": "Motif",
       "colSubmitted": "Soumise",
       "errorLoad": "Échec du chargement des demandes"

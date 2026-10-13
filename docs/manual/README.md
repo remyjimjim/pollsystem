@@ -62,4 +62,5 @@ app's language files (`frontend/src/i18n/*.json`) under `help.<view>.<element>`.
 - [x] `creator/becoming-an-admin.md`: requesting admin access (statewide or nationwide)
 - [x] `admin/reviewing-creator-requests.md`, `managing-creators.md`, `managing-polls.md`
 - [ ] `admin/*`: reports
-- [ ] `super/*`: admin requests, users, IP management, poll-type templates, the submissions kill switch; reports
+- [x] `super/dashboard-and-emergency-switch.md`, `admin-requests.md`, `managing-users.md`, `managing-all-polls.md`, `poll-templates.md`, `ip-rules.md`
+- [ ] `super/*`: reports

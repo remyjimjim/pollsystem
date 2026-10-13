@@ -551,7 +551,7 @@
       "approvedVerb": "godkjent",
       "rejectedVerb": "avslått",
       "colUser": "Bruker",
-      "colZipcodes": "Postnumre",
+      "colArea": "Område",
       "colReason": "Begrunnelse",
       "colSubmitted": "Sendt",
       "errorLoad": "Kunne ikke laste søknader"

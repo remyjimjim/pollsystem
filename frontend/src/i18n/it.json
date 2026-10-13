@@ -506,7 +506,7 @@
       "approvedVerb": "approvata/e",
       "rejectedVerb": "rifiutata/e",
       "colUser": "Utente",
-      "colZipcodes": "CAP",
+      "colArea": "Area",
       "colReason": "Motivo",
       "colSubmitted": "Inviata",
       "errorLoad": "Impossibile caricare le richieste"

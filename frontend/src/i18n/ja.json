@@ -551,7 +551,7 @@
       "approvedVerb": "承認済み",
       "rejectedVerb": "拒否済み",
       "colUser": "ユーザー",
-      "colZipcodes": "郵便番号",
+      "colArea": "地域",
       "colReason": "理由",
       "colSubmitted": "送信日",
       "errorLoad": "リクエストの読み込みに失敗しました"

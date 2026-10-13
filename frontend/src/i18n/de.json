@@ -506,7 +506,7 @@
       "approvedVerb": "genehmigt",
       "rejectedVerb": "abgelehnt",
       "colUser": "Benutzer",
-      "colZipcodes": "Postleitzahlen",
+      "colArea": "Gebiet",
       "colReason": "Begründung",
       "colSubmitted": "Eingereicht",
       "errorLoad": "Anfragen konnten nicht geladen werden"

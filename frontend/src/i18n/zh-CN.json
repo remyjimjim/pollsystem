@@ -506,7 +506,7 @@
       "approvedVerb": "已批准",
       "rejectedVerb": "已拒绝",
       "colUser": "用户",
-      "colZipcodes": "邮政编码",
+      "colArea": "区域",
       "colReason": "理由",
       "colSubmitted": "提交时间",
       "errorLoad": "加载请求失败"

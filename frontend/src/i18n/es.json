@@ -506,7 +506,7 @@
       "approvedVerb": "aprobada(s)",
       "rejectedVerb": "rechazada(s)",
       "colUser": "Usuario",
-      "colZipcodes": "Códigos postales",
+      "colArea": "Área",
       "colReason": "Motivo",
       "colSubmitted": "Enviada",
       "errorLoad": "Error al cargar las solicitudes"
