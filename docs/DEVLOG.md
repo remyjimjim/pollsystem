@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-13 — docs(manual): super pages, the last help section
+
+**Requested:**
+
+> Let's go with 'Super help pages: the last help section.'
+
+**Changed:**
+
+- Six `super/` pages:
+  - the dashboard: admin workload, plus the emergency switch for poll
+    submissions;
+  - admin requests;
+  - managing users;
+  - managing all polls;
+  - poll templates, including the Election candidates widget;
+  - IP rules: stored, not enforced yet.
+- The Admin Requests "Zipcodes" header now says "Area", in all 9 languages.
+- The manual has 20 pages, all links work, and the dev server picked them up
+  live.
+- Found, not changed, pending the user's decision: **Promote** in Manage Users
+  raises the level only and grants no area. A promoted creator can't create
+  until someone adds access; a promoted admin has no admin area, and there's
+  no UI to give one except the admin request flow.
+
+**Commit:** `d6533bf`
+
+---
+
 ## 2026-10-09 — fix(help): new manual pages appear without restarting the dev server
 
 **Requested:**
