@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-10-13 — Manage Users: raising a role grants an area (Promote and Edit alike)
+
+**Requested:**
+
+> I'm not seeing a "Promote" option/action on super/manage-users...
+
+then:
+
+> go with 1(a) and 2(ii)
+
+**Found:**
+
+- Promote lives in the small ⋮ next to the role badge.
+- Edit's role change (click the badge) rewrote every grant to the new role.
+  Creator → admin produced unapproved admin access and left the person unable
+  to create; admin → creator produced duplicates.
+- Promote granted no area at all.
+
+**Decision:**
+
+- 1(a): raising a role asks for the area, statewide or nationwide.
+- 2(ii): Edit's role change behaves exactly like Promote and Demote.
+
+**Changed:**
+
+- New `RoleChanges`, shared by Promote, Demote and Edit:
+  - raising a role grants the area: creator access for a creator; admin access
+    plus mirrored creator access for an admin;
+  - re-enabling an existing grant instead of duplicating it;
+  - lowering a role switches off the higher levels' grants;
+  - no more role rewrites (`RoleAssignmentBulkOps` removed).
+- UI: a Promote dialog with the area picker, and Edit asks for an area only
+  when raising.
+- The help page is updated.
+- Backend 291/291, frontend 92/92, e2e 13/13.
+
+**Commit:** `7ff60a2`
+
+---
+
 ## 2026-10-13 — docs(manual): super pages, the last help section
 
 **Requested:**
