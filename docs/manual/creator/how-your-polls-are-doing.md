@@ -1,6 +1,6 @@
 ---
 title: How your polls are doing
-summary: Responses, the in-area share, closing dates and results, at a glance on your dashboard.
+summary: Your dashboard at a glance, and each poll's report: participation, reach, highlights.
 order: 5
 ---
 
@@ -29,6 +29,36 @@ The **Close date** column shows when each poll closes. For live polls it also
 says how long is left: **closes today**, **closes tomorrow**, or **closes in N
 days**. A date that has arrived is highlighted.
 
+## The poll report
+
+**Report** (next to Results) opens a fuller report on a published poll. Only you,
+and Poll System's super administrators, can see it.
+
+- **At a glance:** respondents, the share inside the poll's area, how many
+  people changed their answers, and how many left a comment (never what they
+  wrote).
+- **Participation over time:** new respondents per day, with a running total.
+  It shows whether sharing the poll on a given day worked.
+- **Reach:** respondents in each part of the poll's area (states for a
+  nationwide poll, counties for a statewide one, zipcodes for a smaller one),
+  people outside the area, and how much of the area you've reached, e.g.
+  "Responses from 9 of 14 counties".
+- **Highlights:**
+  - elections: each office's leader and margin;
+  - ballot measures: the margin;
+  - questionnaires: questions from most agreed to most divided.
+- **Inside vs. outside the area:** the results for people who live in the
+  poll's area next to everyone else's.
+
+The report protects people's privacy:
+
+- **Small groups are withheld.** A group of fewer than 10 people shows as
+  "fewer than 10". When hiding one group would still let you work it out from
+  the total, another group is withheld too.
+- **Days are grouped.** Participation over time joins days together until each
+  period has at least 10 new respondents.
+- **Until a poll has 10 respondents,** the report shows only its totals.
+
 ## Results
 
 **Results** opens a published poll's results page, the same page everyone
@@ -43,4 +73,3 @@ What you can't see:
   see them.
 - **Small groups.** Narrowed results for fewer than 10 people are hidden.
 
-More detailed reports are planned.

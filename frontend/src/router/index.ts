@@ -101,6 +101,13 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/creator/EditPollView.vue'),
     meta: { requiresAuth: true, minAccess: AccessLevel.CREATOR }
   },
+  {
+    // Creator reports, phase 2: one poll's report (creator or super only, enforced by the API).
+    path: '/creator/polls/:type/:id/report',
+    name: 'PollReport',
+    component: () => import('@/views/creator/PollReportView.vue'),
+    meta: { requiresAuth: true, minAccess: AccessLevel.CREATOR }
+  },
 
   // Admin routes (requires ADMIN+)
   {

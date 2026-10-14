@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
@@ -38,7 +39,8 @@ class CreatorPollsController(
     private val questionnaires: QuestionnaireRepository,
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
-    private val participation: PollParticipationService
+    private val participation: PollParticipationService,
+    private val reports: PollReportService
 ) {
     @GetMapping
     fun list(
@@ -144,6 +146,28 @@ class CreatorPollsController(
             }
             else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
         }
+    }
+
+    /**
+     * Creator reports, phase 2: one poll's report (participation over time,
+     * reach, engagement) for its creator, or a super. Privacy rules live in
+     * PollReportService. Drafts have no responses, so their report is empty.
+     */
+    @GetMapping("/{type}/{id}/report")
+    @Transactional(readOnly = true)
+    fun report(
+        @AuthenticationPrincipal principal: AppUserDetails,
+        @PathVariable type: String,
+        @PathVariable id: Long
+    ): PollReport {
+        val (kind, creatorId) = when (type) {
+            "questionnaire" -> PollKind.QUESTIONNAIRE to questionnaires.findById(id).orElseThrow { notFound() }.creator.id
+            "election" -> PollKind.ELECTION to elections.findById(id).orElseThrow { notFound() }.creator.id
+            "ballot-measure" -> PollKind.BALLOT_MEASURE to ballotMeasures.findById(id).orElseThrow { notFound() }.creator.id
+            else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
+        }
+        if (creatorId != principal.user.id && principal.user.access != AccessLevel.SUPER) throw forbidden()
+        return reports.report(kind, id)
     }
 
     private fun notFound() = ResponseStatusException(HttpStatus.NOT_FOUND, "Poll not found")

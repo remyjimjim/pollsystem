@@ -140,7 +140,9 @@
      - inside vs. outside results side by side;
      - highlights per type (election leaders/margins, measure margin, questionnaire most-agreed -> most-divided);
      - engagement: answers changed, comment count.
-     - Done: No.
+     - Done: Yes (2026-10-14). /creator/polls/<type>/<id>/report (creator or super). Days merge until each period
+       has >= k; reach treats "outside the area" as a cell when suppressing.
+       Highlights and inside/outside are worked out from the public results endpoints.
    - Phase 3: CSV download of the report's totals, a printable summary page, and milestone emails
      ("10 responses: results by area are now visible", plus a final report at close).
      - Done: No.

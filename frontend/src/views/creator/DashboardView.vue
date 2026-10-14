@@ -214,6 +214,11 @@ onMounted(load)
               :to="`/polls/${editSlug(p.type)}/${p.id}/results`"
               class="text-slate-800 underline"
             >{{ $t('creator.dashboard.results') }}</router-link>
+            <router-link
+              v-if="hasResults(p)"
+              :to="`/creator/polls/${editSlug(p.type)}/${p.id}/report`"
+              class="ml-2 text-slate-800 underline"
+            >{{ $t('creator.dashboard.report') }}</router-link>
           </td>
           <td class="border-b border-slate-100 p-2">
             <router-link
