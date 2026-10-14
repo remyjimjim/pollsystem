@@ -197,6 +197,18 @@ A second test uses the declining card `4000 0000 0000 0002` and checks that no
 account is created. **Normal runs and CI skip these tests;** they run only with
 `STRIPE_E2E=1`.
 
+**The easy way:** `./scripts/test-stripe.bash [--headed] [--keep]` on the host
+does all of the steps below:
+- it gets your `sk_test_…` key from `$STRIPE_API_KEY`, the keychain
+  (`service=pollsystem-stripe-test`) or a hidden prompt, and refuses live keys;
+- it finds or creates the test price;
+- it pauses the Docker app containers;
+- it starts `stripe listen` and the host stack with real Stripe;
+- it runs the tests, then cleans up and restarts the containers.
+
+You only need the Stripe CLI installed and logged in (`stripe login`). The
+manual steps:
+
 Run them **on the host** (the Docker backend has `APP_PAYMENTS_PROVIDER: mock`
 fixed in its settings):
 
