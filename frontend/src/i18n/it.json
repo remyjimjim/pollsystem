@@ -239,7 +239,11 @@
     "noResponsesYet": "Ancora nessuna risposta.",
     "noVotesYet": "Ancora nessun voto.",
     "poll404": "Sondaggio non trovato",
-    "loadFailed": "Impossibile caricare i risultati"
+    "loadFailed": "Impossibile caricare i risultati",
+    "privacyVoted": "Per la privacy, i risultati non vengono mostrati finché non hanno votato almeno {k} persone. I risultati si aggiornano ogni {step} votanti.",
+    "privacyAnswered": "Per la privacy, i risultati non vengono mostrati finché non hanno risposto almeno {k} persone. I risultati si aggiornano ogni {step} partecipanti.",
+    "soFar": "Nessuno ha ancora risposto. | Finora ha risposto 1 persona. | Finora hanno risposto {n} persone.",
+    "superLive": "Vista super: risultati in tempo reale con i numeri esatti."
   },
   "notFound": {
     "heading": "Non trovato",
@@ -315,11 +319,11 @@
       "fewerThan": "meno di {k}",
       "outsideArea": "Fuori dall'area del sondaggio",
       "highlightsHeading": "In evidenza",
-      "leads": "{name} è in testa con {votes} voti, avanti di {margin}",
-      "onlyCandidate": "{name}: {votes} voti",
+      "leads": "{name} è in testa con il {pct}%, avanti di {margin} punti",
+      "onlyCandidate": "{name}: {pct}%",
       "yesShare": "{pct}% Sì",
       "measure": "Risultato",
-      "measureMargin": "{side} di {margin} voti ({yes}% Sì, {no}% No)",
+      "measureMargin": "{side} di {margin} punti ({yes}% Sì, {no}% No)",
       "splitHeading": "Dentro vs. fuori dall'area del sondaggio",
       "splitNote": "Un gruppo con meno di {k} persone viene nascosto.",
       "insideCol": "Nell'area",

@@ -239,7 +239,11 @@
     "noResponsesYet": "Aucune réponse pour le moment.",
     "noVotesYet": "Aucun vote pour le moment.",
     "poll404": "Sondage introuvable",
-    "loadFailed": "Échec du chargement des résultats"
+    "loadFailed": "Échec du chargement des résultats",
+    "privacyVoted": "Pour la confidentialité, les résultats ne s'affichent qu'à partir de {k} votants. Ils sont mis à jour tous les {step} votants.",
+    "privacyAnswered": "Pour la confidentialité, les résultats ne s'affichent qu'à partir de {k} répondants. Ils sont mis à jour tous les {step} répondants.",
+    "soFar": "Personne n'a encore répondu. | 1 personne a répondu jusqu'ici. | {n} personnes ont répondu jusqu'ici.",
+    "superLive": "Vue super : résultats en direct avec les chiffres bruts."
   },
   "notFound": {
     "heading": "Introuvable",
@@ -315,11 +319,11 @@
       "fewerThan": "moins de {k}",
       "outsideArea": "Hors de la zone du sondage",
       "highlightsHeading": "Faits marquants",
-      "leads": "{name} mène avec {votes} voix, {margin} d'avance",
-      "onlyCandidate": "{name} : {votes} voix",
+      "leads": "{name} mène avec {pct} %, {margin} points d'avance",
+      "onlyCandidate": "{name} : {pct} %",
       "yesShare": "{pct} % Oui",
       "measure": "Résultat",
-      "measureMargin": "{side} avec {margin} voix d'écart ({yes} % Oui, {no} % Non)",
+      "measureMargin": "{side} avec {margin} points d'écart ({yes} % Oui, {no} % Non)",
       "splitHeading": "Dans vs. hors de la zone du sondage",
       "splitNote": "Un groupe de moins de {k} personnes est masqué.",
       "insideCol": "Dans la zone",

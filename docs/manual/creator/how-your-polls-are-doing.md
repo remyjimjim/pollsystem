@@ -43,8 +43,8 @@ and Poll System's super administrators, can see it.
   nationwide poll, counties for a statewide one, zipcodes for a smaller one),
   people outside the area, and how much of the area you've reached, e.g.
   "Responses from 9 of 14 counties".
-- **Highlights:**
-  - elections: each office's leader and margin;
+- **Highlights** (from the same stepped percentages):
+  - elections: each office's leader and margin in percentage points;
   - ballot measures: the margin;
   - questionnaires: questions from most agreed to most divided.
 - **Inside vs. outside the area:** the results for people who live in the
@@ -72,4 +72,7 @@ What you can't see:
 - **Comments.** They're private: only Poll System's super administrators can
   see them.
 - **Small groups.** Narrowed results for fewer than 10 people are hidden.
+- **Early or exact results.** Like everyone, you see results only once 10
+  people have responded. They update in steps of 10 and show as percentages,
+  never exact counts. See [Viewing results](../viewer/viewing-results.md).
 

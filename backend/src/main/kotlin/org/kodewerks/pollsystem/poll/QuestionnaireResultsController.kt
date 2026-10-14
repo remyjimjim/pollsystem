@@ -1,14 +1,12 @@
 package org.kodewerks.pollsystem.poll
 
-import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.PollKind
-import org.kodewerks.pollsystem.repository.CountyRepository
-import org.kodewerks.pollsystem.repository.CountyZipsRepository
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.repository.QuestionRepository
-import org.kodewerks.pollsystem.repository.QuestionResponseRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
-import org.springframework.beans.factory.annotation.Value
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,14 +18,18 @@ import org.springframework.web.server.ResponseStatusException
 data class QuestionResultDto(
     val questionId: Long,
     val text: String,
-    val totalResponses: Int,
-    val byAnswer: Map<String, Int>
+    /** Raw counts: supers only (null for everyone else). */
+    val totalResponses: Int?,
+    val byAnswer: Map<String, Int>?,
+    /** Rounded percentage per answer (lowercased), for everyone. */
+    val byAnswerPct: Map<String, Int>
 )
 
 data class QuestionnaireResultsDto(
     val questionnaireId: Long,
     val title: String,
-    val totalRespondents: Int,
+    /** Respondents in the shown group: supers only (null for everyone else). */
+    val totalRespondents: Int?,
     val perQuestion: List<QuestionResultDto>,
     val filterApplied: Map<String, String>?,
     val suppressed: Boolean,
@@ -35,7 +37,8 @@ data class QuestionnaireResultsDto(
     /** The poll's purview, so the page can say where the poll is for. */
     val purviewLevel: ScopeLevel = ScopeLevel.NATIONAL,
     /** Its places (states, "County (ST)" or zipcodes); empty when nationwide. */
-    val purviewAreas: List<String> = emptyList()
+    val purviewAreas: List<String> = emptyList(),
+    val visibility: ResultsVisibility
 )
 
 @RestController
@@ -43,12 +46,9 @@ data class QuestionnaireResultsDto(
 class QuestionnaireResultsController(
     private val questionnaires: QuestionnaireRepository,
     private val questions: QuestionRepository,
-    private val responses: QuestionResponseRepository,
     private val blocks: PollBlockService,
     private val purviews: PollPurviewService,
-    private val countyZips: CountyZipsRepository,
-    private val counties: CountyRepository,
-    @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
+    private val access: ResultsAccess
 ) {
 
     @GetMapping
@@ -59,7 +59,8 @@ class QuestionnaireResultsController(
         @RequestParam(name = "stateId", required = false) stateIds: List<Long>? = null,
         @RequestParam(name = "countyId", required = false) countyIds: List<Long>? = null,
         @RequestParam(required = false, defaultValue = "true") withinPurview: Boolean = true,
-        @RequestParam(required = false, defaultValue = "true") outsidePurview: Boolean = true
+        @RequestParam(required = false, defaultValue = "true") outsidePurview: Boolean = true,
+        @AuthenticationPrincipal principal: AppUserDetails? = null
     ): QuestionnaireResultsDto {
         val q = questionnaires.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
@@ -67,63 +68,34 @@ class QuestionnaireResultsController(
         if (blocks.isBlockedEverywhere(PollKind.QUESTIONNAIRE, id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Questionnaire not found")
         }
-
-        val pollQuestions = questions.findByQuestionnaireId(id)
         val purviewRows = purviews.purviewOf(PollKind.QUESTIONNAIRE, id)
-        val purviewScope = purviews.scopeLevelOf(purviewRows) to purviews.areaNames(purviewRows)
-        val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
-        val all = responses.findByQuestionnaireId(id)
-        var filtered = all
-        // A responder with no zipcode (profile not yet completed) can't fall in
-        // any geographic group, so they're excluded from a filtered/purview view.
-        if (geoZips != null) filtered = filtered.filter { it.user.zipcode?.let { z -> z in geoZips } == true }
-        filtered = filterByPurview(
-            filtered, { it.user.zipcode }, purviews.purviewOf(PollKind.QUESTIONNAIRE, id),
-            withinPurview, outsidePurview, purviews
-        )
+        val r = access.prepare(principal, PollKind.QUESTIONNAIRE, id, zipcodes, stateIds, countyIds, withinPurview, outsidePurview)
 
-        val respondents = filtered.map { it.user.id }.distinct().size
-        val filterMap = describeFilter(zipcodes, stateIds, countyIds, withinPurview, outsidePurview)
-        val narrowed = geoZips != null || !(withinPurview && outsidePurview)
-
-        if (narrowed && respondents < kThreshold) {
-            return QuestionnaireResultsDto(
-                purviewLevel = purviewScope.first,
-                purviewAreas = purviewScope.second,
-                questionnaireId = id,
-                title = q.title,
-                totalRespondents = 0,
-                perQuestion = emptyList(),
-                filterApplied = filterMap,
-                suppressed = true,
-                suppressionMessage = "Not enough responses in this group to display (privacy protection)"
-            )
-        }
-
-        val byQuestion = filtered.groupBy { it.question.id }
-        val perQuestion = pollQuestions.map { question ->
+        val byQuestion = r.answers.groupBy { it.itemId }
+        val perQuestion = if (r.answers.isEmpty() && !r.live) emptyList() else questions.findByQuestionnaireId(id).map { question ->
             val rows = byQuestion[question.id].orEmpty()
-            val byAnswer = rows
-                .groupingBy { it.response.trim().lowercase() }
-                .eachCount()
+            val byAnswer = rows.groupingBy { it.response.trim().lowercase() }.eachCount()
             QuestionResultDto(
                 questionId = question.id,
                 text = question.question,
-                totalResponses = rows.size,
-                byAnswer = byAnswer
+                totalResponses = if (r.live) rows.size else null,
+                byAnswer = if (r.live) byAnswer else null,
+                byAnswerPct = byAnswer.mapValues { (_, n) -> pct(n, rows.size) }
             )
         }
-
         return QuestionnaireResultsDto(
-                purviewLevel = purviewScope.first,
-                purviewAreas = purviewScope.second,
             questionnaireId = id,
             title = q.title,
-            totalRespondents = respondents,
+            totalRespondents = if (r.live) r.respondents else null,
             perQuestion = perQuestion,
-            filterApplied = filterMap,
-            suppressed = false,
-            suppressionMessage = null
+            filterApplied = r.filterApplied,
+            suppressed = r.suppressed,
+            suppressionMessage = if (r.suppressed) SUPPRESSED else null,
+            purviewLevel = purviews.scopeLevelOf(purviewRows),
+            purviewAreas = purviews.areaNames(purviewRows),
+            visibility = r.visibility
         )
     }
 }
+
+internal const val SUPPRESSED = "Not enough responses in this group to display (privacy protection)"

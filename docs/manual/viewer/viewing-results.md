@@ -17,15 +17,25 @@ then how many more). The page also shows how many people have responded.
 
 ## What you'll see
 
-Results are shown as bars with a count and a percentage.
+Results are shown as bars with a **percentage**, rounded to a whole number.
 
-- **Questionnaires:** each question, with how many people picked each answer.
-- **Ballot measures:** how many voted **Yes** and how many voted **No**.
-- **Elections:** each office, and under it each candidate. **Yes** is how many
-  voters chose that candidate. **No** is how many voted for that office but chose
-  someone else.
+- **Questionnaires:** each question, with the share of people who picked each
+  answer.
+- **Ballot measures:** the share who voted **Yes** and the share who voted
+  **No**.
+- **Elections:** each office, and under it each candidate. **Yes** is the share
+  of voters who chose that candidate. **No** is the share who voted for that
+  office but chose someone else.
 
-A poll with no responses yet says so.
+## Results protect people's privacy
+
+- **No results until 10 people have responded.** Until then the page says how
+  many have responded so far. With fewer people, a result could show how
+  particular people voted.
+- **Results update in steps of 10.** The page shows the results as they were
+  when the 10th, 20th, 30th… person responded. A single new vote, or a single
+  changed answer, never changes what you see on its own.
+- **Percentages only.** Exact counts aren't shown.
 
 ## Inside or outside the poll's area
 
@@ -61,8 +71,10 @@ unticking one of the two boxes) to a group of **fewer than 10 people**. With so
 few people in a group, the results could reveal how particular people voted.
 
 To see results again, widen your choice: pick a larger area, **Clear** the place
-filter, or tick both boxes. The full, unfiltered results are always shown,
-however few responses there are.
+filter, or tick both boxes.
+
+If the page says how many people have responded so far but shows no results,
+the poll hasn't reached 10 respondents yet.
 
 People who haven't entered a zipcode yet can't be placed, so they appear only in
 the full, unfiltered results.

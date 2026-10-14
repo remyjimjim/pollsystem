@@ -1,13 +1,11 @@
 package org.kodewerks.pollsystem.poll
 
-import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.PollKind
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
-import org.kodewerks.pollsystem.repository.BallotResponseRepository
-import org.kodewerks.pollsystem.repository.CountyRepository
-import org.kodewerks.pollsystem.repository.CountyZipsRepository
-import org.springframework.beans.factory.annotation.Value
+import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,28 +17,30 @@ import org.springframework.web.server.ResponseStatusException
 data class BallotMeasureResultsDto(
     val measureId: Long,
     val title: String,
-    val totalRespondents: Int,
-    val yes: Int,
-    val no: Int,
+    /** Raw counts: supers only (null for everyone else). */
+    val totalRespondents: Int?,
+    val yes: Int?,
+    val no: Int?,
+    /** Rounded percentages, for everyone. */
+    val yesPct: Int,
+    val noPct: Int,
     val filterApplied: Map<String, String>?,
     val suppressed: Boolean,
     val suppressionMessage: String?,
     /** The poll's purview, so the page can say where the poll is for. */
     val purviewLevel: ScopeLevel = ScopeLevel.NATIONAL,
     /** Its places (states, "County (ST)" or zipcodes); empty when nationwide. */
-    val purviewAreas: List<String> = emptyList()
+    val purviewAreas: List<String> = emptyList(),
+    val visibility: ResultsVisibility
 )
 
 @RestController
 @RequestMapping("/api/polls/ballot-measures/{id}/results")
 class BallotMeasureResultsController(
     private val measures: BallotMeasureRepository,
-    private val responses: BallotResponseRepository,
     private val blocks: PollBlockService,
     private val purviews: PollPurviewService,
-    private val countyZips: CountyZipsRepository,
-    private val counties: CountyRepository,
-    @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
+    private val access: ResultsAccess
 ) {
 
     @GetMapping
@@ -51,7 +51,8 @@ class BallotMeasureResultsController(
         @RequestParam(name = "stateId", required = false) stateIds: List<Long>? = null,
         @RequestParam(name = "countyId", required = false) countyIds: List<Long>? = null,
         @RequestParam(required = false, defaultValue = "true") withinPurview: Boolean = true,
-        @RequestParam(required = false, defaultValue = "true") outsidePurview: Boolean = true
+        @RequestParam(required = false, defaultValue = "true") outsidePurview: Boolean = true,
+        @AuthenticationPrincipal principal: AppUserDetails? = null
     ): BallotMeasureResultsDto {
         val measure = measures.findById(id).orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
@@ -59,50 +60,26 @@ class BallotMeasureResultsController(
         if (blocks.isBlockedEverywhere(PollKind.BALLOT_MEASURE, measure.id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
-        val purviewRows = purviews.purviewOf(PollKind.BALLOT_MEASURE, id)
-        val purviewScope = purviews.scopeLevelOf(purviewRows) to purviews.areaNames(purviewRows)
-        val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
-        val all = responses.findByMeasureId(id)
-        var filtered = all
-        // A responder with no zipcode (profile not yet completed) can't fall in
-        // any geographic group, so they're excluded from a filtered/purview view.
-        if (geoZips != null) filtered = filtered.filter { it.user.zipcode?.let { z -> z in geoZips } == true }
         // Ballot measures inherit their election's purview (purviewOf resolves it).
-        filtered = filterByPurview(
-            filtered, { it.user.zipcode }, purviews.purviewOf(PollKind.BALLOT_MEASURE, id),
-            withinPurview, outsidePurview, purviews
-        )
+        val purviewRows = purviews.purviewOf(PollKind.BALLOT_MEASURE, id)
+        val r = access.prepare(principal, PollKind.BALLOT_MEASURE, id, zipcodes, stateIds, countyIds, withinPurview, outsidePurview)
 
-        val respondents = filtered.size  // unique by (user, measure) constraint
-        val filterMap = describeFilter(zipcodes, stateIds, countyIds, withinPurview, outsidePurview)
-        val narrowed = geoZips != null || !(withinPurview && outsidePurview)
-
-        if (narrowed && respondents < kThreshold) {
-            return BallotMeasureResultsDto(
-                purviewLevel = purviewScope.first,
-                purviewAreas = purviewScope.second,
-                measureId = id,
-                title = measure.title,
-                totalRespondents = 0,
-                yes = 0,
-                no = 0,
-                filterApplied = filterMap,
-                suppressed = true,
-                suppressionMessage = "Not enough responses in this group to display (privacy protection)"
-            )
-        }
-
+        val yes = r.answers.count { it.response == "true" }
+        val no = r.answers.size - yes
         return BallotMeasureResultsDto(
-                purviewLevel = purviewScope.first,
-                purviewAreas = purviewScope.second,
             measureId = id,
             title = measure.title,
-            totalRespondents = respondents,
-            yes = filtered.count { it.response },
-            no = filtered.count { !it.response },
-            filterApplied = filterMap,
-            suppressed = false,
-            suppressionMessage = null
+            totalRespondents = if (r.live) r.respondents else null,
+            yes = if (r.live) yes else null,
+            no = if (r.live) no else null,
+            yesPct = pct(yes, yes + no),
+            noPct = pct(no, yes + no),
+            filterApplied = r.filterApplied,
+            suppressed = r.suppressed,
+            suppressionMessage = if (r.suppressed) SUPPRESSED else null,
+            purviewLevel = purviews.scopeLevelOf(purviewRows),
+            purviewAreas = purviews.areaNames(purviewRows),
+            visibility = r.visibility
         )
     }
 }

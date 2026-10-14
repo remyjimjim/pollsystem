@@ -10,28 +10,32 @@ import {
 } from './seed'
 
 // Actor: viewer (a GUEST — not logged in). Journey: search for a ballot measure
-// by title, open its results, and see the k-anonymity privacy floor in action —
-// the default (all-respondents) view shows the tally, but narrowing to the
-// poll's purview WITHHOLDS it, because there are fewer than the threshold (10)
-// in-purview responses.
+// by title, open its results, and see small-poll privacy in action:
+//   - with 6 votes, no results yet: the privacy caption and "6 people have
+//     responded so far";
+//   - once 12 have voted, results appear as rounded percentages only (they
+//     update in steps of 10);
+//   - narrowing to people outside the poll's area (none) withholds the result.
 //
 // Read-only actor, so per the seed conventions it does NOT pre-wipe; it seeds
 // fresh, uniquely-titled data each run (searched by that exact title). Doubles
 // as a screen-recordable how-to: pass hold=3000 (or higher) for a calm video.
 test.describe(`viewer searches and views ballot-measure results (${STATE_INPUT.toLowerCase()})`, () => {
   let title = ''
+  let measureId = 0
   let loc: Location
 
   test.beforeAll(async () => {
     loc = await resolveLocation()
-    // Seed a published ballot measure, then 3 real registered voters in the
-    // SAME zip — in-purview but well under the k-anonymity threshold.
+    // A published ballot measure, and 6 real registered voters in its zip
+    // (alternating Yes / No): under the 10 needed before results show.
     const bm = await seedBallotMeasure({ zipcode: loc.zipcode })
     title = bm.title
-    await seedBallotResponses({ measureId: bm.id, count: 3, zipcode: loc.zipcode })
+    measureId = bm.id
+    await seedBallotResponses({ measureId, count: 6, zipcode: loc.zipcode })
   })
 
-  test('guest finds the measure, sees the open tally, then the purview view withholds it', async ({ page }) => {
+  test('guest finds the measure; results stay hidden until 10 have voted, then show as percentages', async ({ page }) => {
     test.setTimeout(120_000)
 
     // 1. Public search page (guest heading confirms we're not authenticated).
@@ -49,24 +53,27 @@ test.describe(`viewer searches and views ballot-measure results (${STATE_INPUT.t
     // 3. Open results — a guest row shows only "View results" (no "Vote").
     await row.getByRole('link', { name: 'View results' }).click()
     await expect(page).toHaveURL(/\/polls\/ballot-measure\/\d+\/results/)
-    // The purview filter (two checkboxes, both ticked by default: responses from
-    // within / outside the poll's purview) renders once results data has loaded.
-    const outside = page.getByRole('checkbox', { name: /outside the poll's purview/i })
-    await expect(outside).toBeVisible({ timeout: 15_000 })
-    await expect(outside).toBeChecked()
+
+    // 4. 6 votes: hidden. The caption says why, and how many have responded.
+    const caption = page.getByText(/For privacy, results aren't shown until at least 10 people have voted/)
+    await expect(caption).toBeVisible({ timeout: 15_000 })
+    await expect(page.getByText('6 people have responded so far.')).toBeVisible()
+    await expect(page.getByText('%', { exact: false })).toHaveCount(0)
     await hold(page)
 
-    // 4. Default view (all respondents): below-threshold data is NOT withheld,
-    //    so the privacy banner is absent.
-    const withheld = page.getByText(/Not enough responses in this group/)
-    await expect(withheld).toBeHidden()
+    // 5. Six more vote (12 in all): results appear, as rounded percentages only.
+    await seedBallotResponses({ measureId, count: 6, zipcode: loc.zipcode, prefix: 'zzz-more' })
+    await page.reload()
+    await expect(caption).toBeVisible({ timeout: 15_000 })
+    await expect(page.getByText('50%')).toHaveCount(2) // 6 Yes, 6 No
+    await expect(page.getByText(/respondent\(s\)/)).toHaveCount(0) // no raw counts for the public
     await hold(page)
 
-    // 5. Narrow to the poll's purview (untick "outside") → now under the
-    //    k-anonymity threshold → the tally is withheld behind the
-    //    privacy-protection banner.
-    await outside.uncheck()
-    await expect(withheld).toBeVisible({ timeout: 15_000 })
+    // 6. Everyone is inside the poll's area, so the "outside" group is empty →
+    //    narrowing to it withholds the result.
+    const within = page.getByRole('checkbox', { name: /within the poll's purview/i })
+    await within.uncheck()
+    await expect(page.getByText(/Not enough responses in this group/)).toBeVisible({ timeout: 15_000 })
     await hold(page)
   })
 })

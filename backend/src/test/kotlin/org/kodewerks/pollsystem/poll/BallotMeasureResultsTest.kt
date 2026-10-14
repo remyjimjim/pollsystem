@@ -19,6 +19,9 @@ class BallotMeasureResultsTest : AbstractIntegrationTest() {
     @Autowired private lateinit var resultsController: BallotMeasureResultsController
     @Autowired private lateinit var fixtures: TestFixtures
 
+    /** Counts are for supers only (small-poll privacy); everyone else sees stepped percentages. */
+    private val sup by lazy { AppUserDetails(fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "res-super")) }
+
     private val electionPollTypeId = 1L
     private val ballotMeasurePollTypeId = 3L
     private val futureDate get() = LocalDate.now().plusDays(30)
@@ -64,7 +67,7 @@ class BallotMeasureResultsTest : AbstractIntegrationTest() {
         repeat(4) { vote(measureId, fixtures.createUser(emailPrefix = "y$it"), true) }
         repeat(2) { vote(measureId, fixtures.createUser(emailPrefix = "n$it"), false) }
 
-        val results = resultsController.get(measureId)
+        val results = resultsController.get(measureId, principal = sup)
         assertThat(results.suppressed).isFalse
         assertThat(results.totalRespondents).isEqualTo(6)
         assertThat(results.yes).isEqualTo(4)
@@ -83,9 +86,9 @@ class BallotMeasureResultsTest : AbstractIntegrationTest() {
 
         val filtered = resultsController.get(measureId, zipcodes = listOf("90001"))
         assertThat(filtered.suppressed).isTrue
-        assertThat(filtered.totalRespondents).isEqualTo(0)
+        assertThat(filtered.totalRespondents).isNull()  // no counts for the public
 
-        val unfiltered = resultsController.get(measureId)
+        val unfiltered = resultsController.get(measureId, principal = sup)
         assertThat(unfiltered.suppressed).isFalse
         assertThat(unfiltered.totalRespondents).isEqualTo(6)
     }

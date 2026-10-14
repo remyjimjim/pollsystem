@@ -239,7 +239,11 @@
     "noResponsesYet": "Ingen svar ennå.",
     "noVotesYet": "Ingen stemmer ennå.",
     "poll404": "Avstemning ikke funnet",
-    "loadFailed": "Kunne ikke laste resultater"
+    "loadFailed": "Kunne ikke laste resultater",
+    "privacyVoted": "Av personvernhensyn vises ikke resultatene før minst {k} personer har stemt. Resultatene oppdateres for hver {step} nye stemmer.",
+    "privacyAnswered": "Av personvernhensyn vises ikke resultatene før minst {k} personer har svart. Resultatene oppdateres for hver {step} nye svar.",
+    "soFar": "Ingen har svart ennå. | 1 person har svart så langt. | {n} personer har svart så langt.",
+    "superLive": "Super-visning: sanntidsresultater med råtall."
   },
   "notFound": {
     "heading": "Ikke funnet",
@@ -315,11 +319,11 @@
       "fewerThan": "færre enn {k}",
       "outsideArea": "Utenfor avstemningens område",
       "highlightsHeading": "Høydepunkter",
-      "leads": "{name} leder med {votes} stemmer, {margin} foran",
-      "onlyCandidate": "{name}: {votes} stemmer",
+      "leads": "{name} leder med {pct} %, {margin} prosentpoeng foran",
+      "onlyCandidate": "{name}: {pct} %",
       "yesShare": "{pct} % Ja",
       "measure": "Resultat",
-      "measureMargin": "{side} med {margin} stemmer ({yes} % Ja, {no} % Nei)",
+      "measureMargin": "{side} med {margin} prosentpoeng ({yes} % Ja, {no} % Nei)",
       "splitHeading": "Innenfor vs. utenfor avstemningens område",
       "splitNote": "En gruppe med færre enn {k} personer skjules.",
       "insideCol": "Innenfor området",

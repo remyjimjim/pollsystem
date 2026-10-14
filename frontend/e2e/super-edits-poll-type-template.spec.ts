@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { clearMailpit } from './mailpit'
 import {
-  API,
   BASE,
   STATE_INPUT,
   type Location,
@@ -9,6 +8,7 @@ import {
   getPollType,
   hold,
   resolveLocation,
+  resultsAs,
   seedUser,
   setPollTypeTemplate,
   signInSeededUser,
@@ -102,9 +102,8 @@ test.describe(`super edits a poll-type template (${STATE_INPUT.toLowerCase()})`,
       await hold(member)
       await member.getByRole('button', { name: 'Submit votes' }).click()
       await expect(member).toHaveURL(new RegExp(`/polls/election/${electionId}/results`), { timeout: 30_000 })
-      const results = (await (await fetch(`${API}/api/polls/elections/${electionId}/results`)).json()) as {
-        perCandidate: Array<{ name: string; yes: number }>
-      }
+      // One voter: public results stay hidden (small-poll privacy); the super sees live counts.
+      const results = await resultsAs<{ perCandidate: Array<{ name: string; yes: number }> }>(superEmail, 'elections', electionId)
       expect(Object.fromEntries(results.perCandidate.map((c) => [c.name, c.yes])))
         .toEqual({ 'Avery Stone': 1, 'Jordan Reyes': 1 })
       await hold(member)

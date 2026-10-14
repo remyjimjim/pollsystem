@@ -13,13 +13,16 @@ const { t } = useI18n()
 interface QuestionResultDto {
   questionId: number
   text: string
-  totalResponses: number
-  byAnswer: Record<string, number>
+  /** Raw counts: supers only. */
+  totalResponses: number | null
+  byAnswer: Record<string, number> | null
+  /** Rounded percentage per answer, for everyone. */
+  byAnswerPct: Record<string, number>
 }
 interface QuestionnaireResultsDto {
   questionnaireId: number
   title: string
-  totalRespondents: number
+  totalRespondents: number | null
   perQuestion: QuestionResultDto[]
   filterApplied: Record<string, string> | null
   suppressed: boolean
@@ -27,6 +30,8 @@ interface QuestionnaireResultsDto {
   /** Where the poll is for: its purview level and places (empty when nationwide). */
   purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
   purviewAreas: string[]
+  /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
 }
 
 interface CandidateResultDto {
@@ -34,14 +39,17 @@ interface CandidateResultDto {
   name: string
   affiliation: string
   officeName: string
-  yes: number
-  no: number
-  total: number
+  /** Raw counts: supers only. */
+  yes: number | null
+  no: number | null
+  total: number | null
+  yesPct: number
+  noPct: number
 }
 interface ElectionResultsDto {
   electionId: number
   title: string
-  totalRespondents: number
+  totalRespondents: number | null
   perCandidate: CandidateResultDto[]
   filterApplied: Record<string, string> | null
   suppressed: boolean
@@ -49,20 +57,26 @@ interface ElectionResultsDto {
   /** Where the poll is for: its purview level and places (empty when nationwide). */
   purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
   purviewAreas: string[]
+  /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
 }
 
 interface BallotMeasureResultsDto {
   measureId: number
   title: string
-  totalRespondents: number
-  yes: number
-  no: number
+  totalRespondents: number | null
+  yes: number | null
+  no: number | null
+  yesPct: number
+  noPct: number
   filterApplied: Record<string, string> | null
   suppressed: boolean
   suppressionMessage: string | null
   /** Where the poll is for: its purview level and places (empty when nationwide). */
   purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
   purviewAreas: string[]
+  /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
 }
 
 const route = useRoute()
@@ -229,13 +243,15 @@ const isSupported = computed(
 
 const data = computed<{
   title: string
-  totalRespondents: number
+  totalRespondents: number | null
   filterApplied: Record<string, string> | null
   suppressed: boolean
   suppressionMessage: string | null
   /** Where the poll is for: its purview level and places (empty when nationwide). */
   purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
   purviewAreas: string[]
+  /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
 } | null>(() => {
   if (type.value === 'questionnaire') return qData.value
   if (type.value === 'election') return eData.value
@@ -304,10 +320,6 @@ const hasGeoFilter = computed(() =>
   selectedZipcodes.value.length > 0
 )
 
-function pct(count: number, total: number): string {
-  if (total === 0) return '0%'
-  return `${Math.round((count / total) * 100)}%`
-}
 
 const groupedCandidates = computed(() => {
   if (!eData.value) return [] as Array<[string, CandidateResultDto[]]>
@@ -327,6 +339,13 @@ const purviewArea = computed(() => {
   const shown = d.purviewAreas.slice(0, 5).join(', ')
   return d.purviewAreas.length > 5 ? `${shown} ${t('results.moreAreas', { n: d.purviewAreas.length - 5 })}` : shown
 })
+
+const mode = computed(() => data.value?.visibility?.mode ?? 'STEPPED')
+const isLive = computed(() => mode.value === 'LIVE')
+/** Bar label: "67%", or for a super "4 · 67%". */
+function barLabel(percent: number, count: number | null | undefined): string {
+  return isLive.value && count != null ? `${count} · ${percent}%` : `${percent}%`
+}
 
 watch([id, type], load, { immediate: false })
 onMounted(() => {
@@ -365,7 +384,7 @@ onBeforeUnmount(() => {
       <!-- Purview split. Both boxes on (default) = every respondent. Unchecking
            one narrows the aggregate to the other group; each toggle re-fetches so
            k-anonymity is applied to the shown group. -->
-      <div v-if="data" class="mb-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+      <div v-if="data && mode !== 'HIDDEN'" class="mb-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
         <p class="m-0">{{ $t('results.purviewNote') }}</p>
         <p class="m-0 mt-1 text-xs text-slate-500">{{ $t('results.purviewUsOnly') }}</p>
         <label class="mt-2 flex items-center gap-2 font-semibold text-slate-700">
@@ -379,7 +398,7 @@ onBeforeUnmount(() => {
       </div>
 
       <form
-        v-if="data"
+        v-if="data && mode !== 'HIDDEN'"
         @submit.prevent="load"
         class="mb-4 grid grid-cols-1 items-end gap-3 rounded-md bg-slate-50 p-3 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
       >
@@ -458,18 +477,30 @@ onBeforeUnmount(() => {
         </div>
       </form>
 
+      <!-- Small-poll privacy: a caption for everyone but supers; nothing until the minimum. -->
+      <div v-if="data && !isLive" class="mb-4 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700" data-test="privacy-caption">
+        {{ type === 'questionnaire'
+          ? $t('results.privacyAnswered', { k: data.visibility.minimum, step: data.visibility.step })
+          : $t('results.privacyVoted', { k: data.visibility.minimum, step: data.visibility.step }) }}
+      </div>
+      <p v-if="data && isLive" class="mb-4 text-xs font-semibold text-violet-800" data-test="live-note">{{ $t('results.superLive') }}</p>
+
+      <div v-if="data && mode === 'HIDDEN'" class="rounded-md border border-slate-200 p-4 text-sm text-slate-600" data-test="hidden">
+        {{ $t('results.soFar', { n: data.visibility.respondentsSoFar }, data.visibility.respondentsSoFar) }}
+      </div>
+
       <div
-        v-if="data?.suppressed"
+        v-else-if="data?.suppressed"
         class="rounded-md border border-orange-400 bg-orange-50 p-4"
       >
         <p class="m-0 text-sm text-orange-900">{{ data.suppressionMessage }}</p>
       </div>
 
       <template v-else-if="data">
-        <p class="m-0 text-sm text-slate-500">
-          {{ $t('results.respondents', { n: data.totalRespondents }) }}
+        <p v-if="isLive || data.filterApplied" class="m-0 text-sm text-slate-500">
+          <span v-if="isLive">{{ $t('results.respondents', { n: data.totalRespondents }) }}</span>
           <span v-if="data.filterApplied">
-            · {{ $t('results.filterPrefix') }} {{ Object.entries(data.filterApplied).map(([k, v]) => `${k}=${v}`).join(', ') }}
+            <template v-if="isLive"> · </template>{{ $t('results.filterPrefix') }} {{ Object.entries(data.filterApplied).map(([k, v]) => `${k}=${v}`).join(', ') }}
           </span>
         </p>
 
@@ -481,22 +512,18 @@ onBeforeUnmount(() => {
             class="mt-4 rounded-md border border-slate-200 p-4"
           >
             <h3 class="mb-1 text-base font-semibold text-slate-700">{{ q.text }}</h3>
-            <p class="m-0 text-sm text-slate-500">{{ $t('results.responseCount', { n: q.totalResponses }) }}</p>
-            <table v-if="q.totalResponses > 0" class="mt-2 w-full border-collapse">
+            <p v-if="isLive" class="m-0 text-sm text-slate-500">{{ $t('results.responseCount', { n: q.totalResponses }) }}</p>
+            <table v-if="Object.keys(q.byAnswerPct).length > 0" class="mt-2 w-full border-collapse">
               <tbody>
-                <tr v-for="[answer, count] in Object.entries(q.byAnswer)" :key="answer">
-                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">
-                    {{ answer }}
-                  </td>
+                <tr v-for="[answer, percent] in Object.entries(q.byAnswerPct)" :key="answer">
+                  <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ answer }}</td>
                   <td class="rounded bg-slate-100 py-1 align-middle">
-                    <div
-                      class="rounded bg-sky-500 px-2 py-0.5 text-xs text-white whitespace-nowrap"
-                      style="min-width: 2rem"
-                      :style="{ width: pct(count, q.totalResponses) }"
-                    >
-                      <span>{{ count }} ({{ pct(count, q.totalResponses) }})</span>
-                    </div>
-                  </td>
+                      <div
+                        class="rounded bg-sky-500 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        style="min-width: 2.5rem"
+                        :style="{ width: `${percent}%` }"
+                      >{{ barLabel(percent, q.byAnswer?.[answer]) }}</div>
+                    </td>
                 </tr>
               </tbody>
             </table>
@@ -507,31 +534,27 @@ onBeforeUnmount(() => {
         <!-- Ballot measure results -->
         <template v-if="bData">
           <section class="mt-4 rounded-md border border-slate-200 p-4">
-            <table v-if="bData.totalRespondents > 0" class="w-full border-collapse">
+            <table v-if="bData.yesPct + bData.noPct > 0" class="w-full border-collapse">
               <tbody>
                 <tr>
                   <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.yes') }}</td>
                   <td class="rounded bg-slate-100 py-1 align-middle">
-                    <div
-                      class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
-                      style="min-width: 2rem"
-                      :style="{ width: pct(bData.yes, bData.totalRespondents) }"
-                    >
-                      <span>{{ bData.yes }} ({{ pct(bData.yes, bData.totalRespondents) }})</span>
-                    </div>
-                  </td>
+                      <div
+                        class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        style="min-width: 2.5rem"
+                        :style="{ width: `${bData.yesPct}%` }"
+                      >{{ barLabel(bData.yesPct, bData.yes) }}</div>
+                    </td>
                 </tr>
                 <tr>
                   <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.no') }}</td>
                   <td class="rounded bg-slate-100 py-1 align-middle">
-                    <div
-                      class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
-                      style="min-width: 2rem"
-                      :style="{ width: pct(bData.no, bData.totalRespondents) }"
-                    >
-                      <span>{{ bData.no }} ({{ pct(bData.no, bData.totalRespondents) }})</span>
-                    </div>
-                  </td>
+                      <div
+                        class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        style="min-width: 2.5rem"
+                        :style="{ width: `${bData.noPct}%` }"
+                      >{{ barLabel(bData.noPct, bData.no) }}</div>
+                    </td>
                 </tr>
               </tbody>
             </table>
@@ -556,18 +579,16 @@ onBeforeUnmount(() => {
                 <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
                 <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
               </div>
-              <table v-if="c.total > 0" class="mt-2 w-full border-collapse">
+              <table v-if="c.yesPct + c.noPct > 0" class="mt-2 w-full border-collapse">
                 <tbody>
                   <tr>
                     <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.yes') }}</td>
                     <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
                         class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
-                        style="min-width: 2rem"
-                        :style="{ width: pct(c.yes, c.total) }"
-                      >
-                        <span>{{ c.yes }} ({{ pct(c.yes, c.total) }})</span>
-                      </div>
+                        style="min-width: 2.5rem"
+                        :style="{ width: `${c.yesPct}%` }"
+                      >{{ barLabel(c.yesPct, c.yes) }}</div>
                     </td>
                   </tr>
                   <tr>
@@ -575,11 +596,9 @@ onBeforeUnmount(() => {
                     <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
                         class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
-                        style="min-width: 2rem"
-                        :style="{ width: pct(c.no, c.total) }"
-                      >
-                        <span>{{ c.no }} ({{ pct(c.no, c.total) }})</span>
-                      </div>
+                        style="min-width: 2.5rem"
+                        :style="{ width: `${c.noPct}%` }"
+                      >{{ barLabel(c.noPct, c.no) }}</div>
                     </td>
                   </tr>
                 </tbody>

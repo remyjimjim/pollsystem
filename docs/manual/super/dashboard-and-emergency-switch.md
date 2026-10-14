@@ -21,6 +21,10 @@ Supers don't need a paid membership.
   voters choose in elections.
 - [IP Allow / Deny](ip-rules.md): lists of addresses (not enforced yet).
 
+**Results:** you see every poll's results **live, with exact counts**, at any
+size (a note on the results page says so). Everyone else sees results only from
+10 respondents, updated in steps of 10, as rounded percentages.
+
 The admin pages work for you too, across the whole country: see [Managing
 creators](../admin/managing-creators.md) and [Managing
 polls](../admin/managing-polls.md).

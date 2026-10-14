@@ -278,7 +278,11 @@
     "noResponsesYet": "No responses yet.",
     "noVotesYet": "No votes yet.",
     "poll404": "Poll not found",
-    "loadFailed": "Failed to load results"
+    "loadFailed": "Failed to load results",
+    "privacyVoted": "For privacy, results aren't shown until at least {k} people have voted. Results are updated every {step} voters.",
+    "privacyAnswered": "For privacy, results aren't shown until at least {k} people have answered. Results are updated every {step} respondents.",
+    "soFar": "No one has responded yet. | 1 person has responded so far. | {n} people have responded so far.",
+    "superLive": "Super view: live results with raw numbers."
   },
   "notFound": {
     "heading": "Not Found",
@@ -354,11 +358,11 @@
       "fewerThan": "fewer than {k}",
       "outsideArea": "Outside the poll's area",
       "highlightsHeading": "Highlights",
-      "leads": "{name} leads with {votes} votes, ahead by {margin}",
-      "onlyCandidate": "{name}: {votes} votes",
+      "leads": "{name} leads with {pct}%, ahead by {margin} points",
+      "onlyCandidate": "{name}: {pct}%",
       "yesShare": "{pct}% Yes",
       "measure": "Result",
-      "measureMargin": "{side} by {margin} votes ({yes}% Yes, {no}% No)",
+      "measureMargin": "{side} by {margin} points ({yes}% Yes, {no}% No)",
       "splitHeading": "Inside vs. outside the poll's area",
       "splitNote": "A group of fewer than {k} people is withheld.",
       "insideCol": "Inside the area",

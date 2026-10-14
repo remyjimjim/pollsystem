@@ -157,7 +157,10 @@
    - The full, unfiltered results always show, even with 1-2 respondents. Anyone who knows who voted (e.g. the creator,
      three respondents in) can infer how they voted, and live updates make it easier.
    - Options: hide all results until at least 10 people have answered, and/or show a delayed snapshot instead of live.
-   - Done: No.
+   - Decided 2026-10-14 (option C): no public results until 10 respondents; then they update in steps of 10 (a
+     frozen snapshot, V30), as rounded percentages only (the API sends no counts). Supers see live raw numbers.
+     No "leading" indicator. Creators aren't exempt.
+   - Done: Yes (2026-10-14).
 
 -  Help library: show readers where bold UI terms are (e.g. **Search**, **See closed polls too**). Hybrid:
    - Spotlight links (default) for elements visible when their page first loads (most filters, buttons, checkboxes, nav):

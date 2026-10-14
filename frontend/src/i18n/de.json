@@ -239,7 +239,11 @@
     "noResponsesYet": "Noch keine Antworten.",
     "noVotesYet": "Noch keine Stimmen.",
     "poll404": "Umfrage nicht gefunden",
-    "loadFailed": "Ergebnisse konnten nicht geladen werden"
+    "loadFailed": "Ergebnisse konnten nicht geladen werden",
+    "privacyVoted": "Aus Datenschutzgründen werden Ergebnisse erst angezeigt, wenn mindestens {k} Personen abgestimmt haben. Die Ergebnisse werden alle {step} Stimmen aktualisiert.",
+    "privacyAnswered": "Aus Datenschutzgründen werden Ergebnisse erst angezeigt, wenn mindestens {k} Personen geantwortet haben. Die Ergebnisse werden alle {step} Antworten aktualisiert.",
+    "soFar": "Noch hat niemand geantwortet. | Bisher hat 1 Person geantwortet. | Bisher haben {n} Personen geantwortet.",
+    "superLive": "Super-Ansicht: Live-Ergebnisse mit Rohzahlen."
   },
   "notFound": {
     "heading": "Nicht gefunden",
@@ -315,11 +319,11 @@
       "fewerThan": "weniger als {k}",
       "outsideArea": "Außerhalb des Umfragegebiets",
       "highlightsHeading": "Höhepunkte",
-      "leads": "{name} führt mit {votes} Stimmen, {margin} vorne",
-      "onlyCandidate": "{name}: {votes} Stimmen",
+      "leads": "{name} führt mit {pct} %, {margin} Prozentpunkte vorne",
+      "onlyCandidate": "{name}: {pct} %",
       "yesShare": "{pct} % Ja",
       "measure": "Ergebnis",
-      "measureMargin": "{side} mit {margin} Stimmen Vorsprung ({yes} % Ja, {no} % Nein)",
+      "measureMargin": "{side} mit {margin} Prozentpunkten Vorsprung ({yes} % Ja, {no} % Nein)",
       "splitHeading": "Innerhalb vs. außerhalb des Umfragegebiets",
       "splitNote": "Eine Gruppe mit weniger als {k} Personen wird ausgeblendet.",
       "insideCol": "Im Gebiet",

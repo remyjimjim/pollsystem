@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.repository
 
 import org.kodewerks.pollsystem.model.*
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -412,4 +413,16 @@ interface QuestionResponseRepository : JpaRepository<QuestionResponse, Long> {
         GROUP BY qr.user.id
     """)
     fun countDistinctQuestionnairesByUserIds(@Param("userIds") userIds: List<Long>): List<Array<Any>>
+}
+
+interface ResultSnapshotRepository : JpaRepository<ResultSnapshot, Long> {
+    fun findByPollTypeAndPollId(pollType: PollKind, pollId: Long): ResultSnapshot?
+}
+
+interface ResultSnapshotAnswerRepository : JpaRepository<ResultSnapshotAnswer, Long> {
+    fun findBySnapshotId(snapshotId: Long): List<ResultSnapshotAnswer>
+
+    @Modifying
+    @Query("DELETE FROM ResultSnapshotAnswer a WHERE a.snapshotId = :snapshotId")
+    fun deleteBySnapshotId(@Param("snapshotId") snapshotId: Long): Int
 }

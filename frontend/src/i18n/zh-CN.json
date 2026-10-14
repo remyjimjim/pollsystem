@@ -239,7 +239,11 @@
     "noResponsesYet": "暂无答复。",
     "noVotesYet": "暂无投票。",
     "poll404": "未找到投票",
-    "loadFailed": "加载结果失败"
+    "loadFailed": "加载结果失败",
+    "privacyVoted": "为保护隐私，至少 {k} 人投票后才会显示结果。结果每增加 {step} 位投票者更新一次。",
+    "privacyAnswered": "为保护隐私，至少 {k} 人回答后才会显示结果。结果每增加 {step} 位回复者更新一次。",
+    "soFar": "还没有人回复。 | 目前已有 1 人回复。 | 目前已有 {n} 人回复。",
+    "superLive": "超级管理员视图：带原始数字的实时结果。"
   },
   "notFound": {
     "heading": "未找到",
@@ -315,11 +319,11 @@
       "fewerThan": "少于 {k}",
       "outsideArea": "投票区域外",
       "highlightsHeading": "要点",
-      "leads": "{name} 以 {votes} 票领先，领先 {margin} 票",
-      "onlyCandidate": "{name}：{votes} 票",
+      "leads": "{name} 以 {pct}% 领先，领先 {margin} 个百分点",
+      "onlyCandidate": "{name}：{pct}%",
       "yesShare": "{pct}% 是",
       "measure": "结果",
-      "measureMargin": "“{side}”领先 {margin} 票（是 {yes}%，否 {no}%）",
+      "measureMargin": "“{side}”领先 {margin} 个百分点（是 {yes}%，否 {no}%）",
       "splitHeading": "投票区域内与区域外对比",
       "splitNote": "少于 {k} 人的组会被隐藏。",
       "insideCol": "区域内",

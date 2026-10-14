@@ -56,7 +56,8 @@ class DevController(
     private val roleAssignments: RoleAssignmentRepository,
     private val tokens: JwtTokenProvider,
     private val states: StateRepository,
-    private val adminCreatorGrants: AdminCreatorGrants
+    private val adminCreatorGrants: AdminCreatorGrants,
+    private val resultSnapshots: org.kodewerks.pollsystem.poll.ResultSnapshotService
 ) {
 
     @PersistenceContext
@@ -293,9 +294,7 @@ class DevController(
         require(emailPrefix.length >= 3) {
             "emailPrefix must be at least 3 characters (safety guard)"
         }
-        require(count in 1..6) {
-            "count must be between 1 and 6 (stays below the k-anonymity threshold)"
-        }
+        require(count in 1..30) { "count must be between 1 and 30" }
         require(zipcode.matches(Regex("^[0-9]{5}$"))) { "zipcode must be 5 digits" }
         val measure = ballotMeasures.get(measureId)
         val userIds = mutableListOf<Long>()
@@ -315,6 +314,8 @@ class DevController(
             )
             userIds.add(voter.id)
         }
+        // Public results move in steps of k respondents (small-poll privacy), like real submissions.
+        resultSnapshots.refresh(org.kodewerks.pollsystem.model.PollKind.BALLOT_MEASURE, measureId)
         log.info("Seeded {} ballot responses for measure {} (zip {})", count, measureId, zipcode)
         return mapOf("seeded" to count, "measureId" to measureId, "userIds" to userIds)
     }

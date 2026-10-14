@@ -20,20 +20,22 @@ const REPORT = {
   ] },
   engagement: { changedAnswers: 5, commented: 3 },
 }
+// Public results: rounded percentages only (small-poll privacy).
 const election = (avery: number, jordan: number, suppressed = false) => ({
-  title: 'City election', totalRespondents: avery + jordan, suppressed, suppressionMessage: null,
+  title: 'City election', totalRespondents: null, suppressed, suppressionMessage: null,
+  visibility: { mode: 'STEPPED', respondentsSoFar: 40, minimum: 10, step: 10 },
   perCandidate: [
-    { candidateId: 1, name: 'Avery Stone', affiliation: 'Ind', officeName: 'Mayor', yes: avery, no: jordan, total: avery + jordan },
-    { candidateId: 2, name: 'Jordan Reyes', affiliation: 'Civic', officeName: 'Mayor', yes: jordan, no: avery, total: avery + jordan },
+    { candidateId: 1, name: 'Avery Stone', affiliation: 'Ind', officeName: 'Mayor', yes: null, no: null, total: null, yesPct: avery, noPct: 100 - avery },
+    { candidateId: 2, name: 'Jordan Reyes', affiliation: 'Civic', officeName: 'Mayor', yes: null, no: null, total: null, yesPct: jordan, noPct: 100 - jordan },
   ],
 })
 
 function mockApi(report: unknown, outsideSuppressed = false) {
   vi.mocked(axios.get).mockImplementation(async (url: string, cfg?: any) => {
     if (url.endsWith('/report')) return { data: report }
-    if (cfg?.params?.outsidePurview === 'false') return { data: election(20, 10) }
-    if (cfg?.params?.withinPurview === 'false') return { data: election(4, 6, outsideSuppressed) }
-    return { data: election(24, 16) }
+    if (cfg?.params?.outsidePurview === 'false') return { data: election(67, 33) }
+    if (cfg?.params?.withinPurview === 'false') return { data: election(40, 60, outsideSuppressed) }
+    return { data: election(60, 40) }
   })
 }
 
@@ -57,10 +59,10 @@ describe('PollReportView', () => {
     expect(reach).toContain('Los Angeles (CA)22')
     expect(reach).toContain('Kern (CA)fewer than 10')
 
-    expect(w.find('[data-test="highlights"]').text()).toContain('Avery Stone leads with 24 votes, ahead by 8')
+    expect(w.find('[data-test="highlights"]').text()).toContain('Avery Stone leads with 60%, ahead by 20 points')
 
     const split = w.find('[data-test="split"]').text()
-    expect(split).toContain('20 (67%)')       // inside
+    expect(split).toContain('67%')            // inside
     expect(split).toContain('withheld')       // outside group too small
     expect(w.find('[data-test="too-few"]').exists()).toBe(false)
   })

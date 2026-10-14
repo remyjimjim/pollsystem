@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.BallotResponse
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
@@ -41,7 +42,8 @@ data class MyBallotResponseDto(
 class BallotMeasureResponseController(
     private val measures: BallotMeasureRepository,
     private val responses: BallotResponseRepository,
-    private val blocks: PollBlockService
+    private val blocks: PollBlockService,
+    private val snapshots: ResultSnapshotService
 ) {
 
     @GetMapping("/me")
@@ -118,6 +120,8 @@ class BallotMeasureResponseController(
                 )
             )
         }
+        // Public results move only in steps of k respondents (small-poll privacy).
+        snapshots.refresh(PollKind.BALLOT_MEASURE, id)
 
         return MyBallotResponseDto(
             measureId = id,

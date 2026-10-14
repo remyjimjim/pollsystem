@@ -53,7 +53,8 @@ class QuestionnaireResponseController(
     private val questionnaires: QuestionnaireRepository,
     private val questions: QuestionRepository,
     private val responses: QuestionResponseRepository,
-    private val blocks: PollBlockService
+    private val blocks: PollBlockService,
+    private val snapshots: ResultSnapshotService
 ) {
 
     @GetMapping("/me")
@@ -139,6 +140,8 @@ class QuestionnaireResponseController(
             }
         }
         responses.saveAll(toSave)
+        // Public results move only in steps of k respondents (small-poll privacy).
+        snapshots.refresh(PollKind.QUESTIONNAIRE, id)
 
         return mine(principal, id)
     }

@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.CandidateResponse
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.repository.CandidateRepository
@@ -51,7 +52,8 @@ class ElectionResponseController(
     private val elections: ElectionRepository,
     private val candidates: CandidateRepository,
     private val responses: CandidateResponseRepository,
-    private val blocks: PollBlockService
+    private val blocks: PollBlockService,
+    private val snapshots: ResultSnapshotService
 ) {
 
     @GetMapping("/me")
@@ -137,6 +139,8 @@ class ElectionResponseController(
             }
         }
         responses.saveAll(toSave)
+        // Public results move only in steps of k respondents (small-poll privacy).
+        snapshots.refresh(PollKind.ELECTION, id)
 
         return mine(principal, id)
     }

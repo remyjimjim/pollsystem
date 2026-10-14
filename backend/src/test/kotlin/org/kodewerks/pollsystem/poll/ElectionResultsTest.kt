@@ -18,6 +18,9 @@ class ElectionResultsTest : AbstractIntegrationTest() {
     @Autowired private lateinit var responseController: ElectionResponseController
     @Autowired private lateinit var resultsController: ElectionResultsController
     @Autowired private lateinit var fixtures: TestFixtures
+
+    /** Counts are for supers only (small-poll privacy); everyone else sees stepped percentages. */
+    private val sup by lazy { AppUserDetails(fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "res-super")) }
     @Autowired private lateinit var candidates: CandidateRepository
 
     private val electionPollTypeId = 1L
@@ -61,7 +64,7 @@ class ElectionResultsTest : AbstractIntegrationTest() {
         // 1 votes No-Alice, Yes-Bob
         vote(pollId, fixtures.createUser(emailPrefix = "alt"), mapOf("Alice" to false, "Bob" to true))
 
-        val results = resultsController.get(pollId)
+        val results = resultsController.get(pollId, principal = sup)
         assertThat(results.suppressed).isFalse
         assertThat(results.totalRespondents).isEqualTo(4)
 
@@ -89,7 +92,7 @@ class ElectionResultsTest : AbstractIntegrationTest() {
         val filtered = resultsController.get(pollId, zipcodes = listOf("90001"))
         assertThat(filtered.suppressed).isTrue
 
-        val unfiltered = resultsController.get(pollId)
+        val unfiltered = resultsController.get(pollId, principal = sup)
         assertThat(unfiltered.suppressed).isFalse
         assertThat(unfiltered.totalRespondents).isEqualTo(6)
     }

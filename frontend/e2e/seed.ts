@@ -345,15 +345,15 @@ export async function seedBallotMeasure(
 }
 
 /**
- * Seed up to 6 ballot-measure responses from real registered users (created in
- * `zipcode` so they count in the poll's purview). Capped at 6 to stay below the
- * ~10-response k-anonymity threshold — a purview/geo-filtered results view then
- * withholds the tally.
+ * Seed up to 30 ballot-measure responses (alternating Yes / No) from real
+ * registered users created in `zipcode`, so they count in the poll's purview.
+ * Like real submissions, this refreshes the public results snapshot: public
+ * results appear at 10 respondents and then move in steps of 10.
  */
 export async function seedBallotResponses(
   opts: { measureId: number; count: number; zipcode: string; prefix?: string },
 ): Promise<{ seeded: number }> {
-  if (opts.count > 6) throw new Error('seedBallotResponses: count must be <= 6 (below k-anonymity threshold)')
+  if (opts.count > 30) throw new Error('seedBallotResponses: count must be <= 30')
   const q = new URLSearchParams({
     emailPrefix: opts.prefix ?? 'zzz',
     measureId: String(opts.measureId),
@@ -414,4 +414,17 @@ export async function signInSeededUser(page: Page, email: string): Promise<void>
   await page.goto(href)
   await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible({ timeout: 30_000 })
   await hold(page) // signed in
+}
+
+/**
+ * A poll's results as [email] sees them. Small-poll privacy: only a super gets
+ * live raw counts; everyone else gets stepped, rounded percentages (or nothing
+ * below 10 respondents). `kind`: questionnaires | elections | ballot-measures.
+ */
+export async function resultsAs<T = Record<string, unknown>>(email: string, kind: string, id: number): Promise<T> {
+  const res = await fetch(`${API}/api/polls/${kind}/${id}/results`, {
+    headers: { Authorization: `Bearer ${await devToken(email)}` },
+  })
+  if (!res.ok) throw new Error(`results ${kind}/${id} failed: ${res.status}`)
+  return (await res.json()) as T
 }

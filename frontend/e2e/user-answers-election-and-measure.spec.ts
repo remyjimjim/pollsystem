@@ -1,12 +1,12 @@
 import { test, expect, type Page } from '@playwright/test'
 import { clearMailpit } from './mailpit'
 import {
-  API,
   BASE,
   STATE_INPUT,
   type Location,
   createBallotMeasureAs,
   createElectionAs,
+  resultsAs,
   hold,
   resolveLocation,
   seedUser,
@@ -27,6 +27,7 @@ test.describe(`user answers an election and a ballot measure (${STATE_INPUT.toLo
   let memberEmail = ''
   let electionId = 0
   let measureId = 0
+  let superEmail = ''
   const stamp = Date.now()
   const electionTitle = `E2E Answer Election ${stamp}`
   const measureTitle = `E2E Answer Measure ${stamp}`
@@ -46,6 +47,8 @@ test.describe(`user answers an election and a ballot measure (${STATE_INPUT.toLo
     expect(measure.ok, `seed measure: ${measure.status} ${measure.message ?? ''}`).toBe(true)
     measureId = measure.id!
     memberEmail = (await seedUser({ zipcode: loc.zipcode })).email
+    // Counts are for supers only (small-poll privacy); the check below reads as one.
+    superEmail = (await seedUser({ access: 'SUPER', zipcode: loc.zipcode })).email
   })
 
   /** Search by exact title and follow the row's Vote link. */
@@ -89,18 +92,16 @@ test.describe(`user answers an election and a ballot measure (${STATE_INPUT.toLo
     await expect(page).toHaveURL(new RegExp(`/polls/ballot-measure/${measureId}/results`), { timeout: 30_000 })
     await hold(page)
 
-    // 3. Both votes counted (unfiltered public results show real counts).
-    const er = (await (await fetch(`${API}/api/polls/elections/${electionId}/results`)).json()) as {
-      totalRespondents: number; perCandidate: Array<{ name: string; yes: number }>
-    }
+    // 3. Both votes counted. With one voter the public sees nothing yet (small-poll
+    //    privacy), so check the live counts as a super.
+    const er = await resultsAs<{ totalRespondents: number; perCandidate: Array<{ name: string; yes: number }> }>(
+      superEmail, 'elections', electionId)
     expect(er.totalRespondents).toBe(1)
     const yesBy = Object.fromEntries(er.perCandidate.map((c) => [c.name, c.yes]))
     expect(yesBy['Avery Stone']).toBe(1)
     expect(yesBy['Jordan Reyes']).toBe(0)
 
-    const mr = (await (await fetch(`${API}/api/polls/ballot-measures/${measureId}/results`)).json()) as {
-      totalRespondents: number; yes: number; no: number
-    }
+    const mr = await resultsAs<{ totalRespondents: number; yes: number; no: number }>(superEmail, 'ballot-measures', measureId)
     expect([mr.totalRespondents, mr.yes, mr.no]).toEqual([1, 1, 0])
 
     // 4. Revisiting the election shows the member's existing vote.

@@ -22,15 +22,16 @@ interface PollReport {
   reach: { level: 'STATE' | 'COUNTY' | 'ZIP'; rows: ReachRow[]; outside: number | null; covered: number; total: number } | null
   engagement: { changedAnswers: number; commented: number } | null
 }
+// The public results: rounded percentages, frozen in steps (small-poll privacy).
 interface Results {
   title: string
-  totalRespondents: number
   suppressed: boolean
   suppressionMessage: string | null
-  perQuestion?: { questionId: number; text: string; totalResponses: number; byAnswer: Record<string, number> }[]
-  perCandidate?: { candidateId: number; name: string; affiliation: string; officeName: string; yes: number; no: number; total: number }[]
-  yes?: number
-  no?: number
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE' }
+  perQuestion?: { questionId: number; text: string; byAnswerPct: Record<string, number> }[]
+  perCandidate?: { candidateId: number; name: string; affiliation: string; officeName: string; yesPct: number; noPct: number }[]
+  yesPct?: number
+  noPct?: number
 }
 
 const report = ref<PollReport | null>(null)
@@ -68,8 +69,8 @@ async function load() {
 onMounted(load)
 
 const pct = (n: number, of: number) => (of > 0 ? Math.round((n / of) * 100) : 0)
-const yesOf = (byAnswer: Record<string, number>) =>
-  Object.entries(byAnswer).reduce((s, [k, v]) => (k.toLowerCase() === 'yes' ? s + v : s), 0)
+const yesPctOf = (byAnswerPct: Record<string, number>) => byAnswerPct.yes ?? 0
+const shown = (r: Results | null) => !!r && !r.suppressed && r.visibility?.mode !== 'HIDDEN'
 
 // ---------- participation over time ----------
 function period(b: TimelineBucket): string {
@@ -83,31 +84,29 @@ const maxBucket = computed(() => Math.max(1, ...(report.value?.timeline ?? []).m
 interface Highlight { label: string; detail: string }
 const highlights = computed<Highlight[]>(() => {
   const r = all.value
-  if (!r || r.suppressed || r.totalRespondents === 0) return []
+  if (!r || !shown(r)) return []
   if (r.perCandidate) {
     const offices = new Map<string, NonNullable<Results['perCandidate']>>()
     for (const c of r.perCandidate) offices.set(c.officeName, [...(offices.get(c.officeName) ?? []), c])
     return [...offices.entries()].map(([office, cs]) => {
-      const sorted = [...cs].sort((a, b) => b.yes - a.yes)
-      const [lead, next] = sorted
+      const [lead, next] = [...cs].sort((a, b) => b.yesPct - a.yesPct)
       const detail = next
-        ? t('creator.report.leads', { name: lead.name, votes: lead.yes, margin: lead.yes - next.yes })
-        : t('creator.report.onlyCandidate', { name: lead.name, votes: lead.yes })
+        ? t('creator.report.leads', { name: lead.name, pct: lead.yesPct, margin: lead.yesPct - next.yesPct })
+        : t('creator.report.onlyCandidate', { name: lead.name, pct: lead.yesPct })
       return { label: office, detail }
     })
   }
   if (r.perQuestion) {
     // Most agreed (furthest from a 50/50 split) first, most divided last.
     return [...r.perQuestion]
-      .filter(q => q.totalResponses > 0)
-      .map(q => ({ q, share: pct(yesOf(q.byAnswer), q.totalResponses) }))
+      .filter(q => Object.keys(q.byAnswerPct).length > 0)
+      .map(q => ({ q, share: yesPctOf(q.byAnswerPct) }))
       .sort((a, b) => Math.abs(b.share - 50) - Math.abs(a.share - 50))
       .map(({ q, share }) => ({ label: q.text, detail: t('creator.report.yesShare', { pct: share }) }))
   }
-  const yes = r.yes ?? 0, no = r.no ?? 0
+  const yes = r.yesPct ?? 0, no = r.noPct ?? 0
   return [{ label: t('creator.report.measure'), detail: t('creator.report.measureMargin', {
-    yes: pct(yes, yes + no), no: pct(no, yes + no), margin: Math.abs(yes - no),
-    side: yes >= no ? t('common.yes') : t('common.no'),
+    yes, no, margin: Math.abs(yes - no), side: yes >= no ? t('common.yes') : t('common.no'),
   }) }]
 })
 
@@ -115,8 +114,7 @@ const highlights = computed<Highlight[]>(() => {
 interface SplitRow { label: string; inside: string; outside: string }
 function cell(r: Results | null, pick: (r: Results) => string): string {
   if (!r) return '—'
-  if (r.suppressed) return t('creator.report.withheld')
-  if (r.totalRespondents === 0) return t('creator.report.noneYet')
+  if (!shown(r)) return t('creator.report.withheld')
   return pick(r)
 }
 const split = computed<SplitRow[]>(() => {
@@ -126,7 +124,7 @@ const split = computed<SplitRow[]>(() => {
     return a.perQuestion.map(q => {
       const yesPct = (r: Results) => {
         const x = r.perQuestion?.find(p => p.questionId === q.questionId)
-        return x && x.totalResponses ? `${pct(yesOf(x.byAnswer), x.totalResponses)}% ${t('common.yes')}` : '—'
+        return x && Object.keys(x.byAnswerPct).length ? `${yesPctOf(x.byAnswerPct)}% ${t('common.yes')}` : '—'
       }
       return { label: q.text, inside: cell(inside.value, yesPct), outside: cell(outside.value, yesPct) }
     })
@@ -135,15 +133,15 @@ const split = computed<SplitRow[]>(() => {
     return a.perCandidate.map(c => {
       const votes = (r: Results) => {
         const x = r.perCandidate?.find(p => p.candidateId === c.candidateId)
-        return x ? `${x.yes} (${pct(x.yes, x.total)}%)` : '—'
+        return x ? `${x.yesPct}%` : '—'
       }
       return { label: `${c.name} · ${c.officeName}`, inside: cell(inside.value, votes), outside: cell(outside.value, votes) }
     })
   }
-  const share = (side: 'yes' | 'no') => (r: Results) => `${pct(r[side] ?? 0, (r.yes ?? 0) + (r.no ?? 0))}%`
+  const share = (side: 'yesPct' | 'noPct') => (r: Results) => `${r[side] ?? 0}%`
   return [
-    { label: t('common.yes'), inside: cell(inside.value, share('yes')), outside: cell(outside.value, share('yes')) },
-    { label: t('common.no'), inside: cell(inside.value, share('no')), outside: cell(outside.value, share('no')) },
+    { label: t('common.yes'), inside: cell(inside.value, share('yesPct')), outside: cell(outside.value, share('yesPct')) },
+    { label: t('common.no'), inside: cell(inside.value, share('noPct')), outside: cell(outside.value, share('noPct')) },
   ]
 })
 
