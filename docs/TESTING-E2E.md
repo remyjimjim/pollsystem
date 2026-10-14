@@ -194,8 +194,16 @@ real:
 5. sign in as a paid member.
 
 A second test uses the declining card `4000 0000 0000 0002` and checks that no
-account is created. **Normal runs and CI skip these tests;** they run only with
-`STRIPE_E2E=1`.
+account is created. A third:
+1. opens Stripe's **billing portal** from **Manage subscription**;
+2. ends the subscription through Stripe's test API (the portal itself cancels
+   at the end of the paid period, too late for a test);
+3. checks that the `customer.subscription.deleted` webhook lapses the
+   membership ("Your membership has lapsed" / Renew).
+
+That third test needs the test-mode **Customer portal** saved once in the Stripe
+dashboard (Settings → Billing → Customer portal → Save). **Normal runs and CI
+skip these tests;** they run only with `STRIPE_E2E=1`.
 
 **The easy way:** `./scripts/test-stripe.bash [--headed] [--keep]` on the host
 does all of the steps below:

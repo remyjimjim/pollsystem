@@ -28,7 +28,7 @@ suite. Spec names follow `{actor}-{process}`; see `docs/TESTING-E2E.md`._
 | Complete Poll | Registered | ✅ `*ResponsesTest` | ✅ `user-registers-submits-poll`, `user-answers-election-and-measure` | — | All three poll types answered via the UI; votes confirmed in results |
 | Create Creator Request | Registered | ✅ `CreatorRequestServiceTest` | ✅ `user-submits-creator-request` | — | Whole-state scope |
 | Submit Creator Request | Registered | ✅ `CreatorRequestServiceTest` | ✅ `user-submits-creator-request` | — | |
-| Stripe Checkout | Viewer/Reg | ➖ session-create | ➖ `register-users`, `user-registers-submits-poll` | **P1** | E2E runs the pay-first flow against the local **MockPaymentProvider**; the real Stripe redirect is unverified |
+| Stripe Checkout | Viewer/Reg | ➖ session-create | ✅ `stripe/user-pays-with-stripe-test-mode` (opt-in) | — | Real Stripe test mode on the host (`scripts/test-stripe.bash`): pay, decline, portal + cancellation lapse. CI uses the **MockPaymentProvider** (`register-users`, `user-registers-submits-poll`) |
 | Webhook: checkout.completed | Stripe | ✅ `StripeWebhookControllerTest` | ➖ | P2 | Mock provider provisions directly; real event needs Stripe CLI |
 | Provision Paid User | (system) | ✅ `StripeWebhookControllerTest` | ➖ | P2 | Via the mock provider |
 | Create Poll | Creator | ✅ `*ServiceTest`, `CreatorGrantGuardTest` | ✅ `creator-creates-questionnaire`, `creator-creates-election`, `creator-creates-ballot-measure` | — | All three poll types via the wizard |
@@ -60,11 +60,14 @@ creates and answers each poll type (questionnaire, election, ballot measure),
 admin approves a creator, admin manages creators, admin manages polls, and
 super edits a poll-type template.
 
-**P1 — next:**
+**P1:**
 
-1. **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode.
-   Written as an opt-in spec (`e2e/stripe/`, `STRIPE_E2E=1`, run on the host:
-   see TESTING-E2E.md). It still needs its first green run with real test keys.
+1. ✅ **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode.
+   Done 2026-10-14: an opt-in spec (`e2e/stripe/`, `STRIPE_E2E=1`), run on the
+   host with `./scripts/test-stripe.bash`.
+   - Paying and the declined card passed against real test mode.
+   - A third test (billing portal, then subscription ended, then membership
+     lapses) has been added, and its first run is pending.
 
 **P2:** none left.
 
