@@ -145,6 +145,52 @@ const split = computed<SplitRow[]>(() => {
   ]
 })
 
+// ---------- CSV + print (phase 3) ----------
+// The CSV holds exactly what the page shows: privacy-safe totals and
+// percentages (withheld cells stay withheld), built here in the browser.
+function csvCell(v: unknown): string {
+  const text = String(v ?? '')
+  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
+}
+function downloadCsv() {
+  const r = report.value
+  if (!r) return
+  const k = r.threshold
+  const fewer = t('creator.report.fewerThan', { k })
+  const rows: unknown[][] = [[t('creator.report.csvSection'), t('creator.report.csvItem'), t('creator.report.csvValue'), '']]
+  const sec = t('creator.report.csvSummary')
+  rows.push([sec, t('creator.report.csvPoll'), all.value?.title ?? ''])
+  rows.push([sec, t('creator.report.respondents'), r.respondents])
+  rows.push([sec, t('creator.report.inArea'), r.inArea === null ? t('creator.report.withheld') : `${pct(r.inArea, r.respondents)}%`])
+  if (r.engagement) {
+    rows.push([sec, t('creator.report.changed'), r.engagement.changedAnswers])
+    rows.push([sec, t('creator.report.commented'), r.engagement.commented])
+  }
+  for (const b of r.timeline ?? []) {
+    rows.push([t('creator.report.timelineHeading'), period(b), b.count, b.runningTotal])
+  }
+  if (r.reach) {
+    const sh = t('creator.report.reachHeading')
+    rows.push([sh, t('creator.report.coverage', { covered: r.reach.covered, total: r.reach.total, level: reachLevel.value })])
+    for (const row of r.reach.rows) rows.push([sh, row.label, row.count ?? fewer])
+    rows.push([sh, t('creator.report.outsideArea'), r.reach.outside ?? fewer])
+  }
+  for (const h of highlights.value) rows.push([t('creator.report.highlightsHeading'), h.label, h.detail])
+  if (split.value.length) {
+    const sp = t('creator.report.splitHeading')
+    rows.push([sp, '', t('creator.report.insideCol'), t('creator.report.outsideCol')])
+    for (const row of split.value) rows.push([sp, row.label, row.inside, row.outside])
+  }
+  const csv = rows.map(row => row.map(csvCell).join(',')).join('\r\n') + '\r\n'
+  const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }))
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `poll-report-${type.value}-${id.value}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+function printReport() { window.print() }
+
 const reachLevel = computed(() => {
   switch (report.value?.reach?.level) {
     case 'STATE': return t('creator.report.levelStates')
@@ -156,9 +202,19 @@ const reachLevel = computed(() => {
 
 <template>
   <div class="mx-auto max-w-4xl py-8">
-    <router-link to="/creator/dashboard" class="text-sm text-slate-600 underline hover:text-slate-900">
-      ← {{ $t('creator.report.back') }}
-    </router-link>
+    <div class="flex items-center justify-between print:hidden">
+      <router-link to="/creator/dashboard" class="text-sm text-slate-600 underline hover:text-slate-900">
+        ← {{ $t('creator.report.back') }}
+      </router-link>
+      <div v-if="report" class="flex gap-2">
+        <button type="button" data-test="download-csv" class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50" @click="downloadCsv">
+          {{ $t('creator.report.downloadCsv') }}
+        </button>
+        <button type="button" data-test="print" class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50" @click="printReport">
+          {{ $t('creator.report.print') }}
+        </button>
+      </div>
+    </div>
     <h1 class="mb-1 mt-2 text-2xl font-semibold text-slate-800">
       {{ all ? $t('creator.report.headingFor', { title: all.title }) : $t('creator.report.heading') }}
     </h1>

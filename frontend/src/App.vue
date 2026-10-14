@@ -28,7 +28,8 @@ function onLocaleChange(e: Event) {
 
 <template>
   <div id="app" class="min-h-screen">
-    <header class="bg-slate-800 text-white px-8">
+    <!-- Hidden when printing (e.g. a creator's poll report). -->
+    <header class="bg-slate-800 text-white px-8 print:hidden">
       <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between">
         <div class="text-xl font-bold">
           <RouterLink to="/" class="text-white no-underline">{{ $t('brand') }}</RouterLink>

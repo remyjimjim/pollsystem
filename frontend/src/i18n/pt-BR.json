@@ -329,7 +329,14 @@
       "insideCol": "Dentro da área",
       "outsideCol": "Fora da área",
       "withheld": "oculto (abaixo do mínimo)",
-      "noneYet": "ainda sem respostas"
+      "noneYet": "ainda sem respostas",
+      "downloadCsv": "Baixar CSV",
+      "print": "Imprimir",
+      "csvSection": "Seção",
+      "csvItem": "Item",
+      "csvValue": "Valor",
+      "csvSummary": "Resumo",
+      "csvPoll": "Enquete"
     }
   },
   "form": {

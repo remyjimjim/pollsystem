@@ -329,7 +329,14 @@
       "insideCol": "Innenfor området",
       "outsideCol": "Utenfor området",
       "withheld": "skjult (under minimum)",
-      "noneYet": "ingen svar ennå"
+      "noneYet": "ingen svar ennå",
+      "downloadCsv": "Last ned CSV",
+      "print": "Skriv ut",
+      "csvSection": "Del",
+      "csvItem": "Punkt",
+      "csvValue": "Verdi",
+      "csvSummary": "Sammendrag",
+      "csvPoll": "Avstemning"
     }
   },
   "form": {

@@ -76,4 +76,36 @@ describe('PollReportView', () => {
     expect(w.find('[data-test="reach"]').exists()).toBe(false)
     expect(w.find('[data-test="summary"]').text()).toContain('—')
   })
+
+  it('Download CSV holds what the page shows, with withheld cells kept withheld', async () => {
+    mockApi(REPORT, true)
+    let blob: Blob | null = null
+    const create = vi.fn((b: Blob) => { blob = b; return 'blob:report' })
+    Object.assign(URL, { createObjectURL: create, revokeObjectURL: vi.fn() })
+    const clicked = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+
+    const w = mount(PollReportView)
+    await flushPromises()
+    await w.find('[data-test="download-csv"]').trigger('click')
+
+    expect(clicked).toHaveBeenCalled()
+    const csv = await (blob as unknown as Blob).text()
+    expect(csv).toContain('Summary,respondents,40')
+    expect(csv).toContain('Summary,in the poll\'s area,75%')
+    expect(csv).toContain('Reach,Los Angeles (CA),22')
+    expect(csv).toContain('Reach,Kern (CA),fewer than 10')           // withheld stays withheld
+    expect(csv).toContain('Highlights,Mayor,"Avery Stone leads with 60%, ahead by 20 points"')
+    expect(csv).toMatch(/Inside vs\. outside the poll's area,Avery Stone · Mayor,67%,withheld/)
+    clicked.mockRestore()
+  })
+
+  it('has a Print button', async () => {
+    mockApi(REPORT)
+    const print = vi.spyOn(window, 'print').mockImplementation(() => {})
+    const w = mount(PollReportView)
+    await flushPromises()
+    await w.find('[data-test="print"]').trigger('click')
+    expect(print).toHaveBeenCalled()
+    print.mockRestore()
+  })
 })

@@ -368,7 +368,14 @@
       "insideCol": "Inside the area",
       "outsideCol": "Outside the area",
       "withheld": "withheld (fewer than the minimum)",
-      "noneYet": "no responses yet"
+      "noneYet": "no responses yet",
+      "downloadCsv": "Download CSV",
+      "print": "Print",
+      "csvSection": "Section",
+      "csvItem": "Item",
+      "csvValue": "Value",
+      "csvSummary": "Summary",
+      "csvPoll": "Poll"
     }
   },
   "form": {

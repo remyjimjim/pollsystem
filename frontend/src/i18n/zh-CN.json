@@ -329,7 +329,14 @@
       "insideCol": "区域内",
       "outsideCol": "区域外",
       "withheld": "已隐藏（低于最低人数）",
-      "noneYet": "暂无回复"
+      "noneYet": "暂无回复",
+      "downloadCsv": "下载 CSV",
+      "print": "打印",
+      "csvSection": "部分",
+      "csvItem": "项目",
+      "csvValue": "值",
+      "csvSummary": "摘要",
+      "csvPoll": "投票"
     }
   },
   "form": {

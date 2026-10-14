@@ -329,7 +329,14 @@
       "insideCol": "地域内",
       "outsideCol": "地域外",
       "withheld": "非表示（最低人数未満）",
-      "noneYet": "まだ回答がありません"
+      "noneYet": "まだ回答がありません",
+      "downloadCsv": "CSV をダウンロード",
+      "print": "印刷",
+      "csvSection": "セクション",
+      "csvItem": "項目",
+      "csvValue": "値",
+      "csvSummary": "概要",
+      "csvPoll": "投票"
     }
   },
   "form": {
