@@ -61,6 +61,59 @@ logged.
 
 ---
 
+## 2026-10-14 — Small-poll privacy: nothing below 10, steps of 10, percentages only
+
+**Requested:**
+
+> start on the small-poll privacy decision
+
+then:
+
+> Let's go with option "C". Can we have an indicator like 'X is leading' and a
+> caption saying 'For privacy considerations results aren't shown until at least
+> 10 people have voted. Results are updated every 10 voters until at least 1000
+> votes have been cast'?
+
+and finally:
+
+> 1. Let's update every 10 votes until and use rounded percentages always.
+> Super admin can see raw numbers at all times. No need for an 'X is leading'
+> indicator. 2. (a) Update in steps of 10 showing rounded percentages, no 'until
+> at least 1000'.
+
+**Decision:**
+
+- No public results until 10 respondents.
+- Then results update in steps of 10, at any size.
+- Rounded percentages only, and the API sends no counts.
+- Supers see live raw numbers.
+- No "leading" indicator, and no exemption for creators.
+
+**Changed:**
+
+- `V30` adds snapshot tables. Each step freezes every answer, including the
+  respondent's zipcode, so a single vote or a single edit is never visible on
+  its own. A startup backfill snapshots existing polls.
+- The shared `ResultsAccess` decides LIVE (super), STEPPED or HIDDEN. Counts
+  are null for everyone but supers; percentages and `visibility` are added.
+- Results page:
+  - the privacy caption;
+  - "N people have responded so far" while hidden;
+  - percentages only;
+  - a super note.
+
+  In all 9 languages.
+- The creator report uses percentages, with margins in percentage points.
+- The dev seeder refreshes snapshots.
+- e2e: the viewer journey now shows hidden, then percentages, then a withheld
+  group; the answering specs read counts as a super.
+- The help pages are updated, and `todo.md` records the decision.
+- Backend 302/302, frontend 99/99, e2e 13/13.
+
+**Commit:** `d198835`
+
+---
+
 ## 2026-10-14 — Results pages say where the poll is for
 
 **Requested:**
