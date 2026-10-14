@@ -426,3 +426,7 @@ interface ResultSnapshotAnswerRepository : JpaRepository<ResultSnapshotAnswer, L
     @Query("DELETE FROM ResultSnapshotAnswer a WHERE a.snapshotId = :snapshotId")
     fun deleteBySnapshotId(@Param("snapshotId") snapshotId: Long): Int
 }
+
+interface PollNotificationRepository : JpaRepository<PollNotification, Long> {
+    fun existsByPollTypeAndPollIdAndKind(pollType: PollKind, pollId: Long, kind: PollNotificationKind): Boolean
+}

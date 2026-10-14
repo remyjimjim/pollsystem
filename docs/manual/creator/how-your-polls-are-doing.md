@@ -50,6 +50,21 @@ and Poll System's super administrators, can see it.
 - **Inside vs. outside the area:** the results for people who live in the
   poll's area next to everyone else's.
 
+**Download CSV** saves the report as a spreadsheet file, and **Print** prints it
+(or saves it as a PDF) without the site's menus. Both contain exactly what the
+page shows, privacy rules included.
+
+## Emails about your poll
+
+You get an email:
+
+- **when your poll reaches 10 responses:** its results have just become
+  visible to everyone;
+- **when your poll closes:** a short final report, with the number of
+  respondents and links to the results and your report.
+
+Each is sent once per poll.
+
 The report protects people's privacy:
 
 - **Small groups are withheld.** A group of fewer than 10 people shows as

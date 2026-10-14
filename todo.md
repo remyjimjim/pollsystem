@@ -145,7 +145,9 @@
        Highlights and inside/outside are worked out from the public results endpoints.
    - Phase 3: CSV download of the report's totals, a printable summary page, and milestone emails
      ("10 responses: results by area are now visible", plus a final report at close).
-     - Done: No.
+     - Done: Yes (2026-10-14). The CSV/Print are built in the browser from what the page shows. The emails
+       (poll_notifications, V31) are each sent once: at the first results snapshot (not on the startup backfill),
+       and at close (polls closed in the last 7 days, checked every 15 min).
    - Later: an overview across all of a creator's polls (totals, trends, most engaged areas).
      - Done: No.
 

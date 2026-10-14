@@ -61,6 +61,7 @@ class ResultSnapshotService(
     private val ballotResponses: BallotResponseRepository,
     private val snapshots: ResultSnapshotRepository,
     private val snapshotAnswers: ResultSnapshotAnswerRepository,
+    private val milestones: PollMilestoneService,
     @Value("\${app.results.k-anonymity-threshold:10}") private val k: Int
 ) {
     fun live(kind: PollKind, pollId: Long): List<Answer> = when (kind) {
@@ -72,9 +73,13 @@ class ResultSnapshotService(
             .map { Answer(it.user.id, it.user.zipcode, pollId, it.response.toString()) }
     }
 
-    /** Take a new snapshot if the respondent count has reached a step beyond the current one. */
+    /**
+     * Take a new snapshot if the respondent count has reached a step beyond the
+     * current one. The first snapshot emails the creator that results are now
+     * visible, unless [notify] is false (the startup backfill).
+     */
     @Transactional
-    fun refresh(kind: PollKind, pollId: Long) {
+    fun refresh(kind: PollKind, pollId: Long, notify: Boolean = true) {
         val answers = live(kind, pollId)
         val n = answers.map { it.userId }.distinct().size
         val step = n / k * k
@@ -89,6 +94,7 @@ class ResultSnapshotService(
         snapshotAnswers.saveAll(answers.map {
             ResultSnapshotAnswer(snapshotId = snap.id, userId = it.userId, zipcode = it.zipcode, itemId = it.itemId, response = it.response)
         })
+        if (current == null && notify) milestones.resultsVisible(kind, pollId)
     }
 
     fun snapshot(kind: PollKind, pollId: Long): List<Answer>? =
@@ -173,7 +179,8 @@ class ResultSnapshotBackfill(
         val polls = questionnaires.findAll().map { PollKind.QUESTIONNAIRE to it.id } +
             elections.findAll().map { PollKind.ELECTION to it.id } +
             ballotMeasures.findAll().map { PollKind.BALLOT_MEASURE to it.id }
-        polls.forEach { (kind, id) -> tx.executeWithoutResult { snapshots.refresh(kind, id) } }
+        // notify = false: existing polls don't trigger "results are now visible" emails on deploy.
+        polls.forEach { (kind, id) -> tx.executeWithoutResult { snapshots.refresh(kind, id, notify = false) } }
         log.info("Result snapshots checked for {} polls", polls.size)
     }
 }
