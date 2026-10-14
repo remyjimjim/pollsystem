@@ -33,7 +33,12 @@ export default defineConfig({
   workers: 1,
   // seed-users-debug is an interactive dev tool (blocks on a Close modal); never
   // run it in CI. Every other spec runs, so new ones join CI automatically.
-  testIgnore: process.env.CI ? ['**/seed-users-debug.spec.ts'] : [],
+  // e2e/stripe/** drives REAL Stripe test mode (keys + `stripe listen`), so it
+  // only runs when asked: STRIPE_E2E=1. CI never sets it.
+  testIgnore: [
+    ...(process.env.CI ? ['**/seed-users-debug.spec.ts'] : []),
+    ...(process.env.STRIPE_E2E ? [] : ['**/stripe/**']),
+  ],
   reporter: 'list',
   // Runs once after every spec file finishes. Wipes the zzz-prefixed test
   // users + everything anchored to them. Skip with SKIP_TEARDOWN=1.

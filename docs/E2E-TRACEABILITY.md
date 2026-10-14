@@ -62,8 +62,9 @@ super edits a poll-type template.
 
 **P1 — next:**
 
-1. **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode
-   (today's e2e uses the mock provider).
+1. **Real Stripe Checkout → webhook → magic-link login** in Stripe test mode.
+   Written as an opt-in spec (`e2e/stripe/`, `STRIPE_E2E=1`, run on the host:
+   see TESTING-E2E.md). It still needs its first green run with real test keys.
 
 **P2:** none left.
 

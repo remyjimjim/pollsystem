@@ -182,6 +182,45 @@ The suite depends on `DevController`, which is **`@Profile("local")`** — its
 - See [`RUNNING-on-host.md`](RUNNING-on-host.md) /
   [`RUNNING-on-docker.md`](RUNNING-on-docker.md) for bringing the stack up.
 
+### Real Stripe test mode (opt-in)
+
+`e2e/stripe/user-pays-with-stripe-test-mode.spec.ts` drives the money path for
+real:
+
+1. register on our page;
+2. pay on Stripe's hosted Checkout with the test card `4242 4242 4242 4242`;
+3. the `checkout.session.completed` webhook provisions the account;
+4. the magic link arrives in Mailpit;
+5. sign in as a paid member.
+
+A second test uses the declining card `4000 0000 0000 0002` and checks that no
+account is created. **Normal runs and CI skip these tests;** they run only with
+`STRIPE_E2E=1`.
+
+Run them **on the host** (the Docker backend has `APP_PAYMENTS_PROVIDER: mock`
+fixed in its settings):
+
+1. Stripe dashboard, in **Test mode**:
+   - a Product with a **recurring** Price: copy its `price_…`;
+   - **Developers → API keys**: copy the `sk_test_…` secret key.
+2. Install the [Stripe CLI](https://stripe.com/docs/stripe-cli) and run `stripe login`.
+3. Free ports 8080 and 3000 for the host stack: `docker compose --profile app stop backend frontend`.
+   Postgres and Mailpit keep running.
+4. Terminal A: `stripe listen --forward-to localhost:8080/webhooks/stripe`, then copy the
+   `whsec_…` it prints.
+5. Terminal B:
+   ```bash
+   APP_PAYMENTS_PROVIDER=stripe STRIPE_API_KEY=sk_test_… STRIPE_PRICE_ID=price_… \
+   STRIPE_WEBHOOK_SECRET=whsec_… ./scripts/BuildAndDeploy.bash local
+   ```
+6. Terminal C: `cd frontend && STRIPE_E2E=1 npx playwright test stripe --headed`.
+
+Terminal A should show `checkout.session.completed` and the subscription events
+with `200` responses. The selectors for Stripe's page are in `payOnStripe()`:
+Stripe owns that page, so adjust them there if its layout changes. Afterwards,
+`./scripts/BuildAndDeploy.bash local-docker` brings the Docker stack back.
+See also [`STRIPE-TEST-RUNBOOK.md`](STRIPE-TEST-RUNBOOK.md).
+
 ### Staging (future)
 
 No dev endpoints, so no seeding. A staging suite would drive **real**
