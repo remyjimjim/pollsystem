@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-14 — Creator reports, phase 2: a per-poll report
+
+**Requested:**
+
+> start on creator reports phase 2
+
+**Changed:**
+
+- A **Report** for each published poll, for its creator or a super, with:
+  - summary totals;
+  - participation over time, with days merged until each period has at least
+    k;
+  - reach by sub-area, with coverage;
+  - highlights per poll type;
+  - inside vs. outside;
+  - engagement counts.
+- Privacy:
+  - cells from 1 to k−1 are withheld;
+  - one more cell is withheld when a lone hidden one could be worked out by
+    subtraction;
+  - sections stay hidden until the poll has k respondents.
+- **A leak caught during development:** "outside the area" wasn't part of the
+  subtraction check. A live check with 12 respondents in one county and 3
+  outside revealed 15 − 12 = 3. It's fixed and has a regression test.
+- All 9 languages. The help page is updated, and `todo.md` marks phase 2 done.
+- Backend 297/297, frontend 94/94, e2e 13/13.
+
+**Commit:** `ad8752c`
+
+---
+
 ## 2026-10-13 — Manage Users: raising a role grants an area (Promote and Edit alike)
 
 **Requested:**
