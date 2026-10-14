@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-14 — scripts/test-stripe.bash
+
+**Requested:**
+
+> is there a chance you can put steps 1-6 above into a bash script in
+> pollsystem/scripts/test-stripe.bash?
+
+**Changed:**
+
+- New `scripts/test-stripe.bash [--headed] [--keep]`, run on the host:
+  - the key comes from the environment, the keychain or a hidden prompt; it's
+    never printed, and live keys are refused;
+  - it finds or creates the test price through Stripe's API (the key goes in on
+    curl's stdin);
+  - it pauses the Docker app containers;
+  - it starts `stripe listen` (reading its whsec automatically) and the host
+    stack with real Stripe;
+  - it runs the Stripe e2e, cleans up, and restarts the containers.
+- Checked:
+  - syntax, `--help`, and the guard against running in the Dev Container;
+  - the API path and its error message, with a fake key against Stripe.
+- `docs/TESTING-E2E.md` points at the script.
+
+**Commit:** `e64575f`
+
+---
+
 ## 2026-10-14 — Opt-in real Stripe test-mode checkout e2e (P1)
 
 **Requested:**
