@@ -36,6 +36,8 @@ cd "$ROOT"
 KEYCHAIN_SERVICE="pollsystem-stripe-test"
 PRICE_LOOKUP_KEY="pollsystem_membership_test"
 WEBHOOK_URL="localhost:8080/webhooks/stripe"
+# The events StripeWebhookService handles (newer Stripe CLIs require a list).
+WEBHOOK_EVENTS="checkout.session.completed,customer.subscription.created,customer.subscription.updated,customer.subscription.deleted,invoice.paid,invoice.payment_failed"
 
 if [[ -t 1 ]]; then
   C_BLUE=$'\033[34m'; C_GREEN=$'\033[32m'; C_YELLOW=$'\033[33m'; C_RED=$'\033[31m'; C_OFF=$'\033[0m'
@@ -48,6 +50,8 @@ warn() { printf '%s ! %s%s\n' "$C_YELLOW" "$*" "$C_OFF"; }
 die()  { printf '%s ✗ %s%s\n' "$C_RED" "$*" "$C_OFF" >&2; exit 1; }
 
 usage() { sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'; exit 0; }
+# On failure, show the end of a log right away (it's in a temp folder).
+show_tail() { echo "----- last lines of $1 -----"; tail -n 30 "$1" 2>/dev/null || true; echo "-----"; }
 
 HEADED=""; KEEP=0
 for arg in "$@"; do
@@ -129,14 +133,18 @@ if (( ${#PAUSED[@]} )); then
   docker compose --profile app stop "${PAUSED[@]}" >/dev/null
 fi
 
+# Job control: every background job gets its own process group whose id is
+# its $!, so we can watch it and stop it (and all its children) reliably.
+# (setsid could fork, leaving $! pointing at a process that had already exited.)
+set -m
 LISTEN_PID=""; STACK_PID=""
 cleanup() {
   trap - INT TERM EXIT
   if (( KEEP )) && [[ "${1:-}" != "interrupted" ]]; then return; fi
   echo
   info "Cleaning up…"
-  [[ -n "$STACK_PID"  ]] && kill -TERM -"$STACK_PID"  2>/dev/null || true
-  [[ -n "$LISTEN_PID" ]] && kill -TERM -"$LISTEN_PID" 2>/dev/null || true
+  [[ -n "$STACK_PID"  ]] && kill -TERM -- -"$STACK_PID"  2>/dev/null || true
+  [[ -n "$LISTEN_PID" ]] && kill -TERM -- -"$LISTEN_PID" 2>/dev/null || true
   wait 2>/dev/null || true
   if (( ${#PAUSED[@]} )); then
     info "Restarting Docker ${PAUSED[*]}…"
@@ -148,25 +156,34 @@ trap 'cleanup interrupted' INT TERM
 trap cleanup EXIT
 
 # --- 4. stripe listen ----------------------------------------------------------
-STRIPE_WEBHOOK_SECRET="$(stripe listen --api-key "$STRIPE_API_KEY" --print-secret 2>>"$LOGS/stripe-cli.err")"
+STRIPE_WEBHOOK_SECRET="$(stripe listen --api-key "$STRIPE_API_KEY" --events "$WEBHOOK_EVENTS" --print-secret 2>>"$LOGS/stripe-cli.err")"
 [[ "$STRIPE_WEBHOOK_SECRET" == whsec_* ]] || die "Couldn't get a webhook secret from 'stripe listen' (see $LOGS/stripe-cli.err)"
 export STRIPE_WEBHOOK_SECRET
 info "Forwarding Stripe webhooks to $WEBHOOK_URL (log: $LOGS/stripe-listen.log)…"
-setsid stripe listen --api-key "$STRIPE_API_KEY" --forward-to "$WEBHOOK_URL" >"$LOGS/stripe-listen.log" 2>&1 &
+stripe listen --api-key "$STRIPE_API_KEY" --events "$WEBHOOK_EVENTS" --forward-to "$WEBHOOK_URL" >"$LOGS/stripe-listen.log" 2>&1 &
 LISTEN_PID=$!
+sleep 3
+if ! kill -0 "$LISTEN_PID" 2>/dev/null; then
+  show_tail "$LOGS/stripe-listen.log"
+  die "'stripe listen' stopped right away (full log: $LOGS/stripe-listen.log)"
+fi
 
 # --- 5. the host stack with real Stripe ----------------------------------------
 info "Starting the host stack with APP_PAYMENTS_PROVIDER=stripe (log: $LOGS/stack.log)…"
-APP_PAYMENTS_PROVIDER=stripe SKIP_WATCH=1 setsid ./scripts/BuildAndDeploy.bash local >"$LOGS/stack.log" 2>&1 &
+APP_PAYMENTS_PROVIDER=stripe SKIP_WATCH=1 ./scripts/BuildAndDeploy.bash local >"$LOGS/stack.log" 2>&1 </dev/null &
 STACK_PID=$!
 wait_for() { # label, seconds, url
   local i
   for ((i = 0; i < $2; i += 2)); do
     curl -sf -o /dev/null "$3" && { ok "$1 is up"; return 0; }
-    kill -0 "$STACK_PID" 2>/dev/null || die "The stack stopped while starting (see $LOGS/stack.log)"
+    if ! kill -0 "$STACK_PID" 2>/dev/null; then
+      show_tail "$LOGS/stack.log"
+      die "The stack stopped while starting (full log: $LOGS/stack.log)"
+    fi
     sleep 2
   done
-  die "$1 didn't come up within $2s (see $LOGS/stack.log)"
+  show_tail "$LOGS/stack.log"
+  die "$1 didn't come up within $2s (full log: $LOGS/stack.log)"
 }
 wait_for "Backend" 300 "http://localhost:8080/actuator/health"
 wait_for "Frontend" 120 "http://localhost:3000/"
