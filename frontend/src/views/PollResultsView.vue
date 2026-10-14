@@ -24,6 +24,9 @@ interface QuestionnaireResultsDto {
   filterApplied: Record<string, string> | null
   suppressed: boolean
   suppressionMessage: string | null
+  /** Where the poll is for: its purview level and places (empty when nationwide). */
+  purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
+  purviewAreas: string[]
 }
 
 interface CandidateResultDto {
@@ -43,6 +46,9 @@ interface ElectionResultsDto {
   filterApplied: Record<string, string> | null
   suppressed: boolean
   suppressionMessage: string | null
+  /** Where the poll is for: its purview level and places (empty when nationwide). */
+  purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
+  purviewAreas: string[]
 }
 
 interface BallotMeasureResultsDto {
@@ -54,6 +60,9 @@ interface BallotMeasureResultsDto {
   filterApplied: Record<string, string> | null
   suppressed: boolean
   suppressionMessage: string | null
+  /** Where the poll is for: its purview level and places (empty when nationwide). */
+  purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
+  purviewAreas: string[]
 }
 
 const route = useRoute()
@@ -224,6 +233,9 @@ const data = computed<{
   filterApplied: Record<string, string> | null
   suppressed: boolean
   suppressionMessage: string | null
+  /** Where the poll is for: its purview level and places (empty when nationwide). */
+  purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
+  purviewAreas: string[]
 } | null>(() => {
   if (type.value === 'questionnaire') return qData.value
   if (type.value === 'election') return eData.value
@@ -308,6 +320,14 @@ const groupedCandidates = computed(() => {
   return Array.from(map.entries())
 })
 
+// "Nationwide", or the first few places and "+N more".
+const purviewArea = computed(() => {
+  const d = data.value
+  if (!d || d.purviewLevel === 'NATIONAL' || d.purviewAreas.length === 0) return t('results.nationwide')
+  const shown = d.purviewAreas.slice(0, 5).join(', ')
+  return d.purviewAreas.length > 5 ? `${shown} ${t('results.moreAreas', { n: d.purviewAreas.length - 5 })}` : shown
+})
+
 watch([id, type], load, { immediate: false })
 onMounted(() => {
   document.addEventListener('click', onDocClick)
@@ -331,9 +351,12 @@ onBeforeUnmount(() => {
     </div>
 
     <template v-else>
-      <h1 v-if="data" class="mb-4 text-2xl font-semibold text-slate-800">
+      <h1 v-if="data" class="mb-1 text-2xl font-semibold text-slate-800">
         {{ $t('results.headingFor', { title: data.title }) }}
       </h1>
+      <p v-if="data" class="mb-4 text-sm text-slate-600" data-test="purview-area">
+        {{ $t('results.purviewArea', { area: purviewArea }) }}
+      </p>
       <h1 v-else class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('results.heading') }}</h1>
 
       <p v-if="error" class="text-sm text-red-700">{{ error }}</p>

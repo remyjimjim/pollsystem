@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.repository.CountyRepository
 import org.kodewerks.pollsystem.repository.CountyZipsRepository
@@ -30,7 +31,11 @@ data class QuestionnaireResultsDto(
     val perQuestion: List<QuestionResultDto>,
     val filterApplied: Map<String, String>?,
     val suppressed: Boolean,
-    val suppressionMessage: String?
+    val suppressionMessage: String?,
+    /** The poll's purview, so the page can say where the poll is for. */
+    val purviewLevel: ScopeLevel = ScopeLevel.NATIONAL,
+    /** Its places (states, "County (ST)" or zipcodes); empty when nationwide. */
+    val purviewAreas: List<String> = emptyList()
 )
 
 @RestController
@@ -64,6 +69,8 @@ class QuestionnaireResultsController(
         }
 
         val pollQuestions = questions.findByQuestionnaireId(id)
+        val purviewRows = purviews.purviewOf(PollKind.QUESTIONNAIRE, id)
+        val purviewScope = purviews.scopeLevelOf(purviewRows) to purviews.areaNames(purviewRows)
         val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
         val all = responses.findByQuestionnaireId(id)
         var filtered = all
@@ -81,6 +88,8 @@ class QuestionnaireResultsController(
 
         if (narrowed && respondents < kThreshold) {
             return QuestionnaireResultsDto(
+                purviewLevel = purviewScope.first,
+                purviewAreas = purviewScope.second,
                 questionnaireId = id,
                 title = q.title,
                 totalRespondents = 0,
@@ -106,6 +115,8 @@ class QuestionnaireResultsController(
         }
 
         return QuestionnaireResultsDto(
+                purviewLevel = purviewScope.first,
+                purviewAreas = purviewScope.second,
             questionnaireId = id,
             title = q.title,
             totalRespondents = respondents,

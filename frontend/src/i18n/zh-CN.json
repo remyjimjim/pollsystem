@@ -226,6 +226,9 @@
   "results": {
     "heading": "结果",
     "headingFor": "{title} — 结果",
+    "purviewArea": "投票区域：{area}",
+    "nationwide": "全国",
+    "moreAreas": "另有 {n} 个",
     "unsupportedPre": "尚不支持",
     "unsupportedPost": "的结果。",
     "filterLabel": "按邮政编码筛选",

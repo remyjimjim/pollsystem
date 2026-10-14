@@ -1,5 +1,6 @@
 package org.kodewerks.pollsystem.poll
 
+import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
 import org.kodewerks.pollsystem.repository.BallotResponseRepository
@@ -23,7 +24,11 @@ data class BallotMeasureResultsDto(
     val no: Int,
     val filterApplied: Map<String, String>?,
     val suppressed: Boolean,
-    val suppressionMessage: String?
+    val suppressionMessage: String?,
+    /** The poll's purview, so the page can say where the poll is for. */
+    val purviewLevel: ScopeLevel = ScopeLevel.NATIONAL,
+    /** Its places (states, "County (ST)" or zipcodes); empty when nationwide. */
+    val purviewAreas: List<String> = emptyList()
 )
 
 @RestController
@@ -54,6 +59,8 @@ class BallotMeasureResultsController(
         if (blocks.isBlockedEverywhere(PollKind.BALLOT_MEASURE, measure.id)) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Ballot measure not found")
         }
+        val purviewRows = purviews.purviewOf(PollKind.BALLOT_MEASURE, id)
+        val purviewScope = purviews.scopeLevelOf(purviewRows) to purviews.areaNames(purviewRows)
         val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
         val all = responses.findByMeasureId(id)
         var filtered = all
@@ -72,6 +79,8 @@ class BallotMeasureResultsController(
 
         if (narrowed && respondents < kThreshold) {
             return BallotMeasureResultsDto(
+                purviewLevel = purviewScope.first,
+                purviewAreas = purviewScope.second,
                 measureId = id,
                 title = measure.title,
                 totalRespondents = 0,
@@ -84,6 +93,8 @@ class BallotMeasureResultsController(
         }
 
         return BallotMeasureResultsDto(
+                purviewLevel = purviewScope.first,
+                purviewAreas = purviewScope.second,
             measureId = id,
             title = measure.title,
             totalRespondents = respondents,

@@ -127,4 +127,28 @@ class QuestionnaireResultsTest : AbstractIntegrationTest() {
         assertThat(filtered.perQuestion.first().byAnswer["yes"]).isEqualTo(3)
         assertThat(filtered.perQuestion.first().byAnswer["no"]).isNull()
     }
+
+    @Test
+    fun `results say where the poll is for`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
+        val zipPoll = publishOneQuestionPoll(creator)  // purview: ZIP 90001
+        resultsController.get(zipPoll).let {
+            assertThat(it.purviewLevel).isEqualTo(org.kodewerks.pollsystem.model.ScopeLevel.ZIP)
+            assertThat(it.purviewAreas).containsExactly("90001")
+        }
+
+        val ca = fixtures.stateId("CA")
+        val statewide = service.saveDraft(creator, QuestionnaireDraftRequest(
+            pollTypeId = pollTypeId, title = "Statewide", summary = "s", closeDate = null,
+            questions = listOf(QuestionInput("Q?")),
+            scopeLevel = org.kodewerks.pollsystem.model.ScopeLevel.STATE, regionIds = listOf(ca)
+        ))
+        service.publish(statewide.id, creator, confirmed = false)
+        // Withheld results still say where the poll is for.
+        resultsController.get(statewide.id, zipcodes = listOf("90001")).let {
+            assertThat(it.suppressed).isTrue()
+            assertThat(it.purviewLevel).isEqualTo(org.kodewerks.pollsystem.model.ScopeLevel.STATE)
+            assertThat(it.purviewAreas).containsExactly("California")
+        }
+    }
 }

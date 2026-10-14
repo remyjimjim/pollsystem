@@ -226,6 +226,9 @@
   "results": {
     "heading": "Resultados",
     "headingFor": "{title} — Resultados",
+    "purviewArea": "Área da enquete: {area}",
+    "nationwide": "Todo o país",
+    "moreAreas": "+{n} mais",
     "unsupportedPre": "Os resultados para",
     "unsupportedPost": "ainda não são suportados.",
     "filterLabel": "Filtrar por CEP",

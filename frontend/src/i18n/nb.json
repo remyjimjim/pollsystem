@@ -226,6 +226,9 @@
   "results": {
     "heading": "Resultater",
     "headingFor": "{title} — Resultater",
+    "purviewArea": "Avstemningens område: {area}",
+    "nationwide": "Hele landet",
+    "moreAreas": "+{n} til",
     "unsupportedPre": "Resultater for",
     "unsupportedPost": "støttes ennå ikke.",
     "filterLabel": "Filtrer etter postnummer",

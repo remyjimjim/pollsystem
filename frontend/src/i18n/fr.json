@@ -226,6 +226,9 @@
   "results": {
     "heading": "Résultats",
     "headingFor": "{title} — Résultats",
+    "purviewArea": "Zone du sondage : {area}",
+    "nationwide": "Tout le pays",
+    "moreAreas": "+{n} de plus",
     "unsupportedPre": "Les résultats pour",
     "unsupportedPost": "ne sont pas encore pris en charge.",
     "filterLabel": "Filtrer par code postal",

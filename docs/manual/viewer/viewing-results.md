@@ -11,7 +11,9 @@ Anyone can view results, signed in or not. To open them:
 - In [Finding polls](finding-polls.md), click **View results** on the poll's row.
 - After you vote, you're taken to the results automatically.
 
-The page shows the poll's title and how many people have responded.
+Under the poll's title, **Purview area** says where the poll is for:
+**Nationwide**, or the states, counties or zipcodes it covers (the first few,
+then how many more). The page also shows how many people have responded.
 
 ## What you'll see
 

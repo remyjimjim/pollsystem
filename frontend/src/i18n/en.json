@@ -252,6 +252,9 @@
   "results": {
     "heading": "Results",
     "headingFor": "{title} — Results",
+    "purviewArea": "Purview area: {area}",
+    "nationwide": "Nationwide",
+    "moreAreas": "+{n} more",
     "unsupportedPre": "Results for",
     "unsupportedPost": "are not yet supported.",
     "filterLabel": "Filter by zipcode",

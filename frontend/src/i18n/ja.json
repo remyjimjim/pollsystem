@@ -226,6 +226,9 @@
   "results": {
     "heading": "結果",
     "headingFor": "{title} — 結果",
+    "purviewArea": "対象地域：{area}",
+    "nationwide": "全国",
+    "moreAreas": "他 {n} 件",
     "unsupportedPre": "次の結果はまだサポートされていません:",
     "unsupportedPost": "",
     "filterLabel": "郵便番号で絞り込み",

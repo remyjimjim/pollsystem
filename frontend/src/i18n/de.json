@@ -226,6 +226,9 @@
   "results": {
     "heading": "Ergebnisse",
     "headingFor": "{title} — Ergebnisse",
+    "purviewArea": "Umfragegebiet: {area}",
+    "nationwide": "Landesweit",
+    "moreAreas": "+{n} weitere",
     "unsupportedPre": "Ergebnisse für",
     "unsupportedPost": "werden noch nicht unterstützt.",
     "filterLabel": "Nach Postleitzahl filtern",

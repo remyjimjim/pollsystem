@@ -226,6 +226,9 @@
   "results": {
     "heading": "Risultati",
     "headingFor": "{title} — Risultati",
+    "purviewArea": "Area del sondaggio: {area}",
+    "nationwide": "Tutto il paese",
+    "moreAreas": "+{n} altre",
     "unsupportedPre": "I risultati per",
     "unsupportedPost": "non sono ancora supportati.",
     "filterLabel": "Filtra per CAP",

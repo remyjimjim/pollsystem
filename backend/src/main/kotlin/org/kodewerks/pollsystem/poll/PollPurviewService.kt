@@ -181,6 +181,19 @@ class PollPurviewService(
         else -> emptyList()
     }
 
+    /**
+     * The purview's places, for display: state names, "County (ST)" or zipcodes,
+     * sorted; empty for NATIONAL (the caller labels that "Nationwide").
+     */
+    @Transactional(readOnly = true)
+    fun areaNames(rows: List<PollPurview>): List<String> = when (scopeLevelOf(rows)) {
+        ScopeLevel.NATIONAL -> emptyList()
+        ScopeLevel.STATE -> states.findAllById(rows.mapNotNull { it.stateId }).map { it.name }.distinct().sorted()
+        ScopeLevel.COUNTY -> counties.findAllById(rows.mapNotNull { it.countyId })
+            .map { "${it.name} (${it.state.initial})" }.distinct().sorted()
+        ScopeLevel.ZIP -> rows.mapNotNull { it.zipcode }.distinct().sorted()
+    }
+
     /** Human-readable purview, e.g. "Nationwide", "California", "Los Angeles (CA)", or a zip list. */
     @Transactional(readOnly = true)
     fun regionLabel(rows: List<PollPurview>): String = when (scopeLevelOf(rows)) {
