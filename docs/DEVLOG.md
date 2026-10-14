@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-10-14 — Stripe test mode: 3 passed (verified)
+
+**Requested:**
+
+> 3 passed, push it
+
+**Verified:**
+
+- `./scripts/test-stripe.bash` on the user's host, against real Stripe test
+  mode: **3 passed**.
+  - Paying with the 4242 card works.
+  - The declined card creates no account.
+  - The billing portal opens, and an ended subscription lapses the membership.
+- E2E-TRACEABILITY is updated to match.
+
+---
+
 ## 2026-10-14 — Stripe test mode: P1 done; cancellation test added
 
 **Requested:**

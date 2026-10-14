@@ -67,7 +67,7 @@ super edits a poll-type template.
    host with `./scripts/test-stripe.bash`.
    - Paying and the declined card passed against real test mode.
    - A third test (billing portal, then subscription ended, then membership
-     lapses) has been added, and its first run is pending.
+     lapses) passed too: 3 passed.
 
 **P2:** none left.
 
