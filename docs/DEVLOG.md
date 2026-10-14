@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-14 — Creator reports, phase 3: CSV, print, milestone emails
+
+**Requested:**
+
+> start on creator reports phase 3
+
+**Changed:**
+
+- `fb202f3`: the poll report gets **Download CSV** and **Print**.
+  - The CSV is built in the browser from exactly what the page shows, so
+    withheld cells stay withheld. It's UTF-8, opens cleanly in Excel, and
+    values are quoted where needed.
+  - Print hides the app header.
+  - In all 9 languages. Frontend 101/101.
+- `ce2b956`: milestone emails to the creator, each sent once (`V31`
+  `poll_notifications`):
+  - "results are now visible" at the first snapshot (k respondents), but not
+    from the startup backfill;
+  - a final report when the poll closes, for polls closed in the last 7 days,
+    checked every 15 minutes;
+  - a failed email never breaks a vote.
+- The help page and `todo.md` are updated.
+- Backend 305/305. A live check put exactly one email in Mailpit at 10
+  respondents. e2e 13/13.
+
+**Commits:** `fb202f3`, `ce2b956`
+
+---
+
 ## 2026-10-14 — Stripe test mode: 3 passed (verified)
 
 **Requested:**
