@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-14 — Opt-in real Stripe test-mode checkout e2e (P1)
+
+**Requested:**
+
+> start on the real Stripe test-mode checkout e2e
+
+**Changed:**
+
+- New `e2e/stripe/user-pays-with-stripe-test-mode.spec.ts`:
+  - pay with the 4242 card on Stripe's hosted Checkout, then the webhook
+    provisions the account, the magic link arrives, and you're signed in as a
+    paid member;
+  - a declined card creates no account.
+- Opt-in: it runs only with `STRIPE_E2E=1`; normal runs and CI skip it. Listing
+  and type checks are verified.
+- Host run steps are in TESTING-E2E. E2E-TRACEABILITY marks the item written,
+  with its first real run pending.
+- Not run yet: it needs the user's Stripe test keys and the Stripe CLI on the
+  host.
+
+**Commit:** `a9c3679`
+
+---
+
 ## 2026-10-14 — Small-poll privacy: nothing below 10, steps of 10, percentages only
 
 **Requested:**
