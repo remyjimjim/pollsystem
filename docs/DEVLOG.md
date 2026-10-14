@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-14 — Stripe test mode: P1 done; cancellation test added
+
+**Requested:**
+
+> 2 passed, add the cancellation test too
+
+**Verified (on the user's host, real Stripe test mode):**
+
+- `./scripts/test-stripe.bash`: 2 passed.
+  - The 4242 card subscribes and signs in as a paid member.
+  - The declined card creates no account.
+
+**Changed:**
+
+- A third opt-in test:
+  - Manage subscription must open Stripe's billing portal;
+  - the subscription is then ended through Stripe's test API, since the portal
+    itself cancels at the end of the period;
+  - the `customer.subscription.deleted` webhook must lapse the membership.
+- It needs the test-mode Customer portal saved once in the dashboard.
+- The docs are updated: the P1 is marked done, and the Stripe Checkout row is
+  now covered.
+
+**Commit:** `a5878fd`
+
+---
+
 ## 2026-10-14 — fix(scripts): BuildAndDeploy local died silently when its ports were free
 
 **Requested:**
