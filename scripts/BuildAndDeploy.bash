@@ -225,12 +225,14 @@ cmd_status() {
 # Terminate whatever host process is LISTENING on a TCP port (TERM, then KILL).
 free_port() {
   local port="$1" pids
-  pids=$(ss -ltnpH "sport = :$port" 2>/dev/null | grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u)
+  # `|| true`: no listener means grep matches nothing, which under
+  # `set -euo pipefail` would silently end the whole script.
+  pids=$(ss -ltnpH "sport = :$port" 2>/dev/null | grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u || true)
   [[ -z "$pids" ]] && return 0
   warn "freeing lingering process on :$port (pid $(echo "$pids" | tr '\n' ' '))"
   kill $pids 2>/dev/null || true
   sleep 1
-  pids=$(ss -ltnpH "sport = :$port" 2>/dev/null | grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u)
+  pids=$(ss -ltnpH "sport = :$port" 2>/dev/null | grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u || true)
   [[ -n "$pids" ]] && kill -9 $pids 2>/dev/null || true
   return 0
 }
