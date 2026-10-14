@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-14 — fix(scripts): BuildAndDeploy local died silently when its ports were free
+
+**Requested:**
+
+> here's what I got: [test-stripe.bash again: "The stack stopped while
+> starting", empty stack.log]
+
+**Changed:**
+
+- The real cause: `free_port()` ran a `ss | grep | cut | sort` pipeline. With
+  nothing listening, `grep` matches nothing, and under
+  `set -euo pipefail` the whole script exited before printing anything.
+  - `BuildAndDeploy.bash local` therefore died whenever ports 8080 and 3000
+    were free.
+  - `local-docker` doesn't use `free_port`, which is why this went unnoticed.
+  - A `bash -x` trace in the Dev Container showed it stopping inside
+    `free_port 8080`.
+- Both pipelines now end in `|| true`.
+- Verified: a background launch stays up, logs "payments=stripe", and stops
+  cleanly.
+- The earlier `setsid` explanation was not the cause, but the `set -m` change
+  remains correct.
+
+**Commit:** `a36c824`
+
+---
+
 ## 2026-10-14 — fix(scripts): test-stripe.bash background jobs + stripe listen --events
 
 **Requested:**
