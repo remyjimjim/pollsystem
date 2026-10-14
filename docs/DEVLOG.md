@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-14 — Results pages say where the poll is for
+
+**Requested:**
+
+> Using poll results at polls/questionnaire/97/results as an example, can we
+> specify the purview are? For instance, after the line ZZ report 1791935979374
+> — Results, can we add a line saying "Purview area = X" where X is either
+> Nationwide, a State or a county(ies)?
+
+**Changed:**
+
+- The results responses (all three poll types) carry `purviewLevel` and
+  `purviewAreas`, including when the results are withheld.
+- The page shows "Purview area: …" under the title: Nationwide, or the first
+  five places followed by "+N more". Zipcode-level polls list their zipcodes.
+- In all 9 languages. The "Viewing results" help page is updated.
+- Backend 298/298, frontend 96/96, e2e 13/13. Questionnaire 97 shows Colorado.
+
+**Commit:** `6b0fa47`
+
+---
+
 ## 2026-10-14 — Creator reports, phase 2: a per-poll report
 
 **Requested:**
