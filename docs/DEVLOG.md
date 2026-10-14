@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-14 — fix(scripts): test-stripe.bash background jobs + stripe listen --events
+
+**Requested:**
+
+> The scripts/test-stripe.bash script had a 'stack stopped' error
+
+then, the logs: an empty `stack.log`, and the `stripe-listen.log` message "must
+specify events to forward using --events, --all-snapshot, or --all-thin".
+
+**Changed:**
+
+- `stripe listen` now passes `--events` with the six events the backend
+  handles.
+- Background jobs use job control (`set -m`) instead of `setsid`.
+  - `setsid` can fork, so the script was watching a process that had already
+    exited; that's why the stack looked "stopped".
+  - The cleanup also aimed at the wrong process group.
+  - Verified with a stand-in job that has a grandchild.
+- On failure the script prints the log's last lines.
+- The user's host Java 17 is correct: the project is built for Java 17.
+
+**Commit:** `3c8386d`
+
+---
+
 ## 2026-10-14 — scripts/test-stripe.bash
 
 **Requested:**
