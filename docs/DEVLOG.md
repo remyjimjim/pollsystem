@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-15 — The bad-word list stays on the server
+
+**Requested:**
+
+> Can I get in trouble if people can read the bad-words.json on Github?
+
+then:
+
+> Well, let's do #1. My main concern is using the best list of words to
+> censor and then censoring them.
+
+**Decision:**
+
+- Publishing a moderation word list is common and very unlikely to cause
+  trouble.
+- Still, the full list no longer reaches the browser (#1).
+- `bad-words.json` stays in the repo for now; keeping it off GitHub (#2) was
+  not chosen.
+
+**Changed:**
+
+- `720a054`: the public list endpoint is removed. A signed-in-only
+  `POST /api/moderation/check` returns just the words found in the comments
+  sent. The page asks "Can I replace…?" only for those.
+- Backend 316/316, frontend 108/108, e2e 13/13. Live: the old URL returns 401,
+  and a check returns only the word found.
+
+**Commit:** `720a054`
+
+---
+
 ## 2026-10-15 — Public, anonymous comments with a bad-word check
 
 **Requested:**
