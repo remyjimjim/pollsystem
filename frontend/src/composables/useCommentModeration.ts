@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-/** One pair from backend moderation/bad-words.json. */
+/** A listed word found in a comment, with its replacement (from the server). */
 export interface BadWord { word: string; replace: string }
 
 /** A comment box to check: how to read / change its text and its "public" box. */
@@ -14,31 +14,25 @@ export interface CommentEntry {
   makePrivate(): void
 }
 
-let cached: Promise<BadWord[]> | null = null
-
-/** The list, loaded once per page load. If it can't load, the server's own check still keeps a bad comment private. */
-export function loadBadWords(): Promise<BadWord[]> {
-  if (!cached) {
-    cached = axios.get<BadWord[]>('/api/moderation/bad-words')
-      .then(r => r.data ?? [])
-      .catch(() => { cached = null; return [] })
+/**
+ * Ask the server which listed words each text contains. The list itself never
+ * reaches the browser. If the check fails, nothing is asked: saving rechecks,
+ * so a comment with a listed word is kept private anyway.
+ */
+async function check(texts: string[]): Promise<BadWord[][]> {
+  try {
+    const r = await axios.post<{ found: BadWord[][] }>('/api/moderation/check', { texts })
+    return r.data?.found ?? texts.map(() => [])
+  } catch {
+    return texts.map(() => [])
   }
-  return cached
 }
-
-/** Test hook: forget the loaded list. */
-export function resetBadWordsCache() { cached = null }
 
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 /** Whole word, ignoring case (same rule as the server): "Darn" matches "darn", "darned" doesn't. */
 function wordPattern(word: string): RegExp {
   return new RegExp(`(?<![\\p{L}\\p{N}])${escape(word.trim())}(?![\\p{L}\\p{N}])`, 'giu')
-}
-
-export function findBadWords(text: string, list: BadWord[]): BadWord[] {
-  if (!text.trim()) return []
-  return list.filter(b => b.word.trim() && wordPattern(b.word).test(text))
 }
 
 /** Replaces every occurrence; a capitalised one ("Darn") gets a capitalised replacement ("Dang"). */
@@ -74,9 +68,9 @@ export function useCommentModeration() {
   async function review(entries: CommentEntry[]): Promise<void> {
     const toCheck = entries.filter(e => e.isPublic() && e.get().trim())
     if (toCheck.length === 0) return
-    const list = await loadBadWords()
-    for (const e of toCheck) {
-      for (const b of findBadWords(e.get(), list)) {
+    const found = await check(toCheck.map(e => e.get()))
+    for (const [i, e] of toCheck.entries()) {
+      for (const b of found[i] ?? []) {
         document.getElementById(e.inputId)?.focus()
         if (await ask(b)) {
           e.set(replaceBadWord(e.get(), b))

@@ -66,7 +66,6 @@ class SecurityConfig(
                     "/api/polls/search",
                     "/api/polls/search/**",
                     "/api/polls/*/*/results/**",
-                    "/api/moderation/bad-words",
                     // DevController is @Profile("local"), so under prod the
                     // path 404s and permitAll has no effect there.
                     "/api/dev/**",

@@ -1,30 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import axios from 'axios'
-import { findBadWords, replaceBadWord, resetBadWordsCache, useCommentModeration, type BadWord } from './useCommentModeration'
+import { replaceBadWord, useCommentModeration, type BadWord } from './useCommentModeration'
 
 vi.mock('axios')
 
-const LIST: BadWord[] = [{ word: 'darn', replace: 'dang' }, { word: 'heck', replace: 'h*ck' }]
+const DARN: BadWord = { word: 'darn', replace: 'dang' }
+const HECK: BadWord = { word: 'heck', replace: 'h*ck' }
 
-describe('bad-word matching', () => {
-  it('matches whole words, ignoring case', () => {
-    expect(findBadWords('Well DARN it', LIST).map(b => b.word)).toEqual(['darn'])
-    expect(findBadWords('darned heckle', LIST)).toEqual([])
-    expect(findBadWords('darn, heck!', LIST).map(b => b.word)).toEqual(['darn', 'heck'])
-    expect(findBadWords('   ', LIST)).toEqual([])
-  })
-
-  it('replaces every occurrence of just that word', () => {
-    expect(replaceBadWord('Darn, darn, darned', LIST[0])).toBe('Dang, dang, darned')
+describe('replacing a word', () => {
+  it('replaces every whole-word occurrence, keeping a leading capital', () => {
+    expect(replaceBadWord('Darn, darn, darned', DARN)).toBe('Dang, dang, darned')
   })
 })
 
 describe('reviewing public comments before submit', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-    resetBadWordsCache()
-    vi.mocked(axios.get).mockResolvedValue({ data: LIST })
-  })
+  beforeEach(() => vi.clearAllMocks())
 
   function entry(text: string, isPublic: boolean) {
     const e = { text, isPublic }
@@ -40,18 +30,20 @@ describe('reviewing public comments before submit', () => {
     }
   }
 
-  it('asks per word: Yes replaces it, No keeps the comment private and stops asking', async () => {
+  it('asks the server, then per word found: Yes replaces it, No keeps the comment private and stops asking', async () => {
+    vi.mocked(axios.post).mockResolvedValue({ data: { found: [[DARN, HECK], [HECK]] } })
     const m = useCommentModeration()
     const a = entry('darn and heck', true)
     const b = entry('heck no', true)
     const done = m.review([a.entry, b.entry])
 
     await vi.waitFor(() => expect(m.asking.value?.word).toBe('darn'))
-    m.answer(true)                                  // a: replace darn
+    expect(axios.post).toHaveBeenCalledWith('/api/moderation/check', { texts: ['darn and heck', 'heck no'] })
+    m.answer(true)
     await vi.waitFor(() => expect(m.asking.value?.word).toBe('heck'))
-    m.answer(true)                                  // a: replace heck
+    m.answer(true)
     await vi.waitFor(() => expect(m.asking.value?.word).toBe('heck'))
-    m.answer(false)                                 // b: keep private
+    m.answer(false)
     await done
 
     expect(a.e).toEqual({ text: 'dang and h*ck', isPublic: true })
@@ -59,12 +51,18 @@ describe('reviewing public comments before submit', () => {
     expect(m.asking.value).toBeNull()
   })
 
-  it("doesn't check private comments, or load the list when nothing is public", async () => {
+  it("sends nothing when no comment is public", async () => {
     const m = useCommentModeration()
-    const a = entry('darn', false)
+    await m.review([entry('darn', false).entry, entry('  ', true).entry])
+    expect(axios.post).not.toHaveBeenCalled()
+  })
+
+  it("asks nothing if the check fails (saving still keeps such a comment private)", async () => {
+    vi.mocked(axios.post).mockRejectedValue(new Error('offline'))
+    const m = useCommentModeration()
+    const a = entry('darn', true)
     await m.review([a.entry])
     expect(m.asking.value).toBeNull()
-    expect(axios.get).not.toHaveBeenCalled()
-    expect(a.e.text).toBe('darn')
+    expect(a.e).toEqual({ text: 'darn', isPublic: true })
   })
 })
