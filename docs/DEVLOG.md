@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-10-15 — Public, anonymous comments with a bad-word check
+
+**Requested:**
+
+> Let me know where should put the bad-words.json file for the following todo
+> item [the public-comments item in todo.md] …
+
+then, with the file in place:
+
+> 1. a 2. a 3. a
+
+**Decision:**
+
+- The list lives in `backend/src/main/resources/moderation/bad-words.json`;
+  the server serves it to the page and rechecks on save.
+- Matching is whole-word, ignoring case.
+- A "No" to "Can I replace…?" keeps that comment private; the answers still
+  submit.
+- Public comments show anonymously on the results page, with the same
+  small-poll privacy as the numbers.
+
+**Changed:**
+
+- `cfc4690`: `V33` adds `comment_public` to the three response tables. The
+  server stores it as true only for a clean, non-blank comment.
+  - A new public endpoint serves the word list.
+  - Results show each item's public comments, filtered to the answers that
+    request may see: none under 10 respondents, stepped, filtered by place,
+    live for supers.
+  - All three answer forms (and all four election widgets) get the "Make
+    comment public (and anonymous)" box. On submit, the comment box is
+    focused and "Can I replace…?" is asked per word.
+  - The help pages are updated, and `todo.md` marks it done.
+- Backend 314/314, frontend 108/108, e2e 13/13. A live check stored only the
+  clean comment as public and showed only it after 10 respondents.
+
+**Commit:** `cfc4690`
+
+---
+
 ## 2026-10-15 — Sortable columns on Manage Creators
 
 **Requested:**
