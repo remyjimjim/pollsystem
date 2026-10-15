@@ -3,8 +3,12 @@ import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import PublicCommentToggle from './PublicCommentToggle.vue'
+import ReplaceWordDialog from './ReplaceWordDialog.vue'
+import { useCommentModeration } from '../composables/useCommentModeration'
 
 const { t } = useI18n()
+const moderation = useCommentModeration()
 
 interface BallotMeasureDto {
   id: number
@@ -22,6 +26,7 @@ interface MyBallotResponseDto {
   hasResponse: boolean
   response: boolean | null
   comment: string | null
+  commentPublic?: boolean
   dateSubmitted: string | null
   lastModified: string | null
 }
@@ -39,6 +44,7 @@ const message = ref<string | null>(null)
 
 const answer = ref<boolean | null>(null)
 const comment = ref('')
+const commentPublic = ref(false)
 
 type Mode = 'fresh' | 'editing' | 'readonly' | 'choosing'
 const mode = ref<Mode>('fresh')
@@ -69,6 +75,7 @@ async function load() {
     if (mine.value.hasResponse) {
       answer.value = mine.value.response
       comment.value = mine.value.comment ?? ''
+      commentPublic.value = mine.value.commentPublic ?? false
       mode.value = 'choosing'
     } else {
       mode.value = 'fresh'
@@ -91,9 +98,18 @@ async function submit() {
   submitting.value = true
   error.value = null
   try {
+    // A public comment: offer to replace any listed word; a "No" keeps it private.
+    await moderation.review([{
+      inputId: 'comment-measure',
+      get: () => comment.value,
+      set: (text: string) => { comment.value = text },
+      isPublic: () => commentPublic.value,
+      makePrivate: () => { commentPublic.value = false }
+    }])
     await axios.post(`/api/polls/ballot-measures/${props.id}/responses`, {
       response: answer.value,
-      comment: comment.value.trim() || null
+      comment: comment.value.trim() || null,
+      commentPublic: commentPublic.value
     })
     message.value = t('ballotMeasure.submittedOk')
     setTimeout(() => router.push(`/polls/ballot-measure/${props.id}/results`), 600)
@@ -180,11 +196,13 @@ onMounted(load)
       <label class="flex flex-col gap-1 text-sm text-slate-600">
         {{ $t('common.comment') }}
         <textarea
+          id="comment-measure"
           v-model="comment"
           rows="2"
           class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
       </label>
+      <PublicCommentToggle id="comment-public-measure" v-model="commentPublic" />
     </fieldset>
 
     <p v-if="message" class="text-sm text-green-700">{{ message }}</p>
@@ -198,5 +216,6 @@ onMounted(load)
         {{ submitting ? $t('common.submitting') : (mine?.hasResponse ? $t('ballotMeasure.updateVote') : $t('ballotMeasure.submitVote')) }}
       </button>
     </div>
+    <ReplaceWordDialog v-if="moderation.asking.value" :asking="moderation.asking.value" @answer="moderation.answer" />
   </div>
 </template>

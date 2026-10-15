@@ -53,8 +53,26 @@ than adding a second set.
 
 ## About your comments
 
-Comments aren't shown in the results, and the poll's creator doesn't see them.
-Poll System's super administrators can see them when reviewing an account.
+Comments are **private** unless you tick **Make comment public (and
+anonymous)** under the comment box. Private comments aren't shown in the
+results, and the poll's creator doesn't see them.
+
+A **public** comment is shown on the results page under that question,
+candidate or measure, **without your name**. It follows the same privacy rules
+as the results: nothing shows until 10 people have responded, and new comments
+appear with the next step of 10.
+
+Public comments can't contain certain words. When you submit, each one found is
+highlighted in its comment box, and you're asked **"Can I replace *word* with
+*other word*?"**:
+
+- **Yes** replaces it, and the comment stays public.
+- **No** keeps that comment **private**. Your answers are still submitted.
+
+Untick the box later, and update your answers, to make a comment private again.
+
+Poll System's super administrators can see all comments, public or private,
+when reviewing an account.
 
 ## Why can't I answer?
 

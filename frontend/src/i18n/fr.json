@@ -699,5 +699,14 @@
       "lastEdit": "Dernière fois que le créateur a créé, modifié, publié, archivé ou restauré l'un de ses sondages. La modération des administrateurs ne compte pas.",
       "enabled": "Décocher désactive ce créateur dans votre périmètre : il ne peut plus y créer ni publier de sondages, et ses sondages y sont désactivés là où le sondage, son accès et votre périmètre se recoupent. Réactiver des sondages un par un sous Sondages laisse le créateur désactivé ; cocher réactive le créateur et ses sondages ici. Grisé lorsqu'il n'a aucun accès dans votre périmètre."
     }
+  },
+  "comments": {
+    "makePublic": "Rendre le commentaire public (et anonyme)",
+    "makePublicHint": "Affiché sur la page des résultats sans votre nom, dès que les résultats sont affichés.",
+    "replaceQuestion": "Puis-je remplacer « {word} » par « {replace} » ?",
+    "replaceHint": "Les commentaires publics ne peuvent pas contenir ce mot. Si vous refusez, ce commentaire reste privé.",
+    "replaceYes": "Oui, remplacer",
+    "replaceNo": "Non, le garder privé",
+    "publicCount": "{n} commentaire public | {n} commentaires publics"
   }
 }

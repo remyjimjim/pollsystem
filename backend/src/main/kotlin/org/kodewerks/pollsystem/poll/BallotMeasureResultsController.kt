@@ -31,7 +31,9 @@ data class BallotMeasureResultsDto(
     val purviewLevel: ScopeLevel = ScopeLevel.NATIONAL,
     /** Its places (states, "County (ST)" or zipcodes); empty when nationwide. */
     val purviewAreas: List<String> = emptyList(),
-    val visibility: ResultsVisibility
+    val visibility: ResultsVisibility,
+    /** Public comments on this item, anonymous; same privacy steps as the numbers. */
+    val comments: List<String> = emptyList()
 )
 
 @RestController
@@ -40,7 +42,8 @@ class BallotMeasureResultsController(
     private val measures: BallotMeasureRepository,
     private val blocks: PollBlockService,
     private val purviews: PollPurviewService,
-    private val access: ResultsAccess
+    private val access: ResultsAccess,
+    private val publicComments: PublicComments
 ) {
 
     @GetMapping
@@ -79,7 +82,8 @@ class BallotMeasureResultsController(
             suppressionMessage = if (r.suppressed) SUPPRESSED else null,
             purviewLevel = purviews.scopeLevelOf(purviewRows),
             purviewAreas = purviews.areaNames(purviewRows),
-            visibility = r.visibility
+            visibility = r.visibility,
+            comments = publicComments.byItem(PollKind.BALLOT_MEASURE, id, r.answers)[id].orEmpty()
         )
     }
 }

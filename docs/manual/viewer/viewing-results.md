@@ -37,6 +37,14 @@ Results are shown as bars with a **percentage**, rounded to a whole number.
   changed answer, never changes what you see on its own.
 - **Percentages only.** Exact counts aren't shown.
 
+## Comments
+
+Under a question, candidate or measure, **N public comments** opens the
+comments people chose to make public. They're anonymous, and follow the same
+rules as the results: none until 10 people have responded, and new ones appear
+with each step of 10. If you narrow the results by place, only comments from
+people in that group show.
+
 ## Inside or outside the poll's area
 
 Every poll covers an area (its *purview*): a zipcode, a county, a state, or the

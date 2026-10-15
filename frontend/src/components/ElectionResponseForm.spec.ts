@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import axios from 'axios'
 import ElectionResponseForm from './ElectionResponseForm.vue'
+import { resetBadWordsCache } from '../composables/useCommentModeration'
 
 vi.mock('axios')
 vi.mock('vue-router', () => ({ useRouter: () => ({ push: vi.fn() }) }))
@@ -13,6 +14,7 @@ const CANDIDATES = [
 
 function mountWith(widget: string) {
   vi.mocked(axios.get).mockImplementation(async (url: string) => {
+    if (url === '/api/moderation/bad-words') return { data: [{ word: 'darn', replace: 'dang' }] }
     if (url.endsWith('/responses/me')) {
       return { data: { electionId: 7, hasResponses: false, firstSubmittedAt: null, responses: [] } }
     }
@@ -28,6 +30,7 @@ function mountWith(widget: string) {
 
 afterEach(() => {
   vi.resetAllMocks()
+  resetBadWordsCache()
   document.body.innerHTML = ''
 })
 
@@ -61,4 +64,37 @@ describe('ElectionResponseForm: candidate choices are labelled', () => {
       w.unmount()
     })
   }
+})
+
+describe('ElectionResponseForm: public comments', () => {
+  it('asks to replace a listed word: Yes replaces it, No keeps that comment private', async () => {
+    vi.mocked(axios.post).mockResolvedValue({ data: {} })
+    const w = mountWith('selectOneRadio')
+    await flushPromises()
+    await w.find('input#candidate-11').setValue(true)
+    await w.find('input#comment-c-11').setValue('Darn good mayor')
+    await w.find('input#comment-public-c-11').setValue(true)
+    await w.find('input#comment-c-12').setValue('darn')
+    await w.find('input#comment-public-c-12').setValue(true)
+
+    await w.find('button').trigger('click')
+    await flushPromises()
+    const dialog = () => w.find('[data-test="replace-word-dialog"]')
+    expect(dialog().exists()).toBe(true)
+    expect(document.activeElement?.id).toBe('comment-c-11')     // the comment being asked about
+    await w.find('[data-test="replace-yes"]').trigger('click')
+    await flushPromises()
+    expect(document.activeElement?.id).toBe('comment-c-12')
+    await w.find('[data-test="replace-no"]').trigger('click')
+    await flushPromises()
+
+    expect(dialog().exists()).toBe(false)
+    const sent = vi.mocked(axios.post).mock.calls[0][1] as { answers: any[] }
+    expect(sent.answers).toEqual([
+      { candidateId: 11, response: true, comment: 'Dang good mayor', commentPublic: true },
+      { candidateId: 12, response: false, comment: 'darn', commentPublic: false },
+    ])
+    expect((w.find('input#comment-public-c-12').element as HTMLInputElement).checked).toBe(false)
+    w.unmount()
+  })
 })

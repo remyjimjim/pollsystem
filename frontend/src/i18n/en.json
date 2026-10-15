@@ -944,5 +944,14 @@
       "lastEdit": "When the creator last created, edited, published, archived or restored one of their polls. Admin moderation doesn't count.",
       "enabled": "Unchecking disables this creator within your purview: they can't create or publish polls there, and their polls there are disabled where the poll, the creator's access and your purview overlap. Re-enabling single polls under Polls keeps the creator disabled; checking re-enables the creator and their polls here. Greyed out when they have no access in your purview."
     }
+  },
+  "comments": {
+    "makePublic": "Make comment public (and anonymous)",
+    "makePublicHint": "Shown on the results page without your name, once the results are shown.",
+    "replaceQuestion": "Can I replace “{word}” with “{replace}”?",
+    "replaceHint": "Public comments can't contain this word. If you say no, this comment stays private.",
+    "replaceYes": "Yes, replace it",
+    "replaceNo": "No, keep it private",
+    "publicCount": "{n} public comment | {n} public comments"
   }
 }

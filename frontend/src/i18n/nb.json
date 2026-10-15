@@ -699,5 +699,14 @@
       "lastEdit": "Når oppretteren sist opprettet, endret, publiserte, arkiverte eller gjenopprettet en av sine avstemninger. Administratormoderering teller ikke.",
       "enabled": "Fjerner du haken, deaktiveres oppretteren innenfor ditt område: de kan ikke opprette eller publisere avstemninger der, og avstemningene deres der deaktiveres der avstemningen, oppretterens tilgang og ditt område overlapper. Aktiverer du enkeltavstemninger under Avstemninger, forblir oppretteren deaktivert; huker du av, aktiveres oppretteren og avstemningene her igjen. Grået ut når de ikke har tilgang i ditt område."
     }
+  },
+  "comments": {
+    "makePublic": "Gjør kommentaren offentlig (og anonym)",
+    "makePublicHint": "Vises på resultatsiden uten navnet ditt, når resultatene vises.",
+    "replaceQuestion": "Kan jeg erstatte «{word}» med «{replace}»?",
+    "replaceHint": "Offentlige kommentarer kan ikke inneholde dette ordet. Hvis du sier nei, forblir denne kommentaren privat.",
+    "replaceYes": "Ja, erstatt",
+    "replaceNo": "Nei, hold den privat",
+    "publicCount": "{n} offentlig kommentar | {n} offentlige kommentarer"
   }
 }

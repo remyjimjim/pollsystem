@@ -52,7 +52,8 @@ separate from the access they're granted.
 - **Polls Completed** lists the polls they answered. Open one to see their
   answers, **including their comments**.
 
-Comments are private to supers. Respect that when you read them.
+Comments are private to supers unless the person made one public (it then also
+appears anonymously on the results page). Respect that when you read them.
 
 ## Messages
 

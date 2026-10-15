@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PublicCommentsList from '../components/PublicCommentsList.vue'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -18,6 +19,8 @@ interface QuestionResultDto {
   byAnswer: Record<string, number> | null
   /** Rounded percentage per answer, for everyone. */
   byAnswerPct: Record<string, number>
+  /** Public comments, anonymous; same privacy steps as the numbers. */
+  comments?: string[]
 }
 interface QuestionnaireResultsDto {
   questionnaireId: number
@@ -45,6 +48,7 @@ interface CandidateResultDto {
   total: number | null
   yesPct: number
   noPct: number
+  comments?: string[]
 }
 interface ElectionResultsDto {
   electionId: number
@@ -63,6 +67,7 @@ interface ElectionResultsDto {
 
 interface BallotMeasureResultsDto {
   measureId: number
+  comments?: string[]
   title: string
   totalRespondents: number | null
   yes: number | null
@@ -528,6 +533,7 @@ onBeforeUnmount(() => {
               </tbody>
             </table>
             <p v-else class="m-0 mt-1 text-sm text-slate-500">{{ $t('results.noResponsesYet') }}</p>
+            <PublicCommentsList :comments="q.comments ?? []" />
           </section>
         </template>
 
@@ -559,6 +565,7 @@ onBeforeUnmount(() => {
               </tbody>
             </table>
             <p v-else class="m-0 text-sm text-slate-500">{{ $t('results.noVotesYet') }}</p>
+            <PublicCommentsList :comments="bData.comments ?? []" />
           </section>
         </template>
 
@@ -604,6 +611,7 @@ onBeforeUnmount(() => {
                 </tbody>
               </table>
               <p v-else class="m-0 text-sm text-slate-500">{{ $t('results.noVotesYet') }}</p>
+              <PublicCommentsList :comments="c.comments ?? []" />
             </div>
           </section>
         </template>

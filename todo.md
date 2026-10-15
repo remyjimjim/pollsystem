@@ -46,9 +46,12 @@
                the OS keychain via `test-secrets`, not an encrypted file — #1's
                encrypted-creds approach could still replace that later.
   3. Add "bad-words.json" file listing bad-word:value and replace:value name:value pairs.  
-     Add 'make comments public? Y/N (Noone will know who's comment it is)' checkbox for each "Comments" box and when user submits poll submission and the checkbox is checked, the comments are searched for bad words and
+     Add 'make comment public (and anonymous)? Y/N' checkbox for each "Comments" box and when user submits poll submission and the checkbox is checked, the comments are searched for bad words and
      if found then focus goes to offending comment box and modal pops up with question
      "Can I replace bad-word with good-word?" and does that for each bad-word found.
+     - Done: Yes (2026-10-15). Decided: whole-word matching ignoring case (1a); "No" keeps that comment private,
+       the answers still submit (2a); public comments show anonymously on the results page with the same small-poll
+       privacy as the numbers (3a). The server rechecks: a comment with a listed word is never stored public (V33).
      - Done: No
   4. - Find out if it's possible to capture claude CLI chat output including claude's output
        and questions, my answers and bash commands to a file called 

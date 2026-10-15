@@ -646,5 +646,14 @@
       "admin": "管理员",
       "super": "超级管理员"
     }
+  },
+  "comments": {
+    "makePublic": "公开评论（匿名）",
+    "makePublicHint": "结果显示后，将在结果页面上匿名显示。",
+    "replaceQuestion": "可以把“{word}”替换为“{replace}”吗？",
+    "replaceHint": "公开评论不能包含这个词。如果选择否，这条评论将保持不公开。",
+    "replaceYes": "是，替换",
+    "replaceNo": "否，保持不公开",
+    "publicCount": "{n} 条公开评论"
   }
 }

@@ -3,8 +3,12 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import PublicCommentToggle from './PublicCommentToggle.vue'
+import ReplaceWordDialog from './ReplaceWordDialog.vue'
+import { useCommentModeration } from '../composables/useCommentModeration'
 
 const { t } = useI18n()
+const moderation = useCommentModeration()
 
 interface CandidateDto {
   id: number
@@ -30,6 +34,7 @@ interface MyCandidateResponseDto {
   candidateId: number
   response: boolean
   comment: string | null
+  commentPublic?: boolean
   dateSubmitted: string
   lastModified: string | null
 }
@@ -62,6 +67,8 @@ const selectionByOffice = reactive<Record<string, Set<number>>>({})
 
 // Per-candidate comment used by all widget modes.
 const comments = reactive<Record<number, string>>({})
+// Per-candidate "make comment public" box, all widget modes.
+const commentPublic = reactive<Record<number, boolean>>({})
 
 type Mode = 'fresh' | 'editing' | 'readonly' | 'choosing'
 const mode = ref<Mode>('fresh')
@@ -129,6 +136,7 @@ function seedAnswers() {
       comment: p?.comment ?? ''
     }
     comments[c.id] = p?.comment ?? ''
+    commentPublic[c.id] = p?.commentPublic ?? false
   }
 
   // Rebuild per-office selection sets from the prior responses so the new
@@ -201,6 +209,15 @@ async function submit() {
   submitting.value = true
   error.value = null
   try {
+    // Public comments: offer to replace any listed word; a "No" keeps that comment private.
+    const legacy = widget.value === 'legacy'
+    await moderation.review(candidatesList.map(c => ({
+      inputId: `comment-c-${c.id}`,
+      get: () => (legacy ? answers[c.id].comment : comments[c.id]) ?? '',
+      set: (text: string) => { if (legacy) answers[c.id].comment = text; else comments[c.id] = text },
+      isPublic: () => commentPublic[c.id] ?? false,
+      makePrivate: () => { commentPublic[c.id] = false }
+    })))
     const payload = candidatesList.map(c => {
       const response = widget.value === 'legacy'
         ? answers[c.id].response
@@ -211,7 +228,8 @@ async function submit() {
       return {
         candidateId: c.id,
         response,
-        comment: commentText.trim() || null
+        comment: commentText.trim() || null,
+        commentPublic: commentPublic[c.id] ?? false
       }
     })
     await axios.post(`/api/polls/elections/${props.id}/responses`, { answers: payload })
@@ -323,11 +341,13 @@ onMounted(load)
             <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
           </label>
           <input
+            :id="`comment-c-${c.id}`"
             v-model="comments[c.id]"
             type="text"
             :placeholder="$t('common.comment')"
             class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
           />
+          <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
         </div>
       </div>
 
@@ -351,11 +371,13 @@ onMounted(load)
             <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
           </label>
           <input
+            :id="`comment-c-${c.id}`"
             v-model="comments[c.id]"
             type="text"
             :placeholder="$t('common.comment')"
             class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
           />
+          <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
         </div>
       </div>
 
@@ -379,11 +401,13 @@ onMounted(load)
             <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
           </label>
           <input
+            :id="`comment-c-${c.id}`"
             v-model="comments[c.id]"
             type="text"
             :placeholder="$t('common.comment')"
             class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
           />
+          <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
         </div>
       </div>
 
@@ -408,12 +432,16 @@ onMounted(load)
             {{ $t('common.no') }}
           </label>
         </div>
-        <input
-          v-model="answers[c.id].comment"
-          type="text"
-          :placeholder="$t('common.comment')"
-          class="col-span-2 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
-        />
+        <div class="col-span-2 flex flex-col">
+          <input
+            :id="`comment-c-${c.id}`"
+            v-model="answers[c.id].comment"
+            type="text"
+            :placeholder="$t('common.comment')"
+            class="rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
+          />
+          <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+        </div>
       </div>
     </fieldset>
 
@@ -428,5 +456,6 @@ onMounted(load)
         {{ submitting ? $t('common.submitting') : (mine?.hasResponses ? $t('election.updateVotes') : $t('election.submitVotes')) }}
       </button>
     </div>
+    <ReplaceWordDialog v-if="moderation.asking.value" :asking="moderation.asking.value" @answer="moderation.answer" />
   </div>
 </template>

@@ -646,5 +646,14 @@
       "admin": "Admins",
       "super": "Super-Admins"
     }
+  },
+  "comments": {
+    "makePublic": "Kommentar öffentlich machen (anonym)",
+    "makePublicHint": "Wird ohne Ihren Namen auf der Ergebnisseite gezeigt, sobald Ergebnisse angezeigt werden.",
+    "replaceQuestion": "Darf ich „{word}“ durch „{replace}“ ersetzen?",
+    "replaceHint": "Öffentliche Kommentare dürfen dieses Wort nicht enthalten. Wenn Sie nein sagen, bleibt dieser Kommentar privat.",
+    "replaceYes": "Ja, ersetzen",
+    "replaceNo": "Nein, privat lassen",
+    "publicCount": "{n} öffentlicher Kommentar | {n} öffentliche Kommentare"
   }
 }

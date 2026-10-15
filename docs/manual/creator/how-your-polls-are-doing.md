@@ -88,8 +88,9 @@ results](../viewer/viewing-results.md).
 What you can't see:
 
 - **Individual answers.** Results are always totals.
-- **Comments.** They're private: only Poll System's super administrators can
-  see them.
+- **Private comments.** Only Poll System's super administrators can see them.
+  Comments a respondent made public appear, anonymously, on the results page
+  like everyone sees them.
 - **Small groups.** Narrowed results for fewer than 10 people are hidden.
 - **Early or exact results.** Like everyone, you see results only once 10
   people have responded. They update in steps of 10 and show as percentages,

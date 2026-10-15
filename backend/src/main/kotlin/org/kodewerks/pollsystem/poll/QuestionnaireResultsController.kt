@@ -22,7 +22,9 @@ data class QuestionResultDto(
     val totalResponses: Int?,
     val byAnswer: Map<String, Int>?,
     /** Rounded percentage per answer (lowercased), for everyone. */
-    val byAnswerPct: Map<String, Int>
+    val byAnswerPct: Map<String, Int>,
+    /** Public comments on this item, anonymous; same privacy steps as the numbers. */
+    val comments: List<String> = emptyList()
 )
 
 data class QuestionnaireResultsDto(
@@ -48,7 +50,8 @@ class QuestionnaireResultsController(
     private val questions: QuestionRepository,
     private val blocks: PollBlockService,
     private val purviews: PollPurviewService,
-    private val access: ResultsAccess
+    private val access: ResultsAccess,
+    private val publicComments: PublicComments
 ) {
 
     @GetMapping
@@ -72,6 +75,7 @@ class QuestionnaireResultsController(
         val r = access.prepare(principal, PollKind.QUESTIONNAIRE, id, zipcodes, stateIds, countyIds, withinPurview, outsidePurview)
 
         val byQuestion = r.answers.groupBy { it.itemId }
+        val comments = publicComments.byItem(PollKind.QUESTIONNAIRE, id, r.answers)
         val perQuestion = if (r.answers.isEmpty() && !r.live) emptyList() else questions.findByQuestionnaireId(id).map { question ->
             val rows = byQuestion[question.id].orEmpty()
             val byAnswer = rows.groupingBy { it.response.trim().lowercase() }.eachCount()
@@ -80,7 +84,8 @@ class QuestionnaireResultsController(
                 text = question.question,
                 totalResponses = if (r.live) rows.size else null,
                 byAnswer = if (r.live) byAnswer else null,
-                byAnswerPct = byAnswer.mapValues { (_, n) -> pct(n, rows.size) }
+                byAnswerPct = byAnswer.mapValues { (_, n) -> pct(n, rows.size) },
+                comments = comments[question.id].orEmpty()
             )
         }
         return QuestionnaireResultsDto(

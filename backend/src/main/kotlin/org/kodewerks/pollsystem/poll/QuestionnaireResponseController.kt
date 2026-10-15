@@ -25,7 +25,9 @@ import java.time.Instant
 data class QuestionAnswerInput(
     val questionId: Long,
     @field:NotBlank val response: String,
-    val comment: String? = null
+    val comment: String? = null,
+    /** "Make comment public (and anonymous)": stored only if the comment is clean. */
+    val commentPublic: Boolean = false
 )
 
 data class SubmitResponsesRequest(
@@ -36,6 +38,7 @@ data class MyResponseDto(
     val questionId: Long,
     val response: String,
     val comment: String?,
+    val commentPublic: Boolean = false,
     val dateSubmitted: Instant,
     val lastModified: Instant?
 )
@@ -54,7 +57,8 @@ class QuestionnaireResponseController(
     private val questions: QuestionRepository,
     private val responses: QuestionResponseRepository,
     private val blocks: PollBlockService,
-    private val snapshots: ResultSnapshotService
+    private val snapshots: ResultSnapshotService,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
 ) {
 
     @GetMapping("/me")
@@ -76,6 +80,7 @@ class QuestionnaireResponseController(
                     questionId = it.question.id,
                     response = it.response,
                     comment = it.comment,
+                    commentPublic = it.commentPublic,
                     dateSubmitted = it.dateSubmitted,
                     lastModified = it.lastModified
                 )
@@ -127,6 +132,7 @@ class QuestionnaireResponseController(
                 existing.copy(
                     response = ans.response.trim(),
                     comment = ans.comment?.trim(),
+                    commentPublic = badWords.publishable(ans.comment, ans.commentPublic),
                     lastModified = now
                 )
             } else {
@@ -135,6 +141,7 @@ class QuestionnaireResponseController(
                     response = ans.response.trim(),
                     user = principal.user,
                     comment = ans.comment?.trim(),
+                    commentPublic = badWords.publishable(ans.comment, ans.commentPublic),
                     dateSubmitted = now
                 )
             }

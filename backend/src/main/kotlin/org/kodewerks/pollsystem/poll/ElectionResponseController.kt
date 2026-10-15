@@ -24,7 +24,9 @@ import java.time.Instant
 data class CandidateAnswerInput(
     val candidateId: Long,
     val response: Boolean,
-    val comment: String? = null
+    val comment: String? = null,
+    /** "Make comment public (and anonymous)": stored only if the comment is clean. */
+    val commentPublic: Boolean = false
 )
 
 data class SubmitElectionResponsesRequest(
@@ -35,6 +37,7 @@ data class MyCandidateResponseDto(
     val candidateId: Long,
     val response: Boolean,
     val comment: String?,
+    val commentPublic: Boolean = false,
     val dateSubmitted: Instant,
     val lastModified: Instant?
 )
@@ -53,7 +56,8 @@ class ElectionResponseController(
     private val candidates: CandidateRepository,
     private val responses: CandidateResponseRepository,
     private val blocks: PollBlockService,
-    private val snapshots: ResultSnapshotService
+    private val snapshots: ResultSnapshotService,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
 ) {
 
     @GetMapping("/me")
@@ -75,6 +79,7 @@ class ElectionResponseController(
                     candidateId = it.candidate.id,
                     response = it.response,
                     comment = it.comment,
+                    commentPublic = it.commentPublic,
                     dateSubmitted = it.dateSubmitted,
                     lastModified = it.lastModified
                 )
@@ -126,6 +131,7 @@ class ElectionResponseController(
                 existing.copy(
                     response = ans.response,
                     comment = ans.comment?.trim(),
+                    commentPublic = badWords.publishable(ans.comment, ans.commentPublic),
                     lastModified = now
                 )
             } else {
@@ -134,6 +140,7 @@ class ElectionResponseController(
                     candidate = candidate,
                     response = ans.response,
                     comment = ans.comment?.trim(),
+                    commentPublic = badWords.publishable(ans.comment, ans.commentPublic),
                     dateSubmitted = now
                 )
             }

@@ -3,8 +3,12 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import PublicCommentToggle from './PublicCommentToggle.vue'
+import ReplaceWordDialog from './ReplaceWordDialog.vue'
+import { useCommentModeration } from '../composables/useCommentModeration'
 
 const { t } = useI18n()
+const moderation = useCommentModeration()
 
 interface QuestionDto { id: number; text: string }
 interface QuestionnaireDto {
@@ -20,6 +24,7 @@ interface MyResponseDto {
   questionId: number
   response: string
   comment: string | null
+  commentPublic?: boolean
   dateSubmitted: string
   lastModified: string | null
 }
@@ -42,7 +47,7 @@ const error = ref<string | null>(null)
 const closedReason = ref<string | null>(null)
 const message = ref<string | null>(null)
 
-const answers = reactive<Record<number, { response: string; comment: string }>>({})
+const answers = reactive<Record<number, { response: string; comment: string; commentPublic: boolean }>>({})
 type Mode = 'fresh' | 'editing' | 'readonly' | 'choosing'
 const mode = ref<Mode>('fresh')
 
@@ -87,7 +92,8 @@ function seedAnswers() {
     const p = prev.get(q.id)
     answers[q.id] = {
       response: p?.response ?? '',
-      comment: p?.comment ?? ''
+      comment: p?.comment ?? '',
+      commentPublic: p?.commentPublic ?? false
     }
   }
 }
@@ -106,11 +112,20 @@ async function submit() {
   submitting.value = true
   error.value = null
   try {
+    // Public comments: offer to replace any listed word; a "No" keeps that comment private.
+    await moderation.review(poll.value.questions.map(q => ({
+      inputId: `comment-q-${q.id}`,
+      get: () => answers[q.id].comment,
+      set: (text: string) => { answers[q.id].comment = text },
+      isPublic: () => answers[q.id].commentPublic,
+      makePrivate: () => { answers[q.id].commentPublic = false }
+    })))
     await axios.post(`/api/polls/questionnaires/${props.id}/responses`, {
       answers: poll.value.questions.map(q => ({
         questionId: q.id,
         response: answers[q.id].response.trim(),
-        comment: answers[q.id].comment.trim() || null
+        comment: answers[q.id].comment.trim() || null,
+        commentPublic: answers[q.id].commentPublic
       }))
     })
     message.value = t('questionnaire.submittedOk')
@@ -207,11 +222,13 @@ onMounted(load)
       <label class="mb-2 flex flex-col gap-1 text-sm text-slate-600">
         {{ $t('common.comment') }}
         <input
+          :id="`comment-q-${q.id}`"
           v-model="answers[q.id].comment"
           type="text"
           class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
       </label>
+      <PublicCommentToggle :id="`comment-public-q-${q.id}`" v-model="answers[q.id].commentPublic" />
     </fieldset>
 
     <p v-if="message" class="text-sm text-green-700">{{ message }}</p>
@@ -225,5 +242,6 @@ onMounted(load)
         {{ submitting ? $t('common.submitting') : (mine?.hasResponses ? $t('questionnaire.updateResponses') : $t('questionnaire.submitResponses')) }}
       </button>
     </div>
+    <ReplaceWordDialog v-if="moderation.asking.value" :asking="moderation.asking.value" @answer="moderation.answer" />
   </div>
 </template>

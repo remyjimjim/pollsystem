@@ -646,5 +646,14 @@
       "admin": "Administradores",
       "super": "Super administradores"
     }
+  },
+  "comments": {
+    "makePublic": "Tornar o comentário público (e anônimo)",
+    "makePublicHint": "Aparece na página de resultados sem o seu nome, quando os resultados forem exibidos.",
+    "replaceQuestion": "Posso substituir “{word}” por “{replace}”?",
+    "replaceHint": "Comentários públicos não podem conter esta palavra. Se você disser não, este comentário continua privado.",
+    "replaceYes": "Sim, substituir",
+    "replaceNo": "Não, manter privado",
+    "publicCount": "{n} comentário público | {n} comentários públicos"
   }
 }

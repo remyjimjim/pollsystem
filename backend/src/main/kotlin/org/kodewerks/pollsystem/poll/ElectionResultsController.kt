@@ -26,7 +26,9 @@ data class CandidateResultDto(
     val total: Int?,
     /** Rounded percentages of this candidate's responses, for everyone. */
     val yesPct: Int,
-    val noPct: Int
+    val noPct: Int,
+    /** Public comments on this item, anonymous; same privacy steps as the numbers. */
+    val comments: List<String> = emptyList()
 )
 
 data class ElectionResultsDto(
@@ -52,7 +54,8 @@ class ElectionResultsController(
     private val candidates: CandidateRepository,
     private val blocks: PollBlockService,
     private val purviews: PollPurviewService,
-    private val access: ResultsAccess
+    private val access: ResultsAccess,
+    private val publicComments: PublicComments
 ) {
 
     @GetMapping
@@ -76,6 +79,7 @@ class ElectionResultsController(
         val purviewRows = purviews.purviewOf(PollKind.ELECTION, id)
         val r = access.prepare(principal, PollKind.ELECTION, id, zipcodes, stateIds, countyIds, withinPurview, outsidePurview)
 
+        val comments = publicComments.byItem(PollKind.ELECTION, id, r.answers)
         val perCandidate = if (r.answers.isEmpty() && !r.live) emptyList() else candidates.findByElectionId(id).map { c ->
             val rows = r.answers.filter { it.itemId == c.id }
             val yes = rows.count { it.response == "true" }
@@ -83,7 +87,8 @@ class ElectionResultsController(
             CandidateResultDto(
                 candidateId = c.id, name = c.name, affiliation = c.affiliation, officeName = c.office.name,
                 yes = if (r.live) yes else null, no = if (r.live) no else null, total = if (r.live) rows.size else null,
-                yesPct = pct(yes, rows.size), noPct = pct(no, rows.size)
+                yesPct = pct(yes, rows.size), noPct = pct(no, rows.size),
+                comments = comments[c.id].orEmpty()
             )
         }
         return ElectionResultsDto(

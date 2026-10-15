@@ -25,7 +25,9 @@ data class SubmitBallotResponseRequest(
     // catches them in Bean Validation. With non-nullable Boolean, Kotlin/Jackson
     // defaults missing fields to false and @NotNull never fires.
     @field:NotNull val response: Boolean?,
-    val comment: String? = null
+    val comment: String? = null,
+    /** "Make comment public (and anonymous)": stored only if the comment is clean. */
+    val commentPublic: Boolean = false
 )
 
 data class MyBallotResponseDto(
@@ -33,6 +35,7 @@ data class MyBallotResponseDto(
     val hasResponse: Boolean,
     val response: Boolean?,
     val comment: String?,
+    val commentPublic: Boolean = false,
     val dateSubmitted: Instant?,
     val lastModified: Instant?
 )
@@ -43,7 +46,8 @@ class BallotMeasureResponseController(
     private val measures: BallotMeasureRepository,
     private val responses: BallotResponseRepository,
     private val blocks: PollBlockService,
-    private val snapshots: ResultSnapshotService
+    private val snapshots: ResultSnapshotService,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
 ) {
 
     @GetMapping("/me")
@@ -63,6 +67,7 @@ class BallotMeasureResponseController(
                     hasResponse = true,
                     response = it.response,
                     comment = it.comment,
+                    commentPublic = it.commentPublic,
                     dateSubmitted = it.dateSubmitted,
                     lastModified = it.lastModified
                 )
@@ -106,6 +111,7 @@ class BallotMeasureResponseController(
                 existing.copy(
                     response = body.response!!,
                     comment = body.comment?.trim(),
+                    commentPublic = badWords.publishable(body.comment, body.commentPublic),
                     lastModified = now
                 )
             )
@@ -116,6 +122,7 @@ class BallotMeasureResponseController(
                     user = principal.user,
                     response = body.response!!,
                     comment = body.comment?.trim(),
+                    commentPublic = badWords.publishable(body.comment, body.commentPublic),
                     dateSubmitted = now
                 )
             )
@@ -128,6 +135,7 @@ class BallotMeasureResponseController(
             hasResponse = true,
             response = saved.response,
             comment = saved.comment,
+            commentPublic = saved.commentPublic,
             dateSubmitted = saved.dateSubmitted,
             lastModified = saved.lastModified
         )

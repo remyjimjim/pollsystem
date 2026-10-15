@@ -78,6 +78,10 @@ data class BallotResponse(
     @Column(columnDefinition = "TEXT")
     val comment: String? = null,
 
+    /** Shown anonymously on the results page (V33); only ever true for a clean comment. */
+    @Column(name = "comment_public", nullable = false)
+    val commentPublic: Boolean = false,
+
     @Column(name = "date_submitted", nullable = false)
     val dateSubmitted: Instant = Instant.now(),
 
