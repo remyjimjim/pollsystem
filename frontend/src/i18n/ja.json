@@ -151,6 +151,7 @@
       "title": "タイトル",
       "type": "種類",
       "zipcodes": "郵便番号",
+      "creator": "作成者",
       "closes": "締切"
     },
     "noCloseDate": "締切日なし",
@@ -562,7 +563,10 @@
       "reasonHintSelf": "自分のアクセスを無効にする場合は必須です（例：「11月3日まで休暇中」）。この州の他の管理者とスーパー管理者に表示されます。",
       "reasonHintOther": "任意。この州の他の管理者とスーパー管理者に表示されます。",
       "reasonConfirm": "無効にする",
-      "disabledBy": "{email}（{date}）"
+      "disabledBy": "{email}（{date}）",
+      "pinnedFirst": "投票の検索から、{email} を先頭に表示しています。",
+      "pinnedMissing": "{email} はあなたの地域の作成者ではありません。",
+      "unpin": "通常の一覧を表示"
     },
     "managePolls": {
       "heading": "投票を管理",

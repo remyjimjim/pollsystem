@@ -177,6 +177,7 @@
       "title": "Title",
       "type": "Type",
       "zipcodes": "Zipcodes",
+      "creator": "Creator",
       "closes": "Closes"
     },
     "noCloseDate": "No close date",
@@ -613,7 +614,10 @@
       "reasonHintSelf": "Required when switching off your own access, e.g. \"On vacation until Nov 3\". Other admins of this state and supers will see it.",
       "reasonHintOther": "Optional. Other admins of this state and supers will see it.",
       "reasonConfirm": "Switch off",
-      "disabledBy": "by {email} on {date}"
+      "disabledBy": "by {email} on {date}",
+      "pinnedFirst": "Showing {email} first, from your poll search.",
+      "pinnedMissing": "{email} isn't a creator in your area.",
+      "unpin": "Show the usual list"
     },
     "managePolls": {
       "heading": "Manage Polls",

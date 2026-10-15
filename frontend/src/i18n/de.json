@@ -151,6 +151,7 @@
       "title": "Titel",
       "type": "Typ",
       "zipcodes": "Postleitzahlen",
+      "creator": "Ersteller",
       "closes": "Schließt"
     },
     "noCloseDate": "Kein Schlussdatum",
@@ -519,7 +520,10 @@
     },
     "manageCreators": {
       "heading": "Ersteller verwalten",
-      "body": "Ersteller-Konten verwalten"
+      "body": "Ersteller-Konten verwalten",
+      "pinnedFirst": "{email} wird zuerst angezeigt (aus Ihrer Umfragesuche).",
+      "pinnedMissing": "{email} ist in Ihrem Gebiet kein Ersteller.",
+      "unpin": "Normale Liste anzeigen"
     },
     "managePolls": {
       "heading": "Umfragen verwalten",

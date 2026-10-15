@@ -44,6 +44,7 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
         candidateName: String? = null,
         type: String? = null,
         includeClosed: Boolean = false,
+        viewer: User? = null,
     ): List<PollSearchResult> =
         controller.search(
             title = title,
@@ -54,6 +55,7 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
             candidateName = candidateName,
             type = type,
             includeClosed = includeClosed,
+            principal = viewer?.let { org.kodewerks.pollsystem.security.AppUserDetails(it) },
         )
 
     private fun publishQuestionnaire(
@@ -219,6 +221,30 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
 
         assertThat(search().map { it.id }).doesNotContain(id)
         assertThat(search(includeClosed = true).map { it.id }).contains(id)
+    }
+
+    @Test
+    fun `creator emails go to admins and supers only, and only they can filter by one`() {
+        val c = creator()
+        val qId = publishQuestionnaire(c, "Creator column ${System.nanoTime()}")
+        val e = publishElection(c, "Creator column E ${System.nanoTime()}")
+        val m = publishBallotMeasure(c, "Creator column M ${System.nanoTime()}")
+        val mine = setOf(qId, e, m)
+        fun rows(viewer: User?, byEmail: String? = null) = search(creatorEmail = byEmail, viewer = viewer).filter { it.id in mine }
+
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "sc-admin")
+        val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "sc-super")
+        for (staff in listOf(admin, sup)) {
+            assertThat(rows(staff).map { it.creatorEmail }).hasSize(3).containsOnly(c.email)
+            assertThat(rows(staff, byEmail = "nobody-${System.nanoTime()}")).isEmpty()
+        }
+
+        val member = fixtures.createUser(emailPrefix = "sc-user")
+        for (viewer in listOf(null, member, c)) {
+            assertThat(rows(viewer).map { it.creatorEmail }).hasSize(3).containsOnlyNulls()
+            // The filter is ignored, so it can't be used to test who created what.
+            assertThat(rows(viewer, byEmail = "nobody-${System.nanoTime()}")).hasSize(3)
+        }
     }
 
     @Test

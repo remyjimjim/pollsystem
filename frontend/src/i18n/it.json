@@ -151,6 +151,7 @@
       "title": "Titolo",
       "type": "Tipo",
       "zipcodes": "CAP",
+      "creator": "Creatore",
       "closes": "Chiude"
     },
     "noCloseDate": "Nessuna data di chiusura",
@@ -519,7 +520,10 @@
     },
     "manageCreators": {
       "heading": "Gestisci Creatori",
-      "body": "Gestisci gli account dei creatori"
+      "body": "Gestisci gli account dei creatori",
+      "pinnedFirst": "{email} è mostrato per primo, dalla tua ricerca di sondaggi.",
+      "pinnedMissing": "{email} non è un creatore nella tua area.",
+      "unpin": "Mostra l'elenco normale"
     },
     "managePolls": {
       "heading": "Gestisci Sondaggi",

@@ -151,6 +151,7 @@
       "title": "Tittel",
       "type": "Type",
       "zipcodes": "Postnumre",
+      "creator": "Oppretter",
       "closes": "Stenger"
     },
     "noCloseDate": "Ingen sluttdato",
@@ -562,7 +563,10 @@
       "reasonHintSelf": "Påkrevd når du slår av din egen tilgang, f.eks. «På ferie til 3. nov.». Andre admins i denne staten og supers ser den.",
       "reasonHintOther": "Valgfritt. Andre admins i denne staten og supers ser den.",
       "reasonConfirm": "Slå av",
-      "disabledBy": "av {email} den {date}"
+      "disabledBy": "av {email} den {date}",
+      "pinnedFirst": "Viser {email} først, fra avstemningssøket ditt.",
+      "pinnedMissing": "{email} er ikke oppretter i ditt område.",
+      "unpin": "Vis vanlig liste"
     },
     "managePolls": {
       "heading": "Administrer avstemninger",

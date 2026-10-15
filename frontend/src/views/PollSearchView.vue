@@ -19,6 +19,8 @@ interface PollSearchResult {
   closeDate: string | null
   zipcodes: ZipState[]
   regionLabel: string | null
+  /** Admins and supers only (the server sends null to everyone else). */
+  creatorEmail?: string | null
 }
 interface SearchSuggestions {
   titles: string[]
@@ -315,7 +317,7 @@ const error = ref<string | null>(null)
 
 // ---------- column sorting (client-side, on top of the backend's
 // active-first ordering — picking a column overrides that order) ----------
-type SortKey = 'title' | 'type' | 'zipcode' | 'closeDate'
+type SortKey = 'title' | 'type' | 'zipcode' | 'creator' | 'closeDate'
 const sortKey = ref<SortKey | null>(null)
 const sortDir = ref<'asc' | 'desc'>('asc')
 function toggleSort(k: SortKey) {
@@ -329,11 +331,17 @@ function sortValue(r: PollSearchResult, k: SortKey): string {
     // The zipcodes payload is already sorted by code from the backend,
     // so taking the first item gives a stable alphanumeric anchor.
     case 'zipcode': return r.zipcodes[0]?.code ?? ''
+    case 'creator': return (r.creatorEmail ?? '').toLowerCase()
     // ISO timestamps are lex-sortable. Null close-date = "never closes",
     // sorts after every real date in ascending order.
     case 'closeDate': return r.closeDate ?? '￿'
   }
 }
+// The Creator column: only when the server sent creator emails (admins and supers).
+const showCreator = computed(() => results.value.some(r => r.creatorEmail))
+/** The first 5 letters of the email, then "...". */
+const shortEmail = (email: string) => email.length > 5 ? `${email.slice(0, 5)}...` : email
+
 const sortedResults = computed<PollSearchResult[]>(() => {
   if (sortKey.value === null) return results.value
   const dir = sortDir.value === 'asc' ? 1 : -1
@@ -718,6 +726,7 @@ async function search() {
           <th @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.title') }}{{ sortIndicator('title') }}</th>
           <th @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.type') }}{{ sortIndicator('type') }}</th>
           <th @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.zipcodes') }}{{ sortIndicator('zipcode') }}</th>
+          <th v-if="showCreator" @click="toggleSort('creator')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.creator') }}{{ sortIndicator('creator') }}</th>
           <th @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.closes') }}{{ sortIndicator('closeDate') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
         </tr>
@@ -800,6 +809,14 @@ async function search() {
                 </div>
               </span>
             </template>
+          </td>
+          <td v-if="showCreator" class="border-b border-slate-100 p-2" data-test="creator">
+            <router-link
+              v-if="r.creatorEmail"
+              :to="{ path: '/admin/manage-creators', query: { creator: r.creatorEmail } }"
+              :title="r.creatorEmail"
+              class="text-slate-800 underline"
+            >{{ shortEmail(r.creatorEmail) }}</router-link>
           </td>
           <td class="border-b border-slate-100 p-2">
             {{ r.closeDate ? new Date(r.closeDate).toLocaleString() : $t('search.noCloseDate') }}

@@ -151,6 +151,7 @@
       "title": "Titre",
       "type": "Type",
       "zipcodes": "Codes postaux",
+      "creator": "Créateur",
       "closes": "Clôture"
     },
     "noCloseDate": "Aucune date de clôture",
@@ -562,7 +563,10 @@
       "reasonHintSelf": "Obligatoire pour désactiver votre propre accès, par ex. « En vacances jusqu'au 3 nov. ». Les autres admins de cet État et les supers le verront.",
       "reasonHintOther": "Facultatif. Les autres admins de cet État et les supers le verront.",
       "reasonConfirm": "Désactiver",
-      "disabledBy": "par {email} le {date}"
+      "disabledBy": "par {email} le {date}",
+      "pinnedFirst": "{email} est affiché en premier, depuis votre recherche de sondages.",
+      "pinnedMissing": "{email} n'est pas créateur dans votre zone.",
+      "unpin": "Afficher la liste habituelle"
     },
     "managePolls": {
       "heading": "Gérer les Sondages",

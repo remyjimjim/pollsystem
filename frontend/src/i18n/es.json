@@ -151,6 +151,7 @@
       "title": "Título",
       "type": "Tipo",
       "zipcodes": "Códigos postales",
+      "creator": "Creador",
       "closes": "Cierra"
     },
     "noCloseDate": "Sin fecha de cierre",
@@ -519,7 +520,10 @@
     },
     "manageCreators": {
       "heading": "Gestionar Creadores",
-      "body": "Gestionar las cuentas de creador"
+      "body": "Gestionar las cuentas de creador",
+      "pinnedFirst": "Se muestra primero a {email}, desde tu búsqueda de encuestas.",
+      "pinnedMissing": "{email} no es creador en tu zona.",
+      "unpin": "Ver la lista habitual"
     },
     "managePolls": {
       "heading": "Gestionar Encuestas",

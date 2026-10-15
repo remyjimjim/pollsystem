@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 import InfoPopover from '@/components/InfoPopover.vue'
 import PurviewSetter from '@/components/PurviewSetter.vue'
 import { useAuthStore } from '@/stores/auth'
@@ -56,6 +57,18 @@ const rows = ref<CreatorRow[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
 const emailFilter = ref('')
+
+// Arriving from a poll search's Creator link (?creator=<email>): that creator
+// is shown first and highlighted, everyone else below in the chosen order.
+const route = useRoute()
+const router = useRouter()
+const pinned = ref<string | null>(typeof route.query.creator === 'string' ? route.query.creator : null)
+const isPinned = (r: CreatorRow) => pinned.value !== null && r.email.toLowerCase() === pinned.value.toLowerCase()
+const pinnedFound = computed(() => rows.value.some(isPinned))
+function unpin() {
+  pinned.value = null
+  router.replace({ query: {} })
+}
 const busyIds = ref(new Set<number>())
 
 async function load() {
@@ -110,7 +123,9 @@ function compareRows(a: CreatorRow, b: CreatorRow): number {
 const visibleRows = computed(() => {
   const f = emailFilter.value.trim().toLowerCase()
   const shown = f ? rows.value.filter(r => r.email.toLowerCase().includes(f)) : rows.value
-  return [...shown].sort((a, b) => compareRows(a, b) || text(a.email, b.email))
+  const sorted = [...shown].sort((a, b) => compareRows(a, b) || text(a.email, b.email))
+  const first = sorted.findIndex(isPinned)
+  return first > 0 ? [sorted[first], ...sorted.slice(0, first), ...sorted.slice(first + 1)] : sorted
 })
 
 // ---------- purview display ----------
@@ -285,6 +300,14 @@ onMounted(() => {
       />
       <span class="text-xs text-slate-500">{{ $t('admin.manageCreators.count', { n: visibleRows.length }, visibleRows.length) }}</span>
     </div>
+    <p
+      v-if="pinned && !loading"
+      data-test="pinned-note"
+      class="mb-3 flex flex-wrap items-center gap-2 rounded border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-slate-700"
+    >
+      {{ pinnedFound ? $t('admin.manageCreators.pinnedFirst', { email: pinned }) : $t('admin.manageCreators.pinnedMissing', { email: pinned }) }}
+      <button type="button" class="text-slate-800 underline" data-test="unpin" @click="unpin">{{ $t('admin.manageCreators.unpin') }}</button>
+    </p>
 
     <p v-if="error" class="mb-3 rounded bg-red-50 p-2 text-sm text-red-700">{{ error }}</p>
     <p v-if="loading" class="text-sm text-slate-500">{{ $t('common.loading') }}</p>
@@ -315,7 +338,13 @@ onMounted(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="r in visibleRows" :key="r.userId" data-test="creator-row">
+          <tr
+            v-for="r in visibleRows"
+            :key="r.userId"
+            data-test="creator-row"
+            :class="isPinned(r) ? 'bg-amber-50' : ''"
+            :aria-current="isPinned(r) ? 'true' : undefined"
+          >
             <td class="border-b border-slate-100 p-2">
               {{ r.email }}
               <span v-if="r.isYou" class="ml-1 text-xs text-slate-500">{{ $t('admin.manageCreators.you') }}</span>

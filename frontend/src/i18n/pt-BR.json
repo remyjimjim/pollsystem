@@ -151,6 +151,7 @@
       "title": "Título",
       "type": "Tipo",
       "zipcodes": "CEPs",
+      "creator": "Criador",
       "closes": "Encerra"
     },
     "noCloseDate": "Sem data de encerramento",
@@ -519,7 +520,10 @@
     },
     "manageCreators": {
       "heading": "Gerenciar Criadores",
-      "body": "Gerenciar contas de criadores"
+      "body": "Gerenciar contas de criadores",
+      "pinnedFirst": "Mostrando {email} primeiro, a partir da sua busca de enquetes.",
+      "pinnedMissing": "{email} não é criador na sua área.",
+      "unpin": "Mostrar a lista normal"
     },
     "managePolls": {
       "heading": "Gerenciar Enquetes",

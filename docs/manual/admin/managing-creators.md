@@ -18,6 +18,17 @@ Click a column name to sort by it, and click again to reverse:
 
 The ⓘ next to a column name explains that column.
 
+### From a poll search
+
+On **Find polls**, admins and supers see a **Creator** column with the start of
+each poll creator's email. Hover it for the full email. Click it to open Manage
+Creators with that creator **first and highlighted**, and everyone else below.
+**Show the usual list** puts them back in order. If they aren't a creator in
+your area, the page says so.
+
+Only admins and supers see creators' emails in search results. For everyone
+else, polls don't show who made them.
+
 | Column    | Shows                                                                                         |
 | --------- | --------------------------------------------------------------------------------------------- |
 | Email     | The creator. **(you)** marks your own row.                                                    |

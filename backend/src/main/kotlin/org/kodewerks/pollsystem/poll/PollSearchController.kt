@@ -22,7 +22,8 @@ data class PollSearchResult(
     val id: Long,
     val type: String,
     val title: String,
-    val creatorEmail: String,
+    /** Admins and supers only (null for everyone else): it links to Manage Creators. */
+    val creatorEmail: String?,
     val closeDate: Instant?,
     val zipcodes: List<ZipState>,
     /** Human-readable purview (e.g. "California", "Nationwide"); shown when a poll has no single zip. */
@@ -66,9 +67,17 @@ class PollSearchController(
         @RequestParam(required = false) creatorEmail: String?,
         @RequestParam(required = false) candidateName: String?,
         @RequestParam(required = false) type: String?,
-        @RequestParam(required = false, defaultValue = "false") includeClosed: Boolean
+        @RequestParam(required = false, defaultValue = "false") includeClosed: Boolean,
+        @org.springframework.security.core.annotation.AuthenticationPrincipal principal: org.kodewerks.pollsystem.security.AppUserDetails? = null
     ): List<PollSearchResult> {
         val now = Instant.now()
+        // Creator emails are for admins and supers: everyone else neither sees
+        // them nor can filter by one (which would reveal who created what).
+        val staff = principal?.user?.access.let {
+            it == org.kodewerks.pollsystem.model.AccessLevel.ADMIN || it == org.kodewerks.pollsystem.model.AccessLevel.SUPER
+        }
+        val creatorEmail = if (staff) creatorEmail else null
+        fun shownEmail(email: String) = if (staff) email else null
         val results = mutableListOf<PollSearchResult>()
 
         // Geo filter resolves to a set of acceptable zipcodes:
@@ -155,7 +164,7 @@ class PollSearchController(
                     id = q.id,
                     type = "Questionnaire",
                     title = q.title,
-                    creatorEmail = q.creator.email,
+                    creatorEmail = shownEmail(q.creator.email),
                     closeDate = q.closeDate,
                     zipcodes = zipStates,
                     regionLabel = purviewService.regionLabel(qRows)
@@ -178,7 +187,7 @@ class PollSearchController(
                     id = e.id,
                     type = "Election",
                     title = e.title,
-                    creatorEmail = e.creator.email,
+                    creatorEmail = shownEmail(e.creator.email),
                     closeDate = e.closeDate,
                     zipcodes = listOfNotNull(e.zipcode?.let { ZipState(it, lookupState(it)) }),
                     regionLabel = purviewService.regionLabel(purviewService.purviewOf(PollKind.ELECTION, e.id))
@@ -200,7 +209,7 @@ class PollSearchController(
                     id = bm.id,
                     type = "BallotMeasure",
                     title = bm.title,
-                    creatorEmail = bm.creator.email,
+                    creatorEmail = shownEmail(bm.creator.email),
                     closeDate = bm.closeDate,
                     zipcodes = listOfNotNull(zip?.let { ZipState(it, lookupState(it)) }),
                     regionLabel = purviewService.regionLabel(purviewService.purviewOf(PollKind.ELECTION, bm.election.id))

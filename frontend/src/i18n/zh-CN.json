@@ -151,6 +151,7 @@
       "title": "标题",
       "type": "类型",
       "zipcodes": "邮政编码",
+      "creator": "创建者",
       "closes": "截止"
     },
     "noCloseDate": "无截止日期",
@@ -519,7 +520,10 @@
     },
     "manageCreators": {
       "heading": "管理创建者",
-      "body": "管理创建者账户"
+      "body": "管理创建者账户",
+      "pinnedFirst": "来自投票搜索：{email} 显示在最前。",
+      "pinnedMissing": "{email} 不是你所在区域的创建者。",
+      "unpin": "显示普通列表"
     },
     "managePolls": {
       "heading": "管理投票",

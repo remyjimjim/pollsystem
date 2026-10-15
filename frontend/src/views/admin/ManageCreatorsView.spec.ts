@@ -47,6 +47,11 @@ beforeEach(() => {
 })
 afterEach(() => vi.resetAllMocks())
 
+
+const routeQuery: Record<string, string> = {}
+const replace = vi.fn()
+vi.mock('vue-router', () => ({ useRoute: () => ({ query: routeQuery }), useRouter: () => ({ replace }) }))
+
 async function mountView() {
   const w = mount(ManageCreatorsView, {
     attachTo: document.body,
@@ -206,6 +211,37 @@ describe('ManageCreatorsView', () => {
     expect(w.find('[data-test="sort-enabled"]').text()).toContain('▼')
     expect(w.find('th[aria-sort="descending"]').exists()).toBe(true)
     w.unmount()
+  })
+
+  it('a Creator link from poll search shows that creator first, highlighted', async () => {
+    routeQuery.creator = 'NAT@test.local'                 // case doesn't matter
+    try {
+      const w = await mountView()
+      const rows = w.findAll('[data-test="creator-row"]')
+      expect(rows.map(r => r.text().split('@')[0].trim())).toEqual(['nat', 'alice', 'bob'])
+      expect(rows[0].classes()).toContain('bg-amber-50')
+      expect(rows[0].attributes('aria-current')).toBe('true')
+      expect(w.find('[data-test="pinned-note"]').text()).toContain('NAT@test.local')
+
+      await w.find('[data-test="unpin"]').trigger('click')
+      expect(w.findAll('[data-test="creator-row"]').map(r => r.text().split('@')[0].trim())).toEqual(['alice', 'bob', 'nat'])
+      expect(replace).toHaveBeenCalledWith({ query: {} })
+      w.unmount()
+    } finally {
+      delete routeQuery.creator
+    }
+  })
+
+  it("says so when the linked creator isn't in the list", async () => {
+    routeQuery.creator = 'someone@else.test'
+    try {
+      const w = await mountView()
+      expect(w.find('[data-test="pinned-note"]').text()).toContain('someone@else.test')
+      expect(w.findAll('[data-test="creator-row"]')).toHaveLength(3)
+      w.unmount()
+    } finally {
+      delete routeQuery.creator
+    }
   })
 })
 
