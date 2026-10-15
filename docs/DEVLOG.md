@@ -61,6 +61,56 @@ logged.
 
 ---
 
+## 2026-10-15 — Ballot measures voted on with their election
+
+**Requested:**
+
+> … I think we need to add another column named 'For Election' and then under
+> there would be a partial name of the election which go to the full name on
+> hover and if the user wants to vote on that ballot measure they would click
+> the 'Vote' link which would lead them to the election which have the ballot
+> measure appended to the bottom of the election form. Also, if a creator is
+> working on an Election poll … the ballot measures should show up on the
+> bottom of the form and the election can't be published until the ballot
+> measures have been published. … there should be an 'edit' link/button next
+> to the title of the ballot meassure … Before going to ballot measure screen
+> the app should ask the creator if they wish to 'Save' the election as draft.
+
+then:
+
+> 1a, 2a, 3a, 4a, 5a, 6a
+
+**Decision:**
+
+- One Submit for the whole ballot, with measures optional.
+- A measure's own page redirects to its election.
+- Only published, still-open measures appear on the ballot.
+- Publishing the election publishes its draft measures. This replaces "can't
+  publish until the measures are published", which would have made measures
+  votable before their election.
+- Measures added later are published on their own.
+- "Save first?" is asked only when there are unsaved changes.
+
+**Changed:**
+
+- `407bcd2`: a measure can't be published under a draft election. Publishing the
+  election checks every draft measure first, then publishes them all.
+- An election's measures are listed for its edit form (all) and its ballot
+  (open ones). Search carries each measure's election.
+- Search has a **For Election** column, and a measure's Vote opens its
+  election. The measure's page redirects there.
+- The election ballot shows the measures, and one Submit sends everything.
+- The edit form lists the measures with Edit/View, asks "Save first?", and
+  Publish lists what goes live. The measure form explains it's published with
+  its election.
+- Help, 9 languages, and tests are updated: backend 324/324, frontend 122/122,
+  e2e 13/13 (`user-answers-election-and-measure` now follows the one-ballot
+  flow).
+
+**Commit:** `407bcd2`
+
+---
+
 ## 2026-10-15 — Tag `release-0` (decision)
 
 **Requested:**
