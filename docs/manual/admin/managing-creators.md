@@ -10,6 +10,14 @@ order: 2
 included. You're in the list too, marked **(you)**. Filter by email with the
 box at the top.
 
+Click a column name to sort by it, and click again to reverse:
+- **Email** and **Purview** sort alphabetically;
+- **Polls** sorts by number;
+- **Last edit** sorts by date, with creators who have never edited always last;
+- **Enabled** puts Yes first.
+
+The ⓘ next to a column name explains that column.
+
 | Column    | Shows                                                                                         |
 | --------- | --------------------------------------------------------------------------------------------- |
 | Email     | The creator. **(you)** marks your own row.                                                    |

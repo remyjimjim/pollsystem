@@ -188,4 +188,24 @@ describe('ManageCreatorsView', () => {
     expect(note).toContain('by me@test.local')
     w.unmount()
   })
+
+  it('sorts by any column, and clicking again reverses', async () => {
+    const w = await mountView()
+    const order = () => w.findAll('[data-test="creator-row"]').map(r => r.text().split('@')[0].trim())
+    const sortBy = async (k: string) => { await w.find(`[data-test="sort-${k}"]`).trigger('click'); await flushPromises() }
+
+    expect(order()).toEqual(['alice', 'bob', 'nat'])            // default: email A→Z
+    await sortBy('email');    expect(order()).toEqual(['nat', 'bob', 'alice'])
+    await sortBy('purview');  expect(order()).toEqual(['bob', 'alice', 'nat'])   // "1 zip", "CA · 2 counties", "Nationwide"
+    await sortBy('polls');    expect(order()).toEqual(['nat', 'bob', 'alice'])   // 0, 1, 3
+    await sortBy('polls');    expect(order()).toEqual(['alice', 'bob', 'nat'])
+    await sortBy('lastEdit'); expect(order()).toEqual(['alice', 'bob', 'nat'])   // never-edited last…
+    await sortBy('lastEdit'); expect(order()).toEqual(['alice', 'bob', 'nat'])   // …in both directions
+    await sortBy('enabled');  expect(order()).toEqual(['alice', 'nat', 'bob'])   // Yes first
+    await sortBy('enabled');  expect(order()).toEqual(['bob', 'alice', 'nat'])
+    expect(w.find('[data-test="sort-enabled"]').text()).toContain('▼')
+    expect(w.find('th[aria-sort="descending"]').exists()).toBe(true)
+    w.unmount()
+  })
 })
+

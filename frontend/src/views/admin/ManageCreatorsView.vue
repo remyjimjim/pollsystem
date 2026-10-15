@@ -74,9 +74,43 @@ function replaceRow(updated: CreatorRow) {
   if (editRow.value?.userId === updated.userId) editRow.value = updated
 }
 
+// ---------- sorting ----------
+// Click a column name to sort by it; click again to reverse. Email / Purview
+// sort alphabetically (numbers inside compare as numbers), Polls by number,
+// Last edit by date (never-edited always last), Enabled by value (Yes first
+// ascending). Ties fall back to email.
+type SortKey = 'email' | 'purview' | 'polls' | 'lastEdit' | 'enabled'
+const sortKey = ref<SortKey>('email')
+const sortDir = ref<'asc' | 'desc'>('asc')
+function toggleSort(k: SortKey) {
+  if (sortKey.value === k) sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  else { sortKey.value = k; sortDir.value = 'asc' }
+}
+function sortIndicator(k: SortKey): string {
+  return sortKey.value !== k ? '' : sortDir.value === 'asc' ? ' ▲' : ' ▼'
+}
+function ariaSort(k: SortKey): 'ascending' | 'descending' | 'none' {
+  return sortKey.value !== k ? 'none' : sortDir.value === 'asc' ? 'ascending' : 'descending'
+}
+const text = (a: string, b: string) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
+function compareRows(a: CreatorRow, b: CreatorRow): number {
+  const dir = sortDir.value === 'asc' ? 1 : -1
+  switch (sortKey.value) {
+    case 'purview': return dir * text(purviewSummary(a), purviewSummary(b))
+    case 'polls': return dir * (a.pollCount - b.pollCount)
+    case 'enabled': return dir * (Number(b.enabled) - Number(a.enabled))
+    case 'lastEdit': {
+      if (!a.lastEditedAt || !b.lastEditedAt) return (a.lastEditedAt ? -1 : 0) + (b.lastEditedAt ? 1 : 0)
+      return dir * (new Date(a.lastEditedAt).getTime() - new Date(b.lastEditedAt).getTime())
+    }
+    default: return dir * text(a.email, b.email)
+  }
+}
+
 const visibleRows = computed(() => {
   const f = emailFilter.value.trim().toLowerCase()
-  return f ? rows.value.filter(r => r.email.toLowerCase().includes(f)) : rows.value
+  const shown = f ? rows.value.filter(r => r.email.toLowerCase().includes(f)) : rows.value
+  return [...shown].sort((a, b) => compareRows(a, b) || text(a.email, b.email))
 })
 
 // ---------- purview display ----------
@@ -260,21 +294,21 @@ onMounted(() => {
       <table class="w-full border-collapse text-sm">
         <thead>
           <tr class="bg-slate-50 text-left">
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.manageCreators.colEmail') }}</th>
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
-              {{ $t('admin.manageCreators.colPurview') }}
+            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('email')"><button type="button" class="font-semibold hover:underline" data-test="sort-email" @click="toggleSort('email')">{{ $t('admin.manageCreators.colEmail') }}{{ sortIndicator('email') }}</button></th>
+            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('purview')">
+              <button type="button" class="font-semibold hover:underline" data-test="sort-purview" @click="toggleSort('purview')">{{ $t('admin.manageCreators.colPurview') }}{{ sortIndicator('purview') }}</button>
               <InfoPopover :label="$t('admin.manageCreators.colPurview')">{{ $t('help.adminManageCreators.purview') }}</InfoPopover>
             </th>
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
-              {{ $t('admin.manageCreators.colPolls') }}
+            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('polls')">
+              <button type="button" class="font-semibold hover:underline" data-test="sort-polls" @click="toggleSort('polls')">{{ $t('admin.manageCreators.colPolls') }}{{ sortIndicator('polls') }}</button>
               <InfoPopover :label="$t('admin.manageCreators.colPolls')">{{ $t('help.adminManageCreators.polls') }}</InfoPopover>
             </th>
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
-              {{ $t('admin.manageCreators.colLastEdit') }}
+            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('lastEdit')">
+              <button type="button" class="font-semibold hover:underline" data-test="sort-lastEdit" @click="toggleSort('lastEdit')">{{ $t('admin.manageCreators.colLastEdit') }}{{ sortIndicator('lastEdit') }}</button>
               <InfoPopover :label="$t('admin.manageCreators.colLastEdit')">{{ $t('help.adminManageCreators.lastEdit') }}</InfoPopover>
             </th>
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">
-              {{ $t('admin.manageCreators.colEnabled') }}
+            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('enabled')">
+              <button type="button" class="font-semibold hover:underline" data-test="sort-enabled" @click="toggleSort('enabled')">{{ $t('admin.manageCreators.colEnabled') }}{{ sortIndicator('enabled') }}</button>
               <InfoPopover :label="$t('admin.manageCreators.colEnabled')" align="right">{{ $t('help.adminManageCreators.enabled') }}</InfoPopover>
             </th>
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.manageCreators.colEdit') }}</th>
