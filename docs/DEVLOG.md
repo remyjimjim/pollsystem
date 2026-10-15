@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-15 — Sortable columns on Manage Creators
+
+**Requested:**
+
+> Can we make the manage creators table sortable i.e., Email = alphanumeric,
+> Purview = alphanumeric, Polls = numeric, Last Edit = date, Enabled = value?
+
+**Changed:**
+
+- Each column name sorts the table, and clicking again reverses it; the ⓘ
+  still just explains the column.
+  - Email and Purview sort alphabetically, with numbers inside compared as
+    numbers.
+  - Polls sorts by number.
+  - Last edit sorts by date, with never-edited creators always last.
+  - Enabled puts Yes first.
+- ▲/▼ shows the order, and the headers carry `aria-sort` for screen readers.
+- The help page is updated.
+- Frontend 103/103, and the admin e2e specs pass.
+
+**Commit:** `cbde03b`
+
+---
+
 ## 2026-10-15 — An Emails checkbox per poll; e2e cleanup keeps real users' requests
 
 **Requested:**
