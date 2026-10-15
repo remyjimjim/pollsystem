@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-10-15 — An Emails checkbox per poll; e2e cleanup keeps real users' requests
+
+**Requested:**
+
+> Excellent work. One request, can we have a checkbox next to ""Your poll …
+> has 10 responses: " email in the creator dashboard where if it's checked then
+> the emails continue to get sent other wise the emails are paused?
+
+then:
+
+> 1(a), 2(a), 3(a)
+
+**Decision:**
+
+- One switch per poll, covering the two existing emails.
+- Emails missed while paused are skipped, not caught up.
+
+**Changed:**
+
+- `5a9fe4c`: `V32` adds `poll_email_mutes`. While paused, a milestone is recorded
+  as handled but not sent. A new owner-only `PUT …/emails` endpoint switches
+  it, and the dashboard gets an **Emails** column, in 9 languages. The help
+  page is updated. Backend 308/308, frontend 102/102.
+- `985d6da`, found while testing: the e2e cleanup deleted every request a test
+  user had processed. That included `admin@local.test`'s real admin request,
+  approved by a seeded test super, which its admin access still references.
+  Now only requests made by test users are deleted; on anyone else's, the test
+  user is just cleared from the request. A regression test is added. Backend
+  309/309, e2e 13/13.
+
+**Commits:** `5a9fe4c`, `985d6da`
+
+---
+
 ## 2026-10-14 — Creator reports, phase 3: CSV, print, milestone emails
 
 **Requested:**
