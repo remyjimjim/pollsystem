@@ -178,6 +178,7 @@
       "type": "Type",
       "zipcodes": "Zipcodes",
       "creator": "Creator",
+      "forElection": "For Election",
       "closes": "Closes"
     },
     "noCloseDate": "No close date",
@@ -209,7 +210,9 @@
     "validation": {
       "yesNoFor": "Please answer Yes or No for: {name}",
       "selectionFor": "Please make a selection for: {office}"
-    }
+    },
+    "measuresHeading": "Ballot measures",
+    "measuresOptional": "Optional: leave a measure blank to skip it."
   },
   "questionnaire": {
     "closesLabel": "Closes",
@@ -425,14 +428,33 @@
       "candidateAffiliation": "Affiliation",
       "candidateOffice": "Office (e.g. Mayor)",
       "addCandidate": "+ Add candidate",
-      "removeCandidate": "Remove candidate"
+      "removeCandidate": "Remove candidate",
+      "measuresHeading": "Ballot measures",
+      "measuresHelp": "Draft measures go live when you publish this election. To add one, create a Ballot measure poll and pick this election.",
+      "noMeasures": "No ballot measures yet.",
+      "editMeasure": "Edit",
+      "viewMeasure": "View results",
+      "saveFirstTitle": "Save the election first?",
+      "saveFirstBody": "You have unsaved changes to this election. Save them as a draft before editing “{title}”?",
+      "goWithoutSaving": "Go without saving",
+      "saveAndGo": "Save and go",
+      "publishWithMeasures": "Publishing also publishes this ballot measure: | Publishing also publishes these {n} ballot measures:",
+      "publishAll": "Publish all",
+      "measureStatus": {
+        "DRAFT": "Draft",
+        "PUBLISHED": "Published",
+        "CLOSED": "Closed",
+        "ARCHIVED": "Archived"
+      }
     },
     "ballotMeasure": {
       "parentElection": "Parent Election",
       "selectElection": "Select an Election",
       "noElections": "You haven't created any Elections yet. Create one first, then attach a measure to it.",
       "effectiveDate": "Effective date",
-      "electionsLoadFailed": "Failed to load your elections"
+      "electionsLoadFailed": "Failed to load your elections",
+      "goesLiveWithElection": "This measure goes live when its election, “{title}”, is published.",
+      "backToElection": "Back to the election"
     }
   },
   "zipSetter": {

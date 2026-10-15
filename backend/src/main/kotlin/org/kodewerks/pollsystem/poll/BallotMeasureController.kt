@@ -66,7 +66,32 @@ data class BallotMeasureDto(
 
 @RestController
 @RequestMapping("/api/polls/ballot-measures")
-class BallotMeasureController(private val service: BallotMeasureService) {
+class BallotMeasureController(
+    private val service: BallotMeasureService,
+    private val measures: org.kodewerks.pollsystem.repository.BallotMeasureRepository,
+    private val blocks: PollBlockService
+) {
+
+    /**
+     * An election's ballot measures. Its creator gets all of them (the edit
+     * form lists drafts too); everyone else only the published, still-open
+     * ones not switched off where they live (the election's voting page).
+     */
+    @GetMapping
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    fun forElection(
+        @AuthenticationPrincipal principal: AppUserDetails,
+        @RequestParam electionId: Long
+    ): List<BallotMeasureDto> {
+        val all = measures.findByElectionId(electionId).sortedBy { it.id }
+        if (all.isNotEmpty() && all.first().election.creator.id == principal.user.id) return all.map(BallotMeasureDto::from)
+        val now = Instant.now()
+        return all.filter {
+            it.status == PollStatus.PUBLISHED &&
+                (it.closeDate == null || it.closeDate.isAfter(now)) &&
+                !blocks.isBlockedFor(org.kodewerks.pollsystem.model.PollKind.BALLOT_MEASURE, it.id, principal.user.zipcode)
+        }.map(BallotMeasureDto::from)
+    }
 
     @PostMapping
     fun saveDraft(

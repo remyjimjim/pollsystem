@@ -11,8 +11,14 @@ const CANDIDATES = [
   { id: 12, name: 'Jordan Reyes', affiliation: 'Civic Party', officeName: 'Mayor' },
 ]
 
-function mountWith(widget: string) {
+const MEASURES = [{ id: 31, title: 'Free Money Mondays', summary: 'Free money?', effectiveDate: '2026-12-01', closeDate: null }]
+
+function mountWith(widget: string, opts: { measures?: typeof MEASURES; focusMeasure?: number } = {}) {
   vi.mocked(axios.get).mockImplementation(async (url: string) => {
+    if (url === '/api/polls/ballot-measures') return { data: opts.measures ?? [] }
+    if (url.startsWith('/api/polls/ballot-measures/') && url.endsWith('/responses/me')) {
+      return { data: { measureId: 31, hasResponse: false, response: null, comment: null, dateSubmitted: null } }
+    }
     if (url.endsWith('/responses/me')) {
       return { data: { electionId: 7, hasResponses: false, firstSubmittedAt: null, responses: [] } }
     }
@@ -23,7 +29,7 @@ function mountWith(widget: string) {
       },
     }
   })
-  return mount(ElectionResponseForm, { props: { id: 7 }, attachTo: document.body })
+  return mount(ElectionResponseForm, { props: { id: 7, focusMeasure: opts.focusMeasure ?? null }, attachTo: document.body })
 }
 
 afterEach(() => {
@@ -99,3 +105,32 @@ describe('ElectionResponseForm: public comments', () => {
     w.unmount()
   })
 })
+
+describe('ElectionResponseForm: ballot measures on the ballot', () => {
+  it('lists the measures; an answered one is submitted with the candidates, a blank one is skipped', async () => {
+    vi.mocked(axios.post).mockResolvedValue({ data: {} })
+    const two = [...MEASURES, { id: 32, title: 'Nap Time Act', summary: 'Naps?', effectiveDate: '2026-12-01', closeDate: null }]
+    const w = mountWith('selectOneRadio', { measures: two })
+    await flushPromises()
+    expect(w.findAll('[data-test="ballot-measure"]').map(f => f.find('legend').text())).toEqual(['Free Money Mondays', 'Nap Time Act'])
+
+    await w.find('input#candidate-11').setValue(true)
+    await w.find('input#measure-31-yes').setValue(true)
+    await w.find('input#comment-m-31').setValue('Yes please')
+    await w.find('button').trigger('click')
+    await flushPromises()
+
+    const posts = vi.mocked(axios.post).mock.calls.map(c => c[0])
+    expect(posts).toEqual(['/api/polls/elections/7/responses', '/api/polls/ballot-measures/31/responses'])
+    expect(vi.mocked(axios.post).mock.calls[1][1]).toEqual({ response: true, comment: 'Yes please', commentPublic: false })
+    w.unmount()
+  })
+
+  it('arriving from a measure\'s Vote link highlights that measure', async () => {
+    const w = mountWith('selectOneRadio', { measures: MEASURES, focusMeasure: 31 })
+    await flushPromises()
+    expect(w.find('#measure-31').classes()).toContain('border-sky-400')
+    w.unmount()
+  })
+})
+

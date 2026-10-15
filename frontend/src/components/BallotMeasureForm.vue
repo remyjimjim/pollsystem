@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -70,6 +70,10 @@ async function loadElections() {
     loadingElections.value = false
   }
 }
+
+// Under a draft election, a measure isn't published on its own: it goes live
+// when the election is published (decided 2026-10-15).
+const draftElection = computed(() => elections.value.find(e => e.id === form.electionId && e.status === 'DRAFT') ?? null)
 
 function payload() {
   return {
@@ -247,6 +251,7 @@ onMounted(loadElections)
         {{ $t('form.cancel') }}
       </button>
       <button
+        v-if="!draftElection"
         type="button"
         @click="publish(false)"
         :disabled="submitting"
@@ -254,6 +259,19 @@ onMounted(loadElections)
       >
         {{ $t('form.publish') }}
       </button>
+      <button
+        v-else
+        type="button"
+        data-test="back-to-election"
+        @click="router.push(`/creator/polls/election/${draftElection.id}/edit`)"
+        :disabled="submitting"
+        class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {{ $t('form.ballotMeasure.backToElection') }}
+      </button>
     </div>
+    <p v-if="draftElection" class="m-0 text-xs text-slate-500" data-test="goes-live-with-election">
+      {{ $t('form.ballotMeasure.goesLiveWithElection', { title: draftElection.title }) }}
+    </p>
   </div>
 </template>

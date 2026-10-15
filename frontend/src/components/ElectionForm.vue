@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -72,6 +72,52 @@ const purview = ref<Purview>(
 )
 
 const draftId = ref<number | null>(props.initial?.id ?? null)
+
+// ---------- its ballot measures (decided 2026-10-15) ----------
+// Listed at the bottom once the election is saved. Draft ones go live with
+// the election when it's published; Edit leaves this form, so it offers to
+// save unsaved changes first.
+interface MeasureRow { id: number; title: string; status: string }
+const measures = ref<MeasureRow[]>([])
+const draftMeasures = computed(() => measures.value.filter(m => m.status === 'DRAFT'))
+async function loadMeasures() {
+  if (draftId.value == null) return
+  try {
+    measures.value = (await axios.get<MeasureRow[]>('/api/polls/ballot-measures', { params: { electionId: draftId.value } })).data ?? []
+  } catch {
+    measures.value = []
+  }
+}
+onMounted(loadMeasures)
+
+// Unsaved changes = the form differs from what was last saved (or loaded).
+const snapshot = () => { const p = payload(); return JSON.stringify({ ...p, regionIds: [...p.regionIds].sort((x, y) => x - y) }) }
+const savedState = ref('')
+onMounted(() => { savedState.value = snapshot() })
+const dirty = computed(() => snapshot() !== savedState.value)
+
+const leaveFor = ref<MeasureRow | null>(null)
+function editMeasure(m: MeasureRow) {
+  if (!dirty.value) { router.push(`/creator/polls/ballot-measure/${m.id}/edit`); return }
+  leaveFor.value = m
+}
+async function leave(save: boolean) {
+  const m = leaveFor.value
+  if (!m) return
+  if (save) {
+    await saveDraft()
+    if (error.value) { leaveFor.value = null; return }
+  }
+  leaveFor.value = null
+  router.push(`/creator/polls/ballot-measure/${m.id}/edit`)
+}
+
+// Publishing with draft measures: confirm, listing what goes live with it.
+const publishAsk = ref(false)
+function askPublish() {
+  if (draftMeasures.value.length) publishAsk.value = true
+  else publish(false)
+}
 const submitting = ref(false)
 const error = ref<string | null>(null)
 const message = ref<string | null>(null)
@@ -130,6 +176,7 @@ async function saveDraft() {
       await axios.put(`/api/polls/elections/${draftId.value}`, payload())
     }
     message.value = t('form.draftSaved')
+    savedState.value = snapshot()
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('form.saveFailed')
   } finally {
@@ -245,6 +292,55 @@ async function publish(confirmed = false) {
       >{{ $t('form.election.addCandidate') }}</button>
     </fieldset>
 
+    <section v-if="draftId != null" class="rounded-md border border-slate-200 p-4" data-test="election-measures">
+      <h3 class="m-0 mb-1 text-sm font-semibold text-slate-700">{{ $t('form.election.measuresHeading') }}</h3>
+      <p class="m-0 mb-2 text-xs text-slate-500">{{ $t('form.election.measuresHelp') }}</p>
+      <p v-if="measures.length === 0" class="m-0 text-sm text-slate-500">{{ $t('form.election.noMeasures') }}</p>
+      <ul v-else class="m-0 list-none p-0">
+        <li v-for="m in measures" :key="m.id" class="flex items-center gap-2 border-b border-slate-100 py-1.5 last:border-b-0" data-test="election-measure">
+          <span class="text-sm text-slate-800">{{ m.title }}</span>
+          <span class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600">{{ $t(`form.election.measureStatus.${m.status}`) }}</span>
+          <button
+            v-if="m.status === 'DRAFT'"
+            type="button"
+            data-test="edit-measure"
+            class="ml-auto rounded border border-slate-300 bg-white px-2 py-0.5 text-xs hover:bg-slate-50"
+            @click="editMeasure(m)"
+          >{{ $t('form.election.editMeasure') }}</button>
+          <router-link
+            v-else
+            :to="`/polls/ballot-measure/${m.id}/results`"
+            class="ml-auto text-xs text-slate-800 underline"
+          >{{ $t('form.election.viewMeasure') }}</router-link>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Edit a measure with unsaved election changes: save first? -->
+    <div v-if="leaveFor" role="dialog" aria-modal="true" data-test="save-before-leaving" class="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4" @click.self="leaveFor = null">
+      <div class="mt-24 w-full max-w-md rounded bg-white p-5 shadow-xl">
+        <h2 class="mb-1 text-base font-semibold text-slate-800">{{ $t('form.election.saveFirstTitle') }}</h2>
+        <p class="mb-3 text-sm text-slate-600">{{ $t('form.election.saveFirstBody', { title: leaveFor.title }) }}</p>
+        <div class="flex flex-wrap justify-end gap-2">
+          <button type="button" class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50" @click="leaveFor = null">{{ $t('form.cancel') }}</button>
+          <button type="button" data-test="leave-without-saving" class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50" @click="leave(false)">{{ $t('form.election.goWithoutSaving') }}</button>
+          <button type="button" data-test="save-and-go" class="rounded bg-slate-800 px-3 py-1 text-sm text-white hover:bg-slate-900" @click="leave(true)">{{ $t('form.election.saveAndGo') }}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Publish with draft measures: they go live with the election. -->
+    <div v-if="publishAsk" class="rounded-md border border-sky-300 bg-sky-50 p-4" data-test="publish-with-measures">
+      <p class="m-0 mb-1 text-sm text-slate-800">{{ $t('form.election.publishWithMeasures', { n: draftMeasures.length }, draftMeasures.length) }}</p>
+      <ul class="m-0 mb-3 pl-5 text-sm text-slate-700">
+        <li v-for="m in draftMeasures" :key="m.id">{{ m.title }}</li>
+      </ul>
+      <div class="flex gap-2">
+        <button type="button" data-test="publish-all" :disabled="submitting" class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:opacity-60" @click="publishAsk = false; publish(false)">{{ $t('form.election.publishAll') }}</button>
+        <button type="button" :disabled="submitting" class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50" @click="publishAsk = false">{{ $t('form.cancel') }}</button>
+      </div>
+    </div>
+
     <p v-if="error" class="m-0 text-sm text-red-700">{{ error }}</p>
     <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
 
@@ -270,7 +366,7 @@ async function publish(confirmed = false) {
       </div>
     </div>
 
-    <div v-else class="flex gap-2">
+    <div v-else-if="!publishAsk" class="flex gap-2">
       <button
         type="button"
         @click="saveDraft"
@@ -289,7 +385,7 @@ async function publish(confirmed = false) {
       </button>
       <button
         type="button"
-        @click="publish(false)"
+        @click="askPublish"
         :disabled="submitting"
         class="rounded bg-slate-800 px-4 py-2 text-sm text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       >

@@ -110,6 +110,8 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
                 candidates = listOf(CandidateInput("Parent Candidate", "Ind", "Mayor")),
             ),
         )
+        // A measure is published on its own only under a published election (4a/5a).
+        electionService.publish(parent.id, creator, confirmed = true)
         val draft = ballotMeasureService.saveDraft(
             creator,
             BallotMeasureDraftRequest(

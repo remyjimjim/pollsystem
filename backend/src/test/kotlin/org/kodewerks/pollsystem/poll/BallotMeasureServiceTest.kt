@@ -84,6 +84,8 @@ class BallotMeasureServiceTest : AbstractIntegrationTest() {
     fun `publish with close_date less than 5 days ahead requires confirmation`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
         val parent = seedElection(creator)
+        // A measure is published on its own only under a published election (4a/5a).
+        elections.publish(parent.id, creator, confirmed = true)
         val draft = measures.saveDraft(
             creator,
             BallotMeasureDraftRequest(
@@ -110,6 +112,8 @@ class BallotMeasureServiceTest : AbstractIntegrationTest() {
     fun `publish without close_date succeeds (no candidate-style requirement)`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
         val parent = seedElection(creator)
+        // A measure is published on its own only under a published election (4a/5a).
+        elections.publish(parent.id, creator, confirmed = true)
         val draft = measures.saveDraft(
             creator,
             BallotMeasureDraftRequest(
@@ -130,6 +134,8 @@ class BallotMeasureServiceTest : AbstractIntegrationTest() {
     fun `update is rejected once published`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
         val parent = seedElection(creator)
+        // A measure is published on its own only under a published election (4a/5a).
+        elections.publish(parent.id, creator, confirmed = true)
         val draft = measures.saveDraft(
             creator,
             BallotMeasureDraftRequest(

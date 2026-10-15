@@ -37,6 +37,8 @@ class BallotMeasureResponsesTest : AbstractIntegrationTest() {
                 candidates = listOf(CandidateInput("A", "X", "Mayor"))
             )
         )
+        // A measure is published on its own only under a published election (4a/5a).
+        elections.publish(parent.id, creator, confirmed = true)
         val draft = measures.saveDraft(
             creator,
             BallotMeasureDraftRequest(
@@ -105,6 +107,8 @@ class BallotMeasureResponsesTest : AbstractIntegrationTest() {
                 candidates = listOf(CandidateInput("A", "X", "Mayor"))
             )
         )
+        // A measure is published on its own only under a published election (4a/5a).
+        elections.publish(parent.id, creator, confirmed = true)
         val draft = measures.saveDraft(
             creator,
             BallotMeasureDraftRequest(

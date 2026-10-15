@@ -152,6 +152,7 @@
       "type": "Tipo",
       "zipcodes": "Códigos postales",
       "creator": "Creador",
+      "forElection": "De la elección",
       "closes": "Cierra"
     },
     "noCloseDate": "Sin fecha de cierre",
@@ -183,7 +184,9 @@
     "validation": {
       "yesNoFor": "Por favor responda Sí o No para: {name}",
       "selectionFor": "Por favor haga una selección para: {office}"
-    }
+    },
+    "measuresHeading": "Medidas electorales",
+    "measuresOptional": "Opcional: deja una medida en blanco para omitirla."
   },
   "questionnaire": {
     "closesLabel": "Cierra",
@@ -383,14 +386,33 @@
       "candidateAffiliation": "Afiliación",
       "candidateOffice": "Cargo (ej. Alcalde)",
       "addCandidate": "+ Añadir candidato",
-      "removeCandidate": "Eliminar candidato"
+      "removeCandidate": "Eliminar candidato",
+      "measuresHeading": "Medidas electorales",
+      "measuresHelp": "Las medidas en borrador se publican cuando publicas esta elección. Para añadir una, crea una encuesta de medida electoral y elige esta elección.",
+      "noMeasures": "Aún no hay medidas electorales.",
+      "editMeasure": "Editar",
+      "viewMeasure": "Ver resultados",
+      "saveFirstTitle": "¿Guardar primero la elección?",
+      "saveFirstBody": "Esta elección tiene cambios sin guardar. ¿Guardarlos como borrador antes de editar «{title}»?",
+      "goWithoutSaving": "Ir sin guardar",
+      "saveAndGo": "Guardar e ir",
+      "publishWithMeasures": "Al publicar también se publica esta medida: | Al publicar también se publican estas {n} medidas:",
+      "publishAll": "Publicar todo",
+      "measureStatus": {
+        "DRAFT": "Borrador",
+        "PUBLISHED": "Publicada",
+        "CLOSED": "Cerrada",
+        "ARCHIVED": "Archivada"
+      }
     },
     "ballotMeasure": {
       "parentElection": "Elección padre",
       "selectElection": "Seleccione una elección",
       "noElections": "Aún no ha creado ninguna elección. Cree una primero y luego adjunte una medida.",
       "effectiveDate": "Fecha de vigencia",
-      "electionsLoadFailed": "Error al cargar sus elecciones"
+      "electionsLoadFailed": "Error al cargar sus elecciones",
+      "goesLiveWithElection": "Esta medida se publica cuando se publique su elección, «{title}».",
+      "backToElection": "Volver a la elección"
     }
   },
   "zipSetter": {

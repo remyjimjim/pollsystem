@@ -1,13 +1,29 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+import axios from 'axios'
+import { useRoute, useRouter } from 'vue-router'
 import QuestionnaireResponseForm from '@/components/QuestionnaireResponseForm.vue'
 import ElectionResponseForm from '@/components/ElectionResponseForm.vue'
-import BallotMeasureResponseForm from '@/components/BallotMeasureResponseForm.vue'
 
 const route = useRoute()
+const router = useRouter()
 const type = computed(() => String(route.params.type))
 const id = computed(() => Number(route.params.id))
+const focusMeasure = computed(() => Number(route.query.measure) || null)
+
+// A ballot measure is voted on with its election (decided 2026-10-15): its own
+// page sends you to the election's form, scrolled to the measure.
+const measureError = ref(false)
+watch([type, id], async ([t, i]) => {
+  if (t !== 'ballot-measure') return
+  measureError.value = false
+  try {
+    const m = (await axios.get<{ electionId: number }>(`/api/polls/ballot-measures/${i}`)).data
+    router.replace({ path: `/polls/election/${m.electionId}`, query: { measure: String(i) } })
+  } catch {
+    measureError.value = true
+  }
+}, { immediate: true })
 </script>
 
 <template>
@@ -19,11 +35,13 @@ const id = computed(() => Number(route.params.id))
     <ElectionResponseForm
       v-else-if="type === 'election'"
       :id="id"
+      :key="id"
+      :focus-measure="focusMeasure"
     />
-    <BallotMeasureResponseForm
-      v-else-if="type === 'ballot-measure'"
-      :id="id"
-    />
+    <template v-else-if="type === 'ballot-measure'">
+      <p v-if="measureError" class="text-sm text-red-700">{{ $t('ballotMeasure.loadFailed') }}</p>
+      <p v-else class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
+    </template>
     <div v-else class="rounded-md border border-orange-400 bg-orange-50 p-4">
       <h1 class="mb-2 text-xl font-semibold text-slate-800">{{ type }}</h1>
       <p class="mb-2 text-sm text-slate-700">{{ $t('pollDetail.unknownType') }}</p>

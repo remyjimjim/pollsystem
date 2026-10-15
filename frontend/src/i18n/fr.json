@@ -152,6 +152,7 @@
       "type": "Type",
       "zipcodes": "Codes postaux",
       "creator": "Créateur",
+      "forElection": "Pour l’élection",
       "closes": "Clôture"
     },
     "noCloseDate": "Aucune date de clôture",
@@ -183,7 +184,9 @@
     "validation": {
       "yesNoFor": "Veuillez répondre Oui ou Non pour : {name}",
       "selectionFor": "Veuillez faire une sélection pour : {office}"
-    }
+    },
+    "measuresHeading": "Mesures soumises au vote",
+    "measuresOptional": "Facultatif : laissez une mesure vide pour l’ignorer."
   },
   "questionnaire": {
     "closesLabel": "Clôture",
@@ -383,14 +386,33 @@
       "candidateAffiliation": "Affiliation",
       "candidateOffice": "Fonction (ex. Maire)",
       "addCandidate": "+ Ajouter un candidat",
-      "removeCandidate": "Supprimer le candidat"
+      "removeCandidate": "Supprimer le candidat",
+      "measuresHeading": "Mesures soumises au vote",
+      "measuresHelp": "Les mesures en brouillon sont publiées avec cette élection. Pour en ajouter une, créez un sondage « mesure » et choisissez cette élection.",
+      "noMeasures": "Aucune mesure pour l’instant.",
+      "editMeasure": "Modifier",
+      "viewMeasure": "Voir les résultats",
+      "saveFirstTitle": "Enregistrer d’abord l’élection ?",
+      "saveFirstBody": "Cette élection a des modifications non enregistrées. Les enregistrer en brouillon avant de modifier « {title} » ?",
+      "goWithoutSaving": "Continuer sans enregistrer",
+      "saveAndGo": "Enregistrer et continuer",
+      "publishWithMeasures": "La publication publie aussi cette mesure : | La publication publie aussi ces {n} mesures :",
+      "publishAll": "Tout publier",
+      "measureStatus": {
+        "DRAFT": "Brouillon",
+        "PUBLISHED": "Publiée",
+        "CLOSED": "Fermée",
+        "ARCHIVED": "Archivée"
+      }
     },
     "ballotMeasure": {
       "parentElection": "Élection parente",
       "selectElection": "Sélectionnez une élection",
       "noElections": "Vous n'avez encore créé aucune élection. Créez-en une d'abord, puis attachez-y une mesure.",
       "effectiveDate": "Date d'entrée en vigueur",
-      "electionsLoadFailed": "Échec du chargement de vos élections"
+      "electionsLoadFailed": "Échec du chargement de vos élections",
+      "goesLiveWithElection": "Cette mesure sera publiée avec son élection, « {title} ».",
+      "backToElection": "Retour à l’élection"
     }
   },
   "zipSetter": {

@@ -152,6 +152,7 @@
       "type": "種類",
       "zipcodes": "郵便番号",
       "creator": "作成者",
+      "forElection": "対象の選挙",
       "closes": "締切"
     },
     "noCloseDate": "締切日なし",
@@ -183,7 +184,9 @@
     "validation": {
       "yesNoFor": "{name} について「はい」か「いいえ」で回答してください",
       "selectionFor": "{office} について選択してください"
-    }
+    },
+    "measuresHeading": "住民投票",
+    "measuresOptional": "任意：空欄のままにするとスキップされます。"
   },
   "questionnaire": {
     "closesLabel": "締切",
@@ -383,14 +386,33 @@
       "candidateAffiliation": "所属",
       "candidateOffice": "役職（例：市長）",
       "addCandidate": "+ 候補者を追加",
-      "removeCandidate": "候補者を削除"
+      "removeCandidate": "候補者を削除",
+      "measuresHeading": "住民投票",
+      "measuresHelp": "下書きの住民投票は、この選挙を公開すると一緒に公開されます。追加するには、住民投票の投票を作成してこの選挙を選んでください。",
+      "noMeasures": "まだ住民投票はありません。",
+      "editMeasure": "編集",
+      "viewMeasure": "結果を見る",
+      "saveFirstTitle": "先に選挙を保存しますか？",
+      "saveFirstBody": "この選挙には未保存の変更があります。「{title}」を編集する前に下書きとして保存しますか？",
+      "goWithoutSaving": "保存せずに移動",
+      "saveAndGo": "保存して移動",
+      "publishWithMeasures": "公開すると、次の住民投票{n}件も公開されます：",
+      "publishAll": "すべて公開",
+      "measureStatus": {
+        "DRAFT": "下書き",
+        "PUBLISHED": "公開中",
+        "CLOSED": "終了",
+        "ARCHIVED": "アーカイブ済み"
+      }
     },
     "ballotMeasure": {
       "parentElection": "親選挙",
       "selectElection": "選挙を選択",
       "noElections": "まだ選挙を作成していません。先に1つ作成してから、住民投票を紐付けてください。",
       "effectiveDate": "発効日",
-      "electionsLoadFailed": "あなたの選挙の読み込みに失敗しました"
+      "electionsLoadFailed": "あなたの選挙の読み込みに失敗しました",
+      "goesLiveWithElection": "この住民投票は、選挙「{title}」の公開時に公開されます。",
+      "backToElection": "選挙に戻る"
     }
   },
   "zipSetter": {

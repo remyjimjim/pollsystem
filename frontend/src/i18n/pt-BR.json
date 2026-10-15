@@ -152,6 +152,7 @@
       "type": "Tipo",
       "zipcodes": "CEPs",
       "creator": "Criador",
+      "forElection": "Da eleição",
       "closes": "Encerra"
     },
     "noCloseDate": "Sem data de encerramento",
@@ -183,7 +184,9 @@
     "validation": {
       "yesNoFor": "Responda Sim ou Não para: {name}",
       "selectionFor": "Faça uma seleção para: {office}"
-    }
+    },
+    "measuresHeading": "Medidas em votação",
+    "measuresOptional": "Opcional: deixe uma medida em branco para pulá-la."
   },
   "questionnaire": {
     "closesLabel": "Encerra",
@@ -383,14 +386,33 @@
       "candidateAffiliation": "Filiação",
       "candidateOffice": "Cargo (ex. Prefeito)",
       "addCandidate": "+ Adicionar candidato",
-      "removeCandidate": "Remover candidato"
+      "removeCandidate": "Remover candidato",
+      "measuresHeading": "Medidas em votação",
+      "measuresHelp": "As medidas em rascunho são publicadas quando você publica esta eleição. Para adicionar uma, crie uma enquete de medida e escolha esta eleição.",
+      "noMeasures": "Nenhuma medida ainda.",
+      "editMeasure": "Editar",
+      "viewMeasure": "Ver resultados",
+      "saveFirstTitle": "Salvar a eleição primeiro?",
+      "saveFirstBody": "Esta eleição tem alterações não salvas. Salvá-las como rascunho antes de editar “{title}”?",
+      "goWithoutSaving": "Ir sem salvar",
+      "saveAndGo": "Salvar e ir",
+      "publishWithMeasures": "Publicar também publica esta medida: | Publicar também publica estas {n} medidas:",
+      "publishAll": "Publicar tudo",
+      "measureStatus": {
+        "DRAFT": "Rascunho",
+        "PUBLISHED": "Publicada",
+        "CLOSED": "Encerrada",
+        "ARCHIVED": "Arquivada"
+      }
     },
     "ballotMeasure": {
       "parentElection": "Eleição de origem",
       "selectElection": "Selecione uma eleição",
       "noElections": "Você ainda não criou nenhuma eleição. Crie uma primeiro e depois anexe uma medida.",
       "effectiveDate": "Data de vigência",
-      "electionsLoadFailed": "Falha ao carregar suas eleições"
+      "electionsLoadFailed": "Falha ao carregar suas eleições",
+      "goesLiveWithElection": "Esta medida é publicada quando a eleição “{title}” for publicada.",
+      "backToElection": "Voltar à eleição"
     }
   },
   "zipSetter": {

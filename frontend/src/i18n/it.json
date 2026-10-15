@@ -152,6 +152,7 @@
       "type": "Tipo",
       "zipcodes": "CAP",
       "creator": "Creatore",
+      "forElection": "Per l’elezione",
       "closes": "Chiude"
     },
     "noCloseDate": "Nessuna data di chiusura",
@@ -183,7 +184,9 @@
     "validation": {
       "yesNoFor": "Rispondi Sì o No per: {name}",
       "selectionFor": "Effettua una selezione per: {office}"
-    }
+    },
+    "measuresHeading": "Quesiti referendari",
+    "measuresOptional": "Facoltativo: lascia vuoto un quesito per saltarlo."
   },
   "questionnaire": {
     "closesLabel": "Chiude",
@@ -383,14 +386,33 @@
       "candidateAffiliation": "Affiliazione",
       "candidateOffice": "Carica (es. Sindaco)",
       "addCandidate": "+ Aggiungi candidato",
-      "removeCandidate": "Rimuovi candidato"
+      "removeCandidate": "Rimuovi candidato",
+      "measuresHeading": "Quesiti referendari",
+      "measuresHelp": "I quesiti in bozza vengono pubblicati insieme a questa elezione. Per aggiungerne uno, crea un sondaggio di tipo quesito e scegli questa elezione.",
+      "noMeasures": "Ancora nessun quesito.",
+      "editMeasure": "Modifica",
+      "viewMeasure": "Vedi risultati",
+      "saveFirstTitle": "Salvare prima l’elezione?",
+      "saveFirstBody": "Questa elezione ha modifiche non salvate. Salvarle come bozza prima di modificare «{title}»?",
+      "goWithoutSaving": "Prosegui senza salvare",
+      "saveAndGo": "Salva e prosegui",
+      "publishWithMeasures": "La pubblicazione pubblica anche questo quesito: | La pubblicazione pubblica anche questi {n} quesiti:",
+      "publishAll": "Pubblica tutto",
+      "measureStatus": {
+        "DRAFT": "Bozza",
+        "PUBLISHED": "Pubblicato",
+        "CLOSED": "Chiuso",
+        "ARCHIVED": "Archiviato"
+      }
     },
     "ballotMeasure": {
       "parentElection": "Elezione di riferimento",
       "selectElection": "Seleziona un'elezione",
       "noElections": "Non hai ancora creato alcuna elezione. Creane una prima, poi allega una misura.",
       "effectiveDate": "Data di entrata in vigore",
-      "electionsLoadFailed": "Impossibile caricare le tue elezioni"
+      "electionsLoadFailed": "Impossibile caricare le tue elezioni",
+      "goesLiveWithElection": "Questo quesito viene pubblicato con la sua elezione, «{title}».",
+      "backToElection": "Torna all’elezione"
     }
   },
   "zipSetter": {

@@ -30,9 +30,18 @@ Measure**.
 
 ## Save or publish
 
-Click **Save draft** to keep working on it later, or **Publish** to make it
-live. See [Drafts, publishing and archiving](drafts-and-publishing.md) for the
-checks at publishing and how to revise a published measure.
+Click **Save draft** to keep working on it later.
+
+**While its election is still a draft,** a measure can't be published on its
+own: it goes live **when you publish the election**, so voters never see a
+measure before its election. The form says so, and **Back to the election**
+takes you there. See [Creating an election](creating-an-election.md).
+
+**Once its election is published,** click **Publish** to make the measure live.
+
+Voters answer measures on their election's page, below the candidates. See
+[Drafts, publishing and archiving](drafts-and-publishing.md) for the checks at
+publishing and how to revise a published measure.
 
 The election's area must be inside your creator access **for ballot measures**:
 access to create elections there isn't enough on its own.

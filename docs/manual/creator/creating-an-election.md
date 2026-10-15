@@ -41,3 +41,20 @@ checks at publishing and how to revise a published election.
 
 Once the election exists, you can [attach ballot
 measures](creating-a-ballot-measure.md) to it.
+
+## Its ballot measures
+
+Once the election is saved, its measures are listed at the bottom of the form
+under **Ballot measures**, with their status:
+
+- **Edit** opens a draft measure. If you've changed the election without
+  saving, you're asked first: **Save and go** saves it as a draft,
+  **Go without saving** drops the changes, **Cancel** stays.
+- **View results** opens a published measure's results.
+
+**Publishing the election publishes its draft measures with it.** If it has
+any, Publish lists them and asks you to **Publish all**. Everything is checked
+first: if one measure can't go live (for example, its close date has passed),
+nothing is published and you're told which one.
+
+Measures added **after** the election is published are published on their own.

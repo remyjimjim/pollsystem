@@ -155,7 +155,7 @@ first spec that needs them.
 | `creator-creates-ballot-measure` | creator | With a published state-wide election (via the API), build a measure in the wizard, attach it to that election, publish → dashboard PUBLISHED → a guest finds it under the election's state → the API shows the right parent election and effective date. |
 | `creator-creates-election` | creator | Build a whole-state election in the wizard (date + two candidates) → publish → dashboard shows PUBLISHED → a guest finds it → the API shows both candidates saved. |
 | `creator-creates-questionnaire` | creator | Build a whole-state questionnaire in the wizard → publish → dashboard shows PUBLISHED → a guest finds it in search. |
-| `user-answers-election-and-measure` | user | Find a state-wide election by title → vote for one Mayor candidate → find its ballot measure → vote Yes → the public results count both votes → revisiting shows "You voted on". |
+| `user-answers-election-and-measure` | user | Find a ballot measure by title → search shows its election ("For Election", 15 characters + "…") → Vote opens the election scrolled to the measure → vote for one Mayor candidate and Yes on the measure, submitted together → both votes counted → revisiting shows "You voted on". |
 | `super-edits-poll-type-template` | super | Edit the Election template: invalid JSON is rejected → switch candidates to multi-choice checkboxes → a member voting on an existing election gets checkboxes and both choices count → restore the original (also in `afterAll`). |
 | `super-disables-submissions` | super | Kill switch: submissions blocked for a member, then re-enabled. |
 | `seed-users-debug` | — | Debug variant of the seeder (keeps windows open). |

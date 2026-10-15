@@ -54,7 +54,10 @@ Each row shows the poll's title, type, zipcodes and closing date. When a poll
 covers many zipcodes, the first few are shown with an **Additional zipcodes**
 link for the rest. Click a column heading to sort by it.
 
-- **Vote →** opens the poll so you can answer it. It only appears when you're
+- **For Election** (shown when the results include a ballot measure) names the
+  election a measure belongs to; hover it for the full title.
+- **Vote →** opens the poll so you can answer it. For a ballot measure, it
+  opens its election, where you vote on both. It only appears when you're
   signed in as a member.
 - **View results** shows how people have answered so far. Anyone can view
   results; see [Viewing results](viewing-results.md).

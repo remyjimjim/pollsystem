@@ -21,6 +21,9 @@ interface PollSearchResult {
   regionLabel: string | null
   /** Admins and supers only (the server sends null to everyone else). */
   creatorEmail?: string | null
+  /** Ballot measures: the election they're on (and voted with). */
+  electionId?: number | null
+  electionTitle?: string | null
 }
 interface SearchSuggestions {
   titles: string[]
@@ -317,7 +320,7 @@ const error = ref<string | null>(null)
 
 // ---------- column sorting (client-side, on top of the backend's
 // active-first ordering — picking a column overrides that order) ----------
-type SortKey = 'title' | 'type' | 'zipcode' | 'creator' | 'closeDate'
+type SortKey = 'title' | 'type' | 'zipcode' | 'creator' | 'election' | 'closeDate'
 const sortKey = ref<SortKey | null>(null)
 const sortDir = ref<'asc' | 'desc'>('asc')
 function toggleSort(k: SortKey) {
@@ -332,6 +335,7 @@ function sortValue(r: PollSearchResult, k: SortKey): string {
     // so taking the first item gives a stable alphanumeric anchor.
     case 'zipcode': return r.zipcodes[0]?.code ?? ''
     case 'creator': return (r.creatorEmail ?? '').toLowerCase()
+    case 'election': return (r.electionTitle ?? '').toLowerCase()
     // ISO timestamps are lex-sortable. Null close-date = "never closes",
     // sorts after every real date in ascending order.
     case 'closeDate': return r.closeDate ?? '￿'
@@ -339,6 +343,16 @@ function sortValue(r: PollSearchResult, k: SortKey): string {
 }
 // The Creator column: only when the server sent creator emails (admins and supers).
 const showCreator = computed(() => results.value.some(r => r.creatorEmail))
+// The For Election column: only when a ballot measure is among the results.
+const showElection = computed(() => results.value.some(r => r.electionTitle))
+/** The first 15 characters of an election's title, then "..." (full title on hover). */
+const shortTitle = (title: string) => title.length > 15 ? `${title.slice(0, 15)}...` : title
+/** Where Vote goes: a ballot measure is voted on with its election, scrolled to the measure. */
+function voteLink(r: PollSearchResult): string | { path: string; query: Record<string, string> } {
+  if (r.type === 'BallotMeasure' && r.electionId) return { path: `/polls/election/${r.electionId}`, query: { measure: String(r.id) } }
+  return `/polls/${routeMap(r.type)}/${r.id}`
+}
+
 /** The first 5 letters of the email, then "...". */
 const shortEmail = (email: string) => email.length > 5 ? `${email.slice(0, 5)}...` : email
 
@@ -727,6 +741,7 @@ async function search() {
           <th @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.type') }}{{ sortIndicator('type') }}</th>
           <th @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.zipcodes') }}{{ sortIndicator('zipcode') }}</th>
           <th v-if="showCreator" @click="toggleSort('creator')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.creator') }}{{ sortIndicator('creator') }}</th>
+          <th v-if="showElection" @click="toggleSort('election')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.forElection') }}{{ sortIndicator('election') }}</th>
           <th @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.closes') }}{{ sortIndicator('closeDate') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
         </tr>
@@ -818,6 +833,9 @@ async function search() {
               class="text-slate-800 underline"
             >{{ shortEmail(r.creatorEmail) }}</router-link>
           </td>
+          <td v-if="showElection" class="border-b border-slate-100 p-2" data-test="for-election">
+            <span v-if="r.electionTitle" :title="r.electionTitle">{{ shortTitle(r.electionTitle) }}</span>
+          </td>
           <td class="border-b border-slate-100 p-2">
             {{ r.closeDate ? new Date(r.closeDate).toLocaleString() : $t('search.noCloseDate') }}
           </td>
@@ -831,7 +849,7 @@ async function search() {
               </router-link>
               <router-link
                 v-if="auth.isAuthenticated && !isClosed(r)"
-                :to="`/polls/${routeMap(r.type)}/${r.id}`"
+                :to="voteLink(r)"
                 class="text-slate-800 underline"
               >
                 {{ $t('search.vote') }}

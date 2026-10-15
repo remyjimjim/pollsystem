@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -39,6 +39,24 @@ interface MyCandidateResponseDto {
   lastModified: string | null
 }
 
+/** A published, still-open ballot measure on this election's ballot. */
+interface BallotMeasureDto {
+  id: number
+  title: string
+  summary: string
+  effectiveDate: string
+  closeDate: string | null
+}
+
+interface MyBallotResponseDto {
+  measureId: number
+  hasResponse: boolean
+  response: boolean | null
+  comment: string | null
+  commentPublic?: boolean
+  dateSubmitted: string | null
+}
+
 interface MyElectionResponsesDto {
   electionId: number
   hasResponses: boolean
@@ -46,7 +64,8 @@ interface MyElectionResponsesDto {
   responses: MyCandidateResponseDto[]
 }
 
-const props = defineProps<{ id: number }>()
+// focusMeasure: arriving from a ballot measure's Vote link, scroll to it.
+const props = defineProps<{ id: number; focusMeasure?: number | null }>()
 const router = useRouter()
 
 const election = ref<ElectionDto | null>(null)
@@ -69,6 +88,12 @@ const selectionByOffice = reactive<Record<string, Set<number>>>({})
 const comments = reactive<Record<number, string>>({})
 // Per-candidate "make comment public" box, all widget modes.
 const commentPublic = reactive<Record<number, boolean>>({})
+
+// The election's ballot measures, at the bottom of the form. Optional, like a
+// real ballot: a measure left blank isn't submitted (decided 2026-10-15).
+const measures = ref<BallotMeasureDto[]>([])
+const measureAnswers = reactive<Record<number, { response: boolean | null; comment: string; commentPublic: boolean }>>({})
+const votedOnMeasure = ref(false)
 
 type Mode = 'fresh' | 'editing' | 'readonly' | 'choosing'
 const mode = ref<Mode>('fresh')
@@ -117,7 +142,8 @@ async function load() {
     )
     mine.value = mineRes.data
     seedAnswers()
-    mode.value = mine.value.hasResponses ? 'choosing' : 'fresh'
+    await loadMeasures()
+    mode.value = mine.value.hasResponses || votedOnMeasure.value ? 'choosing' : 'fresh'
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('election.loadFailed')
   } finally {
@@ -146,6 +172,29 @@ function seedAnswers() {
       .filter(c => prev.get(c.id)?.response === true)
       .map(c => c.id)
     selectionByOffice[office] = new Set(picked)
+  }
+}
+
+async function loadMeasures() {
+  measures.value = (await axios.get<BallotMeasureDto[]>('/api/polls/ballot-measures', {
+    params: { electionId: props.id }
+  })).data ?? []
+  const mineList = await Promise.all(measures.value.map(m =>
+    axios.get<MyBallotResponseDto>(`/api/polls/ballot-measures/${m.id}/responses/me`).then(r => r.data)
+  ))
+  votedOnMeasure.value = mineList.some(r => r?.hasResponse)
+  measures.value.forEach((m, i) => {
+    const r = mineList[i]
+    measureAnswers[m.id] = {
+      response: r?.response ?? null,
+      comment: r?.comment ?? '',
+      commentPublic: r?.commentPublic ?? false
+    }
+  })
+  if (props.focusMeasure && measures.value.some(m => m.id === props.focusMeasure)) {
+    // After the loading state clears and the measures render.
+    setTimeout(() => document.getElementById(`measure-${props.focusMeasure}`)?.scrollIntoView?.({ behavior: 'smooth', block: 'start' }), 0)
+    await nextTick()
   }
 }
 
@@ -217,7 +266,13 @@ async function submit() {
       set: (text: string) => { if (legacy) answers[c.id].comment = text; else comments[c.id] = text },
       isPublic: () => commentPublic[c.id] ?? false,
       makePrivate: () => { commentPublic[c.id] = false }
-    })))
+    })).concat(measures.value.map(m => ({
+      inputId: `comment-m-${m.id}`,
+      get: () => measureAnswers[m.id].comment,
+      set: (text: string) => { measureAnswers[m.id].comment = text },
+      isPublic: () => measureAnswers[m.id].commentPublic,
+      makePrivate: () => { measureAnswers[m.id].commentPublic = false }
+    }))))
     const payload = candidatesList.map(c => {
       const response = widget.value === 'legacy'
         ? answers[c.id].response
@@ -233,6 +288,16 @@ async function submit() {
       }
     })
     await axios.post(`/api/polls/elections/${props.id}/responses`, { answers: payload })
+    // Then each ballot measure that was answered.
+    for (const m of measures.value) {
+      const a = measureAnswers[m.id]
+      if (a.response === null) continue
+      await axios.post(`/api/polls/ballot-measures/${m.id}/responses`, {
+        response: a.response,
+        comment: a.comment.trim() || null,
+        commentPublic: a.commentPublic
+      })
+    }
     message.value = t('election.submittedOk')
     setTimeout(() => router.push(`/polls/election/${props.id}/results`), 600)
   } catch (e: any) {
@@ -444,6 +509,47 @@ onMounted(load)
         </div>
       </div>
     </fieldset>
+
+    <!-- The election's ballot measures: optional, submitted with the candidates. -->
+    <template v-if="measures.length">
+      <h3 class="m-0 mt-2 text-base font-semibold text-slate-800">{{ $t('election.measuresHeading') }}</h3>
+      <p class="m-0 text-xs text-slate-500">{{ $t('election.measuresOptional') }}</p>
+      <fieldset
+        v-for="m in measures"
+        :id="`measure-${m.id}`"
+        :key="m.id"
+        :disabled="mode === 'readonly'"
+        data-test="ballot-measure"
+        class="scroll-mt-4 rounded-md border p-4 disabled:opacity-90"
+        :class="m.id === props.focusMeasure ? 'border-sky-400 bg-sky-50/40' : 'border-slate-200'"
+      >
+        <legend class="px-2 text-sm font-semibold text-slate-700">{{ m.title }}</legend>
+        <p class="m-0 mb-2 text-xs text-slate-500">
+          {{ $t('ballotMeasure.effectiveLabel') }} {{ new Date(m.effectiveDate).toLocaleDateString() }}
+          <template v-if="m.closeDate">· {{ $t('ballotMeasure.closesLabel') }} {{ new Date(m.closeDate).toLocaleString() }}</template>
+        </p>
+        <p class="m-0 mb-3 whitespace-pre-wrap rounded-r bg-slate-50 p-3 text-sm text-slate-700 [border-left:3px_solid_#4299e1]">{{ m.summary }}</p>
+        <div class="mb-2 flex gap-4">
+          <label class="flex items-center gap-2 text-base text-slate-700">
+            <input :id="`measure-${m.id}-yes`" type="radio" :name="`measure-${m.id}`" :value="true" v-model="measureAnswers[m.id].response" />
+            {{ $t('common.yes') }}
+          </label>
+          <label class="flex items-center gap-2 text-base text-slate-700">
+            <input :id="`measure-${m.id}-no`" type="radio" :name="`measure-${m.id}`" :value="false" v-model="measureAnswers[m.id].response" />
+            {{ $t('common.no') }}
+          </label>
+        </div>
+        <input
+          :id="`comment-m-${m.id}`"
+          v-model="measureAnswers[m.id].comment"
+          type="text"
+          :placeholder="$t('common.comment')"
+          :aria-label="`${$t('common.comment')}: ${m.title}`"
+          class="w-full rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
+        />
+        <PublicCommentToggle :id="`comment-public-m-${m.id}`" v-model="measureAnswers[m.id].commentPublic" />
+      </fieldset>
+    </template>
 
     <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
 

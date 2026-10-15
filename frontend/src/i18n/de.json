@@ -152,6 +152,7 @@
       "type": "Typ",
       "zipcodes": "Postleitzahlen",
       "creator": "Ersteller",
+      "forElection": "Zur Wahl",
       "closes": "Schließt"
     },
     "noCloseDate": "Kein Schlussdatum",
@@ -183,7 +184,9 @@
     "validation": {
       "yesNoFor": "Bitte antworten Sie mit Ja oder Nein für: {name}",
       "selectionFor": "Bitte treffen Sie eine Auswahl für: {office}"
-    }
+    },
+    "measuresHeading": "Abstimmungsvorlagen",
+    "measuresOptional": "Optional: Lassen Sie eine Vorlage leer, um sie zu überspringen."
   },
   "questionnaire": {
     "closesLabel": "Schließt",
@@ -383,14 +386,33 @@
       "candidateAffiliation": "Zugehörigkeit",
       "candidateOffice": "Amt (z. B. Bürgermeister)",
       "addCandidate": "+ Kandidaten hinzufügen",
-      "removeCandidate": "Kandidaten entfernen"
+      "removeCandidate": "Kandidaten entfernen",
+      "measuresHeading": "Abstimmungsvorlagen",
+      "measuresHelp": "Entwürfe gehen live, wenn Sie diese Wahl veröffentlichen. Um eine hinzuzufügen, erstellen Sie eine Abstimmungsvorlage und wählen Sie diese Wahl.",
+      "noMeasures": "Noch keine Abstimmungsvorlagen.",
+      "editMeasure": "Bearbeiten",
+      "viewMeasure": "Ergebnisse ansehen",
+      "saveFirstTitle": "Wahl zuerst speichern?",
+      "saveFirstBody": "Diese Wahl hat ungespeicherte Änderungen. Als Entwurf speichern, bevor Sie „{title}“ bearbeiten?",
+      "goWithoutSaving": "Ohne Speichern weiter",
+      "saveAndGo": "Speichern und weiter",
+      "publishWithMeasures": "Beim Veröffentlichen wird auch diese Vorlage veröffentlicht: | Beim Veröffentlichen werden auch diese {n} Vorlagen veröffentlicht:",
+      "publishAll": "Alle veröffentlichen",
+      "measureStatus": {
+        "DRAFT": "Entwurf",
+        "PUBLISHED": "Veröffentlicht",
+        "CLOSED": "Geschlossen",
+        "ARCHIVED": "Archiviert"
+      }
     },
     "ballotMeasure": {
       "parentElection": "Übergeordnete Wahl",
       "selectElection": "Wahl auswählen",
       "noElections": "Sie haben noch keine Wahlen erstellt. Erstellen Sie zuerst eine und hängen Sie dann ein Referendum an.",
       "effectiveDate": "Gültig ab",
-      "electionsLoadFailed": "Ihre Wahlen konnten nicht geladen werden"
+      "electionsLoadFailed": "Ihre Wahlen konnten nicht geladen werden",
+      "goesLiveWithElection": "Diese Vorlage geht live, wenn ihre Wahl „{title}“ veröffentlicht wird.",
+      "backToElection": "Zurück zur Wahl"
     }
   },
   "zipSetter": {

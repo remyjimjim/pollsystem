@@ -27,7 +27,10 @@ data class PollSearchResult(
     val closeDate: Instant?,
     val zipcodes: List<ZipState>,
     /** Human-readable purview (e.g. "California", "Nationwide"); shown when a poll has no single zip. */
-    val regionLabel: String? = null
+    val regionLabel: String? = null,
+    /** Ballot measures only: the election they belong to (where they're voted on). */
+    val electionId: Long? = null,
+    val electionTitle: String? = null
 )
 
 /** Distinct values that feed the autocomplete datalists on the search form. */
@@ -212,7 +215,9 @@ class PollSearchController(
                     creatorEmail = shownEmail(bm.creator.email),
                     closeDate = bm.closeDate,
                     zipcodes = listOfNotNull(zip?.let { ZipState(it, lookupState(it)) }),
-                    regionLabel = purviewService.regionLabel(purviewService.purviewOf(PollKind.ELECTION, bm.election.id))
+                    regionLabel = purviewService.regionLabel(purviewService.purviewOf(PollKind.ELECTION, bm.election.id)),
+                    electionId = bm.election.id,
+                    electionTitle = bm.election.title
                 )
             }
         }

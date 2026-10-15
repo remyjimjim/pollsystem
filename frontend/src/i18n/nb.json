@@ -152,6 +152,7 @@
       "type": "Type",
       "zipcodes": "Postnumre",
       "creator": "Oppretter",
+      "forElection": "For valget",
       "closes": "Stenger"
     },
     "noCloseDate": "Ingen sluttdato",
@@ -183,7 +184,9 @@
     "validation": {
       "yesNoFor": "Svar Ja eller Nei for: {name}",
       "selectionFor": "Gjør et valg for: {office}"
-    }
+    },
+    "measuresHeading": "Folkeavstemningssaker",
+    "measuresOptional": "Valgfritt: la en sak stå tom for å hoppe over den."
   },
   "questionnaire": {
     "closesLabel": "Stenger",
@@ -383,14 +386,33 @@
       "candidateAffiliation": "Tilknytning",
       "candidateOffice": "Verv (f.eks. Ordfører)",
       "addCandidate": "+ Legg til kandidat",
-      "removeCandidate": "Fjern kandidat"
+      "removeCandidate": "Fjern kandidat",
+      "measuresHeading": "Folkeavstemningssaker",
+      "measuresHelp": "Utkast publiseres når du publiserer dette valget. For å legge til en, lag en avstemningssak og velg dette valget.",
+      "noMeasures": "Ingen saker ennå.",
+      "editMeasure": "Rediger",
+      "viewMeasure": "Se resultater",
+      "saveFirstTitle": "Lagre valget først?",
+      "saveFirstBody": "Valget har endringer som ikke er lagret. Lagre dem som utkast før du redigerer «{title}»?",
+      "goWithoutSaving": "Gå uten å lagre",
+      "saveAndGo": "Lagre og gå",
+      "publishWithMeasures": "Publisering publiserer også denne saken: | Publisering publiserer også disse {n} sakene:",
+      "publishAll": "Publiser alt",
+      "measureStatus": {
+        "DRAFT": "Utkast",
+        "PUBLISHED": "Publisert",
+        "CLOSED": "Stengt",
+        "ARCHIVED": "Arkivert"
+      }
     },
     "ballotMeasure": {
       "parentElection": "Overordnet valg",
       "selectElection": "Velg et valg",
       "noElections": "Du har ikke opprettet noen valg ennå. Opprett ett først, og legg så til en folkeavstemning.",
       "effectiveDate": "Ikrafttredelsesdato",
-      "electionsLoadFailed": "Kunne ikke laste valgene dine"
+      "electionsLoadFailed": "Kunne ikke laste valgene dine",
+      "goesLiveWithElection": "Denne saken publiseres når valget «{title}» publiseres.",
+      "backToElection": "Tilbake til valget"
     }
   },
   "zipSetter": {

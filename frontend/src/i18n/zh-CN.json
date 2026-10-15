@@ -152,6 +152,7 @@
       "type": "类型",
       "zipcodes": "邮政编码",
       "creator": "创建者",
+      "forElection": "所属选举",
       "closes": "截止"
     },
     "noCloseDate": "无截止日期",
@@ -183,7 +184,9 @@
     "validation": {
       "yesNoFor": "请为以下选项回答“是”或“否”：{name}",
       "selectionFor": "请为以下职位做出选择：{office}"
-    }
+    },
+    "measuresHeading": "投票议案",
+    "measuresOptional": "可选：留空即跳过该议案。"
   },
   "questionnaire": {
     "closesLabel": "截止",
@@ -383,14 +386,33 @@
       "candidateAffiliation": "所属",
       "candidateOffice": "职位（例如：市长）",
       "addCandidate": "+ 添加候选人",
-      "removeCandidate": "删除候选人"
+      "removeCandidate": "删除候选人",
+      "measuresHeading": "投票议案",
+      "measuresHelp": "草稿议案会在你发布此选举时一同发布。要添加议案，请创建“投票议案”投票并选择此选举。",
+      "noMeasures": "还没有投票议案。",
+      "editMeasure": "编辑",
+      "viewMeasure": "查看结果",
+      "saveFirstTitle": "先保存选举吗？",
+      "saveFirstBody": "此选举有未保存的更改。在编辑“{title}”之前保存为草稿吗？",
+      "goWithoutSaving": "不保存直接前往",
+      "saveAndGo": "保存并前往",
+      "publishWithMeasures": "发布时还会一同发布以下 {n} 项议案：",
+      "publishAll": "全部发布",
+      "measureStatus": {
+        "DRAFT": "草稿",
+        "PUBLISHED": "已发布",
+        "CLOSED": "已结束",
+        "ARCHIVED": "已归档"
+      }
     },
     "ballotMeasure": {
       "parentElection": "父级选举",
       "selectElection": "选择一项选举",
       "noElections": "您还没有创建任何选举。请先创建一项，然后再附加公投。",
       "effectiveDate": "生效日期",
-      "electionsLoadFailed": "加载您的选举失败"
+      "electionsLoadFailed": "加载您的选举失败",
+      "goesLiveWithElection": "此议案将在其选举“{title}”发布时一同发布。",
+      "backToElection": "返回选举"
     }
   },
   "zipSetter": {

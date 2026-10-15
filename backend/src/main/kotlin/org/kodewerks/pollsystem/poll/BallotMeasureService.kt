@@ -91,6 +91,12 @@ class BallotMeasureService(
         )
     }
 
+    /**
+     * Publish one measure on its own: only for an election that's already
+     * published (a measure added later). Under a draft election, measures go
+     * live together with it when the election is published (decided
+     * 2026-10-15), so voters never see a measure before its election.
+     */
     @Transactional
     fun publish(id: Long, creator: User, confirmed: Boolean): BallotMeasure {
         requireCreator(creator)
@@ -98,17 +104,42 @@ class BallotMeasureService(
         if (existing.status != PollStatus.DRAFT) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT can be published")
         }
+        when (existing.election.status) {
+            PollStatus.PUBLISHED -> {}
+            PollStatus.DRAFT -> throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Publish the election \"${existing.election.title}\": its draft ballot measures go live with it"
+            )
+            else -> throw ResponseStatusException(HttpStatus.CONFLICT, "Its election is no longer open")
+        }
+        return publishChecked(existing, creator, confirmed)
+    }
+
+    /** The draft measures that go live with [electionId] when it's published. */
+    @Transactional(readOnly = true)
+    fun draftsOf(electionId: Long): List<BallotMeasure> =
+        measures.findByElectionId(electionId).filter { it.status == PollStatus.DRAFT }
+
+    /** Publish [existing] after the usual checks (close date, grants); the caller has checked its election. */
+    @Transactional
+    fun publishChecked(existing: BallotMeasure, creator: User, confirmed: Boolean): BallotMeasure {
+        checkPublishable(existing, creator, confirmed)
+        return measures.save(
+            existing.copy(status = PollStatus.PUBLISHED, lastUpdated = Instant.now(), creatorEditedAt = Instant.now())
+        )
+    }
+
+    /** The checks a measure must pass to go live, without changing anything (so an election can check all first). */
+    @Transactional(readOnly = true)
+    fun checkPublishable(existing: BallotMeasure, creator: User, confirmed: Boolean) {
         // A re-publish (archive + restore + re-edit) on a ballot measure
         // that already has cast votes is allowed to take a past close
         // date; date_submitted is set at draft creation so isn't useful
         // as the "has been live" signal, but the response count is.
-        val hasBeenLive = ballotResponses.findByMeasureId(id).isNotEmpty()
+        val hasBeenLive = ballotResponses.findByMeasureId(existing.id).isNotEmpty()
         validateClose(existing.closeDate, confirmed, allowPast = hasBeenLive)
         // Re-checked at publish: grants may have been disabled since the draft.
         grants.requireCovers(creator, existing.pollType, purviews.purviewOf(PollKind.ELECTION, existing.election.id))
-        return measures.save(
-            existing.copy(status = PollStatus.PUBLISHED, lastUpdated = Instant.now(), creatorEditedAt = Instant.now())
-        )
     }
 
     @Transactional(readOnly = true)

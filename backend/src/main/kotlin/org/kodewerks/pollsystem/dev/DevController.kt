@@ -11,6 +11,7 @@ import org.kodewerks.pollsystem.model.ScopeLevel
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.poll.BallotMeasureDraftRequest
 import org.kodewerks.pollsystem.poll.BallotMeasureService
+import org.kodewerks.pollsystem.poll.CandidateInput
 import org.kodewerks.pollsystem.poll.ElectionDraftRequest
 import org.kodewerks.pollsystem.poll.ElectionService
 import org.kodewerks.pollsystem.poll.QuestionInput
@@ -268,7 +269,8 @@ class DevController(
                 date = LocalDate.now(),
                 scopeLevel = ScopeLevel.NATIONAL, // coarse purview; the measure inherits it
                 closeDate = null,
-                candidates = emptyList(),
+                // An election needs a candidate to be published.
+                candidates = listOf(CandidateInput("Seeded Candidate", "Independent", "Mayor")),
             ),
         )
         val title = "E2E Ballot Measure $n"
@@ -283,7 +285,8 @@ class DevController(
                 closeDate = null,
             ),
         )
-        ballotMeasures.publish(draft.id, creator, confirmed = false)
+        // Publishing the election takes its draft measures live with it.
+        elections.publish(election.id, creator, confirmed = true)
         log.info("Seeded published ballot measure id={} title='{}' zip={}", draft.id, title, zipcode)
         return mapOf("id" to draft.id, "title" to title, "zipcode" to zipcode, "electionId" to election.id)
     }

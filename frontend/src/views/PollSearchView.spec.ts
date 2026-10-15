@@ -51,4 +51,23 @@ describe('PollSearchView: the Creator column', () => {
     expect(w.find('[data-test="creator"]').exists()).toBe(false)
     w.unmount()
   })
+
+  it('a ballot measure shows its election (15 characters + "...", full title on hover), and Vote goes there', async () => {
+    const auth = (await import('@/stores/auth')).useAuthStore
+    const measure = { ...row(5, null), type: 'BallotMeasure', electionId: 9, electionTitle: 'King for a week of fun' }
+    const w = await searchReturning([measure, row(1, null)])
+    expect(w.findAll('th').map(h => h.text()).some(h => h.startsWith('For Election'))).toBe(true)
+    const cells = w.findAll('[data-test="for-election"]')
+    expect(cells[0].text()).toBe('King for a week...')
+    expect(cells[0].find('span').attributes('title')).toBe('King for a week of fun')
+    expect(cells[1].text()).toBe('')
+
+    // Signed in: Vote on the measure opens its election, scrolled to it.
+    ;(auth() as any).isAuthenticated = true
+    await flushPromises()
+    const vote = w.findAllComponents(RouterLinkStub).find(l => typeof l.props('to') === 'object' && (l.props('to') as any).path?.startsWith('/polls/election/'))
+    expect(vote?.props('to')).toEqual({ path: '/polls/election/9', query: { measure: '5' } })
+    w.unmount()
+  })
 })
+

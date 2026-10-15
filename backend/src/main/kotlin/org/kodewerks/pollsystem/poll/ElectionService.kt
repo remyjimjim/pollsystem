@@ -30,7 +30,8 @@ class ElectionService(
     private val pollTypes: PollTypeRepository,
     private val purviews: PollPurviewService,
     private val grants: CreatorGrantGuard,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val ballotMeasures: BallotMeasureService
 ) {
 
     @Transactional
@@ -114,7 +115,23 @@ class ElectionService(
         validateClose(existing.closeDate, confirmed, allowPast = hasBeenLive)
         // Re-checked at publish: grants may have been disabled since the draft.
         grants.requireCovers(creator, existing.pollType, purviews.purviewOf(PollKind.ELECTION, id))
-        return elections.save(existing.copy(status = PollStatus.PUBLISHED, creatorEditedAt = Instant.now()))
+        // Its draft ballot measures go live with it. Every one is checked like
+        // a measure's own publish BEFORE anything is saved, so one that can't
+        // go live stops the whole publish cleanly.
+        val drafts = ballotMeasures.draftsOf(id)
+        for (m in drafts) {
+            try {
+                ballotMeasures.checkPublishable(m, creator, confirmed)
+            } catch (e: ResponseStatusException) {
+                val reason = e.reason ?: ""
+                // Keep the short-close code as-is so the page can ask to confirm.
+                if (reason.startsWith("close_date_short:")) throw e
+                throw ResponseStatusException(e.statusCode, "Ballot measure \"${m.title}\": $reason")
+            }
+        }
+        val published = elections.save(existing.copy(status = PollStatus.PUBLISHED, creatorEditedAt = Instant.now()))
+        drafts.forEach { ballotMeasures.publishChecked(it.copy(election = published), creator, confirmed) }
+        return published
     }
 
     @Transactional(readOnly = true)

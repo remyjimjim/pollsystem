@@ -30,9 +30,14 @@ Each candidate has an optional **comment** box.
 
 ## Ballot measures
 
-A ballot measure belongs to an election, shown as **Part of**. Choose **Yes**
-or **No** under **Your vote**, add a comment if you like, and click **Submit
-vote**.
+A ballot measure belongs to an election, and you vote on it **on the
+election's page**: the election's open measures are listed under
+**Ballot measures**, below the candidates. **Vote →** on a measure in Find
+polls takes you there, scrolled to that measure.
+
+Measures are **optional**, like on a real ballot: choose **Yes** or **No** on
+the ones you want to vote on, and leave the others blank. Each has an optional
+comment box. **Submit votes** sends your candidates and measures together.
 
 ## Questionnaires
 
