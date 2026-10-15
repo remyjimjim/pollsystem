@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-10-15 — Creator column on poll search, linking to Manage Creators
+
+**Requested:**
+
+> If a user logs in with admin+ access and navigates to polls/search and clicks
+> the 'Search' button … there should be one more column after the zipcodes
+> column named 'Creator' and under that column will be hyperlinks showing the
+> first 5 letters of the creator's email with '...' on the end and if that link
+> is clicked then the app should navigate to admin/manage-creators with
+> creators sorted by email having the clicked on email at the top of the list
+> of creators.
+
+**Changed:**
+
+- `5c92db5`: admins and supers get a **Creator** column on poll search, showing the
+  first 5 letters of the email + "...".
+  - The link opens Manage Creators with that creator pinned first and
+    highlighted, and the rest in email order. A note offers "Show the usual
+    list".
+- Found while building it: the search API sent every poll's creator email to
+  everyone, signed out included. Emails, and the creator-email filter, are now
+  for admins and supers only.
+- Labels in 9 languages, and the help page is updated.
+- Backend 317/317, frontend 112/112, e2e 13/13. Live: signed out, 0 of 3 polls
+  carried an email; as an admin, 3 of 3.
+
+**Commit:** `5c92db5`
+
+---
+
 ## 2026-10-15 — Curate the bad-word list by hand (decision)
 
 **Requested:**
