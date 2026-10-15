@@ -34,3 +34,22 @@ data class PollNotification(
     @Column(name = "sent_at", nullable = false)
     val sentAt: Instant = Instant.now()
 )
+
+/** Milestone emails paused for a poll (V32); no row = emails on. */
+@Entity
+@Table(name = "poll_email_mutes")
+data class PollEmailMute(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "poll_type", nullable = false, length = 20)
+    val pollType: PollKind,
+
+    @Column(name = "poll_id", nullable = false)
+    val pollId: Long,
+
+    @Column(name = "created_at", nullable = false)
+    val createdAt: Instant = Instant.now()
+)

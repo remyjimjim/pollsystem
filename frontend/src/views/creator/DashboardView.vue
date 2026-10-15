@@ -20,6 +20,8 @@ interface CreatorPollSummary {
   respondents: number
   /** How many live inside the poll's area; null = withheld (a group is too small). */
   inArea: number | null
+  /** Milestone emails on for this poll (10 responses, closed); the creator can pause them. */
+  emails: boolean
 }
 
 const polls = ref<CreatorPollSummary[]>([])
@@ -89,6 +91,17 @@ function toggleArchived() {
 }
 
 const acting = ref<number | null>(null)
+// The Emails checkbox: pause / resume this poll's milestone emails.
+async function setEmails(p: CreatorPollSummary, enabled: boolean) {
+  error.value = null
+  try {
+    await axios.put(`/api/creator/polls/${editSlug(p.type)}/${p.id}/emails`, { enabled })
+    p.emails = enabled
+  } catch (e: any) {
+    error.value = e?.response?.data?.message ?? t('creator.dashboard.errorEmails')
+  }
+}
+
 async function archive(p: CreatorPollSummary) {
   if (!window.confirm(t('creator.dashboard.archiveConfirm', { title: p.title }))) return
   acting.value = p.id
@@ -171,6 +184,7 @@ onMounted(load)
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableStatus') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableCloseDate') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableResponses') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :title="$t('creator.dashboard.emailsHint')">{{ $t('creator.dashboard.tableEmails') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
           <th class="border-b border-slate-200 p-2"></th>
           <th class="border-b border-slate-200 p-2"></th>
@@ -207,6 +221,16 @@ onMounted(load)
                 :title="$t('creator.dashboard.inAreaHiddenWhy')"
               >· {{ $t('creator.dashboard.inAreaHidden') }}</span>
             </template>
+          </td>
+          <td class="border-b border-slate-100 p-2" :title="$t('creator.dashboard.emailsHint')">
+            <input
+              type="checkbox"
+              class="h-4 w-4"
+              data-test="emails"
+              :checked="p.emails"
+              :aria-label="$t('creator.dashboard.emailsFor', { title: p.title })"
+              @change="setEmails(p, ($event.target as HTMLInputElement).checked)"
+            />
           </td>
           <td class="border-b border-slate-100 p-2">
             <router-link

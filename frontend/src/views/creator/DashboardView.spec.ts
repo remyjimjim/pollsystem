@@ -47,7 +47,7 @@ describe('Creator DashboardView', () => {
   describe('at a glance (creator reports, phase 1)', () => {
     const poll = (over: Record<string, unknown>) => ({
       id: 7, type: 'Questionnaire', title: 'Park hours', status: 'PUBLISHED',
-      closeDate: null, createdAt: '2026-10-01T00:00:00Z', respondents: 0, inArea: 0, ...over,
+      closeDate: null, createdAt: '2026-10-01T00:00:00Z', respondents: 0, inArea: 0, emails: true, ...over,
     })
     const cell = async (over: Record<string, unknown>) =>
       (await mountAs(AccessLevel.CREATOR, [poll(over)])).find('[data-test="responses"]').text()
@@ -78,6 +78,17 @@ describe('Creator DashboardView', () => {
       const w = await mountAs(AccessLevel.CREATOR, [poll({ id: 1, closeDate: inDays(3) }), poll({ id: 2, closeDate: inDays(1) })])
       expect(w.text()).toContain('closes in 3 days')
       expect(w.text()).toContain('closes tomorrow')
+    })
+
+    it('the Emails box shows and switches a poll\'s milestone emails', async () => {
+      vi.mocked(axios.put).mockResolvedValue({ data: { enabled: false } })
+      const w = await mountAs(AccessLevel.CREATOR, [poll({ id: 7 }), poll({ id: 8, emails: false })])
+      const boxes = w.findAll('[data-test="emails"]')
+      expect(boxes.map(b => (b.element as HTMLInputElement).checked)).toEqual([true, false])
+
+      await boxes[0].setValue(false)
+      await flushPromises()
+      expect(axios.put).toHaveBeenCalledWith('/api/creator/polls/questionnaire/7/emails', { enabled: false })
     })
   })
 })

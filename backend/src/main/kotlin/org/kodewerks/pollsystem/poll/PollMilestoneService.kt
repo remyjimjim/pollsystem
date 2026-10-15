@@ -38,6 +38,7 @@ class PollMilestoneService(
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
     private val notifications: PollNotificationRepository,
+    private val mutes: org.kodewerks.pollsystem.repository.PollEmailMuteRepository,
     private val participation: PollParticipationService,
     private val email: EmailService,
     private val links: MagicLinkProperties,
@@ -65,10 +66,18 @@ class PollMilestoneService(
     private fun reportUrl(p: PollInfo) = "${site()}/creator/polls/${slug(p.kind)}/${p.id}/report"
     private fun resultsUrl(p: PollInfo) = "${site()}/polls/${slug(p.kind)}/${p.id}/results"
 
-    /** Record the milestone (once) and email the creator. Returns false if it was already sent. */
+    /**
+     * Record the milestone (once) and email the creator. If the creator paused
+     * this poll's emails, it's recorded but not sent, so un-pausing later
+     * doesn't send it (missed emails are skipped). Returns false if already handled.
+     */
     private fun once(p: PollInfo, kind: PollNotificationKind, subject: String, body: String): Boolean {
         if (notifications.existsByPollTypeAndPollIdAndKind(p.kind, p.id, kind)) return false
         notifications.save(PollNotification(pollType = p.kind, pollId = p.id, kind = kind))
+        if (mutes.existsByPollTypeAndPollId(p.kind, p.id)) {
+            log.info("Milestone email {} for {} {} skipped: paused by the creator", kind, p.kind, p.id)
+            return true
+        }
         try {
             email.send(p.creator.email, subject, body)
         } catch (e: Exception) {

@@ -103,6 +103,59 @@ class PollMilestoneTest : AbstractIntegrationTest() {
         assertThat(sentTo(creator)).hasSize(1)
     }
 
+    // ---------- the Creator dashboard's Emails checkbox ----------
+
+    @Autowired private lateinit var creatorPolls: CreatorPollsController
+
+    private fun emailsOn(creator: User, id: Long) =
+        creatorPolls.list(AppUserDetails(creator), showArchived = false).single { it.id == id }.emails
+
+    @Test
+    fun `paused emails are skipped, not caught up, and resuming only affects later ones`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "ms-creator")
+        val id = poll(creator)
+        assertThat(emailsOn(creator, id)).isTrue()      // on by default
+
+        creatorPolls.setEmails(AppUserDetails(creator), "questionnaire", id, SetEmailsRequest(false))
+        assertThat(emailsOn(creator, id)).isFalse()
+        repeat(3) { vote(id, 30 + it) }                 // the 10-response milestone (k = 3) while paused
+        assertThat(sentTo(creator)).isEmpty()
+
+        creatorPolls.setEmails(AppUserDetails(creator), "questionnaire", id, SetEmailsRequest(true))
+        repeat(3) { vote(id, 40 + it) }                 // resumed: the skipped one isn't sent later
+        assertThat(sentTo(creator)).isEmpty()
+
+        // A later milestone after resuming is sent.
+        questionnaireRepo.save(questionnaireRepo.findById(id).get().copy(closeDate = Instant.now().minus(Duration.ofHours(1))))
+        milestones.sendClosingReports()
+        assertThat(sentTo(creator).single().subject).isEqualTo("Your poll \"Milestones\" has closed")
+    }
+
+    @Test
+    fun `a closing report missed while paused isn't sent after resuming`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "ms-creator")
+        val id = poll(creator)
+        creatorPolls.setEmails(AppUserDetails(creator), "questionnaire", id, SetEmailsRequest(false))
+        questionnaireRepo.save(questionnaireRepo.findById(id).get().copy(closeDate = Instant.now().minus(Duration.ofHours(1))))
+        milestones.sendClosingReports()
+        creatorPolls.setEmails(AppUserDetails(creator), "questionnaire", id, SetEmailsRequest(true))
+        milestones.sendClosingReports()
+        assertThat(sentTo(creator)).isEmpty()
+    }
+
+    @Test
+    fun `only the poll's creator can pause its emails`() {
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "ms-creator")
+        val id = poll(creator)
+        val other = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "ms-other")
+        org.assertj.core.api.Assertions.assertThatThrownBy {
+            creatorPolls.setEmails(AppUserDetails(other), "questionnaire", id, SetEmailsRequest(false))
+        }.isInstanceOfSatisfying(org.springframework.web.server.ResponseStatusException::class.java) {
+            assertThat(it.statusCode.value()).isEqualTo(403)
+        }
+        assertThat(emailsOn(creator, id)).isTrue()
+    }
+
     @TestConfiguration
     class RecordingEmailConfig {
         @Bean

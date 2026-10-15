@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -30,8 +32,13 @@ data class CreatorPollSummary(
     /** People who have answered (0 for drafts). */
     val respondents: Int = 0,
     /** How many of them live inside the poll's purview; null = withheld (small group). */
-    val inArea: Int? = 0
+    val inArea: Int? = 0,
+    /** Milestone emails on for this poll (the creator can pause them). */
+    val emails: Boolean = true
 )
+
+/** Pause (false) or resume (true) a poll's milestone emails. */
+data class SetEmailsRequest(val enabled: Boolean)
 
 @RestController
 @RequestMapping("/api/creator/polls")
@@ -40,7 +47,8 @@ class CreatorPollsController(
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
     private val participation: PollParticipationService,
-    private val reports: PollReportService
+    private val reports: PollReportService,
+    private val mutes: org.kodewerks.pollsystem.repository.PollEmailMuteRepository
 ) {
     @GetMapping
     fun list(
@@ -72,9 +80,11 @@ class CreatorPollsController(
         val all = (q + e + b).sortedByDescending { it.createdAt }
         val listed = if (showArchived) all else all.filterNot { it.status == PollStatus.ARCHIVED }
         // Drafts have no responses; count the rest (a creator has few polls).
+        val muted = mutes.findAll().map { it.pollType to it.pollId }.toSet()
         return listed.map { p ->
-            if (p.status == PollStatus.DRAFT) p
-            else participation.of(kindOf(p.type), p.id).let { p.copy(respondents = it.respondents, inArea = it.inArea) }
+            val withEmails = p.copy(emails = (kindOf(p.type) to p.id) !in muted)
+            if (p.status == PollStatus.DRAFT) withEmails
+            else participation.of(kindOf(p.type), p.id).let { withEmails.copy(respondents = it.respondents, inArea = it.inArea) }
         }
     }
 
@@ -168,6 +178,28 @@ class CreatorPollsController(
         }
         if (creatorId != principal.user.id && principal.user.access != AccessLevel.SUPER) throw forbidden()
         return reports.report(kind, id)
+    }
+
+    /** The Creator dashboard's Emails checkbox: pause or resume this poll's milestone emails (owner only). */
+    @PutMapping("/{type}/{id}/emails")
+    @Transactional
+    fun setEmails(
+        @AuthenticationPrincipal principal: AppUserDetails,
+        @PathVariable type: String,
+        @PathVariable id: Long,
+        @RequestBody body: SetEmailsRequest
+    ): SetEmailsRequest {
+        val (kind, creatorId) = when (type) {
+            "questionnaire" -> PollKind.QUESTIONNAIRE to questionnaires.findById(id).orElseThrow { notFound() }.creator.id
+            "election" -> PollKind.ELECTION to elections.findById(id).orElseThrow { notFound() }.creator.id
+            "ballot-measure" -> PollKind.BALLOT_MEASURE to ballotMeasures.findById(id).orElseThrow { notFound() }.creator.id
+            else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
+        }
+        if (creatorId != principal.user.id) throw forbidden()
+        val existing = mutes.findByPollTypeAndPollId(kind, id)
+        if (body.enabled && existing != null) mutes.delete(existing)
+        if (!body.enabled && existing == null) mutes.save(org.kodewerks.pollsystem.model.PollEmailMute(pollType = kind, pollId = id))
+        return SetEmailsRequest(enabled = body.enabled)
     }
 
     private fun notFound() = ResponseStatusException(HttpStatus.NOT_FOUND, "Poll not found")

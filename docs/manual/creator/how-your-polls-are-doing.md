@@ -65,6 +65,10 @@ You get an email:
 
 Each is sent once per poll.
 
+To pause them for a poll, untick its **Emails** box on your Creator dashboard.
+Anything that happens while paused isn't emailed later; ticking the box again
+only affects future emails. New polls start with emails on.
+
 The report protects people's privacy:
 
 - **Small groups are withheld.** A group of fewer than 10 people shows as

@@ -430,3 +430,8 @@ interface ResultSnapshotAnswerRepository : JpaRepository<ResultSnapshotAnswer, L
 interface PollNotificationRepository : JpaRepository<PollNotification, Long> {
     fun existsByPollTypeAndPollIdAndKind(pollType: PollKind, pollId: Long, kind: PollNotificationKind): Boolean
 }
+
+interface PollEmailMuteRepository : JpaRepository<PollEmailMute, Long> {
+    fun findByPollTypeAndPollId(pollType: PollKind, pollId: Long): PollEmailMute?
+    fun existsByPollTypeAndPollId(pollType: PollKind, pollId: Long): Boolean
+}
