@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-15 — Tag `release-0` (decision)
+
+**Requested:**
+
+> I think we should tag the current state of the repo something like 'Release
+> 0' so if my instructions lead to a totally jacked up product we have
+> something to fall back to.
+
+then:
+
+> (a), tag it release-0
+
+**Decision:**
+
+- An annotated tag `release-0` is on `3ccfc21`, the commit CI passed on and
+  staging runs, rather than the newer local commits. It's pushed to GitHub.
+- The tag covers code only. Falling back past later migrations (after `V33`)
+  also needs a database restore (Neon point-in-time) for staging/prod.
+- Fall back by branching from the tag or reverting, never by rewriting `main`.
+
+---
+
 ## 2026-10-15 — Creator column on poll search, linking to Manage Creators
 
 **Requested:**
