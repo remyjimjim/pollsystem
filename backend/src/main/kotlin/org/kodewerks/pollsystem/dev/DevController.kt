@@ -150,8 +150,20 @@ class DevController(
         nuke("ballot_responses", "user_id IN ($idList)")
         nuke("question_responses", "user_id IN ($idList)")
         nuke("user_messages", "author_id IN ($idList)")
-        nuke("creator_requests", "user_id IN ($idList) OR assigned_admin_id IN ($idList) OR processed_by_id IN ($idList)")
-        nuke("admin_requests", "user_id IN ($idList) OR processed_by_id IN ($idList)")
+        // Requests MADE by test users go; on anyone else's request, just forget the
+        // test user as assignee / decider (deleting a real user's approved request
+        // would break the access that references it, e.g. admin@local.test approved
+        // by a seeded test super).
+        nuke("creator_requests", "user_id IN ($idList)")
+        nuke("admin_requests", "user_id IN ($idList)")
+        deletions["creator_requests.assigned_admin_id/processed_by_id (nulled)"] = em.createNativeQuery(
+            "UPDATE creator_requests SET assigned_admin_id = CASE WHEN assigned_admin_id IN ($idList) THEN NULL ELSE assigned_admin_id END, " +
+                "processed_by_id = CASE WHEN processed_by_id IN ($idList) THEN NULL ELSE processed_by_id END " +
+                "WHERE assigned_admin_id IN ($idList) OR processed_by_id IN ($idList)"
+        ).executeUpdate()
+        deletions["admin_requests.processed_by_id (nulled)"] = em.createNativeQuery(
+            "UPDATE admin_requests SET processed_by_id = NULL WHERE processed_by_id IN ($idList)"
+        ).executeUpdate()
         nuke("ip_rules", "created_by_id IN ($idList)")
         nuke("poll_type_blocks", "created_by IN ($idList)")
         nuke("poll_notes", "author_id IN ($idList)")

@@ -56,4 +56,25 @@ class ResetTestUsersTest : AbstractIntegrationTest() {
         )).isZero()
         assertThat(count("SELECT count(*) FROM users WHERE email LIKE 'zzr%'")).isZero()
     }
+
+    @Autowired private lateinit var adminRequests: org.kodewerks.pollsystem.adminrequest.AdminRequestService
+    @Autowired private lateinit var fixtures: org.kodewerks.pollsystem.TestFixtures
+
+    @Test
+    fun `a real user's request approved by a test user survives the reset`() {
+        // e.g. admin@local.test's admin request, approved by a seeded test super.
+        val real = fixtures.createUser(access = org.kodewerks.pollsystem.model.AccessLevel.CREATOR, emailPrefix = "real")
+        val testSuper = fixtures.createUser(access = org.kodewerks.pollsystem.model.AccessLevel.SUPER, emailPrefix = "zzr-super")
+        val req = adminRequests.submit(real, org.kodewerks.pollsystem.adminrequest.SubmitAdminRequest(
+            scopeLevel = org.kodewerks.pollsystem.model.ScopeLevel.NATIONAL, reason = "r"))
+        adminRequests.batchApprove(listOf(req.id), testSuper)
+
+        mockMvc.post("/api/dev/reset-test-users") { param("emailPrefix", "zzr") }
+            .andExpect { status { isOk() } }
+        em.clear()
+
+        assertThat(count("SELECT count(*) FROM users WHERE email LIKE 'zzr%'")).isZero()
+        assertThat(count("SELECT count(*) FROM admin_requests WHERE id = ${req.id} AND processed_by_id IS NULL")).isEqualTo(1)
+        assertThat(count("SELECT count(*) FROM role_assignments WHERE admin_request_id = ${req.id} AND enabled")).isEqualTo(1)
+    }
 }
