@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-10-15 — Curate the bad-word list by hand (decision)
+
+**Requested:**
+
+> I'll just curate my own list and add to it.
+
+**Decision:**
+
+- No third-party list (LDNOOBW, `bad-words`/`cuss`), no auto-generated
+  replacements, and no automatic word forms.
+- The user maintains `backend/src/main/resources/moderation/bad-words.json` by
+  hand.
+- Matching stays whole-word, so each form to catch ("darns", "darned") is
+  listed explicitly.
+- A list change ships with a backend deploy, because the file is loaded at
+  startup.
+
+---
+
 ## 2026-10-15 — The bad-word list stays on the server
 
 **Requested:**
