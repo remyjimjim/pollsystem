@@ -61,6 +61,22 @@ logged.
 
 ---
 
+## 2026-10-16 — seed-demo.md tidied
+
+**Requested:**
+
+> tidy it up and push it please
+
+**Changed:**
+
+- `f9e5848`: `scripts/docs/seed-demo.md` (saved from a chat reply) is rewritten
+  as a reference doc: running it, what it creates (a table), signing in, and
+  how it works. The staging section is unchanged.
+
+**Commit:** `f9e5848`
+
+---
+
 ## 2026-10-16 — seed-demo on staging (documented)
 
 **Requested:**
