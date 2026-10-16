@@ -130,6 +130,30 @@ describe('LoginView (magic-link)', () => {
       expect(replaceMock).toHaveBeenCalledWith('/polls/42')
     })
 
+    it('moves on even when this tab was signed in as someone else', async () => {
+      mountLogin()
+      const auth = useAuthStore()
+      ;(auth as any).token = 'old-user-jwt'
+      ;(auth as any).isAuthenticated = true
+
+      window.dispatchEvent(new StorageEvent('storage', { key: 'token', newValue: 'new-user-jwt' }))
+      await flushPromises()
+
+      expect(auth.adoptToken).toHaveBeenCalledWith('new-user-jwt')
+      expect(replaceMock).toHaveBeenCalledWith('/')
+    })
+
+    it('ignores the login this tab already has', async () => {
+      mountLogin()
+      const auth = useAuthStore()
+      ;(auth as any).token = 'same-jwt'
+
+      window.dispatchEvent(new StorageEvent('storage', { key: 'token', newValue: 'same-jwt' }))
+      await flushPromises()
+
+      expect(auth.adoptToken).not.toHaveBeenCalled()
+    })
+
     it('ignores storage events that are not a fresh token', async () => {
       mountLogin()
       const auth = useAuthStore()

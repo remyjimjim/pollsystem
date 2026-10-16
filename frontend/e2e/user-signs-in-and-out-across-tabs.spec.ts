@@ -10,9 +10,11 @@ import { fetchMagicLink } from './mailpit'
 // Read-only: no pre-wipe.
 test.describe('user signs in and out across tabs', () => {
   let memberEmail = ''
+  let otherEmail = ''
 
   test.beforeAll(async () => {
     memberEmail = (await seedUser({})).email
+    otherEmail = (await seedUser({})).email
   })
 
   test('the emailed link in a new tab signs in the tab you started from', async ({ page, context }) => {
@@ -31,6 +33,24 @@ test.describe('user signs in and out across tabs', () => {
     // The first tab doesn't stay on the Login page: it's signed in and moves on.
     await expect(page).not.toHaveURL(/\/login/, { timeout: 10_000 })
     await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible()
+    await hold(page)
+  })
+
+  test('…and when the browser was signed in as someone else', async ({ page, context }) => {
+    test.setTimeout(120_000)
+    await signInSeededUser(page, otherEmail)
+    await page.goto(`${BASE}/login`)
+    await page.getByLabel('Email').fill(memberEmail)
+    await page.getByRole('button', { name: 'Email me a sign-in link' }).click()
+    await expect(page.getByText('Check your email.')).toBeVisible({ timeout: 15_000 })
+
+    const linkTab = await context.newPage()
+    await linkTab.goto(await fetchMagicLink(memberEmail))
+    await expect(linkTab.getByText(memberEmail)).toBeVisible({ timeout: 30_000 })
+
+    // The first tab moves on as the NEW user (not left on a blank Login form).
+    await expect(page).not.toHaveURL(/\/login/, { timeout: 10_000 })
+    await expect(page.getByText(memberEmail).first()).toBeVisible()
     await hold(page)
   })
 

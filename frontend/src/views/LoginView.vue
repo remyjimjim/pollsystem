@@ -13,8 +13,10 @@ const router = useRouter()
 // tab and redeems there), that tab writes the JWT to localStorage, firing a
 // `storage` event here. We adopt it and continue on THIS tab, so the user ends
 // up signed in on the tab they started from rather than the pop-up tab.
+// Also when this tab was already signed in as someone else: the new login wins
+// and the tab moves on (App.vue leaves the Login page to this handler).
 async function onTokenFromOtherTab(e: StorageEvent) {
-  if (e.key !== 'token' || !e.newValue || auth.isAuthenticated) return
+  if (e.key !== 'token' || !e.newValue || e.newValue === auth.token) return
   await auth.adoptToken(e.newValue)
   const redirect = (route.query.redirect as string) || '/'
   if (auth.user && !auth.user.profileComplete) {
