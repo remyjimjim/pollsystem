@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-16 — Fix: the emailed link left the starting tab on Login
+
+**Requested:**
+
+> demo-creator-wash@test.local appears to not be able to login, the errors in
+> watchall log are: [two backend restarts, two Postgres `string_agg` errors]
+
+**Changed:**
+
+- `090ad72`: reproduced in a browser. Opening the emailed link in a new tab
+  signed in, but the starting tab stayed on Login.
+  - The cause was `3200096`: a login arriving from another tab counted as a
+    user switch and reloaded the tab.
+  - A login arriving while signed out is now a sign-in, so the Login page
+    moves on as before.
+- A new e2e test follows exactly that path and fails on the old code. Frontend
+  127/127, e2e 15/15.
+- The watchall errors were from my own mistyped verification query; the
+  account and backend were fine.
+
+**Commit:** `090ad72`
+
+---
+
 ## 2026-10-16 — A demo-seeding script
 
 **Requested:**
