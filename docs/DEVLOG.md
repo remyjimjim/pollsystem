@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-10-16 — watchall watches the containers for errors
+
+**Requested:**
+
+> So was it wise of me to run the pollsystem/scripts/pollsystem.watchall.bash?
+> It's having DB connection issues. Is it meant to be run in local-docker
+> environment or just local?
+
+then:
+
+> retire it in favour of BuildAndDeploy.bash local, is there a way to rewrite
+> it so it works on containers, as I recall it watched for and reported any
+> errors for the whole app?
+
+**Decision:**
+
+- watchall's old job, running the backend and frontend on the host, is
+  retired: `BuildAndDeploy.bash local` does it.
+- watchall itself becomes a log watcher for the local-docker containers.
+
+**Changed:**
+
+- `5800f19`: it follows the backend, frontend, database and Mailpit logs in one
+  window, highlights and counts error lines, and prints a per-service summary
+  on Ctrl-C. Options: `-e` for errors only, `-s` for the starting point, and
+  a service subset.
+- It survives container rebuilds and leaves no processes behind.
+- Verified with a deliberate database error. Documented in
+  `RUNNING-on-docker.md`.
+
+**Commit:** `5800f19`
+
+---
+
 ## 2026-10-15 — Ballot measures voted on with their election
 
 **Requested:**
