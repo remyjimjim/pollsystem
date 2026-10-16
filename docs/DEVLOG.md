@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-16 — Logging out in one tab logs out every tab
+
+**Requested:**
+
+> … should we allow users to be logged into multiple tabs as the same user?
+> Or actually, I think I'm making too much out of it. I see not reason to not
+> allow multiple logins in the browser.
+
+then:
+
+> yes, make note in todo.md if you would.
+
+**Decision:**
+
+- Logins stay shared by the browser's tabs.
+- Logging out (or in as someone else) in one tab now applies to all of them.
+- Server-side logout is noted in `todo.md` under "Possible add ons", not
+  built.
+
+**Changed:**
+
+- `3200096`: the app listens for the shared login changing in another tab. A
+  logout there logs this tab out and sends it home; a different login reloads
+  it as that user.
+- A new e2e test (`user-logs-out-in-every-tab`) checks two real tabs.
+- Frontend 126/126, e2e 14/14.
+
+**Commit:** `3200096`
+
+---
+
 ## 2026-10-16 — watchall watches the containers for errors
 
 **Requested:**
