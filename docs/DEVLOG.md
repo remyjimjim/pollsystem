@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-16 — Fix: the Login tab when already signed in as someone else
+
+**Requested:**
+
+> It's still not able to login, do need to run scripts/BuildAndDeploy
+> local-docker again? …
+
+then:
+
+> I goto localhost:3000/login and enter demo-creator-wash@test.local then
+> clicked the newest message and link in mailpit then a tab opened and closed
+> and the original tab was still at localhost:3000/login with an empty email
+> field.
+
+**Changed:**
+
+- `1f310bc`: the empty email field showed the tab had reloaded. The browser was
+  already signed in as another user, so the new login counted as a switch.
+  - The Login page now moves on for any new login.
+  - The app shell leaves the Login page to it.
+- The e2e test gains this path (reproduced first). Frontend 129/129, e2e
+  16/16.
+- No rebuild was needed: the frontend container picks up changes on its own.
+
+**Commit:** `1f310bc`
+
+---
+
 ## 2026-10-16 — Fix: the emailed link left the starting tab on Login
 
 **Requested:**
