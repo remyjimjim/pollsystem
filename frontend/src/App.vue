@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -15,6 +15,15 @@ onMounted(async () => {
     await authStore.fetchUser()
   }
 })
+
+// Logging out (or in as someone else) in one tab applies to every tab.
+function onStorage(e: StorageEvent) {
+  const change = authStore.syncFromOtherTab(e)
+  if (change === 'signedOut') router.push('/')
+  else if (change === 'switched') window.location.reload()
+}
+onMounted(() => window.addEventListener('storage', onStorage))
+onUnmounted(() => window.removeEventListener('storage', onStorage))
 
 function handleLogout() {
   authStore.logout()

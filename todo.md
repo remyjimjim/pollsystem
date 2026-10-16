@@ -209,3 +209,10 @@
      - only inside a state grant the creator already has;
      - in one step, switch the state grant off (with a reason) and add the county/zipcode grants inside it.
    - Done: No.
+
+-  Make "Logout" end the login on the server too.
+   - Today (2026-10-16) Logout removes the login from the browser, in every tab, but the login token stays valid on the
+     server until it expires (logins are stateless JWTs). It only matters if a token were stolen (copied from the browser).
+   - If needed: keep a server-side list of logged-out tokens (or a per-user "logged out at" time that tokens issued
+     earlier fail against), checked on every request; or shorter-lived tokens with refresh.
+   - Done: No.

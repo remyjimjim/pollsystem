@@ -122,10 +122,39 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function logout(): void {
+    clearSession()
+    localStorage.removeItem('token')
+  }
+
+  /** Forget the session in this tab only (the shared storage is already cleared). */
+  function clearSession(): void {
     user.value = null
     token.value = null
-    localStorage.removeItem('token')
     delete axios.defaults.headers.common['Authorization']
+  }
+
+  /**
+   * Keep this tab in step with the others: the login lives in localStorage,
+   * shared by every tab, but each tab also holds it in memory. Called on a
+   * `storage` event. Returns what changed:
+   * - 'signedOut': another tab logged out, so this one is logged out too
+   *   (it must not stay usable, e.g. on a shared computer);
+   * - 'switched': another tab signed in as a different login; the caller
+   *   reloads so no page keeps showing the previous user's data;
+   * - null: nothing to do (another key, or the login this tab already has,
+   *   e.g. adopted by the Login page's own cross-tab sign-in).
+   */
+  function syncFromOtherTab(e: Pick<StorageEvent, 'key' | 'newValue'>): 'signedOut' | 'switched' | null {
+    // key null = the whole storage was cleared.
+    if (e.key !== 'token' && e.key !== null) return null
+    const next = e.key === null ? null : e.newValue
+    if (next === token.value) return null
+    if (!next) {
+      if (!token.value) return null
+      clearSession()
+      return 'signedOut'
+    }
+    return 'switched'
   }
 
   return {
@@ -142,6 +171,7 @@ export const useAuthStore = defineStore('auth', () => {
     adoptToken,
     fetchUser,
     completeProfile,
-    logout
+    logout,
+    syncFromOtherTab
   }
 })

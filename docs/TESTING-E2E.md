@@ -156,6 +156,7 @@ first spec that needs them.
 | `creator-creates-election` | creator | Build a whole-state election in the wizard (date + two candidates) → publish → dashboard shows PUBLISHED → a guest finds it → the API shows both candidates saved. |
 | `creator-creates-questionnaire` | creator | Build a whole-state questionnaire in the wizard → publish → dashboard shows PUBLISHED → a guest finds it in search. |
 | `user-answers-election-and-measure` | user | Find a ballot measure by title → search shows its election ("For Election", 15 characters + "…") → Vote opens the election scrolled to the measure → vote for one Mayor candidate and Yes on the measure, submitted together → both votes counted → revisiting shows "You voted on". |
+| `user-logs-out-in-every-tab` | user | Signed in with the site open in a second tab → Logout in the first tab → the second tab is logged out too, at once and without a reload, and sent home. |
 | `super-edits-poll-type-template` | super | Edit the Election template: invalid JSON is rejected → switch candidates to multi-choice checkboxes → a member voting on an existing election gets checkboxes and both choices count → restore the original (also in `afterAll`). |
 | `super-disables-submissions` | super | Kill switch: submissions blocked for a member, then re-enabled. |
 | `seed-users-debug` | — | Debug variant of the seeder (keeps windows open). |

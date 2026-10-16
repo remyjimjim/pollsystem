@@ -185,6 +185,42 @@ describe('useAuthStore', () => {
     })
   })
 
+  describe('syncFromOtherTab', () => {
+    async function signedIn(tok = 'tok-a') {
+      mockedAxios.get.mockResolvedValueOnce({ data: makeUser() })
+      const auth = useAuthStore()
+      await auth.adoptToken(tok)
+      return auth
+    }
+
+    it('another tab logging out logs this tab out too', async () => {
+      const auth = await signedIn()
+      expect(auth.syncFromOtherTab({ key: 'token', newValue: null })).toBe('signedOut')
+      expect(auth.isAuthenticated).toBe(false)
+      expect(auth.token).toBeNull()
+      expect(mockedAxios.defaults.headers.common['Authorization']).toBeUndefined()
+    })
+
+    it('the whole storage being cleared counts as logging out', async () => {
+      const auth = await signedIn()
+      expect(auth.syncFromOtherTab({ key: null, newValue: null })).toBe('signedOut')
+      expect(auth.isAuthenticated).toBe(false)
+    })
+
+    it('a different login in another tab is a switch', async () => {
+      const auth = await signedIn('tok-a')
+      expect(auth.syncFromOtherTab({ key: 'token', newValue: 'tok-b' })).toBe('switched')
+    })
+
+    it('the same login, other keys, or a logout while already out change nothing', async () => {
+      const auth = await signedIn('tok-a')
+      expect(auth.syncFromOtherTab({ key: 'token', newValue: 'tok-a' })).toBeNull()
+      expect(auth.syncFromOtherTab({ key: 'locale', newValue: 'fr' })).toBeNull()
+      auth.logout()
+      expect(auth.syncFromOtherTab({ key: 'token', newValue: null })).toBeNull()
+    })
+  })
+
   describe('fetchUser', () => {
     it('does nothing when no token is set', async () => {
       const auth = useAuthStore()
