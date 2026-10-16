@@ -139,12 +139,14 @@ export const useAuthStore = defineStore('auth', () => {
    * `storage` event. Returns what changed:
    * - 'signedOut': another tab logged out, so this one is logged out too
    *   (it must not stay usable, e.g. on a shared computer);
-   * - 'switched': another tab signed in as a different login; the caller
-   *   reloads so no page keeps showing the previous user's data;
+   * - 'signedIn': this tab wasn't signed in and another tab signed in (e.g.
+   *   the emailed link opened in a new tab); the caller adopts the login;
+   * - 'switched': another tab replaced this tab's login with a different one;
+   *   the caller reloads so no page keeps showing the previous user's data;
    * - null: nothing to do (another key, or the login this tab already has,
    *   e.g. adopted by the Login page's own cross-tab sign-in).
    */
-  function syncFromOtherTab(e: Pick<StorageEvent, 'key' | 'newValue'>): 'signedOut' | 'switched' | null {
+  function syncFromOtherTab(e: Pick<StorageEvent, 'key' | 'newValue'>): 'signedOut' | 'signedIn' | 'switched' | null {
     // key null = the whole storage was cleared.
     if (e.key !== 'token' && e.key !== null) return null
     const next = e.key === null ? null : e.newValue
@@ -154,7 +156,7 @@ export const useAuthStore = defineStore('auth', () => {
       clearSession()
       return 'signedOut'
     }
-    return 'switched'
+    return token.value ? 'switched' : 'signedIn'
   }
 
   return {

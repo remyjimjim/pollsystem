@@ -207,6 +207,11 @@ describe('useAuthStore', () => {
       expect(auth.isAuthenticated).toBe(false)
     })
 
+    it('signing in elsewhere while signed out here is a sign-in, not a switch', () => {
+      const auth = useAuthStore()
+      expect(auth.syncFromOtherTab({ key: 'token', newValue: 'tok-new' })).toBe('signedIn')
+    })
+
     it('a different login in another tab is a switch', async () => {
       const auth = await signedIn('tok-a')
       expect(auth.syncFromOtherTab({ key: 'token', newValue: 'tok-b' })).toBe('switched')

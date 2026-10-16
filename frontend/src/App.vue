@@ -16,11 +16,15 @@ onMounted(async () => {
   }
 })
 
-// Logging out (or in as someone else) in one tab applies to every tab.
+// Logging in or out (or in as someone else) in one tab applies to every tab.
 function onStorage(e: StorageEvent) {
   const change = authStore.syncFromOtherTab(e)
   if (change === 'signedOut') router.push('/')
   else if (change === 'switched') window.location.reload()
+  // Signed in elsewhere (e.g. the emailed link in a new tab). The Login page
+  // adopts it itself and moves on to where you were going; any other page
+  // just picks it up.
+  else if (change === 'signedIn' && router.currentRoute.value.name !== 'Login') authStore.adoptToken(e.newValue!)
 }
 onMounted(() => window.addEventListener('storage', onStorage))
 onUnmounted(() => window.removeEventListener('storage', onStorage))
