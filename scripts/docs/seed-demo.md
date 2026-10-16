@@ -1,28 +1,58 @@
-To run it again:
-- From a terminal on your machine: ./scripts/seed-demo.bash
-- From the Dev Container, where localhost:8080 isn't reachable, run it inside a small container:
-  docker run --rm --network host -v "$PWD":/repo -w /repo alpine:3.20 sh -c "apk add -q bash curl python3 && bash scripts/seed-demo.bash"
+# seed-demo.bash
 
-Each run first deletes the previous demo and the e2e zzz users. Your own super and admin@local.test are left alone; I confirmed that.
+Starts the **local** database over with a demo: users, creators and admins in
+three states, each with draft polls. Everything goes through the real API, so
+the access requests, approvals and polls are genuine records. Based on
+`scripts/pseudocode/swagger-like-db-reset.txt`.
 
-What it creates, all through the real API:
-- Users: demo-super@test.local approves the requests. Per state (wash, colo, cali), all paid members: demo-respondent1..10-<st>, demo-user-<st>, demo-creator-<st> and demo-admin-<st>.
-- The creator requests creator access for the state, and the super approves it.
-  - It then creates "MidTerm Election <State>" as a draft and edits it to add your 4 candidates in District 1 and District 2.
-  - It also attaches 3 ballot measures (No nukes, No sales tax, No property tax) and creates 3 questionnaires (vaccines, money in politics, Glyphosate/Food), each with 3 Yes/No questions I wrote.
-- The admin gets creator access, creates the same 3 questionnaires, then requests admin access for the state, approved by the super.
+## Running it
 
-Checked in the database, twice (the second run cleanly replaced the first):
-- 40 users: 33 members, 3 creators, 3 admins, 1 super;
-- 3 elections with 4 candidates each, 9 measures, 18 questionnaires (54 questions), all drafts;
-- every grant in the right state.
+- From a terminal on your machine: `./scripts/seed-demo.bash`
+- From the Dev Container, where `localhost:8080` isn't reachable, run it inside
+  a small container on the host network:
 
-Notes:
-- Logging in: enter e.g. demo-creator-wash@test.local at http://localhost:3000/login, then click the link in Mailpit (http://localhost:8025).
-- One small backend addition: seed-user can now take an exact email address, so the demo users get memorable addresses. It only accepts @test.local addresses starting with the given prefix, so the wipe can always find them again. New tests cover it, and the backend suite passes 326/326.
-- A hiccup in testing: the Kotlin compiler's background process crashed once, which left old test results in place and made a passing test look like it failed. A clean rerun confirmed everything passes.
-- Your pseudocode file is untracked (scripts/pseudocode/). I didn't commit it, since it's your working note; the script's header credits it. Tell me if you'd like it in the repo.
-- The "Seeding a demo database" section of docs/RUNNING-on-docker.md explains it.
+  ```bash
+  docker run --rm --network host -v "$PWD":/repo -w /repo alpine:3.20 \
+    sh -c "apk add -q bash curl python3 && bash scripts/seed-demo.bash"
+  ```
+
+It needs the local stack running (`BuildAndDeploy.bash local` or
+`local-docker`). It's safe to re-run: each run first deletes the previous demo
+users and the e2e `zzz…` test users, with everything they made. Every other
+user (your own super, `admin@local.test`, …) is left alone.
+
+## What it creates
+
+All users are paid members at `demo-…@test.local`.
+
+| User | Per state (`wash`, `colo`, `cali`) |
+| --- | --- |
+| `demo-super@test.local` | One overall: the super who approves the requests below. |
+| `demo-respondent1..10-<st>` | 10 members in the state. |
+| `demo-user-<st>` | A member. |
+| `demo-creator-<st>` | Creator for the state (requested, then approved). Has a draft **"MidTerm Election \<State\>"** with 4 candidates (Jim James and Judy James in District 1; Barney Rubble and Fred Flintstone in District 2), 3 draft ballot measures on it (No nukes, No sales tax, No property tax), and 3 draft questionnaires (vaccines, money in politics, Glyphosate/Food) of 3 Yes/No questions each. |
+| `demo-admin-<st>` | Creator for the state with the same 3 draft questionnaires, then admin for the state (requested, then approved). |
+
+In total: 40 users (33 members, 3 creators, 3 admins, 1 super); 3 elections,
+9 ballot measures and 18 questionnaires (54 questions), all drafts.
+
+## Signing in as a demo user
+
+Enter the address (e.g. `demo-creator-wash@test.local`) at
+http://localhost:3000/login, then click the sign-in link in Mailpit
+(http://localhost:8025).
+
+## How it works
+
+- `/api/dev/seed-user` creates each user. Its `email` option gives an exact,
+  memorable address; it only accepts `@test.local` addresses that start with the
+  given prefix, so the next run's wipe can always find them.
+- Creator and admin access go through the real request endpoints and are
+  approved as `demo-super`.
+- Polls are created through the normal creator endpoints as drafts. The
+  election is created first and then edited to add its candidates.
+- Any failed call stops the script with the server's message.
+
 ## Running it on staging
 
 **It doesn't run on staging today, and it has never been run there.** The
