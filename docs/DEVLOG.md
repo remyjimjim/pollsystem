@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-16 — seed-demo on staging (documented)
+
+**Requested:**
+
+> I trust seed-demo.bash wasn't run on staging. Can we add a note in
+> pollsystem/scripts/docs/seed-demo.md how to run seed-demo.bash on staging if
+> the process differs from local-docker.
+
+**Changed:**
+
+- `bfd6934`: confirmed it never ran on staging, and can't:
+  - the dev endpoints answer 404 there;
+  - staging emails real mailboxes, so `@test.local` users can't sign in;
+  - sign-up goes through Stripe.
+- `scripts/docs/seed-demo.md`, as the user wrote it, gains a staging section
+  with what it would take, safest first: a secret-keyed staging-only switch
+  with "+" email aliases. Nothing was built.
+
+**Commit:** `bfd6934`
+
+---
+
 ## 2026-10-16 — Fix: the Login tab when already signed in as someone else
 
 **Requested:**
