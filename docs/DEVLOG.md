@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-10-16 — A demo-seeding script
+
+**Requested:**
+
+> So I've come up with a pseudocode doc that attempts to create users, create
+> creators, create admins and create some polls in DRAFT mode. The idea is to
+> run this to start over with a decently seeded database. It's located here,
+> …/scripts/pseudocode/swagger-like-db-reset.txt.
+
+then:
+
+> go ahead with 1-5 as suggested
+
+**Decision:**
+
+- Demo users get memorable `demo-…@test.local` addresses.
+- A script-made `demo-super` approves the requests.
+- Each run first wipes the previous demo and the `zzz` e2e users.
+- Zipcode 80210 replaces 80208, which isn't in the zipcode table.
+- All polls are drafts.
+
+**Changed:**
+
+- `689d5d2`: `seed-user` can take an exact email. The new `scripts/seed-demo.bash`
+  seeds three states through the real API:
+  - users;
+  - creator and admin access via real requests, then approved;
+  - one election per state (4 candidates, 3 measures) and the questionnaires.
+- Verified twice locally (40 users, 3 elections, 9 measures, 18
+  questionnaires, all drafts). Backend 326/326.
+
+**Commit:** `689d5d2`
+
+---
+
 ## 2026-10-16 — Logging out in one tab logs out every tab
 
 **Requested:**
