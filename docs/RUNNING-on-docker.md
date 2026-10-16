@@ -85,6 +85,25 @@ member. See `payment/MockPaymentProvider`; full details + real-Stripe steps in
 
 ---
 
+## Seeding a demo database
+
+```bash
+./scripts/seed-demo.bash
+```
+
+Starts the local database over with a demo: per state (Washington, Colorado,
+California) 10 respondents, a member, a creator and an admin, all
+`demo-…@test.local`. Each creator has a draft election (4 candidates, 3 ballot
+measures) and 3 draft questionnaires; each admin has 3 draft questionnaires
+and admin access for the state. Access comes from real requests, approved by
+`demo-super@test.local`.
+
+It first deletes the previous demo and the e2e `zzz` users; everyone else is
+left alone. Re-run it any time. It needs the local dev endpoints, so it works
+only against the local stack. From the Dev Container, where `localhost:8080`
+isn't reachable, run it in a container on the host network:
+`docker run --rm --network host -v "$PWD":/repo -w /repo alpine:3.20 sh -c "apk add -q bash curl python3 && bash scripts/seed-demo.bash"`.
+
 ## Watching the whole app for errors
 
 ```bash

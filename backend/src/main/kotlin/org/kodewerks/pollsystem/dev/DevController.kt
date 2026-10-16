@@ -340,6 +340,10 @@ class DevController(
      * Stripe. `zzz`-prefixed with a unique nanoTime email so re-runs don't
      * collide (cleaned by reset-test-users). Used by reuse specs (e.g.
      * user-submits-creator-request) that need an existing member to sign in as.
+     *
+     * [email]: an exact, memorable address instead (e.g. demo-creator-wash@test.local,
+     * for scripts/seed-demo.bash). Must be @test.local and start with [emailPrefix],
+     * so reset-test-users with that prefix removes it again.
      */
     @PostMapping("/seed-user")
     @Transactional
@@ -350,9 +354,21 @@ class DevController(
         // ADMIN only: also grant enabled, state-wide admin access for this
         // state, so creator requests there route to (or are claimable by) them.
         @RequestParam(required = false) adminStateId: Long? = null,
+        @RequestParam(required = false) email: String? = null,
     ): Map<String, Any> {
         require(emailPrefix.length >= 3) {
             "emailPrefix must be at least 3 characters (safety guard)"
+        }
+        if (email != null) {
+            if (!email.matches(Regex("^[a-z0-9._-]+@test\\.local$"))) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "email must be lowercase and @test.local")
+            }
+            if (!email.startsWith(emailPrefix)) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "email must start with emailPrefix ($emailPrefix)")
+            }
+            if (users.findByEmail(email) != null) {
+                throw ResponseStatusException(HttpStatus.CONFLICT, "A user with email $email already exists")
+            }
         }
         require(adminStateId == null || access.equals("ADMIN", ignoreCase = true)) {
             "adminStateId is only for access=ADMIN"
@@ -363,7 +379,7 @@ class DevController(
         val n = System.nanoTime()
         val user = users.save(
             User(
-                email = "$emailPrefix-user-$n@test.local",
+                email = email ?: "$emailPrefix-user-$n@test.local",
                 phone = "+1555${(n % 10_000_000).toString().padStart(7, '0')}",
                 zipcode = zipcode,
                 access = AccessLevel.valueOf(access.uppercase()),
