@@ -85,6 +85,26 @@ member. See `payment/MockPaymentProvider`; full details + real-Stripe steps in
 
 ---
 
+## Watching the whole app for errors
+
+```bash
+./scripts/pollsystem.watchall.bash            # all four containers, from now
+./scripts/pollsystem.watchall.bash -e         # only error lines
+./scripts/pollsystem.watchall.bash -s 30m db  # one service, from 30 minutes ago
+```
+
+It follows the logs of `pollsystem-backend`, `pollsystem-frontend`,
+`pollsystem-db` and `mailpit` in one window, each line labelled by service.
+Error lines are shown in red and counted, and **Ctrl-C** prints how many each
+service logged.
+
+It only reads logs, so run it any time next to the running app. A container
+that's rebuilt or restarted is picked up again. It works from the host or the
+Dev Container.
+
+(It used to run the backend and frontend on the host; that's
+`./scripts/BuildAndDeploy.bash local` now, see RUNNING-on-host.md.)
+
 ## Entering the app containers
 
 `local-docker` runs the app as containers on the host's Docker; exec into them
