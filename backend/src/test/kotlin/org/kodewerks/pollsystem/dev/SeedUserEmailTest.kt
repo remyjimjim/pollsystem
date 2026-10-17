@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 /**
@@ -43,4 +44,18 @@ class SeedUserEmailTest : AbstractIntegrationTest() {
         seed("zzd-dup@test.local").andExpect { status { isConflict() } }
         assertThat(users.findByEmail("zzd-a@example.com")).isNull()
     }
+
+    @Test
+    fun `demo-users lists only the demo accounts, for the local Quick sign-in`() {
+        mockMvc.post("/api/dev/seed-user") { param("emailPrefix", "demo-"); param("zipcode", "90001"); param("email", "demo-creator-zz@test.local") }
+            .andExpect { status { isOk() } }
+        mockMvc.post("/api/dev/seed-user") { param("emailPrefix", "zzd-"); param("zipcode", "90001") }
+            .andExpect { status { isOk() } }
+        val listed = com.fasterxml.jackson.databind.ObjectMapper()
+            .readTree(mockMvc.get("/api/dev/demo-users").andExpect { status { isOk() } }.andReturn().response.contentAsString)
+            .map { it["email"].asText() to it["access"].asText() }
+        assertThat(listed).contains("demo-creator-zz@test.local" to "USER")
+        assertThat(listed.map { it.first }).allMatch { it.startsWith("demo-") }
+    }
 }
+

@@ -96,6 +96,15 @@ export const useAuthStore = defineStore('auth', () => {
    * calls this to sync its in-memory session + auth header and load the user,
    * so it signs itself in without the user leaving that tab.
    */
+  /**
+   * Sign in with a token obtained another way (the local-only Quick sign-in):
+   * like redeeming a link, it's stored for every tab, then loaded here.
+   */
+  async function signInWithToken(newToken: string): Promise<void> {
+    localStorage.setItem('token', newToken)
+    await adoptToken(newToken)
+  }
+
   async function adoptToken(newToken: string): Promise<void> {
     token.value = newToken
     axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
@@ -198,6 +207,7 @@ export const useAuthStore = defineStore('auth', () => {
     completeProfile,
     logout,
     syncFromOtherTab,
-    lastUserId
+    lastUserId,
+    signInWithToken
   }
 })

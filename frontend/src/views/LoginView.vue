@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, onMounted, onUnmounted } from 'vue'
+import { reactive, ref, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -25,6 +25,18 @@ function destination(): string {
   const wanted = (route.query.redirect as string) || '/'
   return previousUserId === null || previousUserId === auth.user?.id ? wanted : '/'
 }
+// Local-only Quick sign-in: same destination rules as an emailed link. Loaded
+// only in development: in a production build this is null and the component's
+// code isn't bundled at all.
+const DevQuickSignIn = import.meta.env.DEV
+  ? defineAsyncComponent(() => import('@/components/DevQuickSignIn.vue'))
+  : null
+function onQuickSignIn() {
+  const redirect = destination()
+  if (auth.user && !auth.user.profileComplete) router.replace({ name: 'CompleteProfile', query: { redirect } })
+  else router.replace(redirect)
+}
+
 async function onTokenFromOtherTab(e: StorageEvent) {
   if (e.key !== 'token' || !e.newValue || e.newValue === auth.token) return
   await auth.adoptToken(e.newValue)
@@ -105,7 +117,9 @@ async function onSubmit() {
       <label class="flex flex-col gap-1 text-sm text-slate-700">
         {{ $t('login.emailLabel') }}
         <input
+          id="email"
           v-model="form.email"
+          name="email"
           type="email"
           required
           autocomplete="email"
@@ -125,5 +139,8 @@ async function onSubmit() {
         <router-link to="/register" class="text-slate-800 underline">{{ $t('login.registerLink') }}</router-link>
       </p>
     </form>
+
+    <!-- Local development only: not in staging/prod builds (import.meta.env.DEV). -->
+    <component :is="DevQuickSignIn" v-if="DevQuickSignIn" @signed-in="onQuickSignIn" />
   </div>
 </template>

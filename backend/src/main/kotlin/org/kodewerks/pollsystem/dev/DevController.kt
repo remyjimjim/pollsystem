@@ -418,6 +418,15 @@ class DevController(
         return mapOf("id" to u.id, "email" to u.email, "access" to u.access.name)
     }
 
+    /**
+     * The demo accounts made by scripts/seed-demo.bash (demo-…@test.local), for
+     * the Login page's local-only "Quick sign-in" list (signs in via /token).
+     */
+    @GetMapping("/demo-users")
+    fun demoUsers(): List<Map<String, String>> =
+        users.findByEmailStartingWithIgnoreCaseOrderByEmail("demo-")
+            .map { mapOf("email" to it.email, "access" to it.access.name) }
+
     @PostMapping("/token")
     fun token(@RequestParam email: String): Map<String, Any> {
         val user = users.findByEmail(email.trim().lowercase())

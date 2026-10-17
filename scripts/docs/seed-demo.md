@@ -38,9 +38,13 @@ In total: 40 users (33 members, 3 creators, 3 admins, 1 super); 3 elections,
 
 ## Signing in as a demo user
 
-Enter the address (e.g. `demo-creator-wash@test.local`) at
-http://localhost:3000/login, then click the sign-in link in Mailpit
-(http://localhost:8025).
+**Quick sign-in:** the Login page (http://localhost:3000/login) shows a
+**Quick sign-in (local only)** panel under the form, with a button per demo
+user. One click signs you in, with no email. It's only in the local development
+build, so it never appears on staging or prod.
+
+Or the usual way: enter the address (e.g. `demo-creator-wash@test.local`), then
+click the sign-in link in Mailpit (http://localhost:8025).
 
 ## How it works
 
