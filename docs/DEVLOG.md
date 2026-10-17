@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-17 — Local-only Quick sign-in; a rememberable email field
+
+**Requested:**
+
+> … why is my "Brave" browser not adding common input values to the
+> auto-completion routine? Every time I want to login as
+> demo-creator-wash@test.local I have to type the whole address, what gives?
+
+then:
+
+> do both, the field change and the sign-in list
+
+**Changed:**
+
+- `ee49af5`: the Login email field gets `name`/`id`, which browsers like Brave
+  remember entries by.
+- A **Quick sign-in (local only)** panel lists the demo users (new local-only
+  `/api/dev/demo-users`). One click signs in, following the usual destination
+  rules. It loads only in development builds; a production build was checked
+  and has no trace of it.
+- Backend 327/327, frontend 139/139, e2e 17/17. Verified live with the 40 demo
+  users.
+
+**Commit:** `ee49af5`
+
+---
+
 ## 2026-10-17 — Restarts don't log you out; remembered pages are per user
 
 **Requested:**
