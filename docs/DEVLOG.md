@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-10-17 — Reopen for revising, and a poll history page
+
+**Requested:**
+
+> Can we make it so a history record for a poll is made anytime the poll is
+> "Published" and can we make it so that a poll can be reopened for a time then
+> "Published" and can we have a 'History' page that lists the publishing and
+> reopenings for creators and above?
+
+then:
+
+> 1a, 2b, 3a, 4 as described
+
+**Decision:**
+
+- One-click Reopen back to draft replaces archive + restore for revising.
+- History records the poll's whole life, with who, when and what changed.
+- One History page, with per-poll links. Creators see their own polls, admins
+  their area, supers everything.
+- Polls already live get a "Published before history began" marker.
+
+**Changed:**
+
+- `5e4eb85`: `V34` adds `poll_events`. A history service records every publish
+  (with what changed), reopen, close, archive, restore, admin switch-off/on,
+  and admin or super edit.
+- New Reopen endpoint, History endpoint and `/history` page. Reopen and
+  History links on the Creator dashboard, Manage Polls and Manage All Polls.
+- Help and 9 languages are updated. Backend 334/334, frontend 145/145, e2e
+  19/19 (new: `creator-reopens-and-republishes-a-poll`).
+
+**Commit:** `5e4eb85`
+
+---
+
 ## 2026-10-17 — Candidate Suggestions on the election form
 
 **Requested:**
