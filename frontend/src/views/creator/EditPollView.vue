@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import axios from 'axios'
@@ -66,7 +66,15 @@ const ballotMeasure = ref<BallotMeasureDto | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 
-onMounted(async () => {
+// Load on open AND whenever the address changes: going from an election's
+// Edit to one of its measures (or "Back to the election") keeps this same page
+// mounted, only the route params change.
+async function load() {
+  loading.value = true
+  error.value = null
+  questionnaire.value = null
+  election.value = null
+  ballotMeasure.value = null
   try {
     if (type.value === 'questionnaire') {
       const res = await axios.get<QuestionnaireDto>(`/api/polls/questionnaires/${id.value}`)
@@ -99,7 +107,8 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+watch([type, id], load, { immediate: true })
 </script>
 
 <template>
@@ -109,6 +118,7 @@ onMounted(async () => {
     <p v-else-if="error" class="text-sm text-red-700">{{ error }}</p>
 
     <QuestionnaireForm
+      :key="`${type}-${id}`"
       v-else-if="questionnaire"
       :poll-type-id="questionnaire.pollTypeId"
       :initial="{
@@ -126,6 +136,7 @@ onMounted(async () => {
     />
 
     <ElectionForm
+      :key="`${type}-${id}`"
       v-else-if="election"
       :poll-type-id="election.pollTypeId"
       :initial="{
@@ -146,6 +157,7 @@ onMounted(async () => {
     />
 
     <BallotMeasureForm
+      :key="`${type}-${id}`"
       v-else-if="ballotMeasure"
       :poll-type-id="ballotMeasure.pollTypeId"
       :initial="{
