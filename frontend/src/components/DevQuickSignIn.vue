@@ -63,7 +63,10 @@ async function signInAs(email: string) {
 <template>
   <details v-if="users.length" open class="mt-6 rounded border border-dashed border-amber-400 bg-amber-50 p-3 text-sm" data-test="dev-quick-sign-in">
     <summary class="cursor-pointer font-semibold text-amber-900">Quick sign-in (local only)</summary>
-    <p class="m-0 mt-1 text-xs text-amber-900">Demo users from scripts/seed-demo.bash. Not in staging or prod builds.</p>
+    <p class="m-0 mt-1 text-xs text-amber-900">
+      Demo users from scripts/seed-demo.bash. Not in staging or prod builds.
+      <RouterLink to="/dev/settings" class="text-amber-900 underline">Dev settings</RouterLink>
+    </p>
     <p v-if="error" class="m-0 mt-2 text-xs text-red-700">{{ error }}</p>
     <div v-for="[state, list] in groups" :key="state" class="mt-2">
       <div v-if="state" class="mb-1 text-xs font-semibold uppercase text-amber-900">{{ state }}</div>

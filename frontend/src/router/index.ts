@@ -128,6 +128,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/admin/CreatorRequestDetailView.vue'),
     meta: { requiresAuth: true, minAccess: AccessLevel.ADMIN }
   },
+  // Local development only: in a production build this is an empty list, so
+  // the page isn't bundled at all (the backend part is local-profile only).
+  ...(import.meta.env.DEV
+    ? [{ path: '/dev/settings', name: 'DevSettings', component: () => import('@/views/dev/DevSettingsView.vue') }]
+    : []),
   {
     // A poll's history: creators (their own polls), admins (their area), supers.
     path: '/history',

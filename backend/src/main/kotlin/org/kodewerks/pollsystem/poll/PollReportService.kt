@@ -66,8 +66,9 @@ class PollReportService(
     private val countyZips: CountyZipsRepository,
     private val counties: CountyRepository,
     private val states: StateRepository,
-    @Value("\${app.results.k-anonymity-threshold:10}") private val k: Int
+    private val privacy: ResultsPrivacy
 ) {
+    private val k: Int get() = privacy.k()
     private data class Respondent(val zipcode: String?, val first: Instant, val changed: Boolean, val commented: Boolean)
 
     @Transactional(readOnly = true)

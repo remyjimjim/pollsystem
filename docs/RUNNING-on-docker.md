@@ -104,6 +104,19 @@ only against the local stack. From the Dev Container, where `localhost:8080`
 isn't reachable, run it in a container on the host network:
 `docker run --rm --network host -v "$PWD":/repo -w /repo alpine:3.20 sh -c "apk add -q bash curl python3 && bash scripts/seed-demo.bash"`.
 
+## Dev settings (local only)
+
+http://localhost:3000/dev/settings (also linked from the header, and from the
+Login page's Quick sign-in panel) sets the **results privacy threshold**:
+results stay hidden until a poll has that many respondents, then update in
+steps of it, and smaller groups are withheld. Prod uses 10.
+
+- **Save** rebuilds every poll's results for the new value at once, with no
+  emails sent. **Back to 10** clears it.
+- It's kept in the local database, so it survives rebuilds.
+- Only development builds have the page, and only the `local` backend profile
+  honours the setting: staging and prod ignore it.
+
 ## Watching the whole app for errors
 
 ```bash

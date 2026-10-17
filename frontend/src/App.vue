@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { defineAsyncComponent, onMounted, onUnmounted } from 'vue'
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -7,6 +7,10 @@ import { AccessLevel } from '@/types'
 import { SUPPORTED_LOCALES, setLocale, type LocaleCode } from '@/i18n'
 
 const authStore = useAuthStore()
+// Local development only: null in a production build, so it isn't bundled.
+const DevHeaderLink = import.meta.env.DEV
+  ? defineAsyncComponent(() => import('@/components/DevHeaderLink.vue'))
+  : null
 const router = useRouter()
 const { locale } = useI18n()
 
@@ -111,6 +115,7 @@ function onLocaleChange(e: Event) {
             </RouterLink>
           </template>
 
+          <component :is="DevHeaderLink" v-if="DevHeaderLink" />
           <select
             :value="locale"
             @change="onLocaleChange"

@@ -43,9 +43,10 @@ class PollMilestoneService(
     private val email: EmailService,
     private val links: MagicLinkProperties,
     private val history: PollHistoryService,
-    @Value("\${app.results.k-anonymity-threshold:10}") private val k: Int,
+    private val privacy: ResultsPrivacy,
     transactionManager: PlatformTransactionManager
 ) {
+    private val k: Int get() = privacy.k()
     private val log = LoggerFactory.getLogger(javaClass)
     private val tx = TransactionTemplate(transactionManager)
 

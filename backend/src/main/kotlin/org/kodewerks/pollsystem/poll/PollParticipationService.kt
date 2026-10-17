@@ -26,8 +26,9 @@ class PollParticipationService(
     private val candidateResponses: CandidateResponseRepository,
     private val ballotResponses: BallotResponseRepository,
     private val purviews: PollPurviewService,
-    @Value("\${app.results.k-anonymity-threshold:10}") private val kThreshold: Int
+    private val privacy: ResultsPrivacy
 ) {
+    private val kThreshold: Int get() = privacy.k()
     @Transactional(readOnly = true)
     fun of(kind: PollKind, pollId: Long): Participation {
         // One zipcode per respondent (a respondent answers many questions or

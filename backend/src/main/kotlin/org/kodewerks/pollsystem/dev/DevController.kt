@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
 import java.time.LocalDate
@@ -58,7 +60,9 @@ class DevController(
     private val tokens: JwtTokenProvider,
     private val states: StateRepository,
     private val adminCreatorGrants: AdminCreatorGrants,
-    private val resultSnapshots: org.kodewerks.pollsystem.poll.ResultSnapshotService
+    private val resultSnapshots: org.kodewerks.pollsystem.poll.ResultSnapshotService,
+    private val resultsPrivacy: org.kodewerks.pollsystem.poll.ResultsPrivacy,
+    private val snapshotBackfill: org.kodewerks.pollsystem.poll.ResultSnapshotBackfill
 ) {
 
     @PersistenceContext
@@ -419,6 +423,37 @@ class DevController(
             ResponseStatusException(HttpStatus.NOT_FOUND, "No local user with id $id")
         }
         return mapOf("id" to u.id, "email" to u.email, "access" to u.access.name)
+    }
+
+    /**
+     * The local Dev settings page: the results privacy threshold (results
+     * hidden until k respondents, steps of k, small groups withheld).
+     */
+    @GetMapping("/settings")
+    fun settings(): Map<String, Any?> = mapOf(
+        "resultsThreshold" to resultsPrivacy.k(),
+        "resultsThresholdDefault" to resultsPrivacy.configured,
+        "resultsThresholdOverridden" to (resultsPrivacy.currentOverride() != null)
+    )
+
+    /**
+     * Set the threshold (1–100), or null for the configured default, then
+     * rebuild every poll's results snapshot for it (no emails).
+     */
+    @PutMapping("/settings")
+    fun updateSettings(@RequestBody body: Map<String, Any?>): Map<String, Any?> {
+        val raw = body["resultsThreshold"]
+        val value = when (raw) {
+            null -> null
+            is Number -> raw.toInt().takeIf { raw.toDouble() == it.toDouble() }
+            else -> null
+        }
+        if (raw != null && (value == null || value !in 1..100)) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "resultsThreshold must be a whole number from 1 to 100, or null")
+        }
+        resultsPrivacy.setOverride(value?.takeIf { it != resultsPrivacy.configured })
+        val rebuilt = snapshotBackfill.rebuildAll()
+        return settings() + ("pollsRebuilt" to rebuilt)
     }
 
     /**

@@ -62,8 +62,10 @@ class ResultSnapshotService(
     private val snapshots: ResultSnapshotRepository,
     private val snapshotAnswers: ResultSnapshotAnswerRepository,
     private val milestones: PollMilestoneService,
-    @Value("\${app.results.k-anonymity-threshold:10}") private val k: Int
+    private val privacy: ResultsPrivacy
 ) {
+    private val k: Int get() = privacy.k()
+
     fun live(kind: PollKind, pollId: Long): List<Answer> = when (kind) {
         PollKind.QUESTIONNAIRE -> questionResponses.findByQuestionnaireId(pollId)
             .map { Answer(it.user.id, it.user.zipcode, it.question.id, it.response) }
@@ -97,6 +99,20 @@ class ResultSnapshotService(
         if (current == null && notify) milestones.resultsVisible(kind, pollId)
     }
 
+    /**
+     * Throw away the poll's snapshot and take it again for the current k (the
+     * local Dev settings changed it). Never emails: the poll isn't newly visible.
+     */
+    @Transactional
+    fun rebuild(kind: PollKind, pollId: Long) {
+        snapshots.findByPollTypeAndPollId(kind, pollId)?.let {
+            snapshotAnswers.deleteBySnapshotId(it.id)
+            snapshots.delete(it)
+            snapshots.flush()
+        }
+        refresh(kind, pollId, notify = false)
+    }
+
     fun snapshot(kind: PollKind, pollId: Long): List<Answer>? =
         snapshots.findByPollTypeAndPollId(kind, pollId)?.let { s ->
             snapshotAnswers.findBySnapshotId(s.id).map { Answer(it.userId, it.zipcode, it.itemId, it.response) }
@@ -123,8 +139,10 @@ class ResultsAccess(
     private val purviews: PollPurviewService,
     private val counties: CountyRepository,
     private val countyZips: CountyZipsRepository,
-    @Value("\${app.results.k-anonymity-threshold:10}") private val k: Int
+    private val privacy: ResultsPrivacy
 ) {
+    private val k: Int get() = privacy.k()
+
     fun prepare(
         principal: AppUserDetails?,
         kind: PollKind,
@@ -167,6 +185,7 @@ class ResultsAccess(
 @Component
 class ResultSnapshotBackfill(
     private val snapshots: ResultSnapshotService,
+    private val privacy: ResultsPrivacy,
     private val questionnaires: QuestionnaireRepository,
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
@@ -174,6 +193,17 @@ class ResultSnapshotBackfill(
 ) : ApplicationRunner {
     private val tx = TransactionTemplate(transactionManager)
     private val log = LoggerFactory.getLogger(javaClass)
+    private val k: Int get() = privacy.k()
+
+    /** Rebuild every poll's snapshot for the current k (local Dev settings). Returns how many polls. */
+    fun rebuildAll(): Int {
+        val polls = questionnaires.findAll().map { PollKind.QUESTIONNAIRE to it.id } +
+            elections.findAll().map { PollKind.ELECTION to it.id } +
+            ballotMeasures.findAll().map { PollKind.BALLOT_MEASURE to it.id }
+        polls.forEach { (kind, id) -> tx.executeWithoutResult { snapshots.rebuild(kind, id) } }
+        log.info("Result snapshots rebuilt for {} polls (k = {})", polls.size, k)
+        return polls.size
+    }
 
     override fun run(args: ApplicationArguments) {
         val polls = questionnaires.findAll().map { PollKind.QUESTIONNAIRE to it.id } +

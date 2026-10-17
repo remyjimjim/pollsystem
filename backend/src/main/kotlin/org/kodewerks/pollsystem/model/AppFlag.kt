@@ -23,5 +23,9 @@ data class AppFlag(
     val updatedAt: Instant = Instant.now(),
 
     @Column(name = "updated_by")
-    val updatedBy: Long? = null
+    val updatedBy: Long? = null,
+
+    /** Local development only (V35): the results privacy threshold override; null = configured. */
+    @Column(name = "results_threshold")
+    val resultsThreshold: Int? = null
 )
