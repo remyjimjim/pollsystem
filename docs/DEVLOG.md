@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-17 — Restarts don't log you out; remembered pages are per user
+
+**Requested:**
+
+> I reset the environment via scripts/BuildAndDeploy.bash local-docker then
+> signed in as demo-admin-wash@test.local and the first view it brought up is
+> http://localhost:3000/creator/polls/ballot-measure/79/edit … I'm curious as
+> to why it did that and not the / home page?
+
+then, to the two suggested improvements:
+
+> yes please
+
+**Changed:**
+
+- `0279910`: why it happened. The tab was on demo-creator-wash's measure 79.
+  During the backend restart, failing to load the user logged the tab out
+  (any failure counted). The guard sent it to `/login?redirect=…`, and the
+  next sign-in, a different user, went there.
+- Now it logs out only on 401/403.
+- The browser remembers its last user, and Login uses the redirect only for
+  that same user; anyone else goes home.
+- Frontend 135/135, e2e 17/17.
+
+**Commit:** `0279910`
+
+---
+
 ## 2026-10-16 — seed-demo.md tidied
 
 **Requested:**
