@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-17 — Fix: Edit on an election's measure opens the measure
+
+**Requested:**
+
+> One issue, when I login as demo-creator-wash and select the 'Creator' menu
+> item and select the 'Edit' button for the 'Midterm-Election-Washington'
+> Election then select the 'Edit' button for the ballot measure titled 'Wash
+> Measure 1 No nukes', I am never taken to the Edit page for 'Wash Measure 1 No
+> nukes'...
+
+**Changed:**
+
+- `bc02c90`: the election and measure editors are one page with different route
+  params. The page loaded only when first opened, so the address changed but
+  the election's form stayed. "Back to the election" had the same problem.
+  - It now reloads whenever the params change, with a fresh form per poll.
+- A new e2e test follows the reported path; it failed on the old page as
+  reported. Frontend 139/139, e2e 18/18.
+
+**Commit:** `bc02c90`
+
+---
+
 ## 2026-10-17 — Local-only Quick sign-in; a rememberable email field
 
 **Requested:**
