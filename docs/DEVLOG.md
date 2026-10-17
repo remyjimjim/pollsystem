@@ -61,6 +61,43 @@ logged.
 
 ---
 
+## 2026-10-17 — Local Dev settings: the results privacy threshold
+
+**Requested:**
+
+> Can we modify actions around the http://localhost:3000/polls/election/93/results
+> page such that when operated in local mode the 'results aren't shown until at
+> least 10 people have voted' are settable via a settings page somewhere?
+
+then:
+
+> Go with 1(a), 2(a)?
+
+**Decision:**
+
+- One threshold for everything it governs.
+- It's kept in the local database across rebuilds.
+- Only the `local` profile honours it: staging and prod always use 10.
+
+**Changed:**
+
+- `1924322`: a new `ResultsPrivacy` component is the single source of the
+  threshold. `V35` stores the local override.
+- Local-only `/api/dev/settings` rebuilds every poll's results snapshot
+  without emails.
+- A `/dev/settings` page, plus header and Quick sign-in links, exist only in
+  development builds.
+- Verified live on election 93: hidden at 10, shown at 2, hidden after reset.
+  Backend 337/337, frontend 147/147, e2e 19/19.
+- Slip caught before committing: my new test file was named
+  `ResultsPrivacyTest.kt`, overwriting the existing 4-test file of that name.
+  I restored it, moved my test to `ResultsThresholdOverrideTest.kt`, and the
+  original 4 tests pass against the new code.
+
+**Commit:** `1924322`
+
+---
+
 ## 2026-10-17 — Reopen for revising, and a poll history page
 
 **Requested:**
