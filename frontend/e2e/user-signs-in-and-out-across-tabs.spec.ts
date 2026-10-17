@@ -54,6 +54,32 @@ test.describe('user signs in and out across tabs', () => {
     await hold(page)
   })
 
+  // The Login page remembers where you were (?redirect) only for whoever
+  // signed in last on this browser: someone else lands on the home page.
+  async function signInFromLogin(page: import('@playwright/test').Page, email: string) {
+    await page.goto(`${BASE}/login?redirect=/creator/request`)
+    await page.getByLabel('Email').fill(email)
+    await page.getByRole('button', { name: 'Email me a sign-in link' }).click()
+    await expect(page.getByText('Check your email.')).toBeVisible({ timeout: 15_000 })
+    const linkTab = await page.context().newPage()
+    await linkTab.goto(await fetchMagicLink(email))
+    await expect(page).not.toHaveURL(/\/login/, { timeout: 30_000 })
+  }
+
+  test('a remembered page is for the same user returning, not someone else', async ({ page }) => {
+    test.setTimeout(150_000)
+    await signInSeededUser(page, otherEmail)
+    await page.getByRole('button', { name: 'Logout' }).click()
+
+    await signInFromLogin(page, memberEmail)                // someone else: home
+    await expect(page).toHaveURL(new RegExp(`^${BASE}/?$`))
+    await page.getByRole('button', { name: 'Logout' }).click()
+
+    await signInFromLogin(page, memberEmail)                // the same user again: the page
+    await expect(page).toHaveURL(new RegExp(`/creator/request$`))
+    await hold(page)
+  })
+
   test('logging out in one tab logs the other tab out too', async ({ page, context }) => {
     test.setTimeout(120_000)
     await signInSeededUser(page, memberEmail)

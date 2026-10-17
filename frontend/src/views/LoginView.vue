@@ -15,10 +15,20 @@ const router = useRouter()
 // up signed in on the tab they started from rather than the pop-up tab.
 // Also when this tab was already signed in as someone else: the new login wins
 // and the tab moves on (App.vue leaves the Login page to this handler).
+//
+// ?redirect (the page you were on when sent here) is only for whoever signed
+// in last on this browser: someone else goes home instead, since that page may
+// be the previous user's (e.g. their draft). Noted when this page opens,
+// before the sign-in tab records the new user.
+const previousUserId = auth.lastUserId() ?? null
+function destination(): string {
+  const wanted = (route.query.redirect as string) || '/'
+  return previousUserId === null || previousUserId === auth.user?.id ? wanted : '/'
+}
 async function onTokenFromOtherTab(e: StorageEvent) {
   if (e.key !== 'token' || !e.newValue || e.newValue === auth.token) return
   await auth.adoptToken(e.newValue)
-  const redirect = (route.query.redirect as string) || '/'
+  const redirect = destination()
   if (auth.user && !auth.user.profileComplete) {
     router.replace({ name: 'CompleteProfile', query: { redirect } })
   } else {

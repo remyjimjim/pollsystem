@@ -243,15 +243,39 @@ describe('useAuthStore', () => {
       expect(auth.user?.email).toBe('alice@test.local')
     })
 
-    it('logs out on rejection', async () => {
+    it.each([401, 403])('logs out when the server rejects the login (%i)', async (status) => {
       localStorage.setItem('token', 'expired')
       const auth = useAuthStore()
-      mockedAxios.get.mockRejectedValueOnce(new Error('401'))
+      mockedAxios.get.mockRejectedValueOnce({ response: { status } })
 
       await auth.fetchUser()
       expect(auth.user).toBeNull()
       expect(auth.token).toBeNull()
       expect(localStorage.getItem('token')).toBeNull()
+    })
+
+    it.each([
+      ['unreachable (a restart)', new Error('Network Error')],
+      ['a server error', { response: { status: 502 } }],
+    ])('keeps the login when the server is %s', async (_what, failure) => {
+      localStorage.setItem('token', 'still-good')
+      const auth = useAuthStore()
+      mockedAxios.get.mockRejectedValueOnce(failure)
+
+      await auth.fetchUser()
+      expect(auth.token).toBe('still-good')
+      expect(localStorage.getItem('token')).toBe('still-good')
+    })
+
+    it('remembers who signed in, and keeps that after logout', async () => {
+      localStorage.setItem('token', 'tok')
+      const auth = useAuthStore()
+      mockedAxios.get.mockResolvedValueOnce({ data: { ...makeUser(), id: 42 } })
+
+      await auth.fetchUser()
+      expect(auth.lastUserId()).toBe(42)
+      auth.logout()
+      expect(auth.lastUserId()).toBe(42)
     })
   })
 })

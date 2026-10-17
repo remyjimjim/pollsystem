@@ -18,10 +18,13 @@ vi.mock('vue-router', () => ({
 // Each mount registers a `storage` listener on window; track wrappers so we can
 // unmount them after every test and avoid stale listeners firing across tests.
 const mounted: ReturnType<typeof mount>[] = []
-function mountLogin() {
+function mountLogin(opts: { lastUserId?: number | null } = {}) {
+  const pinia = createTestingPinia({ createSpy: vi.fn })
+  // Who signed in last on this browser, as the page sees it when it opens.
+  vi.mocked(useAuthStore(pinia).lastUserId).mockReturnValue(opts.lastUserId ?? null)
   const wrapper = mount(LoginView, {
     global: {
-      plugins: [createTestingPinia({ createSpy: vi.fn })],
+      plugins: [pinia],
       stubs: { 'router-link': true }
     }
   })
@@ -152,6 +155,30 @@ describe('LoginView (magic-link)', () => {
       await flushPromises()
 
       expect(auth.adoptToken).not.toHaveBeenCalled()
+    })
+
+    it('a different user than the last one goes home, not to the remembered page', async () => {
+      routeQuery.value = { redirect: '/creator/polls/ballot-measure/79/edit' }
+      mountLogin({ lastUserId: 5 })
+      const auth = useAuthStore()
+      ;(auth as any).user = { id: 9, profileComplete: true }
+
+      window.dispatchEvent(new StorageEvent('storage', { key: 'token', newValue: 'jwt-user-9' }))
+      await flushPromises()
+
+      expect(replaceMock).toHaveBeenCalledWith('/')
+    })
+
+    it('the same user returning goes back to the remembered page', async () => {
+      routeQuery.value = { redirect: '/creator/polls/ballot-measure/79/edit' }
+      mountLogin({ lastUserId: 5 })
+      const auth = useAuthStore()
+      ;(auth as any).user = { id: 5, profileComplete: true }
+
+      window.dispatchEvent(new StorageEvent('storage', { key: 'token', newValue: 'jwt-user-5' }))
+      await flushPromises()
+
+      expect(replaceMock).toHaveBeenCalledWith('/creator/polls/ballot-measure/79/edit')
     })
 
     it('ignores storage events that are not a fresh token', async () => {

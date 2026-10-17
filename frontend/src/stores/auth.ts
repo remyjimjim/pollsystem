@@ -84,6 +84,7 @@ export const useAuthStore = defineStore('auth', () => {
     )
     token.value = response.data.token
     user.value = response.data.user
+    rememberUser(response.data.user.id)
     localStorage.setItem('token', response.data.token)
     axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
   }
@@ -106,8 +107,30 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await axios.get<User>('/api/auth/me')
       user.value = response.data
+      rememberUser(response.data.id)
+    } catch (e: any) {
+      // Log out only when the server says this login is no good (401/403).
+      // If it's unreachable (a restart, a network blip) or erring, keep the
+      // login: it works again once the server is back. Logging out here would
+      // also log out every other tab.
+      const status = e?.response?.status
+      if (status === 401 || status === 403) logout()
+    }
+  }
+
+  // Who last signed in on this browser (kept after logout), so the Login page
+  // only takes a returning user back to the page they were on, never someone
+  // else (that page may be another user's, e.g. their draft).
+  const LAST_USER_KEY = 'lastUserId'
+  function rememberUser(id: number): void {
+    try { localStorage.setItem(LAST_USER_KEY, String(id)) } catch { /* storage unavailable: no memory */ }
+  }
+  function lastUserId(): number | null {
+    try {
+      const v = localStorage.getItem(LAST_USER_KEY)
+      return v ? Number(v) : null
     } catch {
-      logout()
+      return null
     }
   }
 
@@ -174,6 +197,7 @@ export const useAuthStore = defineStore('auth', () => {
     fetchUser,
     completeProfile,
     logout,
-    syncFromOtherTab
+    syncFromOtherTab,
+    lastUserId
   }
 })
