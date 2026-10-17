@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-17 — Candidate Suggestions on the election form
+
+**Requested:**
+
+> … just like the 'Candidates' have an 'X' that if clicked removes that
+> candidate … is there a way that a 'X' clicked removed candidate can be
+> recalled via a 'suggestion' link or some such? … and perhaps a web lookup of
+> the current candidates announced their candidacy?
+
+then:
+
+> 1(a) + 1(c), and add the lookups to todo.md
+
+**Decision:**
+
+- Removed candidates can be restored while the form is open.
+- Candidates from the creator's other elections are suggested.
+- Announced-candidate lookups go to `todo.md`: federal via the FEC's free API
+  first, with state/local options to revisit.
+
+**Changed:**
+
+- `82ff844`: a new endpoint returns the creator's own other elections'
+  candidates.
+- A Suggestions panel on the election form has "Removed just now" (Restore)
+  and "From your other elections" (Add).
+- Help and 9 languages are updated. Backend 328/328, frontend 141/141, e2e
+  18/18. Verified live on election 114.
+
+**Commit:** `82ff844`
+
+---
+
 ## 2026-10-17 — Fix: Edit on an election's measure opens the measure
 
 **Requested:**
