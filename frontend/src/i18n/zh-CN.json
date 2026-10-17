@@ -403,7 +403,14 @@
         "PUBLISHED": "已发布",
         "CLOSED": "已结束",
         "ARCHIVED": "已归档"
-      }
+      },
+      "suggestions": "建议",
+      "hideSuggestions": "隐藏建议",
+      "removedJustNow": "刚刚移除的",
+      "fromOtherElections": "来自你的其他选举",
+      "restore": "恢复",
+      "addSuggestion": "添加",
+      "noSuggestions": "暂无建议：你在此移除的候选人，或在其他选举中用过的候选人，会显示在这里。"
     },
     "ballotMeasure": {
       "parentElection": "父级选举",

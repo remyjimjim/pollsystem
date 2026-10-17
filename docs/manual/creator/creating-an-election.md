@@ -27,6 +27,14 @@ Click **+ New Poll** on your Creator dashboard and choose **Election**.
    time. **+ Add candidate** adds another; **Remove candidate** deletes one. At
    least one complete candidate is required.
 
+   **Suggestions** (next to **+ Add candidate**) offers candidates to add back:
+   - **Removed just now:** ones you removed with ✕ while the form has been open.
+     **Restore** puts one back.
+   - **From your other elections:** candidates you've used in your other
+     elections. **Add** puts one on this ballot.
+
+   Candidates already on the form aren't suggested.
+
 ## How voters choose
 
 Poll System's super administrators set how voters choose, for all elections:

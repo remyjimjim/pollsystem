@@ -11,8 +11,12 @@ vi.mock('vue-router', () => ({ useRouter: () => ({ push }) }))
 const INITIAL = {
   id: 7, pollTypeId: 1, title: 'King for a week', date: '2026-12-01',
   scopeLevel: ScopeLevel.NATIONAL, regionIds: [], regionStateIds: [], closeDate: null,
-  candidates: [{ name: 'A', affiliation: 'X', officeName: 'King' }],
+  candidates: [{ name: 'A', affiliation: 'X', officeName: 'King' }, { name: 'B', affiliation: 'Y', officeName: 'King' }],
 }
+const OTHER = [
+  { name: 'A', affiliation: 'X', officeName: 'King' },            // already on the form: not suggested
+  { name: 'Jim James', affiliation: 'Red', officeName: 'District 1' },
+]
 const MEASURES = [
   { id: 31, title: 'Free Money Mondays', status: 'DRAFT' },
   { id: 32, title: 'Nap Time Act', status: 'PUBLISHED' },
@@ -20,7 +24,9 @@ const MEASURES = [
 
 async function mountForm() {
   vi.mocked(axios.get).mockImplementation(async (url: string) =>
-    url === '/api/polls/ballot-measures' ? { data: MEASURES } : { data: [] })
+    url === '/api/polls/ballot-measures' ? { data: MEASURES }
+      : url === '/api/polls/elections/candidate-suggestions' ? { data: OTHER }
+      : { data: [] })
   vi.mocked(axios.put).mockResolvedValue({ data: {} })
   vi.mocked(axios.post).mockResolvedValue({ data: {} })
   const w = mount(ElectionForm, {
@@ -98,3 +104,37 @@ describe('ElectionForm: its ballot measures', () => {
     w.unmount()
   })
 })
+
+describe('ElectionForm: candidate Suggestions', () => {
+  const names = (w: any) => w.findAll('input[placeholder="Name"]').map((i: any) => (i.element as HTMLInputElement).value)
+
+  it('a removed candidate can be restored from Suggestions', async () => {
+    const w = await mountForm()
+    await w.findAll('button[aria-label="Remove candidate"]')[1].trigger('click')   // remove B
+    expect(names(w)).toEqual(['A'])
+
+    await w.find('[data-test="toggle-suggestions"]').trigger('click')
+    await flushPromises()
+    const removed = w.findAll('[data-test="removed-suggestion"]')
+    expect(removed.map(r => r.text())).toEqual([expect.stringContaining('B')])
+    await removed[0].find('button').trigger('click')
+    expect(names(w)).toEqual(['A', 'B'])
+    expect(w.findAll('[data-test="removed-suggestion"]')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('offers candidates from your other elections, skipping ones already on the form', async () => {
+    const w = await mountForm()
+    await w.find('[data-test="toggle-suggestions"]').trigger('click')
+    await flushPromises()
+    expect(axios.get).toHaveBeenCalledWith('/api/polls/elections/candidate-suggestions', { params: { excludeElectionId: 7 } })
+    const other = w.findAll('[data-test="other-suggestion"]')
+    expect(other.map(o => o.text())).toEqual([expect.stringContaining('Jim James')])
+
+    await other[0].find('button').trigger('click')
+    expect(names(w)).toEqual(['A', 'B', 'Jim James'])
+    expect(w.findAll('[data-test="other-suggestion"]')).toHaveLength(0)
+    w.unmount()
+  })
+})
+

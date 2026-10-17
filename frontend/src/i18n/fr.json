@@ -403,7 +403,14 @@
         "PUBLISHED": "Publiée",
         "CLOSED": "Fermée",
         "ARCHIVED": "Archivée"
-      }
+      },
+      "suggestions": "Suggestions",
+      "hideSuggestions": "Masquer les suggestions",
+      "removedJustNow": "Retirés à l’instant",
+      "fromOtherElections": "De vos autres élections",
+      "restore": "Rétablir",
+      "addSuggestion": "Ajouter",
+      "noSuggestions": "Pas encore de suggestions : les candidats retirés ici ou utilisés dans vos autres élections apparaîtront ici."
     },
     "ballotMeasure": {
       "parentElection": "Élection parente",

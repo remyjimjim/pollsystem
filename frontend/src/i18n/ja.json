@@ -403,7 +403,14 @@
         "PUBLISHED": "公開中",
         "CLOSED": "終了",
         "ARCHIVED": "アーカイブ済み"
-      }
+      },
+      "suggestions": "候補の提案",
+      "hideSuggestions": "提案を隠す",
+      "removedJustNow": "今削除した候補",
+      "fromOtherElections": "あなたの他の選挙から",
+      "restore": "元に戻す",
+      "addSuggestion": "追加",
+      "noSuggestions": "まだ提案はありません。ここで削除した候補や、他の選挙で使った候補がここに表示されます。"
     },
     "ballotMeasure": {
       "parentElection": "親選挙",

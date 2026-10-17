@@ -127,7 +127,48 @@ function addCandidate() {
   form.candidates.push({ name: '', affiliation: '', officeName: '' })
 }
 function removeCandidate(idx: number) {
-  if (form.candidates.length > 1) form.candidates.splice(idx, 1)
+  if (form.candidates.length <= 1) return
+  const [gone] = form.candidates.splice(idx, 1)
+  // Keep it to restore from Suggestions (unless the row was empty).
+  if (gone && (gone.name.trim() || gone.affiliation.trim() || gone.officeName.trim())) {
+    removed.value = [gone, ...removed.value.filter(r => candidateKey(r) !== candidateKey(gone))]
+  }
+}
+
+// ---------- Suggestions: candidates removed just now, and from your other elections ----------
+interface CandidateSuggestion { name: string; affiliation: string; officeName: string }
+const candidateKey = (c: CandidateSuggestion) => `${c.name.trim().toLowerCase()}|${c.officeName.trim().toLowerCase()}`
+// Removed with ✕ while this form is open (not kept after leaving it).
+const removed = ref<CandidateInputModel[]>([])
+const fromOtherElections = ref<CandidateSuggestion[]>([])
+const suggestionsOpen = ref(false)
+let suggestionsLoaded = false
+async function toggleSuggestions() {
+  suggestionsOpen.value = !suggestionsOpen.value
+  if (!suggestionsOpen.value || suggestionsLoaded) return
+  try {
+    fromOtherElections.value = (await axios.get<CandidateSuggestion[]>('/api/polls/elections/candidate-suggestions', {
+      params: draftId.value != null ? { excludeElectionId: draftId.value } : {}
+    })).data ?? []
+    suggestionsLoaded = true
+  } catch {
+    fromOtherElections.value = []
+  }
+}
+// What's already on the form isn't suggested again.
+const onForm = computed(() => new Set(form.candidates.map(candidateKey)))
+const removedSuggestions = computed(() => removed.value.filter(c => !onForm.value.has(candidateKey(c))))
+const otherSuggestions = computed(() => {
+  const shownRemoved = new Set(removedSuggestions.value.map(candidateKey))
+  return fromOtherElections.value.filter(c => !onForm.value.has(candidateKey(c)) && !shownRemoved.has(candidateKey(c)))
+})
+function addSuggestion(c: CandidateSuggestion) {
+  const row = { name: c.name, affiliation: c.affiliation, officeName: c.officeName }
+  // Fill an empty row if there is one (e.g. the blank first row), else add one.
+  const empty = form.candidates.findIndex(r => !r.name.trim() && !r.affiliation.trim() && !r.officeName.trim())
+  if (empty >= 0) form.candidates.splice(empty, 1, row)
+  else form.candidates.push(row)
+  removed.value = removed.value.filter(r => candidateKey(r) !== candidateKey(c))
 }
 
 function payload() {
@@ -285,11 +326,44 @@ async function publish(confirmed = false) {
           :aria-label="$t('form.election.removeCandidate')"
         >×</button>
       </div>
-      <button
-        type="button"
-        @click="addCandidate"
-        class="self-start rounded border border-dashed border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
-      >{{ $t('form.election.addCandidate') }}</button>
+      <div class="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          @click="addCandidate"
+          class="self-start rounded border border-dashed border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
+        >{{ $t('form.election.addCandidate') }}</button>
+        <button
+          type="button"
+          data-test="toggle-suggestions"
+          :aria-expanded="suggestionsOpen"
+          class="text-sm text-slate-800 underline"
+          @click="toggleSuggestions"
+        >{{ suggestionsOpen ? $t('form.election.hideSuggestions') : $t('form.election.suggestions') }}</button>
+      </div>
+
+      <div v-if="suggestionsOpen" class="mt-3 rounded border border-slate-200 bg-slate-50 p-3" data-test="candidate-suggestions">
+        <p v-if="!removedSuggestions.length && !otherSuggestions.length" class="m-0 text-sm text-slate-500">{{ $t('form.election.noSuggestions') }}</p>
+        <template v-if="removedSuggestions.length">
+          <h4 class="m-0 mb-1 text-xs font-semibold uppercase text-slate-600">{{ $t('form.election.removedJustNow') }}</h4>
+          <ul class="m-0 mb-2 list-none p-0">
+            <li v-for="c in removedSuggestions" :key="'r' + candidateKey(c)" class="flex items-center gap-2 py-0.5 text-sm" data-test="removed-suggestion">
+              <span class="text-slate-800">{{ c.name }}</span>
+              <span class="text-slate-500">{{ c.affiliation }} · {{ c.officeName }}</span>
+              <button type="button" class="ml-auto text-xs text-slate-800 underline" @click="addSuggestion(c)">{{ $t('form.election.restore') }}</button>
+            </li>
+          </ul>
+        </template>
+        <template v-if="otherSuggestions.length">
+          <h4 class="m-0 mb-1 text-xs font-semibold uppercase text-slate-600">{{ $t('form.election.fromOtherElections') }}</h4>
+          <ul class="m-0 list-none p-0">
+            <li v-for="c in otherSuggestions" :key="'o' + candidateKey(c)" class="flex items-center gap-2 py-0.5 text-sm" data-test="other-suggestion">
+              <span class="text-slate-800">{{ c.name }}</span>
+              <span class="text-slate-500">{{ c.affiliation }} · {{ c.officeName }}</span>
+              <button type="button" class="ml-auto text-xs text-slate-800 underline" @click="addSuggestion(c)">{{ $t('form.election.addSuggestion') }}</button>
+            </li>
+          </ul>
+        </template>
+      </div>
     </fieldset>
 
     <section v-if="draftId != null" class="rounded-md border border-slate-200 p-4" data-test="election-measures">

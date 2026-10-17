@@ -199,6 +199,21 @@
    - The hover/click help (i18n `help.*` keys) is translated with the rest of the app strings.
    - Done: No.
 
+-  Election form: look up announced candidates (beyond Suggestions, which offers removed ones and ones from your
+   other elections; done 2026-10-17).
+   - Federal races first (President, US Senate, US House): the FEC's official OpenFEC API (api.open.fec.gov),
+     free with an api.data.gov key (a Fly secret on staging/prod; DEMO_KEY is 30 requests/hour). Lists registered
+     candidates by state, district and cycle (2026 data is there).
+     - Needs a way to say which federal office/district an election's office is, since offices are free text
+       today ("District 1"): e.g. pick "US House · WA · district 1" in the lookup, then add from the list.
+   - State and local races: no free, complete, official source. Revisit closer to launch:
+     - Google Civic Information API, elections voterInfoQuery: contests and candidates by voter address, but
+       only for elections Google has data for, usually close to election day (patchy).
+     - An AI web search (e.g. Claude with web search) per race, shown as unverified suggestions with source
+       links to check; costs a little per lookup.
+     - Ballotpedia covers most races, but its data is a paid product.
+   - Done: No.
+
 # Possible add ons for a later date if needed:
 
 -  Narrow a creator's access below statewide (an admin's "scalpel").

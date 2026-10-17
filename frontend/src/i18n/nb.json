@@ -403,7 +403,14 @@
         "PUBLISHED": "Publisert",
         "CLOSED": "Stengt",
         "ARCHIVED": "Arkivert"
-      }
+      },
+      "suggestions": "Forslag",
+      "hideSuggestions": "Skjul forslag",
+      "removedJustNow": "Nettopp fjernet",
+      "fromOtherElections": "Fra dine andre valg",
+      "restore": "Gjenopprett",
+      "addSuggestion": "Legg til",
+      "noSuggestions": "Ingen forslag ennå: kandidater du fjerner her eller bruker i andre valg, vises her."
     },
     "ballotMeasure": {
       "parentElection": "Overordnet valg",

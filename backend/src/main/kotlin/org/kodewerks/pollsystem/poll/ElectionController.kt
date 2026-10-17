@@ -111,9 +111,34 @@ data class ElectionDto(
     }
 }
 
+/** A candidate the creator has used in another election (the edit form's Suggestions). */
+data class CandidateSuggestionDto(val name: String, val affiliation: String, val officeName: String)
+
 @RestController
 @RequestMapping("/api/polls/elections")
-class ElectionController(private val service: ElectionService) {
+class ElectionController(
+    private val service: ElectionService,
+    private val elections: org.kodewerks.pollsystem.repository.ElectionRepository,
+    private val candidates: org.kodewerks.pollsystem.repository.CandidateRepository
+) {
+
+    /**
+     * Candidates from the signed-in creator's own other elections, once each
+     * (same name + affiliation + office, ignoring case), by office then name:
+     * offered under "Suggestions" on the election form. Only ever their own.
+     */
+    @GetMapping("/candidate-suggestions")
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    fun candidateSuggestions(
+        @AuthenticationPrincipal principal: AppUserDetails,
+        @RequestParam(required = false) excludeElectionId: Long?
+    ): List<CandidateSuggestionDto> =
+        elections.findByCreatorId(principal.user.id)
+            .filter { it.id != excludeElectionId }
+            .flatMap { candidates.findByElectionId(it.id) }
+            .map { CandidateSuggestionDto(it.name.trim(), it.affiliation.trim(), it.office.name.trim()) }
+            .distinctBy { Triple(it.name.lowercase(), it.affiliation.lowercase(), it.officeName.lowercase()) }
+            .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, CandidateSuggestionDto::officeName).thenBy(String.CASE_INSENSITIVE_ORDER, CandidateSuggestionDto::name))
 
     @PostMapping
     fun saveDraft(
