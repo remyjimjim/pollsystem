@@ -91,4 +91,30 @@ describe('Creator DashboardView', () => {
       expect(axios.put).toHaveBeenCalledWith('/api/creator/polls/questionnaire/7/emails', { enabled: false })
     })
   })
+
+  describe('Reopen and History', () => {
+    const poll = (over: Record<string, unknown>) => ({
+      id: 7, type: 'Questionnaire', title: 'Vaccines', status: 'PUBLISHED', closeDate: null,
+      createdAt: '2026-10-01T00:00:00Z', respondents: 0, inArea: 0, emails: true, ...over,
+    })
+
+    it('Reopen a published poll: confirms, reopens, then opens its edit page', async () => {
+      vi.mocked(axios.post).mockResolvedValue({ data: {} })
+      const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true)
+      const w = await mountAs(AccessLevel.CREATOR, [poll({})])
+      await w.find('[data-test="reopen"]').trigger('click')
+      await flushPromises()
+      expect(confirm).toHaveBeenCalledWith(expect.stringContaining('Vaccines'))
+      expect(axios.post).toHaveBeenCalledWith('/api/creator/polls/questionnaire/7/reopen')
+      expect(w.vm.$router.currentRoute.value.fullPath).toBe('/creator/polls/questionnaire/7/edit')
+      confirm.mockRestore()
+    })
+
+    it('no Reopen on a draft; every poll links to its history', async () => {
+      const w = await mountAs(AccessLevel.CREATOR, [poll({ status: 'DRAFT' })])
+      expect(w.find('[data-test="reopen"]').exists()).toBe(false)
+      expect(w.find('[data-test="poll-history"]').attributes('href')).toBe('/history?type=questionnaire&id=7')
+    })
+  })
 })
+

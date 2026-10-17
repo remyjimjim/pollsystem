@@ -31,7 +31,8 @@ class ElectionService(
     private val purviews: PollPurviewService,
     private val grants: CreatorGrantGuard,
     private val objectMapper: ObjectMapper,
-    private val ballotMeasures: BallotMeasureService
+    private val ballotMeasures: BallotMeasureService,
+    private val history: PollHistoryService
 ) {
 
     @Transactional
@@ -130,6 +131,7 @@ class ElectionService(
             }
         }
         val published = elections.save(existing.copy(status = PollStatus.PUBLISHED, creatorEditedAt = Instant.now()))
+        history.published(PollKind.ELECTION, id, creator)
         drafts.forEach { ballotMeasures.publishChecked(it.copy(election = published), creator, confirmed) }
         return published
     }

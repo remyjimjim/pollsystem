@@ -286,7 +286,11 @@
       "archiveConfirm": "归档“{title}”？这将把它从控制面板、搜索和投票中移除。您之后可以通过“显示已归档”将其恢复。",
       "errorLoad": "加载投票失败",
       "errorArchive": "归档失败",
-      "errorRestore": "恢复失败"
+      "errorRestore": "恢复失败",
+      "reopen": "重新开放",
+      "reopenHint": "退回草稿以便修改；在再次发布前不出现在搜索和投票中。回复会保留。",
+      "reopenConfirm": "重新开放“{title}”以便修改？在你再次发布前，它不会出现在搜索和投票中。回复会保留。",
+      "errorReopen": "无法重新开放此投票"
     },
     "createPoll": {
       "heading": "创建新投票",
@@ -688,5 +692,43 @@
     "replaceYes": "是，替换",
     "replaceNo": "否，保持不公开",
     "publicCount": "{n} 条公开评论"
+  },
+  "history": {
+    "link": "历史",
+    "title": "投票历史",
+    "intro": "投票何时被发布、重新开放、结束、归档、恢复、停用或编辑，以及由谁操作。最新的在前。",
+    "pollFilter": "投票",
+    "allPolls": "全部投票",
+    "empty": "暂无记录。",
+    "loadFailed": "无法加载历史",
+    "colWhen": "时间",
+    "colPoll": "投票",
+    "colWhat": "发生了什么",
+    "colBy": "操作人",
+    "colDetails": "详情",
+    "event": {
+      "PUBLISHED": "已发布",
+      "REOPENED": "已重新开放",
+      "CLOSED": "已结束",
+      "ARCHIVED": "已归档",
+      "RESTORED": "已恢复",
+      "SWITCHED_OFF": "已停用",
+      "SWITCHED_ON": "已重新启用",
+      "EDITED": "已编辑",
+      "PUBLISHED_BEFORE_HISTORY": "在开始记录历史前已发布"
+    },
+    "by": {
+      "you": "你",
+      "automatic": "自动",
+      "ADMIN": "一位管理员",
+      "SUPER": "一位超级管理员",
+      "CREATOR": "一位创建者",
+      "USER": "一位成员"
+    },
+    "type": {
+      "questionnaire": "问卷",
+      "election": "选举",
+      "ballot-measure": "投票议案"
+    }
   }
 }

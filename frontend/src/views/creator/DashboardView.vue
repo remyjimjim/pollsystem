@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import type { PollStatus } from '@/types'
 import { AccessLevel } from '@/types'
 import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -116,6 +117,23 @@ async function archive(p: CreatorPollSummary) {
   }
 }
 
+// Reopen a published or closed poll to revise it: back to draft (out of search
+// and voting until published again), then straight to its edit page.
+const router = useRouter()
+async function reopen(p: CreatorPollSummary) {
+  if (!window.confirm(t('creator.dashboard.reopenConfirm', { title: p.title }))) return
+  acting.value = p.id
+  error.value = null
+  try {
+    await axios.post(`/api/creator/polls/${editSlug(p.type)}/${p.id}/reopen`)
+    router.push(`/creator/polls/${editSlug(p.type)}/${p.id}/edit`)
+  } catch (e: any) {
+    error.value = e?.response?.data?.message ?? t('creator.dashboard.errorReopen')
+  } finally {
+    acting.value = null
+  }
+}
+
 async function restore(p: CreatorPollSummary) {
   acting.value = p.id
   error.value = null
@@ -139,6 +157,10 @@ onMounted(load)
       <div class="flex gap-2">
         <!-- Widen access (more area or poll types): the home page's "Become a
              Creator" card is gone once someone is a creator. -->
+        <router-link
+          to="/history"
+          class="rounded border border-slate-300 bg-white px-4 py-2 text-sm text-slate-800 no-underline hover:bg-slate-50"
+        >{{ $t('history.link') }}</router-link>
         <router-link
           to="/creator/request"
           class="rounded border border-slate-800 bg-white px-4 py-2 text-sm text-slate-800 no-underline hover:bg-slate-50"
@@ -243,6 +265,11 @@ onMounted(load)
               :to="`/creator/polls/${editSlug(p.type)}/${p.id}/report`"
               class="ml-2 text-slate-800 underline"
             >{{ $t('creator.dashboard.report') }}</router-link>
+            <router-link
+              :to="{ path: '/history', query: { type: editSlug(p.type), id: String(p.id) } }"
+              class="ml-2 text-slate-800 underline"
+              data-test="poll-history"
+            >{{ $t('history.link') }}</router-link>
           </td>
           <td class="border-b border-slate-100 p-2">
             <router-link
@@ -250,6 +277,14 @@ onMounted(load)
               :to="`/creator/polls/${editSlug(p.type)}/${p.id}/edit`"
               class="text-slate-800 underline"
             >{{ $t('creator.dashboard.edit') }}</router-link>
+            <button
+              v-else-if="p.status === 'PUBLISHED' || p.status === 'CLOSED'"
+              data-test="reopen"
+              :title="$t('creator.dashboard.reopenHint')"
+              :disabled="acting === p.id"
+              class="text-slate-800 underline hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
+              @click="reopen(p)"
+            >{{ $t('creator.dashboard.reopen') }}</button>
           </td>
           <td class="border-b border-slate-100 p-2">
             <button

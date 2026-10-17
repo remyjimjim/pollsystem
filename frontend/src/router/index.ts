@@ -129,6 +129,13 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, minAccess: AccessLevel.ADMIN }
   },
   {
+    // A poll's history: creators (their own polls), admins (their area), supers.
+    path: '/history',
+    name: 'History',
+    component: () => import('@/views/HistoryView.vue'),
+    meta: { requiresAuth: true, minAccess: AccessLevel.CREATOR }
+  },
+  {
     path: '/admin/manage-creators',
     name: 'ManageCreators',
     component: () => import('@/views/admin/ManageCreatorsView.vue'),

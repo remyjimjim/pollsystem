@@ -42,6 +42,7 @@ class PollMilestoneService(
     private val participation: PollParticipationService,
     private val email: EmailService,
     private val links: MagicLinkProperties,
+    private val history: PollHistoryService,
     @Value("\${app.results.k-anonymity-threshold:10}") private val k: Int,
     transactionManager: PlatformTransactionManager
 ) {
@@ -118,6 +119,8 @@ class PollMilestoneService(
                 val close = p.closeDate ?: return@executeWithoutResult
                 if (p.status != PollStatus.PUBLISHED && p.status != PollStatus.CLOSED) return@executeWithoutResult
                 if (close.isAfter(now) || close.isBefore(since)) return@executeWithoutResult
+                // The poll's history: it closed (once per time it was live).
+                history.closedIfNew(p.kind, p.id, close)
                 if (closingReport(p)) sent++
             }
         }

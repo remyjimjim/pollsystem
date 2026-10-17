@@ -43,7 +43,8 @@ data class SuperPollEdit(
 class SuperPollsController(
     private val questionnaires: QuestionnaireRepository,
     private val elections: ElectionRepository,
-    private val ballotMeasures: BallotMeasureRepository
+    private val ballotMeasures: BallotMeasureRepository,
+    private val history: org.kodewerks.pollsystem.poll.PollHistoryService
 ) {
 
     @GetMapping
@@ -73,8 +74,20 @@ class SuperPollsController(
     fun update(
         @PathVariable type: String,
         @PathVariable id: Long,
-        @RequestBody body: SuperPollEdit
+        @RequestBody body: SuperPollEdit,
+        @org.springframework.security.core.annotation.AuthenticationPrincipal principal: org.kodewerks.pollsystem.security.AppUserDetails? = null
     ): SuperPollRow {
+        // For the poll's history: what this edit changed.
+        fun logEdit(kind: org.kodewerks.pollsystem.model.PollKind, before: Triple<String, String?, java.time.Instant?>, after: Triple<String, String?, java.time.Instant?>) {
+            val changes = buildList {
+                if (before.first != after.first) add("Title: \"${before.first}\" → \"${after.first}\"")
+                if (before.second != after.second) add("Summary changed")
+                if (before.third != after.third) add("Close date: ${before.third ?: "none"} → ${after.third ?: "none"}")
+            }
+            if (changes.isNotEmpty()) {
+                history.record(kind, id, org.kodewerks.pollsystem.model.PollEventType.EDITED, principal?.user, changes.joinToString("\n"))
+            }
+        }
         val title = body.title?.trim()
         if (title != null && title.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Title cannot be blank")
@@ -92,6 +105,7 @@ class SuperPollsController(
                         closeDate = body.closeDate
                     )
                 )
+                logEdit(org.kodewerks.pollsystem.model.PollKind.QUESTIONNAIRE, Triple(existing.title, existing.summary, existing.closeDate), Triple(saved.title, saved.summary, saved.closeDate))
                 SuperPollRow(
                     saved.id, "questionnaire", saved.title, saved.summary,
                     saved.status, saved.creator.email, saved.closeDate
@@ -107,6 +121,7 @@ class SuperPollsController(
                         closeDate = body.closeDate
                     )
                 )
+                logEdit(org.kodewerks.pollsystem.model.PollKind.ELECTION, Triple(existing.title, null, existing.closeDate), Triple(saved.title, null, saved.closeDate))
                 SuperPollRow(
                     saved.id, "election", saved.title, null,
                     saved.status, saved.creator.email, saved.closeDate
@@ -123,6 +138,7 @@ class SuperPollsController(
                         closeDate = body.closeDate
                     )
                 )
+                logEdit(org.kodewerks.pollsystem.model.PollKind.BALLOT_MEASURE, Triple(existing.title, existing.summary, existing.closeDate), Triple(saved.title, saved.summary, saved.closeDate))
                 SuperPollRow(
                     saved.id, "ballot-measure", saved.title, saved.summary,
                     saved.status, saved.creator.email, saved.closeDate

@@ -115,7 +115,8 @@ class AdminPollsController(
     private val blocks: PollTypeBlockRepository,
     private val notes: PollNoteRepository,
     private val emailService: org.kodewerks.pollsystem.email.EmailService,
-    private val regions: org.kodewerks.pollsystem.geography.RegionService
+    private val regions: org.kodewerks.pollsystem.geography.RegionService,
+    private val history: org.kodewerks.pollsystem.poll.PollHistoryService
 ) {
 
     @GetMapping("/purview")
@@ -348,8 +349,21 @@ class AdminPollsController(
                 ))
             }
         }
+        history.record(kind, id, org.kodewerks.pollsystem.model.PollEventType.SWITCHED_OFF, principal.user, blockLabel(saved))
         return toBlockDto(saved)
     }
+
+    /** Where a block applies, for the poll's history: "Everywhere", "State: California", … */
+    private fun blockLabel(b: PollTypeBlock): String = when (b.scope) {
+        BlockScope.EVERYWHERE -> "Everywhere"
+        BlockScope.STATE -> "State: " + (b.stateId?.let { states.findById(it).orElse(null)?.name } ?: b.stateId)
+        BlockScope.COUNTY -> "County: " + (b.countyId?.let { counties.findById(it).orElse(null)?.name } ?: b.countyId)
+        BlockScope.ZIPCODE -> "Zipcode: ${b.zipcode}"
+    }
+
+    /** Whether this admin (or super) may see the poll: the same rule as the Manage Polls list. */
+    fun canSee(principal: AppUserDetails, kind: PollKind, pollId: Long): Boolean =
+        matchesAdminGeo(kind, pollId, resolvePurview(principal), null)
 
     @DeleteMapping("/blocks/{blockId}")
     @Transactional
@@ -369,6 +383,7 @@ class AdminPollsController(
             }
         }
         blocks.delete(b)
+        history.record(b.pollType, b.pollId, org.kodewerks.pollsystem.model.PollEventType.SWITCHED_ON, principal.user, blockLabel(b))
     }
 
     @GetMapping("/{type}/{id}/notes")
@@ -473,6 +488,8 @@ class AdminPollsController(
             pollType = kind, pollId = id, body = noteBody,
             authorId = principal.user.id, emailed = emailed
         ))
+        history.record(kind, id, org.kodewerks.pollsystem.model.PollEventType.EDITED, principal.user,
+            (changes.map { it.replaceFirstChar(Char::uppercase) } + "Reason: $reason").joinToString("\n"))
         return toDto(saved)
     }
 

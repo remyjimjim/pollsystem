@@ -286,7 +286,11 @@
       "archiveConfirm": "Archiviare «{title}»? Verrà rimosso dal pannello, dalla ricerca e dal voto. Potrai ripristinarlo in seguito tramite «Mostra archiviati».",
       "errorLoad": "Impossibile caricare i sondaggi",
       "errorArchive": "Archiviazione non riuscita",
-      "errorRestore": "Ripristino non riuscito"
+      "errorRestore": "Ripristino non riuscito",
+      "reopen": "Riapri",
+      "reopenHint": "Torna bozza per rivederlo; fuori da ricerca e voto finché non lo pubblichi di nuovo. Le risposte restano.",
+      "reopenConfirm": "Riaprire «{title}» per rivederlo? Esce da ricerca e voto finché non lo pubblichi di nuovo. Le sue risposte restano.",
+      "errorReopen": "Impossibile riaprire il sondaggio"
     },
     "createPoll": {
       "heading": "Crea nuovo sondaggio",
@@ -688,5 +692,43 @@
     "replaceYes": "Sì, sostituisci",
     "replaceNo": "No, mantienilo privato",
     "publicCount": "{n} commento pubblico | {n} commenti pubblici"
+  },
+  "history": {
+    "link": "Cronologia",
+    "title": "Cronologia dei sondaggi",
+    "intro": "Quando i sondaggi sono stati pubblicati, riaperti, chiusi, archiviati, ripristinati, disattivati o modificati, e da chi. I più recenti prima.",
+    "pollFilter": "Sondaggio",
+    "allPolls": "Tutti i sondaggi",
+    "empty": "Ancora niente.",
+    "loadFailed": "Impossibile caricare la cronologia",
+    "colWhen": "Quando",
+    "colPoll": "Sondaggio",
+    "colWhat": "Cosa è successo",
+    "colBy": "Da",
+    "colDetails": "Dettagli",
+    "event": {
+      "PUBLISHED": "Pubblicato",
+      "REOPENED": "Riaperto",
+      "CLOSED": "Chiuso",
+      "ARCHIVED": "Archiviato",
+      "RESTORED": "Ripristinato",
+      "SWITCHED_OFF": "Disattivato",
+      "SWITCHED_ON": "Riattivato",
+      "EDITED": "Modificato",
+      "PUBLISHED_BEFORE_HISTORY": "Pubblicato prima dell’inizio della cronologia"
+    },
+    "by": {
+      "you": "Tu",
+      "automatic": "Automatico",
+      "ADMIN": "Un admin",
+      "SUPER": "Un super admin",
+      "CREATOR": "Un creatore",
+      "USER": "Un membro"
+    },
+    "type": {
+      "questionnaire": "Questionario",
+      "election": "Elezione",
+      "ballot-measure": "Quesito referendario"
+    }
   }
 }

@@ -48,7 +48,8 @@ class CreatorPollsController(
     private val ballotMeasures: BallotMeasureRepository,
     private val participation: PollParticipationService,
     private val reports: PollReportService,
-    private val mutes: org.kodewerks.pollsystem.repository.PollEmailMuteRepository
+    private val mutes: org.kodewerks.pollsystem.repository.PollEmailMuteRepository,
+    private val history: PollHistoryService
 ) {
     @GetMapping
     fun list(
@@ -107,16 +108,19 @@ class CreatorPollsController(
                 val q = questionnaires.findById(id).orElseThrow { notFound() }
                 if (q.creator.id != callerId) throw forbidden()
                 questionnaires.save(q.copy(status = PollStatus.ARCHIVED, creatorEditedAt = Instant.now()))
+                history.record(PollKind.QUESTIONNAIRE, id, org.kodewerks.pollsystem.model.PollEventType.ARCHIVED, principal.user)
             }
             "election" -> {
                 val e = elections.findById(id).orElseThrow { notFound() }
                 if (e.creator.id != callerId) throw forbidden()
                 elections.save(e.copy(status = PollStatus.ARCHIVED, creatorEditedAt = Instant.now()))
+                history.record(PollKind.ELECTION, id, org.kodewerks.pollsystem.model.PollEventType.ARCHIVED, principal.user)
             }
             "ballot-measure" -> {
                 val bm = ballotMeasures.findById(id).orElseThrow { notFound() }
                 if (bm.creator.id != callerId) throw forbidden()
                 ballotMeasures.save(bm.copy(status = PollStatus.ARCHIVED, creatorEditedAt = Instant.now()))
+                history.record(PollKind.BALLOT_MEASURE, id, org.kodewerks.pollsystem.model.PollEventType.ARCHIVED, principal.user)
             }
             else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
         }
@@ -141,21 +145,67 @@ class CreatorPollsController(
                 if (q.creator.id != callerId) throw forbidden()
                 if (q.status != PollStatus.ARCHIVED) return
                 questionnaires.save(q.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
+                history.record(PollKind.QUESTIONNAIRE, id, org.kodewerks.pollsystem.model.PollEventType.RESTORED, principal.user)
             }
             "election" -> {
                 val e = elections.findById(id).orElseThrow { notFound() }
                 if (e.creator.id != callerId) throw forbidden()
                 if (e.status != PollStatus.ARCHIVED) return
                 elections.save(e.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
+                history.record(PollKind.ELECTION, id, org.kodewerks.pollsystem.model.PollEventType.RESTORED, principal.user)
             }
             "ballot-measure" -> {
                 val bm = ballotMeasures.findById(id).orElseThrow { notFound() }
                 if (bm.creator.id != callerId) throw forbidden()
                 if (bm.status != PollStatus.ARCHIVED) return
                 ballotMeasures.save(bm.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
+                history.record(PollKind.BALLOT_MEASURE, id, org.kodewerks.pollsystem.model.PollEventType.RESTORED, principal.user)
             }
             else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
         }
+    }
+
+    /**
+     * Reopen a published (or closed) poll for revising (decided 2026-10-17):
+     * back to DRAFT, out of search and voting until published again. Responses
+     * are kept; the usual edit rules apply (questions, candidates and area are
+     * locked once there are responses). Replaces archive + restore for revising.
+     */
+    @PostMapping("/{type}/{id}/reopen")
+    @Transactional
+    fun reopen(
+        @AuthenticationPrincipal principal: AppUserDetails,
+        @PathVariable type: String,
+        @PathVariable id: Long
+    ) {
+        val callerId = principal.user.id
+        val reopenable = setOf(PollStatus.PUBLISHED, PollStatus.CLOSED)
+        fun notReopenable(): Nothing = throw ResponseStatusException(HttpStatus.CONFLICT, "Only a published or closed poll can be reopened")
+        val kind = when (type) {
+            "questionnaire" -> {
+                val q = questionnaires.findById(id).orElseThrow { notFound() }
+                if (q.creator.id != callerId) throw forbidden()
+                if (q.status !in reopenable) notReopenable()
+                questionnaires.save(q.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
+                PollKind.QUESTIONNAIRE
+            }
+            "election" -> {
+                val e = elections.findById(id).orElseThrow { notFound() }
+                if (e.creator.id != callerId) throw forbidden()
+                if (e.status !in reopenable) notReopenable()
+                elections.save(e.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
+                PollKind.ELECTION
+            }
+            "ballot-measure" -> {
+                val bm = ballotMeasures.findById(id).orElseThrow { notFound() }
+                if (bm.creator.id != callerId) throw forbidden()
+                if (bm.status !in reopenable) notReopenable()
+                ballotMeasures.save(bm.copy(status = PollStatus.DRAFT, creatorEditedAt = Instant.now()))
+                PollKind.BALLOT_MEASURE
+            }
+            else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown poll type: $type")
+        }
+        history.record(kind, id, org.kodewerks.pollsystem.model.PollEventType.REOPENED, principal.user)
     }
 
     /**

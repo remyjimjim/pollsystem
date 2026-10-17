@@ -435,3 +435,7 @@ interface PollEmailMuteRepository : JpaRepository<PollEmailMute, Long> {
     fun findByPollTypeAndPollId(pollType: PollKind, pollId: Long): PollEmailMute?
     fun existsByPollTypeAndPollId(pollType: PollKind, pollId: Long): Boolean
 }
+
+interface PollEventRepository : JpaRepository<PollEvent, Long> {
+    fun findByPollTypeAndPollIdOrderByIdDesc(pollType: PollKind, pollId: Long): List<PollEvent>
+}

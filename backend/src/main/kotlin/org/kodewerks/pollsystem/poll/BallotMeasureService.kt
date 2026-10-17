@@ -22,7 +22,8 @@ class BallotMeasureService(
     private val elections: ElectionRepository,
     private val pollTypes: PollTypeRepository,
     private val purviews: PollPurviewService,
-    private val grants: CreatorGrantGuard
+    private val grants: CreatorGrantGuard,
+    private val history: PollHistoryService
 ) {
 
     @Transactional
@@ -124,9 +125,11 @@ class BallotMeasureService(
     @Transactional
     fun publishChecked(existing: BallotMeasure, creator: User, confirmed: Boolean): BallotMeasure {
         checkPublishable(existing, creator, confirmed)
-        return measures.save(
+        val published = measures.save(
             existing.copy(status = PollStatus.PUBLISHED, lastUpdated = Instant.now(), creatorEditedAt = Instant.now())
         )
+        history.published(PollKind.BALLOT_MEASURE, existing.id, creator)
+        return published
     }
 
     /** The checks a measure must pass to go live, without changing anything (so an election can check all first). */

@@ -286,7 +286,11 @@
       "archiveConfirm": "Archiver « {title} » ? Cela le retire du tableau de bord, de la recherche et du vote. Vous pourrez le restaurer via « Afficher les archivés ».",
       "errorLoad": "Échec du chargement des sondages",
       "errorArchive": "Échec de l'archivage",
-      "errorRestore": "Échec de la restauration"
+      "errorRestore": "Échec de la restauration",
+      "reopen": "Rouvrir",
+      "reopenHint": "Revient en brouillon pour la réviser ; hors recherche et vote jusqu’à la prochaine publication. Les réponses sont conservées.",
+      "reopenConfirm": "Rouvrir « {title} » pour la réviser ? Elle quitte la recherche et le vote jusqu’à ce que vous la publiiez à nouveau. Ses réponses sont conservées.",
+      "errorReopen": "Impossible de rouvrir le sondage"
     },
     "createPoll": {
       "heading": "Créer un nouveau sondage",
@@ -741,5 +745,43 @@
     "replaceYes": "Oui, remplacer",
     "replaceNo": "Non, le garder privé",
     "publicCount": "{n} commentaire public | {n} commentaires publics"
+  },
+  "history": {
+    "link": "Historique",
+    "title": "Historique des sondages",
+    "intro": "Quand les sondages ont été publiés, rouverts, fermés, archivés, restaurés, désactivés ou modifiés, et par qui. Les plus récents d’abord.",
+    "pollFilter": "Sondage",
+    "allPolls": "Tous les sondages",
+    "empty": "Rien pour l’instant.",
+    "loadFailed": "Impossible de charger l’historique",
+    "colWhen": "Quand",
+    "colPoll": "Sondage",
+    "colWhat": "Ce qui s’est passé",
+    "colBy": "Par",
+    "colDetails": "Détails",
+    "event": {
+      "PUBLISHED": "Publié",
+      "REOPENED": "Rouvert",
+      "CLOSED": "Fermé",
+      "ARCHIVED": "Archivé",
+      "RESTORED": "Restauré",
+      "SWITCHED_OFF": "Désactivé",
+      "SWITCHED_ON": "Réactivé",
+      "EDITED": "Modifié",
+      "PUBLISHED_BEFORE_HISTORY": "Publié avant le début de l’historique"
+    },
+    "by": {
+      "you": "Vous",
+      "automatic": "Automatique",
+      "ADMIN": "Un admin",
+      "SUPER": "Un super-admin",
+      "CREATOR": "Un créateur",
+      "USER": "Un membre"
+    },
+    "type": {
+      "questionnaire": "Questionnaire",
+      "election": "Élection",
+      "ballot-measure": "Mesure soumise au vote"
+    }
   }
 }

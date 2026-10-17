@@ -325,7 +325,11 @@
       "archiveConfirm": "Archive \"{title}\"? This removes it from the dashboard, search, and voting. You can restore it later via \"Show archived\".",
       "errorLoad": "Failed to load polls",
       "errorArchive": "Archive failed",
-      "errorRestore": "Restore failed"
+      "errorRestore": "Restore failed",
+      "reopen": "Reopen",
+      "reopenHint": "Back to draft to revise it; out of search and voting until you publish again. Responses are kept.",
+      "reopenConfirm": "Reopen \"{title}\" to revise it? It leaves search and voting until you publish it again. Its responses are kept.",
+      "errorReopen": "Couldn't reopen the poll"
     },
     "createPoll": {
       "heading": "Create New Poll",
@@ -986,5 +990,43 @@
     "replaceYes": "Yes, replace it",
     "replaceNo": "No, keep it private",
     "publicCount": "{n} public comment | {n} public comments"
+  },
+  "history": {
+    "link": "History",
+    "title": "Poll history",
+    "intro": "When polls were published, reopened, closed, archived, restored, switched off or edited, and by whom. Newest first.",
+    "pollFilter": "Poll",
+    "allPolls": "All polls",
+    "empty": "Nothing yet.",
+    "loadFailed": "Couldn't load the history",
+    "colWhen": "When",
+    "colPoll": "Poll",
+    "colWhat": "What happened",
+    "colBy": "By",
+    "colDetails": "Details",
+    "event": {
+      "PUBLISHED": "Published",
+      "REOPENED": "Reopened",
+      "CLOSED": "Closed",
+      "ARCHIVED": "Archived",
+      "RESTORED": "Restored",
+      "SWITCHED_OFF": "Switched off",
+      "SWITCHED_ON": "Switched back on",
+      "EDITED": "Edited",
+      "PUBLISHED_BEFORE_HISTORY": "Published before history began"
+    },
+    "by": {
+      "you": "You",
+      "automatic": "Automatic",
+      "ADMIN": "An admin",
+      "SUPER": "A super",
+      "CREATOR": "A creator",
+      "USER": "A member"
+    },
+    "type": {
+      "questionnaire": "Questionnaire",
+      "election": "Election",
+      "ballot-measure": "Ballot measure"
+    }
   }
 }

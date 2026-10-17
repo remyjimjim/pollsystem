@@ -286,7 +286,11 @@
       "archiveConfirm": "„{title}“ archivieren? Dies entfernt sie aus Dashboard, Suche und Abstimmung. Sie können sie über „Archivierte anzeigen“ wiederherstellen.",
       "errorLoad": "Umfragen konnten nicht geladen werden",
       "errorArchive": "Archivieren fehlgeschlagen",
-      "errorRestore": "Wiederherstellung fehlgeschlagen"
+      "errorRestore": "Wiederherstellung fehlgeschlagen",
+      "reopen": "Wieder öffnen",
+      "reopenHint": "Zurück zum Entwurf zum Überarbeiten; bis zur erneuten Veröffentlichung nicht in Suche und Abstimmung. Antworten bleiben erhalten.",
+      "reopenConfirm": "„{title}“ zum Überarbeiten wieder öffnen? Sie verschwindet aus Suche und Abstimmung, bis Sie sie erneut veröffentlichen. Die Antworten bleiben erhalten.",
+      "errorReopen": "Umfrage konnte nicht wieder geöffnet werden"
     },
     "createPoll": {
       "heading": "Neue Umfrage erstellen",
@@ -688,5 +692,43 @@
     "replaceYes": "Ja, ersetzen",
     "replaceNo": "Nein, privat lassen",
     "publicCount": "{n} öffentlicher Kommentar | {n} öffentliche Kommentare"
+  },
+  "history": {
+    "link": "Verlauf",
+    "title": "Umfrageverlauf",
+    "intro": "Wann Umfragen veröffentlicht, wieder geöffnet, geschlossen, archiviert, wiederhergestellt, abgeschaltet oder bearbeitet wurden, und von wem. Neueste zuerst.",
+    "pollFilter": "Umfrage",
+    "allPolls": "Alle Umfragen",
+    "empty": "Noch nichts.",
+    "loadFailed": "Verlauf konnte nicht geladen werden",
+    "colWhen": "Wann",
+    "colPoll": "Umfrage",
+    "colWhat": "Was geschah",
+    "colBy": "Von",
+    "colDetails": "Details",
+    "event": {
+      "PUBLISHED": "Veröffentlicht",
+      "REOPENED": "Wieder geöffnet",
+      "CLOSED": "Geschlossen",
+      "ARCHIVED": "Archiviert",
+      "RESTORED": "Wiederhergestellt",
+      "SWITCHED_OFF": "Abgeschaltet",
+      "SWITCHED_ON": "Wieder eingeschaltet",
+      "EDITED": "Bearbeitet",
+      "PUBLISHED_BEFORE_HISTORY": "Vor Beginn des Verlaufs veröffentlicht"
+    },
+    "by": {
+      "you": "Sie",
+      "automatic": "Automatisch",
+      "ADMIN": "Ein Admin",
+      "SUPER": "Ein Super-Admin",
+      "CREATOR": "Ein Ersteller",
+      "USER": "Ein Mitglied"
+    },
+    "type": {
+      "questionnaire": "Fragebogen",
+      "election": "Wahl",
+      "ballot-measure": "Abstimmungsvorlage"
+    }
   }
 }

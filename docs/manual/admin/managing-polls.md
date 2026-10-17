@@ -44,3 +44,10 @@ and its **Close date**. A **Reason** is required. It's saved as a note on the
 poll, and you can email it to the creator.
 
 You can edit polls inside your area only.
+
+## History
+
+**History** on a poll's row shows its history: published, reopened, closed,
+archived, restored, switched off or back on, and edited, with when, by whom
+(with their email) and details. You see the history of polls in your area, and
+your own polls.

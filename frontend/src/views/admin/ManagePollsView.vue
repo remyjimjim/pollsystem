@@ -680,6 +680,11 @@ onBeforeUnmount(() => {
   document.removeEventListener('click', onDocClick)
   document.removeEventListener('keydown', onEsc)
 })
+
+/** The History page's poll type for a row (rows use ELECTION / QUESTIONNAIRE / BALLOT_MEASURE). */
+function historySlug(kind: Kind): string {
+  return kind === 'BALLOT_MEASURE' ? 'ballot-measure' : kind.toLowerCase()
+}
 </script>
 
 <template>
@@ -885,6 +890,11 @@ onBeforeUnmount(() => {
               class="rounded border border-slate-300 px-2 py-0.5 text-xs hover:bg-slate-50">
               {{ $t('admin.managePolls.editButton') }}
             </button>
+            <router-link
+              :to="{ path: '/history', query: { type: historySlug(row.type), id: String(row.id) } }"
+              class="ml-2 text-xs text-slate-800 underline"
+              data-test="poll-history"
+            >{{ $t('history.link') }}</router-link>
           </td>
         </tr>
       </tbody>

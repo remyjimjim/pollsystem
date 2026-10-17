@@ -105,6 +105,7 @@ class DevController(
         em.createNativeQuery(
             "DELETE FROM poll_purviews WHERE poll_type = 'BALLOT_MEASURE' AND poll_id IN ($testMeasures)"
         ).executeUpdate()
+        em.createNativeQuery("DELETE FROM poll_events WHERE poll_type = 'BALLOT_MEASURE' AND poll_id IN ($testMeasures)").executeUpdate()
         nuke("ballot_measures", "id IN ($testMeasures)")
 
         em.createNativeQuery("""
@@ -123,6 +124,7 @@ class DevController(
                 SELECT id FROM elections WHERE creator_id IN ($idList)
             )
         """).executeUpdate()
+        em.createNativeQuery("DELETE FROM poll_events WHERE poll_type = 'ELECTION' AND poll_id IN (SELECT id FROM elections WHERE creator_id IN ($idList))").executeUpdate()
         nuke("elections", "creator_id IN ($idList)")
 
         em.createNativeQuery("""
@@ -141,6 +143,7 @@ class DevController(
                 SELECT id FROM questionnaires WHERE creator_id IN ($idList)
             )
         """).executeUpdate()
+        em.createNativeQuery("DELETE FROM poll_events WHERE poll_type = 'QUESTIONNAIRE' AND poll_id IN (SELECT id FROM questionnaires WHERE creator_id IN ($idList))").executeUpdate()
         nuke("questionnaires", "creator_id IN ($idList)")
 
         // Direct references from auxiliary tables. user_messages.user_id is

@@ -286,7 +286,11 @@
       "archiveConfirm": "Arquivar «{title}»? Isso a remove do painel, da busca e da votação. Você pode restaurá-la depois via «Mostrar arquivadas».",
       "errorLoad": "Falha ao carregar enquetes",
       "errorArchive": "Falha ao arquivar",
-      "errorRestore": "Falha ao restaurar"
+      "errorRestore": "Falha ao restaurar",
+      "reopen": "Reabrir",
+      "reopenHint": "Volta para rascunho para revisar; fora da busca e da votação até publicar de novo. As respostas são mantidas.",
+      "reopenConfirm": "Reabrir “{title}” para revisar? Ela sai da busca e da votação até você publicar de novo. As respostas são mantidas.",
+      "errorReopen": "Não foi possível reabrir a enquete"
     },
     "createPoll": {
       "heading": "Criar nova enquete",
@@ -688,5 +692,43 @@
     "replaceYes": "Sim, substituir",
     "replaceNo": "Não, manter privado",
     "publicCount": "{n} comentário público | {n} comentários públicos"
+  },
+  "history": {
+    "link": "Histórico",
+    "title": "Histórico das enquetes",
+    "intro": "Quando as enquetes foram publicadas, reabertas, encerradas, arquivadas, restauradas, desativadas ou editadas, e por quem. Mais recentes primeiro.",
+    "pollFilter": "Enquete",
+    "allPolls": "Todas as enquetes",
+    "empty": "Nada ainda.",
+    "loadFailed": "Não foi possível carregar o histórico",
+    "colWhen": "Quando",
+    "colPoll": "Enquete",
+    "colWhat": "O que aconteceu",
+    "colBy": "Por",
+    "colDetails": "Detalhes",
+    "event": {
+      "PUBLISHED": "Publicada",
+      "REOPENED": "Reaberta",
+      "CLOSED": "Encerrada",
+      "ARCHIVED": "Arquivada",
+      "RESTORED": "Restaurada",
+      "SWITCHED_OFF": "Desativada",
+      "SWITCHED_ON": "Reativada",
+      "EDITED": "Editada",
+      "PUBLISHED_BEFORE_HISTORY": "Publicada antes do início do histórico"
+    },
+    "by": {
+      "you": "Você",
+      "automatic": "Automático",
+      "ADMIN": "Um admin",
+      "SUPER": "Um super admin",
+      "CREATOR": "Um criador",
+      "USER": "Um membro"
+    },
+    "type": {
+      "questionnaire": "Questionário",
+      "election": "Eleição",
+      "ballot-measure": "Medida em votação"
+    }
   }
 }

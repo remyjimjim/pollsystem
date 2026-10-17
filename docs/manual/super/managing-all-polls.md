@@ -20,9 +20,12 @@ can't edit it any more.
 
 **What you can't change here:** a published poll's questions, candidates or
 area. Changing those after people have answered would change the meaning of
-their answers. To change them, the creator archives the poll, restores it as a
-draft, edits it and publishes it again (see [Drafts, publishing and
+their answers. To change them, the creator reopens the poll, edits it and
+publishes it again (see [Drafts, publishing and
 archiving](../creator/drafts-and-publishing.md)).
+
+**History** on a poll's row shows everything that happened to it, with when,
+by whom and details. Your edits here appear there too.
 
 To switch a poll off in some places, or change its status, use [Managing
 polls](../admin/managing-polls.md), which works for you everywhere.

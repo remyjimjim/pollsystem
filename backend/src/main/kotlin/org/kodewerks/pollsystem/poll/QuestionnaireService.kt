@@ -23,7 +23,8 @@ class QuestionnaireService(
     private val questionResponses: QuestionResponseRepository,
     private val pollTypes: PollTypeRepository,
     private val purviews: PollPurviewService,
-    private val grants: CreatorGrantGuard
+    private val grants: CreatorGrantGuard,
+    private val history: PollHistoryService
 ) {
 
     @Transactional
@@ -109,9 +110,11 @@ class QuestionnaireService(
             }
         }
 
-        return questionnaires.save(
+        val published = questionnaires.save(
             existing.copy(status = PollStatus.PUBLISHED, submitDate = Instant.now(), creatorEditedAt = Instant.now())
         )
+        history.published(PollKind.QUESTIONNAIRE, id, creator)
+        return published
     }
 
     @Transactional(readOnly = true)

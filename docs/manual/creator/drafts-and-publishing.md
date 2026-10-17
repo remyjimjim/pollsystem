@@ -55,17 +55,32 @@ results stay visible. A poll without a close date stays open.
 
 ## Revising a published poll
 
-Published polls can't be edited directly. To revise one:
+Published polls can't be edited directly. To revise one, click **Reopen** on
+its row on your dashboard (also on closed polls) and confirm. It goes back to
+**draft** and opens for editing. Make your changes, then **Publish** again.
 
-1. Click **Archive** on your dashboard and confirm.
-2. Click **Show archived**, then **Restore** on the poll. It comes back as a
-   **draft**.
-3. Click **Edit**, make your changes, and **Publish** again.
+- Until you publish it again, the poll is out of search and voting.
+- Its responses are kept. Once a poll has responses, only its title, summary
+  and close date can change; its questions, candidates and area stay as they
+  were, so earlier answers keep their meaning.
+- Reopening an **election** doesn't reopen its ballot measures, but voters
+  reach those through the election, so they can't be voted on until you publish
+  the election again.
 
-Until you publish it again, the poll is out of search and voting.
+To close a live poll early, reopen it, set its close date to now or earlier,
+and publish. You'll be asked to confirm the date.
 
-To close a live poll early, revise it this way and set its close date to now or
-earlier. When you publish, you'll be asked to confirm the date.
+## History
+
+**History** (on your dashboard, and on each poll's row) lists what happened to
+your polls, newest first: published, reopened, closed, archived, restored,
+switched off or back on by an admin, and edited by an admin or super. It shows
+when, by whom, and details such as what changed when you published again (for
+example "Close date: 2026-11-03 18:00 UTC → 2026-11-10 18:00 UTC"). Pick a
+poll at the top to see just that poll.
+
+Polls that were already live before history was kept show **Published before
+history began**, with no date.
 
 ## Archiving
 

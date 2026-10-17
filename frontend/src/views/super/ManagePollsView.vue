@@ -157,6 +157,11 @@ onMounted(load)
               {{ p.closeDate ? new Date(p.closeDate).toLocaleString() : '—' }}
             </td>
             <td class="border-b border-slate-100 p-2 text-right">
+              <router-link
+                :to="{ path: '/history', query: { type: p.type, id: String(p.id) } }"
+                class="mr-3 text-slate-800 underline hover:text-slate-900"
+                data-test="poll-history"
+              >{{ $t('history.link') }}</router-link>
               <button
                 @click="startEdit(p)"
                 class="text-slate-800 underline hover:text-slate-900"

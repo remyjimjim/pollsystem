@@ -286,7 +286,11 @@
       "archiveConfirm": "Arkivere «{title}»? Den fjernes fra panelet, søk og avstemning. Du kan gjenopprette den senere via «Vis arkiverte».",
       "errorLoad": "Kunne ikke laste avstemninger",
       "errorArchive": "Arkivering mislyktes",
-      "errorRestore": "Gjenoppretting mislyktes"
+      "errorRestore": "Gjenoppretting mislyktes",
+      "reopen": "Gjenåpne",
+      "reopenHint": "Tilbake til utkast for å revidere; ute av søk og stemming til du publiserer igjen. Svarene beholdes.",
+      "reopenConfirm": "Gjenåpne «{title}» for å revidere? Den forsvinner fra søk og stemming til du publiserer igjen. Svarene beholdes.",
+      "errorReopen": "Kunne ikke gjenåpne avstemningen"
     },
     "createPoll": {
       "heading": "Opprett ny avstemning",
@@ -741,5 +745,43 @@
     "replaceYes": "Ja, erstatt",
     "replaceNo": "Nei, hold den privat",
     "publicCount": "{n} offentlig kommentar | {n} offentlige kommentarer"
+  },
+  "history": {
+    "link": "Historikk",
+    "title": "Avstemningshistorikk",
+    "intro": "Når avstemninger ble publisert, gjenåpnet, stengt, arkivert, gjenopprettet, slått av eller redigert, og av hvem. Nyeste først.",
+    "pollFilter": "Avstemning",
+    "allPolls": "Alle avstemninger",
+    "empty": "Ingenting ennå.",
+    "loadFailed": "Kunne ikke laste historikken",
+    "colWhen": "Når",
+    "colPoll": "Avstemning",
+    "colWhat": "Hva skjedde",
+    "colBy": "Av",
+    "colDetails": "Detaljer",
+    "event": {
+      "PUBLISHED": "Publisert",
+      "REOPENED": "Gjenåpnet",
+      "CLOSED": "Stengt",
+      "ARCHIVED": "Arkivert",
+      "RESTORED": "Gjenopprettet",
+      "SWITCHED_OFF": "Slått av",
+      "SWITCHED_ON": "Slått på igjen",
+      "EDITED": "Redigert",
+      "PUBLISHED_BEFORE_HISTORY": "Publisert før historikken startet"
+    },
+    "by": {
+      "you": "Deg",
+      "automatic": "Automatisk",
+      "ADMIN": "En admin",
+      "SUPER": "En superadmin",
+      "CREATOR": "En oppretter",
+      "USER": "Et medlem"
+    },
+    "type": {
+      "questionnaire": "Spørreskjema",
+      "election": "Valg",
+      "ballot-measure": "Folkeavstemningssak"
+    }
   }
 }

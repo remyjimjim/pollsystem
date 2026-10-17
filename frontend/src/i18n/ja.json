@@ -286,7 +286,11 @@
       "archiveConfirm": "「{title}」をアーカイブしますか？ダッシュボード、検索、投票から削除されます。後で「アーカイブを表示」から復元できます。",
       "errorLoad": "投票の読み込みに失敗しました",
       "errorArchive": "アーカイブに失敗しました",
-      "errorRestore": "復元に失敗しました"
+      "errorRestore": "復元に失敗しました",
+      "reopen": "再開",
+      "reopenHint": "下書きに戻して修正します。再公開するまで検索と投票から外れます。回答は保持されます。",
+      "reopenConfirm": "「{title}」を修正のため再開しますか？再公開するまで検索と投票から外れます。回答は保持されます。",
+      "errorReopen": "投票を再開できませんでした"
     },
     "createPoll": {
       "heading": "新しい投票を作成",
@@ -741,5 +745,43 @@
     "replaceYes": "はい、置き換える",
     "replaceNo": "いいえ、非公開にする",
     "publicCount": "公開コメント {n} 件"
+  },
+  "history": {
+    "link": "履歴",
+    "title": "投票の履歴",
+    "intro": "投票がいつ公開・再開・終了・アーカイブ・復元・停止・編集されたか、誰が行ったか。新しい順。",
+    "pollFilter": "投票",
+    "allPolls": "すべての投票",
+    "empty": "まだありません。",
+    "loadFailed": "履歴を読み込めませんでした",
+    "colWhen": "日時",
+    "colPoll": "投票",
+    "colWhat": "内容",
+    "colBy": "実行者",
+    "colDetails": "詳細",
+    "event": {
+      "PUBLISHED": "公開",
+      "REOPENED": "再開",
+      "CLOSED": "終了",
+      "ARCHIVED": "アーカイブ",
+      "RESTORED": "復元",
+      "SWITCHED_OFF": "停止",
+      "SWITCHED_ON": "再有効化",
+      "EDITED": "編集",
+      "PUBLISHED_BEFORE_HISTORY": "履歴開始前に公開"
+    },
+    "by": {
+      "you": "あなた",
+      "automatic": "自動",
+      "ADMIN": "管理者",
+      "SUPER": "スーパー管理者",
+      "CREATOR": "作成者",
+      "USER": "メンバー"
+    },
+    "type": {
+      "questionnaire": "アンケート",
+      "election": "選挙",
+      "ballot-measure": "住民投票"
+    }
   }
 }
