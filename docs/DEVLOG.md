@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-19 — Search: a Responses column, and choosing columns
+
+**Requested:**
+
+> for the http://localhost:3000/polls/search page, can we add a sortable
+> "responses" column and for the "Title" row that lists the title of each
+> column, can we have a "Show?" checkbox so the user with a phone that's not
+> very wide can choose the columns that they want to see?
+
+**Changed:**
+
+- `3bbeded`: a sortable Responses column (public respondent counts).
+- A "Show:" bar of column checkboxes above the table. It's not in the headers,
+  since hiding a column there would hide its own checkbox. The choice is
+  remembered per device, and phones start with the wide columns hidden.
+- Phone layout: the header wraps, and the table scrolls on its own at 390px.
+- Also fixed:
+  - two search tests that compared ids across poll types;
+  - e2e runs now use the default threshold and restore a Dev-settings value;
+  - a flaky email check in the cross-tab e2e test.
+- Backend 338/338, frontend 150/150, e2e 19/19 (twice).
+
+**Commit:** `3bbeded`
+
+---
+
 ## 2026-10-17 — Local Dev settings: the results privacy threshold
 
 **Requested:**
