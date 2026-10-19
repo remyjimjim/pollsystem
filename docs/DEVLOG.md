@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-19 — Demo scripts moved to scripts/demo/
+
+**Requested:**
+
+> Do you think we should put the new script in a new directory like
+> scripts/demo/e2e-demo-vote.bash?
+
+then:
+
+> Yes, please, move both into scripts/demo/ and shorten the names and go ahead
+> and restructure the scripts directory as you suggested and do a 'touch
+> docs/vote.bash.md'
+
+**Changed:**
+
+- `78f7c02`: `scripts/demo/seed.bash` and `scripts/demo/vote.bash`.
+- Their docs are in `scripts/demo/docs/`: `seed.bash.md` (moved) and
+  `vote.bash.md` (new, empty).
+- Every reference is updated. The other scripts are unchanged.
+
+**Commit:** `78f7c02`
+
+---
+
 ## 2026-10-19 — A watch-it-run demo: a member signs in and votes
 
 **Requested:**
