@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test'
 import { BASE } from '../seed'
 
 // Demo (opt-in, never in CI): a member signs in the normal way and answers a
-// questionnaire, slowly enough to watch. Run it with scripts/e2e-demo-vote.bash,
+// questionnaire, slowly enough to watch. Run it with scripts/demo/vote.bash,
 // which sets DEMO_E2E=1 and opens a headed browser.
 //
 // Settings (env):
@@ -43,7 +43,7 @@ async function newSignInLink(to: string, after: string | null): Promise<string> 
 }
 
 test('a member signs in and answers a questionnaire', async ({ page }) => {
-  test.skip(!USER, 'Set E2E_USER (scripts/e2e-demo-vote.bash <email>)')
+  test.skip(!USER, 'Set E2E_USER (scripts/demo/vote.bash <email>)')
   test.setTimeout(10 * 60_000)
 
   // 1. Sign in the normal way: Login page, email, the emailed link.

@@ -1,4 +1,4 @@
-# seed-demo.bash
+# scripts/demo/seed.bash
 
 Starts the **local** database over with a demo: users, creators and admins in
 three states, each with draft polls. Everything goes through the real API, so
@@ -7,13 +7,13 @@ the access requests, approvals and polls are genuine records. Based on
 
 ## Running it
 
-- From a terminal on your machine: `./scripts/seed-demo.bash`
+- From a terminal on your machine: `./scripts/demo/seed.bash`
 - From the Dev Container, where `localhost:8080` isn't reachable, run it inside
   a small container on the host network:
 
   ```bash
   docker run --rm --network host -v "$PWD":/repo -w /repo alpine:3.20 \
-    sh -c "apk add -q bash curl python3 && bash scripts/seed-demo.bash"
+    sh -c "apk add -q bash curl python3 && bash scripts/demo/seed.bash"
   ```
 
 It needs the local stack running (`BuildAndDeploy.bash local` or
@@ -74,7 +74,7 @@ process differs from local-docker in three ways that stop it:
    checkout, then signs in by email. There's no shortcut that skips either step.
 
 Pointing the script at staging (`API=https://pollsystem-backend-staging.fly.dev
-./scripts/seed-demo.bash`) just stops at the first dev call with a 404. That's
+./scripts/demo/seed.bash`) just stops at the first dev call with a 404. That's
 harmless: it changes nothing.
 
 ### If you want demo data on staging

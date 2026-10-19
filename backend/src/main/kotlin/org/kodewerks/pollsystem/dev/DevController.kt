@@ -349,7 +349,7 @@ class DevController(
      * user-submits-creator-request) that need an existing member to sign in as.
      *
      * [email]: an exact, memorable address instead (e.g. demo-creator-wash@test.local,
-     * for scripts/seed-demo.bash). Must be @test.local and start with [emailPrefix],
+     * for scripts/demo/seed.bash). Must be @test.local and start with [emailPrefix],
      * so reset-test-users with that prefix removes it again.
      */
     @PostMapping("/seed-user")
@@ -457,7 +457,7 @@ class DevController(
     }
 
     /**
-     * The demo accounts made by scripts/seed-demo.bash (demo-…@test.local), for
+     * The demo accounts made by scripts/demo/seed.bash (demo-…@test.local), for
      * the Login page's local-only "Quick sign-in" list (signs in via /token).
      */
     @GetMapping("/demo-users")

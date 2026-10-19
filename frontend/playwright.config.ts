@@ -38,7 +38,7 @@ export default defineConfig({
   testIgnore: [
     ...(process.env.CI ? ['**/seed-users-debug.spec.ts'] : []),
     ...(process.env.STRIPE_E2E ? [] : ['**/stripe/**']),
-    // e2e/demo/** is a watch-it-run demo (scripts/e2e-demo-vote.bash): DEMO_E2E=1.
+    // e2e/demo/** is a watch-it-run demo (scripts/demo/vote.bash): DEMO_E2E=1.
     ...(process.env.DEMO_E2E ? [] : ['**/demo/**']),
   ],
   reporter: 'list',

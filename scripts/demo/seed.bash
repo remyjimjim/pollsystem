@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# seed-demo.bash — start the LOCAL database over with a decently seeded demo.
+# seed.bash (scripts/demo/) — start the LOCAL database over with a decently seeded demo.
 #
 # From scripts/pseudocode/swagger-like-db-reset.txt. Everything goes through
 # the real API, the way the app does it: creator and admin access come from
@@ -25,8 +25,8 @@
 # Sign in as any of them at http://localhost:3000/login; the link arrives in
 # Mailpit (http://localhost:8025). Or use a token from /api/dev/token.
 #
-# Usage: scripts/seed-demo.bash        (API at http://localhost:8080)
-#        API=http://host:8080 scripts/seed-demo.bash
+# Usage: scripts/demo/seed.bash        (API at http://localhost:8080)
+#        API=http://host:8080 scripts/demo/seed.bash
 
 set -euo pipefail
 

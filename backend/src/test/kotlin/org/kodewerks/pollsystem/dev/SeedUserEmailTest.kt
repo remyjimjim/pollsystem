@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 /**
- * seed-user's exact `email` option (scripts/seed-demo.bash): a memorable
+ * seed-user's exact `email` option (scripts/demo/seed.bash): a memorable
  * address that reset-test-users with the same prefix removes again. Local
  * profile only, like DevController (see ResetTestUsersTest).
  */

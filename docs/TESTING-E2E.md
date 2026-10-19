@@ -159,7 +159,7 @@ first spec that needs them.
 | `creator-reopens-and-republishes-a-poll` | creator | Creator dashboard → Reopen a published questionnaire (confirm) → its edit page → change the title → Publish → History link on its row → Published (with the title change), Reopened, Published. |
 
 **Demo (opt-in, not in CI):** `e2e/demo/user-votes-on-a-poll.spec.ts`, run with
-`scripts/e2e-demo-vote.bash <email> [--poll "<title>"] [--answer Yes|No] [--pause ms] [--login-delay ms]`
+`scripts/demo/vote.bash <email> [--poll "<title>"] [--answer Yes|No] [--pause ms] [--login-delay ms]`
 on the host. It opens a headed browser and signs the member in the normal way
 (the emailed link, not Quick sign-in). Then Find polls → Search → Vote on the
 poll → the answer on every question → submit, pausing after each action

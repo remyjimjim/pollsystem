@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
-# e2e-demo-vote.bash — watch a member sign in and answer a questionnaire, in a
+# vote.bash (scripts/demo/) — watch a member sign in and answer a questionnaire, in a
 # new headed browser, slowly. Runs frontend/e2e/demo/user-votes-on-a-poll.spec.ts.
 #
 # Run on the HOST (a visible browser needs your screen), with the local stack up
 # (BuildAndDeploy.bash local-docker or local) and demo users seeded
-# (scripts/seed-demo.bash). Needs Node and Playwright's Chromium on the host
+# (scripts/demo/seed.bash). Needs Node and Playwright's Chromium on the host
 # (once: cd frontend && npx playwright install chromium).
 #
 # Usage:
-#   scripts/e2e-demo-vote.bash <email> [options]
+#   scripts/demo/vote.bash <email> [options]
 #     --poll "<title>"     questionnaire title (default: the Seahawks one)
 #     --answer Yes|No      answer for every question (default Yes)
 #     --pause <ms>         pause after each action (default 3000)
 #     --login-delay <ms>   wait between signing in and Find polls (default 4000)
 #
 # Example:
-#   scripts/e2e-demo-vote.bash demo-user-wash@test.local
-#   scripts/e2e-demo-vote.bash demo-respondent3-wash@test.local --answer No --pause 1500
+#   scripts/demo/vote.bash demo-user-wash@test.local
+#   scripts/demo/vote.bash demo-respondent3-wash@test.local --answer No --pause 1500
 
 set -euo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 [[ $# -ge 1 && "$1" != -* ]] || { sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 2; }
 export E2E_USER="$1"; shift

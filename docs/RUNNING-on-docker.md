@@ -88,7 +88,7 @@ member. See `payment/MockPaymentProvider`; full details + real-Stripe steps in
 ## Seeding a demo database
 
 ```bash
-./scripts/seed-demo.bash
+./scripts/demo/seed.bash
 ```
 
 Starts the local database over with a demo: per state (Washington, Colorado,
@@ -102,7 +102,7 @@ It first deletes the previous demo and the e2e `zzz` users; everyone else is
 left alone. Re-run it any time. It needs the local dev endpoints, so it works
 only against the local stack. From the Dev Container, where `localhost:8080`
 isn't reachable, run it in a container on the host network:
-`docker run --rm --network host -v "$PWD":/repo -w /repo alpine:3.20 sh -c "apk add -q bash curl python3 && bash scripts/seed-demo.bash"`.
+`docker run --rm --network host -v "$PWD":/repo -w /repo alpine:3.20 sh -c "apk add -q bash curl python3 && bash scripts/demo/seed.bash"`.
 
 ## Dev settings (local only)
 
