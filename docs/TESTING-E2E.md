@@ -157,6 +157,14 @@ first spec that needs them.
 | `creator-creates-questionnaire` | creator | Build a whole-state questionnaire in the wizard → publish → dashboard shows PUBLISHED → a guest finds it in search. |
 | `creator-edits-election-and-its-measures` | creator | Creator dashboard → Edit a draft election → Edit one of its draft measures (listed under the election form) → the measure's form opens → "Back to the election" → the election's form again. |
 | `creator-reopens-and-republishes-a-poll` | creator | Creator dashboard → Reopen a published questionnaire (confirm) → its edit page → change the title → Publish → History link on its row → Published (with the title change), Reopened, Published. |
+
+**Demo (opt-in, not in CI):** `e2e/demo/user-votes-on-a-poll.spec.ts`, run with
+`scripts/e2e-demo-vote.bash <email> [--poll "<title>"] [--answer Yes|No] [--pause ms] [--login-delay ms]`
+on the host. It opens a headed browser and signs the member in the normal way
+(the emailed link, not Quick sign-in). Then Find polls → Search → Vote on the
+poll → the answer on every question → submit, pausing after each action
+(3 s by default) and 4 s between signing in and Find polls. It's skipped
+unless `DEMO_E2E=1`.
 | `user-answers-election-and-measure` | user | Find a ballot measure by title → search shows its election ("For Election", 15 characters + "…") → Vote opens the election scrolled to the measure → vote for one Mayor candidate and Yes on the measure, submitted together → both votes counted → revisiting shows "You voted on". |
 | `user-signs-in-and-out-across-tabs` | user | (1) From the home page to Login → request a link → open it in a new tab → the first tab signs in and leaves the Login page; (1b) the same when the browser was already signed in as someone else: the first tab moves on as the new user; (1c) a remembered page (`/login?redirect=…`) is for the same user returning, while a different user lands on the home page. (2) Signed in with a second tab open → Logout in one → the other is logged out at once, without a reload, and sent home. |
 | `super-edits-poll-type-template` | super | Edit the Election template: invalid JSON is rejected → switch candidates to multi-choice checkboxes → a member voting on an existing election gets checkboxes and both choices count → restore the original (also in `afterAll`). |
