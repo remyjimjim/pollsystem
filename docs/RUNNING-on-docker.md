@@ -116,6 +116,9 @@ steps of it, and smaller groups are withheld. Prod uses 10.
 - It's kept in the local database, so it survives rebuilds.
 - Only development builds have the page, and only the `local` backend profile
   honours the setting: staging and prod ignore it.
+- The e2e specs assume the default. A run notes your value, uses the default,
+  and puts yours back at the end (`frontend/playwright/global-setup.ts` and
+  `global-teardown.ts`).
 
 ## Watching the whole app for errors
 

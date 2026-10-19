@@ -153,6 +153,7 @@
       "zipcodes": "Postleitzahlen",
       "creator": "Ersteller",
       "forElection": "Zur Wahl",
+      "responses": "Antworten",
       "closes": "Schließt"
     },
     "noCloseDate": "Kein Schlussdatum",
@@ -160,7 +161,11 @@
     "vote": "Abstimmen →",
     "showMore": "{n} weitere anzeigen",
     "additionalZipcodes": "Weitere Postleitzahlen ({n})",
-    "errorFailed": "Suche fehlgeschlagen"
+    "errorFailed": "Suche fehlgeschlagen",
+    "columns": {
+      "show": "Anzeigen:",
+      "legend": "Anzuzeigende Spalten"
+    }
   },
   "pollDetail": {
     "unknownType": "Unbekannter Umfragetyp.",

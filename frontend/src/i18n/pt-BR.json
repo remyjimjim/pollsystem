@@ -153,6 +153,7 @@
       "zipcodes": "CEPs",
       "creator": "Criador",
       "forElection": "Da eleição",
+      "responses": "Respostas",
       "closes": "Encerra"
     },
     "noCloseDate": "Sem data de encerramento",
@@ -160,7 +161,11 @@
     "vote": "Votar →",
     "showMore": "Mostrar mais {n}",
     "additionalZipcodes": "CEPs adicionais ({n})",
-    "errorFailed": "Falha na busca"
+    "errorFailed": "Falha na busca",
+    "columns": {
+      "show": "Mostrar:",
+      "legend": "Colunas exibidas"
+    }
   },
   "pollDetail": {
     "unknownType": "Tipo de enquete desconhecido.",

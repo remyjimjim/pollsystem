@@ -153,6 +153,7 @@
       "zipcodes": "Códigos postales",
       "creator": "Creador",
       "forElection": "De la elección",
+      "responses": "Respuestas",
       "closes": "Cierra"
     },
     "noCloseDate": "Sin fecha de cierre",
@@ -160,7 +161,11 @@
     "vote": "Votar →",
     "showMore": "Mostrar {n} más",
     "additionalZipcodes": "Códigos postales adicionales ({n})",
-    "errorFailed": "Error en la búsqueda"
+    "errorFailed": "Error en la búsqueda",
+    "columns": {
+      "show": "Mostrar:",
+      "legend": "Columnas visibles"
+    }
   },
   "pollDetail": {
     "unknownType": "Tipo de encuesta desconocido.",

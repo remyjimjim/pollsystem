@@ -47,12 +47,12 @@ function onLocaleChange(e: Event) {
 <template>
   <div id="app" class="min-h-screen">
     <!-- Hidden when printing (e.g. a creator's poll report). -->
-    <header class="bg-slate-800 text-white px-8 print:hidden">
-      <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between">
+    <header class="bg-slate-800 text-white px-4 sm:px-8 print:hidden">
+      <nav class="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-y-2 py-2 sm:py-0">
         <div class="text-xl font-bold">
           <RouterLink to="/" class="text-white no-underline">{{ $t('brand') }}</RouterLink>
         </div>
-        <div class="flex items-center gap-6 text-sm">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:gap-x-6">
           <RouterLink
             to="/polls/search"
             class="text-white/85 hover:text-white"
@@ -130,7 +130,7 @@ function onLocaleChange(e: Event) {
       </nav>
     </header>
 
-    <main class="mx-auto my-8 max-w-6xl px-8">
+    <main class="mx-auto my-8 max-w-6xl px-4 sm:px-8">
       <RouterView />
     </main>
   </div>

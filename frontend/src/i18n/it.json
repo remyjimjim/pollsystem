@@ -153,6 +153,7 @@
       "zipcodes": "CAP",
       "creator": "Creatore",
       "forElection": "Per l’elezione",
+      "responses": "Risposte",
       "closes": "Chiude"
     },
     "noCloseDate": "Nessuna data di chiusura",
@@ -160,7 +161,11 @@
     "vote": "Vota →",
     "showMore": "Mostra {n} in più",
     "additionalZipcodes": "CAP aggiuntivi ({n})",
-    "errorFailed": "Ricerca non riuscita"
+    "errorFailed": "Ricerca non riuscita",
+    "columns": {
+      "show": "Mostra:",
+      "legend": "Colonne da mostrare"
+    }
   },
   "pollDetail": {
     "unknownType": "Tipo di sondaggio sconosciuto.",

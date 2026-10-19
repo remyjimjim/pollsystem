@@ -46,7 +46,8 @@ test.describe('user signs in and out across tabs', () => {
 
     const linkTab = await context.newPage()
     await linkTab.goto(await fetchMagicLink(memberEmail))
-    await expect(linkTab.getByText(memberEmail)).toBeVisible({ timeout: 30_000 })
+    // The header shows who's signed in (the home page may also greet them by email).
+    await expect(linkTab.getByRole('navigation').getByText(memberEmail)).toBeVisible({ timeout: 30_000 })
 
     // The first tab moves on as the NEW user (not left on a blank Login form).
     await expect(page).not.toHaveURL(/\/login/, { timeout: 10_000 })

@@ -30,7 +30,9 @@ data class PollSearchResult(
     val regionLabel: String? = null,
     /** Ballot measures only: the election they belong to (where they're voted on). */
     val electionId: Long? = null,
-    val electionTitle: String? = null
+    val electionTitle: String? = null,
+    /** How many people have responded (public, like the results page's "so far" count). */
+    val respondents: Int = 0
 )
 
 /** Distinct values that feed the autocomplete datalists on the search form. */
@@ -50,7 +52,8 @@ class PollSearchController(
     private val counties: CountyRepository,
     private val pollPurviews: PollPurviewRepository,
     private val purviewService: PollPurviewService,
-    private val blockService: PollBlockService
+    private val blockService: PollBlockService,
+    private val participation: PollParticipationService
 ) {
 
     /** Maps the search-row `type` string back to the block-table enum. */
@@ -233,7 +236,7 @@ class PollSearchController(
         // Active polls (no closeDate or future) first, sorted by closeDate
         // ascending; closed polls last, sorted by closeDate descending so the
         // most-recently-closed appears at the top of the closed section.
-        return visible.sortedWith(
+        return visible.map { it.copy(respondents = participation.of(kindOf(it.type), it.id).respondents) }.sortedWith(
             compareBy<PollSearchResult>(
                 { if (it.closeDate != null && !it.closeDate.isAfter(now)) 1 else 0 },
                 { if (it.closeDate != null && !it.closeDate.isAfter(now)) -it.closeDate.toEpochMilli() else (it.closeDate?.toEpochMilli() ?: Long.MAX_VALUE) },

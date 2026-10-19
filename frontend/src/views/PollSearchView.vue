@@ -24,6 +24,8 @@ interface PollSearchResult {
   /** Ballot measures: the election they're on (and voted with). */
   electionId?: number | null
   electionTitle?: string | null
+  /** How many people have responded. */
+  respondents?: number
 }
 interface SearchSuggestions {
   titles: string[]
@@ -320,14 +322,14 @@ const error = ref<string | null>(null)
 
 // ---------- column sorting (client-side, on top of the backend's
 // active-first ordering — picking a column overrides that order) ----------
-type SortKey = 'title' | 'type' | 'zipcode' | 'creator' | 'election' | 'closeDate'
+type SortKey = 'title' | 'type' | 'zipcode' | 'creator' | 'election' | 'responses' | 'closeDate'
 const sortKey = ref<SortKey | null>(null)
 const sortDir = ref<'asc' | 'desc'>('asc')
 function toggleSort(k: SortKey) {
   if (sortKey.value === k) sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
   else { sortKey.value = k; sortDir.value = 'asc' }
 }
-function sortValue(r: PollSearchResult, k: SortKey): string {
+function sortValue(r: PollSearchResult, k: SortKey): string | number {
   switch (k) {
     case 'title': return r.title.toLowerCase()
     case 'type': return r.type
@@ -336,6 +338,7 @@ function sortValue(r: PollSearchResult, k: SortKey): string {
     case 'zipcode': return r.zipcodes[0]?.code ?? ''
     case 'creator': return (r.creatorEmail ?? '').toLowerCase()
     case 'election': return (r.electionTitle ?? '').toLowerCase()
+    case 'responses': return r.respondents ?? 0
     // ISO timestamps are lex-sortable. Null close-date = "never closes",
     // sorts after every real date in ascending order.
     case 'closeDate': return r.closeDate ?? '￿'
@@ -343,6 +346,25 @@ function sortValue(r: PollSearchResult, k: SortKey): string {
 }
 // The Creator column: only when the server sent creator emails (admins and supers).
 const showCreator = computed(() => results.value.some(r => r.creatorEmail))
+// ---------- Columns: choose which to show (narrow phones) ----------
+// Title and the View results / Vote links always show. Remembered on this
+// device; the first time on a narrow screen, the wide columns start hidden.
+type ColumnKey = 'type' | 'zipcodes' | 'creator' | 'election' | 'responses' | 'closes'
+const COLUMNS_KEY = 'pollSearch.columns'
+const ALL_SHOWN: Record<ColumnKey, boolean> = { type: true, zipcodes: true, creator: true, election: true, responses: true, closes: true }
+function initialColumns(): Record<ColumnKey, boolean> {
+  try {
+    const saved = JSON.parse(localStorage.getItem(COLUMNS_KEY) ?? 'null')
+    if (saved && typeof saved === 'object') return { ...ALL_SHOWN, ...saved }
+  } catch { /* storage unavailable: use the defaults */ }
+  const narrow = typeof window !== 'undefined' && window.innerWidth < 640
+  return narrow ? { ...ALL_SHOWN, zipcodes: false, creator: false, election: false } : { ...ALL_SHOWN }
+}
+const columns = reactive(initialColumns())
+watch(columns, (v) => {
+  try { localStorage.setItem(COLUMNS_KEY, JSON.stringify(v)) } catch { /* not remembered */ }
+}, { deep: true })
+
 // The For Election column: only when a ballot measure is among the results.
 const showElection = computed(() => results.value.some(r => r.electionTitle))
 /** The first 15 characters of an election's title, then "..." (full title on hover). */
@@ -734,15 +756,29 @@ async function search() {
       {{ $t('search.noMatches') }}
     </p>
 
-    <table v-if="results.length > 0" class="w-full border-collapse text-sm">
+    <fieldset v-if="results.length > 0" class="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-600" data-test="column-chooser">
+      <legend class="sr-only">{{ $t('search.columns.legend') }}</legend>
+      <span class="font-semibold">{{ $t('search.columns.show') }}</span>
+      <label class="inline-flex items-center gap-1"><input v-model="columns.type" type="checkbox" class="h-3.5 w-3.5" />{{ $t('search.table.type') }}</label>
+      <label class="inline-flex items-center gap-1"><input v-model="columns.zipcodes" type="checkbox" class="h-3.5 w-3.5" />{{ $t('search.table.zipcodes') }}</label>
+      <label v-if="showCreator" class="inline-flex items-center gap-1"><input v-model="columns.creator" type="checkbox" class="h-3.5 w-3.5" />{{ $t('search.table.creator') }}</label>
+      <label v-if="showElection" class="inline-flex items-center gap-1"><input v-model="columns.election" type="checkbox" class="h-3.5 w-3.5" />{{ $t('search.table.forElection') }}</label>
+      <label class="inline-flex items-center gap-1"><input v-model="columns.responses" type="checkbox" class="h-3.5 w-3.5" />{{ $t('search.table.responses') }}</label>
+      <label class="inline-flex items-center gap-1"><input v-model="columns.closes" type="checkbox" class="h-3.5 w-3.5" />{{ $t('search.table.closes') }}</label>
+    </fieldset>
+    <!-- On phones the table scrolls sideways on its own (not the whole page);
+         the zipcode list then opens inline, so the scroll area can't clip it. -->
+    <div v-if="results.length > 0" class="overflow-x-auto sm:overflow-visible" data-test="results-scroll">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
           <th @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.title') }}{{ sortIndicator('title') }}</th>
-          <th @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.type') }}{{ sortIndicator('type') }}</th>
-          <th @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.zipcodes') }}{{ sortIndicator('zipcode') }}</th>
-          <th v-if="showCreator" @click="toggleSort('creator')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.creator') }}{{ sortIndicator('creator') }}</th>
-          <th v-if="showElection" @click="toggleSort('election')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.forElection') }}{{ sortIndicator('election') }}</th>
-          <th @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.closes') }}{{ sortIndicator('closeDate') }}</th>
+          <th v-if="columns.type" @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.type') }}{{ sortIndicator('type') }}</th>
+          <th v-if="columns.zipcodes" @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.zipcodes') }}{{ sortIndicator('zipcode') }}</th>
+          <th v-if="showCreator && columns.creator" @click="toggleSort('creator')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.creator') }}{{ sortIndicator('creator') }}</th>
+          <th v-if="showElection && columns.election" @click="toggleSort('election')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.forElection') }}{{ sortIndicator('election') }}</th>
+          <th v-if="columns.responses" @click="toggleSort('responses')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.responses') }}{{ sortIndicator('responses') }}</th>
+          <th v-if="columns.closes" @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('search.table.closes') }}{{ sortIndicator('closeDate') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
         </tr>
       </thead>
@@ -755,8 +791,8 @@ async function search() {
               class="ml-2 inline-block rounded bg-slate-200 px-1.5 py-0.5 text-xs font-semibold text-slate-700"
             >{{ $t('search.closedBadge') }}</span>
           </td>
-          <td class="border-b border-slate-100 p-2">{{ r.type }}</td>
-          <td class="border-b border-slate-100 p-2 font-mono text-xs">
+          <td v-if="columns.type" class="border-b border-slate-100 p-2">{{ r.type }}</td>
+          <td v-if="columns.zipcodes" class="border-b border-slate-100 p-2 font-mono text-xs">
             <template v-if="r.zipcodes.length === 0">
               <span v-if="r.regionLabel" class="text-slate-700">{{ r.regionLabel }}</span>
               <template v-else>—</template>
@@ -783,7 +819,7 @@ async function search() {
                   v-if="expandedKey === rowKey(r)"
                   data-zip-popover
                   role="dialog"
-                  class="absolute left-0 top-full z-20 mt-1 w-56 rounded-md border border-slate-300 bg-white shadow-lg"
+                  class="z-20 mt-1 w-56 rounded-md border border-slate-300 bg-white shadow-lg sm:absolute sm:left-0 sm:top-full"
                 >
                   <header class="flex items-center justify-between border-b border-slate-200 px-3 py-2">
                     <span class="text-xs font-semibold text-slate-700">
@@ -825,7 +861,7 @@ async function search() {
               </span>
             </template>
           </td>
-          <td v-if="showCreator" class="border-b border-slate-100 p-2" data-test="creator">
+          <td v-if="showCreator && columns.creator" class="border-b border-slate-100 p-2" data-test="creator">
             <router-link
               v-if="r.creatorEmail"
               :to="{ path: '/admin/manage-creators', query: { creator: r.creatorEmail } }"
@@ -833,10 +869,11 @@ async function search() {
               class="text-slate-800 underline"
             >{{ shortEmail(r.creatorEmail) }}</router-link>
           </td>
-          <td v-if="showElection" class="border-b border-slate-100 p-2" data-test="for-election">
+          <td v-if="showElection && columns.election" class="border-b border-slate-100 p-2" data-test="for-election">
             <span v-if="r.electionTitle" :title="r.electionTitle">{{ shortTitle(r.electionTitle) }}</span>
           </td>
-          <td class="border-b border-slate-100 p-2">
+          <td v-if="columns.responses" class="border-b border-slate-100 p-2 tabular-nums" data-test="responses">{{ r.respondents ?? 0 }}</td>
+          <td v-if="columns.closes" class="border-b border-slate-100 p-2">
             {{ r.closeDate ? new Date(r.closeDate).toLocaleString() : $t('search.noCloseDate') }}
           </td>
           <td class="border-b border-slate-100 p-2">
@@ -859,5 +896,6 @@ async function search() {
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </template>

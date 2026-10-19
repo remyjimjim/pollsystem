@@ -30,6 +30,7 @@ async function searchReturning(results: unknown[]) {
 afterEach(() => {
   vi.resetAllMocks()
   document.body.innerHTML = ''
+  localStorage.clear()
 })
 
 describe('PollSearchView: the Creator column', () => {
@@ -68,6 +69,47 @@ describe('PollSearchView: the Creator column', () => {
     const vote = w.findAllComponents(RouterLinkStub).find(l => typeof l.props('to') === 'object' && (l.props('to') as any).path?.startsWith('/polls/election/'))
     expect(vote?.props('to')).toEqual({ path: '/polls/election/9', query: { measure: '5' } })
     w.unmount()
+  })
+})
+
+describe('PollSearchView: Responses column and the column chooser', () => {
+  const headers = (w: any) => w.findAll('th').map((h: any) => h.text().replace(/[▲▼]/g, '').trim()).filter(Boolean)
+
+  it('shows how many responded, and sorts by it as a number', async () => {
+    const w = await searchReturning([{ ...row(1, null), respondents: 9 }, { ...row(2, null), respondents: 10 }, { ...row(3, null), respondents: 0 }])
+    expect(w.findAll('[data-test="responses"]').map(c => c.text())).toEqual(['9', '10', '0'])
+    await w.findAll('th').find(h => h.text().startsWith('Responses'))!.trigger('click')
+    expect(w.findAll('[data-test="responses"]').map(c => c.text())).toEqual(['0', '9', '10'])
+    w.unmount()
+  })
+
+  it('unticking a column hides it, and it stays hidden next time', async () => {
+    const w = await searchReturning([row(1, null)])
+    expect(headers(w)).toContain('Zipcodes')
+    const box = w.find('[data-test="column-chooser"]').findAll('label').find(l => l.text() === 'Zipcodes')!.find('input')
+    await box.setValue(false)
+    expect(headers(w)).not.toContain('Zipcodes')
+    expect(headers(w)).toContain('Title')                     // always shown
+    expect(JSON.parse(localStorage.getItem('pollSearch.columns')!).zipcodes).toBe(false)
+    w.unmount()
+
+    const again = await searchReturning([row(1, null)])
+    expect(headers(again)).not.toContain('Zipcodes')
+    again.unmount()
+  })
+
+  it('on a narrow screen, the wide columns start hidden', async () => {
+    const width = window.innerWidth
+    Object.defineProperty(window, 'innerWidth', { value: 390, configurable: true })
+    try {
+      const w = await searchReturning([row(1, 'a@b.c')])
+      expect(headers(w)).not.toContain('Zipcodes')
+      expect(headers(w)).not.toContain('Creator')
+      expect(headers(w)).toEqual(expect.arrayContaining(['Title', 'Type', 'Responses', 'Closes']))
+      w.unmount()
+    } finally {
+      Object.defineProperty(window, 'innerWidth', { value: width, configurable: true })
+    }
   })
 })
 

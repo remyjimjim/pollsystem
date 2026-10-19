@@ -133,16 +133,17 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
         val qId = publishQuestionnaire(creator, "Public Art Funding")
         val eId = publishElection(creator, "Public Transit Board")
 
-        val ids = search(title = "public").map { it.id }
-        assertThat(ids).contains(qId, eId)
+        // Ids are per poll type (separate tables), so compare type + id.
+        val q = "Questionnaire:$qId"
+        val e = "Election:$eId"
+        fun found(title: String) = search(title = title).map { "${it.type}:${it.id}" }
+        assertThat(found("public")).contains(q, e)
 
         // Narrower term hits only the questionnaire.
-        val artOnly = search(title = "art").map { it.id }
-        assertThat(artOnly).contains(qId).doesNotContain(eId)
+        assertThat(found("art")).contains(q).doesNotContain(e)
 
         // A term in neither title returns neither of ours.
-        val none = search(title = "zzz-no-such-title").map { it.id }
-        assertThat(none).doesNotContain(qId, eId)
+        assertThat(found("zzz-no-such-title")).doesNotContain(q, e)
     }
 
     @Test
@@ -231,8 +232,10 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
         val qId = publishQuestionnaire(c, "Creator column ${System.nanoTime()}")
         val e = publishElection(c, "Creator column E ${System.nanoTime()}")
         val m = publishBallotMeasure(c, "Creator column M ${System.nanoTime()}")
-        val mine = setOf(qId, e, m)
-        fun rows(viewer: User?, byEmail: String? = null) = search(creatorEmail = byEmail, viewer = viewer).filter { it.id in mine }
+        // Ids are per poll type (separate tables), so match type + id.
+        val mine = setOf("Questionnaire" to qId, "Election" to e, "BallotMeasure" to m)
+        fun rows(viewer: User?, byEmail: String? = null) =
+            search(creatorEmail = byEmail, viewer = viewer).filter { (it.type to it.id) in mine }
 
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "sc-admin")
         val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "sc-super")
@@ -247,6 +250,21 @@ class PollSearchControllerTest : AbstractIntegrationTest() {
             // The filter is ignored, so it can't be used to test who created what.
             assertThat(rows(viewer, byEmail = "nobody-${System.nanoTime()}")).hasSize(3)
         }
+    }
+
+    @Autowired private lateinit var responseController: QuestionnaireResponseController
+    @Autowired private lateinit var questionRepo: org.kodewerks.pollsystem.repository.QuestionRepository
+
+    @Test
+    fun `each result says how many people have responded`() {
+        val id = publishQuestionnaire(creator(), "Responses column ${System.nanoTime()}")
+        val q = questionRepo.findByQuestionnaireId(id).single()
+        repeat(2) {
+            responseController.submit(
+                org.kodewerks.pollsystem.security.AppUserDetails(fixtures.createUser(emailPrefix = "resp")), id,
+                SubmitResponsesRequest(listOf(QuestionAnswerInput(q.id, "Yes"))))
+        }
+        assertThat(search().single { it.id == id && it.type == "Questionnaire" }.respondents).isEqualTo(2)
     }
 
     @Test

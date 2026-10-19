@@ -153,6 +153,7 @@
       "zipcodes": "Postnumre",
       "creator": "Oppretter",
       "forElection": "For valget",
+      "responses": "Svar",
       "closes": "Stenger"
     },
     "noCloseDate": "Ingen sluttdato",
@@ -160,7 +161,11 @@
     "vote": "Stem →",
     "showMore": "Vis {n} til",
     "additionalZipcodes": "Flere postnumre ({n})",
-    "errorFailed": "Søket mislyktes"
+    "errorFailed": "Søket mislyktes",
+    "columns": {
+      "show": "Vis:",
+      "legend": "Kolonner som vises"
+    }
   },
   "pollDetail": {
     "unknownType": "Ukjent avstemningstype.",

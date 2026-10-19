@@ -153,6 +153,7 @@
       "zipcodes": "郵便番号",
       "creator": "作成者",
       "forElection": "対象の選挙",
+      "responses": "回答数",
       "closes": "締切"
     },
     "noCloseDate": "締切日なし",
@@ -160,7 +161,11 @@
     "vote": "投票 →",
     "showMore": "あと {n} 件を表示",
     "additionalZipcodes": "追加の郵便番号（{n}）",
-    "errorFailed": "検索に失敗しました"
+    "errorFailed": "検索に失敗しました",
+    "columns": {
+      "show": "表示：",
+      "legend": "表示する列"
+    }
   },
   "pollDetail": {
     "unknownType": "不明な投票種類です。",

@@ -45,6 +45,9 @@ export default defineConfig({
   // Lives outside testDir so Playwright's spec discovery doesn't try to
   // load it twice (once as teardown, once as a candidate spec file).
   globalTeardown: './playwright/global-teardown.ts',
+  // Uses the default results threshold for the run if Dev settings changed it
+  // (restored by the teardown).
+  globalSetup: './playwright/global-setup.ts',
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',

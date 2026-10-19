@@ -16,7 +16,24 @@ function isTruthy(v: string | undefined): boolean {
   return v != null && ['yes', '1', 'true', 'on'].includes(v.toLowerCase())
 }
 
+// Put back the results threshold global-setup.ts set aside (Dev settings).
+async function restoreResultsThreshold() {
+  const saved = process.env.E2E_SAVED_RESULTS_THRESHOLD
+  if (!saved) return
+  try {
+    await fetch('http://localhost:8080/api/dev/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ resultsThreshold: Number(saved) }),
+    })
+    console.log(`globalTeardown: results threshold restored to ${saved}`)
+  } catch (err) {
+    console.warn(`globalTeardown: couldn't restore the results threshold to ${saved} (${(err as Error).message})`)
+  }
+}
+
 export default async function globalTeardown() {
+  await restoreResultsThreshold()
   if (!isTruthy(process.env.E2E_WIPE)) {
     console.log('globalTeardown: leaving test data in place (pass wipe=yes to clear it)')
     return

@@ -153,6 +153,7 @@
       "zipcodes": "邮政编码",
       "creator": "创建者",
       "forElection": "所属选举",
+      "responses": "回复数",
       "closes": "截止"
     },
     "noCloseDate": "无截止日期",
@@ -160,7 +161,11 @@
     "vote": "投票 →",
     "showMore": "显示其他 {n} 个",
     "additionalZipcodes": "其他邮政编码（{n}）",
-    "errorFailed": "搜索失败"
+    "errorFailed": "搜索失败",
+    "columns": {
+      "show": "显示：",
+      "legend": "要显示的列"
+    }
   },
   "pollDetail": {
     "unknownType": "未知的投票类型。",

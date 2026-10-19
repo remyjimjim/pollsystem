@@ -179,6 +179,7 @@
       "zipcodes": "Zipcodes",
       "creator": "Creator",
       "forElection": "For Election",
+      "responses": "Responses",
       "closes": "Closes"
     },
     "noCloseDate": "No close date",
@@ -186,7 +187,11 @@
     "vote": "Vote →",
     "showMore": "Show {n} more",
     "additionalZipcodes": "Additional zipcodes ({n})",
-    "errorFailed": "Search failed"
+    "errorFailed": "Search failed",
+    "columns": {
+      "show": "Show:",
+      "legend": "Columns to show"
+    }
   },
   "pollDetail": {
     "unknownType": "Unknown poll type.",
