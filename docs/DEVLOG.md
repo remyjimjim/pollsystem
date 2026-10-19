@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-19 — A watch-it-run demo: a member signs in and votes
+
+**Requested:**
+
+> Do we have a way to call an e2e script and pass it a let's say a demo-user
+> like demo-user-wash@test.local … do a normal login without clicking the quick
+> login … go to polls/search and click 'Search' … select the "Will the Seahawks
+> win the super bowl again in 2026/7?" Questionnaire and vote 'yes' for all
+> questions … a 3 second pause after each user action and a 4 second delay from
+> /login to polls/search? All run from a new headed browser?
+
+**Changed:**
+
+- `222cb3d`: an opt-in `e2e/demo/user-votes-on-a-poll.spec.ts`, only with
+  `DEMO_E2E=1` and never in CI, plus `scripts/e2e-demo-vote.bash <email>
+  [--poll] [--answer] [--pause] [--login-delay]` to run it headed on the host.
+- It signs in via the emailed link, waiting for a newer message than before
+  so it never opens an old link, then searches, votes and submits.
+- Dry-run twice as demo-user-wash: a fresh vote, then the edit path.
+
+**Commit:** `222cb3d`
+
+---
+
 ## 2026-10-19 — Search: a Responses column, and choosing columns
 
 **Requested:**
