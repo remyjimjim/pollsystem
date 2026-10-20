@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-10-20 — PROXY_SECRET rollout script
+
+**Requested:**
+
+> How would you describe the process that you're currently working on and is
+> there a way to get the important parts into a bash script?
+
+> Yes, write it please...
+
+**Changed:**
+
+- `5215057`: `scripts/proxy-secret.bash` with `generate`, `status`,
+  `set staging|prod` and `check staging|prod`. The value is never printed,
+  and prod asks for confirmation. Turning it on goes in this order:
+  Cloudflare variable → redeploy Pages → Fly secret → check.
+
+**Verified:**
+
+- `PROXY_SECRET` is set on the staging Fly app.
+- `check staging` reports **not working**: staging Pages hasn't been rebuilt
+  since the variable was saved.
+- Positive control: a direct burst at the staging backend gave 60 OK
+  (2 machines × 30) and then 15 refused.
+- Prod: not set. It also needs a backend deploy, because v10 has no rate
+  limits.
+
+**Commits:** `5215057`
+
+---
+
 ## 2026-10-20 — Rate limiting, and draft legal pages
 
 **Requested:**
