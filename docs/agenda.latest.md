@@ -69,11 +69,15 @@ means re-warming the email domain, redirects, and confused users.
     Have the text reviewed before launch.
 - **Deleting an account:** a stated way to do it, even if it starts as "email
   us".
+  - ✅ **Built 2026-10-20.** Members cancel in the app (ends with the paid
+    month). Deletion is "email us", and a super deletes the account in
+    Manage Users (⋮ → Delete account…). Needs V36 on staging and prod.
 - **Rate limiting** on sign-in link requests, sign-up and search.
   - ✅ **Built 2026-10-20.** Per-email limits are on wherever the code is
     deployed.
-  - **Per-IP limits** need the shared `PROXY_SECRET` set in the Cloudflare
-    Pages project **first**, then on both Fly apps.
+  - ✅ **Per-IP limits live on staging and prod** (`PROXY_SECRET` in Pages
+    Production + Preview and on both Fly apps). Manage and test with
+    `scripts/proxy-secret.bash`.
   - Found: the super's IP rules are stored but **not enforced** anywhere.
 - **Monitoring:** an uptime check and error alerts.
 - **Backups:** confirm Neon's point-in-time restore window, and do one restore

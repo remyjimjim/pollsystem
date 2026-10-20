@@ -16,6 +16,7 @@ function makeUser(access: AccessLevel = AccessLevel.USER): User {
     access,
     isEnabled: true,
     paidUntil: null,
+    cancelAtPeriodEnd: false,
     profileComplete: true
   }
 }

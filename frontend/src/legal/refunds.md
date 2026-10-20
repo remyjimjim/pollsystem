@@ -8,13 +8,17 @@ title: Cancellation and Refund Policy
 
 ## Cancelling
 
-- Cancel anytime: on your home page, click **Manage subscription**, then cancel.
-  You manage it on Stripe's secure page; no need to contact us.
+- Cancel anytime: on your home page, click **Cancel membership** and confirm.
+  No need to contact us.
 - Your membership continues until the end of the month you've already paid
-  for, and isn't renewed after that. [[TO FILL: confirm the Stripe Customer
+  for, and isn't renewed after that. Until then you can change your mind with
+  **Keep my membership**. (Cancelling through **Manage subscription**, on
+  Stripe's secure page, does the same.) [[TO FILL: confirm the Stripe Customer
   Portal is set to cancel at the end of the billing period]]
 - After it ends you can still sign in, find polls and view results, but you
-  can't answer polls until you renew.
+  can't answer polls until you renew. Your account and answers are kept.
+- Cancelling doesn't delete your account. To delete it, see the
+  [Privacy Policy](/legal/privacy).
 
 ## Refunds
 

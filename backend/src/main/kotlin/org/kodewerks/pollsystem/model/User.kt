@@ -39,7 +39,11 @@ data class User(
     val stripeSubscriptionId: String? = null,
 
     @Column(name = "paid_until")
-    val paidUntil: Instant? = null
+    val paidUntil: Instant? = null,
+
+    /** The member cancelled: the membership ends at paidUntil and isn't renewed (V36). */
+    @Column(name = "cancel_at_period_end", nullable = false)
+    val cancelAtPeriodEnd: Boolean = false
 ) {
     /**
      * A payment-first user is provisioned with only an email; they may view

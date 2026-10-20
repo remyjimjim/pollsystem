@@ -886,7 +886,22 @@
       "errorSaveEdit": "Edit failed",
       "areaLabel": "Area for their new access",
       "areaHintCreator": "They get creator access here: whole states, or nationwide.",
-      "areaHintAdmin": "They get admin access here (whole states, or nationwide), plus creator access across the same area."
+      "areaHintAdmin": "They get admin access here (whole states, or nationwide), plus creator access across the same area.",
+      "roleLapsed": "Lapsed",
+      "roleLapsedTitle": "Cancelled or unpaid members. Shown only when ticked; they can't be edited here, only deleted.",
+      "deleteAccount": "Delete account…",
+      "deleteTitle": "Delete this account permanently?",
+      "deleteIntro": "Only do this when {email} has asked for their account to be deleted.",
+      "deleteAnswers": "Their answers and comments are deleted, and the results of every poll they answered are recounted without them.",
+      "deleteSubscription": "Any subscription is cancelled now, without a refund (Stripe keeps its payment records).",
+      "deleteForever": "This can't be undone. Accounts that own polls can't be deleted yet.",
+      "deleteType": "Type their email to confirm",
+      "deleteYes": "Delete permanently",
+      "deleting": "Deleting…",
+      "deleteCancel": "Cancel",
+      "deleted": "Deleted {email}. Results recounted for {n} poll(s).",
+      "deletedWithSub": "Deleted {email} and cancelled their subscription. Results recounted for {n} poll(s).",
+      "errorDelete": "Couldn't delete the account."
     },
     "managePolls": {
       "heading": "Manage All Polls",
@@ -964,7 +979,14 @@
     "manageCta": "Manage subscription",
     "unavailable": "Billing isn’t available right now. Please try again later.",
     "success": "Thanks! Your subscription is being activated — it may take a moment to appear.",
-    "canceled": "Checkout canceled — you weren’t charged."
+    "canceled": "Checkout canceled — you weren’t charged.",
+    "endingTitle": "Your membership is ending",
+    "endingBlurb": "Your membership ends on {date}. Until then everything works as usual. After that you can still sign in and view results, and renew anytime.",
+    "keepCta": "Keep my membership",
+    "cancelCta": "Cancel membership",
+    "cancelConfirm": "Cancel your membership? It stays active until {date} and then won’t renew. You can change your mind any time before then.",
+    "cancelYes": "Yes, cancel",
+    "cancelNo": "Not now"
   },
   "manual": {
     "heading": "Help",

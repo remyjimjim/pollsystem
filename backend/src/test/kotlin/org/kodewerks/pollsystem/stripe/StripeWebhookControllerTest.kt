@@ -162,6 +162,37 @@ class StripeWebhookControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `cancelling in Stripe (either way) or keeping the membership is reflected in cancel_at_period_end`() {
+        users.save(saveUser("canceller@test.local", "+15559990021").copy(stripeSubscriptionId = "sub_flag"))
+        val periodEnd = Instant.now().plusSeconds(20 * 86400).epochSecond
+        fun update(evt: String, extra: String) = deliver("""
+            {"id":"$evt","type":"customer.subscription.updated","data":{"object":{
+              "id":"sub_flag","current_period_end":$periodEnd$extra
+            }}}
+        """.trimIndent()).andExpect(status().isOk)
+        fun flag() = users.findByEmail("canceller@test.local")!!.cancelAtPeriodEnd
+
+        update("evt_flag1", ",\"cancel_at_period_end\":true")
+        assertEquals(true, flag())
+        update("evt_flag2", ",\"cancel_at_period_end\":false")
+        assertEquals(false, flag())
+        update("evt_flag3", ",\"cancel_at_period_end\":false,\"cancel_at\":$periodEnd")   // the portal's way
+        assertEquals(true, flag())
+
+        // A renewal invoice says nothing about it, so leaves it alone.
+        deliver("""
+            {"id":"evt_flag4","type":"invoice.paid","data":{"object":{
+              "subscription":"sub_flag","lines":{"data":[{"period":{"end":$periodEnd}}]}
+            }}}
+        """.trimIndent()).andExpect(status().isOk)
+        assertEquals(true, flag())
+
+        deliver("""{"id":"evt_flag5","type":"customer.subscription.deleted","data":{"object":{"id":"sub_flag"}}}""")
+            .andExpect(status().isOk)
+        assertEquals(false, flag())
+    }
+
+    @Test
     fun `subscription deleted clears paid_until`() {
         val user = saveUser("cancelled@test.local", "+15559990003")
             .copy(

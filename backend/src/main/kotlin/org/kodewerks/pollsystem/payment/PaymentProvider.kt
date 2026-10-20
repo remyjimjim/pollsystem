@@ -27,4 +27,14 @@ interface PaymentProvider {
 
     /** Open the self-service billing portal for [user]; returns a hosted-page URL. */
     fun createPortalSession(user: User): String
+
+    /**
+     * Stop ([cancel] = true) or restart renewal of [user]'s subscription at the
+     * end of the period already paid for. The membership itself runs on until
+     * then either way. 409 if there's no subscription to change.
+     */
+    fun setCancelAtPeriodEnd(user: User, cancel: Boolean)
+
+    /** End [user]'s subscription now, so they're never charged again (account deletion). */
+    fun cancelNow(user: User)
 }

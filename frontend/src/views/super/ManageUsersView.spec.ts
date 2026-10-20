@@ -62,3 +62,53 @@ describe('ManageUsersView: raising a role grants an area', () => {
     expect(save.attributes('disabled')).toBeUndefined()
   })
 })
+
+describe('ManageUsersView: deleting an account on request', () => {
+  it('the delete button stays off until the email is typed, then posts it and drops the row', async () => {
+    const w = await mountView()
+    vi.mocked(axios.post).mockImplementation(async () => ({ data: { email: ROW.email, pollsRecounted: 2, subscriptionCancelled: true } }))
+    await w.find('button[aria-label="Role actions"]').trigger('click')
+    await w.find('[data-test="delete-account"]').trigger('click')
+
+    const yes = () => w.find('[data-test="delete-yes"]')
+    expect(w.find('[data-test="delete-modal"]').text()).toContain('pat@test.local')
+    expect(yes().attributes('disabled')).toBeDefined()
+    await w.find('[data-test="delete-confirm"]').setValue('someone@else')
+    expect(yes().attributes('disabled')).toBeDefined()
+    await w.find('[data-test="delete-confirm"]').setValue('PAT@test.local')
+    expect(yes().attributes('disabled')).toBeUndefined()
+
+    await yes().trigger('click')
+    await flushPromises()
+    expect(axios.post).toHaveBeenCalledWith('/api/super/users/7/delete', { confirmEmail: 'PAT@test.local' })
+    expect(w.find('[data-test="delete-modal"]').exists()).toBe(false)
+    expect(w.text()).not.toContain('+15550000007')
+    expect(w.text()).toContain('Deleted pat@test.local and cancelled their subscription. Results recounted for 2 poll(s).')
+  })
+
+  it("a refusal (e.g. they own polls) is shown, and the account stays", async () => {
+    const w = await mountView()
+    vi.mocked(axios.post).mockRejectedValue({ response: { data: { message: "Can't delete yet: this account owns 1 poll." } } })
+    await w.find('button[aria-label="Role actions"]').trigger('click')
+    await w.find('[data-test="delete-account"]').trigger('click')
+    await w.find('[data-test="delete-confirm"]').setValue('pat@test.local')
+    await w.find('[data-test="delete-yes"]').trigger('click')
+    await flushPromises()
+    expect(w.find('[data-test="delete-error"]').text()).toBe("Can't delete yet: this account owns 1 poll.")
+    expect(w.text()).toContain('pat@test.local')
+  })
+
+  it('ticking Lapsed asks for VIEWER accounts too', async () => {
+    vi.useFakeTimers()
+    try {
+      const w = await mountView()
+      vi.mocked(axios.get).mockClear()
+      await w.find('[data-test="filter-lapsed"]').setValue(true)
+      await vi.runAllTimersAsync()
+      const call = vi.mocked(axios.get).mock.calls.find(c => c[0] === '/api/super/users')!
+      expect((call[1] as any).params.role).toBe('USER,CREATOR,ADMIN,VIEWER')
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+})

@@ -48,6 +48,8 @@ export interface User {
   access: AccessLevel
   isEnabled: boolean
   paidUntil: string | null
+  // Cancelled: the membership ends at paidUntil and won't renew.
+  cancelAtPeriodEnd: boolean
   profileComplete: boolean
 }
 

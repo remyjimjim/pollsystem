@@ -61,6 +61,126 @@ logged.
 
 ---
 
+## 2026-10-20 — Cancel membership; super deletes accounts on request
+
+**Requested:**
+
+> start on the account deletion route
+
+> I was thinking that one could 'Cancel' an account at which point if that
+> user ever tried to login again they'd have to 'renew' the account.
+
+> 1a, 2a, 3a
+
+**Decision:**
+
+- **Cancel** is in the app for every member. It ends with the paid month (1a).
+  Afterwards they can still sign in, browse and view results, with Renew
+  (2a). Their data is kept.
+- **Delete** is "email us", plus a super-admin tool built now (3a). It's
+  needed because the Privacy Policy promises deletion, and some states (e.g.
+  California) give a legal right to it.
+- My defaults within that:
+  - Delete removes answers and comments, and recounts results.
+  - It cancels Stripe immediately, without a refund.
+  - It's refused for poll owners, supers, yourself, and anyone whose
+    removal would undo moderation (notes, blocks, messages, creator
+    switch-offs).
+
+**Changed:**
+
+- `cd5e476`: V36 `users.cancel_at_period_end`.
+  - Members: Cancel membership and Keep my membership on the home page,
+    with `POST /api/billing/cancel|resume` behind them. Webhooks keep the
+    flag in step with Stripe.
+  - Supers: Manage Users gets ⋮ → Delete account… (confirmed by typing the
+    account's email), handled by `AccountDeletion`. A "Lapsed" filter finds
+    cancelled members.
+- Help pages and the legal drafts were updated to match.
+
+**Verified:**
+
+- Backend 356/356, frontend 161/161, e2e 19/19.
+- Walked through both flows in a browser locally. When the wrong row was
+  opened, the typed-email guard kept Delete disabled.
+
+**Commits:** `cd5e476`
+
+---
+
+## 2026-10-20 — Per-IP rate limits live on prod (verified)
+
+**Requested:**
+
+> PROXY_SECRET is set in Production, push it
+
+**Verified:**
+
+- Pushing `5386d09` rebuilt prod Pages; GitHub showed "Cloudflare Pages:
+  success" for it.
+- `proxy-secret.bash set prod` put the secret on `pollsystem-backend`
+  without printing it, and `status` shows it set on both Fly apps.
+- `proxy-secret.bash check prod`: through the site, 43 OK then 32 refused;
+  straight to the backend afterwards, 429. The backend sees visitors' real
+  IPs, so per-IP limits are on in prod.
+- The rate-limiting launch item is done. Still open from that block: account
+  deletion route, monitoring, backup drill, IP rules not enforced.
+
+---
+
+## 2026-10-20 — Prod backend v11: rate limits (verified)
+
+**Requested:**
+
+> deploy the backend to prod
+
+**Verified:**
+
+- Prod backend deployed from `main` at `2de5fa6`, release **v11**. No new
+  migrations: prod is already on schema 35.
+- Health is UP, and the prod site's `/api` proxy and `/legal/terms` answer 200.
+- The per-email limit is live: 4 sign-in link requests for one address gave
+  `404 404 404 429`.
+- Staging: per-IP limits are working after `PROXY_SECRET` was added to the
+  Pages project's **Preview** variables and staging Pages was rebuilt (empty
+  commit `fe54bdb` on `staging` only). `proxy-secret.bash check staging`
+  passed.
+- Prod per-IP limits are still off. They need `PROXY_SECRET` under
+  Production in Pages, a Pages rebuild, then `proxy-secret.bash set prod`
+  and `check prod`.
+
+---
+
+## 2026-10-20 — PROXY_SECRET rollout script
+
+**Requested:**
+
+> How would you describe the process that you're currently working on and is
+> there a way to get the important parts into a bash script?
+
+> Yes, write it please...
+
+**Changed:**
+
+- `5215057`: `scripts/proxy-secret.bash` with `generate`, `status`,
+  `set staging|prod` and `check staging|prod`. The value is never printed,
+  and prod asks for confirmation. Turning it on goes in this order:
+  Cloudflare variable → redeploy Pages → Fly secret → check.
+
+**Verified:**
+
+- `PROXY_SECRET` is set on the staging Fly app.
+- `check staging` reports **not working**: staging Pages hasn't been rebuilt
+  since the variable was saved.
+- Positive control: a direct burst at the staging backend gave 60 OK
+  (2 machines × 30) and then 15 refused.
+- Prod: not set. It also needs a backend deploy, because v10 has no rate
+  limits.
+
+**Commits:** `5215057`
+
+---
+
 ## 2026-10-20 — Rate limiting, and draft legal pages
 
 **Requested:**

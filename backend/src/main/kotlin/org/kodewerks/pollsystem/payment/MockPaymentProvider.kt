@@ -80,6 +80,19 @@ class MockPaymentProvider(
         return "$baseUrl/?checkout=success&mock=1"
     }
 
+    /**
+     * Nothing to tell offline: the caller records the choice, and paidUntil
+     * simply runs out. Works without a subscription id too, so seeded demo
+     * members can try Cancel / Keep.
+     */
+    override fun setCancelAtPeriodEnd(user: User, cancel: Boolean) {
+        log.info("Mock subscription for user {}: cancel at period end = {}", user.id, cancel)
+    }
+
+    override fun cancelNow(user: User) {
+        log.info("Mock subscription for user {} cancelled now", user.id)
+    }
+
     /** No real portal offline — just send them back to the home page. */
     override fun createPortalSession(user: User): String {
         log.info("Mock portal for user {} (no-op)", user.id)
