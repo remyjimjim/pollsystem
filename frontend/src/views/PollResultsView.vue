@@ -372,9 +372,9 @@ onBeforeUnmount(() => {
   document.removeEventListener('keydown', onEsc)
 })
 
-/** A purview checkbox's count: the number, or "fewer than 10" when withheld (a small group). */
+/** A purview checkbox's count: the number, or "fewer than k" when withheld (a small group). */
 function purviewCount(n: number | null): string {
-  return n === null ? t('results.countWithheld', { n: data.value?.visibility.minimum ?? 10 }) : String(n)
+  return n === null ? t('results.countWithheld', { n: data.value?.visibility.minimum ?? 4 }) : String(n)
 }
 </script>
 

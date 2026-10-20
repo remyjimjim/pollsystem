@@ -57,7 +57,7 @@ app:
     secret: ${JWT_SECRET:your-super-secret-jwt-key-change-in-production}
     expiration-ms: 7776000000  # 90 days — cuts repeat magic-link emails by ~95%. Tradeoff: a leaked JWT is valid for the full window (no server-side revocation).
   results:
-    k-anonymity-threshold: 10  # min responses to show filtered aggregates
+    k-anonymity-threshold: 4  # small-poll privacy: results hidden until k respondents, steps of k, groups under k withheld (was 10 until 2026-10-20)
   magic-link:
     ttl-minutes: 15
     base-url: ${APP_BASE_URL:http://localhost:3000}

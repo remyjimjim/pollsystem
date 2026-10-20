@@ -19,7 +19,7 @@ poll's area (its purview). It tells you whether you're reaching the people the
 poll is meant for.
 
 Sometimes you'll see **in-area share withheld** instead. That happens while the
-people inside the area, or those outside it, number fewer than 10. With so few
+people inside the area, or those outside it, number fewer than 4. With so few
 people, the split could reveal who answered. The share appears once both groups
 are large enough, or one of them is empty.
 
@@ -58,7 +58,7 @@ page shows, privacy rules included.
 
 You get an email:
 
-- **when your poll reaches 10 responses:** its results have just become
+- **when your poll reaches 4 responses:** its results have just become
   visible to everyone;
 - **when your poll closes:** a short final report, with the number of
   respondents and links to the results and your report.
@@ -71,12 +71,12 @@ only affects future emails. New polls start with emails on.
 
 The report protects people's privacy:
 
-- **Small groups are withheld.** A group of fewer than 10 people shows as
-  "fewer than 10". When hiding one group would still let you work it out from
+- **Small groups are withheld.** A group of fewer than 4 people shows as
+  "fewer than 4". When hiding one group would still let you work it out from
   the total, another group is withheld too.
 - **Days are grouped.** Participation over time joins days together until each
-  period has at least 10 new respondents.
-- **Until a poll has 10 respondents,** the report shows only its totals.
+  period has at least 4 new respondents.
+- **Until a poll has 4 respondents,** the report shows only its totals.
 
 ## Results
 
@@ -91,8 +91,8 @@ What you can't see:
 - **Private comments.** Only Poll System's super administrators can see them.
   Comments a respondent made public appear, anonymously, on the results page
   like everyone sees them.
-- **Small groups.** Narrowed results for fewer than 10 people are hidden.
-- **Early or exact results.** Like everyone, you see results only once 10
-  people have responded. They update in steps of 10 and show as percentages,
+- **Small groups.** Narrowed results for fewer than 4 people are hidden.
+- **Early or exact results.** Like everyone, you see results only once 4
+  people have responded. They update in steps of 4 and show as percentages,
   never exact counts. See [Viewing results](../viewer/viewing-results.md).
 

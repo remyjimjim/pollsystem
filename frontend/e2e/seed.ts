@@ -348,7 +348,7 @@ export async function seedBallotMeasure(
  * Seed up to 30 ballot-measure responses (alternating Yes / No) from real
  * registered users created in `zipcode`, so they count in the poll's purview.
  * Like real submissions, this refreshes the public results snapshot: public
- * results appear at 10 respondents and then move in steps of 10.
+ * results appear at k respondents and then move in steps of k (application.yml; 4).
  */
 export async function seedBallotResponses(
   opts: { measureId: number; count: number; zipcode: string; prefix?: string },
@@ -419,7 +419,7 @@ export async function signInSeededUser(page: Page, email: string): Promise<void>
 /**
  * A poll's results as [email] sees them. Small-poll privacy: only a super gets
  * live raw counts; everyone else gets stepped, rounded percentages (or nothing
- * below 10 respondents). `kind`: questionnaires | elections | ballot-measures.
+ * below k respondents). `kind`: questionnaires | elections | ballot-measures.
  */
 export async function resultsAs<T = Record<string, unknown>>(email: string, kind: string, id: number): Promise<T> {
   const res = await fetch(`${API}/api/polls/${kind}/${id}/results`, {

@@ -64,8 +64,8 @@ results, and the poll's creator doesn't see them.
 
 A **public** comment is shown on the results page under that question,
 candidate or measure, **without your name**. It follows the same privacy rules
-as the results: nothing shows until 10 people have responded, and new comments
-appear with the next step of 10.
+as the results: nothing shows until 4 people have responded, and new comments
+appear with the next step of 4.
 
 Public comments can't contain certain words. When you submit, each one found is
 highlighted in its comment box, and you're asked **"Can I replace *word* with

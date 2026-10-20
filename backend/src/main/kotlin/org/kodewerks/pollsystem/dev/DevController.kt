@@ -303,7 +303,7 @@ class DevController(
      * here, `zzz`-prefixed, in the given zip so they count in the poll's purview).
      * Saved directly via the repository, which bypasses the paid-membership
      * participation guard — fine for seeding. Cap of 6 keeps totals below the
-     * k-anonymity threshold (10) so a purview/geo-filtered results view withholds.
+     * k-anonymity threshold (application.yml) so a purview/geo-filtered results view withholds.
      */
     @PostMapping("/seed-ballot-responses")
     @Transactional

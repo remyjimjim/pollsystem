@@ -29,11 +29,11 @@ Results are shown as bars with a **percentage**, rounded to a whole number.
 
 ## Results protect people's privacy
 
-- **No results until 10 people have responded.** Until then the page says how
+- **No results until 4 people have responded.** Until then the page says how
   many have responded so far. With fewer people, a result could show how
   particular people voted.
-- **Results update in steps of 10.** The page shows the results as they were
-  when the 10th, 20th, 30th… person responded. A single new vote, or a single
+- **Results update in steps of 4.** The page shows the results as they were
+  when the 4th, 8th, 12th… person responded. A single new vote, or a single
   changed answer, never changes what you see on its own.
 - **Percentages only.** Exact counts aren't shown.
 
@@ -41,8 +41,8 @@ Results are shown as bars with a **percentage**, rounded to a whole number.
 
 Under a question, candidate or measure, **N public comments** opens the
 comments people chose to make public. They're anonymous, and follow the same
-rules as the results: none until 10 people have responded, and new ones appear
-with each step of 10. If you narrow the results by place, only comments from
+rules as the results: none until 4 people have responded, and new ones appear
+with each step of 4. If you narrow the results by place, only comments from
 people in that group show.
 
 ## Inside or outside the poll's area
@@ -61,7 +61,7 @@ other group. Results update as soon as you click.
 The number in brackets after each is how many respondents are in that group,
 e.g. "(32)". Like the results, it updates in steps, not with every vote. If
 either group is too small to show without narrowing down who's in it, both say
-**"(fewer than 10)"**.
+**"(fewer than 4)"**.
 
 A ballot measure covers the same area as the election it belongs to.
 
@@ -80,14 +80,14 @@ filter is applied.
 
 You may see "Not enough responses in this group to display (privacy
 protection)". It appears when you've narrowed the results (by place, or by
-unticking one of the two boxes) to a group of **fewer than 10 people**. With so
+unticking one of the two boxes) to a group of **fewer than 4 people**. With so
 few people in a group, the results could reveal how particular people voted.
 
 To see results again, widen your choice: pick a larger area, **Clear** the place
 filter, or tick both boxes.
 
 If the page says how many people have responded so far but shows no results,
-the poll hasn't reached 10 respondents yet.
+the poll hasn't reached 4 respondents yet.
 
 People who haven't entered a zipcode yet can't be placed, so they appear only in
 the full, unfiltered results.

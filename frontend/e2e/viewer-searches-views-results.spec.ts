@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import {
+  API,
   BASE,
   STATE_INPUT,
   type Location,
@@ -10,11 +11,12 @@ import {
 } from './seed'
 
 // Actor: viewer (a GUEST — not logged in). Journey: search for a ballot measure
-// by title, open its results, and see small-poll privacy in action:
-//   - with 6 votes, no results yet: the privacy caption and "6 people have
+// by title, open its results, and see small-poll privacy in action, for the
+// running backend's threshold k (app.results.k-anonymity-threshold):
+//   - with k-1 votes, no results yet: the privacy caption and "k-1 people have
 //     responded so far";
-//   - once 12 have voted, results appear as rounded percentages only (they
-//     update in steps of 10);
+//   - once 2k have voted, results appear as rounded percentages only (they
+//     update in steps of k);
 //   - narrowing to people outside the poll's area (none) withholds the result.
 //
 // Read-only actor, so per the seed conventions it does NOT pre-wipe; it seeds
@@ -24,18 +26,21 @@ test.describe(`viewer searches and views ballot-measure results (${STATE_INPUT.t
   let title = ''
   let measureId = 0
   let loc: Location
+  let k = 0
 
   test.beforeAll(async () => {
     loc = await resolveLocation()
-    // A published ballot measure, and 6 real registered voters in its zip
-    // (alternating Yes / No): under the 10 needed before results show.
+    // The threshold in force (global-setup puts a Dev-settings change aside).
+    k = ((await (await fetch(`${API}/api/dev/settings`)).json()) as { resultsThreshold: number }).resultsThreshold
+    // A published ballot measure, and k-1 real registered voters in its zip
+    // (alternating Yes / No, starting Yes): one short of showing results.
     const bm = await seedBallotMeasure({ zipcode: loc.zipcode })
     title = bm.title
     measureId = bm.id
-    await seedBallotResponses({ measureId, count: 6, zipcode: loc.zipcode })
+    await seedBallotResponses({ measureId, count: k - 1, zipcode: loc.zipcode })
   })
 
-  test('guest finds the measure; results stay hidden until 10 have voted, then show as percentages', async ({ page }) => {
+  test('guest finds the measure; results stay hidden until k have voted, then show as percentages', async ({ page }) => {
     test.setTimeout(120_000)
 
     // 1. Public search page (guest heading confirms we're not authenticated).
@@ -54,18 +59,27 @@ test.describe(`viewer searches and views ballot-measure results (${STATE_INPUT.t
     await row.getByRole('link', { name: 'View results' }).click()
     await expect(page).toHaveURL(/\/polls\/ballot-measure\/\d+\/results/)
 
-    // 4. 6 votes: hidden. The caption says why, and how many have responded.
-    const caption = page.getByText(/For privacy, results aren't shown until at least 10 people have voted/)
+    // 4. k-1 votes: hidden. The caption says why, and how many have responded.
+    const caption = page.getByText(new RegExp(`For privacy, results aren't shown until at least ${k} people have voted`))
     await expect(caption).toBeVisible({ timeout: 15_000 })
-    await expect(page.getByText('6 people have responded so far.')).toBeVisible()
+    await expect(page.getByText(new RegExp(`^${k - 1} (people have|person has) responded so far\\.`))).toBeVisible()
     await expect(page.getByText('%', { exact: false })).toHaveCount(0)
     await hold(page)
 
-    // 5. Six more vote (12 in all): results appear, as rounded percentages only.
-    await seedBallotResponses({ measureId, count: 6, zipcode: loc.zipcode, prefix: 'zzz-more' })
+    // 5. k+1 more vote (2k in all, a full step): results appear, as rounded
+    //    percentages only. Each batch alternates Yes / No starting with Yes.
+    await seedBallotResponses({ measureId, count: k + 1, zipcode: loc.zipcode, prefix: 'zzz-more' })
+    const yes = Math.ceil((k - 1) / 2) + Math.ceil((k + 1) / 2)
+    // Each percentage is rounded on its own (e.g. 5/8 → 63%, 3/8 → 38%).
+    const yesPct = Math.round((yes * 100) / (2 * k))
+    const noPct = Math.round(((2 * k - yes) * 100) / (2 * k))
     await page.reload()
     await expect(caption).toBeVisible({ timeout: 15_000 })
-    await expect(page.getByText('50%')).toHaveCount(2) // 6 Yes, 6 No
+    if (yesPct === noPct) await expect(page.getByText(`${yesPct}%`)).toHaveCount(2)
+    else {
+      await expect(page.getByText(`${yesPct}%`, { exact: true })).toBeVisible()
+      await expect(page.getByText(`${noPct}%`, { exact: true })).toBeVisible()
+    }
     await expect(page.getByText(/respondent\(s\)/)).toHaveCount(0) // no raw counts for the public
     await hold(page)
 

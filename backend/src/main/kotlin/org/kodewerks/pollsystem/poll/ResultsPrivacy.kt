@@ -12,7 +12,7 @@ import java.time.Instant
 /**
  * The small-poll privacy threshold k: results hidden until k respondents,
  * public results in steps of k, groups under k withheld, the milestone email
- * at k. Normally app.results.k-anonymity-threshold (10; 3 in tests).
+ * at k. Normally app.results.k-anonymity-threshold (4; 3 in tests).
  *
  * Local development only (decided 2026-10-17): the Dev settings page can
  * override it, saved in app_flags so it survives rebuilds. The override is
@@ -21,7 +21,7 @@ import java.time.Instant
  */
 @Component
 class ResultsPrivacy(
-    @Value("\${app.results.k-anonymity-threshold:10}") val configured: Int,
+    @Value("\${app.results.k-anonymity-threshold:4}") val configured: Int,
     private val flags: AppFlagRepository,
     env: Environment
 ) {

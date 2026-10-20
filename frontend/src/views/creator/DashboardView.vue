@@ -21,7 +21,7 @@ interface CreatorPollSummary {
   respondents: number
   /** How many live inside the poll's area; null = withheld (a group is too small). */
   inArea: number | null
-  /** Milestone emails on for this poll (10 responses, closed); the creator can pause them. */
+  /** Milestone emails on for this poll (results visible, closed); the creator can pause them. */
   emails: boolean
 }
 

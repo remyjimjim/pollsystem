@@ -218,7 +218,7 @@ const reachLevel = computed(() => {
     <h1 class="mb-1 mt-2 text-2xl font-semibold text-slate-800">
       {{ all ? $t('creator.report.headingFor', { title: all.title }) : $t('creator.report.heading') }}
     </h1>
-    <p class="mb-6 text-sm text-slate-600">{{ $t('creator.report.intro', { k: report?.threshold ?? 10 }) }}</p>
+    <p class="mb-6 text-sm text-slate-600">{{ $t('creator.report.intro', { k: report?.threshold ?? 4 }) }}</p>
 
     <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
     <p v-else-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>

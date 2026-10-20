@@ -129,7 +129,7 @@ Mail helpers live in `frontend/e2e/mailpit.ts`: `clearMailpit()`,
 - **Never seed more than 6 responses.** That keeps totals under the
   **k-anonymity threshold of 10** (`app.results.k-anonymity-threshold`), so a
   purview/geo-filtered results view correctly **withholds** the tally. (Note:
-  the *unfiltered* results view shows real counts even below 10 — suppression
+  the *unfiltered* results view shows real counts even below the threshold — suppression
   only fires when the view is narrowed: unticking "outside the poll's purview"
   (or "within"), or applying a geo filter.)
 - **Zips must be real** (present in `county_zips`) — always source them from
