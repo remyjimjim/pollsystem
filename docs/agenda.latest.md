@@ -61,10 +61,20 @@ means re-warming the email domain, redirects, and confused users.
 - **Terms of Service, Privacy Policy, refund/cancellation policy.** A paid
   subscription needs them, Stripe expects them, and the app holds emails,
   phones and zipcodes. Link them from checkout and the footer.
+  - 📝 **Drafted 2026-10-20**: `/legal/terms`, `/legal/privacy`,
+    `/legal/refunds`, linked from the footer and the sign-up page. Each
+    **[[TO FILL]]** item (legal name, contact email, dates, state, minimum
+    age, refund rule, price-change notice, data retention, confirming the
+    Stripe portal cancels at period end) shows highlighted until filled.
+    Have the text reviewed before launch.
 - **Deleting an account:** a stated way to do it, even if it starts as "email
   us".
-- **Rate limiting** on sign-in link requests, sign-up and search. The existing
-  IP-rule code is a starting point.
+- **Rate limiting** on sign-in link requests, sign-up and search.
+  - ✅ **Built 2026-10-20.** Per-email limits are on wherever the code is
+    deployed.
+  - **Per-IP limits** need the shared `PROXY_SECRET` set in the Cloudflare
+    Pages project **first**, then on both Fly apps.
+  - Found: the super's IP rules are stored but **not enforced** anywhere.
 - **Monitoring:** an uptime check and error alerts.
 - **Backups:** confirm Neon's point-in-time restore window, and do one restore
   drill.

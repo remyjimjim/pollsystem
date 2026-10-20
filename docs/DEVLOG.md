@@ -61,6 +61,43 @@ logged.
 
 ---
 
+## 2026-10-20 — Rate limiting, and draft legal pages
+
+**Requested:**
+
+> start on the legal pages and rate limiting
+
+**Decision:**
+
+- Per-email limits always apply. Per-IP limits need a secret shared with the
+  Cloudflare proxy.
+  - On staging and prod the backend sees Cloudflare's address for everyone.
+  - The proxy now passes the real IP, signed with the secret.
+  - Until the secret is set, per-IP limits stay off rather than treating
+    every visitor as one.
+- The legal pages are drafts written from the app's actual behaviour.
+  Owner-only facts are highlighted `[[TO FILL]]` items, and the text needs
+  review by someone qualified.
+
+**Changed:**
+
+- `1065af8`: rate limits.
+  - Sign-in links: 3 per email per 15 minutes, 10 per IP.
+  - Status: 30 per minute per IP. Checkout: 5 per email and 10 per IP per hour.
+    Search: 120 per minute per IP.
+  - Over the limit: 429 with Retry-After.
+  - Off locally and in tests. The proxy passes `X-Client-IP` and
+    `X-Proxy-Secret`, and drops forged copies.
+- Found: the super's IP rules are stored but never enforced.
+- `a51ba61`: `/legal/terms`, `/legal/privacy` and `/legal/refunds`, a footer, and
+  an agreement line on sign-up, in 9 languages.
+- Backend 346/346, frontend 156/156, e2e 19/19.
+- Next: set `PROXY_SECRET` in Cloudflare Pages first, then on the Fly apps.
+
+**Commits:** `1065af8`, `a51ba61`
+
+---
+
 ## 2026-10-20 — Prod brought up to date (verified)
 
 **Requested:**
