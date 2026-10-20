@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-20 — Launch agenda (decision)
+
+**Requested:**
+
+> Given the todo.md and the Notes.txt, both have suggestions of features, etc,
+> if we wanted to launch in 5 days, what would you recommend we concentrate on
+> first, second and third?
+
+then:
+
+> can you write that agenda to docs/agenda.latest.md? btw, I'm thinking about
+> changing the name, should we do that first or down the road?
+
+**Decision:**
+
+- Settle the name first, at least before launch: the domain's email
+  reputation, Stripe names and legal pages depend on it. Rename only what
+  people see; keep internal names.
+- First: bring prod up to date, and start on the domain/email warm-up and live
+  Stripe. Second: legal pages, rate limiting, monitoring, backups. Third:
+  launch content and a final pass. Everything else waits until after launch.
+- Found while checking: the prod backend was last released 5 Oct and lacks
+  V27–V35, while the prod frontend publishes from `main`. The app has no legal
+  pages, rate limiting or monitoring.
+
+**Changed:**
+
+- `3e11776`: `docs/agenda.latest.md`.
+
+**Commit:** `3e11776`
+
+---
+
 ## 2026-10-20 — Purview counts on results; the privacy threshold is now 4
 
 **Requested:**
