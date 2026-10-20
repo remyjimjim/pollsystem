@@ -252,7 +252,8 @@
     "privacyVoted": "Av personvernhensyn vises ikke resultatene før minst {k} personer har stemt. Resultatene oppdateres for hver {step} nye stemmer.",
     "privacyAnswered": "Av personvernhensyn vises ikke resultatene før minst {k} personer har svart. Resultatene oppdateres for hver {step} nye svar.",
     "soFar": "Ingen har svart ennå. | 1 person har svart så langt. | {n} personer har svart så langt.",
-    "superLive": "Super-visning: sanntidsresultater med råtall."
+    "superLive": "Super-visning: sanntidsresultater med råtall.",
+    "countWithheld": "færre enn {n}"
   },
   "notFound": {
     "heading": "Ikke funnet",

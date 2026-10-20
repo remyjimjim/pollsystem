@@ -252,7 +252,8 @@
     "privacyVoted": "Aus Datenschutzgründen werden Ergebnisse erst angezeigt, wenn mindestens {k} Personen abgestimmt haben. Die Ergebnisse werden alle {step} Stimmen aktualisiert.",
     "privacyAnswered": "Aus Datenschutzgründen werden Ergebnisse erst angezeigt, wenn mindestens {k} Personen geantwortet haben. Die Ergebnisse werden alle {step} Antworten aktualisiert.",
     "soFar": "Noch hat niemand geantwortet. | Bisher hat 1 Person geantwortet. | Bisher haben {n} Personen geantwortet.",
-    "superLive": "Super-Ansicht: Live-Ergebnisse mit Rohzahlen."
+    "superLive": "Super-Ansicht: Live-Ergebnisse mit Rohzahlen.",
+    "countWithheld": "weniger als {n}"
   },
   "notFound": {
     "heading": "Nicht gefunden",

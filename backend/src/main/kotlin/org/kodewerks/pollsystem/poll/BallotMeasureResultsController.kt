@@ -33,7 +33,9 @@ data class BallotMeasureResultsDto(
     val purviewAreas: List<String> = emptyList(),
     val visibility: ResultsVisibility,
     /** Public comments on this item, anonymous; same privacy steps as the numbers. */
-    val comments: List<String> = emptyList()
+    val comments: List<String> = emptyList(),
+    /** Respondents inside / outside the purview (null = withheld, small group). */
+    val purviewCounts: PurviewCounts = PurviewCounts(null, null)
 )
 
 @RestController
@@ -83,7 +85,8 @@ class BallotMeasureResultsController(
             purviewLevel = purviews.scopeLevelOf(purviewRows),
             purviewAreas = purviews.areaNames(purviewRows),
             visibility = r.visibility,
-            comments = publicComments.byItem(PollKind.BALLOT_MEASURE, id, r.answers)[id].orEmpty()
+            comments = publicComments.byItem(PollKind.BALLOT_MEASURE, id, r.answers)[id].orEmpty(),
+            purviewCounts = r.purviewCounts
         )
     }
 }

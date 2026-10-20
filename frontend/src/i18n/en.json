@@ -291,7 +291,8 @@
     "privacyVoted": "For privacy, results aren't shown until at least {k} people have voted. Results are updated every {step} voters.",
     "privacyAnswered": "For privacy, results aren't shown until at least {k} people have answered. Results are updated every {step} respondents.",
     "soFar": "No one has responded yet. | 1 person has responded so far. | {n} people have responded so far.",
-    "superLive": "Super view: live results with raw numbers."
+    "superLive": "Super view: live results with raw numbers.",
+    "countWithheld": "fewer than {n}"
   },
   "notFound": {
     "heading": "Not Found",

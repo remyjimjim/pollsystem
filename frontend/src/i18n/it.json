@@ -252,7 +252,8 @@
     "privacyVoted": "Per la privacy, i risultati non vengono mostrati finché non hanno votato almeno {k} persone. I risultati si aggiornano ogni {step} votanti.",
     "privacyAnswered": "Per la privacy, i risultati non vengono mostrati finché non hanno risposto almeno {k} persone. I risultati si aggiornano ogni {step} partecipanti.",
     "soFar": "Nessuno ha ancora risposto. | Finora ha risposto 1 persona. | Finora hanno risposto {n} persone.",
-    "superLive": "Vista super: risultati in tempo reale con i numeri esatti."
+    "superLive": "Vista super: risultati in tempo reale con i numeri esatti.",
+    "countWithheld": "meno di {n}"
   },
   "notFound": {
     "heading": "Non trovato",

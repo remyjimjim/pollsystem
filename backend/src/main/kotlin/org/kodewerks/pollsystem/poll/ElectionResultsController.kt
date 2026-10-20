@@ -44,7 +44,9 @@ data class ElectionResultsDto(
     val purviewLevel: ScopeLevel = ScopeLevel.NATIONAL,
     /** Its places (states, "County (ST)" or zipcodes); empty when nationwide. */
     val purviewAreas: List<String> = emptyList(),
-    val visibility: ResultsVisibility
+    val visibility: ResultsVisibility,
+    /** Respondents inside / outside the purview (null = withheld, small group). */
+    val purviewCounts: PurviewCounts = PurviewCounts(null, null)
 )
 
 @RestController
@@ -101,7 +103,8 @@ class ElectionResultsController(
             suppressionMessage = if (r.suppressed) SUPPRESSED else null,
             purviewLevel = purviews.scopeLevelOf(purviewRows),
             purviewAreas = purviews.areaNames(purviewRows),
-            visibility = r.visibility
+            visibility = r.visibility,
+            purviewCounts = r.purviewCounts
         )
     }
 }

@@ -119,6 +119,15 @@ class ResultSnapshotService(
         }
 }
 
+/**
+ * Respondents inside / outside the poll's purview, for the results page's two
+ * checkboxes. Counted from the same answers the page shows (the stepped
+ * snapshot; live for a super), over the whole poll. Both null = withheld: a
+ * group of 1 to k-1 people would narrow down who they are, and showing the
+ * other group would give it away by subtraction from the total.
+ */
+data class PurviewCounts(val inside: Int?, val outside: Int?)
+
 /** The answers a results request may see, already filtered, plus how to show them. */
 data class PreparedResults(
     val visibility: ResultsVisibility,
@@ -127,7 +136,8 @@ data class PreparedResults(
     /** Distinct respondents in the filtered group. */
     val respondents: Int,
     val suppressed: Boolean,
-    val filterApplied: Map<String, String>?
+    val filterApplied: Map<String, String>?,
+    val purviewCounts: PurviewCounts = PurviewCounts(null, null)
 ) {
     val live get() = visibility.mode == "LIVE"
 }
@@ -163,21 +173,32 @@ class ResultsAccess(
                 ?: return PreparedResults(ResultsVisibility("HIDDEN", soFar, k, k), emptyList(), 0, false, filterMap)
         }
         val visibility = ResultsVisibility(if (isSuper) "LIVE" else "STEPPED", soFar, k, k)
+        val purviewRows = purviews.purviewOf(kind, pollId)
+        val split = purviewCounts(base, purviewRows, isSuper)
 
         // A responder with no zipcode (profile not yet completed) can't fall in
         // any geographic group, so they're excluded from a filtered/purview view.
         val geoZips = resolveGeoFilter(zipcodes, stateIds, countyIds, counties, countyZips)
         var filtered = base
         if (geoZips != null) filtered = filtered.filter { it.zipcode?.let { z -> z in geoZips } == true }
-        filtered = filterByPurview(filtered, { it.zipcode }, purviews.purviewOf(kind, pollId), withinPurview, outsidePurview, purviews)
+        filtered = filterByPurview(filtered, { it.zipcode }, purviewRows, withinPurview, outsidePurview, purviews)
 
         val respondents = filtered.map { it.userId }.distinct().size
         val narrowed = geoZips != null || !(withinPurview && outsidePurview)
         // Supers see raw numbers at all times; everyone else, no group under k.
         if (!isSuper && narrowed && respondents < k) {
-            return PreparedResults(visibility, emptyList(), 0, true, filterMap)
+            return PreparedResults(visibility, emptyList(), 0, true, filterMap, split)
         }
-        return PreparedResults(visibility, filtered, respondents, false, filterMap)
+        return PreparedResults(visibility, filtered, respondents, false, filterMap, split)
+    }
+
+    private fun purviewCounts(answers: List<Answer>, purviewRows: List<org.kodewerks.pollsystem.model.PollPurview>, isSuper: Boolean): PurviewCounts {
+        val zipByUser = answers.associate { it.userId to it.zipcode }      // one zipcode per respondent
+        val within = purviews.classifyZips(purviewRows, zipByUser.values)
+        val inside = zipByUser.values.count { within[it] == true }
+        val outside = zipByUser.size - inside
+        val safe = isSuper || ((inside == 0 || inside >= k) && (outside == 0 || outside >= k))
+        return if (safe) PurviewCounts(inside, outside) else PurviewCounts(null, null)
     }
 }
 

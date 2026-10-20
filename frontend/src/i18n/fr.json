@@ -252,7 +252,8 @@
     "privacyVoted": "Pour la confidentialité, les résultats ne s'affichent qu'à partir de {k} votants. Ils sont mis à jour tous les {step} votants.",
     "privacyAnswered": "Pour la confidentialité, les résultats ne s'affichent qu'à partir de {k} répondants. Ils sont mis à jour tous les {step} répondants.",
     "soFar": "Personne n'a encore répondu. | 1 personne a répondu jusqu'ici. | {n} personnes ont répondu jusqu'ici.",
-    "superLive": "Vue super : résultats en direct avec les chiffres bruts."
+    "superLive": "Vue super : résultats en direct avec les chiffres bruts.",
+    "countWithheld": "moins de {n}"
   },
   "notFound": {
     "heading": "Introuvable",

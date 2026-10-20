@@ -252,7 +252,8 @@
     "privacyVoted": "Por privacidad, los resultados no se muestran hasta que voten al menos {k} personas. Los resultados se actualizan cada {step} votantes.",
     "privacyAnswered": "Por privacidad, los resultados no se muestran hasta que respondan al menos {k} personas. Los resultados se actualizan cada {step} participantes.",
     "soFar": "Nadie ha respondido todavía. | Hasta ahora ha respondido 1 persona. | Hasta ahora han respondido {n} personas.",
-    "superLive": "Vista de super: resultados en vivo con cifras exactas."
+    "superLive": "Vista de super: resultados en vivo con cifras exactas.",
+    "countWithheld": "menos de {n}"
   },
   "notFound": {
     "heading": "No encontrado",

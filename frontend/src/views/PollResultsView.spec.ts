@@ -61,4 +61,15 @@ describe('PollResultsView: small-poll privacy', () => {
     expect(w.text()).toContain('3 · 60%')
     expect(w.text()).toContain('5 respondent(s)')
   })
+
+  it('each purview checkbox shows how many responded inside / outside, or that it is withheld', async () => {
+    const shown = await mountWith(measure({ purviewCounts: { inside: 32, outside: 14 } }))
+    expect(shown.find('[data-test="within-count"]').text()).toBe('(32)')
+    expect(shown.find('[data-test="outside-count"]').text()).toBe('(14)')
+
+    const withheld = await mountWith(measure({ purviewCounts: { inside: null, outside: null } }))
+    expect(withheld.find('[data-test="within-count"]').text()).toBe('(fewer than 10)')
+    expect(withheld.find('[data-test="outside-count"]').text()).toBe('(fewer than 10)')
+  })
 })
+

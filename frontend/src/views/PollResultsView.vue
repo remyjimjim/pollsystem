@@ -35,6 +35,8 @@ interface QuestionnaireResultsDto {
   purviewAreas: string[]
   /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
   visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
+  /** Respondents inside / outside the purview; null = withheld (a small group). */
+  purviewCounts?: { inside: number | null; outside: number | null }
 }
 
 interface CandidateResultDto {
@@ -63,6 +65,8 @@ interface ElectionResultsDto {
   purviewAreas: string[]
   /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
   visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
+  /** Respondents inside / outside the purview; null = withheld (a small group). */
+  purviewCounts?: { inside: number | null; outside: number | null }
 }
 
 interface BallotMeasureResultsDto {
@@ -82,6 +86,8 @@ interface BallotMeasureResultsDto {
   purviewAreas: string[]
   /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
   visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
+  /** Respondents inside / outside the purview; null = withheld (a small group). */
+  purviewCounts?: { inside: number | null; outside: number | null }
 }
 
 const route = useRoute()
@@ -257,6 +263,8 @@ const data = computed<{
   purviewAreas: string[]
   /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
   visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
+  /** Respondents inside / outside the purview; null = withheld (a small group). */
+  purviewCounts?: { inside: number | null; outside: number | null }
 } | null>(() => {
   if (type.value === 'questionnaire') return qData.value
   if (type.value === 'election') return eData.value
@@ -363,6 +371,11 @@ onBeforeUnmount(() => {
   document.removeEventListener('click', onDocClick)
   document.removeEventListener('keydown', onEsc)
 })
+
+/** A purview checkbox's count: the number, or "fewer than 10" when withheld (a small group). */
+function purviewCount(n: number | null): string {
+  return n === null ? t('results.countWithheld', { n: data.value?.visibility.minimum ?? 10 }) : String(n)
+}
 </script>
 
 <template>
@@ -395,10 +408,12 @@ onBeforeUnmount(() => {
         <label class="mt-2 flex items-center gap-2 font-semibold text-slate-700">
           <input v-model="withinPurview" type="checkbox" @change="load" class="h-4 w-4" />
           {{ $t('results.withinPurview') }}
+          <span v-if="data.purviewCounts" class="font-normal text-slate-500" data-test="within-count">({{ purviewCount(data.purviewCounts.inside) }})</span>
         </label>
         <label class="mt-1 flex items-center gap-2 font-semibold text-slate-700">
           <input v-model="outsidePurview" type="checkbox" @change="load" class="h-4 w-4" />
           {{ $t('results.outsidePurview') }}
+          <span v-if="data.purviewCounts" class="font-normal text-slate-500" data-test="outside-count">({{ purviewCount(data.purviewCounts.outside) }})</span>
         </label>
       </div>
 

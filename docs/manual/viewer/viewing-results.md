@@ -58,6 +58,11 @@ Two checkboxes split the respondents by where they live:
 Both are ticked to start with, so you see everyone. Untick one to see only the
 other group. Results update as soon as you click.
 
+The number in brackets after each is how many respondents are in that group,
+e.g. "(32)". Like the results, it updates in steps, not with every vote. If
+either group is too small to show without narrowing down who's in it, both say
+**"(fewer than 10)"**.
+
 A ballot measure covers the same area as the election it belongs to.
 
 ## Narrowing by place
