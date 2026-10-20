@@ -5,11 +5,9 @@ code and the deployments that day.
 
 ## Where things stand (2026-10-20)
 
-- **Prod is out of step with itself.** The prod frontend (Cloudflare Pages)
-  publishes automatically from `main`, so it has every change. The prod backend
-  (Fly `pollsystem-backend`) was last released **5 Oct 2026** (v9): it lacks two
-  weeks of work and **9 database migrations, V27–V35**. Those migrations have
-  run cleanly on staging.
+- ~~Prod is out of step with itself.~~ Fixed 2026-10-20: the prod backend is on
+  release v10, schema 35, matching the prod frontend (which publishes from
+  `main`). See item 1 below.
 - **No legal pages** (terms, privacy, refunds), **no rate limiting**, and **no
   monitoring or error alerting** exist in the app yet.
 - `BuildAndDeploy.bash` has no `prod` command; prod is deployed by hand
@@ -36,9 +34,16 @@ means re-warming the email domain, redirects, and confused users.
 
 ## 1. First (days 1–2): make prod real and safe to take money
 
-1. **Bring prod up to date.**
-   - Take a Neon restore point.
-   - Deploy the backend to prod (V27–V35 run on startup) and smoke-test it.
+1. **Bring prod up to date.** ✅ Done 2026-10-20.
+   - Prod was at schema **18**, not 26 (the 5 Oct release predated V19).
+     Release **v10** applied 16 migrations, V19–V35, with none failed. V28 is
+     local-only seed data and correctly skipped.
+   - Prod held one user (the owner's super) and no polls; the user was kept.
+   - Backup: every `public` table as CSV in the git-ignored
+     `backups/prod-before-V19-V35-20261020T040551Z/` (pg_dump can't run as the
+     read-only role), plus Neon's point-in-time restore.
+   - Smoke test: both machines on v10 and healthy; public endpoints, the prod
+     site and its `/api` proxy answer.
    - Optional: add a guarded `prod` command to `BuildAndDeploy.bash`.
 2. **Domain and email: start on day 1.**
    - Point the DNS at the app and set `APP_BASE_URL`.

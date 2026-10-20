@@ -47,3 +47,6 @@ tmp/sql/*
 
 # Local personal command cheatsheet — may hold connection strings; keep it off git
 docs/Pollsystem specific commands.txt
+
+# Local database dumps (may hold personal data) — NEVER commit.
+backups/
