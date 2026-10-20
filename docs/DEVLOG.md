@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-10-20 — Purview counts on results; the privacy threshold is now 4
+
+**Requested:**
+
+> For the results pages for the polls … "Show responses from within the poll's
+> purview" (32) would indicate that 32 respondents were from within the
+> zipcode purview of the poll, same with the row undereath it for respondents
+> outside the poll's location purview?
+
+then, while that was in progress:
+
+> Change the default in backend/src/main/resources/application.yml
+> (app.results.k-anonymity-threshold: 10 → 4) and deploy. That changes it
+> everywhere, including local defaults.
+
+**Decision:**
+
+- The counts come from the published (stepped) results, over the whole poll.
+  Both are withheld when either group is under the threshold; supers see them
+  live.
+- The privacy threshold is 4 everywhere, the user's call (it was 10).
+  Deployed to staging; not prod.
+
+**Changed:**
+
+- `4675b0d`: purview counts in the results APIs, and "(32)" or "(fewer than k)"
+  after each checkbox.
+- `656f628`: `application.yml` threshold set to 4. Every text that said 10 now
+  says 4, in 9 languages and the help pages.
+- The threshold e2e test reads k from the backend.
+- Backend 340/340, frontend 151/151, e2e 19/19 (twice).
+
+**Commits:** `4675b0d`, `656f628`
+
+---
+
 ## 2026-10-19 — Demo scripts moved to scripts/demo/
 
 **Requested:**
