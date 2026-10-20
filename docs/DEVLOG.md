@@ -61,6 +61,48 @@ logged.
 
 ---
 
+## 2026-10-21 — Show: column choosers on three management views
+
+**Requested:**
+
+> creator/dashboard: Add column 'For Election' column after the 'Type '
+> column. Add column 'Enabled?' after 'For Election' column. Add "Show: "
+> row above headings row like so: 'Show: Title x Type x For Election x
+> Enabled? x Status x Close date x Responses x Emails? x'
+>
+> admin/manage-creators: … 'Show: Email x Purview x Polls x Last Edit x
+> Enabled x'
+>
+> admin/manage-polls: Change column heading 'Zipcode' to 'Purview'. Add
+> show row like so: 'Show: Title x Type x Creator x State x County x
+> Purview x Closes x Enabled? x'
+
+**Decision:**
+
+- On the creator dashboard, Enabled? reports admin switch-offs as **Yes /
+  Partly / No**: Partly means switched off in some areas, No means
+  everywhere. That matches what admins can do.
+- Columns that aren't in the requested lists always show: the dashboard's
+  action links, Manage Creators' Edit, Manage Polls' Notes and Actions.
+
+**Changed:**
+
+- `3079131`: a shared `ColumnChooser` component and `useColumns` composable,
+  remembered per device.
+- Creator dashboard summary gains `electionId`, `electionTitle` and
+  `enabled`.
+- Manage Polls' Zipcode heading is now Purview.
+- Labels in 9 languages.
+
+**Verified:**
+
+- Backend 358/358, frontend 169/169, e2e 19/19.
+- Screenshots of all three views checked locally.
+
+**Commits:** `3079131`
+
+---
+
 ## 2026-10-20 — Staging + prod: cancel / delete deployed (verified)
 
 **Requested:**
