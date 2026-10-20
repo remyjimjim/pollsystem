@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-20 — Prod backend v11: rate limits (verified)
+
+**Requested:**
+
+> deploy the backend to prod
+
+**Verified:**
+
+- Prod backend deployed from `main` at `2de5fa6`, release **v11**. No new
+  migrations: prod is already on schema 35.
+- Health is UP, and the prod site's `/api` proxy and `/legal/terms` answer 200.
+- The per-email limit is live: 4 sign-in link requests for one address gave
+  `404 404 404 429`.
+- Staging: per-IP limits are working after `PROXY_SECRET` was added to the
+  Pages project's **Preview** variables and staging Pages was rebuilt (empty
+  commit `fe54bdb` on `staging` only). `proxy-secret.bash check staging`
+  passed.
+- Prod per-IP limits are still off. They need `PROXY_SECRET` under
+  Production in Pages, a Pages rebuild, then `proxy-secret.bash set prod`
+  and `check prod`.
+
+---
+
 ## 2026-10-20 — PROXY_SECRET rollout script
 
 **Requested:**
