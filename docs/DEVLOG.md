@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-10-20 — Staging + prod: cancel / delete deployed (verified)
+
+**Requested:**
+
+> push it and deploy to staging
+
+> Let's go ahead and do a prod backend deploy
+
+**Changed:**
+
+- The staging deploy's frontend push was rejected as non-fast-forward: my
+  empty Pages-rebuild commit `fe54bdb` on `staging` wasn't in `main`. The
+  backend had already deployed (staging v35, with V36).
+- A force-push was blocked by the permission check, so instead I pushed a
+  merge commit `4fc1c87` (content identical to `main`) onto `staging`, then
+  fast-forwarded `main` to it. Both branches now share history, so future
+  staging pushes are fast-forwards again.
+- **Lesson:** to force a Pages rebuild, push the empty commit to `main`, or
+  retry the deployment in the dashboard, never onto `staging` alone.
+
+**Verified:**
+
+- CI green on `5f8e525`.
+- Staging: a user lookup reads the new column (200).
+- Prod backend **v13** from `4fc1c87`: health UP; schema **36** and
+  `users.cancel_at_period_end` present (checked as the read-only role); the
+  one account is unchanged; a user lookup through the prod site returns 200.
+
+---
+
 ## 2026-10-20 — Cancel membership; super deletes accounts on request
 
 **Requested:**
