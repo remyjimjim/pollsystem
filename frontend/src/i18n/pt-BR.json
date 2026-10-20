@@ -297,7 +297,13 @@
       "reopen": "Reabrir",
       "reopenHint": "Volta para rascunho para revisar; fora da busca e da votação até publicar de novo. As respostas são mantidas.",
       "reopenConfirm": "Reabrir “{title}” para revisar? Ela sai da busca e da votação até você publicar de novo. As respostas são mantidas.",
-      "errorReopen": "Não foi possível reabrir a enquete"
+      "errorReopen": "Não foi possível reabrir a enquete",
+      "tableForElection": "Da eleição",
+      "enabledYES": "Sim",
+      "enabledPARTLY": "Em parte",
+      "enabledNO": "Não",
+      "enabledHint": "Se um administrador desativou esta enquete: Em parte significa em alguns estados, condados ou CEPs; Não significa em todo lugar.",
+      "tableEnabled": "Ativa?"
     },
     "createPoll": {
       "heading": "Criar nova enquete",
@@ -567,7 +573,8 @@
     },
     "managePolls": {
       "heading": "Gerenciar Enquetes",
-      "body": "Moderar enquetes"
+      "body": "Moderar enquetes",
+      "colPurview": "Abrangência"
     }
   },
   "super": {

@@ -3,8 +3,19 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import ColumnChooser from '@/components/ColumnChooser.vue'
+import { useColumns } from '@/composables/useColumns'
 
 const { t } = useI18n()
+
+// ---------- Columns: choose which to show (Note and Actions always show) ----------
+const COLUMN_KEYS = ['title', 'type', 'creator', 'state', 'county', 'purview', 'closes', 'enabled'] as const
+type ColumnKey = (typeof COLUMN_KEYS)[number]
+const columns = useColumns<ColumnKey>('managePolls.columns', COLUMN_KEYS, ['creator', 'county', 'purview'])
+const columnOptions = computed(() => ([
+  ['title', 'colTitle'], ['type', 'colType'], ['creator', 'colCreator'], ['state', 'colState'],
+  ['county', 'colCounty'], ['purview', 'colPurview'], ['closes', 'colCloses'], ['enabled', 'colEnable'],
+] as const).map(([key, label]) => ({ key, label: t(`admin.managePolls.${label}`) })))
 // Deep-link support, e.g. the Polls link on /admin/manage-creators:
 // ?creator=<email>&sort=closeDate&dir=desc&showDisabled=1
 const route = useRoute()
@@ -830,39 +841,40 @@ function historySlug(kind: Kind): string {
     <p v-if="loading" class="mb-2 text-xs text-slate-500">{{ $t('common.loading') }}</p>
     <p v-if="!loading && visibleResults.length === 0" class="text-sm text-slate-500">{{ $t('admin.managePolls.none') }}</p>
 
+    <ColumnChooser v-if="visibleResults.length > 0" v-model="columns" :options="columnOptions" />
     <table v-if="visibleResults.length > 0" class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
-          <th @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colTitle') }}{{ sortIndicator('title') }}</th>
-          <th @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colType') }}{{ sortIndicator('type') }}</th>
-          <th @click="toggleSort('creatorEmail')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCreator') }}{{ sortIndicator('creatorEmail') }}</th>
-          <th @click="toggleSort('stateInitial')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colState') }}{{ sortIndicator('stateInitial') }}</th>
-          <th @click="toggleSort('countyName')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCounty') }}{{ sortIndicator('countyName') }}</th>
-          <th @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colZipcode') }}{{ sortIndicator('zipcode') }}</th>
-          <th @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCloses') }}{{ sortIndicator('closeDate') }}</th>
-          <th @click="toggleSort('blocked')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colEnable') }}{{ sortIndicator('blocked') }}</th>
+          <th v-if="columns.title" @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colTitle') }}{{ sortIndicator('title') }}</th>
+          <th v-if="columns.type" @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colType') }}{{ sortIndicator('type') }}</th>
+          <th v-if="columns.creator" @click="toggleSort('creatorEmail')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCreator') }}{{ sortIndicator('creatorEmail') }}</th>
+          <th v-if="columns.state" @click="toggleSort('stateInitial')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colState') }}{{ sortIndicator('stateInitial') }}</th>
+          <th v-if="columns.county" @click="toggleSort('countyName')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCounty') }}{{ sortIndicator('countyName') }}</th>
+          <th v-if="columns.purview" @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colPurview') }}{{ sortIndicator('zipcode') }}</th>
+          <th v-if="columns.closes" @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCloses') }}{{ sortIndicator('closeDate') }}</th>
+          <th v-if="columns.enabled" @click="toggleSort('blocked')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colEnable') }}{{ sortIndicator('blocked') }}</th>
           <th @click="toggleSort('note')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colNote') }}{{ sortIndicator('note') }}</th>
           <th class="select-none border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.managePolls.colActions') }}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="row in sortedResults" :key="`${row.type}-${row.id}`">
-          <td class="border-b border-slate-100 p-2">{{ row.title }}</td>
-          <td class="border-b border-slate-100 p-2">
+          <td v-if="columns.title" class="border-b border-slate-100 p-2">{{ row.title }}</td>
+          <td v-if="columns.type" class="border-b border-slate-100 p-2">
             <span :class="['rounded px-2 py-0.5 text-xs font-semibold', kindBadgeClasses(row.type)]">{{ kindLabel(row.type) }}</span>
           </td>
-          <td class="border-b border-slate-100 p-2">{{ row.creatorEmail }}</td>
-          <td class="border-b border-slate-100 p-2">{{ row.stateInitial ?? '—' }}</td>
-          <td class="border-b border-slate-100 p-2">{{ row.countyName ?? '—' }}</td>
-          <td class="border-b border-slate-100 p-2 font-mono">
+          <td v-if="columns.creator" class="border-b border-slate-100 p-2">{{ row.creatorEmail }}</td>
+          <td v-if="columns.state" class="border-b border-slate-100 p-2">{{ row.stateInitial ?? '—' }}</td>
+          <td v-if="columns.county" class="border-b border-slate-100 p-2">{{ row.countyName ?? '—' }}</td>
+          <td v-if="columns.purview" class="border-b border-slate-100 p-2 font-mono">
             <template v-if="row.zipcodes.length === 0"><span class="text-slate-700">{{ row.regionLabel || '—' }}</span></template>
             <template v-else-if="row.zipcodes.length === 1">{{ row.zipcodes[0] }}</template>
             <template v-else>{{ row.zipcodes[0] }} <span class="text-slate-500">+{{ row.zipcodes.length - 1 }}</span></template>
           </td>
-          <td class="border-b border-slate-100 p-2">
+          <td v-if="columns.closes" class="border-b border-slate-100 p-2">
             {{ row.closeDate ? new Date(row.closeDate).toLocaleString() : $t('admin.managePolls.closeNever') }}
           </td>
-          <td class="border-b border-slate-100 p-2">
+          <td v-if="columns.enabled" class="border-b border-slate-100 p-2">
             <input
               type="checkbox"
               :checked="!row.blocked"

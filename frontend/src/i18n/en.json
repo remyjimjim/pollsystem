@@ -336,7 +336,13 @@
       "reopen": "Reopen",
       "reopenHint": "Back to draft to revise it; out of search and voting until you publish again. Responses are kept.",
       "reopenConfirm": "Reopen \"{title}\" to revise it? It leaves search and voting until you publish it again. Its responses are kept.",
-      "errorReopen": "Couldn't reopen the poll"
+      "errorReopen": "Couldn't reopen the poll",
+      "tableForElection": "For Election",
+      "tableEnabled": "Enabled?",
+      "enabledYES": "Yes",
+      "enabledPARTLY": "Partly",
+      "enabledNO": "No",
+      "enabledHint": "Whether an admin has switched this poll off: Partly means in some states, counties or zipcodes; No means everywhere."
     },
     "createPoll": {
       "heading": "Create New Poll",
@@ -735,7 +741,8 @@
       "errorReasonLength": "Reason must be 1–2000 characters.",
       "errorSaveEdit": "Failed to update poll",
       "creatorFilter": "Creator: {email}",
-      "clearCreator": "Clear creator filter"
+      "clearCreator": "Clear creator filter",
+      "colPurview": "Purview"
     }
   },
   "super": {

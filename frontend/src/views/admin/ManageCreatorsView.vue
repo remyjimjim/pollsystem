@@ -5,11 +5,21 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import InfoPopover from '@/components/InfoPopover.vue'
 import PurviewSetter from '@/components/PurviewSetter.vue'
+import ColumnChooser from '@/components/ColumnChooser.vue'
+import { useColumns } from '@/composables/useColumns'
 import { useAuthStore } from '@/stores/auth'
 import { AccessLevel, ScopeLevel, type PollType, type Purview, GRANT_LEVELS } from '@/types'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+
+// ---------- Columns: choose which to show (Edit always shows) ----------
+const COLUMN_KEYS = ['email', 'purview', 'polls', 'lastEdit', 'enabled'] as const
+type ColumnKey = (typeof COLUMN_KEYS)[number]
+const columns = useColumns<ColumnKey>('manageCreators.columns', COLUMN_KEYS, ['lastEdit'])
+const columnOptions = computed(() => ([
+  ['email', 'colEmail'], ['purview', 'colPurview'], ['polls', 'colPolls'], ['lastEdit', 'colLastEdit'], ['enabled', 'colEnabled'],
+] as const).map(([key, label]) => ({ key, label: t(`admin.manageCreators.${label}`) })))
 
 type EnabledState = 'ENABLED' | 'DISABLED' | 'PARTIAL'
 interface Grant {
@@ -313,24 +323,25 @@ onMounted(() => {
     <p v-if="loading" class="text-sm text-slate-500">{{ $t('common.loading') }}</p>
     <p v-else-if="visibleRows.length === 0" class="text-sm text-slate-500">{{ $t('admin.manageCreators.none') }}</p>
 
-    <div v-else class="overflow-x-auto">
+    <ColumnChooser v-if="!loading && visibleRows.length > 0" v-model="columns" :options="columnOptions" />
+    <div v-if="!loading && visibleRows.length > 0" class="overflow-x-auto">
       <table class="w-full border-collapse text-sm">
         <thead>
           <tr class="bg-slate-50 text-left">
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('email')"><button type="button" class="font-semibold hover:underline" data-test="sort-email" @click="toggleSort('email')">{{ $t('admin.manageCreators.colEmail') }}{{ sortIndicator('email') }}</button></th>
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('purview')">
+            <th v-if="columns.email" class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('email')"><button type="button" class="font-semibold hover:underline" data-test="sort-email" @click="toggleSort('email')">{{ $t('admin.manageCreators.colEmail') }}{{ sortIndicator('email') }}</button></th>
+            <th v-if="columns.purview" class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('purview')">
               <button type="button" class="font-semibold hover:underline" data-test="sort-purview" @click="toggleSort('purview')">{{ $t('admin.manageCreators.colPurview') }}{{ sortIndicator('purview') }}</button>
               <InfoPopover :label="$t('admin.manageCreators.colPurview')">{{ $t('help.adminManageCreators.purview') }}</InfoPopover>
             </th>
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('polls')">
+            <th v-if="columns.polls" class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('polls')">
               <button type="button" class="font-semibold hover:underline" data-test="sort-polls" @click="toggleSort('polls')">{{ $t('admin.manageCreators.colPolls') }}{{ sortIndicator('polls') }}</button>
               <InfoPopover :label="$t('admin.manageCreators.colPolls')">{{ $t('help.adminManageCreators.polls') }}</InfoPopover>
             </th>
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('lastEdit')">
+            <th v-if="columns.lastEdit" class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('lastEdit')">
               <button type="button" class="font-semibold hover:underline" data-test="sort-lastEdit" @click="toggleSort('lastEdit')">{{ $t('admin.manageCreators.colLastEdit') }}{{ sortIndicator('lastEdit') }}</button>
               <InfoPopover :label="$t('admin.manageCreators.colLastEdit')">{{ $t('help.adminManageCreators.lastEdit') }}</InfoPopover>
             </th>
-            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('enabled')">
+            <th v-if="columns.enabled" class="border-b border-slate-200 p-2 font-semibold text-slate-700" :aria-sort="ariaSort('enabled')">
               <button type="button" class="font-semibold hover:underline" data-test="sort-enabled" @click="toggleSort('enabled')">{{ $t('admin.manageCreators.colEnabled') }}{{ sortIndicator('enabled') }}</button>
               <InfoPopover :label="$t('admin.manageCreators.colEnabled')" align="right">{{ $t('help.adminManageCreators.enabled') }}</InfoPopover>
             </th>
@@ -345,11 +356,11 @@ onMounted(() => {
             :class="isPinned(r) ? 'bg-amber-50' : ''"
             :aria-current="isPinned(r) ? 'true' : undefined"
           >
-            <td class="border-b border-slate-100 p-2">
+            <td v-if="columns.email" class="border-b border-slate-100 p-2">
               {{ r.email }}
               <span v-if="r.isYou" class="ml-1 text-xs text-slate-500">{{ $t('admin.manageCreators.you') }}</span>
             </td>
-            <td class="border-b border-slate-100 p-2">
+            <td v-if="columns.purview" class="border-b border-slate-100 p-2">
               <InfoPopover :label="$t('admin.manageCreators.purviewOf', { email: r.email })" icon="pin" width-class="w-80">
                 <template #trigger>
                   <span class="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-0.5 text-slate-800">
@@ -367,12 +378,12 @@ onMounted(() => {
                 </div>
               </InfoPopover>
             </td>
-            <td class="border-b border-slate-100 p-2">
+            <td v-if="columns.polls" class="border-b border-slate-100 p-2">
               <router-link v-if="r.pollTotal > 0" :to="pollsLink(r)" class="text-blue-700 underline">{{ r.pollCount }}</router-link>
               <span v-else class="text-slate-400">0</span>
             </td>
-            <td class="border-b border-slate-100 p-2">{{ formatDate(r.lastEditedAt) }}</td>
-            <td class="border-b border-slate-100 p-2">
+            <td v-if="columns.lastEdit" class="border-b border-slate-100 p-2">{{ formatDate(r.lastEditedAt) }}</td>
+            <td v-if="columns.enabled" class="border-b border-slate-100 p-2">
               <label
                 class="inline-flex items-center gap-2"
                 :title="r.canToggle ? '' : r.isYou ? $t('admin.manageCreators.youHint') : $t('admin.manageCreators.noAccessHint')"

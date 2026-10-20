@@ -297,7 +297,13 @@
       "reopen": "Riapri",
       "reopenHint": "Torna bozza per rivederlo; fuori da ricerca e voto finché non lo pubblichi di nuovo. Le risposte restano.",
       "reopenConfirm": "Riaprire «{title}» per rivederlo? Esce da ricerca e voto finché non lo pubblichi di nuovo. Le sue risposte restano.",
-      "errorReopen": "Impossibile riaprire il sondaggio"
+      "errorReopen": "Impossibile riaprire il sondaggio",
+      "tableForElection": "Per l’elezione",
+      "enabledYES": "Sì",
+      "enabledPARTLY": "In parte",
+      "enabledNO": "No",
+      "enabledHint": "Se un amministratore ha disattivato questo sondaggio: In parte significa in alcuni stati, contee o CAP; No significa ovunque.",
+      "tableEnabled": "Attivo?"
     },
     "createPoll": {
       "heading": "Crea nuovo sondaggio",
@@ -567,7 +573,8 @@
     },
     "managePolls": {
       "heading": "Gestisci Sondaggi",
-      "body": "Modera i sondaggi"
+      "body": "Modera i sondaggi",
+      "colPurview": "Ambito"
     }
   },
   "super": {

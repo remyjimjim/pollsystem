@@ -146,3 +146,18 @@ describe('ManagePollsView: deep link from Manage Creators', () => {
     w.unmount()
   })
 })
+
+describe('ManagePollsView: Show: columns', () => {
+  afterEach(() => localStorage.clear())
+  it('the zipcode column is headed Purview, and unticking County hides it', async () => {
+    const w = await mountView()
+    const headings = () => w.findAll('th').map(th => th.text().replace(/[▲▼]/g, '').trim())
+    expect(headings()).toContain('Purview')
+    expect(headings()).not.toContain('Zipcode')
+    expect(w.find('[data-test="column-chooser"]').text()).toBe('Columns to showShow:TitleTypeCreatorStateCountyPurviewClosesEnabled?')
+    await w.find('[data-test="show-county"]').setValue(false)
+    expect(headings()).not.toContain('County')
+    expect(headings()).toContain('Notes')           // Notes and Actions always show
+  })
+})
+

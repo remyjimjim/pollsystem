@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { createRouter, createMemoryHistory } from 'vue-router'
@@ -114,6 +114,42 @@ describe('Creator DashboardView', () => {
       const w = await mountAs(AccessLevel.CREATOR, [poll({ status: 'DRAFT' })])
       expect(w.find('[data-test="reopen"]').exists()).toBe(false)
       expect(w.find('[data-test="poll-history"]').attributes('href')).toBe('/history?type=questionnaire&id=7')
+    })
+  })
+
+  describe('Show: columns, For Election and Enabled?', () => {
+    afterEach(() => localStorage.clear())
+    const poll = (over: Record<string, unknown>) => ({
+      id: 7, type: 'BallotMeasure', title: 'Prop 1', status: 'PUBLISHED', closeDate: null,
+      createdAt: '2026-10-01T00:00:00Z', respondents: 0, inArea: 0, emails: true,
+      electionId: 93, electionTitle: 'November General Election', enabled: 'YES', ...over,
+    })
+    const headings = (w: Awaited<ReturnType<typeof mountAs>>) => w.findAll('th').map(th => th.text()).filter(Boolean)
+
+    it('For Election and Enabled? follow Type, and a ballot measure links to its election', async () => {
+      const w = await mountAs(AccessLevel.CREATOR, [poll({ enabled: 'PARTLY' })])
+      expect(headings(w).slice(0, 5)).toEqual(['Title', 'Type', 'For Election', 'Enabled?', 'Status'])
+      const link = w.find('[data-test="for-election"] a')
+      expect(link.attributes('href')).toBe('/polls/election/93')
+      expect(link.text()).toBe('November Genera...')
+      expect(w.find('[data-test="enabled"]').text()).toBe('Partly')
+    })
+
+    it('other poll types show a dash for the election; switched off everywhere shows No', async () => {
+      const w = await mountAs(AccessLevel.CREATOR, [poll({ type: 'Questionnaire', electionId: null, electionTitle: null, enabled: 'NO' })])
+      expect(w.find('[data-test="for-election"]').text()).toBe('—')
+      expect(w.find('[data-test="enabled"]').text()).toBe('No')
+    })
+
+    it('unticking a column in Show: hides it, and the choice is remembered', async () => {
+      const w = await mountAs(AccessLevel.CREATOR, [poll({})])
+      const options = w.find('[data-test="column-chooser"]').text()
+      expect(options).toBe('Columns to showShow:TitleTypeFor ElectionEnabled?StatusClose dateResponsesEmails')
+      await w.find('[data-test="show-election"]').setValue(false)
+      expect(headings(w)).not.toContain('For Election')
+      expect(w.find('[data-test="for-election"]').exists()).toBe(false)
+      const again = await mountAs(AccessLevel.CREATOR, [poll({})])
+      expect(headings(again)).not.toContain('For Election')
     })
   })
 })

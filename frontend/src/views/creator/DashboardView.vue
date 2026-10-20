@@ -1,14 +1,33 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import type { PollStatus } from '@/types'
 import { AccessLevel } from '@/types'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import ColumnChooser from '@/components/ColumnChooser.vue'
+import { useColumns } from '@/composables/useColumns'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+
+// ---------- Columns: choose which to show ----------
+const COLUMN_KEYS = ['title', 'type', 'election', 'enabled', 'status', 'closeDate', 'responses', 'emails'] as const
+type ColumnKey = (typeof COLUMN_KEYS)[number]
+const columns = useColumns<ColumnKey>('creatorDashboard.columns', COLUMN_KEYS, ['election', 'enabled', 'emails'])
+const columnOptions = computed(() => ([
+  ['title', 'tableTitle'], ['type', 'tableType'], ['election', 'tableForElection'], ['enabled', 'tableEnabled'],
+  ['status', 'tableStatus'], ['closeDate', 'tableCloseDate'], ['responses', 'tableResponses'], ['emails', 'tableEmails'],
+] as const).map(([key, label]) => ({ key, label: t(`creator.dashboard.${label}`) })))
+
+/** The first 15 characters of an election's title, then "..." (full title on hover). */
+const shortTitle = (title: string) => title.length > 15 ? `${title.slice(0, 15)}...` : title
+function enabledClasses(e: CreatorPollSummary['enabled']): string {
+  if (e === 'NO') return 'bg-red-100 text-red-800'
+  if (e === 'PARTLY') return 'bg-amber-100 text-amber-800'
+  return 'text-slate-700'
+}
 
 interface CreatorPollSummary {
   id: number
@@ -23,6 +42,11 @@ interface CreatorPollSummary {
   inArea: number | null
   /** Milestone emails on for this poll (results visible, closed); the creator can pause them. */
   emails: boolean
+  /** A ballot measure's election (null for other types). */
+  electionId: number | null
+  electionTitle: string | null
+  /** Switched off by an admin: not at all, in some areas, or everywhere. */
+  enabled: 'YES' | 'PARTLY' | 'NO'
 }
 
 const polls = ref<CreatorPollSummary[]>([])
@@ -198,15 +222,18 @@ onMounted(load)
       {{ showArchived ? $t('creator.dashboard.emptyArchived') : $t('creator.dashboard.emptyDefault') }}
     </p>
 
-    <table v-else class="w-full border-collapse text-sm">
+    <ColumnChooser v-if="!loading && polls.length > 0" v-model="columns" :options="columnOptions" />
+    <table v-if="!loading && polls.length > 0" class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableTitle') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableType') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableStatus') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableCloseDate') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableResponses') }}</th>
-          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :title="$t('creator.dashboard.emailsHint')">{{ $t('creator.dashboard.tableEmails') }}</th>
+          <th v-if="columns.title" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableTitle') }}</th>
+          <th v-if="columns.type" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableType') }}</th>
+          <th v-if="columns.election" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableForElection') }}</th>
+          <th v-if="columns.enabled" class="border-b border-slate-200 p-2 font-semibold text-slate-700" :title="$t('creator.dashboard.enabledHint')">{{ $t('creator.dashboard.tableEnabled') }}</th>
+          <th v-if="columns.status" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableStatus') }}</th>
+          <th v-if="columns.closeDate" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableCloseDate') }}</th>
+          <th v-if="columns.responses" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableResponses') }}</th>
+          <th v-if="columns.emails" class="border-b border-slate-200 p-2 font-semibold text-slate-700" :title="$t('creator.dashboard.emailsHint')">{{ $t('creator.dashboard.tableEmails') }}</th>
           <th class="border-b border-slate-200 p-2"></th>
           <th class="border-b border-slate-200 p-2"></th>
           <th class="border-b border-slate-200 p-2"></th>
@@ -214,9 +241,21 @@ onMounted(load)
       </thead>
       <tbody>
         <tr v-for="p in polls" :key="`${p.type}-${p.id}`">
-          <td class="border-b border-slate-100 p-2">{{ p.title }}</td>
-          <td class="border-b border-slate-100 p-2">{{ p.type }}</td>
-          <td class="border-b border-slate-100 p-2">
+          <td v-if="columns.title" class="border-b border-slate-100 p-2">{{ p.title }}</td>
+          <td v-if="columns.type" class="border-b border-slate-100 p-2">{{ p.type }}</td>
+          <td v-if="columns.election" class="border-b border-slate-100 p-2" data-test="for-election">
+            <router-link
+              v-if="p.electionId && p.electionTitle"
+              :to="`/polls/election/${p.electionId}`"
+              :title="p.electionTitle"
+              class="text-slate-800 underline"
+            >{{ shortTitle(p.electionTitle) }}</router-link>
+            <span v-else class="text-slate-400">—</span>
+          </td>
+          <td v-if="columns.enabled" class="border-b border-slate-100 p-2" data-test="enabled" :title="$t('creator.dashboard.enabledHint')">
+            <span :class="['inline-block rounded px-2 py-0.5 text-xs', enabledClasses(p.enabled)]">{{ $t(`creator.dashboard.enabled${p.enabled}`) }}</span>
+          </td>
+          <td v-if="columns.status" class="border-b border-slate-100 p-2">
             <span
               :class="['inline-block rounded px-2 py-0.5 text-xs', statusClasses(p.status)]"
             >
@@ -224,6 +263,7 @@ onMounted(load)
             </span>
           </td>
           <td
+            v-if="columns.closeDate"
             class="border-b border-slate-100 p-2"
             :class="closeDatePast(p.closeDate) ? 'bg-orange-50 text-orange-900' : ''"
           >
@@ -232,7 +272,7 @@ onMounted(load)
               {{ $t('creator.dashboard.closesIn', { n: daysToClose(p) }, daysToClose(p)!) }}
             </span>
           </td>
-          <td class="border-b border-slate-100 p-2" data-test="responses">
+          <td v-if="columns.responses" class="border-b border-slate-100 p-2" data-test="responses">
             <template v-if="p.status === 'DRAFT'">—</template>
             <template v-else>
               {{ p.respondents }}
@@ -244,7 +284,7 @@ onMounted(load)
               >· {{ $t('creator.dashboard.inAreaHidden') }}</span>
             </template>
           </td>
-          <td class="border-b border-slate-100 p-2" :title="$t('creator.dashboard.emailsHint')">
+          <td v-if="columns.emails" class="border-b border-slate-100 p-2" :title="$t('creator.dashboard.emailsHint')">
             <input
               type="checkbox"
               class="h-4 w-4"

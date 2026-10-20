@@ -297,7 +297,13 @@
       "reopen": "再開",
       "reopenHint": "下書きに戻して修正します。再公開するまで検索と投票から外れます。回答は保持されます。",
       "reopenConfirm": "「{title}」を修正のため再開しますか？再公開するまで検索と投票から外れます。回答は保持されます。",
-      "errorReopen": "投票を再開できませんでした"
+      "errorReopen": "投票を再開できませんでした",
+      "tableForElection": "対象の選挙",
+      "enabledYES": "はい",
+      "enabledPARTLY": "一部",
+      "enabledNO": "いいえ",
+      "enabledHint": "管理者がこの投票を無効にしたかどうか：「一部」は一部の州・郡・郵便番号で、「いいえ」はすべての地域で無効です。",
+      "tableEnabled": "有効？"
     },
     "createPoll": {
       "heading": "新しい投票を作成",
@@ -612,7 +618,8 @@
       "heading": "投票を管理",
       "body": "投票をモデレート",
       "creatorFilter": "作成者: {email}",
-      "clearCreator": "作成者の絞り込みを解除"
+      "clearCreator": "作成者の絞り込みを解除",
+      "colPurview": "対象地域"
     }
   },
   "super": {

@@ -245,3 +245,15 @@ describe('ManageCreatorsView', () => {
   })
 })
 
+describe('ManageCreatorsView: Show: columns', () => {
+  afterEach(() => localStorage.clear())
+  it('lists the columns, and unticking Last edit hides it (Edit always shows)', async () => {
+    const w = await mountView()
+    expect(w.find('[data-test="column-chooser"]').text()).toBe('Columns to showShow:EmailPurviewPollsLast editEnabled')
+    await w.find('[data-test="show-lastEdit"]').setValue(false)
+    const headings = w.findAll('th').map(th => th.text())
+    expect(headings.some(h => h.startsWith('Last edit'))).toBe(false)
+    expect(headings.some(h => h.startsWith('Edit'))).toBe(true)
+  })
+})
+

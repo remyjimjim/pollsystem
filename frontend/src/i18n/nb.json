@@ -297,7 +297,13 @@
       "reopen": "Gjenåpne",
       "reopenHint": "Tilbake til utkast for å revidere; ute av søk og stemming til du publiserer igjen. Svarene beholdes.",
       "reopenConfirm": "Gjenåpne «{title}» for å revidere? Den forsvinner fra søk og stemming til du publiserer igjen. Svarene beholdes.",
-      "errorReopen": "Kunne ikke gjenåpne avstemningen"
+      "errorReopen": "Kunne ikke gjenåpne avstemningen",
+      "tableForElection": "For valget",
+      "enabledYES": "Ja",
+      "enabledPARTLY": "Delvis",
+      "enabledNO": "Nei",
+      "enabledHint": "Om en admin har slått av denne avstemningen: Delvis betyr i noen delstater, fylker eller postnumre; Nei betyr overalt.",
+      "tableEnabled": "Aktiv?"
     },
     "createPoll": {
       "heading": "Opprett ny avstemning",
@@ -612,7 +618,8 @@
       "heading": "Administrer avstemninger",
       "body": "Moderer avstemninger",
       "creatorFilter": "Oppretter: {email}",
-      "clearCreator": "Fjern oppretterfilter"
+      "clearCreator": "Fjern oppretterfilter",
+      "colPurview": "Område"
     }
   },
   "super": {

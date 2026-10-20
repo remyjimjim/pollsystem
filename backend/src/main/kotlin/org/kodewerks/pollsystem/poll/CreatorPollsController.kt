@@ -1,10 +1,12 @@
 package org.kodewerks.pollsystem.poll
 
 import org.kodewerks.pollsystem.model.AccessLevel
+import org.kodewerks.pollsystem.model.BlockScope
 import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollStatus
 import org.kodewerks.pollsystem.repository.BallotMeasureRepository
 import org.kodewerks.pollsystem.repository.ElectionRepository
+import org.kodewerks.pollsystem.repository.PollTypeBlockRepository
 import org.kodewerks.pollsystem.repository.QuestionnaireRepository
 import org.kodewerks.pollsystem.security.AppUserDetails
 import org.springframework.http.HttpStatus
@@ -34,7 +36,15 @@ data class CreatorPollSummary(
     /** How many of them live inside the poll's purview; null = withheld (small group). */
     val inArea: Int? = 0,
     /** Milestone emails on for this poll (the creator can pause them). */
-    val emails: Boolean = true
+    val emails: Boolean = true,
+    /** A ballot measure's election (null for other types). */
+    val electionId: Long? = null,
+    val electionTitle: String? = null,
+    /**
+     * Whether an admin has switched the poll off: YES (not at all), PARTLY
+     * (in some states, counties or zipcodes) or NO (everywhere).
+     */
+    val enabled: String = "YES"
 )
 
 /** Pause (false) or resume (true) a poll's milestone emails. */
@@ -49,7 +59,8 @@ class CreatorPollsController(
     private val participation: PollParticipationService,
     private val reports: PollReportService,
     private val mutes: org.kodewerks.pollsystem.repository.PollEmailMuteRepository,
-    private val history: PollHistoryService
+    private val history: PollHistoryService,
+    private val blocks: PollTypeBlockRepository
 ) {
     @GetMapping
     fun list(
@@ -75,7 +86,8 @@ class CreatorPollsController(
             .map {
                 CreatorPollSummary(
                     it.id, "BallotMeasure", it.title, it.status,
-                    it.closeDate, it.dateCreated
+                    it.closeDate, it.dateCreated,
+                    electionId = it.election.id, electionTitle = it.election.title
                 )
             }
         val all = (q + e + b).sortedByDescending { it.createdAt }
@@ -83,7 +95,13 @@ class CreatorPollsController(
         // Drafts have no responses; count the rest (a creator has few polls).
         val muted = mutes.findAll().map { it.pollType to it.pollId }.toSet()
         return listed.map { p ->
-            val withEmails = p.copy(emails = (kindOf(p.type) to p.id) !in muted)
+            val switchedOff = blocks.findByPollTypeAndPollId(kindOf(p.type), p.id)
+            val enabled = when {
+                switchedOff.isEmpty() -> "YES"
+                switchedOff.any { it.scope == BlockScope.EVERYWHERE } -> "NO"
+                else -> "PARTLY"
+            }
+            val withEmails = p.copy(emails = (kindOf(p.type) to p.id) !in muted, enabled = enabled)
             if (p.status == PollStatus.DRAFT) withEmails
             else participation.of(kindOf(p.type), p.id).let { withEmails.copy(respondents = it.respondents, inArea = it.inArea) }
         }

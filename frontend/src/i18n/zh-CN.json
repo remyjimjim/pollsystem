@@ -297,7 +297,13 @@
       "reopen": "重新开放",
       "reopenHint": "退回草稿以便修改；在再次发布前不出现在搜索和投票中。回复会保留。",
       "reopenConfirm": "重新开放“{title}”以便修改？在你再次发布前，它不会出现在搜索和投票中。回复会保留。",
-      "errorReopen": "无法重新开放此投票"
+      "errorReopen": "无法重新开放此投票",
+      "tableForElection": "所属选举",
+      "enabledYES": "是",
+      "enabledPARTLY": "部分",
+      "enabledNO": "否",
+      "enabledHint": "管理员是否已关闭此投票：“部分”表示在某些州、县或邮编；“否”表示所有地区。",
+      "tableEnabled": "已启用？"
     },
     "createPoll": {
       "heading": "创建新投票",
@@ -567,7 +573,8 @@
     },
     "managePolls": {
       "heading": "管理投票",
-      "body": "审核投票"
+      "body": "审核投票",
+      "colPurview": "覆盖范围"
     }
   },
   "super": {

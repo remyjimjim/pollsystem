@@ -297,7 +297,13 @@
       "reopen": "Rouvrir",
       "reopenHint": "Revient en brouillon pour la réviser ; hors recherche et vote jusqu’à la prochaine publication. Les réponses sont conservées.",
       "reopenConfirm": "Rouvrir « {title} » pour la réviser ? Elle quitte la recherche et le vote jusqu’à ce que vous la publiiez à nouveau. Ses réponses sont conservées.",
-      "errorReopen": "Impossible de rouvrir le sondage"
+      "errorReopen": "Impossible de rouvrir le sondage",
+      "tableForElection": "Pour l’élection",
+      "enabledYES": "Oui",
+      "enabledPARTLY": "En partie",
+      "enabledNO": "Non",
+      "enabledHint": "Si un administrateur a désactivé ce sondage : En partie signifie dans certains États, comtés ou codes postaux ; Non signifie partout.",
+      "tableEnabled": "Activé ?"
     },
     "createPoll": {
       "heading": "Créer un nouveau sondage",
@@ -612,7 +618,8 @@
       "heading": "Gérer les Sondages",
       "body": "Modérer les sondages",
       "creatorFilter": "Créateur : {email}",
-      "clearCreator": "Retirer le filtre créateur"
+      "clearCreator": "Retirer le filtre créateur",
+      "colPurview": "Périmètre"
     }
   },
   "super": {

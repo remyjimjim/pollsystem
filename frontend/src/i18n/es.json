@@ -297,7 +297,13 @@
       "reopen": "Reabrir",
       "reopenHint": "Vuelve a borrador para revisarla; fuera de la búsqueda y la votación hasta que la publiques de nuevo. Las respuestas se conservan.",
       "reopenConfirm": "¿Reabrir «{title}» para revisarla? Sale de la búsqueda y la votación hasta que la publiques de nuevo. Sus respuestas se conservan.",
-      "errorReopen": "No se pudo reabrir la encuesta"
+      "errorReopen": "No se pudo reabrir la encuesta",
+      "tableForElection": "De la elección",
+      "enabledYES": "Sí",
+      "enabledPARTLY": "En parte",
+      "enabledNO": "No",
+      "enabledHint": "Si un administrador ha desactivado esta encuesta: En parte significa en algunos estados, condados o códigos postales; No significa en todas partes.",
+      "tableEnabled": "¿Activa?"
     },
     "createPoll": {
       "heading": "Crear nueva encuesta",
@@ -567,7 +573,8 @@
     },
     "managePolls": {
       "heading": "Gestionar Encuestas",
-      "body": "Moderar encuestas"
+      "body": "Moderar encuestas",
+      "colPurview": "Ámbito"
     }
   },
   "super": {

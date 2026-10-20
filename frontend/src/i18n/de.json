@@ -297,7 +297,13 @@
       "reopen": "Wieder öffnen",
       "reopenHint": "Zurück zum Entwurf zum Überarbeiten; bis zur erneuten Veröffentlichung nicht in Suche und Abstimmung. Antworten bleiben erhalten.",
       "reopenConfirm": "„{title}“ zum Überarbeiten wieder öffnen? Sie verschwindet aus Suche und Abstimmung, bis Sie sie erneut veröffentlichen. Die Antworten bleiben erhalten.",
-      "errorReopen": "Umfrage konnte nicht wieder geöffnet werden"
+      "errorReopen": "Umfrage konnte nicht wieder geöffnet werden",
+      "tableForElection": "Zur Wahl",
+      "enabledYES": "Ja",
+      "enabledPARTLY": "Teilweise",
+      "enabledNO": "Nein",
+      "enabledHint": "Ob ein Admin diese Umfrage abgeschaltet hat: Teilweise heißt in einigen Bundesstaaten, Countys oder Postleitzahlen; Nein heißt überall.",
+      "tableEnabled": "Aktiv?"
     },
     "createPoll": {
       "heading": "Neue Umfrage erstellen",
@@ -567,7 +573,8 @@
     },
     "managePolls": {
       "heading": "Umfragen verwalten",
-      "body": "Umfragen moderieren"
+      "body": "Umfragen moderieren",
+      "colPurview": "Geltungsbereich"
     }
   },
   "super": {
