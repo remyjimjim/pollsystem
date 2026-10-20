@@ -61,6 +61,53 @@ logged.
 
 ---
 
+## 2026-10-20 — Cancel membership; super deletes accounts on request
+
+**Requested:**
+
+> start on the account deletion route
+
+> I was thinking that one could 'Cancel' an account at which point if that
+> user ever tried to login again they'd have to 'renew' the account.
+
+> 1a, 2a, 3a
+
+**Decision:**
+
+- **Cancel** is in the app for every member. It ends with the paid month (1a).
+  Afterwards they can still sign in, browse and view results, with Renew
+  (2a). Their data is kept.
+- **Delete** is "email us", plus a super-admin tool built now (3a). It's
+  needed because the Privacy Policy promises deletion, and some states (e.g.
+  California) give a legal right to it.
+- My defaults within that:
+  - Delete removes answers and comments, and recounts results.
+  - It cancels Stripe immediately, without a refund.
+  - It's refused for poll owners, supers, yourself, and anyone whose
+    removal would undo moderation (notes, blocks, messages, creator
+    switch-offs).
+
+**Changed:**
+
+- `cd5e476`: V36 `users.cancel_at_period_end`.
+  - Members: Cancel membership and Keep my membership on the home page,
+    with `POST /api/billing/cancel|resume` behind them. Webhooks keep the
+    flag in step with Stripe.
+  - Supers: Manage Users gets ⋮ → Delete account… (confirmed by typing the
+    account's email), handled by `AccountDeletion`. A "Lapsed" filter finds
+    cancelled members.
+- Help pages and the legal drafts were updated to match.
+
+**Verified:**
+
+- Backend 356/356, frontend 161/161, e2e 19/19.
+- Walked through both flows in a browser locally. When the wrong row was
+  opened, the typed-email guard kept Delete disabled.
+
+**Commits:** `cd5e476`
+
+---
+
 ## 2026-10-20 — Per-IP rate limits live on prod (verified)
 
 **Requested:**

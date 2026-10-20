@@ -69,6 +69,9 @@ means re-warming the email domain, redirects, and confused users.
     Have the text reviewed before launch.
 - **Deleting an account:** a stated way to do it, even if it starts as "email
   us".
+  - ✅ **Built 2026-10-20.** Members cancel in the app (ends with the paid
+    month). Deletion is "email us", and a super deletes the account in
+    Manage Users (⋮ → Delete account…). Needs V36 on staging and prod.
 - **Rate limiting** on sign-in link requests, sign-up and search.
   - ✅ **Built 2026-10-20.** Per-email limits are on wherever the code is
     deployed.
