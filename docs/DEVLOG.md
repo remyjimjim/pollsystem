@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-20 — Prod brought up to date (verified)
+
+**Requested:**
+
+> start on bringing prod up to date
+
+then, after the read-only password was saved for the Dev Container:
+
+> It is saved.
+
+**Verified:**
+
+- Before: prod was at schema **18** (not 26 as assumed), with one user (the
+  owner's super) and no polls. Its secrets lacked only Stripe, which the app
+  starts without; payment pages answer 503 until live Stripe is set up.
+- Backup: `pg_dump` can't run as the read-only role. Prod Postgres is 18, and
+  the role has no access to `neon_auth` or the sequences. So every `public`
+  table went to CSV in the git-ignored `backups/`, on top of Neon's
+  point-in-time restore.
+- Deployed release **v10** (`076c0eb`) with
+  `flyctl deploy -a pollsystem-backend -c fly.toml`.
+  - It applied **V19–V35**, 16 migrations, with none failed. V28 is local-only
+    seed data and correctly skipped.
+  - The user was kept. Both machines are on v10 and healthy.
+  - Public endpoints, the prod site and its `/api` proxy answer.
+- My first schema check came too early, while the machines were still
+  migrating, and wrongly read 18. Rechecked after startup: 35.
+
+**Commit:** `fc84682` (agenda updated; `backups/` git-ignored)
+
+---
+
 ## 2026-10-20 — Launch agenda (decision)
 
 **Requested:**
