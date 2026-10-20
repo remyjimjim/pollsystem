@@ -61,6 +61,26 @@ logged.
 
 ---
 
+## 2026-10-20 — Per-IP rate limits live on prod (verified)
+
+**Requested:**
+
+> PROXY_SECRET is set in Production, push it
+
+**Verified:**
+
+- Pushing `5386d09` rebuilt prod Pages; GitHub showed "Cloudflare Pages:
+  success" for it.
+- `proxy-secret.bash set prod` put the secret on `pollsystem-backend`
+  without printing it, and `status` shows it set on both Fly apps.
+- `proxy-secret.bash check prod`: through the site, 43 OK then 32 refused;
+  straight to the backend afterwards, 429. The backend sees visitors' real
+  IPs, so per-IP limits are on in prod.
+- The rate-limiting launch item is done. Still open from that block: account
+  deletion route, monitoring, backup drill, IP rules not enforced.
+
+---
+
 ## 2026-10-20 — Prod backend v11: rate limits (verified)
 
 **Requested:**
