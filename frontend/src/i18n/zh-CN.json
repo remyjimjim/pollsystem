@@ -109,7 +109,8 @@
     "wrongAddress": "地址错误？",
     "haveAccount": "已有账户？",
     "signInLink": "登录",
-    "errorGeneric": "无法发送登录链接"
+    "errorGeneric": "无法发送登录链接",
+    "agree": "继续即表示你同意{terms}和{privacy}。"
   },
   "completeProfile": {
     "heading": "完善您的资料",
@@ -736,5 +737,10 @@
       "election": "选举",
       "ballot-measure": "投票议案"
     }
+  },
+  "legal": {
+    "terms": "服务条款",
+    "privacy": "隐私政策",
+    "refunds": "取消与退款"
   }
 }

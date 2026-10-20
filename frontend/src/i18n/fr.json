@@ -109,7 +109,8 @@
     "wrongAddress": "Mauvaise adresse ?",
     "haveAccount": "Vous avez déjà un compte ?",
     "signInLink": "Se connecter",
-    "errorGeneric": "Impossible d'envoyer le lien de connexion"
+    "errorGeneric": "Impossible d'envoyer le lien de connexion",
+    "agree": "En continuant, vous acceptez les {terms} et la {privacy}."
   },
   "completeProfile": {
     "heading": "Complétez votre profil",
@@ -789,5 +790,10 @@
       "election": "Élection",
       "ballot-measure": "Mesure soumise au vote"
     }
+  },
+  "legal": {
+    "terms": "Conditions d’utilisation",
+    "privacy": "Politique de confidentialité",
+    "refunds": "Résiliation et remboursements"
   }
 }

@@ -109,7 +109,8 @@
     "wrongAddress": "アドレスが間違っていますか？",
     "haveAccount": "すでにアカウントをお持ちですか？",
     "signInLink": "ログイン",
-    "errorGeneric": "ログインリンクを送信できませんでした"
+    "errorGeneric": "ログインリンクを送信できませんでした",
+    "agree": "続行すると、{terms}と{privacy}に同意したことになります。"
   },
   "completeProfile": {
     "heading": "プロフィールを完成させる",
@@ -789,5 +790,10 @@
       "election": "選挙",
       "ballot-measure": "住民投票"
     }
+  },
+  "legal": {
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー",
+    "refunds": "解約と返金"
   }
 }

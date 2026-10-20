@@ -114,7 +114,8 @@
     "errorEmailTaken": "That email is already registered.",
     "errorPhoneTaken": "That phone number is already registered to another account.",
     "errorInvalid": "Please check your details and try again.",
-    "errorGeneric": "Could not start checkout. Please try again."
+    "errorGeneric": "Could not start checkout. Please try again.",
+    "agree": "By continuing, you agree to the {terms} and {privacy}."
   },
   "completeProfile": {
     "heading": "Complete your profile",
@@ -1034,5 +1035,10 @@
       "election": "Election",
       "ballot-measure": "Ballot measure"
     }
+  },
+  "legal": {
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "refunds": "Cancellation and Refunds"
   }
 }

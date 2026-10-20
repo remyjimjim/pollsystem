@@ -109,7 +109,8 @@
     "wrongAddress": "Falsche Adresse?",
     "haveAccount": "Bereits ein Konto?",
     "signInLink": "Anmelden",
-    "errorGeneric": "Anmeldelink konnte nicht gesendet werden"
+    "errorGeneric": "Anmeldelink konnte nicht gesendet werden",
+    "agree": "Mit dem Fortfahren stimmen Sie den {terms} und der {privacy} zu."
   },
   "completeProfile": {
     "heading": "Vervollständigen Sie Ihr Profil",
@@ -736,5 +737,10 @@
       "election": "Wahl",
       "ballot-measure": "Abstimmungsvorlage"
     }
+  },
+  "legal": {
+    "terms": "Nutzungsbedingungen",
+    "privacy": "Datenschutzerklärung",
+    "refunds": "Kündigung und Erstattung"
   }
 }

@@ -109,7 +109,8 @@
     "wrongAddress": "Feil adresse?",
     "haveAccount": "Har du allerede en konto?",
     "signInLink": "Logg inn",
-    "errorGeneric": "Kunne ikke sende innloggingslenken"
+    "errorGeneric": "Kunne ikke sende innloggingslenken",
+    "agree": "Ved å fortsette godtar du {terms} og {privacy}."
   },
   "completeProfile": {
     "heading": "Fullfør profilen din",
@@ -789,5 +790,10 @@
       "election": "Valg",
       "ballot-measure": "Folkeavstemningssak"
     }
+  },
+  "legal": {
+    "terms": "Vilkår for bruk",
+    "privacy": "Personvernerklæring",
+    "refunds": "Oppsigelse og refusjon"
   }
 }

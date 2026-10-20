@@ -128,6 +128,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/admin/CreatorRequestDetailView.vue'),
     meta: { requiresAuth: true, minAccess: AccessLevel.ADMIN }
   },
+  {
+    // Terms of Service, Privacy Policy, Cancellation and Refund Policy (public).
+    path: '/legal/:page',
+    name: 'Legal',
+    component: () => import('@/views/LegalView.vue')
+  },
   // Local development only: in a production build this is an empty list, so
   // the page isn't bundled at all (the backend part is local-profile only).
   ...(import.meta.env.DEV

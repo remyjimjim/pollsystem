@@ -109,7 +109,8 @@
     "wrongAddress": "¿Dirección incorrecta?",
     "haveAccount": "¿Ya tiene una cuenta?",
     "signInLink": "Iniciar sesión",
-    "errorGeneric": "No se pudo enviar el enlace de inicio de sesión"
+    "errorGeneric": "No se pudo enviar el enlace de inicio de sesión",
+    "agree": "Al continuar, aceptas los {terms} y la {privacy}."
   },
   "completeProfile": {
     "heading": "Complete su perfil",
@@ -736,5 +737,10 @@
       "election": "Elección",
       "ballot-measure": "Medida electoral"
     }
+  },
+  "legal": {
+    "terms": "Términos del servicio",
+    "privacy": "Política de privacidad",
+    "refunds": "Cancelación y reembolsos"
   }
 }

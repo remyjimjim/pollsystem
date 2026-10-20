@@ -94,6 +94,10 @@ async function onSubmit() {
           {{ $t('register.signInLink') }}
         </router-link>
       </p>
+      <i18n-t keypath="register.agree" tag="p" class="m-0 text-center text-xs text-slate-500" data-test="register-agree">
+        <template #terms><router-link to="/legal/terms" class="underline" target="_blank">{{ $t('legal.terms') }}</router-link></template>
+        <template #privacy><router-link to="/legal/privacy" class="underline" target="_blank">{{ $t('legal.privacy') }}</router-link></template>
+      </i18n-t>
       <button
         type="submit"
         :disabled="submitting"

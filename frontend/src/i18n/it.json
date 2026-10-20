@@ -109,7 +109,8 @@
     "wrongAddress": "Indirizzo sbagliato?",
     "haveAccount": "Hai già un account?",
     "signInLink": "Accedi",
-    "errorGeneric": "Impossibile inviare il link di accesso"
+    "errorGeneric": "Impossibile inviare il link di accesso",
+    "agree": "Continuando, accetti i {terms} e l’{privacy}."
   },
   "completeProfile": {
     "heading": "Completa il tuo profilo",
@@ -736,5 +737,10 @@
       "election": "Elezione",
       "ballot-measure": "Quesito referendario"
     }
+  },
+  "legal": {
+    "terms": "Termini di servizio",
+    "privacy": "Informativa sulla privacy",
+    "refunds": "Disdetta e rimborsi"
   }
 }
