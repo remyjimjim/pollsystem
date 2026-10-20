@@ -82,9 +82,14 @@ records by law."]]
 
 - **Comments:** they stay private unless you tick "Make comment public".
 - **Emails:** poll creators can pause updates about each poll.
-- **Your account:** to correct or delete your account and its information,
-  email [[TO FILL: contact email]]. We'll confirm the request comes from your
-  account's email address.
+- **Cancelling** your membership keeps your account and answers, so you can
+  renew later.
+- **Deleting your account:** email [[TO FILL: contact email]] from your
+  account's email address. We delete your account, answers and comments, and
+  cancel any subscription at once. Results of polls you answered are recounted
+  without you. Our payment processor keeps its own payment records, as the law
+  requires.
+- **Correcting** your details: email us the same way.
 
 ## Children
 

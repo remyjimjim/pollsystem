@@ -33,7 +33,8 @@ Polls currently concern places in the United States.
 - Answering polls requires a paid membership: **$10 a month**, charged in
   advance through our payment processor, Stripe. It **renews automatically each
   month** until you cancel.
-- Cancel anytime with **Manage subscription** on your home page. See the
+- Cancel anytime with **Cancel membership** on your home page; your membership
+  runs to the end of the month you've paid for. See the
   [Cancellation and Refund Policy](/legal/refunds).
 - We may change the price. We'll tell members by email at least
   [[TO FILL: notice period, e.g. 30 days]] before a new price applies, and you

@@ -1,17 +1,18 @@
 ---
 title: Managing users
-summary: Find any account, switch it on or off, change roles, see their polls, and send messages.
+summary: Find any account, switch it on or off, change roles, see their polls, send messages, and delete an account on request.
 order: 3
 ---
 
 # Managing users
 
-**Manage Users** lists members, creators and admins. It doesn't list supers,
-or people whose membership has lapsed.
+**Manage Users** lists members, creators and admins. It doesn't list supers.
+People whose membership has lapsed are listed only when you tick **Lapsed**.
 
 ## Finding people
 
-Filter by **Role**, **Email contains**, **State**, **County**, **Zipcode**, or
+Filter by **Role** (tick **Lapsed** to include cancelled or unpaid members),
+**Email contains**, **State**, **County**, **Zipcode**, or
 words in the **Messages** you've sent them, then click **Search**. Switched-off
 accounts are hidden unless you tick **Show disabled**.
 
@@ -63,3 +64,28 @@ Messages aren't shown to the user in the app; they only see an emailed copy.
 
 Click a person's message to see their message history, step through it with
 **Previous** and **Next**, and edit a message.
+
+## Deleting an account
+
+Members cancel their membership themselves. Deleting is for when someone
+**emails asking for their account to be deleted**:
+
+1. Make sure the request comes from the account's own email address.
+2. Find them. Tick **Lapsed** if they've already cancelled.
+3. Open the **⋮** next to their role and choose **Delete account…**.
+4. Type their email to confirm, then click **Delete permanently**.
+
+What happens:
+
+- Their account, answers and comments are deleted, along with their sign-in
+  links, messages and any creator or admin requests and access.
+- The results of every poll they answered are recounted without them. A poll
+  can drop below the minimum number of respondents and hide its results again.
+- Any subscription is cancelled at once, without a refund. Stripe keeps its own
+  payment records.
+- What they did as staff (requests they processed, settings they changed) stays
+  on record, without their name.
+
+**It can't be undone.** It's refused for supers and for accounts that own polls,
+wrote poll notes, blocks or messages, or switched creators off. Other people's
+answers or moderation depend on those, so they need sorting out first.

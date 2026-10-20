@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
+import { useAuthStore } from '@/stores/auth'
+import type { User } from '@/types'
 
 /**
  * Drives the Stripe purchase / management flows. Both backend endpoints return
@@ -26,5 +28,23 @@ export function useBilling() {
   const startCheckout = () => redirectTo('/api/billing/checkout')
   const openPortal = () => redirectTo('/api/billing/portal')
 
-  return { busy, error, startCheckout, openPortal }
+  // Cancel (ends with the paid month) or keep the membership; stays on the page.
+  async function setCancelling(cancel: boolean): Promise<boolean> {
+    busy.value = true
+    error.value = null
+    try {
+      const res = await axios.post<User>(cancel ? '/api/billing/cancel' : '/api/billing/resume')
+      useAuthStore().user = res.data
+      return true
+    } catch {
+      error.value = 'unavailable'
+      return false
+    } finally {
+      busy.value = false
+    }
+  }
+  const cancelMembership = () => setCancelling(true)
+  const keepMembership = () => setCancelling(false)
+
+  return { busy, error, startCheckout, openPortal, cancelMembership, keepMembership }
 }

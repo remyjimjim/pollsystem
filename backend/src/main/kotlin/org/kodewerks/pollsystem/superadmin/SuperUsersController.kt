@@ -71,6 +71,7 @@ data class SuperUserMessageDto(
 
 data class CreateMessageRequest(val body: String, val sendEmail: Boolean = false)
 data class EditMessageRequest(val body: String)
+data class DeleteAccountRequest(val confirmEmail: String)
 data class BulkToggleRequest(val userIds: List<Long>, val enable: Boolean)
 /**
  * Edit a user's role and/or zipcode. Raising the role needs the area for the
@@ -114,6 +115,13 @@ data class SuperUserPollAnswer(
 /** Only User/Creator/Admin are listable here — VIEWER and SUPER are intentionally excluded. */
 private val LISTABLE_ROLES = setOf(AccessLevel.USER, AccessLevel.CREATOR, AccessLevel.ADMIN)
 
+/**
+ * Lapsed members (VIEWER: cancelled or unpaid) are listed only when asked for
+ * by role, so a super can find one to delete; they're never shown by default
+ * and can't be edited, promoted or toggled here.
+ */
+private val FINDABLE_ROLES = LISTABLE_ROLES + AccessLevel.VIEWER
+
 @RestController
 @RequestMapping("/api/super/users")
 class SuperUsersController(
@@ -131,6 +139,7 @@ class SuperUsersController(
     private val candidateResponses: CandidateResponseRepository,
     private val ballotResponses: BallotResponseRepository,
     private val roleAuthCache: RoleAuthCache,
+    private val accountDeletion: AccountDeletion,
 ) {
 
     @GetMapping
@@ -146,7 +155,7 @@ class SuperUsersController(
     ): List<SuperUserRow> {
         val parsedRoles = roles
             ?.mapNotNull { runCatching { AccessLevel.valueOf(it.uppercase()) }.getOrNull() }
-            ?.filter { it in LISTABLE_ROLES }
+            ?.filter { it in FINDABLE_ROLES }
             ?.toSet()
             ?: LISTABLE_ROLES
         if (parsedRoles.isEmpty()) return emptyList()
@@ -250,6 +259,17 @@ class SuperUsersController(
             .take(20)
             .map { it.email }
     }
+
+    /**
+     * Permanently delete an account at its owner's request ("email us"). The
+     * super types the account's email to confirm. See [AccountDeletion].
+     */
+    @PostMapping("/{userId}/delete")
+    fun deleteAccount(
+        @PathVariable userId: Long,
+        @RequestBody body: DeleteAccountRequest,
+        @AuthenticationPrincipal principal: AppUserDetails
+    ): AccountDeletionResult = accountDeletion.delete(userId, body.confirmEmail, principal.user)
 
     @PostMapping("/{userId}/toggle-enabled")
     @Transactional

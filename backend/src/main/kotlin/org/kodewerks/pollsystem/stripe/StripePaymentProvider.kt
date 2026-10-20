@@ -5,6 +5,8 @@ import com.stripe.StripeClient
 import com.stripe.exception.StripeException
 import com.stripe.param.billingportal.SessionCreateParams as PortalSessionCreateParams
 import com.stripe.param.checkout.SessionCreateParams
+import com.stripe.param.SubscriptionUpdateParams
+import com.stripe.param.common.EmptyParam
 import org.kodewerks.pollsystem.auth.MagicLinkProperties
 import org.kodewerks.pollsystem.model.User
 import org.kodewerks.pollsystem.payment.PaymentProvider
@@ -130,6 +132,36 @@ class StripePaymentProvider(
             throw ResponseStatusException(HttpStatus.BAD_GATEWAY, "Could not open billing portal")
         }
     }
+
+    override fun setCancelAtPeriodEnd(user: User, cancel: Boolean) {
+        val subscriptionId = subscriptionOf(user)
+        val params = SubscriptionUpdateParams.builder()
+            .setCancelAtPeriodEnd(cancel)
+            // Stripe's portal may cancel with a cancel_at date instead; keeping
+            // the membership has to clear that too.
+            .apply { if (!cancel) setCancelAt(EmptyParam.EMPTY) }
+            .build()
+        try {
+            client().subscriptions().update(subscriptionId, params)
+        } catch (e: StripeException) {
+            log.error("Stripe cancel_at_period_end={} failed for user={}", cancel, user.id, e)
+            throw ResponseStatusException(HttpStatus.BAD_GATEWAY, "Could not update the subscription")
+        }
+    }
+
+    override fun cancelNow(user: User) {
+        val subscriptionId = subscriptionOf(user)
+        try {
+            client().subscriptions().cancel(subscriptionId)
+        } catch (e: StripeException) {
+            log.error("Stripe cancel failed for user={}", user.id, e)
+            throw ResponseStatusException(HttpStatus.BAD_GATEWAY, "Could not cancel the subscription")
+        }
+    }
+
+    private fun subscriptionOf(user: User): String =
+        user.stripeSubscriptionId?.takeIf { it.isNotBlank() }
+            ?: throw ResponseStatusException(HttpStatus.CONFLICT, "No subscription")
 
     /**
      * Retrieve a subscription's current period end (when the paid access lapses),

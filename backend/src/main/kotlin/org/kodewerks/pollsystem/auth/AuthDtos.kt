@@ -61,6 +61,8 @@ data class UserDto(
     val access: AccessLevel,
     val isEnabled: Boolean,
     val paidUntil: Instant?,
+    /** Cancelled: the membership ends at paidUntil and won't renew. */
+    val cancelAtPeriodEnd: Boolean,
     val profileComplete: Boolean
 ) {
     companion object {
@@ -72,6 +74,7 @@ data class UserDto(
             access = user.access,
             isEnabled = user.isEnabled,
             paidUntil = user.paidUntil,
+            cancelAtPeriodEnd = user.cancelAtPeriodEnd,
             profileComplete = user.profileComplete
         )
     }

@@ -34,6 +34,8 @@ interface CountyZipRow { id: number; countyId: number; zipcode: string }
 
 // ---------- filter state ----------
 const roleFilter = ref<Record<Role, boolean>>({ USER: true, CREATOR: true, ADMIN: true })
+// Lapsed (cancelled or unpaid) members: off by default, on to find one to delete.
+const showLapsed = ref(false)
 const showDisabled = ref(false)
 const emailFilter = ref('')
 const emailSuggestions = ref<string[]>([])
@@ -273,6 +275,7 @@ watch(emailFilter, (newVal) => {
 })
 
 watch(roleFilter, scheduleFetch, { deep: true })
+watch(showLapsed, scheduleFetch)
 watch(showDisabled, scheduleFetch)
 // Free-text search of the message history. Debounced so each keystroke
 // doesn't fire its own request.
@@ -299,7 +302,8 @@ async function fetchUsers() {
   loading.value = true
   error.value = null
   try {
-    const roles = (Object.keys(roleFilter.value) as Role[]).filter(r => roleFilter.value[r])
+    const roles: string[] = (Object.keys(roleFilter.value) as Role[]).filter(r => roleFilter.value[r])
+    if (showLapsed.value) roles.push('VIEWER')
     const params: Record<string, string> = {}
     if (roles.length > 0) params.role = roles.join(',')
     if (showDisabled.value) params.includeDisabled = 'true'
@@ -860,6 +864,42 @@ function previewText(body: string): string {
   const flat = body.replace(/\s+/g, ' ').trim()
   return flat.length > 60 ? `${flat.slice(0, 60)}…` : flat
 }
+// ---------- delete account (an owner's "email us" request) ----------
+const deleteFor = ref<UserRow | null>(null)
+const deleteTyped = ref('')
+const deleteBusy = ref(false)
+const deleteError = ref<string | null>(null)
+const deleteMatches = computed(() =>
+  !!deleteFor.value && deleteTyped.value.trim().toLowerCase() === deleteFor.value.email.toLowerCase())
+
+function openDelete(row: UserRow) {
+  roleMenuOpenFor.value = null
+  deleteFor.value = row
+  deleteTyped.value = ''
+  deleteError.value = null
+}
+function closeDelete() {
+  deleteFor.value = null
+}
+async function confirmDelete() {
+  const row = deleteFor.value
+  if (!row || !deleteMatches.value) return
+  deleteBusy.value = true
+  deleteError.value = null
+  try {
+    const res = await axios.post<{ email: string; pollsRecounted: number; subscriptionCancelled: boolean }>(
+      `/api/super/users/${row.id}/delete`, { confirmEmail: deleteTyped.value.trim() })
+    results.value = results.value.filter(r => r.id !== row.id)
+    message.value = t(res.data.subscriptionCancelled ? 'super.manageUsers.deletedWithSub' : 'super.manageUsers.deleted',
+      { email: res.data.email, n: res.data.pollsRecounted })
+    deleteFor.value = null
+  } catch (e: any) {
+    deleteError.value = e?.response?.data?.message ?? t('super.manageUsers.errorDelete')
+  } finally {
+    deleteBusy.value = false
+  }
+}
+
 function accessBadgeClasses(access: UserRow['access']): string {
   switch (access) {
     case 'ADMIN': return 'bg-sky-200 text-sky-900'
@@ -906,6 +946,10 @@ onBeforeUnmount(() => {
           <label class="flex items-center gap-1">
             <input v-model="roleFilter.ADMIN" type="checkbox" class="h-4 w-4" />
             {{ $t('super.manageUsers.roleAdmin') }}
+          </label>
+          <label class="flex items-center gap-1" :title="$t('super.manageUsers.roleLapsedTitle')">
+            <input v-model="showLapsed" type="checkbox" class="h-4 w-4" data-test="filter-lapsed" />
+            {{ $t('super.manageUsers.roleLapsed') }}
           </label>
           <label class="ml-3 flex items-center gap-2">
             <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
@@ -1123,14 +1167,20 @@ onBeforeUnmount(() => {
         <tr v-for="(row, idx) in sortedResults" :key="row.id">
           <td class="border-b border-slate-100 p-2">{{ row.email }}</td>
           <td class="whitespace-nowrap border-b border-slate-100 p-2">
+            <span
+              v-if="row.access === 'VIEWER'"
+              :class="['rounded px-2 py-0.5 text-xs font-semibold', accessBadgeClasses(row.access)]"
+              :title="$t('super.manageUsers.roleLapsedTitle')"
+            >{{ $t('super.manageUsers.roleLapsed') }}</span>
             <button
+              v-else
               type="button"
               @click="openEdit(row)"
               :class="['rounded px-2 py-0.5 text-xs font-semibold hover:opacity-80', accessBadgeClasses(row.access)]"
               :title="$t('super.manageUsers.editRoleTitle')"
             >{{ row.access }}</button>
             <span
-              v-if="promoteTarget(row) || demoteTarget(row)"
+              v-if="row.access !== 'SUPER'"
               data-role-menu
               class="relative ml-1 inline-block align-middle"
             >
@@ -1157,6 +1207,12 @@ onBeforeUnmount(() => {
                   @click="demote(row)"
                   class="block w-full px-3 py-1 text-left text-xs text-red-700 hover:bg-red-50"
                 >{{ $t('super.manageUsers.demoteTo', { level: demoteTarget(row) }) }}</button>
+                <button
+                  type="button"
+                  @click="openDelete(row)"
+                  class="block w-full border-t border-slate-100 px-3 py-1 text-left text-xs text-red-700 hover:bg-red-50"
+                  data-test="delete-account"
+                >{{ $t('super.manageUsers.deleteAccount') }}</button>
               </div>
             </span>
           </td>
@@ -1185,6 +1241,7 @@ onBeforeUnmount(() => {
             <input
               type="checkbox"
               :checked="row.isEnabled"
+              :disabled="row.access === 'VIEWER'"
               @click="onEnableClick($event, idx, row)"
               class="h-4 w-4"
               :aria-label="row.isEnabled ? $t('super.manageUsers.disableAria', { email: row.email }) : $t('super.manageUsers.enableAria', { email: row.email })"
@@ -1207,6 +1264,48 @@ onBeforeUnmount(() => {
       </tbody>
     </table>
     <p v-if="results.length > 0" class="mt-2 text-xs text-slate-500">{{ $t('super.manageUsers.enableHelp') }}</p>
+
+    <!-- Delete account modal -->
+    <div
+      v-if="deleteFor"
+      role="dialog"
+      aria-modal="true"
+      class="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4"
+      data-test="delete-modal"
+      @click.self="closeDelete"
+    >
+      <div class="w-full max-w-md rounded-md bg-white p-5 shadow-xl">
+        <h2 class="mb-2 text-lg font-semibold text-red-800">{{ $t('super.manageUsers.deleteTitle') }}</h2>
+        <p class="mb-2 text-sm text-slate-700">{{ $t('super.manageUsers.deleteIntro', { email: deleteFor.email }) }}</p>
+        <ul class="mb-3 list-disc pl-5 text-sm text-slate-700">
+          <li>{{ $t('super.manageUsers.deleteAnswers') }}</li>
+          <li>{{ $t('super.manageUsers.deleteSubscription') }}</li>
+          <li>{{ $t('super.manageUsers.deleteForever') }}</li>
+        </ul>
+        <label class="mb-1 block text-sm font-semibold text-slate-700" for="delete-confirm">{{ $t('super.manageUsers.deleteType') }}</label>
+        <input
+          id="delete-confirm"
+          v-model="deleteTyped"
+          type="text"
+          autocomplete="off"
+          class="mb-3 w-full rounded border border-slate-300 px-2 py-1 text-sm"
+          :placeholder="deleteFor.email"
+          data-test="delete-confirm"
+          @keydown.enter="confirmDelete"
+        />
+        <p v-if="deleteError" class="mb-3 text-sm text-red-700" data-test="delete-error">{{ deleteError }}</p>
+        <div class="flex justify-end gap-2">
+          <button type="button" class="rounded border border-slate-300 px-3 py-1.5 text-sm" @click="closeDelete">{{ $t('super.manageUsers.deleteCancel') }}</button>
+          <button
+            type="button"
+            :disabled="!deleteMatches || deleteBusy"
+            class="rounded bg-red-700 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-50"
+            data-test="delete-yes"
+            @click="confirmDelete"
+          >{{ deleteBusy ? $t('super.manageUsers.deleting') : $t('super.manageUsers.deleteYes') }}</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Message modal -->
     <div

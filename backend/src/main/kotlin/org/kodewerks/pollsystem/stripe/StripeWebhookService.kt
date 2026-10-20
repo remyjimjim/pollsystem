@@ -152,7 +152,12 @@ class StripeWebhookService(
         }
         // Reactivating a lapsed VIEWER via a paid invoice/renewal restores USER.
         val access = if (user.access == AccessLevel.VIEWER) AccessLevel.USER else user.access
-        users.save(user.copy(paidUntil = Instant.ofEpochSecond(periodEndEpoch), access = access))
+        // A subscription event says whether it's set to end (the app's Cancel
+        // button, or Stripe's portal, which may use a cancel_at date instead).
+        // An invoice doesn't, so it leaves the flag alone.
+        val cancelling = if (type == "invoice.paid") user.cancelAtPeriodEnd else
+            data.path("cancel_at_period_end").asBoolean(false) || data.path("cancel_at").asLong(0) > 0
+        users.save(user.copy(paidUntil = Instant.ofEpochSecond(periodEndEpoch), access = access, cancelAtPeriodEnd = cancelling))
     }
 
     /**
@@ -198,6 +203,6 @@ class StripeWebhookService(
         // creator/admin after re-subscribing. VIEWER thus legitimately appears
         // in the DB as this dormant state, distinct from anonymous viewers.
         val demoted = if (user.access == AccessLevel.SUPER) user.access else AccessLevel.VIEWER
-        users.save(user.copy(paidUntil = null, stripeSubscriptionId = null, access = demoted))
+        users.save(user.copy(paidUntil = null, stripeSubscriptionId = null, access = demoted, cancelAtPeriodEnd = false))
     }
 }

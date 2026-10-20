@@ -52,8 +52,22 @@ Your home page shows **Renew** while your membership is lapsed.
 
 ## Managing your membership
 
-While you're a member, your home page has **Manage subscription**. Use it to
-change your payment method or cancel.
+While you're a member, your home page has:
+
+- **Manage subscription**, to change your payment method.
+- **Cancel membership**. After you confirm, your membership stays active until
+  the end of the month you've paid for, and isn't renewed.
+
+After cancelling, your home page says when your membership ends, with **Keep my
+membership** if you change your mind before then. Once it ends, it lapses (see
+above): your answers and account are kept, and **Renew** brings everything
+back.
+
+## Deleting your account
+
+Cancelling keeps your account. To have your account and everything in it
+deleted for good, including your answers and comments, email us at the address
+in the [Privacy Policy](/legal/privacy).
 
 ## Troubleshooting
 
