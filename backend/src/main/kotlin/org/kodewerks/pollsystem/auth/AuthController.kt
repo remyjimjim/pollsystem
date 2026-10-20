@@ -38,7 +38,8 @@ class AuthController(
     private val emailer: MagicLinkEmailer,
     private val countyZips: CountyZipsRepository,
     private val billing: PaymentProvider,
-    private val env: Environment
+    private val env: Environment,
+    private val rateLimiter: org.kodewerks.pollsystem.security.RateLimiter
 ) {
 
     /**
@@ -51,6 +52,9 @@ class AuthController(
      */
     @PostMapping("/magic-link/request")
     fun requestMagicLink(@Valid @RequestBody req: MagicLinkRequest): ResponseEntity<Void> {
+        // At most a few links per address per 15 minutes: no flooding someone's
+        // inbox, no running up the email bill (per IP too, in RateLimitFilter).
+        rateLimiter.check(org.kodewerks.pollsystem.security.RateLimiter.MAGIC_LINK_EMAIL, req.email.lowercase())
         val user = users.findByEmail(req.email.lowercase())
             ?: if ("local" in env.activeProfiles) provision(req)
                else throw ResponseStatusException(HttpStatus.NOT_FOUND, "No account for that email")
@@ -90,6 +94,7 @@ class AuthController(
     @PostMapping("/register-checkout")
     fun registerCheckout(@Valid @RequestBody req: GuestCheckoutRequest): Map<String, String> {
         val email = req.email.lowercase()
+        rateLimiter.check(org.kodewerks.pollsystem.security.RateLimiter.CHECKOUT_EMAIL, email)
         if (users.findByEmail(email) != null) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "That email is already registered — sign in instead")
         }

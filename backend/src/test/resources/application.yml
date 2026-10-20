@@ -12,6 +12,8 @@ app:
     expiration-ms: 3600000
   results:
     k-anonymity-threshold: 3  # lower threshold makes results tests easier
+  rate-limit:
+    enabled: false  # RateLimitTest turns it on
   creator-requests:
     sweep-interval-ms: 3600000  # don't run the sweep cron during tests
 

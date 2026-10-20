@@ -56,6 +56,15 @@ app:
   jwt:
     secret: ${JWT_SECRET:your-super-secret-jwt-key-change-in-production}
     expiration-ms: 7776000000  # 90 days — cuts repeat magic-link emails by ~95%. Tradeoff: a leaked JWT is valid for the full window (no server-side revocation).
+  # Rate limits on public endpoints (sign-in links, status, checkout, search):
+  # see security/RateLimiter.kt. Off in application-local.yml and in tests.
+  rate-limit:
+    enabled: true
+  # Shared with the Cloudflare Pages proxy (its PROXY_SECRET env var) so the
+  # proxy can pass the visitor's real IP. Until set, per-IP limits are off
+  # (per-email limits still apply). Set as a Fly secret: PROXY_SECRET.
+  proxy:
+    secret: ${PROXY_SECRET:}
   results:
     k-anonymity-threshold: 4  # small-poll privacy: results hidden until k respondents, steps of k, groups under k withheld (was 10 until 2026-10-20)
   magic-link:

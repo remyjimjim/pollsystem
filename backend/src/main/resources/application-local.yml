@@ -23,3 +23,8 @@ springdoc:
     try-it-out-enabled: true      # request forms open ready to edit + Execute
     tags-sorter: alpha
     operations-sorter: alpha
+
+# Local development and CI e2e sign in as often as they like.
+app:
+  rate-limit:
+    enabled: false
