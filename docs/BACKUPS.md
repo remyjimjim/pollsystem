@@ -57,8 +57,21 @@ events can be resent from the Stripe dashboard.
   4. Load each CSV with `session_replication_role = replica`.
   5. Set the sequences: `restore-backup-check.bash` shows each step.
   6. Point the backend at it, or copy the rows into prod.
-- **Keep a copy off the laptop** now and then, e.g. an encrypted copy on an
-  external drive. A backup that lives only on this machine goes down with it.
+- **A second copy, daily at 05:00:** `scripts/copy-backups.bash`.
+  - It copies new backups to `nomad/local-backup/data-backups`, found under
+    `/media/$USER`, `/run/media/$USER`, `/mnt`, `/media` or your home folder,
+    or at a path you pass.
+  - It checks each copy's checksum and keeps copies 90 days (`--keep-days`).
+  - If the drive isn't there, it logs a failure and stops. It never recreates
+    the mount point on the laptop's own disk.
+  - Install once **on the host**: `./scripts/install-backup-copy-cron.bash
+    [DEST]`. It runs a copy straight away to prove the path, then adds the
+    cron line.
+  - Cron doesn't catch up: if the laptop is off at 05:00, the next run copies
+    everything missing.
+  - Results go to `backup.log`.
+- If `nomad` is a drive kept with the laptop, it doesn't protect against
+  losing both. Now and then, also keep an encrypted copy somewhere else.
 
 ## The Neon drill
 
