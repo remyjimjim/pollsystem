@@ -18,6 +18,11 @@ code and the deployments that day.
 
 ## 0. Settle the name (day 1, before anything that depends on it)
 
+- ✅ **Decided 2026-10-21: BallotBox, at ballotbox.us.com**, mail from
+  no-reply@mail.ballotbox.us.com. The brand text is changed in the app. Next:
+  the custom domain in Pages, the Resend domain, then the `MAIL_FROM` and
+  `APP_BASE_URL` switch.
+
 The domain, the email sender's reputation, the Stripe business name and
 receipts, and the legal pages all carry the name. Changing it after launch
 means re-warming the email domain, redirects, and confused users.

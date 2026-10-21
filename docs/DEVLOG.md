@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-21 — The name: BallotBox (ballotbox.us.com)
+
+**Requested:**
+
+> Let's work on #1, first off, let's make the name ballotbox.us.com
+
+**Decision:** (asked)
+
+- The brand text is **BallotBox**, the same in every language.
+- The domain is registered, with DNS at Cloudflare.
+- Mail comes from **no-reply@mail.ballotbox.us.com**, a sending subdomain.
+- Order of the switch:
+  1. brand text now;
+  2. the owner adds the custom domain in Cloudflare Pages, and
+     `mail.ballotbox.us.com` in Resend;
+  3. only after Resend verifies it, switch the `MAIL_FROM` and
+     `APP_BASE_URL` secrets. Sending from an unverified domain would break
+     sign-in.
+
+**Changed:**
+
+- `f1e6a5a`: brand text, the sign-in email's subject and body, the super
+  message email, the help library, and the legal drafts.
+
+**Verified:**
+
+- Frontend 169/169, type-check clean, backend compiles.
+
+**Commits:** `f1e6a5a`
+
+---
+
 ## 2026-10-21 — Daily copy of the backups to nomad/local-backup
 
 **Requested:**
