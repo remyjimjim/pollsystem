@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-21 — Neon restore drill passed; the window is 6 hours (verified)
+
+**Requested:**
+
+> The api key file should be in .devcontainer
+
+**Changed:**
+
+- `scripts/neon-restore-drill.bash`: Neon requires an organization id to list
+  projects, so the script now looks up the key's organizations first.
+
+**Verified:**
+
+- Project `square-king-10716397`, prod branch `br-restless-rain-axnzpwwp`.
+- **Restore window: 6 hours.** The planned target, just before V36
+  (2026-10-20 09:00 UTC), was already outside it.
+- Restored prod as of 06:03 UTC into the temporary branch
+  `restore-drill-20261021T070318Z`.
+- Read it as the read-only role: schema 36, row counts identical to live prod
+  in all 32 tables.
+- The branch was deleted afterwards.
+- Prod was only read.
+- **Open:** decide whether 6 hours is enough before launch (a paid plan's
+  longer window, and/or a daily backup of our own).
+
+---
+
 ## 2026-10-21 — Monitoring and the backup drill (started)
 
 **Requested:**

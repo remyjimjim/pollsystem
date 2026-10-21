@@ -6,6 +6,8 @@
    database's history for the **restore window** set by the plan, and can
    restore it to any moment inside that window. `scripts/neon-restore-drill.bash`
    prints the current window.
+   - **As of 2026-10-21 the window is only 6 hours.** Damage noticed later than
+     that can't be undone from Neon; only our own CSV copies would help.
 2. **CSV copies we take ourselves** before risky changes, e.g.
    `backups/prod-before-V19-V35-20261020T040551Z/`. They're git-ignored and
    readable only by you, because they hold personal data.
@@ -43,4 +45,4 @@ Run it after any change to the Neon plan, and every few months.
 
 | Date | Restored to | Result |
 |---|---|---|
-| (pending: needs the Neon API key) | | |
+| 2026-10-21 07:03 UTC | 06:03 UTC (1 hour back) | ✅ Restored copy readable: schema 36 and identical row counts in all 32 tables. Branch deleted. **Restore window: only 6 hours.** |

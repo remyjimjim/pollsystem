@@ -80,8 +80,15 @@ means re-warming the email domain, redirects, and confused users.
     `scripts/proxy-secret.bash`.
   - Found: the super's IP rules are stored but **not enforced** anywhere.
 - **Monitoring:** an uptime check and error alerts.
+  - ✅ **Built 2026-10-21.** Error alerts are a 15-minute email digest, live
+    once deployed and `ALERT_EMAIL` is set. UptimeRobot setup is in
+    `docs/MONITORING.md` (owner: sign up and add the monitors).
 - **Backups:** confirm Neon's point-in-time restore window, and do one restore
   drill.
+  - ✅ **Drill passed 2026-10-21** (`scripts/neon-restore-drill.bash`).
+  - ⚠️ **The restore window is only 6 hours.** Decide before launch whether
+    that's enough: a longer window on a paid Neon plan, and/or a daily
+    backup of our own.
 
 ## 3. Third (days 3–5): content and a final pass
 

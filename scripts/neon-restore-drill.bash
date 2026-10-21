@@ -65,11 +65,15 @@ psql_ro() {  # psql_ro HOST SQL
 }
 
 # ---- 1. the project and its restore window ----
-projects=$(api GET "/projects?limit=100") || fail "Neon API refused the key: $projects"
+# Projects live in organizations; look in each one the key can see.
+orgs=$(api GET "/users/me/organizations") || fail "Neon API refused the key: $orgs"
 endpoint_id=${PROD_HOST%%.*}
 PROJECT=""
-for p in $(echo "$projects" | json '" ".join(x["id"] for x in d["projects"])'); do
-  if api GET "/projects/$p/endpoints" | json "any(e['id']=='$endpoint_id' for e in d['endpoints'])" | grep -q True; then PROJECT=$p; break; fi
+for org in $(echo "$orgs" | json '" ".join(o["id"] for o in d.get("organizations", []))'); do
+  projects=$(api GET "/projects?limit=100&org_id=$org") || continue
+  for p in $(echo "$projects" | json '" ".join(x["id"] for x in d["projects"])'); do
+    if api GET "/projects/$p/endpoints" | json "any(e['id']=='$endpoint_id' for e in d['endpoints'])" | grep -q True; then PROJECT=$p; break 2; fi
+  done
 done
 [[ -n "$PROJECT" ]] || fail "no Neon project has the prod endpoint $endpoint_id"
 project=$(api GET "/projects/$PROJECT")
