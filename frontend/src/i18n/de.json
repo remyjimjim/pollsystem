@@ -1,5 +1,5 @@
 {
-  "brand": "Abstimmungssystem",
+  "brand": "BallotBox",
   "nav": {
     "searchPolls": "Umfragen suchen",
     "viewResults": "Ergebnisse anzeigen",
@@ -685,7 +685,7 @@
   },
   "manual": {
     "heading": "Hilfe",
-    "intro": "Anleitungen für das Abstimmungssystem. Sie sehen die Anleitungen für Ihre Zugriffsstufe.",
+    "intro": "Anleitungen für BallotBox. Sie sehen die Anleitungen für Ihre Zugriffsstufe.",
     "back": "Alle Hilfethemen",
     "englishOnly": "Diese Hilfeseite ist vorerst nur auf Englisch verfügbar. Eine Übersetzung folgt.",
     "signInToSee": "Diese Hilfeseite ist für angemeldete Mitglieder mit dem passenden Zugriff.",

@@ -37,7 +37,7 @@ Click **+ New Poll** on your Creator dashboard and choose **Election**.
 
 ## How voters choose
 
-Poll System's super administrators set how voters choose, for all elections:
+BallotBox's super administrators set how voters choose, for all elections:
 currently **one candidate per office**. See [Answering
 polls](../user/answering-polls.md) for what voters see.
 

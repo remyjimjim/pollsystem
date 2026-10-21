@@ -7,7 +7,7 @@ title: Terms of Service
 **Effective date:** [[TO FILL: date these terms take effect]]
 
 These terms are an agreement between you and [[TO FILL: business or owner's
-legal name]] ("we", "us") about your use of this website ("the service").
+legal name]] ("we", "us") about your use of BallotBox at ballotbox.us.com ("the service").
 By creating an account or using the service, you agree to them. Questions:
 [[TO FILL: contact email]].
 

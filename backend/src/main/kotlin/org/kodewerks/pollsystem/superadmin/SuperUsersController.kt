@@ -398,7 +398,7 @@ class SuperUsersController(
         }
         var emailed = false
         if (body.sendEmail) {
-            emailService.send(recipient.email, "A message from the Poll System", text)
+            emailService.send(recipient.email, "A message from BallotBox", text)
             emailed = true
         }
         val saved = userMessages.save(

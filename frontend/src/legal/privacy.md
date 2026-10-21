@@ -7,7 +7,7 @@ title: Privacy Policy
 **Effective date:** [[TO FILL: date this policy takes effect]]
 
 This policy explains what [[TO FILL: business or owner's legal name]] ("we",
-"us") collects when you use this website ("the service"), why, and who can see
+"us") collects when you use BallotBox at ballotbox.us.com ("the service"), why, and who can see
 it. Questions: [[TO FILL: contact email]].
 
 ## What we collect

@@ -10,7 +10,7 @@ order: 6
 
 **These rules are stored but not enforced yet.** Blocking is deliberately not
 switched on, so that a mistake can't lock everyone out. Adding a rule has no
-effect on who can use Poll System today.
+effect on who can use BallotBox today.
 
 To add a rule:
 

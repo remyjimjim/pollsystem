@@ -1,5 +1,5 @@
 {
-  "brand": "Système de Vote",
+  "brand": "BallotBox",
   "nav": {
     "searchPolls": "Rechercher des Sondages",
     "viewResults": "Voir les Résultats",
@@ -730,7 +730,7 @@
   },
   "manual": {
     "heading": "Aide",
-    "intro": "Guides pratiques pour le Système de Vote. Vous voyez les guides de votre niveau d'accès.",
+    "intro": "Guides pratiques pour BallotBox. Vous voyez les guides de votre niveau d'accès.",
     "back": "Tous les sujets d'aide",
     "englishOnly": "Cette page d'aide est pour l'instant en anglais. Une traduction est prévue.",
     "signInToSee": "Cette page d'aide est réservée aux membres connectés disposant de l'accès requis.",

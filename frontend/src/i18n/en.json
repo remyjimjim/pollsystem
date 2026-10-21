@@ -1,5 +1,5 @@
 {
-  "brand": "Poll System",
+  "brand": "BallotBox",
   "nav": {
     "searchPolls": "Search Polls",
     "viewResults": "View Results",
@@ -997,7 +997,7 @@
   },
   "manual": {
     "heading": "Help",
-    "intro": "How-to guides for Poll System. You see the guides for your access level.",
+    "intro": "How-to guides for BallotBox. You see the guides for your access level.",
     "back": "All help topics",
     "englishOnly": "This help page is in English for now. A translation is coming.",
     "signInToSee": "This help page is for signed-in members with the right access.",

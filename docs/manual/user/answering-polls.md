@@ -76,7 +76,7 @@ highlighted in its comment box, and you're asked **"Can I replace *word* with
 
 Untick the box later, and update your answers, to make a comment private again.
 
-Poll System's super administrators can see all comments, public or private,
+BallotBox's super administrators can see all comments, public or private,
 when reviewing an account.
 
 ## Why can't I answer?

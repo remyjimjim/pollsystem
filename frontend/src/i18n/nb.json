@@ -1,5 +1,5 @@
 {
-  "brand": "Avstemmingssystem",
+  "brand": "BallotBox",
   "nav": {
     "searchPolls": "Søk i avstemninger",
     "viewResults": "Se resultater",
@@ -730,7 +730,7 @@
   },
   "manual": {
     "heading": "Hjelp",
-    "intro": "Veiledninger for Avstemmingssystem. Du ser veiledningene for ditt tilgangsnivå.",
+    "intro": "Veiledninger for BallotBox. Du ser veiledningene for ditt tilgangsnivå.",
     "back": "Alle hjelpeemner",
     "englishOnly": "Denne hjelpesiden er foreløpig bare på engelsk. En oversettelse kommer.",
     "signInToSee": "Denne hjelpesiden er for innloggede medlemmer med riktig tilgang.",

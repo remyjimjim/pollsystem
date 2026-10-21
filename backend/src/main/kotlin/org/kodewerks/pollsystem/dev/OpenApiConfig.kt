@@ -23,7 +23,7 @@ class OpenApiConfig {
     fun pollSystemOpenApi(): OpenAPI = OpenAPI()
         .info(
             Info()
-                .title("Poll System API (local)")
+                .title("BallotBox API (local)")
                 .description(
                     "Local dev only. Authorize with a JWT from POST /api/dev/token?email=… " +
                         "(e.g. admin@local.test) or from POST /api/dev/seed-user."

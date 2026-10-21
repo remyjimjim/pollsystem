@@ -1,5 +1,5 @@
 {
-  "brand": "投票系统",
+  "brand": "BallotBox",
   "nav": {
     "searchPolls": "搜索投票",
     "viewResults": "查看结果",
@@ -685,7 +685,7 @@
   },
   "manual": {
     "heading": "帮助",
-    "intro": "投票系统使用指南。你会看到与你的访问级别相符的指南。",
+    "intro": "BallotBox 使用指南。你会看到与你的访问级别相符的指南。",
     "back": "全部帮助主题",
     "englishOnly": "此帮助页面目前仅有英文版，翻译即将推出。",
     "signInToSee": "此帮助页面面向已登录且拥有相应权限的成员。",

@@ -32,7 +32,7 @@ days**. A date that has arrived is highlighted.
 ## The poll report
 
 **Report** (next to Results) opens a fuller report on a published poll. Only you,
-and Poll System's super administrators, can see it.
+and BallotBox's super administrators, can see it.
 
 - **At a glance:** respondents, the share inside the poll's area, how many
   people changed their answers, and how many left a comment (never what they
@@ -88,7 +88,7 @@ results](../viewer/viewing-results.md).
 What you can't see:
 
 - **Individual answers.** Results are always totals.
-- **Private comments.** Only Poll System's super administrators can see them.
+- **Private comments.** Only BallotBox's super administrators can see them.
   Comments a respondent made public appear, anonymously, on the results page
   like everyone sees them.
 - **Small groups.** Narrowed results for fewer than 4 people are hidden.

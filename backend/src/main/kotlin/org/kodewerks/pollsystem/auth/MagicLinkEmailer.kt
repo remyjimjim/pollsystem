@@ -43,10 +43,10 @@ class MagicLinkEmailer(
         MimeMessageHelper(mime, false, "UTF-8").apply {
             setFrom(from)
             setTo(user.email)
-            setSubject("Your sign-in link")
+            setSubject("Your BallotBox sign-in link")
             setText(
                 """
-                Click the link below to sign in. It expires in 15 minutes and can be used once.
+                Click the link below to sign in to BallotBox. It expires in 15 minutes and can be used once.
 
                 $url
 

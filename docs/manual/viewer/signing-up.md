@@ -19,7 +19,7 @@ There are no passwords. You sign in with a one-time link sent to your email.
      inside or outside a poll's area (see [Viewing results](viewing-results.md)).
    - Each email and each phone number can belong to only one account.
 3. Click **Continue to payment** and pay on the secure checkout page.
-4. Back on Poll System, you'll see "Payment received". Check your email for a
+4. Back on BallotBox, you'll see "Payment received". Check your email for a
    **sign-in link** and click it. You're signed in.
 
 Your account is created only once payment succeeds. If you cancel checkout,
