@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-10-21 — Monitoring and the backup drill (started)
+
+**Requested:**
+
+> start on monitoring and the backup drill
+
+**Decision:** (asked; answers: UptimeRobot, remyjimjim@proton.me, Neon API key)
+
+- **Uptime** is checked by UptimeRobot, outside our stack, so it notices when
+  GitHub, Fly or Cloudflare are down too. The owner sets it up from
+  `docs/MONITORING.md`.
+- The two backend monitors start **paused** until launch: running them would
+  keep the sleeping prod machine awake.
+- **Error alerts** come from inside the backend, as a 15-minute email digest
+  to remyjimjim@proton.me.
+- **Backup drill:** restore prod to an earlier time in a temporary Neon
+  branch, using a Neon API key the owner saves in a git-ignored file.
+
+**Changed:**
+
+- `0a0cb75`: `ops/ErrorAlerts.kt` (on when `ALERT_EMAIL` is set),
+  `docs/MONITORING.md`, `docs/BACKUPS.md`, `scripts/neon-restore-drill.bash`.
+
+**Verified:**
+
+- Backend 363/363.
+- Both uptime URLs answer correctly.
+- The drill's row-count query works on prod as the read-only role.
+- Still to do:
+  - run the drill (waiting for the key);
+  - deploy the alerts, then set `ALERT_EMAIL` on both Fly apps.
+
+---
+
 ## 2026-10-21 — Show: column choosers on three management views
 
 **Requested:**
