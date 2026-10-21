@@ -61,6 +61,48 @@ logged.
 
 ---
 
+## 2026-10-21 — Daily prod backup of our own
+
+**Requested:**
+
+> I guess do the daily backup since I'm already on the launch plan, you can
+> put it in pollsystem/assets/data-backups
+
+**Decision:**
+
+- A daily, consistent, restorable backup:
+  - schema + CSVs + manifest, from one read-only transaction;
+  - kept 14 days in the git-ignored `assets/data-backups/`;
+  - scheduled by a systemd user timer on the host, with catch-up after the
+    laptop was off;
+  - a restore check on every backup, and a desktop notification on failure.
+- I suggested the owner look at raising the project's restore window in Neon
+  (the Launch plan should allow longer than 6 hours). I didn't change it
+  myself: it affects billing.
+
+**Changed:**
+
+- `c81825b`: `scripts/backup-prod.bash`, `scripts/restore-backup-check.bash` and
+  `scripts/install-backup-timer.bash`; `.gitignore`; `docs/BACKUPS.md`.
+
+**Verified:**
+
+- First backup `prod-20261021T071543Z.tar.gz` (188 KB, 33 tables, schema 36).
+- It restored into a throwaway Postgres with all 33 counts matching.
+- A tampered copy was correctly refused.
+- Fixed in the check along the way:
+  - Docker on the host can't see the container's `/tmp`, so it now works in
+    the project folder;
+  - the dump creates `public` itself;
+  - `docker exec -i` was eating the manifest loop, which made it say "all 1
+    tables".
+- The timer installer refuses to run inside the Dev Container, as it
+  should. It hasn't been installed on the host yet.
+
+**Commits:** `c81825b`
+
+---
+
 ## 2026-10-21 — Neon restore drill passed; the window is 6 hours (verified)
 
 **Requested:**
