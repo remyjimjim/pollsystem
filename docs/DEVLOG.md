@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-21 — Daily copy of the backups to nomad/local-backup
+
+**Requested:**
+
+> Can set up a cron job that copies the backups to
+> nomad/local-backup/data-backups and runs once a day at 5am?
+
+**Changed:**
+
+- `7e4802b`: `scripts/copy-backups.bash` and `scripts/install-backup-copy-cron.bash`.
+  - Copies are checksummed and kept 90 days.
+  - A missing drive fails loudly instead of the mount point being recreated
+    on the laptop's disk.
+  - `nomad` lives on the host, outside the Dev Container, so the script finds
+    it there, or takes a path.
+
+**Verified:**
+
+- Tested with a stand-in destination: the first run copies, the second
+  copies nothing, and a missing drive fails without creating anything.
+- Not installed on the host yet (the owner runs the installer).
+
+**Commits:** `7e4802b`
+
+---
+
 ## 2026-10-21 — Daily prod backup of our own
 
 **Requested:**
