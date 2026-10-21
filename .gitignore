@@ -50,3 +50,5 @@ docs/Pollsystem specific commands.txt
 
 # Local database dumps (may hold personal data) — NEVER commit.
 backups/
+# Daily prod backups (scripts/backup-prod.bash): personal data, never commit.
+assets/data-backups/
