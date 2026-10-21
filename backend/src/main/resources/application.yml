@@ -58,6 +58,12 @@ app:
     expiration-ms: 7776000000  # 90 days — cuts repeat magic-link emails by ~95%. Tradeoff: a leaked JWT is valid for the full window (no server-side revocation).
   # Rate limits on public endpoints (sign-in links, status, checkout, search):
   # see security/RateLimiter.kt. Off in application-local.yml and in tests.
+  alerts:
+    # Error alerts: a digest of logged errors, emailed at most every 15 min.
+    # Off when blank. Set ALERT_EMAIL as a Fly secret on staging and prod.
+    email: ${ALERT_EMAIL:}
+    # Names the app in the subject line and the `flyctl logs -a` hint.
+    label: ${FLY_APP_NAME:pollsystem}
   rate-limit:
     enabled: true
   # Shared with the Cloudflare Pages proxy (its PROXY_SECRET env var) so the
