@@ -29,6 +29,16 @@ class ValidationErrorsTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `several bad fields are always listed in the form's order, whatever order the validator reports them`() {
+        // The validator's order varies between runs (it failed CI on 3 runs), so check it many times.
+        repeat(25) {
+            register("""{"zipcode":"9826","phone":"call me","email":"not-an-email"}""").andExpect {
+                jsonPath("$.message") { value("Please check your email address, phone number and zipcode (5 digits).") }
+            }
+        }
+    }
+
+    @Test
     fun `several bad fields are listed together`() {
         register("""{"email":"not-an-email","phone":"call me","zipcode":"98264"}""").andExpect {
             status { isBadRequest() }

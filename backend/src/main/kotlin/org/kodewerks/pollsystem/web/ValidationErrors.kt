@@ -20,7 +20,11 @@ class ValidationErrors {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun invalid(e: MethodArgumentNotValidException, request: HttpServletRequest): ResponseEntity<Map<String, Any>> {
-        val fields = e.bindingResult.fieldErrors.map { it.field }.distinct().map { LABELS[it] ?: it }
+        // The validator reports problems in no fixed order, so sort them: the
+        // form's own order first (email, phone, zipcode), then the rest A-Z.
+        val fields = e.bindingResult.fieldErrors.map { it.field }.distinct()
+            .sortedWith(compareBy<String>({ ORDER.indexOf(it).let { i -> if (i < 0) ORDER.size else i } }, { it }))
+            .map { LABELS[it] ?: it }
         val message = if (fields.isEmpty()) "Please check your details and try again."
             else "Please check your ${join(fields)}."
         return ResponseEntity.badRequest().body(mapOf(
@@ -38,6 +42,7 @@ class ValidationErrors {
     }
 
     companion object {
+        private val ORDER = listOf("email", "phone", "zipcode")
         private val LABELS = mapOf(
             "email" to "email address",
             "phone" to "phone number",
