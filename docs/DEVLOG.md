@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-22 — CI backend failures are intermittent; make CI say which test
+
+**Requested:**
+
+> push it and deploy to staging
+
+**Changed:**
+
+- The icons are live on prod and staging.
+- CI run 39733996489 on `825bc48` (icons only) **failed the backend job
+  again**. Earlier I called run 39724817796 "a one-off", which was wrong.
+  2 of the last 3 runs failed with no backend change; local runs always pass.
+- `eb59960`: the CI backend job now publishes each failing test's name, error and
+  stack start as annotations. If no tests ran, it publishes the output tail
+  and the Docker version. Those are readable without a GitHub login, so the
+  next failure names itself.
+
+**Verified:**
+
+- actionlint is clean.
+- A dry run of the summary on a sample failure produces the annotation.
+
+**Commits:** `eb59960`
+
+---
+
 ## 2026-10-22 — Tab and home-screen icons: the tower
 
 **Requested:**
