@@ -4,6 +4,15 @@
 spring:
   jpa:
     show-sql: true
+  # Each distinct test setup (a set of @Import / @TestPropertySource) is a cached
+  # Spring context with its own connection pool, all against one Postgres
+  # container (max_connections 100). Tests in a context run one at a time, so a
+  # small pool is plenty; at Hikari's default of 10, about ten contexts used up
+  # every connection ("too many clients already", 2026-10-23).
+  datasource:
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
 
 app:
   jwt:

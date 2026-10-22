@@ -22,7 +22,7 @@ Polls currently concern places in the United States.
 
 ## Who can use it
 
-- There is no minimum age.
+- The minimum age is 13, as per COPPA rules.
 - One account per person. The information you give (email, phone, zipcode)
   must be accurate and yours.
 - You sign in with links emailed to you. Keep your email account secure:

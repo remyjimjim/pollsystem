@@ -1280,6 +1280,7 @@ onBeforeUnmount(() => {
         <ul class="mb-3 list-disc pl-5 text-sm text-slate-700">
           <li>{{ $t('super.manageUsers.deleteAnswers') }}</li>
           <li>{{ $t('super.manageUsers.deleteSubscription') }}</li>
+          <li>{{ $t('super.manageUsers.deleteConfirmEmail') }}</li>
           <li>{{ $t('super.manageUsers.deleteForever') }}</li>
         </ul>
         <label class="mb-1 block text-sm font-semibold text-slate-700" for="delete-confirm">{{ $t('super.manageUsers.deleteType') }}</label>

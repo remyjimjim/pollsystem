@@ -908,7 +908,8 @@
       "deleteCancel": "Cancel",
       "deleted": "Deleted {email}. Results recounted for {n} poll(s).",
       "deletedWithSub": "Deleted {email} and cancelled their subscription. Results recounted for {n} poll(s).",
-      "errorDelete": "Couldn't delete the account."
+      "errorDelete": "Couldn't delete the account.",
+      "deleteConfirmEmail": "They're emailed a confirmation once it's done."
     },
     "managePolls": {
       "heading": "Manage All Polls",

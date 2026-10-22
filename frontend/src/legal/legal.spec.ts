@@ -17,10 +17,12 @@ describe('legal pages', () => {
       expect(html).not.toContain('[[')
       expect((html.match(/<mark class="legal-todo">/g) ?? []).length).toBe(todo.length)
     }
-    // Filled in 2026-10-22: Terms and Privacy are complete; Refunds still asks for its rule.
-    expect(placeholdersIn(legalPage('terms')!)).toEqual([])
-    expect(placeholdersIn(legalPage('privacy')!)).toEqual([])
-    expect(placeholdersIn(legalPage('refunds')!)[0]).toMatch(/^choose one refund rule/)
+    // All three were completed on 2026-10-22.
+    for (const slug of LEGAL_PAGES) expect(placeholdersIn(legalPage(slug)!)).toEqual([])
+    // The highlighting itself, on a made-up page.
+    const draft = { slug: 'terms' as const, title: 'T', body: 'Effective [[TO FILL: a\n date]].' }
+    expect(placeholdersIn(draft)).toEqual(['a date'])
+    expect(renderLegal(draft)).toContain('<mark class="legal-todo">TO FILL: a date</mark>')
   })
 
   it('the privacy policy states the facts the app depends on', () => {

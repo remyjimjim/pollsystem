@@ -18,6 +18,7 @@ import org.kodewerks.pollsystem.poll.QuestionnaireDraftRequest
 import org.kodewerks.pollsystem.poll.QuestionnaireResponseController
 import org.kodewerks.pollsystem.poll.QuestionnaireResultsController
 import org.kodewerks.pollsystem.poll.QuestionnaireService
+import org.kodewerks.pollsystem.poll.PollMilestoneTest
 import org.kodewerks.pollsystem.poll.SubmitResponsesRequest
 import org.kodewerks.pollsystem.repository.CreatorRequestRepository
 import org.kodewerks.pollsystem.repository.QuestionRepository
@@ -35,7 +36,7 @@ import org.springframework.test.web.servlet.post
 
 /** A super deletes an account on its owner's request (decided 2026-10-20). Test threshold k = 3. */
 @AutoConfigureMockMvc
-@Import(FakePayments::class)
+@Import(FakePayments::class, PollMilestoneTest.RecordingEmailConfig::class)
 class AccountDeletionTest : AbstractIntegrationTest() {
 
     @Autowired private lateinit var mockMvc: MockMvc
@@ -51,11 +52,13 @@ class AccountDeletionTest : AbstractIntegrationTest() {
     @Autowired private lateinit var questions: QuestionRepository
     @Autowired private lateinit var magicLinks: MagicLinkService
     @Autowired private lateinit var creatorRequests: CreatorRequestRepository
+    @Autowired private lateinit var mail: PollMilestoneTest.RecordingEmailService
 
     private lateinit var superUser: User
 
     @BeforeEach fun setUp() {
         payments.reset()
+        mail.clear()
         superUser = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "del-super")
     }
 
@@ -107,6 +110,11 @@ class AccountDeletionTest : AbstractIntegrationTest() {
         assertThat(rows("select count(*) from magic_link_tokens where user_id = ?", member.id)).isZero()
         assertThat(rows("select count(*) from creator_requests where user_id = ?", member.id)).isZero()
         assertThat(payments.calls).containsExactly("cancelNow(${member.id})")
+        // The person is told it's done.
+        val sent = mail.sent.single { it.to == member.email }
+        assertThat(sent.subject).isEqualTo("Your BallotBox account has been deleted")
+        assertThat(sent.body).contains("Your account data from BallotBox.us.com has been deleted per your request.")
+        assertThat(sent.body).contains("Your membership has been cancelled, and you won't be charged again.")
         // Two respondents left, under k: the results hide again.
         val after = results.get(id)
         assertThat(after.visibility.mode).isEqualTo("HIDDEN")
@@ -119,6 +127,7 @@ class AccountDeletionTest : AbstractIntegrationTest() {
         delete(creator).andExpect { status { isOk() }; jsonPath("$.subscriptionCancelled") { value(false) } }
         assertThat(rows("select count(*) from role_assignments where user_id = ?", creator.id)).isZero()
         assertThat(payments.calls).isEmpty()
+        assertThat(mail.sent.single { it.to == creator.email }.body).doesNotContain("membership")   // no subscription to mention
     }
 
     @Test
@@ -142,6 +151,7 @@ class AccountDeletionTest : AbstractIntegrationTest() {
         payments.failCancelNow = true
         delete(member).andExpect { status { isBadGateway() } }
         assertThat(users.findById(member.id)).isPresent()
+        assertThat(mail.sent).isEmpty()                  // nothing deleted, so no confirmation
     }
 
     @Test

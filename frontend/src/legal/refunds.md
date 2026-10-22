@@ -21,9 +21,8 @@ title: Cancellation and Refund Policy
 
 ## Refunds
 
-[[TO FILL: choose one refund rule: "Payments are non-refundable, and we don't
-refund partial months, except where the law requires it." OR "If you cancel
-within 7 days of your first payment, email us for a full refund."]]
+Payments are non-refundable, and we don't refund partial months, except where
+the law requires it.
 
 ## Failed payments
 

@@ -67,7 +67,8 @@ back.
 
 Cancelling keeps your account. To have your account and everything in it
 deleted for good, including your answers and comments, email us at the address
-in the [Privacy Policy](/legal/privacy).
+in the [Privacy Policy](/legal/privacy). You'll get an email confirming it's
+done.
 
 ## Troubleshooting
 

@@ -84,9 +84,9 @@ We keep your information while your account exists. We delete your data within
   renew later.
 - **Deleting your account:** to delete your account, email us at
   [wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me) from your
-  account's email address. We'll send a contact email to your account's email
-  address 24 hours before deletion. We'll delete your account, answers and
-  comments, and cancel any subscription at once. Results of polls you answered
+  account's email address. We'll delete your account, answers and comments,
+  cancel any subscription at once, and email your account's address to confirm
+  it's done. Results of polls you answered
   are recounted without you. Our payment processor keeps its own payment
   records, as the law requires.
 - **Correcting your details:** email us the same way.

@@ -19,10 +19,11 @@ describe('LegalView', () => {
     expect(w.find('[data-test="legal-draft"]').exists()).toBe(false)
   })
 
-  it('a page with items still to fill says it is a draft', () => {
-    params.page = 'refunds'
-    const w = mountView()
-    expect(w.find('[data-test="legal-draft"]').text()).toMatch(/Draft: 1 highlighted item still to fill in/)
+  it('no published page is a draft any more', () => {
+    for (const page of ['terms', 'privacy', 'refunds']) {
+      params.page = page
+      expect(mountView().find('[data-test="legal-draft"]').exists()).toBe(false)
+    }
   })
 
   it('an unknown page says so', () => {

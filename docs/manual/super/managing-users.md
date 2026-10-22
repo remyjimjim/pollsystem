@@ -85,6 +85,8 @@ What happens:
   payment records.
 - What they did as staff (requests they processed, settings they changed) stays
   on record, without their name.
+- They're emailed a confirmation: "Your account data from BallotBox.us.com has
+  been deleted per your request."
 
 **It can't be undone.** It's refused for supers and for accounts that own polls,
 wrote poll notes, blocks or messages, or switched creators off. Other people's

@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.superadmin
 
 import jakarta.persistence.EntityManager
 import org.kodewerks.pollsystem.authz.RoleAuthCache
+import org.kodewerks.pollsystem.email.EmailService
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.User
@@ -33,7 +34,8 @@ data class AccountDeletionResult(
  * - their Stripe subscription, cancelled at once so they're never charged
  *   again (Stripe keeps its own payment records).
  * Records of what they did as staff (who processed a request, who changed a
- * setting or poll) are kept with the person removed.
+ * setting or poll) are kept with the person removed. Once it's done, the
+ * person is emailed a confirmation (decided 2026-10-22).
  *
  * Refused for supers, for yourself, and for anyone who owns polls, wrote poll
  * notes, blocks or messages, or has switched creators off: other members'
@@ -47,7 +49,8 @@ class AccountDeletion(
     private val snapshots: ResultSnapshotService,
     private val roleAuthCache: RoleAuthCache,
     private val tx: TransactionTemplate,
-    private val entityManager: EntityManager
+    private val entityManager: EntityManager,
+    private val email: EmailService
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -70,8 +73,19 @@ class AccountDeletion(
 
         val recounted = tx.execute { removeEverything(user.id) }!!
         roleAuthCache.invalidateAuthorizations()
+        // After the deletion is saved, so a mail problem can't undo or block it
+        // (EmailService logs a failed send rather than throwing).
+        email.send(user.email, CONFIRMATION_SUBJECT, confirmationBody(hadSubscription))
         log.info("Deleted account {} at the request of its owner, by super {}; {} polls recounted", user.id, by.id, recounted)
         return AccountDeletionResult(user.email, recounted, hadSubscription)
+    }
+
+    private fun confirmationBody(hadSubscription: Boolean) = buildString {
+        appendLine("Your account data from BallotBox.us.com has been deleted per your request.")
+        if (hadSubscription) {
+            appendLine()
+            appendLine("Your membership has been cancelled, and you won't be charged again.")
+        }
     }
 
     private fun count(sql: String, id: Long): Int = jdbc.queryForObject(sql, Int::class.java, id) ?: 0
@@ -93,6 +107,10 @@ class AccountDeletion(
         if (disables > 0) add("has switched off $disables creator${if (disables == 1) "" else "s"}")
         val messages = count("select count(*) from user_messages where author_id = ? and user_id <> author_id", id)
         if (messages > 0) add("wrote $messages message${if (messages == 1) "" else "s"} to other members")
+    }
+
+    companion object {
+        const val CONFIRMATION_SUBJECT = "Your BallotBox account has been deleted"
     }
 
     /** Deletes the account and its rows; returns how many polls' results were retaken. */
