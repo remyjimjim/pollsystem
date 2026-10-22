@@ -4,7 +4,7 @@ title: Cancellation and Refund Policy
 
 # Cancellation and Refund Policy
 
-**Effective date:** [[TO FILL: date this policy takes effect]]
+**Effective date:** November 1, 2026
 
 ## Cancelling
 
@@ -13,8 +13,7 @@ title: Cancellation and Refund Policy
 - Your membership continues until the end of the month you've already paid
   for, and isn't renewed after that. Until then you can change your mind with
   **Keep my membership**. (Cancelling through **Manage subscription**, on
-  Stripe's secure page, does the same.) [[TO FILL: confirm the Stripe Customer
-  Portal is set to cancel at the end of the billing period]]
+  Stripe's secure page, does the same.)
 - After it ends you can still sign in, find polls and view results, but you
   can't answer polls until you renew. Your account and answers are kept.
 - Cancelling doesn't delete your account. To delete it, see the
@@ -22,8 +21,8 @@ title: Cancellation and Refund Policy
 
 ## Refunds
 
-[[TO FILL: your refund rule, e.g. "Payments are non-refundable, and we don't
-refund partial months, except where the law requires it." or "If you cancel
+[[TO FILL: choose one refund rule: "Payments are non-refundable, and we don't
+refund partial months, except where the law requires it." OR "If you cancel
 within 7 days of your first payment, email us for a full refund."]]
 
 ## Failed payments
@@ -33,4 +32,4 @@ membership ends until you renew.
 
 ## Questions
 
-Email [[TO FILL: contact email]].
+Email [wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me).

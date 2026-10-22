@@ -4,12 +4,12 @@ title: Terms of Service
 
 # Terms of Service
 
-**Effective date:** [[TO FILL: date these terms take effect]]
+**Effective date:** November 1, 2026
 
-These terms are an agreement between you and [[TO FILL: business or owner's
-legal name]] ("we", "us") about your use of BallotBox at ballotbox.us.com ("the service").
-By creating an account or using the service, you agree to them. Questions:
-[[TO FILL: contact email]].
+These terms are an agreement between you and World Wide Wakeup, LLC ("we",
+"us") about your use of BallotBox at ballotbox.us.com ("the service"). By
+creating an account or using the service, you agree to them. Questions:
+[wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me).
 
 ## The service
 
@@ -22,7 +22,7 @@ Polls currently concern places in the United States.
 
 ## Who can use it
 
-- You must be at least [[TO FILL: minimum age, e.g. 18]].
+- There is no minimum age.
 - One account per person. The information you give (email, phone, zipcode)
   must be accurate and yours.
 - You sign in with links emailed to you. Keep your email account secure:
@@ -36,9 +36,8 @@ Polls currently concern places in the United States.
 - Cancel anytime with **Cancel membership** on your home page; your membership
   runs to the end of the month you've paid for. See the
   [Cancellation and Refund Policy](/legal/refunds).
-- We may change the price. We'll tell members by email at least
-  [[TO FILL: notice period, e.g. 30 days]] before a new price applies, and you
-  can cancel before then.
+- We may change the price. We'll tell members by email at least 30 days before
+  a new price applies, and you can cancel before then.
 
 ## Your content
 
@@ -77,7 +76,7 @@ end the service, or your access under "What we may do" above.
 
 ## Law
 
-These terms are governed by the laws of [[TO FILL: state]], United States.
+These terms are governed by the laws of the state of Washington, United States.
 
 ## Changes
 

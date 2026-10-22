@@ -4,11 +4,11 @@ title: Privacy Policy
 
 # Privacy Policy
 
-**Effective date:** [[TO FILL: date this policy takes effect]]
+**Effective date:** November 1, 2026
 
-This policy explains what [[TO FILL: business or owner's legal name]] ("we",
-"us") collects when you use BallotBox at ballotbox.us.com ("the service"), why, and who can see
-it. Questions: [[TO FILL: contact email]].
+This policy explains what World Wide Wakeup, LLC ("we", "us") collects when you
+use BallotBox at ballotbox.us.com ("the service"), why, and who can see it.
+Questions: [wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me).
 
 ## What we collect
 
@@ -26,13 +26,13 @@ it. Questions: [[TO FILL: contact email]].
 - **Emails we send you:** sign-in links, and for poll creators, updates about
   their polls. Our email provider processes these to deliver them.
 
-We **don't** use advertising trackers or cookies. Your browser keeps four small
-items for the service to work:
+We **don't** use advertising trackers or cookies. Your browser keeps a few
+small items for the service to work:
 
 - your sign-in token;
 - the id of the account last signed in on that browser;
 - your language choice;
-- which columns you chose to show on the poll search page.
+- which columns you chose to show in tables.
 
 ## How we use it
 
@@ -73,10 +73,8 @@ Each handles your information only to provide its service to us.
 
 ## How long we keep it
 
-We keep your information while your account exists.
-[[TO FILL: how long you keep data after an account lapses or is deleted, e.g.
-"We delete it within 30 days of a deletion request, except where we must keep
-records by law."]]
+We keep your information while your account exists. We delete your data within
+30 days of a deletion request, except when we must keep records by law.
 
 ## Your choices
 
@@ -84,16 +82,14 @@ records by law."]]
 - **Emails:** poll creators can pause updates about each poll.
 - **Cancelling** your membership keeps your account and answers, so you can
   renew later.
-- **Deleting your account:** email [[TO FILL: contact email]] from your
-  account's email address. We delete your account, answers and comments, and
-  cancel any subscription at once. Results of polls you answered are recounted
-  without you. Our payment processor keeps its own payment records, as the law
-  requires.
-- **Correcting** your details: email us the same way.
-
-## Children
-
-The service isn't for anyone under [[TO FILL: minimum age, e.g. 18]].
+- **Deleting your account:** to delete your account, email us at
+  [wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me) from your
+  account's email address. We'll send a contact email to your account's email
+  address 24 hours before deletion. We'll delete your account, answers and
+  comments, and cancel any subscription at once. Results of polls you answered
+  are recounted without you. Our payment processor keeps its own payment
+  records, as the law requires.
+- **Correcting your details:** email us the same way.
 
 ## Changes
 

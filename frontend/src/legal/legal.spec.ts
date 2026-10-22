@@ -17,7 +17,10 @@ describe('legal pages', () => {
       expect(html).not.toContain('[[')
       expect((html.match(/<mark class="legal-todo">/g) ?? []).length).toBe(todo.length)
     }
-    expect(placeholdersIn(legalPage('privacy')!)).toContain('contact email')
+    // Filled in 2026-10-22: Terms and Privacy are complete; Refunds still asks for its rule.
+    expect(placeholdersIn(legalPage('terms')!)).toEqual([])
+    expect(placeholdersIn(legalPage('privacy')!)).toEqual([])
+    expect(placeholdersIn(legalPage('refunds')!)[0]).toMatch(/^choose one refund rule/)
   })
 
   it('the privacy policy states the facts the app depends on', () => {

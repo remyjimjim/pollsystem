@@ -12,11 +12,17 @@ vi.mock('vue-router', () => ({ useRoute: () => ({ params }) }))
 const mountView = () => mount(LegalView, { global: { plugins: [createI18n({ legacy: false, locale: 'en', messages: { en } })] } })
 
 describe('LegalView', () => {
-  it('shows the page, and says it is still a draft while items are unfilled', () => {
+  it('a finished page shows without a draft banner', () => {
     params.page = 'terms'
     const w = mountView()
     expect(w.find('[data-test="legal-page"] h1').text()).toBe('Terms of Service')
-    expect(w.find('[data-test="legal-draft"]').text()).toMatch(/Draft: \d+ highlighted items? still to fill in/)
+    expect(w.find('[data-test="legal-draft"]').exists()).toBe(false)
+  })
+
+  it('a page with items still to fill says it is a draft', () => {
+    params.page = 'refunds'
+    const w = mountView()
+    expect(w.find('[data-test="legal-draft"]').text()).toMatch(/Draft: 1 highlighted item still to fill in/)
   })
 
   it('an unknown page says so', () => {
