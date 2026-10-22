@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-22 — Tab and home-screen icons: the tower
+
+**Requested:**
+
+> push and deploy my brother.
+
+> a matching browser-tab icon (favicon) with just the tower with its red
+> beacon sounds nifty
+
+**Changed:**
+
+- The logo push (`6546237`) went to prod (website) and staging.
+- `a439acb`: favicon.svg/.ico, apple-touch-icon, 192/512 icons and a web
+  manifest. Before this, `index.html` pointed at a missing `/vite.svg`, so the
+  site had no icon at all.
+
+**Verified:**
+
+- CI run 39733359077 on `6546237` was all green, backend included. The
+  earlier backend failure (run 39724817796) was a one-off on GitHub's side:
+  same backend code, no change.
+- Icons previewed at 16, 32, 64 and 180 on light and dark tabs.
+- The build includes them, and the dev server serves them.
+
+**Commits:** `a439acb`
+
+---
+
 ## 2026-10-22 — The BallotBox logo
 
 **Requested:**
