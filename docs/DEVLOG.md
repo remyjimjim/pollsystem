@@ -61,6 +61,44 @@ logged.
 
 ---
 
+## 2026-10-22 — ballotbox.us.com live on Cloudflare; mail domain verified (verified)
+
+**Requested:** (the domain and email setup, step by step)
+
+> Resend says verified
+
+> got the email and it did log me in...
+
+**Changed:**
+
+- DNS for ballotbox.us.com (registered 2026-10-21 at Porkbun) moved to
+  Cloudflare: nameservers `courtney` and `graham.ns.cloudflare.com`.
+  Porkbun's parking records were not imported.
+- Pages custom domains: `ballotbox.us.com` and `www`, as CNAMEs to
+  `pollsystem.pages.dev`, proxied.
+- Resend sending domain `mail.ballotbox.us.com`:
+  - DKIM TXT `resend._domainkey.mail`;
+  - SPF CNAMEs `rsend.mail` and `send.mail` (DNS only);
+  - DMARC `p=none` reporting to the owner.
+  - Resend's names were shown relative to `us.com` (ending `…ballotbox`),
+    so full names were typed into Cloudflare to avoid doubling.
+- Staging `MAIL_FROM=no-reply@mail.ballotbox.us.com`.
+
+**Verified:**
+
+- Checked all records directly at Cloudflare's nameserver, bypassing stale
+  resolver caches: DKIM is an exact 218-character match, and the CNAMEs are
+  unproxied.
+- Both hostnames serve the site over valid HTTPS, including `/legal/*` and
+  the `/api` proxy.
+- A real staging sign-in email arrived at the owner's Proton address, and its
+  link signed in.
+- Next: prod. Push the rename, deploy the backend, then set `MAIL_FROM`,
+  `APP_BASE_URL=https://ballotbox.us.com` and `ALERT_EMAIL`, with the
+  owner's go-ahead.
+
+---
+
 ## 2026-10-21 — The name: BallotBox (ballotbox.us.com)
 
 **Requested:**
