@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-10-23 — Age checkbox live, deployed in order (verified)
+
+**Requested:**
+
+> push it and deploy to staging and prod backend good sir
+
+**Verified:**
+
+- Pushed `d9883e4`, then waited until the live prod site's bundle contained
+  `ageConfirmed` (about 40 s) before deploying the backend. Sign-up was never
+  broken.
+- Staging deployed. Prod backend **v19**: health UP.
+- On prod, a sign-up with the box ticked reaches a `cs_live_` checkout;
+  without it, "Please check your confirmation that you're 13 or older."
+- CI run 39872238557 all green.
+
+---
+
 ## 2026-10-23 — "I'm 13 or older" on sign-up
 
 **Requested:**
