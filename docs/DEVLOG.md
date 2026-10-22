@@ -61,6 +61,21 @@ logged.
 
 ---
 
+## 2026-10-23 — Final legal pages + deletion email live (verified)
+
+**Requested:**
+
+> push it and deploy to staging and prod backend
+
+**Verified:**
+
+- Pushed `b91b6e7`, so the prod site's legal pages are final.
+- Staging deployed (fast-forward, healthy).
+- Prod backend **v18**: health UP, `cs_live_` checkout still created.
+- CI run 39866967030 all green, the first full run with capped test pools.
+
+---
+
 ## 2026-10-23 — Legal pages final; deletion confirmation email
 
 **Requested:**
