@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-22 — The BallotBox logo
+
+**Requested:**
+
+> Try to draw a cartoonish sketch really that's about as tall as the app's
+> header … a simple page of paper with one corner a bit curled with the word
+> "Ballot" written in it then a plus sign (+) then a stick figure of a radio
+> station transmitter that looks like a 60 foot high 3 legged tripod with the
+> transmitter beacon on top and lines shooting out of the beacon like...
+
+> make the corner curl more and use the 80px header
+
+**Decision:**
+
+- The message ended at "like...", so the beacon's lines are drawn as
+  radio-wave arcs. Easy to change.
+- The logo sits beside the "BallotBox" name, which is kept.
+
+**Changed:**
+
+- `dfd336b`: `BrandLogo.vue` (v2, with the deeper curl) in an 80px header.
+  Sources and a preview page are in `assets/logo/`.
+
+**Verified:**
+
+- Frontend 176/176, e2e 21/21.
+- Screenshots at desktop and phone width.
+
+**Commits:** `dfd336b`
+
+---
+
 ## 2026-10-22 — Prod backend v17; CI's backend job failed (unexplained)
 
 **Requested:**
