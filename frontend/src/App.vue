@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent, onMounted, onUnmounted } from 'vue'
+import BrandLogo from '@/components/BrandLogo.vue'
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -48,9 +49,12 @@ function onLocaleChange(e: Event) {
   <div id="app" class="min-h-screen">
     <!-- Hidden when printing (e.g. a creator's poll report). -->
     <header class="bg-slate-800 text-white px-4 sm:px-8 print:hidden">
-      <nav class="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-y-2 py-2 sm:py-0">
+      <nav class="mx-auto flex min-h-20 max-w-6xl flex-wrap items-center justify-between gap-y-2 py-2 sm:py-0">
         <div class="text-xl font-bold">
-          <RouterLink to="/" class="text-white no-underline">{{ $t('brand') }}</RouterLink>
+          <RouterLink to="/" class="flex items-center gap-3 text-white no-underline" data-test="brand">
+            <span class="h-14 sm:h-[72px]"><BrandLogo /></span>
+            {{ $t('brand') }}
+          </RouterLink>
         </div>
         <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:gap-x-6">
           <RouterLink
