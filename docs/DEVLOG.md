@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-22 — Prod backend v17; CI's backend job failed (unexplained)
+
+**Requested:**
+
+> push it and deploy to staging
+
+> deploy the prod backend
+
+**Verified:**
+
+- Pushed `6a483a3`; staging deployed (fast-forward), and staging answers with
+  plain validation messages.
+- **CI run 39724817796: the backend job failed.** Frontend and e2e passed.
+  The same code passes all 365 backend tests locally, twice, including a
+  clean run.
+  - The logs and the test-report artifact need a GitHub login, so the cause
+    isn't known yet.
+  - Suspect: runners moving to Ubuntu 26 (from 2026-10-19) with a newer
+    Docker that may reject the pinned Docker API 1.41 used by Testcontainers
+    1.20.6. Unconfirmed.
+  - Asked the owner for the failing lines or the `backend-test-report`
+    artifact.
+- On the owner's request, deployed the prod backend anyway: **v17** from
+  `6a483a3`.
+  - Health UP.
+  - Prod answers "Please check your zipcode (5 digits)." for a trailing
+    space.
+  - Prod still creates `cs_live_` checkouts.
+
+---
+
 ## 2026-10-22 — First live purchase, end to end (verified)
 
 **Requested:**
