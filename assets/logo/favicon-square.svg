@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- BallotBox tab icon: the logo's radio tower and red beacon, simplified and
+       bolder so it reads at 16px; on the header's slate so it shows on light
+       and dark tabs. -->
+  <rect width="64" height="64" fill="#1e293b"/>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 25 L19 55 M32 25 L45 55 M32 25 L33.5 55" stroke-width="4"/>
+    <path d="M26.3 39 L38 39 M22.6 47.5 L41.5 47.5" stroke-width="2.6"/>
+    <path d="M17 55.5 L47 55.5" stroke-width="3"/>
+    <path d="M40.4 11.2 A10.5 10.5 0 0 1 40.4 25.8 M23.6 11.2 A10.5 10.5 0 0 0 23.6 25.8" stroke-width="3.2"/>
+  </g>
+  <circle cx="32" cy="18.5" r="5.6" fill="#f87171" stroke="#fff" stroke-width="2.4"/>
+</svg>
