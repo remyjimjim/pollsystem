@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-23 — "I'm 13 or older" on sign-up
+
+**Requested:**
+
+> Please add the "I'm 13 or older" checkbox on the sign-up form
+
+**Changed:**
+
+- `78a65c9`: the checkbox is required on the form, and the server enforces it too
+  (`ageConfirmed`, `@AssertTrue`).
+- The e2e sign-up flows tick it.
+
+**Verified:**
+
+- Backend 367/367, frontend 178/178, e2e 19/19.
+- A screenshot shows the error when the box is unticked.
+- **Deploy order:** push first (the site sends `ageConfirmed`), then the prod
+  backend. A backend that requires it before the site sends it would refuse
+  every sign-up.
+
+**Commits:** `78a65c9`
+
+---
+
 ## 2026-10-23 — Final legal pages + deletion email live (verified)
 
 **Requested:**
