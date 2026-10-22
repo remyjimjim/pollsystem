@@ -110,7 +110,8 @@
     "haveAccount": "¿Ya tiene una cuenta?",
     "signInLink": "Iniciar sesión",
     "errorGeneric": "No se pudo enviar el enlace de inicio de sesión",
-    "agree": "Al continuar, aceptas los {terms} y la {privacy}."
+    "agree": "Al continuar, aceptas los {terms} y la {privacy}.",
+    "ageLabel": "Tengo 13 años o más"
   },
   "completeProfile": {
     "heading": "Complete su perfil",
@@ -752,6 +753,7 @@
   },
   "forms": {
     "phoneInvalid": "Revisa tu número de teléfono: usa dígitos y, si quieres, + ( ) - o espacios, p. ej. (401) 992-4938.",
-    "zipcodeInvalid": "Introduce un código postal de 5 dígitos, p. ej. 98264."
+    "zipcodeInvalid": "Introduce un código postal de 5 dígitos, p. ej. 98264.",
+    "ageRequired": "Confirma que tienes 13 años o más."
   }
 }

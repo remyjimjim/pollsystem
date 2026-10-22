@@ -110,7 +110,8 @@
     "haveAccount": "Vous avez déjà un compte ?",
     "signInLink": "Se connecter",
     "errorGeneric": "Impossible d'envoyer le lien de connexion",
-    "agree": "En continuant, vous acceptez les {terms} et la {privacy}."
+    "agree": "En continuant, vous acceptez les {terms} et la {privacy}.",
+    "ageLabel": "J’ai 13 ans ou plus"
   },
   "completeProfile": {
     "heading": "Complétez votre profil",
@@ -805,6 +806,7 @@
   },
   "forms": {
     "phoneInvalid": "Vérifiez votre numéro de téléphone : des chiffres, et éventuellement + ( ) - ou des espaces, p. ex. (401) 992-4938.",
-    "zipcodeInvalid": "Saisissez un code postal à 5 chiffres, p. ex. 98264."
+    "zipcodeInvalid": "Saisissez un code postal à 5 chiffres, p. ex. 98264.",
+    "ageRequired": "Veuillez confirmer que vous avez 13 ans ou plus."
   }
 }

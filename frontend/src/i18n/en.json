@@ -115,7 +115,8 @@
     "errorPhoneTaken": "That phone number is already registered to another account.",
     "errorInvalid": "Please check your details and try again.",
     "errorGeneric": "Could not start checkout. Please try again.",
-    "agree": "By continuing, you agree to the {terms} and {privacy}."
+    "agree": "By continuing, you agree to the {terms} and {privacy}.",
+    "ageLabel": "I'm 13 or older"
   },
   "completeProfile": {
     "heading": "Complete your profile",
@@ -1073,6 +1074,7 @@
   },
   "forms": {
     "phoneInvalid": "Please check your phone number: use digits, and optionally + ( ) - or spaces, e.g. (401) 992-4938.",
-    "zipcodeInvalid": "Please enter a 5-digit zipcode, e.g. 98264."
+    "zipcodeInvalid": "Please enter a 5-digit zipcode, e.g. 98264.",
+    "ageRequired": "Please confirm you're 13 or older."
   }
 }

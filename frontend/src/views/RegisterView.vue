@@ -10,7 +10,8 @@ const auth = useAuthStore()
 const form = reactive({
   email: '',
   phone: '',
-  zipcode: ''
+  zipcode: '',
+  ageConfirmed: false
 })
 const error = ref<string | null>(null)
 const emailTaken = ref(false)
@@ -26,6 +27,7 @@ async function onSubmit() {
   form.zipcode = cleanZipcode(form.zipcode)
   if (!PHONE_OK.test(form.phone)) { error.value = t('forms.phoneInvalid'); return }
   if (!ZIPCODE_OK.test(form.zipcode)) { error.value = t('forms.zipcodeInvalid'); return }
+  if (!form.ageConfirmed) { error.value = t('forms.ageRequired'); return }
   submitting.value = true
   try {
     // Pay-first: validate + start Stripe Checkout, then hand off to Stripe.
@@ -34,7 +36,8 @@ async function onSubmit() {
     const url = await auth.registerCheckout({
       email: form.email,
       phone: form.phone,
-      zipcode: form.zipcode
+      zipcode: form.zipcode,
+      ageConfirmed: form.ageConfirmed
     })
     window.location.href = url
   } catch (e: any) {
@@ -95,6 +98,15 @@ async function onSubmit() {
           autocomplete="postal-code"
           class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
+      </label>
+      <label class="flex items-center gap-2 text-sm text-slate-700">
+        <input
+          v-model="form.ageConfirmed"
+          type="checkbox"
+          class="h-4 w-4"
+          data-test="age-confirm"
+        />
+        {{ $t('register.ageLabel') }}
       </label>
       <p v-if="error" class="text-sm text-red-700">
         {{ error }}

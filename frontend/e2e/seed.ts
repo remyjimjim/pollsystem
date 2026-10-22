@@ -378,6 +378,7 @@ export async function registerAndSignIn(
   await page.getByLabel('Email').fill(user.email)
   await page.getByLabel('Phone').fill(user.phone)
   await page.getByLabel('Zipcode').fill(user.zipcode)
+  await page.getByLabel("I'm 13 or older").check()
   await hold(page) // the filled registration form
   await page.getByRole('button', { name: /Continue to payment/ }).click()
   await page.waitForURL(/checkout=success/, { timeout: 30_000 })

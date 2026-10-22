@@ -110,7 +110,8 @@
     "haveAccount": "已有账户？",
     "signInLink": "登录",
     "errorGeneric": "无法发送登录链接",
-    "agree": "继续即表示你同意{terms}和{privacy}。"
+    "agree": "继续即表示你同意{terms}和{privacy}。",
+    "ageLabel": "我已年满 13 岁"
   },
   "completeProfile": {
     "heading": "完善您的资料",
@@ -752,6 +753,7 @@
   },
   "forms": {
     "phoneInvalid": "请检查电话号码：使用数字，可加 + ( ) - 或空格，例如 (401) 992-4938。",
-    "zipcodeInvalid": "请输入 5 位邮编，例如 98264。"
+    "zipcodeInvalid": "请输入 5 位邮编，例如 98264。",
+    "ageRequired": "请确认你已年满 13 岁。"
   }
 }

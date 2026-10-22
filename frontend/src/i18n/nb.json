@@ -110,7 +110,8 @@
     "haveAccount": "Har du allerede en konto?",
     "signInLink": "Logg inn",
     "errorGeneric": "Kunne ikke sende innloggingslenken",
-    "agree": "Ved å fortsette godtar du {terms} og {privacy}."
+    "agree": "Ved å fortsette godtar du {terms} og {privacy}.",
+    "ageLabel": "Jeg er 13 år eller eldre"
   },
   "completeProfile": {
     "heading": "Fullfør profilen din",
@@ -805,6 +806,7 @@
   },
   "forms": {
     "phoneInvalid": "Sjekk telefonnummeret: bruk sifre, og eventuelt + ( ) - eller mellomrom, f.eks. (401) 992-4938.",
-    "zipcodeInvalid": "Skriv inn et femsifret postnummer, f.eks. 98264."
+    "zipcodeInvalid": "Skriv inn et femsifret postnummer, f.eks. 98264.",
+    "ageRequired": "Bekreft at du er 13 år eller eldre."
   }
 }

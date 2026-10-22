@@ -12,6 +12,8 @@ export interface RegisterCheckoutRequest {
   email: string
   phone: string
   zipcode: string
+  /** "I'm 13 or older" ticked (Terms: minimum age 13). */
+  ageConfirmed: boolean
 }
 
 export const useAuthStore = defineStore('auth', () => {

@@ -42,11 +42,12 @@ class ValidationErrors {
     }
 
     companion object {
-        private val ORDER = listOf("email", "phone", "zipcode")
+        private val ORDER = listOf("email", "phone", "zipcode", "ageConfirmed")
         private val LABELS = mapOf(
             "email" to "email address",
             "phone" to "phone number",
-            "zipcode" to "zipcode (5 digits)"
+            "zipcode" to "zipcode (5 digits)",
+            "ageConfirmed" to "confirmation that you're 13 or older"
         )
     }
 }

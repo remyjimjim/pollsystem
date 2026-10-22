@@ -29,7 +29,7 @@ class RegistrationCheckoutTest : AbstractIntegrationTest() {
         mockMvc.perform(
             post("/api/auth/register-checkout")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(mapOf("email" to email, "phone" to phone, "zipcode" to zipcode)))
+                .content(json.writeValueAsString(mapOf("email" to email, "phone" to phone, "zipcode" to zipcode, "ageConfirmed" to true)))
         )
 
     @Test

@@ -88,6 +88,7 @@ test.describe(`register ${STATE} users via magic link`, () => {
         await page.getByLabel('Email').fill(email)
         await page.getByLabel('Phone').fill(phone)
         await page.getByLabel('Zipcode').fill(zipcode)
+        await page.getByLabel("I'm 13 or older").check()
         await hold(page)                               // hold on /register with form filled
 
         // On the very last iteration, pause before submit so the user can

@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.auth
 
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.User
+import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
@@ -31,7 +32,9 @@ data class MagicLinkRedeemRequest(
 data class GuestCheckoutRequest(
     @field:Email @field:NotBlank val email: String,
     @field:Pattern(regexp = "^[0-9+\\-() ]{7,20}$") @field:NotBlank val phone: String,
-    @field:Pattern(regexp = "^[0-9]{5}$") @field:NotBlank val zipcode: String
+    @field:Pattern(regexp = "^[0-9]{5}$") @field:NotBlank val zipcode: String,
+    /** "I'm 13 or older" ticked on the sign-up form (Terms: minimum age 13, COPPA). */
+    @field:AssertTrue val ageConfirmed: Boolean = false
 )
 
 /** Email lookup for the login screen's routing decision. */

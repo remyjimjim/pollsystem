@@ -110,7 +110,8 @@
     "haveAccount": "Já tem conta?",
     "signInLink": "Entrar",
     "errorGeneric": "Não foi possível enviar o link de acesso",
-    "agree": "Ao continuar, você concorda com os {terms} e a {privacy}."
+    "agree": "Ao continuar, você concorda com os {terms} e a {privacy}.",
+    "ageLabel": "Tenho 13 anos ou mais"
   },
   "completeProfile": {
     "heading": "Complete seu perfil",
@@ -752,6 +753,7 @@
   },
   "forms": {
     "phoneInvalid": "Verifique seu telefone: use dígitos e, se quiser, + ( ) - ou espaços, ex.: (401) 992-4938.",
-    "zipcodeInvalid": "Digite um CEP de 5 dígitos, ex.: 98264."
+    "zipcodeInvalid": "Digite um CEP de 5 dígitos, ex.: 98264.",
+    "ageRequired": "Confirme que você tem 13 anos ou mais."
   }
 }

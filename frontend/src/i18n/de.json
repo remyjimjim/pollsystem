@@ -110,7 +110,8 @@
     "haveAccount": "Bereits ein Konto?",
     "signInLink": "Anmelden",
     "errorGeneric": "Anmeldelink konnte nicht gesendet werden",
-    "agree": "Mit dem Fortfahren stimmen Sie den {terms} und der {privacy} zu."
+    "agree": "Mit dem Fortfahren stimmen Sie den {terms} und der {privacy} zu.",
+    "ageLabel": "Ich bin 13 Jahre oder älter"
   },
   "completeProfile": {
     "heading": "Vervollständigen Sie Ihr Profil",
@@ -752,6 +753,7 @@
   },
   "forms": {
     "phoneInvalid": "Bitte prüfen Sie Ihre Telefonnummer: Ziffern, optional + ( ) - oder Leerzeichen, z. B. (401) 992-4938.",
-    "zipcodeInvalid": "Bitte geben Sie eine 5-stellige Postleitzahl ein, z. B. 98264."
+    "zipcodeInvalid": "Bitte geben Sie eine 5-stellige Postleitzahl ein, z. B. 98264.",
+    "ageRequired": "Bitte bestätigen Sie, dass Sie 13 Jahre oder älter sind."
   }
 }

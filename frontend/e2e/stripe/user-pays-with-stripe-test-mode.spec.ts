@@ -41,6 +41,7 @@ async function startCheckout(page: Page, user: { email: string; phone: string; z
   await page.getByLabel('Email').fill(user.email)
   await page.getByLabel('Phone').fill(user.phone)
   await page.getByLabel('Zipcode').fill(user.zipcode)
+  await page.getByLabel("I'm 13 or older").check()
   await hold(page)
   await page.getByRole('button', { name: /Continue to payment/ }).click()
   // Stripe's hosted Checkout (test mode shows a "TEST MODE" badge).

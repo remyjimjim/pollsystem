@@ -110,7 +110,8 @@
     "haveAccount": "すでにアカウントをお持ちですか？",
     "signInLink": "ログイン",
     "errorGeneric": "ログインリンクを送信できませんでした",
-    "agree": "続行すると、{terms}と{privacy}に同意したことになります。"
+    "agree": "続行すると、{terms}と{privacy}に同意したことになります。",
+    "ageLabel": "13歳以上です"
   },
   "completeProfile": {
     "heading": "プロフィールを完成させる",
@@ -805,6 +806,7 @@
   },
   "forms": {
     "phoneInvalid": "電話番号を確認してください：数字と、必要に応じて + ( ) - または空白を使用します（例：(401) 992-4938）。",
-    "zipcodeInvalid": "5桁の郵便番号を入力してください（例：98264）。"
+    "zipcodeInvalid": "5桁の郵便番号を入力してください（例：98264）。",
+    "ageRequired": "13歳以上であることを確認してください。"
   }
 }
