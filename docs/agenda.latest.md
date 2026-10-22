@@ -64,7 +64,9 @@ means re-warming the email domain, redirects, and confused users.
    - ✅ **Set up 2026-10-22** (`docs/STRIPE-LIVE.md`): account activated, a
      $10/month price, a live webhook to the prod backend, and the portal
      cancelling at the end of the period. Prod creates `cs_live_` checkouts.
-     **Still to do:** one real purchase and refund, end to end.
+     ✅ **Real purchase 2026-10-22:** charged, account provisioned by the
+     webhook, sign-in email received. The refund or cancel waits for the
+     first payout.
    - Live Stripe keys, a live price, and a live webhook endpoint and secret.
    - Save the Customer Portal in live mode.
    - Make one real purchase and refund, end to end.

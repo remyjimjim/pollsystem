@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-22 — First live purchase, end to end (verified)
+
+**Requested:**
+
+> I was able to subscribe and my debit card was charged.
+
+> got the email and would have voted if there were any polls to vote on, I
+> think I'll wait until the payment ($9.41) hits my bank to cancel.
+
+**Verified:**
+
+- The owner subscribed on `https://ballotbox.us.com/register` with a real card:
+  $10.00 charged, customer created in Stripe.
+- All of Stripe's events were delivered to the prod webhook (0 pending),
+  including `checkout.session.completed`, `customer.subscription.created`
+  and `invoice.paid`.
+- Prod provisioned the account: `/api/auth/status` → ACTIVE.
+- "Your BallotBox sign-in link" arrived, and the link signed in.
+- Voting wasn't tried: prod has no polls yet (launch content).
+
+**Decision:**
+
+- The owner keeps the subscription until the first payout (about $9.41)
+  lands, then cancels.
+- Suggested the app's Cancel membership now (renewal stops, access until
+  2026-11-21), with an optional refund later.
+
+---
+
 ## 2026-10-22 — Live Stripe on prod (verified)
 
 **Requested:**
