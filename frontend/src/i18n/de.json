@@ -749,5 +749,9 @@
     "terms": "Nutzungsbedingungen",
     "privacy": "Datenschutzerklärung",
     "refunds": "Kündigung und Erstattung"
+  },
+  "forms": {
+    "phoneInvalid": "Bitte prüfen Sie Ihre Telefonnummer: Ziffern, optional + ( ) - oder Leerzeichen, z. B. (401) 992-4938.",
+    "zipcodeInvalid": "Bitte geben Sie eine 5-stellige Postleitzahl ein, z. B. 98264."
   }
 }

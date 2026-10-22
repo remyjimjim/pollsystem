@@ -802,5 +802,9 @@
     "terms": "Conditions d’utilisation",
     "privacy": "Politique de confidentialité",
     "refunds": "Résiliation et remboursements"
+  },
+  "forms": {
+    "phoneInvalid": "Vérifiez votre numéro de téléphone : des chiffres, et éventuellement + ( ) - ou des espaces, p. ex. (401) 992-4938.",
+    "zipcodeInvalid": "Saisissez un code postal à 5 chiffres, p. ex. 98264."
   }
 }

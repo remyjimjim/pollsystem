@@ -802,5 +802,9 @@
     "terms": "Vilkår for bruk",
     "privacy": "Personvernerklæring",
     "refunds": "Oppsigelse og refusjon"
+  },
+  "forms": {
+    "phoneInvalid": "Sjekk telefonnummeret: bruk sifre, og eventuelt + ( ) - eller mellomrom, f.eks. (401) 992-4938.",
+    "zipcodeInvalid": "Skriv inn et femsifret postnummer, f.eks. 98264."
   }
 }

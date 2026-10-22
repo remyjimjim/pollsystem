@@ -749,5 +749,9 @@
     "terms": "Termini di servizio",
     "privacy": "Informativa sulla privacy",
     "refunds": "Disdetta e rimborsi"
+  },
+  "forms": {
+    "phoneInvalid": "Controlla il numero di telefono: usa cifre e, se vuoi, + ( ) - o spazi, ad es. (401) 992-4938.",
+    "zipcodeInvalid": "Inserisci un CAP di 5 cifre, ad es. 98264."
   }
 }

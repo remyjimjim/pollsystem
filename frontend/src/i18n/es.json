@@ -749,5 +749,9 @@
     "terms": "Términos del servicio",
     "privacy": "Política de privacidad",
     "refunds": "Cancelación y reembolsos"
+  },
+  "forms": {
+    "phoneInvalid": "Revisa tu número de teléfono: usa dígitos y, si quieres, + ( ) - o espacios, p. ej. (401) 992-4938.",
+    "zipcodeInvalid": "Introduce un código postal de 5 dígitos, p. ej. 98264."
   }
 }

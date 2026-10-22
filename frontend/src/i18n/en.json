@@ -1069,5 +1069,9 @@
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
     "refunds": "Cancellation and Refunds"
+  },
+  "forms": {
+    "phoneInvalid": "Please check your phone number: use digits, and optionally + ( ) - or spaces, e.g. (401) 992-4938.",
+    "zipcodeInvalid": "Please enter a 5-digit zipcode, e.g. 98264."
   }
 }

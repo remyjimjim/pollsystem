@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { cleanEmail, cleanPhone, cleanZipcode, PHONE_OK, ZIPCODE_OK } from '@/utils/cleanInput'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -18,6 +19,13 @@ const submitting = ref(false)
 async function onSubmit() {
   error.value = null
   emailTaken.value = false
+  // Tidy invisible characters and stray spaces (autofill, pasted numbers), and
+  // show the tidied values; then catch a real format mistake before sending.
+  form.email = cleanEmail(form.email)
+  form.phone = cleanPhone(form.phone)
+  form.zipcode = cleanZipcode(form.zipcode)
+  if (!PHONE_OK.test(form.phone)) { error.value = t('forms.phoneInvalid'); return }
+  if (!ZIPCODE_OK.test(form.zipcode)) { error.value = t('forms.zipcodeInvalid'); return }
   submitting.value = true
   try {
     // Pay-first: validate + start Stripe Checkout, then hand off to Stripe.

@@ -60,3 +60,26 @@ describe('CompleteProfileView', () => {
     expect(replace).not.toHaveBeenCalled()
   })
 })
+
+describe('CompleteProfileView: tidying what was typed', () => {
+  it('a pasted phone with a non-breaking hyphen and a zipcode with a space are cleaned and accepted', async () => {
+    const wrapper = mountView()
+    const auth = useAuthStore()
+    await wrapper.find('input[type="tel"]').setValue('(401) 992‑4938')
+    await wrapper.find('input[autocomplete="postal-code"]').setValue('98264 ')
+    await wrapper.find('form').trigger('submit.prevent')
+    await flushPromises()
+    expect(auth.completeProfile).toHaveBeenCalledWith({ phone: '(401) 992-4938', zipcode: '98264' })
+  })
+
+  it('a real format mistake is reported before anything is sent', async () => {
+    const wrapper = mountView()
+    const auth = useAuthStore()
+    await wrapper.find('input[type="tel"]').setValue('(401) 992-4938')
+    await wrapper.find('input[autocomplete="postal-code"]').setValue('9826')
+    await wrapper.find('form').trigger('submit.prevent')
+    await flushPromises()
+    expect(auth.completeProfile).not.toHaveBeenCalled()
+    expect(wrapper.text()).toContain('Please enter a 5-digit zipcode')
+  })
+})

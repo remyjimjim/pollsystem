@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { cleanPhone, cleanZipcode, PHONE_OK, ZIPCODE_OK } from '@/utils/cleanInput'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -20,6 +21,11 @@ const submitting = ref(false)
 
 async function onSubmit() {
   error.value = null
+  // Tidy invisible characters and stray spaces, as on the sign-up form.
+  form.phone = cleanPhone(form.phone)
+  form.zipcode = cleanZipcode(form.zipcode)
+  if (!PHONE_OK.test(form.phone)) { error.value = t('forms.phoneInvalid'); return }
+  if (!ZIPCODE_OK.test(form.zipcode)) { error.value = t('forms.zipcodeInvalid'); return }
   submitting.value = true
   try {
     await auth.completeProfile({ phone: form.phone, zipcode: form.zipcode })

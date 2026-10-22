@@ -749,5 +749,9 @@
     "terms": "Termos de serviço",
     "privacy": "Política de privacidade",
     "refunds": "Cancelamento e reembolsos"
+  },
+  "forms": {
+    "phoneInvalid": "Verifique seu telefone: use dígitos e, se quiser, + ( ) - ou espaços, ex.: (401) 992-4938.",
+    "zipcodeInvalid": "Digite um CEP de 5 dígitos, ex.: 98264."
   }
 }
