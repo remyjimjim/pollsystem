@@ -34,8 +34,40 @@ jobs:
           gradle-version: 8.10.2
 
       # Testcontainers needs Docker; Ubuntu runners have it pre-installed.
+      # Output is kept for the failure summary below (shell: bash adds
+      # pipefail, so a test failure still fails this step).
       - name: Run tests
-        run: gradle test --no-daemon --stacktrace
+        shell: bash
+        run: gradle test --no-daemon --stacktrace 2>&1 | tee gradle-test.log
+
+      # On failure, publish each failing test (name + error) as an annotation.
+      # Annotations are readable without a GitHub login, unlike job logs and
+      # artifacts. If no test results exist (the build failed before tests
+      # ran, e.g. Docker), publish the end of the output and the Docker
+      # version instead.
+      - name: Summarise failures
+        if: failure()
+        shell: bash
+        run: |
+          echo "::notice title=Docker::$(docker version --format 'server {{.Server.Version}} API {{.Server.APIVersion}} (min {{.Server.MinAPIVersion}})' 2>&1 | head -1)"
+          python3 - <<'EOF'
+          import glob, re, html
+          def esc(s): return s.replace('%', '%25').replace('\r', '').replace('\n', '%0A')
+          found = 0
+          for path in sorted(glob.glob('build/test-results/test/TEST-*.xml')):
+              xml = open(path, encoding='utf-8', errors='replace').read()
+              cls = path.split('TEST-')[-1][:-4].split('.')[-1]
+              for name, body in re.findall(r'<testcase name="([^"]*)"[^>]*>(.*?)</testcase>', xml, re.S):
+                  m = re.search(r'<(failure|error) message="([^"]*)"[^>]*>(.*?)</\1>', body, re.S)
+                  if not m:
+                      continue
+                  found += 1
+                  trace = html.unescape(m.group(3)).strip().splitlines()[:12]
+                  print(f"::error title={esc(cls)}: {esc(html.unescape(name))[:180]}::{esc(html.unescape(m.group(2))[:600] + chr(10) + chr(10).join(trace))}")
+          if found == 0:
+              tail = open('gradle-test.log', encoding='utf-8', errors='replace').read().splitlines()[-60:]
+              print("::error title=No failing test recorded (build failed before or outside tests)::" + esc(chr(10).join(tail)))
+          EOF
 
       # Upload reports on failure for diagnostics.
       - name: Upload test report
