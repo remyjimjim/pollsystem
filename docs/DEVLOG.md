@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-22 — Found the flaky CI test: field order in validation messages
+
+**Requested:**
+
+> push it
+
+> how's the CI run going?
+
+**Changed:**
+
+- CI run 39858728995 failed, and its annotation named
+  `ValidationErrorsTest`. It expected "email address and phone number" and
+  got "phone number and email address".
+- Bean Validation's violations have no fixed order, so the message I added in
+  `50fafe4` varied between runs. That was the cause on all three failing runs.
+  The Docker guess was wrong: CI runs Docker 28.0.4.
+- `df7d8fd`: fields are sorted (email, phone, zipcode, then A to Z), and a test
+  repeats the request 25 times.
+
+**Verified:**
+
+- Backend 366/366.
+- The CI annotation step paid off on its first failing run.
+
+**Commits:** `df7d8fd`
+
+---
+
 ## 2026-10-22 — CI backend failures are intermittent; make CI say which test
 
 **Requested:**
