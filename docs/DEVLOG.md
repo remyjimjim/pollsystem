@@ -61,6 +61,44 @@ logged.
 
 ---
 
+## 2026-10-23 — Legal pages final; deletion confirmation email
+
+**Requested:**
+
+> For #1 I choose (a).  For #2 the legal name will be World Wide Wakeup,
+> LLC. For #3 let's go with 'The minimum is 13 as per COPPA rules.'.  For #4,
+> can we have an email sent to the email address of the customer seeking
+> deletion saying 'your account data from BallotBox.us.com has been deleted
+> per your request'?
+
+**Decision:**
+
+- The automatic confirmation **replaces** the Privacy Policy's promise of a
+  manual email 24 hours before deletion. The page now promises only what the
+  app does.
+
+**Changed:**
+
+- `9848cf7`:
+  - Refund rule (a);
+  - the minimum age of 13 (COPPA);
+  - the deletion confirmation email, sent after the deletion is saved;
+  - wording updated in the Privacy Policy, the Delete dialog and the help
+    pages.
+- No legal page is a draft now.
+- Test pools are capped at 3 connections. One more cached test context had
+  exhausted the test Postgres's 100 connections.
+- The previous session ended mid-step. I checked every edit had landed
+  before continuing.
+
+**Verified:**
+
+- Backend 366/366, frontend 177/177.
+
+**Commits:** `9848cf7`
+
+---
+
 ## 2026-10-22 — The owner's legal text in the legal pages
 
 **Requested:**

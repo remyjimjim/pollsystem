@@ -83,8 +83,9 @@ means re-warming the email domain, redirects, and confused users.
     age, refund rule, price-change notice, data retention, confirming the
     Stripe portal cancels at period end) shows highlighted until filled.
     Have the text reviewed before launch.
-  - ✅ **Owner's text in, 2026-10-22.** Terms and Privacy are complete.
-    Refunds still needs its rule chosen (highlighted).
+  - ✅ **Final, 2026-10-23:** all three pages are complete (refund rule,
+    minimum age 13, World Wide Wakeup, LLC). Still worth a review by someone
+    qualified.
 - **Deleting an account:** a stated way to do it, even if it starts as "email
   us".
   - ✅ **Built 2026-10-20.** Members cancel in the app (ends with the paid
