@@ -61,6 +61,10 @@ means re-warming the email domain, redirects, and confused users.
    - **Start warming up the sending domain now.** Sign-in is by emailed link
      only, so links in spam mean nobody gets in, and warm-up takes days.
 3. **Live payments.**
+   - ✅ **Set up 2026-10-22** (`docs/STRIPE-LIVE.md`): account activated, a
+     $10/month price, a live webhook to the prod backend, and the portal
+     cancelling at the end of the period. Prod creates `cs_live_` checkouts.
+     **Still to do:** one real purchase and refund, end to end.
    - Live Stripe keys, a live price, and a live webhook endpoint and secret.
    - Save the Customer Portal in live mode.
    - Make one real purchase and refund, end to end.

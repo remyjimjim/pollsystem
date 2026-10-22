@@ -61,6 +61,44 @@ logged.
 
 ---
 
+## 2026-10-22 — Live Stripe on prod (verified)
+
+**Requested:**
+
+> let's set up live Stripe
+
+**Decision:**
+
+- The owner did the dashboard work: activation, the Customer Portal saved
+  with cancel at the end of the period, and the live secret key saved in a
+  git-ignored file.
+- Everything else was done through Stripe's API with that key, never
+  printing a secret. The webhook signing secret went straight from Stripe
+  into a private file and Fly.
+
+**Changed:** (see `docs/STRIPE-LIVE.md` for ids)
+
+- Portal: Terms and Privacy links, and a return URL.
+- Product "BallotBox Membership", price $10.00/month.
+- Live webhook to `https://pollsystem-backend.fly.dev/webhooks/stripe` with
+  the 6 handled events.
+- Prod secrets `STRIPE_API_KEY`, `STRIPE_PRICE_ID` and
+  `STRIPE_WEBHOOK_SECRET`.
+
+**Verified:**
+
+- The account: charges and payouts enabled, nothing due.
+- Prod health UP.
+- The register endpoint returns a `checkout.stripe.com` `cs_live_` session
+  (left unpaid).
+- The webhook endpoint rejects unsigned posts (400).
+- **Next:** the owner makes one real purchase, checks the account is created,
+  the sign-in email arrives and voting works, then refunds it in Stripe.
+- **Open:** set the account's public business name to BallotBox (Settings →
+  Business → Public details), since the portal shows the LLC's name.
+
+---
+
 ## 2026-10-22 — Sign-up failed on invisible characters
 
 **Requested:**
