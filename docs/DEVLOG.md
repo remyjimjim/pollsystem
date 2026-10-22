@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-22 — Prod on BallotBox: push, backend v14, new mail + URL (verified)
+
+**Requested:**
+
+> do all three
+
+**Changed:**
+
+1. Pushed `2ff3dd2`, so the prod site rebuilt as BallotBox. The page title on
+   ballotbox.us.com is "BallotBox".
+2. Prod backend **v14** from `main` (content `2ff3dd2`). It brings:
+   - the BallotBox email wording;
+   - the dashboard's For Election and Enabled? columns;
+   - ErrorAlerts.
+3. Prod secrets, set in one change (one restart):
+   - `MAIL_FROM=no-reply@mail.ballotbox.us.com`;
+   - `APP_BASE_URL=https://ballotbox.us.com` (sign-in links, Stripe return
+     pages);
+   - `ALERT_EMAIL=remyjimjim@proton.me`.
+
+**Verified:**
+
+- Health UP; "Error alerts on" logged by both machines.
+- The prod super is `remyjimjim@proton.me` (status ACTIVE).
+- A real prod sign-in email, requested through `https://ballotbox.us.com/api`,
+  was accepted by Resend.
+- Staging still runs the pre-rename backend, and its `APP_BASE_URL` stays the
+  staging site.
+
+---
+
 ## 2026-10-22 — ballotbox.us.com live on Cloudflare; mail domain verified (verified)
 
 **Requested:** (the domain and email setup, step by step)

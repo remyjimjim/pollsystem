@@ -51,6 +51,11 @@ means re-warming the email domain, redirects, and confused users.
      site and its `/api` proxy answer.
    - Optional: add a guarded `prod` command to `BuildAndDeploy.bash`.
 2. **Domain and email: start on day 1.**
+   - ✅ **Done 2026-10-22.** ballotbox.us.com is on Cloudflare (Pages, apex and
+     www). `mail.ballotbox.us.com` is verified in Resend (DKIM, SPF, DMARC
+     `p=none`). Prod sends from `no-reply@mail.ballotbox.us.com`, with links
+     to `https://ballotbox.us.com`. **Warm-up is under way:** sign in daily from
+     several inboxes and mark anything in spam as not spam.
    - Point the DNS at the app and set `APP_BASE_URL`.
    - Verify the sending domain in Resend: SPF, DKIM, DMARC.
    - **Start warming up the sending domain now.** Sign-in is by emailed link
