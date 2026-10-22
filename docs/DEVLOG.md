@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-22 — Sign-up failed on invisible characters
+
+**Requested:**
+
+> I tried to register with the values in the screenshot … and got err msg:
+> Validation failed for object='guestCheckoutRequest'. Error count: 1  I'm
+> not sure why.  Thoughts?
+
+**Changed:**
+
+- `50fafe4`: both forms now tidy what was typed before sending, via
+  `utils/cleanInput.ts`. It removes stray spaces, invisible marks, and
+  look-alike hyphens and spaces.
+- Both forms pre-check the format, with clear messages in 9 languages.
+- The backend now names failed fields in plain words (`ValidationErrors`).
+
+**Verified:**
+
+- On prod, the visible values passed validation, reaching "Billing price is
+  not configured", expected until live Stripe.
+- A trailing space on the zipcode, or a non-breaking hyphen in the phone,
+  reproduced the error exactly.
+- Backend 365/365, frontend 176/176, e2e 19/19.
+- Locally the trailing-space case now answers "Please check your zipcode
+  (5 digits)."
+- Note for the owner: sign-up on prod can't complete until live Stripe is set
+  up.
+
+**Commits:** `50fafe4`
+
+---
+
 ## 2026-10-22 — Prod on BallotBox: push, backend v14, new mail + URL (verified)
 
 **Requested:**
