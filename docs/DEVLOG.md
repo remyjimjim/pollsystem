@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-10-22 — The owner's legal text in the legal pages
+
+**Requested:**
+
+> Please put TOS.txt, PrivacyPolicy.txt and Cancellation.txt located in the
+> project root into the legal pages
+
+**Changed:**
+
+- `8c82049`: the text formatted into `/legal/terms`, `/legal/privacy` and
+  `/legal/refunds`. Edits:
+  - leftover "TO FILL:" prefixes removed, and a typo fixed;
+  - the company name made consistent: World Wide Wakeup, LLC, as on Stripe;
+  - the browser-storage list made accurate;
+  - the deletion request route restored;
+  - the confirmed-portal note dropped.
+- Terms and Privacy are complete.
+
+**Flagged to the owner:**
+
+- The refund rule pasted both options. Left highlighted until they choose.
+- The legal name: Stripe says World Wide Wakeup, LLC, and the Porkbun
+  registrant shows World Wide Waltrip, LLC.
+- "There is no minimum age" vs COPPA's under-13 rules (not legal advice).
+- The 24-hour pre-deletion email is a manual promise; the Delete tool doesn't
+  send it.
+
+**Verified:**
+
+- Frontend 177/177.
+- The Refunds page shows its one remaining item highlighted.
+
+**Commits:** `8c82049`
+
+---
+
 ## 2026-10-22 — Found the flaky CI test: field order in validation messages
 
 **Requested:**
