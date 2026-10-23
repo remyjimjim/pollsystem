@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Vermont on local
+
+**Changed:** VT: one ballot for the whole state: 6 statewide races (Governor has 5 candidates, with fusion combined), the at-large House race (6 candidates), and Proposals 3 (collective bargaining) and 4 (equal protection). Candidates come from the SoS list. The question wording comes from Ballotpedia; the amendment text matches the legislature's PDFs.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `ab91d45`
+
+---
+
 ## 2026-10-23 — South Dakota on local
 
 **Changed:** SD: one ballot for the whole state: U.S. Senate (Rounds vs Bengs; the Democratic nominee withdrew), Gov/Lt Gov, 6 other statewide offices, and the at-large House race. Amendments I, J, K and L, with the Attorney General's titles and explanations from the official pamphlet.
