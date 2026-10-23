@@ -61,6 +61,19 @@ logged.
 
 ---
 
+## 2026-10-23 — Georgia on local
+
+**Changed:** GA: 11 statewide races, Amendments 1–3, 14 district ballots.
+Names come from official county sample ballots; every sos.ga.gov page
+returned 403. The printed first name in GA-1 ("Jim" vs "James" Kingston) and
+the GA-3 names rest on secondary sources (see `GA.md`).
+
+**Verified:** built, loaded and published on local.
+
+**Commit:** `23256ca`
+
+---
+
 ## 2026-10-23 — New Jersey on local
 
 **Changed:** NJ: U.S. Senate (4 candidates), no public questions, 12 district
