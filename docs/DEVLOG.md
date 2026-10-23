@@ -61,6 +61,49 @@ logged.
 
 ---
 
+## 2026-10-23 — California & Colorado midterms drafted; "2026 Midterm" titles
+
+**Requested:**
+
+> mid-term, we should probably get that into the title of these elections
+> and ballot measures huh?  What do you think?  I'l like to kick out
+> California and Colorado on local then staging then prod, sound like fun?
+
+> Let's do D-1, D-2, etc instead of CD-1, CD-2, CD-3, ok?
+
+> Prefix (my recommendation): "2026 Midterm · Washington D-1: U.S. House"
+
+**Decision:**
+
+- Titles take the form "2026 Midterm · <State> D-N: U.S. House". Measures
+  name their state.
+- Content goes local first, then staging, then prod.
+- Washington's published polls are renamed in place through the super edit
+  endpoint. Prod had 0 votes, and a title-only change never touches
+  candidates.
+
+**Changed:**
+
+- `b400f4d`:
+  - California: 1 statewide election with 14 propositions, plus 52 House
+    elections.
+  - Colorado: 1 statewide election with 14 measures, plus 8 House elections.
+  - Research docs for both states.
+  - The Washington retitle map, and `--retitle`, which sends the current
+    close date back (the endpoint would otherwise clear it).
+
+**Verified:**
+
+- Both states researched from official sources.
+- Spot-checked California's certified list. Checked Prop 43's title on its
+  own page.
+- Locally: Washington renamed (close dates intact); California and Colorado
+  created as drafts and checked in the editor.
+
+**Commits:** `b400f4d`
+
+---
+
 ## 2026-10-23 — "Please make a selection for" links to the office
 
 **Requested:**
