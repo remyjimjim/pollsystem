@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Mississippi on local
+
+**Changed:** MS: U.S. Senate (Hyde-Smith, Colom, Pinkins), no statewide measures, 4 district ballots, from the Secretary of State's live qualifying list. Judicial seats are elected by district, so none are listed.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `9bda94f`
+
+---
+
 ## 2026-10-23 — Oklahoma on local
 
 **Changed:** OK: 10 statewide races, 30 candidates. The U.S. Senate race is the regular seat. Auditor has only one filer, who is deemed elected, so it's left off. SQ 845 and SQ 847. 5 district ballots. Names come from the Election Board's candidate book. Primary and runoff winners come from secondary sources, because official results returned 403 (see `OK.md`).
