@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Nevada on local
+
+**Changed:** NV: 8 statewide races, including Governor and two unopposed Supreme Court seats. Questions 6 and 7 are the second votes on abortion rights and voter ID. 4 district ballots. nvsos.gov blocks automated reads, so this comes from Clark County's official list of all contests (Aug 24). CD2 names (outside Clark) rest on Ballotpedia (see `NV.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `74201a1`
+
+---
+
 ## 2026-10-23 — New Hampshire on local
 
 **Changed:** NH: U.S. Senate (open seat), Governor, Question 1 (eliminate the register of probate, wording from the legislature's CACR 13), 2 district ballots. sos.nh.gov returned 403, so the candidates rest on Ballotpedia and Wikipedia, which agree (see `NH.md`).
