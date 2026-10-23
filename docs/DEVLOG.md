@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Wyoming on local
+
+**Changed:** WY: one ballot for the whole state: U.S. Senate (Hageman vs Byrd), Governor, 4 other statewide offices, the open at-large House seat (4 candidates), and Initiative Proposition 1 (50% homeowner property-tax exemption). From official SoS lists.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `3515262`
+
+---
+
 ## 2026-10-23 — Vermont on local
 
 **Changed:** VT: one ballot for the whole state: 6 statewide races (Governor has 5 candidates, with fusion combined), the at-large House race (6 candidates), and Proposals 3 (collective bargaining) and 4 (equal protection). Candidates come from the SoS list. The question wording comes from Ballotpedia; the amendment text matches the legislature's PDFs.
