@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — New Hampshire on local
+
+**Changed:** NH: U.S. Senate (open seat), Governor, Question 1 (eliminate the register of probate, wording from the legislature's CACR 13), 2 district ballots. sos.nh.gov returned 403, so the candidates rest on Ballotpedia and Wikipedia, which agree (see `NH.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `dc6c2fc`
+
+---
+
 ## 2026-10-23 — Massachusetts on local
 
 **Changed:** MA: 6 statewide races, Questions 1–9 (8 initiatives and a referendum on the 2024 firearms law), 9 district ballots. MA-2, MA-5 and MA-7 have only the Democratic incumbent. Taken from the Secretary of the Commonwealth's candidate list and Information for Voters booklet, via Wayback copies of Oct 15–16. A few measures take effect later than the representative date, as their own text says.
