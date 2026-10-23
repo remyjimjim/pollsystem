@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — North Dakota on local
+
+**Changed:** ND: one ballot for the whole state. 9 statewide contests (no Senate or Governor race) and the at-large House race (4 candidates). Constitutional Measure 1 (60% for amendments) and Initiated Measure 2 (free school meals). From official SoS lists and measure PDFs.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `8a40f5f`
+
+---
+
 ## 2026-10-23 — Montana on local
 
 **Changed:** MT: U.S. Senate (open seat) and Supreme Court Seat 4, plus CI-132, CI-133 and I-194. 2 district ballots. sosmt.gov blocked every request, so the candidates and ballot wording rest on Montana Free Press and Ballotpedia, which agree. The qualified measures list comes from a Wayback copy of the SoS page (see `MT.md`).
