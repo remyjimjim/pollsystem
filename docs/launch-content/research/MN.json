@@ -1,0 +1,313 @@
+{
+  "state": "Minnesota",
+  "abbr": "MN",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T02:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Marisa Simonetti",
+          "party": "Independent"
+        },
+        {
+          "name": "Rebecca Whiting",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Peggy Flanagan",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "Michele Tafoya",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        {
+          "name": "Amy Klobuchar and Ben Schierer",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "Lisa Demuth and Ryan Wilson",
+          "party": "Republican"
+        },
+        {
+          "name": "Steven Young and Jane Kirby",
+          "party": "Green"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Keith Ellison",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "Ronald J. Schutz",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Steve Simon",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "Seth Kuhl-Stennes",
+          "party": "Green"
+        },
+        {
+          "name": "Tad Jude",
+          "party": "Republican"
+        },
+        {
+          "name": "George \"Chip\" Tangen",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "office": "State Auditor",
+      "candidates": [
+        {
+          "name": "Scott Jensen",
+          "party": "Republican"
+        },
+        {
+          "name": "Zack Filipovich",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "Jay Reeves",
+          "party": "Forward Independence"
+        }
+      ]
+    },
+    {
+      "office": "Associate Justice 1 - Supreme Court",
+      "candidates": [
+        {
+          "name": "Sarah Hennesy",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Associate Justice 4 - Supreme Court",
+      "candidates": [
+        {
+          "name": "Paul Thissen",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Judge 1 - Court of Appeals",
+      "candidates": [
+        {
+          "name": "Elizabeth Bentley",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Judge 7 - Court of Appeals",
+      "candidates": [
+        {
+          "name": "Rachel Bond",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Judge 13 - Court of Appeals",
+      "candidates": [
+        {
+          "name": "Jeanne Cochran",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Judge 15 - Court of Appeals",
+      "candidates": [
+        {
+          "name": "Kevin G. Ross",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Judge 18 - Court of Appeals",
+      "candidates": [
+        {
+          "name": "JaPaul J. Harris",
+          "party": "Nonpartisan"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Jake Johnson",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "Brad Finstad",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Matt Little",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "Eric Pratt",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Tyler Bass",
+          "party": "Republican"
+        },
+        {
+          "name": "Kelly Morrison",
+          "party": "Democratic-Farmer-Labor"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Betty McCollum",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "Paul Wikstrom",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Ilhan Omar",
+          "party": "Democratic-Farmer-Labor"
+        },
+        {
+          "name": "John Nagel",
+          "party": "Republican"
+        },
+        {
+          "name": "DeVelle L. Jackson",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Tom Emmer",
+          "party": "Republican"
+        },
+        {
+          "name": "Doug Chapin",
+          "party": "Democratic-Farmer-Labor"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Michelle Fischbach",
+          "party": "Republican"
+        },
+        {
+          "name": "Erik Osberg",
+          "party": "Democratic-Farmer-Labor"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Pete Stauber",
+          "party": "Republican"
+        },
+        {
+          "name": "Trina Swanson",
+          "party": "Democratic-Farmer-Labor"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Amendment - Increasing Funding to School Districts",
+      "subject": "Permanent school fund distributions to school districts",
+      "ballotTitle": "Shall the Minnesota Constitution be amended to increase the funding going to all school districts from the permanent school fund, which is a fund that supports school districts without raising individual income or property taxes, effective July 1, 2027?",
+      "summary": "Would change the constitutional rules for managing the permanent school fund so it preserves purchasing power over time and distributes money to school districts under a policy set by law, with a companion statute setting annual distributions at 4.5% of the fund's three-year average value starting July 1, 2027.",
+      "source": "https://www.revisor.mn.gov/laws/2026/0/Session+Law/Chapter/114/"
+    }
+  ],
+  "measureEffective": "2027-07-01",
+  "measureEffectiveNote": "The ballot question itself states the change is 'effective July 1, 2027', and Laws 2026, ch. 114, sec. 6 makes the companion statutory distribution changes effective July 1, 2027 (aid payable in fiscal year 2028) if voters adopt the amendment. Adoption requires a majority of all voters casting ballots at the election (Minn. Const. art. IX, sec. 1); a blank answer counts as no.",
+  "sources": [
+    "https://electionresultsfiles.sos.mn.gov/20261103/ussenate.txt",
+    "https://electionresultsfiles.sos.mn.gov/20261103/ushouse.txt",
+    "https://electionresultsfiles.sos.mn.gov/20261103/governor.txt",
+    "https://electionresultsfiles.sos.mn.gov/20261103/attorneygen.txt",
+    "https://electionresultsfiles.sos.mn.gov/20261103/secofstate.txt",
+    "https://electionresultsfiles.sos.mn.gov/20261103/auditor.txt",
+    "https://electionresultsfiles.sos.mn.gov/20261103/judicial.txt",
+    "https://electionresultsfiles.sos.mn.gov/20260811/ussenate.txt",
+    "https://electionresultsfiles.sos.mn.gov/20260811/ushouse.txt",
+    "https://electionresultsfiles.sos.mn.gov/20260811/governor.txt",
+    "https://www.revisor.mn.gov/laws/2026/0/Session+Law/Chapter/114/",
+    "https://www.revisor.mn.gov/bills/bill.php?b=House&f=HF3900&ssn=0&y=2026",
+    "https://sos.mn.gov/about-the-office/news-room/candidates-certified-for-2026-primary-election/",
+    "https://assets.nationbuilder.com/sd45/pages/3781/attachments/original/1789585375/sample-ballot45A.pdf",
+    "https://naomikritzer.com/tag/05/",
+    "https://theballotbrief.com/candidate/develle-l-jackson-mn"
+  ],
+  "notes": [
+    "Candidate names and party codes come from the Secretary of State's Nov 3, 2026 election-results feed (electionresultsfiles.sos.mn.gov/20261103/*.txt), which is pre-loaded with the general-election ballot; its vote figures are pre-election test data and were ignored.",
+    "Party labels are as printed on a Hennepin County SD45/HD45A sample ballot (DFL = 'Democratic-Farmer-Labor', GP = 'Green', LIB = 'Libertarian', FI = 'Forward Independence', IND = 'Independent'); that ballot matched the SOS feed for every statewide race and CD3.",
+    "Major-party nominees match the official Aug 11, 2026 primary results (e.g. Flanagan over Craig; Tafoya over Schwarze and White; Klobuchar/Schierer; Demuth/Wilson over Lindell and Qualls; Nagel won the CD5 GOP primary).",
+    "U.S. Senate is the regular Class 2 seat (Tina Smith not running); no special election.",
+    "Minnesota judicial races are nonpartisan; every 2026 statewide judicial seat has only the incumbent printed. 'Nonpartisan' is used as the party value; the ballot prints 'Incumbent' instead of a party.",
+    "There is one statewide constitutional amendment (Laws 2026, ch. 114, HF 3900). The ballot heading is 'Constitutional Amendments' with the title 'Increasing Funding to School Districts'; it is not numbered. Ballot title in law is 'Increasing funding to school districts.'",
+    "All of Minnesota is in the Central time zone; polls close 8:00 PM CST (UTC-6) on Nov 3, 2026."
+  ],
+  "unconfirmed": [
+    "CD5: DeVelle L. Jackson's printed party label. The SOS feed code is IND (same code printed as 'Independent' for Simonetti) and a sample-ballot blog post shows 'Independent', but The Ballot Brief reports 'Independence-Alliance Party'. 'Independent' used.",
+    "Party labels for CD1, CD2, CD4-CD8 were not seen on a printed ballot; inferred from the SOS party codes using the Hennepin sample ballot's spellings.",
+    "The official SOS candidate-filing site (candidates.sos.mn.gov) and sos.mn.gov ballot pages were blocked by a captcha, so no candidate withdrawals or changes after the feed was loaded could be checked against them directly."
+  ]
+}

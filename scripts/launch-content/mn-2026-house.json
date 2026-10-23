@@ -1,0 +1,187 @@
+{
+  "_about": "Minnesota, Nov 3 2026, built by build-state.py from docs/launch-content/research/MN.json (sources and gaps in MN.md). One ballot per district, each including \"2026 Midterm · Minnesota: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Minnesota District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        24
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Jake Johnson",
+          "affiliation": "Democratic-Farmer-Labor",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Brad Finstad",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Minnesota District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        24
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Matt Little",
+          "affiliation": "Democratic-Farmer-Labor",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Eric Pratt",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Minnesota District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        24
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Tyler Bass",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Kelly Morrison",
+          "affiliation": "Democratic-Farmer-Labor",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Minnesota District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        24
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Betty McCollum",
+          "affiliation": "Democratic-Farmer-Labor",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Paul Wikstrom",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Minnesota District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        24
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Ilhan Omar",
+          "affiliation": "Democratic-Farmer-Labor",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "John Nagel",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "DeVelle L. Jackson",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Minnesota District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        24
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Tom Emmer",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Doug Chapin",
+          "affiliation": "Democratic-Farmer-Labor",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Minnesota District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        24
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Michelle Fischbach",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Erik Osberg",
+          "affiliation": "Democratic-Farmer-Labor",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Minnesota District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        24
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Pete Stauber",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Trina Swanson",
+          "affiliation": "Democratic-Farmer-Labor",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Minnesota: statewide races & measures"
+}

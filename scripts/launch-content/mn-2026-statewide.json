@@ -1,0 +1,139 @@
+{
+  "_about": "Minnesota, Nov 3 2026, built by build-state.py from docs/launch-content/research/MN.json (sources and gaps in MN.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Minnesota: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      24
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Marisa Simonetti",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Rebecca Whiting",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Peggy Flanagan",
+        "affiliation": "Democratic-Farmer-Labor",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Michele Tafoya",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Amy Klobuchar and Ben Schierer",
+        "affiliation": "Democratic-Farmer-Labor",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Lisa Demuth and Ryan Wilson",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Steven Young and Jane Kirby",
+        "affiliation": "Green",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Keith Ellison",
+        "affiliation": "Democratic-Farmer-Labor",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Ronald J. Schutz",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Steve Simon",
+        "affiliation": "Democratic-Farmer-Labor",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Seth Kuhl-Stennes",
+        "affiliation": "Green",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Tad Jude",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "George \"Chip\" Tangen",
+        "affiliation": "Libertarian",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Scott Jensen",
+        "affiliation": "Republican",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Zack Filipovich",
+        "affiliation": "Democratic-Farmer-Labor",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Jay Reeves",
+        "affiliation": "Forward Independence",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Sarah Hennesy",
+        "affiliation": "Nonpartisan",
+        "officeName": "Associate Justice 1 - Supreme Court"
+      },
+      {
+        "name": "Paul Thissen",
+        "affiliation": "Nonpartisan",
+        "officeName": "Associate Justice 4 - Supreme Court"
+      },
+      {
+        "name": "Elizabeth Bentley",
+        "affiliation": "Nonpartisan",
+        "officeName": "Judge 1 - Court of Appeals"
+      },
+      {
+        "name": "Rachel Bond",
+        "affiliation": "Nonpartisan",
+        "officeName": "Judge 7 - Court of Appeals"
+      },
+      {
+        "name": "Jeanne Cochran",
+        "affiliation": "Nonpartisan",
+        "officeName": "Judge 13 - Court of Appeals"
+      },
+      {
+        "name": "Kevin G. Ross",
+        "affiliation": "Nonpartisan",
+        "officeName": "Judge 15 - Court of Appeals"
+      },
+      {
+        "name": "JaPaul J. Harris",
+        "affiliation": "Nonpartisan",
+        "officeName": "Judge 18 - Court of Appeals"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Minnesota Constitutional Amendment - Increasing Funding to School Districts",
+      "summary": "Shall the Minnesota Constitution be amended to increase the funding going to all school districts from the permanent school fund, which is a fund that supports school districts without raising individual income or property taxes, effective July 1, 2027?\n\nIn short: Would change the constitutional rules for managing the permanent school fund so it preserves purchasing power over time and distributes money to school districts under a policy set by law, with a companion statute setting annual distributions at 4.5% of the fund's three-year average value starting July 1, 2027.\n\nOfficial ballot language. Source: https://www.revisor.mn.gov/laws/2026/0/Session+Law/Chapter/114/",
+      "effectiveDate": "2027-07-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}
