@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Arkansas on local
+
+**Changed:** AR: 8 statewide races, three with a single Republican candidate. Issues 1–4 (citizens-only voting, right to bear arms, economic development districts, $500M water bonds). 4 district ballots. Candidates come from the Secretary of State's results feed for Nov 3 (Oct 21). Measure wording comes from the SoS's public notices.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `09b99b5`
+
+---
+
 ## 2026-10-23 — New Mexico on local
 
 **Changed:** NM: 8 statewide races (U.S. Senate, Gov/Lt Gov, five executive offices, Court of Appeals Position 1). Constitutional Amendments 1–4 and Bond Questions 1–3, with official amounts. 3 district ballots. Candidates come from the Secretary of State's portal and the Santa Fe sample ballot. Where the SoS measures document differs from the ballot and the joint resolutions, I used the ballot wording (see `NM.md`).
