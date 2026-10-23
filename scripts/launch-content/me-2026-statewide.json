@@ -1,0 +1,40 @@
+{
+  "_about": "Maine, Nov 3 2026, built by build-state.py from docs/launch-content/research/ME.json (sources and gaps in ME.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Maine: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      20
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Susan M. Collins",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Troy D. Jackson",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Hannah M. Pingree",
+        "affiliation": "Democratic",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Robert B. Charles",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Rick Bennett",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      }
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "state": "Maine",
+  "abbr": "ME",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "houseRankedChoice": true,
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "rankedChoice": true,
+      "candidates": [
+        { "name": "Susan M. Collins", "party": "Republican" },
+        { "name": "Troy D. Jackson", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Governor",
+      "candidates": [
+        { "name": "Hannah M. Pingree", "party": "Democratic" },
+        { "name": "Robert B. Charles", "party": "Republican" },
+        { "name": "Rick Bennett", "party": "Independent" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        { "name": "Chellie Pingree", "party": "Democratic" },
+        { "name": "Ronald C. Russell", "party": "Republican" }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        { "name": "Matthew G. Dunlap", "party": "Democratic" },
+        { "name": "Paul R. LePage", "party": "Republican" }
+      ]
+    }
+  ],
+  "measures": [],
+  "measureEffective": "2026-12-31",
+  "measureEffectiveNote": "No statewide question is on the November 3, 2026 ballot. For reference only: under Me. Const. art. IV, pt. 3, sec. 19 an approved citizen initiative or people's veto takes effect 30 days after the Governor's public proclamation of the result (bond issues take effect on proclamation), so roughly December 2026 to early January 2027; 2026-12-31 is an approximation, not a computed date.",
+  "sources": [
+    "https://www.maine.gov/sos/elections-voting/upcoming-elections",
+    "https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/2026%20General%20Candidate%20List%20-%20FINAL.xlsx",
+    "https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/2026%20Post%20Primary%20Withdrawals%20%26%20Replacement%20Candidates%20-%20Updated%209.22.26_0.pdf",
+    "https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/Nov26%20Declared%20Write%20in%20List%20-%20Updated%2010.15.26.pdf",
+    "https://www.maine.gov/sos/elections-voting/ranked-choice-voting-frequently-asked-questions",
+    "https://www.maine.gov/sos/elections-voting/state-of-maine-voter-guide",
+    "https://www.maine.gov/sos/elections-voting/peoples-veto-or-citizens-initiative-resources/current-citizen-initiatives-and-peoples-vetoes",
+    "https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/Final%20determination.pdf",
+    "https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/Final%20wording%205.28.26.pdf",
+    "https://ballotpedia.org/Maine_2026_ballot_measures",
+    "https://wjla.com/news/nation-world/troy-jackson-replaces-graham-platner-as-maine-democrats-us-senate-nominee-politics-elections-voting-vote-polls-republican-sen-susan-collins-progressive-candidates-socialists-socialism-medicare-for-all-sexual-assault-allegation-accusation",
+    "https://www.pressherald.com/2026/10/01/2026-maine-voter-guide/"
+  ],
+  "notes": [
+    "Candidates are from the Maine SOS '2026 General Election Candidates List' (FINAL, 7/27/2026 5:00 pm) and the post-primary withdrawals/replacements list (updated 9/22/2026); names are assembled First Middle-initial Last from the list's fields.",
+    "U.S. Senate: Democratic primary winner Graham C. Platner withdrew 7/10/2026; the party nominated Troy D. Jackson as replacement (received 7/27/2026). News reports (wire story) say a special state convention chose Jackson 566 of 571 delegate votes.",
+    "Ranked-choice voting: Maine uses RCV in general elections only for federal offices, so U.S. Senator and both U.S. House races are ranked-choice; Governor is NOT ranked-choice in the general (plurality). Per the SOS, RCV tabulation rounds only matter in races with more than two candidates.",
+    "Rick Bennett is an unenrolled candidate; 'Independent' is his designation in the SOS list. Maine has no Independent party; its qualified parties are Democratic, Green Independent, Libertarian and Republican.",
+    "No statewide referendum questions: the SOS Upcoming Elections page lists none, and Ballotpedia (as of Oct 21, 2026) reports zero certified statewide measures. The school sports/birth-certificate initiative was found invalid on May 26, 2026 (67,150 valid signatures vs 67,682 required); the SOS issued only a provisional question wording on May 28 in case it were reinstated.",
+    "Declared write-in candidates (excluded here) exist for U.S. Senate (6), Governor (2) and CD-2 (1).",
+    "All of Maine is in the Eastern time zone; all polling places close at 8:00 PM EST (UTC-5) on Nov 3, 2026."
+  ],
+  "unconfirmed": [
+    "Exact ballot-face name forms were not checked against a sample ballot; e.g. the Republican for Governor files as Robert B. Charles but campaigns as Bobby Charles, and the ballot may print a nickname.",
+    "Exact party wording on the ballot face (e.g. 'Democratic' vs 'Democrat', and Bennett's printed designation) was not checked against a sample ballot.",
+    "Whether the two-candidate CD-1 and Senate contests are printed in ranked-choice grid format was not checked against a sample ballot; RCV legally applies to all federal races.",
+    "No statewide referendum: no court ruling reinstating the school sports initiative was found, but later litigation status was confirmed only via Ballotpedia, not an official SOS notice (web search budget ran out).",
+    "measureEffective is an approximation only (no measures on the ballot)."
+  ]
+}
