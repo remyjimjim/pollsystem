@@ -1,0 +1,30 @@
+{
+  "_about": "Mississippi, Nov 3 2026, built by build-state.py from docs/launch-content/research/MS.json (sources and gaps in MS.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Mississippi: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      25
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Scott Colom",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Ty Pinkins",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Cindy Hyde-Smith",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      }
+    ]
+  }
+}

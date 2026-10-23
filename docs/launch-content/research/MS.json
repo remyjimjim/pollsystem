@@ -1,0 +1,121 @@
+{
+  "state": "Mississippi",
+  "abbr": "MS",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Scott Colom",
+          "party": "Democratic"
+        },
+        {
+          "name": "Ty Pinkins",
+          "party": "Independent"
+        },
+        {
+          "name": "Cindy Hyde-Smith",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Johnny Baucom",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Cliff Johnson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Trent Kelly",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Ron Eller",
+          "party": "Republican"
+        },
+        {
+          "name": "Bennie Foster",
+          "party": "Independent"
+        },
+        {
+          "name": "Bennie G. Thompson",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Michael A. Chiaradio",
+          "party": "Democratic"
+        },
+        {
+          "name": "Michael Guest",
+          "party": "Republican"
+        },
+        {
+          "name": "Erik Kiehle",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Carl Boyanton",
+          "party": "Independent"
+        },
+        {
+          "name": "Mike Ezell",
+          "party": "Republican"
+        },
+        {
+          "name": "Jeffrey Hulum III",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "measures": [],
+  "measureEffective": "2026-11-03",
+  "measureEffectiveNote": "No statewide measure is on the November 3, 2026 Mississippi ballot, so nothing takes effect. Rule for reference: under Miss. Const. sec. 273(3), a legislatively proposed amendment approved by a majority of those voting on it (and at least 40% of all who vote in the election) is inserted into the Constitution by proclamation of the Secretary of State certifying the vote; the election date is used here as a notional representative date.",
+  "sources": [
+    "https://sos.ms.gov/content/CandidateQualifying/default.aspx",
+    "https://www.sos.ms.gov/Content/documents/Elections/Links/2026%20Candidate%20Qualifying%20List%2012-26-2025.pdf",
+    "https://billstatus.ls.state.ms.us/2026/pdf/all_measures/allmsrs.xml",
+    "https://billstatus.ls.state.ms.us/2025/pdf/all_measures/allmsrs.xml",
+    "https://billstatus.ls.state.ms.us/2026/pdf/history/SC/SC0518.xml",
+    "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Mississippi",
+    "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Mississippi",
+    "https://magnoliatribune.com/2026/10/13/poll-majority-of-mississippi-voters-support-property-tax-elimination-school-choice-restoration-of-the-ballot-initiative/"
+  ],
+  "notes": [
+    "Candidates and party labels are from the Secretary of State's live Candidate Qualifying List ('All offices and candidates currently on file', read 2026-10-23), which lists only the general-election field for U.S. Senate and U.S. House (primary losers such as Sarah Adlakha, Albert Littell, Priscilla W. Till, Kevin Wilson and Sawyer Walters no longer appear). Candidates are listed in the SOS order (alphabetical by surname).",
+    "March 10, 2026 primary nominees cross-checked against Wikipedia (secondary): Hyde-Smith 80.8% over Adlakha; Colom 72.9%; MS-1 Johnson (D) over Kelvin Buck; MS-2 Thompson (D) 86.4%, Eller (R) 51.1% over Kevin Wilson; MS-3 Guest and Chiaradio unopposed; MS-4 Ezell 84.1%, Hulum (D) 57.7%. All match the SOS list. Ty Pinkins left the Democratic race to run as an Independent.",
+    "Mississippi Supreme Court and Court of Appeals judges are elected by district (nonpartisan), not statewide, so they are left out. The SOS list shows Court of Appeals district races but no Supreme Court race; court-ordered Supreme Court special elections under the Voting Rights Act case (Judge Aycock, Dec 2025) would also be district-based.",
+    "No statewide measures: every constitutional-amendment concurrent resolution in the 2025 and 2026 regular sessions died or was tabled (e.g. initiative-restoration SCR 518 tabled Feb 11, 2026), per the Legislature's all-measures reports; the initiative process has been inoperative since 2021. A Magnolia Tribune article of Oct 13, 2026 confirms the initiative remains unrestored.",
+    "Mississippi is entirely in the Central time zone; polls are open 7:00 AM to 7:00 PM. On Nov 3, 2026 that is CST (UTC-6), so 7:00 PM = 01:00 UTC Nov 4.",
+    "The SOS's static qualifying-list PDF link returned 404; the live HTML list was used instead. sos.ms.gov pages and legislature files were read with curl."
+  ],
+  "unconfirmed": [
+    "No 'as of' date is printed on the live SOS candidate list, and no official sample ballot or SOS primary returns were read; nominees were cross-checked only via Wikipedia.",
+    "Party wording on the ballot face (e.g. 'Democrat' vs 'Democratic') not checked against a sample ballot; SOS list wording used.",
+    "Special legislative sessions (none found at the standard bill-status path) were not checked for amendment resolutions; web search budget ran out before Ballotpedia's MS 2026 measures page could be confirmed (it returned empty)."
+  ]
+}

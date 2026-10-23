@@ -1,0 +1,114 @@
+{
+  "_about": "Mississippi, Nov 3 2026, built by build-state.py from docs/launch-content/research/MS.json (sources and gaps in MS.md). One ballot per district, each including \"2026 Midterm · Mississippi: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Mississippi District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        25
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Johnny Baucom",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Cliff Johnson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Trent Kelly",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Mississippi District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        25
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Ron Eller",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Bennie Foster",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Bennie G. Thompson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Mississippi District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        25
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Michael A. Chiaradio",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Michael Guest",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Erik Kiehle",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Mississippi District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        25
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Carl Boyanton",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Mike Ezell",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Jeffrey Hulum III",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Mississippi: statewide races & measures"
+}
