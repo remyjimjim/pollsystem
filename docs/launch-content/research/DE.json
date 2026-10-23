@@ -1,0 +1,67 @@
+{
+  "state": "Delaware",
+  "abbr": "DE",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        { "name": "Chris Coons", "party": "Democratic" },
+        { "name": "Michael \"Dr. Mike\" Katz", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        { "name": "Kathy Jennings", "party": "Democratic" },
+        { "name": "David C. \"Dave\" Graham", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        { "name": "Ted Lauzen", "party": "Democratic" },
+        { "name": "Michael Ramone", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Auditor of Accounts",
+      "candidates": [
+        { "name": "Lydia York", "party": "Democratic" },
+        { "name": "April Callaway", "party": "Republican" },
+        { "name": "Austin Cassidy", "party": "Independent Party of Delaware" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 0,
+      "candidates": [
+        { "name": "Sarah McBride", "party": "Democratic" },
+        { "name": "Joseph \"Dr. Joe\" Arminio", "party": "Republican" }
+      ]
+    }
+  ],
+  "measures": [],
+  "sources": [
+    "https://elections.delaware.gov/candidates/candidatelist/genl_fcddt_2026.shtml",
+    "https://elections.delaware.gov/elections/general/general.html",
+    "https://elections.delaware.gov/",
+    "https://elections.delaware.gov/candidates/candidatelist/prim_fcddt_2026.html",
+    "https://whyy.org/articles/election-2026-delaware-primary-treasurer-voter-guide/"
+  ],
+  "notes": [
+    "Candidates and parties are from the Department of Elections 'General Election 11/3/2026 Filed Candidates by Office' list, last updated 2026-10-22 07:56 PM; only candidates with status 'Qualified' are included.",
+    "U.S. House at-large: Republican Lee Murphy filed 7/13/2026 and is marked 'WITHDRAWN 7/21/2026'; he is left out. Joseph \"Dr. Joe\" Arminio is the qualified Republican.",
+    "State Treasurer is an open seat (incumbent Colleen Davis not running, per WHYY); Ted Lauzen is the only Democrat on the official general list after the Sept. 15 primary.",
+    "The official list abbreviates Austin Cassidy's party as 'Ind Pty of DE'; spelled out here as Independent Party of Delaware.",
+    "No statewide measures: Delaware amends its constitution by two-thirds votes of two successive General Assemblies with no popular vote, and the official general-election page lists no ballot questions.",
+    "Polls are open 7 a.m. until 8 p.m. on General Election Day, November 3, 2026 (official general election page). Delaware is entirely Eastern time; 8 PM EST (UTC-5, DST ended Nov 1) = 01:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Primary winner for State Treasurer (Democratic) was inferred from the official general candidate list, not read from official primary results (web search budget exhausted).",
+    "Ballot-face spelling of names/party labels not checked against a 2026 sample ballot (no 2026 sample ballot page found); names are as shown on the official candidate list.",
+    "Absence of statewide measures rests on Delaware's constitutional amendment process and the official general-election page; Ballotpedia's DE 2026 measures page could not be read."
+  ]
+}

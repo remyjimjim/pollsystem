@@ -1,0 +1,70 @@
+{
+  "_about": "Delaware, Nov 3 2026, built by build-state.py from docs/launch-content/research/DE.json (sources and gaps in DE.md). One House seat, so one ballot for the whole state.",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm Delaware",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      8
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Chris Coons",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Michael \"Dr. Mike\" Katz",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Kathy Jennings",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "David C. \"Dave\" Graham",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Ted Lauzen",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Michael Ramone",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Lydia York",
+        "affiliation": "Democratic",
+        "officeName": "Auditor of Accounts"
+      },
+      {
+        "name": "April Callaway",
+        "affiliation": "Republican",
+        "officeName": "Auditor of Accounts"
+      },
+      {
+        "name": "Austin Cassidy",
+        "affiliation": "Independent Party of Delaware",
+        "officeName": "Auditor of Accounts"
+      },
+      {
+        "name": "Sarah McBride",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Joseph \"Dr. Joe\" Arminio",
+        "affiliation": "Republican",
+        "officeName": "U.S. Representative, At-Large"
+      }
+    ]
+  }
+}
