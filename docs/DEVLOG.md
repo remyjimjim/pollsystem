@@ -61,6 +61,50 @@ logged.
 
 ---
 
+## 2026-10-23 — One ballot per district (local)
+
+**Requested:**
+
+> for seeding the midterm elections, can we combine the 'Supreme Court &
+> statewide measures' and the 'D-1: U.S. House' candidates into one election
+> called "2026 Midterm Colorado District 1" in the case of Colorado?
+
+> Let's go with B and let's start in local and also at the end of the day,
+> I'd like the user to be able to go to polls/search and set type to
+> 'Election' and see 10 elections instead of 20, one for each district
+
+**Decision:**
+
+- Option B: link the statewide election into each district ballot instead
+  of copying it. Copying would split statewide results by district, and
+  would mean 728 California measure polls.
+- Also raised for later, from the owner's note (not built yet):
+  - section headings above offices;
+  - attaching ballot measures from the election editor.
+
+**Changed:**
+
+- `3b4863d`:
+  - V37 `election_includes`;
+  - include rules, DTO fields and search hiding;
+  - the combined voting form and the results link;
+  - "Purview: <area>" in the ballot header;
+  - `--link-ballots` and the new district titles in the content files.
+
+**Verified:**
+
+- Backend 371/371, frontend 181/181, e2e 19/19.
+- Locally:
+  - search type=Election lists 70 ballots, one per district;
+  - a candidate search reaches its district ballots;
+  - a browser vote split correctly across the district election, the
+    statewide election and the measure.
+- Not on staging or prod yet.
+
+**Commits:** `3b4863d`
+
+---
+
 ## 2026-10-23 — Vote-form link fix live; staging deployed (verified)
 
 **Requested:**
