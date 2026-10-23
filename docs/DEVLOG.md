@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Wisconsin on local
+
+**Changed:** WI: Gov/Lt Gov, Attorney General, Secretary of State and Treasurer, all checked against an official La Crosse County sample ballot. Questions 1–3 (partial veto, places of worship in emergencies, a ban on preferential treatment) come verbatim from Kenosha County's notice. 8 district ballots: CD-2 has only Pocan. Most House names come from the WEC's June candidates report, because elections.wi.gov returned 403 (see `WI.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `bd8758c`
+
+---
+
 ## 2026-10-23 — Indiana on local
 
 **Changed:** IN: Secretary of State, Comptroller and Treasurer, Public Questions 1–2 (bail, city and town court judges' residency), 9 district ballots on the 2022 map, which is still in effect. All of it comes from the Election Division's candidate list and official county sample ballots.
