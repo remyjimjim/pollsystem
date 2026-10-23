@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Maine on local
+
+**Changed:** ME: U.S. Senate is Collins vs Jackson: Platner won the Democratic primary, then withdrew on 7/10. Governor has 3 candidates. 2 district ballots, no referendum questions. The Senate and House races are ranked-choice, and their offices say so; Governor isn't ranked-choice. Taken from the Secretary of State's final candidate list and its withdrawals/replacements list.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `9c866fe`
+
+---
+
 ## 2026-10-23 — Idaho on local
 
 **Changed:** ID: 8 statewide races. U.S. Senate has no Democrat: Roth withdrew and Achilles runs as an Independent. HJR 4 (marijuana legalization reserved to the Legislature), HJR 6 (English as official language) and Proposition 1 (reproductive freedom). 2 district ballots. Candidates come from the Secretary of State's filing portal (final list). The multiple-choice advisory question on a state gun is left out (see `ID.md`).
