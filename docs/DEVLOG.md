@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Hawaii on local
+
+**Changed:** HI: Gov/Lt Gov and three Office of Hawaiian Affairs trustee races (At-Large is vote for 3), Questions 1–2 (judicial confirmation time, county RISE bonds), 2 district ballots. All of it comes from the Office of Elections' candidate report (Oct 22) and amendments page.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `f755046`
+
+---
+
 ## 2026-10-23 — Missouri on local
 
 **Changed:** MO: State Auditor (no Senate race) and 5 measures: Amendments 3 (abortion and gender procedures for minors), 6, 7 and 8, and Proposition A (referendum on the 2025 congressional map). 8 district ballots on the 2022 map, which the state Supreme Court restored on Sep 3. Candidates come from the certified list (Aug 25). Measure titles come from Ballotpedia and St. Louis Public Radio, because the SoS measures page wouldn't load (see `MO.md`).
