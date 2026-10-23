@@ -1,0 +1,39 @@
+{
+  "_about": "West Virginia, Nov 3 2026, built by build-state.py from docs/launch-content/research/WV.json (sources and gaps in WV.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · West Virginia: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      49
+    ],
+    "closeDate": "2026-11-04T00:30:00Z",
+    "candidates": [
+      {
+        "name": "Shelley Moore Capito",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Rachel Fetty Anderson",
+        "affiliation": "Democrat",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "S. Marshall Wilson",
+        "affiliation": "Constitution",
+        "officeName": "U.S. Senate"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · West Virginia Amendment 1: U.S. citizenship requirement to vote",
+      "summary": "Citizenship Requirement to Vote in West Virginia Elections Amendment. This amendment provides that in all elections held in West Virginia only citizens of the United States who are citizens of this state are qualified to vote.\n\nIn short: Would amend Article IV, Section 1 of the state constitution to state that only citizens of the United States who are citizens of West Virginia may vote in elections held in the state.\n\nOfficial ballot language. Source: https://moorefieldexaminer.com/2026/08/04/public-notice-proposed-amendment-to-the-wv-constitution-to-be-on-the-november-3-2026-general-election-ballot/",
+      "effectiveDate": "2026-11-03",
+      "closeDate": "2026-11-04T00:30:00Z"
+    }
+  ]
+}

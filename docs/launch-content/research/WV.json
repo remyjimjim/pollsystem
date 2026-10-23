@@ -1,0 +1,71 @@
+{
+  "state": "West Virginia",
+  "abbr": "WV",
+  "pollCloseLocal": "7:30 PM",
+  "pollCloseUtc": "2026-11-04T00:30:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        { "name": "Shelley Moore Capito", "party": "Republican" },
+        { "name": "Rachel Fetty Anderson", "party": "Democrat" },
+        { "name": "S. Marshall Wilson", "party": "Constitution" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        { "name": "Carol Miller", "party": "Republican" },
+        { "name": "Vince George", "party": "Democrat" },
+        { "name": "Belinda Fox-Spencer", "party": "Constitution" }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        { "name": "Riley Moore", "party": "Republican" },
+        { "name": "Ace Parsi", "party": "Democrat" }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Amendment 1",
+      "subject": "U.S. citizenship requirement to vote",
+      "ballotTitle": "Citizenship Requirement to Vote in West Virginia Elections Amendment. This amendment provides that in all elections held in West Virginia only citizens of the United States who are citizens of this state are qualified to vote.",
+      "summary": "Would amend Article IV, Section 1 of the state constitution to state that only citizens of the United States who are citizens of West Virginia may vote in elections held in the state.",
+      "source": "https://moorefieldexaminer.com/2026/08/04/public-notice-proposed-amendment-to-the-wv-constitution-to-be-on-the-november-3-2026-general-election-ballot/"
+    }
+  ],
+  "measureEffective": "2026-11-03",
+  "measureEffectiveNote": "W. Va. Code §3-11-6: if a majority of votes cast are for ratification, the amendment 'shall be in force and effect from the date of such ratification, as part of the Constitution of the State.' The election date (Nov 3, 2026) is used as the ratification date. The Secretary of State proclaims the statewide result on the 25th day after the election (about Nov 28, 2026) or as soon thereafter as practicable.",
+  "sources": [
+    "https://candidates.wvsos.gov/regular",
+    "https://candidates.wvsos.gov/candidate-web-api/candidates",
+    "https://sos.wv.gov/elections/voter-information/elections-frequently-asked-questions-faqs",
+    "https://code.wvlegislature.gov/3-11-2/",
+    "https://code.wvlegislature.gov/3-11-4/",
+    "https://code.wvlegislature.gov/3-11-6/",
+    "https://moorefieldexaminer.com/2026/08/04/public-notice-proposed-amendment-to-the-wv-constitution-to-be-on-the-november-3-2026-general-election-ballot/",
+    "https://news.ballotpedia.org/2026/03/17/west-virginia-becomes-fourth-state-to-place-citizenship-requirement-amendment-on-2026-ballot/",
+    "https://news.ballotpedia.org/2026/03/18/west-virginia-voters-to-decide-on-homestead-exemption-increase-amendment-in-nov-2026/",
+    "https://www.newsfromthestates.com/article/capito-secures-gop-nomination-us-senate-wv-will-face-fetty-anderson-november-general"
+  ],
+  "notes": [
+    "Candidates come from the WV Secretary of State candidate listing (candidates.wvsos.gov, election '11/03/2026 - GENERAL 2026', regular candidates), queried through its JSON API on 2026-10-23. The 'candidateBallotName' field is used, converted from all capitals to title case. Party labels are the list's party descriptions (REPUBLICAN, DEMOCRAT, CONSTITUTION).",
+    "Write-ins are excluded. Rio Phillips is a certified write-in candidate for U.S. Senate.",
+    "Statewide judicial races are not on the Nov 3 ballot. West Virginia elects Supreme Court of Appeals justices and Intermediate Court of Appeals judges in nonpartisan races at the May 12, 2026 primary, and the SOS list shows those races under the primary. The general-election judicial races (unexpired Circuit Court Districts 7 and 27, Family Court District 6) are local and are not modeled.",
+    "No other statewide executive office is up in 2026.",
+    "Only one constitutional amendment is on the ballot: SJR 9 (2026 regular session). HJR 42 (homestead exemption) did not make the ballot because the chambers never agreed on one version. Ballotpedia's 2026-03-18 article carries an editor's note correcting its earlier claim.",
+    "Under W. Va. Code §3-11-4, the ballot prints 'No. [n]', the title, the summary of purpose, then For / Against, under the heading 'Ballot on Constitutional Amendments'. ballotTitle here joins the title and the summary of purpose.",
+    "All of West Virginia is in the Eastern time zone. Polls are open 6:30 AM to 7:30 PM (SOS FAQ), so they close at 7:30 PM EST (UTC-5) on Nov 3, 2026."
+  ],
+  "unconfirmed": [
+    "Amendment wording comes from the legally required public notice printed in the Moorefield Examiner on 2026-08-04, not from an official SOS or Legislature page: wvlegislature.gov returned HTTP 500 on every request, and no county sample ballot was checked. Punctuation between title and summary as printed on the ballot is not verified.",
+    "Ballot party labels (for example 'Democrat' or 'Democratic', and whether Constitution is printed as 'Constitution Party') were not checked against a sample ballot. The SOS list's descriptions are used.",
+    "Effective date: §3-11-6 says 'from the date of such ratification'. Whether that means election day or the date of the SOS proclamation (about Nov 28) is not settled here.",
+    "Candidate changes after 2026-10-23 were not checked. The web-search budget ran out before a Ballotpedia cross-check of the House candidates."
+  ]
+}
