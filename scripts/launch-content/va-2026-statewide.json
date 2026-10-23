@@ -1,0 +1,48 @@
+{
+  "_about": "Virginia, Nov 3 2026, built by build-state.py from docs/launch-content/research/VA.json (sources and gaps in VA.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Virginia: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      47
+    ],
+    "closeDate": "2026-11-04T00:00:00Z",
+    "candidates": [
+      {
+        "name": "Mark R. Warner",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Bert Mizusawa",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Virginia Proposed Constitutional Amendment Question 1",
+      "summary": "Question: Should the Constitution of Virginia be amended to (i) protect the freedom to make personal decisions about prenatal care, childbirth, postpartum care, birth control, abortion, miscarriage management, and fertility care; (ii) protect doctors, nurses, and patients from being punished for these decisions; and (iii) allow for restrictions on access to abortion during the third trimester of pregnancy except when the patient's health is at risk or the pregnancy cannot survive?\n\nIn short: Would add a fundamental right to reproductive freedom (Article I, Section 11-A) to the state constitution, while allowing third-trimester abortion restrictions with exceptions for the patient's health and nonviable pregnancies.\n\nOfficial ballot language. Source: https://www.elections.virginia.gov/casting-a-ballot/candidate-list/november-2026-proposed-constitutional-amendments/",
+      "effectiveDate": "2027-01-01",
+      "closeDate": "2026-11-04T00:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Virginia Proposed Constitutional Amendment Question 2",
+      "summary": "Question: Should the Constitution of Virginia be amended to (i) remove the ban on same-sex marriage; (ii) affirm that two adults may marry regardless of sex, gender, or race; and (iii) require all legally valid marriages to be treated equally under the law?\n\nIn short: Would replace the constitution's one-man-one-woman marriage provision (Article I, Section 15-A) with language barring denial of marriage licenses based on sex, gender, or race and requiring equal treatment of lawful marriages.\n\nOfficial ballot language. Source: https://www.elections.virginia.gov/casting-a-ballot/candidate-list/november-2026-proposed-constitutional-amendments/",
+      "effectiveDate": "2027-01-01",
+      "closeDate": "2026-11-04T00:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Virginia Proposed Constitutional Amendment Question 3",
+      "summary": "Question: Should the Constitution of Virginia be amended (i) to provide for the fundamental right to vote in the Commonwealth, (ii) to revise the qualifications of voters so that a person convicted of a felony is not entitled to vote during his period of incarceration but is automatically invested with the right to vote upon release from incarceration, and (iii) to update the existing prohibition on voting by persons found to be mentally incompetent to instead apply to persons who have been found to lack the capacity to understand the act of voting?\n\nIn short: Would establish a constitutional right to vote, automatically restore voting rights to people with felony convictions upon release from incarceration, and narrow the mental-incapacity voting bar to people found unable to understand the act of voting.\n\nOfficial ballot language. Source: https://www.elections.virginia.gov/casting-a-ballot/candidate-list/november-2026-proposed-constitutional-amendments/",
+      "effectiveDate": "2027-01-01",
+      "closeDate": "2026-11-04T00:00:00Z"
+    }
+  ]
+}

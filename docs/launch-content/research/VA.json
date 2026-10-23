@@ -1,0 +1,272 @@
+{
+  "state": "Virginia",
+  "abbr": "VA",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T00:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Mark R. Warner",
+          "party": "Democratic"
+        },
+        {
+          "name": "Bert Mizusawa",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Shannon L. Taylor",
+          "party": "Democratic"
+        },
+        {
+          "name": "Robert J. \"Rob\" Wittman",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Elaine G. Luria",
+          "party": "Democratic"
+        },
+        {
+          "name": "Jen A. Kiggans",
+          "party": "Republican"
+        },
+        {
+          "name": "Geral D. \"Bishop\" Staten",
+          "party": "Independent"
+        },
+        {
+          "name": "J. Matt Baker",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Robert C. \"Bobby\" Scott",
+          "party": "Democratic"
+        },
+        {
+          "name": "Edwin Rivera, Jr.",
+          "party": "Republican"
+        },
+        {
+          "name": "Makiba A. Gaines",
+          "party": "Independent"
+        },
+        {
+          "name": "Stephen C. Woll",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Jennifer L. McClellan",
+          "party": "Democratic"
+        },
+        {
+          "name": "Robert P. \"Family Man\" Murray, Jr.",
+          "party": "Republican"
+        },
+        {
+          "name": "Joan E. \"Andrews\" Bell",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Tom S. P. Perriello",
+          "party": "Democratic"
+        },
+        {
+          "name": "John J. McGuire III",
+          "party": "Republican"
+        },
+        {
+          "name": "Cooke C. Harvey",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Beth A. Macy",
+          "party": "Democratic"
+        },
+        {
+          "name": "Ben L. Cline",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Eugene S. Vindman",
+          "party": "Democratic"
+        },
+        {
+          "name": "Doug A. Ollivant",
+          "party": "Republican"
+        },
+        {
+          "name": "Taner E. Demirci Lopez",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Alaha Ahrar",
+          "party": "Independent"
+        },
+        {
+          "name": "Joshua E. Ertle",
+          "party": "Independent"
+        },
+        {
+          "name": "Randall A. Terry",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Donald S. Beyer, Jr.",
+          "party": "Democratic"
+        },
+        {
+          "name": "Tony A. Sabio",
+          "party": "Republican"
+        },
+        {
+          "name": "Shelly M. Arnoldi",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Tim S. Sharman",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 9,
+      "candidates": [
+        {
+          "name": "Joy A. Powers",
+          "party": "Democratic"
+        },
+        {
+          "name": "H. Morgan Griffith",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 10,
+      "candidates": [
+        {
+          "name": "Suhas Subramanyam",
+          "party": "Democratic"
+        },
+        {
+          "name": "Dave T. Beckwith",
+          "party": "Republican"
+        },
+        {
+          "name": "Ahsen Mujeeb Malik",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 11,
+      "candidates": [
+        {
+          "name": "James R. Walkinshaw",
+          "party": "Democratic"
+        },
+        {
+          "name": "Arthur G. Purves",
+          "party": "Republican"
+        },
+        {
+          "name": "Dianne L. Blais",
+          "party": "Green"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Proposed Constitutional Amendment Question 1",
+      "subject": "Right to reproductive freedom, including abortion",
+      "ballotTitle": "Question: Should the Constitution of Virginia be amended to (i) protect the freedom to make personal decisions about prenatal care, childbirth, postpartum care, birth control, abortion, miscarriage management, and fertility care; (ii) protect doctors, nurses, and patients from being punished for these decisions; and (iii) allow for restrictions on access to abortion during the third trimester of pregnancy except when the patient's health is at risk or the pregnancy cannot survive?",
+      "summary": "Would add a fundamental right to reproductive freedom (Article I, Section 11-A) to the state constitution, while allowing third-trimester abortion restrictions with exceptions for the patient's health and nonviable pregnancies.",
+      "source": "https://www.elections.virginia.gov/casting-a-ballot/candidate-list/november-2026-proposed-constitutional-amendments/"
+    },
+    {
+      "designation": "Proposed Constitutional Amendment Question 2",
+      "subject": "Marriage between two adults regardless of sex, gender, or race",
+      "ballotTitle": "Question: Should the Constitution of Virginia be amended to (i) remove the ban on same-sex marriage; (ii) affirm that two adults may marry regardless of sex, gender, or race; and (iii) require all legally valid marriages to be treated equally under the law?",
+      "summary": "Would replace the constitution's one-man-one-woman marriage provision (Article I, Section 15-A) with language barring denial of marriage licenses based on sex, gender, or race and requiring equal treatment of lawful marriages.",
+      "source": "https://www.elections.virginia.gov/casting-a-ballot/candidate-list/november-2026-proposed-constitutional-amendments/"
+    },
+    {
+      "designation": "Proposed Constitutional Amendment Question 3",
+      "subject": "Right to vote and restoration of voting rights after incarceration",
+      "ballotTitle": "Question: Should the Constitution of Virginia be amended (i) to provide for the fundamental right to vote in the Commonwealth, (ii) to revise the qualifications of voters so that a person convicted of a felony is not entitled to vote during his period of incarceration but is automatically invested with the right to vote upon release from incarceration, and (iii) to update the existing prohibition on voting by persons found to be mentally incompetent to instead apply to persons who have been found to lack the capacity to understand the act of voting?",
+      "summary": "Would establish a constitutional right to vote, automatically restore voting rights to people with felony convictions upon release from incarceration, and narrow the mental-incapacity voting bar to people found unable to understand the act of voting.",
+      "source": "https://www.elections.virginia.gov/casting-a-ballot/candidate-list/november-2026-proposed-constitutional-amendments/"
+    }
+  ],
+  "measureEffective": "2027-01-01",
+  "measureEffectiveNote": "Each enabling act (HB963/SB6 voting rights, HB781/SB449 reproductive freedom, HB612/SB311 marriage; 2026 Session) provides that if a majority votes in favor, the amendment becomes effective January 1, 2027 (per ELECT's 2026 election-law summary and the text of 2026 Acts ch. 1/819 for the marriage amendment).",
+  "sources": [
+    "https://www.elections.virginia.gov/casting-a-ballot/candidate-list/november-3-2026-gen-elect-federal-offices/",
+    "https://www.elections.virginia.gov/media/castyourballot/candidatelist/2026/2026-November-Federal-Offices-Candidate-List-(rev-10-6-2026).xlsx",
+    "https://www.elections.virginia.gov/casting-a-ballot/candidate-list/november-2026-proposed-constitutional-amendments/",
+    "https://www.elections.virginia.gov/media/formswarehouse/print-ready-materials-artwork/november-2026-proposed-constitutional-amendments/2026-Nov-Proposed-Constitution-Amendments-Brochure---EN.pdf",
+    "https://www.elections.virginia.gov/media/electionadministration/electionlaw/2026-Summary-of-Election-Law-Changes_FINAL.pdf",
+    "https://law.lis.virginia.gov/uncodifiedacts/2026/session1/chapter1/",
+    "https://www.elections.virginia.gov/casting-a-ballot/",
+    "https://www.wmra.org/2026-08-04/primary-results-luria-kiggans-rematch-mcguire-defeats-challenger-to-face-perriello-and-more",
+    "https://virginiamercury.com/category/redistricting/va-redistricting-2026/"
+  ],
+  "notes": [
+    "Candidates, ballot names and party labels are from the Department of Elections (ELECT) 'November 3, 2026 - Federal Offices' list (file rev. 10-6-2026); ELECT lists the office as 'Member, United States Senate' (shown here as U.S. Senate, matching other states).",
+    "No statewide offices other than U.S. Senate are on the 2026 Virginia ballot.",
+    "Redistricting: voters approved a mid-decade congressional redistricting amendment on April 21, 2026, but the Supreme Court of Virginia nullified the result (Article XII, Section 1 violation) and the U.S. Supreme Court declined to intervene; the 2021 court-drawn 11-district map remains in effect for November 2026. ELECT's 2026 law summary confirms the nullification; the episode moved the 2026 primary to August 4.",
+    "Measure designations and question text are verbatim from ELECT's November 2026 amendments list (rev. 9-8-2026) and match the official voter brochure and the marriage enabling act.",
+    "Polls are open 6:00 a.m. to 7:00 p.m. statewide (ELECT); all of Virginia is on Eastern time, so 7:00 PM EST = 2026-11-04T00:00:00Z."
+  ],
+  "unconfirmed": [
+    "Exact party wording printed on the ballot face was not checked against a sample ballot; ELECT list labels used (Democratic, Republican, Independent, Libertarian, Green).",
+    "Outcome of the Tazewell County suit (filed ~Apr 30, 2026) challenging the Question 1 ballot language was not found; ELECT's list and brochure still carry the original wording, and early voting began Sept 18.",
+    "Exact date of the Supreme Court of Virginia redistricting decision differs between secondary sources (April 28 vs May 8, 2026); this does not affect the map in use.",
+    "Enabling-act text for Questions 1 and 3 was not read directly (LIS bill pages unreadable); the Jan 1, 2027 effective date for them comes from ELECT's official law summary.",
+    "Candidate changes after the Oct 6, 2026 list revision were not checked."
+  ]
+}
