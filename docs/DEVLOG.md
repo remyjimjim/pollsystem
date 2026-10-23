@@ -61,6 +61,55 @@ logged.
 
 ---
 
+## 2026-10-23 — Midterm voting rules and "Cancel my votes" (V38)
+
+**Requested:**
+
+> if the 'Submit votes' button is clicked on any midterm election and
+> current user's zipcode is not from that state then err msg 'You can only
+> vote on midterms from your own state.' and a rule whereby if a user clicks
+> the 'Submit votes' button of a midterm and they've already voted on another
+> midterm from the same state associated with their zipcode then err msg
+> 'You need to "Cancel" your vote from other midterm you submitted. You need
+> to know your state voting district and choose the right election.'
+
+**Changed:**
+
+- V38 adds `elections.residents_only` and sets it on every "2026 Midterm"
+  election. `ElectionDraftRequest.residentsOnly` sets it; null leaves it
+  unchanged.
+- `BallotRules`:
+  - **Residents only:** an election (or one of its ballot measures) refuses
+    a vote from a zipcode outside its purview with "You can only vote on
+    midterms from your own state."
+  - **One district ballot:** ballots that include the same election are
+    alternatives. Having voted on another one's own races refuses the vote
+    (409), naming that ballot.
+  - **Cancel:** removes a ballot's votes, including its included elections
+    and their measures.
+- `DELETE /api/polls/elections/{id}/responses` is the Cancel. The
+  published results only lose that voter's rows; they aren't re-tallied,
+  which could reveal a newer voter's choice to the one cancelling.
+- Voting form:
+  - A "Cancel my votes" button, with a confirmation, next to "Yes, edit".
+  - The 409 message links to the other ballot.
+  - Translated into all 9 languages.
+- Known gap: a district ballot with no House race of its own (FL-10) can't
+  trigger the one-ballot rule.
+
+**Verified:**
+
+- `BallotRulesTest` (3). The full backend suite passes (377). The frontend
+  type-checks, and all 181 unit tests pass.
+- Local API, as the demo super (a Washington zipcode):
+  - a Texas ballot is refused with 403;
+  - WA District 1 accepts the vote, then District 2 is refused with 409;
+  - after cancelling District 1, District 2 accepts the vote.
+
+**Commit:** `aebb759`
+
+---
+
 ## 2026-10-23 — All states on staging; bulk-publish retries
 
 **Requested:**
