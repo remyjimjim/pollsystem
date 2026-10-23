@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Minnesota on local
+
+**Changed:** MN: 5 executive races and 7 nonpartisan judicial seats (each with only the incumbent on the ballot), 1 constitutional amendment (school funding, effective 2027-07-01 per its own text), 8 district ballots. Names come from the Secretary of State's own Nov 3 results feed. Most House party labels are worked out from the SoS party codes (see `MN.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `99d7a31`
+
+---
+
 ## 2026-10-23 — Maryland on local
 
 **Changed:** MD: Governor/Lt. Governor (4 tickets), Comptroller and Attorney General; Questions 1–3, with Question 3 in the wording the Supreme Court of Maryland ordered; 8 district ballots. All of it comes from the State Board of Elections' lists (updated 10/16). Write-in filers are left out. The effective date (Jan 15) is an estimate (see `MD.md`).
