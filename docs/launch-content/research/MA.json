@@ -1,0 +1,309 @@
+{
+  "state": "Massachusetts",
+  "abbr": "MA",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        {
+          "name": "Edward J. Markey",
+          "party": "Democratic"
+        },
+        {
+          "name": "John Deaton",
+          "party": "Republican"
+        },
+        {
+          "name": "Shiva Ayyadurai",
+          "party": "Independent"
+        },
+        {
+          "name": "Joe Tache",
+          "party": "Socialism and Liberation"
+        }
+      ]
+    },
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        {
+          "name": "Maura Healey / Kimberley Driscoll",
+          "party": "Democratic"
+        },
+        {
+          "name": "Michael Roger Minogue / Shawn Oliver",
+          "party": "Republican"
+        },
+        {
+          "name": "Andrea James / Kayla Kittredge",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Andrea Joy Campbell",
+          "party": "Democratic"
+        },
+        {
+          "name": "Michael C. Walsh",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of the Commonwealth",
+      "candidates": [
+        {
+          "name": "William Francis Galvin",
+          "party": "Democratic"
+        },
+        {
+          "name": "Anne R. Brensley",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Treasurer",
+      "candidates": [
+        {
+          "name": "Deborah B. Goldberg",
+          "party": "Democratic"
+        },
+        {
+          "name": "Elizabeth Dionne",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Auditor",
+      "candidates": [
+        {
+          "name": "Diana DiZoglio",
+          "party": "Democratic"
+        },
+        {
+          "name": "Al Ozonoff",
+          "party": "Libertarian"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Richard E. Neal",
+          "party": "Democratic"
+        },
+        {
+          "name": "Nadia Donya Milleron",
+          "party": "Independent/Unenrolled"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "James P. McGovern",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Lori Loureiro Trahan",
+          "party": "Democratic"
+        },
+        {
+          "name": "Gary J. Grossi",
+          "party": "Republican"
+        },
+        {
+          "name": "Dennis R. Conlon",
+          "party": "Unenrolled"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Jake Auchincloss",
+          "party": "Democratic"
+        },
+        {
+          "name": "Thomas Stalcup",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Katherine M. Clark",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Dan Koh",
+          "party": "Democratic"
+        },
+        {
+          "name": "Micah Quinney Jones",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Ayanna S. Pressley",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Stephen F. Lynch",
+          "party": "Democratic"
+        },
+        {
+          "name": "Robert G. Burke",
+          "party": "Republican"
+        },
+        {
+          "name": "Rasheed Nicholas Walters",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 9,
+      "candidates": [
+        {
+          "name": "Bill Keating",
+          "party": "Democratic"
+        },
+        {
+          "name": "R. Tyler Macallister",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Question 1",
+      "subject": "Expanding the Public Records Law",
+      "ballotTitle": "Do you approve of a law summarized below, on which no vote was taken by the Senate or the House of Representatives before May 6, 2026? SUMMARY: This proposed law would make most records held by the Legislature and the Office of the Governor public records under the Massachusetts Public Records Law. This proposed law would exempt documents related to the development of public policy and communications between legislators and their constituents, if those communications are reasonably related to a constituent’s request for assistance in obtaining government-provided benefits or services or interacting with a government agency. A YES VOTE would make most records held by the Legislature and the Office of the Governor public records under the Massachusetts Public Records Law. A NO VOTE would make no change to the Massachusetts Public Records Law.",
+      "summary": "Would make most records of the Legislature and the Governor's office subject to the state Public Records Law, with exemptions for policy-development documents and certain constituent communications.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    },
+    {
+      "designation": "Question 2",
+      "subject": "Collective Bargaining for CPCS Employees",
+      "ballotTitle": "Do you approve of a law summarized below, on which no vote was taken by the Senate or the House of Representatives before May 6, 2026? SUMMARY: This proposed law would specify that employees of the Committee for Public Counsel Services (“CPCS”) are permitted to engage in collective bargaining with their employer. It would also require CPCS, after executing a collective bargaining agreement, to request the appropriation necessary to fund such agreement from the Governor. A YES VOTE would specify that Committee for Public Counsel Services employees may form a union to collectively bargain with their employer. A NO VOTE would make no change to the law governing labor relations for Committee for Public Counsel Service employees.",
+      "summary": "Would let employees of the Committee for Public Counsel Services, the state public defender agency, unionize and bargain collectively, with CPCS required to request funding for any agreement from the Governor.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    },
+    {
+      "designation": "Question 3",
+      "subject": "State Primary Elections",
+      "ballotTitle": "Do you approve of a law summarized below, on which no vote was taken by the Senate or the House of Representatives before May 6, 2026? SUMMARY: This proposed law would eliminate political party primaries for state elections and instead establish a system where there would be a single, all-party primary in which all candidates, regardless of their party affiliation, would be listed on one ballot, and voters could vote for any candidate on the ballot. The two candidates receiving the most votes in the primary would advance to the general election ballot. This proposed law would require candidates for governor and lieutenant governor to run and be listed jointly on the ballot in the primary. This proposed law would provide political party status to any group whose candidates for any statewide office received at least 3% of the ballots cast in the state primary. A YES VOTE would eliminate separate party primaries for state elections and require a single primary in which all candidates appear on one ballot, voters could vote for any candidate, and the top two candidates would advance to the general election. A NO VOTE would make no change to the laws governing primary elections.",
+      "summary": "Would replace separate party primaries for state offices with a single all-candidate primary in which the top two finishers advance to the general election.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    },
+    {
+      "designation": "Question 4",
+      "subject": "Election Day Registration",
+      "ballotTitle": "Do you approve of a law summarized below, on which no vote was taken by the Senate or the House of Representatives before May 6, 2026? SUMMARY: This proposed law would permit eligible individuals to register to vote or update their voter registration address on Election Day. An individual who is eligible to vote could register to vote on Election Day by going to the polling place in the precinct where they live during voting hours and presenting proof of residency and signing a written oath. Proof of residency could be a valid photo identification, or documentation showing the individual’s name and the address where the individual resides, such as a current utility bill, bank statement, government check, residential lease, wireless telephone statement, paycheck, current student fee statement or other document from a post-secondary school, or another government document or correspondence. The written oath would require the individual to certify that they are a citizen of the United States, are at least 18 years old, are not legally prohibited from voting, and have not and will not vote in the same election at another location. The oath would require the individual to acknowledge that providing false information is a felony punishable by not more than 5 years imprisonment or a fine of not more than $10,000, or both. If an individual did not present proof of residency, they would be allowed to cast a provisional ballot, which would be counted only if the individual returned to provide the required information before the close of polls for a municipal election; within two days after a state primary; or within six days after a state election. Individuals who register to vote on Election Day would be registered to vote in future elections as well as in the election taking place that day. Individuals who are already registered to vote would not be able to change their political party affiliation on Election Day. The proposed law would take effect on January 1, 2028. A YES VOTE would permit eligible citizens to register to vote or to update their voter registration address at their polling place on Election Day. A NO VOTE would make no change to the laws governing voter registration.",
+      "summary": "Would allow eligible people to register to vote or update their registration address at their polling place on Election Day, starting January 1, 2028.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    },
+    {
+      "designation": "Question 5",
+      "subject": "State Revenue Limit & Rebate",
+      "ballotTitle": "Do you approve of a law summarized below, on which no vote was taken by the Senate or the House of Representatives before May 6, 2026? SUMMARY: This proposed law would change the limit on how much revenue the state can collect in a given year. The proposal would limit state revenue in a given year to the net amount of state revenue from the year before, increased by a rate equal to the average growth of wages and salaries in Massachusetts over the most recent three years. If revenue collected by the state in a given year exceeds the limit, the excess amount would be refunded to taxpayers the following year. The proposed law would include all revenue from the surtax on incomes over $1 million when calculating the revenue limit and when determining whether state revenue exceeds the limit. The provisions of the proposed law would all be effective as of July 1, 2027. The proposed law states that, if any of its parts were declared invalid, the other parts would stay in effect. A YES VOTE would change the limit on state revenue collection, tying it to prior year collections plus average wage and salary growth, and provide for a rebate of revenue exceeding that limit. A NO VOTE would make no change in the law relative to state revenue collection.",
+      "summary": "Would cap annual state revenue at the prior year's revenue grown by average wage and salary growth, counting the millionaires' surtax, and refund any excess to taxpayers the next year.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    },
+    {
+      "designation": "Question 6",
+      "subject": "Natural Resource Conservation Fund",
+      "ballotTitle": "Do you approve of a law summarized below, on which no vote was taken by the Senate or the House of Representatives before May 6, 2026? SUMMARY: This proposed law would establish a Nature for All Fund that, subject to appropriation by the Legislature, would receive 50% of state taxes collected from the sale and use of sporting goods, recreational vehicles, and golf courses for the first year of its operation. After July 1, 2028, the Nature for All Fund would begin receiving, subject to appropriation by the Legislature, 100% of state taxes collected on the sale and use of sporting goods, recreational vehicles, and golf courses. The sales tax revenue received by the Nature for All Fund would exclude sales tax revenue transferred to the Massachusetts Bay Transportation Authority State and Local Contribution Fund and the School Modernization and Reconstruction Trust Fund. The proposed law would allow the state Executive Office of Energy and Environmental Affairs to spend the money in the Nature for All Fund for natural resource conservation. The proposed law would allow public and private donations to the Nature for All Fund. The proposed law would prevent the state comptroller from transferring surplus funds in the Nature for All Fund at the end of the fiscal year. It would also allow state agencies, municipalities, public charities involved in natural resource conservation, tribal governments, and other regional public entities to receive money from the Nature for All Fund. Natural resource conservation would include the conservation or restoration of land to protect drinking water, streams, rivers, lakes, coasts, farms, forests, connectivity between open spaces, and lands and natural resources of indigenous cultural significance. Natural resource conservation would also include the creation, improvement, and management of parks, trails, greenspaces or outdoor recreation access. The proposed law would establish a 15-member Nature for All Board that consists of five state officials and ten members of the public appointed by the Governor. The proposed law would require the ten members of the public to include representatives of underserved communities and indigenous peoples and at least one person with expertise or experience in natural resource conservation. The proposed law would allow the state Executive Office of Energy and Environmental Affairs to spend money from the Nature for All Fund to hire staff to manage the fund. The proposed law would also require the Nature for All Board to establish rules about how the money in the Nature for All Fund should be spent, including rules regarding alignment with environmental justice principles, access to and restoration of lands and natural resources of indigenous cultural significance, promotion of affordable housing development, and other matters regarding spending and bond issuance. The proposed law would require the state Executive Office of Energy and Environmental Affairs to submit an annual report to various state committees regarding the funds spent to buy or improve land in cities and towns containing environmental justice populations. The proposed law would take effect on July 1, 2027. A YES VOTE would create a fund that could be utilized for natural resource conservation that would receive some state taxes collected on the sale and use of sporting goods and recreational vehicles, and the use of golf courses. A NO VOTE would not create this natural resource conservation fund or change how sales and use taxes are spent.",
+      "summary": "Would direct state sales and use taxes on sporting goods, recreational vehicles and golf courses, subject to appropriation, into a new Nature for All Fund for land and natural resource conservation.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    },
+    {
+      "designation": "Question 7",
+      "subject": "Single Family Homes",
+      "ballotTitle": "Do you approve of a law summarized below, on which no vote was taken by the Senate or the House of Representatives before May 6, 2026? SUMMARY: This proposed law would allow single-family homes to be built in a residentially zoned area as long as the land on which it is to be constructed is at least 5,000 square feet, has at least 50 feet of land bordering the street, road, or public way that it faces, and has access to public sewer and water services. The proposed law would allow cities and towns to reasonably regulate certain aspects of those single-family homes, including their height, distance from neighboring buildings, open space, parking requirements, and whether they can be rented out on a short-term basis. The proposed law would also allow the Executive Office of Housing and Livable Communities to issue guidance or regulations to administer the proposed law. A YES VOTE would allow single-family homes to be built on lots of 5,000 square feet or more in residential areas, subject to reasonable local regulation of certain aspects of those homes. A NO VOTE would make no change to the law relative to building single-family homes.",
+      "summary": "Would allow single-family homes on residential lots of at least 5,000 square feet with 50 feet of frontage and public water and sewer, subject to reasonable local regulation.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    },
+    {
+      "designation": "Question 8",
+      "subject": "Prohibit Retail Sale of Adult Recreational Use Marijuana",
+      "ballotTitle": "Do you approve of a law summarized below, on which no vote was taken by the Senate or the House of Representatives before May 6, 2026? SUMMARY: The proposed law would change the type and amount of marijuana that may legally be possessed in Massachusetts by repealing the laws that legalize, regulate, and tax the retail sale of adult recreational use marijuana in Massachusetts. The proposed law would also permit persons 21 years of age and older to possess 1 ounce or less of marijuana including no more than 5 grams in the form of concentrate, and to gift or transfer to another person 21 years of age and older 1 ounce or less of marijuana including no more than 5 grams in the form of concentrate. The proposed law would also impose a civil penalty of $100 and forfeiture of the marijuana for the possession of marijuana between the weight of 1 and 2 ounces. For persons 21 years of age and younger, the proposed law would make the possession of 2 ounces or less of marijuana a civil infraction subject to a $100 fine, forfeiture of the marijuana, completion of a drug awareness program and community service, and notification to their parents or legal guardian of the offense and penalties. The proposed law would allow currently licensed adult recreational marijuana businesses to apply on an expedited basis to become a licensed medical marijuana dispensary and to sell their remaining inventory of adult recreational marijuana to medical marijuana dispensaries. The proposed law would retain the Cannabis Control Commission but modify its authority so it would regulate only the medical marijuana market. The proposed law states that, if any of its parts were declared invalid, the other parts would stay in effect. The proposed law would take effect on January 1, 2028. A YES VOTE would prohibit the legalization, regulation, and taxation of the retail sale of adult recreational use marijuana, and change the penalties for possession of marijuana. A NO VOTE would make no change to the law relative to marijuana.",
+      "summary": "Would repeal the legal retail sale of recreational marijuana while keeping limited adult possession and medical marijuana legal, starting January 1, 2028.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    },
+    {
+      "designation": "Question 9",
+      "subject": "Firearms Regulation",
+      "ballotTitle": "Do you approve of a law summarized below, which was approved by the House of Representatives on July 18, 2024 by a vote of 124 to 33, and approved by the Senate on July 18, 2024 by a vote of 35 to 5? SUMMARY: This law makes a number of changes to Massachusetts laws governing firearms. The law adds school administrators and licensed healthcare providers as parties permitted to ask a court to issue an Extreme Risk Protection Order – requiring an individual to surrender or relinquish their firearm licenses, permits, and firearms - if an individual is a present danger to self or others. The law also provides that, when issuing an Harassment Prevention Order, a court may also order the surrender of firearms licenses, permits, and firearms. The law imposes penalties for possessing, creating, and transferring untraceable “ghost gun” firearms and requires all firearms except antiques and relics, including unfinished frames and receivers that can be readily made into a finished product, to have serial numbers. The law includes privately-made guns like 3D-printed guns within the provisions governing untraceable “ghost gun” firearms. The law changes firearms licensing requirements to: (1) allow local licensing authorities to request prior license and permit information from the state, as well as access petitions for involuntary mental health commitments denied by a court in addition to prior involuntary commitments, as a part of their review of applications for licenses to carry firearms, firearm ID cards, and licenses to sell firearms; (2) require an individual to be 21 years of age to own semiautomatic rifles or shotguns; (3) add the possibility of incarceration of up to six months for a second offense of failing to report a firearm loss or theft; and (4) enable 12-15 year olds to apply for a self-defense spray permit with parental permission, and 15 to 18 year olds to apply independently. The law allows local firearm licensing authorities to transfer the responsibility to inspect firearm dealers to the State Police. The law requires local licensing authorities to attend statewide training regarding those inspections. It requires dealers to confiscate expired or suspended licenses and report them to the state and to local licensing authorities. The law changes the definition of “machine gun” to include bump stocks, trigger cranks, Glock switches and auto sears among the devices whose possession and use are subject to penalties. It expands the definition of “silencer” to include the parts used to construct a silencer. The law clarifies how to determine whether a firearm is an assault-style weapon and the circumstances under which a person may continue to possess assault-style weapons and large capacity feeding devices they already own. The law requires the state Firearm Control Advisory Board and the state Secretary of Public Safety and Security to review and update the rosters of prohibited assault-style firearms, approved firearms, and approved firearms sold for target shooting. The law clarifies requirements relating to the carry and transport of firearms in motor vehicles and ATVs. It prohibits the carrying of firearms in government buildings, polling locations, and schools, with certain exceptions. The law expands data compilation and reporting requirements to and from the state, and creates a publicly-accessible dashboard of anonymized aggregate firearm data, along with a commission to study that data. The law requires the State Police to provide training and a test for new applicants for licenses to carry or Firearm ID cards. The law establishes two special legislative commissions – one to examine funding for violence prevention services, and one to study emerging firearms technology. The law criminalizes discharging a firearm and striking a building in use. A YES VOTE would keep in place the law, which increases the regulation of firearms, including ghost guns, machine guns, and assault-style weapons. A NO VOTE would repeal this law.",
+      "summary": "Asks voters whether to keep (yes) or repeal (no) the 2024 state firearms law covering ghost guns, machine-gun conversion devices, assault-style weapons, licensing and related rules.",
+      "source": "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf"
+    }
+  ],
+  "measureEffective": "2026-12-03",
+  "measureEffectiveNote": "Under Mass. Const. Amend. Art. 48 (The Initiative), a law approved by the voters takes effect thirty days after the state election unless the law sets a later date; 30 days after Nov 3, 2026 is Dec 3, 2026, used as the representative date (Questions 1, 2, 3 and 7 set no other date in their AG summaries). Per the AG summaries, Question 4 and Question 8 take effect January 1, 2028, and Questions 5 and 6 on July 1, 2027. Question 9 is a referendum on a 2024 law already in force: a YES vote keeps it in place; a NO vote repeals it.",
+  "sources": [
+    "https://web.archive.org/web/20261015231402/https://www.sec.state.ma.us/divisions/elections/research-and-statistics/2026-state-election-candidates.htm",
+    "https://www.sec.state.ma.us/divisions/elections/research-and-statistics/2026-state-election-candidates.htm",
+    "https://www.sec.state.ma.us/divisions/elections/download/information-for-voters/archive/IFV_2026%20English.pdf",
+    "https://www.sec.state.ma.us/divisions/elections/research-and-statistics/2026-Information-for-voters/2026-ballot-questions.htm",
+    "https://electionstats.state.ma.us/elections/search/year_from:2026/year_to:2026",
+    "https://ballotpedia.org/Massachusetts_elections,_2026",
+    "https://ballotpedia.org/United_States_House_of_Representatives_elections_in_Massachusetts,_2026",
+    "https://ballotpedia.org/Massachusetts_gubernatorial_and_lieutenant_gubernatorial_election,_2026",
+    "https://en.wikipedia.org/wiki/2026_Massachusetts_gubernatorial_election"
+  ],
+  "notes": [
+    "Candidates and party designations are from the Secretary of the Commonwealth's '2026 State Election Candidates' page (sec.state.ma.us is behind a bot check; read via the Wayback Machine capture of Oct 15, 2026). Party/political designation strings are copied as listed there.",
+    "The official list gives the Governor/Lt. Governor tickets by surname only ('Healey and Driscoll', 'Minogue and Oliver', 'James and Kittredge'), as MA ballots print them. Full names: Healey, Driscoll ('Kimberley Driscoll'), Minogue ('Michael Roger Minogue') and Oliver are from the official Sept 1 primary returns (electionstats.state.ma.us); Andrea James and Kayla Kittredge from Ballotpedia/Wikipedia.",
+    "Republican Lt. Gov. nominee Shawn Oliver suspended his campaign on Oct 18, 2026 after an Oct 17 arrest (OUI charges); per Wikipedia (not independently checked) his name remains on the ballot. The ticket is listed as printed.",
+    "Office labels: the ballot prints 'Senator in Congress', 'Governor & Lieutenant Governor', 'Secretary of State' and 'Representative in Congress'; the JSON uses the app's standard labels.",
+    "Anne R. Brensley (Secretary of State, Republican) won her nomination as a write-in in the Sept 1 primary (21,330 votes) and is printed on the general ballot.",
+    "MA-1: the official list omits a party for Richard E. Neal (apparent page omission); he won the Democratic primary 49,927 to 42,488 and is listed as Democratic.",
+    "MA-2, MA-5 and MA-7 have a single printed candidate (the Democratic incumbent).",
+    "Ballot question text (ballotTitle) is the question as printed: the 'Do you approve...' sentence, the Attorney General's summary, and the AG/Secretary 'yes'/'no' statements, verbatim from the official 2026 Information for Voters booklet (PDF read via the Wayback Machine and decoded with a stdlib text extractor). Questions 1-8 are initiative petitions; Question 9 is a referendum on an existing law.",
+    "Polls are open 7 a.m. to 8 p.m. statewide (Information for Voters, Secretary's letter); all of Massachusetts is Eastern time, so 8 PM EST = 01:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Candidate list is the Oct 15, 2026 capture of the official page; later changes (e.g., an official notice about Shawn Oliver) could not be checked because sec.state.ma.us blocks automated reads. A commented-out 'Lieutenant Governor: Shawn Oliver' entry exists in that page's HTML source.",
+    "Exact ballot designations: 'Independent/Unenrolled' (Milleron), 'Independent' (Ayyadurai, James/Kittredge, Walters) and 'Socialism and Liberation' (Tache) are as listed on the official candidates page; Ballotpedia shows several of these as 'Unenrolled' / 'Party for Socialism and Liberation'. Not checked against a sample ballot.",
+    "Full names of Andrea James and Kayla Kittredge come from Ballotpedia/Wikipedia only; the official list gives surnames.",
+    "Effective-date rule citation (Art. 48, The Initiative) is from general knowledge of the MA Constitution and was not re-read from an official text this session; the effect date of a Question 9 'No' (repeal) outcome was not confirmed.",
+    "The official HTML ballot-questions page could not be read (bot check); question text comes from the official PDF booklet instead. Web search was unavailable for news cross-checks of the minor candidates."
+  ]
+}
