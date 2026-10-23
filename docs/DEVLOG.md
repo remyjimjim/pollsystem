@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Indiana on local
+
+**Changed:** IN: Secretary of State, Comptroller and Treasurer, Public Questions 1–2 (bail, city and town court judges' residency), 9 district ballots on the 2022 map, which is still in effect. All of it comes from the Election Division's candidate list and official county sample ballots.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `fee845e`
+
+---
+
 ## 2026-10-23 — Minnesota on local
 
 **Changed:** MN: 5 executive races and 7 nonpartisan judicial seats (each with only the incumbent on the ballot), 1 constitutional amendment (school funding, effective 2027-07-01 per its own text), 8 district ballots. Names come from the Secretary of State's own Nov 3 results feed. Most House party labels are worked out from the SoS party codes (see `MN.md`).
