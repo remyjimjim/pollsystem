@@ -1,0 +1,273 @@
+{
+  "_about": "Louisiana, Nov 3 2026, built by build-state.py from docs/launch-content/research/LA.json (sources and gaps in LA.md). One ballot per district, each including \"2026 Midterm · Louisiana: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Louisiana District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        19
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Randall Arrington",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "E. \"Liddy\" Glass",
+          "affiliation": "No Party",
+          "officeName": "U.S. Representative, District 1 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Lauren Jewett",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Steve Scalise",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Louisiana District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        19
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Lisa Ballay",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 2 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Walter \"Rocky\" Beach",
+          "affiliation": "No Party",
+          "officeName": "U.S. Representative, District 2 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Troy A. Carter Sr.",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Renada \"Honey\" Collins",
+          "affiliation": "No Party",
+          "officeName": "U.S. Representative, District 2 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Peter Williams",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Louisiana District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        19
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "\"Kate\" Cotten",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "John Day",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Priscilla Gonzalez",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "\"Clay\" Higgins",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Tia LeBrun",
+          "affiliation": "No Party",
+          "officeName": "U.S. Representative, District 3 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Caleb \"With a C\" Walker",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Louisiana District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        19
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Conrad Cable",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "\"Matt\" Gromlich",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Gordon Heslop",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "\"Mike\" Johnson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "\"Mike\" Nichols",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Louisiana District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        19
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Stewart Cathey Jr.",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Misti Cordell",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Oscar \"Omar\" Dantzler",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Michael Echols",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "\"Gabe\" Firment",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Austin Magee",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Dan McKay",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Patricia \"Pat\" Moore",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Antonio Wilson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Louisiana District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        19
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Monique Appeaning",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Chauna Banks",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Rufus Craig",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Larry Davis III",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "\"Rick\" Edmonds",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Patrick \"Pat\" Forbes",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Lindsay \"Rubia\" Garcia",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Michael Mebruer",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Blake Miguez",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        },
+        {
+          "name": "Stephen Wagley",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6 (open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority)"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Louisiana: statewide races & measures"
+}

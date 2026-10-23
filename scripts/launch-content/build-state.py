@@ -78,6 +78,7 @@ def build(abbr, ids):
     RCV = " (ranked-choice on the ballot; pick your first choice here)"
     def office(s): return s['office'] + (f" (vote for {s['voteFor']} on the ballot; pick your top choice here)" if s.get('voteFor', 1) > 1 else "") + (RCV if s.get('rankedChoice') else "")
     hrcv = RCV if r.get('houseRankedChoice') else ""
+    if r.get('houseOfficeNote'): hrcv += f" ({r['houseOfficeNote']})"
     statewide = [cand(c, office(s)) for s in r.get('statewide', []) for c in s['candidates']]
     # A short designation ("Amendment 3") gets its subject; a descriptive one
     # (North Carolina's contest titles) stands alone.

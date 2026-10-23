@@ -1,0 +1,97 @@
+{
+  "_about": "Louisiana, Nov 3 2026, built by build-state.py from docs/launch-content/research/LA.json (sources and gaps in LA.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Louisiana: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      19
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "\"Jamie\" Davis",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Julia Letlow",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 1: Property tax exemption transfer for surviving spouses of disabled veterans",
+      "summary": "Do you support an amendment to allow the surviving spouse of a deceased veteran with a service-connected disability, who receives the additional property tax exemption, to make a one-time transfer of the additional property tax exemption to a subsequent qualifying property? (Effective January 1, 2027) (Amends Article VII, Section 21(K)(1))\n\nIn short: Would let a surviving spouse who receives the additional property tax exemption tied to a deceased veteran's service-connected disability move that exemption once to a new qualifying property (Act 39 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 2: Local millage rates after reassessment",
+      "summary": "Do you support an amendment to allow a local taxing authority to continue to levy a lower millage rate without losing its ability to adjust to the maximum authorized millage rate from a prior year's reassessment? (Effective January 1, 2027) (Amends Article VII, Section 23(C))\n\nIn short: Would let a local taxing authority that levies less than its maximum millage keep the ability to later return to the maximum rate set at a prior reassessment (Act 273 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 3: No post-conviction bail for aggravated offenses against minors",
+      "summary": "Do you support an amendment to prohibit a defendant from being released on any post-conviction bail if the defendant is convicted of an aggravated offense against a minor child? (Adds Article I, Section 18(C))\n\nIn short: Would bar release on bail after conviction for a defendant convicted of an aggravated offense against a minor child (Act 271 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 4: Lifetime two-term limit for governor",
+      "summary": "Do you support an amendment to prohibit a person who has served more than one and one-half terms as governor from being elected as governor for any future term? (Amends Article IV, Section 3(B))\n\nIn short: Would replace the current limit on consecutive terms with a lifetime limit, so that anyone who has served more than one and a half terms as governor could not be elected governor again (Act 414 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 5: Use of nonrecurring money for retirement system debt",
+      "summary": "Do you support an amendment to authorize a state retirement system to apply any nonrecurring state monies it receives to any of its unfunded accrued liability rather than requiring application to its oldest unfunded accrued liability? (Amends Article VII, Section 10(D)(2)(b)(iii))\n\nIn short: Would let state retirement systems apply nonrecurring state money to any part of their unfunded accrued liability instead of first to the oldest portion (Act 606 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 6: Optional property tax exemption for homeowners 65 and older",
+      "summary": "Do you support an amendment to authorize parishes and municipalities to extend an additional property tax exemption for property subject to the homestead exemption that is owned and occupied by a person who is at least sixty-five years of age and who qualifies for the special assessment level? (Effective January 1, 2028) (Adds Article VII, Section 21(P))\n\nIn short: Would allow parishes and municipalities to grant an additional property tax exemption on homesteads owned and occupied by people 65 or older who qualify for the special assessment level (Act 274 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 7: Public funds for drinking water service line replacement",
+      "summary": "Do you support an amendment to allow for the use of public funds by a political subdivision for the purpose of identifying, inventorying, removing or replacing drinking water utility service lines made of or affected by materials as specified or prescribed by the Lead and Copper Rule Improvements of the United States Environmental Protection Agency, promulgated October 30, 2024, or subsequent promulgation, on property owned by utility customers? (Amends Article VII, Section 14)\n\nIn short: Would allow local governments to spend public funds to identify, inventory, remove or replace drinking water service lines on customers' property that are covered by the EPA's Lead and Copper Rule Improvements (Act 607 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 8: Ban on expropriation by foreign adversaries",
+      "summary": "Do you support an amendment to prohibit expropriation of property by a foreign adversary or an agent of a foreign adversary? (Amends Article I, Section 4(B)(4))\n\nIn short: Would prohibit a foreign adversary, or an agent of one, from expropriating property in Louisiana (Act 277 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 9: Income limit for the special assessment level",
+      "summary": "Do you support an amendment to increase the maximum amount of income a person may receive and still qualify for the special assessment level for residential property receiving the homestead exemption? (Effective January 1, 2027) (Amends Article VII, Section 18(G)(1)(a)(ii))\n\nIn short: Would raise the income ceiling for qualifying for the special assessment level (the property assessment freeze) on homestead property (Act 220 of 2025).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Louisiana Amendment 10: Property tax exemptions for rehabilitated blighted property",
+      "summary": "Do you support an amendment to allow property tax exemptions for blighted or derelict properties that have been rehabilitated, and to require the legislature to enact laws providing for administration of these exemptions? (Effective January 1, 2027) (Adds Article VII, Section 21(P))\n\nIn short: Would allow property tax exemptions for blighted or derelict properties that have been rehabilitated, with the legislature required to pass laws to administer them (Act 272 of 2026).\n\nOfficial ballot language. Source: https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+      "effectiveDate": "2026-12-10",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}

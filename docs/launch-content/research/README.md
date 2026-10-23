@@ -34,3 +34,4 @@ Researched 2026-10-23 onwards. There is one pair of files per state:
   Write-ins are left out.
 - A multi-seat race ("vote for 2") adds `"voteFor": 2` to its statewide entry. The app records one choice per office, so the builder labels the office "(vote for 2 on the ballot; pick your top choice here)".
 - A ranked-choice race adds `"rankedChoice": true` to its statewide entry, and `"houseRankedChoice": true` at the top level covers the House races. The app records the first choice, and the office says so.
+- `"houseOfficeNote"` (top level, optional) is appended in parentheses to every House office, e.g. Louisiana's "open primary; runoff Dec 12 if no one wins a majority".

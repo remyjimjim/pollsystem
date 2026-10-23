@@ -1,0 +1,316 @@
+{
+ "state": "Louisiana",
+ "abbr": "LA",
+ "pollCloseLocal": "8:00 PM CST",
+ "pollCloseUtc": "2026-11-04T02:00:00Z",
+ "statewide": [
+  {
+   "office": "U.S. Senator",
+   "candidates": [
+    {
+     "name": "\"Jamie\" Davis",
+     "party": "Democratic"
+    },
+    {
+     "name": "Julia Letlow",
+     "party": "Republican"
+    }
+   ]
+  }
+ ],
+ "house": [
+  {
+   "district": 1,
+   "candidates": [
+    {
+     "name": "Randall Arrington",
+     "party": "Republican"
+    },
+    {
+     "name": "E. \"Liddy\" Glass",
+     "party": "No Party"
+    },
+    {
+     "name": "Lauren Jewett",
+     "party": "Democratic"
+    },
+    {
+     "name": "Steve Scalise",
+     "party": "Republican"
+    }
+   ]
+  },
+  {
+   "district": 2,
+   "candidates": [
+    {
+     "name": "Lisa Ballay",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Walter \"Rocky\" Beach",
+     "party": "No Party"
+    },
+    {
+     "name": "Troy A. Carter Sr.",
+     "party": "Democratic"
+    },
+    {
+     "name": "Renada \"Honey\" Collins",
+     "party": "No Party"
+    },
+    {
+     "name": "Peter Williams",
+     "party": "Republican"
+    }
+   ]
+  },
+  {
+   "district": 3,
+   "candidates": [
+    {
+     "name": "\"Kate\" Cotten",
+     "party": "Republican"
+    },
+    {
+     "name": "John Day",
+     "party": "Democratic"
+    },
+    {
+     "name": "Priscilla Gonzalez",
+     "party": "Democratic"
+    },
+    {
+     "name": "\"Clay\" Higgins",
+     "party": "Republican"
+    },
+    {
+     "name": "Tia LeBrun",
+     "party": "No Party"
+    },
+    {
+     "name": "Caleb \"With a C\" Walker",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 4,
+   "candidates": [
+    {
+     "name": "Conrad Cable",
+     "party": "Democratic"
+    },
+    {
+     "name": "\"Matt\" Gromlich",
+     "party": "Democratic"
+    },
+    {
+     "name": "Gordon Heslop",
+     "party": "Republican"
+    },
+    {
+     "name": "\"Mike\" Johnson",
+     "party": "Republican"
+    },
+    {
+     "name": "\"Mike\" Nichols",
+     "party": "Republican"
+    }
+   ]
+  },
+  {
+   "district": 5,
+   "candidates": [
+    {
+     "name": "Stewart Cathey Jr.",
+     "party": "Republican"
+    },
+    {
+     "name": "Misti Cordell",
+     "party": "Republican"
+    },
+    {
+     "name": "Oscar \"Omar\" Dantzler",
+     "party": "Republican"
+    },
+    {
+     "name": "Michael Echols",
+     "party": "Republican"
+    },
+    {
+     "name": "\"Gabe\" Firment",
+     "party": "Republican"
+    },
+    {
+     "name": "Austin Magee",
+     "party": "Republican"
+    },
+    {
+     "name": "Dan McKay",
+     "party": "Democratic"
+    },
+    {
+     "name": "Patricia \"Pat\" Moore",
+     "party": "Democratic"
+    },
+    {
+     "name": "Antonio Wilson",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 6,
+   "candidates": [
+    {
+     "name": "Monique Appeaning",
+     "party": "Republican"
+    },
+    {
+     "name": "Chauna Banks",
+     "party": "Democratic"
+    },
+    {
+     "name": "Rufus Craig",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Larry Davis III",
+     "party": "Republican"
+    },
+    {
+     "name": "\"Rick\" Edmonds",
+     "party": "Republican"
+    },
+    {
+     "name": "Patrick \"Pat\" Forbes",
+     "party": "Democratic"
+    },
+    {
+     "name": "Lindsay \"Rubia\" Garcia",
+     "party": "Democratic"
+    },
+    {
+     "name": "Michael Mebruer",
+     "party": "Republican"
+    },
+    {
+     "name": "Blake Miguez",
+     "party": "Republican"
+    },
+    {
+     "name": "Stephen Wagley",
+     "party": "Republican"
+    }
+   ]
+  }
+ ],
+ "measures": [
+  {
+   "designation": "Amendment 1",
+   "subject": "Property tax exemption transfer for surviving spouses of disabled veterans",
+   "ballotTitle": "Do you support an amendment to allow the surviving spouse of a deceased veteran with a service-connected disability, who receives the additional property tax exemption, to make a one-time transfer of the additional property tax exemption to a subsequent qualifying property? (Effective January 1, 2027) (Amends Article VII, Section 21(K)(1))",
+   "summary": "Would let a surviving spouse who receives the additional property tax exemption tied to a deceased veteran's service-connected disability move that exemption once to a new qualifying property (Act 39 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 2",
+   "subject": "Local millage rates after reassessment",
+   "ballotTitle": "Do you support an amendment to allow a local taxing authority to continue to levy a lower millage rate without losing its ability to adjust to the maximum authorized millage rate from a prior year's reassessment? (Effective January 1, 2027) (Amends Article VII, Section 23(C))",
+   "summary": "Would let a local taxing authority that levies less than its maximum millage keep the ability to later return to the maximum rate set at a prior reassessment (Act 273 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 3",
+   "subject": "No post-conviction bail for aggravated offenses against minors",
+   "ballotTitle": "Do you support an amendment to prohibit a defendant from being released on any post-conviction bail if the defendant is convicted of an aggravated offense against a minor child? (Adds Article I, Section 18(C))",
+   "summary": "Would bar release on bail after conviction for a defendant convicted of an aggravated offense against a minor child (Act 271 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 4",
+   "subject": "Lifetime two-term limit for governor",
+   "ballotTitle": "Do you support an amendment to prohibit a person who has served more than one and one-half terms as governor from being elected as governor for any future term? (Amends Article IV, Section 3(B))",
+   "summary": "Would replace the current limit on consecutive terms with a lifetime limit, so that anyone who has served more than one and a half terms as governor could not be elected governor again (Act 414 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 5",
+   "subject": "Use of nonrecurring money for retirement system debt",
+   "ballotTitle": "Do you support an amendment to authorize a state retirement system to apply any nonrecurring state monies it receives to any of its unfunded accrued liability rather than requiring application to its oldest unfunded accrued liability? (Amends Article VII, Section 10(D)(2)(b)(iii))",
+   "summary": "Would let state retirement systems apply nonrecurring state money to any part of their unfunded accrued liability instead of first to the oldest portion (Act 606 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 6",
+   "subject": "Optional property tax exemption for homeowners 65 and older",
+   "ballotTitle": "Do you support an amendment to authorize parishes and municipalities to extend an additional property tax exemption for property subject to the homestead exemption that is owned and occupied by a person who is at least sixty-five years of age and who qualifies for the special assessment level? (Effective January 1, 2028) (Adds Article VII, Section 21(P))",
+   "summary": "Would allow parishes and municipalities to grant an additional property tax exemption on homesteads owned and occupied by people 65 or older who qualify for the special assessment level (Act 274 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 7",
+   "subject": "Public funds for drinking water service line replacement",
+   "ballotTitle": "Do you support an amendment to allow for the use of public funds by a political subdivision for the purpose of identifying, inventorying, removing or replacing drinking water utility service lines made of or affected by materials as specified or prescribed by the Lead and Copper Rule Improvements of the United States Environmental Protection Agency, promulgated October 30, 2024, or subsequent promulgation, on property owned by utility customers? (Amends Article VII, Section 14)",
+   "summary": "Would allow local governments to spend public funds to identify, inventory, remove or replace drinking water service lines on customers' property that are covered by the EPA's Lead and Copper Rule Improvements (Act 607 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 8",
+   "subject": "Ban on expropriation by foreign adversaries",
+   "ballotTitle": "Do you support an amendment to prohibit expropriation of property by a foreign adversary or an agent of a foreign adversary? (Amends Article I, Section 4(B)(4))",
+   "summary": "Would prohibit a foreign adversary, or an agent of one, from expropriating property in Louisiana (Act 277 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 9",
+   "subject": "Income limit for the special assessment level",
+   "ballotTitle": "Do you support an amendment to increase the maximum amount of income a person may receive and still qualify for the special assessment level for residential property receiving the homestead exemption? (Effective January 1, 2027) (Amends Article VII, Section 18(G)(1)(a)(ii))",
+   "summary": "Would raise the income ceiling for qualifying for the special assessment level (the property assessment freeze) on homestead property (Act 220 of 2025).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  },
+  {
+   "designation": "Amendment 10",
+   "subject": "Property tax exemptions for rehabilitated blighted property",
+   "ballotTitle": "Do you support an amendment to allow property tax exemptions for blighted or derelict properties that have been rehabilitated, and to require the legislature to enact laws providing for administration of these exemptions? (Effective January 1, 2027) (Adds Article VII, Section 21(P))",
+   "summary": "Would allow property tax exemptions for blighted or derelict properties that have been rehabilitated, with the legislature required to pass laws to administer them (Act 272 of 2026).",
+   "source": "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf"
+  }
+ ],
+ "measureEffective": "2026-12-10",
+ "measureEffectiveNote": "La. Const. Art. XIII, Sec. 1(C): an approved amendment takes effect twenty days after the governor proclaims its adoption, unless the amendment provides otherwise. 2026-12-10 is an estimate (state results promulgated in mid-November, proclamation about Nov 20, plus 20 days). Amendments 1, 2, 9 and 10 state they are effective January 1, 2027, and Amendment 6 January 1, 2028.",
+ "sources": [
+  "https://voterportal.sos.la.gov/candidateinquiry",
+  "https://www.sos.la.gov/elections-voting/election-dates",
+  "https://www.sos.la.gov/elections-voting/how-candidates-are-elected",
+  "https://www.sos.la.gov/elections-voting/types-of-elections",
+  "https://www.sos.la.gov/media/jo2die1s/proposed-constitutional-amendments-2026-nov.pdf",
+  "https://www.sos.la.gov/media/j2fjvpye/proposed-constitutional-amendments-2026-nov-summaries.pdf",
+  "https://redist.legis.la.gov/2026_Files/Act2Congress/District%20and%20Split%20Parish%20Maps/Map%20-%20Statewide.pdf",
+  "https://www.wwno.org/2026-08-12/39-candidates-qualify-to-run-for-louisianas-6-congressional-districts",
+  "https://www.wbrz.com/news/10-candidates-qualify-for-louisiana-s-6th-congressional-district",
+  "https://lailluminator.com/2026/05/29/litigation-looms-as-louisiana-legislature-approves-new-congressional-map/",
+  "https://redistricting.lls.edu/wp-content/uploads/LA-callais-20260529-notice-of-leg.pdf",
+  "https://www.cnn.com/2026/05/16/politics/louisiana-senate-primary-results-bill-cassidy-julia-letlow-john-fleming",
+  "https://www.wafb.com/2026/10/14/louisiana-voters-face-10-constitutional-amendments-november-heres-what-yes-or-no-vote-means/"
+ ],
+ "notes": [
+  "Nov 3, 2026 is a mixed election in Louisiana. The SOS calendar calls it 'U.S. Senate General/Open U.S. Representative Primary/Open Primary Election'.",
+  "U.S. Senate: this is the GENERAL election. Louisiana's new closed party primaries (enacted 2024, first used in 2026) applied to the Senate: party primary May 16, 2026 and party runoff June 27, 2026. Julia Letlow won the Republican nomination (incumbent Bill Cassidy finished third on May 16) and Jamie Davis the Democratic one. No other candidate qualified, so the ballot has two names and the winner is elected Nov 3.",
+  "U.S. House: this is NOT a general election. After Louisiana v. Callais (U.S. Supreme Court, April 29, 2026) struck down the 2024 map, the governor suspended the May 16 House party primaries. Act 7 of 2026 made U.S. Representative an open-primary office for 2026. All candidates of every party run together on Nov 3; anyone with a majority is elected, otherwise the top two meet in an open general election on December 12, 2026. House qualifying was re-run Aug 5-7, 2026.",
+  "Map in effect: Act 2 of 2026 (SB 121), signed May 29, 2026. It has 6 districts, expected to be 5 Republican-leaning and 1 Democratic-leaning; it removes the second majority-Black district (the old 6th, held by Cleo Fields, who is not running). The 5th and 6th are open seats.",
+  "Candidates and parties are from the SOS Candidate Inquiry for the 11/03/2026 election, read 2026-10-23. It shows 2 Senate and 39 House candidates; WWNO (2026-08-12) also counts 39. Listed in SOS (alphabetical) order. Nicknames in quotes are kept as qualified. The SOS label 'Democrat' is written as 'Democratic' here.",
+  "Statewide offices: only U.S. Senator is elected statewide on Nov 3. Supreme Court (districts 1, 3, 4), PSC (districts 1, 5) and BESE district 1 races are district-level and are left out.",
+  "Amendments: there are 10 statewide amendments. The ballot language is the 'Do you support...' question from the SOS 'Proposed Constitutional Amendments, November 3, 2026' PDF, with the effective-date and article parentheticals it prints. The PDF was decoded with a Python stdlib script.",
+  "Polls are open 6 AM to 8 PM. Louisiana is entirely in the Central time zone and DST ends Nov 1, so polls close at 8 PM CST (UTC-6), 02:00 UTC Nov 4."
+ ],
+ "unconfirmed": [
+  "Act 2 (SB 121) congressional map: lawsuits were filed in federal court. No later ruling was found that changes the map, and the SOS still links the 2026 map and is running the election on it. The current state of the litigation was not checked.",
+  "Act 7 of 2026 (the House open primary) is cited from the SOS qualifying reminder as summarised in search results. The act text itself was not read.",
+  "Amendment text was decoded from the PDF's glyph codes. Spacing artifacts were fixed ('ef fective' to 'effective', 'disability ,' to 'disability,'). An apostrophe glyph in Amendment 2 ('prior year's') was inferred, and it may print as a curly apostrophe. The text was not checked against a sample ballot.",
+  "Party labels as printed on the ballot face (Louisiana ballots may abbreviate, e.g. 'Rep'/'Dem'/'Lbt'/'Noparty') were not checked against a sample ballot.",
+  "The effective date of 2026-12-10 is an estimate. The governor's proclamation dates were not found."
+ ],
+ "houseOfficeNote": "open primary: all parties on one ballot; runoff Dec 12 if no one wins a majority"
+}
