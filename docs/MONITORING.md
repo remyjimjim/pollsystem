@@ -17,11 +17,11 @@ then add these monitors (**+ New monitor**):
 
 1. **Prod site**
    - Type: HTTP(s)
-   - URL: `https://pollsystem.pages.dev/` (the custom domain once it's set up)
+   - URL: `https://ballotbox.us.com/`
    - Interval: 5 minutes
 2. **Prod API, end to end** (site → Cloudflare proxy → backend → database)
    - Type: Keyword
-   - URL: `https://pollsystem.pages.dev/api/polls/search?title=uptime-check`
+   - URL: `https://ballotbox.us.com/api/polls/search?title=uptime-check`
    - Keyword: `[`, alert when the keyword is *not* found. A healthy answer is a
      JSON list, empty here.
    - Interval: 5 minutes
@@ -31,10 +31,9 @@ then add these monitors (**+ New monitor**):
    - Keyword: `UP`, alert when *not* found.
    - Interval: 5 minutes
 
-**Until launch,** monitors 2 and 3 wake the sleeping prod backend every 5
-minutes, so it never sleeps. That costs about what `min_machines_running = 1`
-does. To keep the saving until launch, create them **paused** and start them on
-launch day, when `min_machines_running` goes back to 1 anyway.
+Monitors 2 and 3 wake the prod backend every 5 minutes, so it never sleeps.
+From launch (Oct 26, 2026) that's moot: `min_machines_running = 1` keeps a
+machine up anyway.
 
 Optionally, the same three for staging (`staging.pollsystem.pages.dev`,
 `pollsystem-backend-staging.fly.dev`), so a broken staging is noticed before a
