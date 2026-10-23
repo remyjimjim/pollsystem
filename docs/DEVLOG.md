@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — New Mexico on local
+
+**Changed:** NM: 8 statewide races (U.S. Senate, Gov/Lt Gov, five executive offices, Court of Appeals Position 1). Constitutional Amendments 1–4 and Bond Questions 1–3, with official amounts. 3 district ballots. Candidates come from the Secretary of State's portal and the Santa Fe sample ballot. Where the SoS measures document differs from the ballot and the joint resolutions, I used the ballot wording (see `NM.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `e3b0465`
+
+---
+
 ## 2026-10-23 — Nebraska on local
 
 **Changed:** NE: 6 statewide races. U.S. Senate has 5 candidates and no Democrat; Osborn is listed 'By Petition'. 4 measures: Initiatives 440 and 441 on online sports betting, 442 on school sports teams by biological sex, and LR19CA on legislative term limits. 3 district ballots. Everything comes from official Secretary of State sources: the final candidate list of Sep 11 and the voters' pamphlet. Nothing was cross-checked, because web search was used up (see `NE.md`).
