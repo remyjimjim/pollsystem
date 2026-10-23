@@ -1,0 +1,130 @@
+{
+  "state": "Alaska",
+  "abbr": "AK",
+  "pollCloseLocal": "8:00 PM local (8:00 PM AKST statewide; latest is 8:00 PM HST in the western Aleutians, west of 169°30′W)",
+  "pollCloseUtc": "2026-11-04T06:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "rankedChoice": true,
+      "candidates": [
+        {
+          "name": "Gerald L. Heikes",
+          "party": "Registered Republican"
+        },
+        {
+          "name": "Mary Peltola",
+          "party": "Registered Democrat"
+        },
+        {
+          "name": "Daniel J. Sullivan Jr.",
+          "party": ""
+        },
+        {
+          "name": "Dan S. Sullivan",
+          "party": "Registered Republican"
+        }
+      ]
+    },
+    {
+      "office": "Gov / Lt Gov",
+      "rankedChoice": true,
+      "candidates": [
+        {
+          "name": "Dave Bronson / Josh Church",
+          "party": "Registered Republican"
+        },
+        {
+          "name": "Jonathan S. \"JKT\" Kreiss-Tomkins / Zac Johnson",
+          "party": "Registered Democrat/Nonpartisan"
+        },
+        {
+          "name": "Treg Taylor / Candi English",
+          "party": "Registered Republican"
+        },
+        {
+          "name": "Bernadette M. Wilson / Michael K. Shower",
+          "party": "Registered Republican"
+        }
+      ]
+    }
+  ],
+  "houseRankedChoice": true,
+  "house": [
+    {
+      "district": 0,
+      "candidates": [
+        {
+          "name": "Nick Begich",
+          "party": "Registered Republican"
+        },
+        {
+          "name": "Eric Hafner",
+          "party": "Registered Democrat"
+        },
+        {
+          "name": "Bill Hill",
+          "party": "Nonpartisan"
+        },
+        {
+          "name": "James C. \"Jim\" McDermott",
+          "party": "Registered Libertarian"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Ballot Measure No. 2",
+      "subject": "Repeal open top-four primaries and ranked-choice general elections",
+      "ballotTitle": "24ESEG - An Act Restoring Political Party Primaries, Ending Ranked-Choice General Elections, and Repealing Recent Campaign Finance Laws\n\nThis act would get rid of open primary elections, where all candidates appear on one ballot. It would also get rid of ranked-choice general elections. It would bring back political party primaries and single-choice general elections. It would also repeal certain campaign finance rules that were added by a 2020 ballot measure. Elections would occur as they did before open primaries and ranked choice voting. In the primary election, voters would choose a party’s ballot, unless prohibited by the party’s bylaws. They would only vote for candidates on that ballot. The winning candidate from each primary would be the party’s nominee. In the general election, voters would vote for only one candidate in each race. The candidate with the most votes would win. Party petitions, special runoff elections, and other processes would return. Candidates for governor and lieutenant governor would run separately in political party primaries and then together in the general election. This act would also repeal campaign finance rules that were passed in 2020. It would remove the limits on donations to joint campaigns for governor and lieutenant governor. It would remove limits and disclosure rules under current law, including for digital ads, out-of-state donations, undisclosed donations, and the true source of donations. It would change the meaning of a campaign expenditure and remove some fines. Should this initiative become law?",
+      "summary": "Would replace the nonpartisan top-four primary and ranked-choice general election with party primaries and single-choice general elections, and repeal campaign finance rules adopted by the 2020 ballot measure.",
+      "source": "https://www.elections.alaska.gov/sample-ballots/ballot/zk4o0"
+    },
+    {
+      "designation": "Ballot Measure No. 3",
+      "subject": "Only U.S. citizens may vote",
+      "ballotTitle": "25USCV - An Act Addressing Voter Qualification\n\nAlaska law requires that someone must be a United States citizen and meet other requirements to vote. This act would specify that only those who are United States citizens and meet the other requirements may vote. This act would not change the requirements to vote. Should this initiative become law?",
+      "summary": "Would state in law that only U.S. citizens who meet the other voter requirements may vote in Alaska elections, without changing the existing requirements.",
+      "source": "https://www.elections.alaska.gov/sample-ballots/ballot/zk4o0"
+    }
+  ],
+  "measureEffective": "2027-02-23",
+  "measureEffectiveNote": "Both are citizen initiatives. Under Alaska Constitution art. XI, sec. 6, an initiated law becomes effective 90 days after certification of the election. The Division of Elections' calendar targets certification of the general election on 2026-11-25; 90 days later is 2027-02-23, used as the representative date. A later certification moves the date.",
+  "sources": [
+    "https://www.elections.alaska.gov/candidates/?election=26genr",
+    "https://www.elections.alaska.gov/sample-ballots/ballot/zk4o0",
+    "https://www.elections.alaska.gov/election/2026/General/SampleBallots/HD1-JD1.pdf",
+    "https://www.elections.alaska.gov/election/2026/General/SampleBallots/HD20-JD3.pdf",
+    "https://www.elections.alaska.gov/election/2026/General/SampleBallots/HD40-JD2.pdf",
+    "https://www.elections.alaska.gov/petitions-and-ballot-measures/",
+    "https://www.elections.alaska.gov/petitions-and-ballot-measures/petition-status/?initiative_id=24ESEG",
+    "https://www.elections.alaska.gov/wp-content/uploads/2026/08/AGO-No.-2025200007-24ESEG-updated-language-8.28.pdf",
+    "https://www.elections.alaska.gov/petitions-and-ballot-measures/petition-status/?initiative_id=25USCV",
+    "https://www.elections.alaska.gov/wp-content/uploads/2026/01/25USCV-Ballot-Title-Summary.pdf",
+    "https://www.elections.alaska.gov/election-results/e/?id=26prim",
+    "https://www.elections.alaska.gov/enr26/results/GA_ENR_Precinct_State_of_Alaska.csv",
+    "https://www.elections.alaska.gov/results/24GENR/ENRbyPrecinct.csv",
+    "https://www.elections.alaska.gov/election-information/",
+    "https://www.elections.alaska.gov/calendar/"
+  ],
+  "notes": [
+    "Voting system in effect for Nov 3, 2026: nonpartisan top-four primary (held Aug 18, 2026) plus ranked-choice general election, from 2020 Ballot Measure 2. The 2024 repeal (Ballot Measure 2, 22AKHE) failed 160,124 yes to 160,861 no (official 2024 results CSV). The official 2026 general sample ballots are ranked-choice (1st-5th choice columns) for U.S. Senate, U.S. House, Governor/Lt Gov and the Legislature. A new repeal (24ESEG) is Ballot Measure No. 2 on this ballot; even if approved it takes effect only 90 days after certification, so it cannot change this election.",
+    "The app records one choice per office; rankedChoice/houseRankedChoice mark that voters rank up to five (four candidates plus a write-in line) on the real ballot.",
+    "Candidates are the four printed names per race on the official sample ballots (HD1-JD1, HD20-JD3, HD40-JD2 checked), in ballot order. The ballot prints 'Last, First'; names are rewritten here as 'First Last'. Party text is the printed affiliation (e.g. 'Registered Republican'); Alaska labels show registration only, not party nomination.",
+    "Daniel J. Sullivan Jr. (U.S. Senate) has no affiliation printed on the sample ballot, and no party code in the primary results, although the candidate list shows him as Registered Republican; party left blank (builder shows 'No party listed').",
+    "General-election fields differ from the raw primary top four because of post-primary withdrawals: e.g. U.S. Senate 4th-place David B. Leslie and Governor 2nd-place Begich/Hnilicka are not on the general list; Gerald L. Heikes and Taylor/English appear instead. Primary leaders (official, Aug 31 certification): Senate Peltola 49.5%, Dan S. Sullivan 41.4%; House Begich 44.6%, Bill Hill 32.5%; Governor Kreiss-Tomkins/Johnson 22.5%.",
+    "Ballot measure numbering starts at No. 2 because Ballot Measure No. 1 (23RCF2, campaign contribution limits) was on the Aug 18 primary ballot and passed (117,962 yes to 45,418 no). The 25ANMA natural-medicine initiative was still circulating and is not on the 2026 ballot.",
+    "Ballot Measure No. 2 language is the Attorney General's updated summary of Aug 28, 2026, prepared after the Alaska Supreme Court's Aug 27, 2026 order (Giessel et al. / Repeal Now appeal); it matches the sample ballot text. ballotTitle holds the printed heading and summary verbatim, with the YES/NO boxes omitted.",
+    "Write-ins left out: Meda DeWitt / Christopher \"Chris\" Steere and James W. \"JP4\" Parkin / Ramadhani \"Ram\" Greer (Governor); Sidney \"Sid\" Hill and Heather McElwain (U.S. Senate); Lady Donna Dutchess (U.S. House).",
+    "Judicial retention questions (Supreme Court Justice Jude Pate statewide, plus superior and district court judges by judicial district) are on the ballot but not modeled here.",
+    "Polls are open 7 a.m. to 8 p.m. (Division calendar). Most of Alaska is on Alaska Standard Time (UTC-9) after DST ends Nov 1: 8 PM AKST = 05:00Z. The western Aleutians (e.g. Adak, Atka) use Hawaii-Aleutian Standard Time (UTC-10): 8 PM HST = 2026-11-04T06:00:00Z, the latest close."
+  ],
+  "unconfirmed": [
+    "Representative effective date 2027-02-23 assumes certification on the Division's target date of 2026-11-25.",
+    "Why Daniel J. Sullivan Jr. has no printed affiliation was not established; the blank was seen on three district sample ballots.",
+    "The exact withdrawal history behind the general-election fields (who withdrew and who was moved up) was not traced; the certified candidate list (updated Sep 25, 2026) and sample ballots were used as authoritative.",
+    "The official ballot name placement PDF is a scanned image and could not be read; ballot order is taken from the sample ballots.",
+    "Web search was unavailable during this research, so nothing was cross-checked against Ballotpedia or news; all data are from elections.alaska.gov pages and files."
+  ]
+}

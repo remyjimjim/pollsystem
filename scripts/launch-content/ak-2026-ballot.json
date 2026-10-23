@@ -1,0 +1,91 @@
+{
+  "_about": "Alaska, Nov 3 2026, built by build-state.py from docs/launch-content/research/AK.json (sources and gaps in AK.md). One House seat, so one ballot for the whole state.",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm Alaska",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      2
+    ],
+    "closeDate": "2026-11-04T06:00:00Z",
+    "candidates": [
+      {
+        "name": "Gerald L. Heikes",
+        "affiliation": "Registered Republican",
+        "officeName": "U.S. Senate (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Mary Peltola",
+        "affiliation": "Registered Democrat",
+        "officeName": "U.S. Senate (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Daniel J. Sullivan Jr.",
+        "affiliation": "No party listed",
+        "officeName": "U.S. Senate (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Dan S. Sullivan",
+        "affiliation": "Registered Republican",
+        "officeName": "U.S. Senate (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Dave Bronson / Josh Church",
+        "affiliation": "Registered Republican",
+        "officeName": "Gov / Lt Gov (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Jonathan S. \"JKT\" Kreiss-Tomkins / Zac Johnson",
+        "affiliation": "Registered Democrat/Nonpartisan",
+        "officeName": "Gov / Lt Gov (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Treg Taylor / Candi English",
+        "affiliation": "Registered Republican",
+        "officeName": "Gov / Lt Gov (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Bernadette M. Wilson / Michael K. Shower",
+        "affiliation": "Registered Republican",
+        "officeName": "Gov / Lt Gov (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Nick Begich",
+        "affiliation": "Registered Republican",
+        "officeName": "U.S. Representative, At-Large (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Eric Hafner",
+        "affiliation": "Registered Democrat",
+        "officeName": "U.S. Representative, At-Large (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "Bill Hill",
+        "affiliation": "Nonpartisan",
+        "officeName": "U.S. Representative, At-Large (ranked-choice on the ballot; pick your first choice here)"
+      },
+      {
+        "name": "James C. \"Jim\" McDermott",
+        "affiliation": "Registered Libertarian",
+        "officeName": "U.S. Representative, At-Large (ranked-choice on the ballot; pick your first choice here)"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Alaska Ballot Measure No. 2: Repeal open top-four primaries and ranked-choice general elections",
+      "summary": "24ESEG - An Act Restoring Political Party Primaries, Ending Ranked-Choice General Elections, and Repealing Recent Campaign Finance Laws\n\nThis act would get rid of open primary elections, where all candidates appear on one ballot. It would also get rid of ranked-choice general elections. It would bring back political party primaries and single-choice general elections. It would also repeal certain campaign finance rules that were added by a 2020 ballot measure. Elections would occur as they did before open primaries and ranked choice voting. In the primary election, voters would choose a party’s ballot, unless prohibited by the party’s bylaws. They would only vote for candidates on that ballot. The winning candidate from each primary would be the party’s nominee. In the general election, voters would vote for only one candidate in each race. The candidate with the most votes would win. Party petitions, special runoff elections, and other processes would return. Candidates for governor and lieutenant governor would run separately in political party primaries and then together in the general election. This act would also repeal campaign finance rules that were passed in 2020. It would remove the limits on donations to joint campaigns for governor and lieutenant governor. It would remove limits and disclosure rules under current law, including for digital ads, out-of-state donations, undisclosed donations, and the true source of donations. It would change the meaning of a campaign expenditure and remove some fines. Should this initiative become law?\n\nIn short: Would replace the nonpartisan top-four primary and ranked-choice general election with party primaries and single-choice general elections, and repeal campaign finance rules adopted by the 2020 ballot measure.\n\nOfficial ballot language. Source: https://www.elections.alaska.gov/sample-ballots/ballot/zk4o0",
+      "effectiveDate": "2027-02-23",
+      "closeDate": "2026-11-04T06:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Alaska Ballot Measure No. 3: Only U.S. citizens may vote",
+      "summary": "25USCV - An Act Addressing Voter Qualification\n\nAlaska law requires that someone must be a United States citizen and meet other requirements to vote. This act would specify that only those who are United States citizens and meet the other requirements may vote. This act would not change the requirements to vote. Should this initiative become law?\n\nIn short: Would state in law that only U.S. citizens who meet the other voter requirements may vote in Alaska elections, without changing the existing requirements.\n\nOfficial ballot language. Source: https://www.elections.alaska.gov/sample-ballots/ballot/zk4o0",
+      "effectiveDate": "2027-02-23",
+      "closeDate": "2026-11-04T06:00:00Z"
+    }
+  ]
+}
