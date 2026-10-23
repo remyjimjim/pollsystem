@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Ohio on local
+
+**Changed:** OH: 8 statewide races, including the U.S. Senate special and two Supreme Court seats. Issue 3 is the photo-ID amendment. There are 15 district ballots. ohiosos.gov returned 403 all session, so statewide races come from five county boards' certified lists, which agree. House districts 2, 4, 6, 7 and 10–13 rest on secondary sources (see `OH.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `0e0f715`
+
+---
+
 ## 2026-10-23 — Virginia on local
 
 **Changed:** VA: U.S. Senate (Warner, Mizusawa), Questions 1–3 (reproductive freedom, marriage, voting rights), 11 district ballots on the 2021 map. The 2026 redistricting amendment was nullified by the Supreme Court of Virginia. All of it comes from the Department of Elections' lists.
