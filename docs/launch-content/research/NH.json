@@ -1,0 +1,112 @@
+{
+  "state": "New Hampshire",
+  "abbr": "NH",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Chris Pappas",
+          "party": "Democratic"
+        },
+        {
+          "name": "John E. Sununu",
+          "party": "Republican"
+        },
+        {
+          "name": "Edmond J. LaPlante Jr.",
+          "party": "Constitution"
+        }
+      ]
+    },
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Kelly Ayotte",
+          "party": "Republican"
+        },
+        {
+          "name": "Cinde Warmington",
+          "party": "Democratic"
+        },
+        {
+          "name": "Stephen Villee",
+          "party": "Libertarian"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Stefany Shaheen",
+          "party": "Democratic"
+        },
+        {
+          "name": "Anthony DiLorenzo",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Maggie Goodlander",
+          "party": "Democratic"
+        },
+        {
+          "name": "Lily Tang Williams",
+          "party": "Republican"
+        },
+        {
+          "name": "Robbie Mahrou",
+          "party": "Independent"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Question 1",
+      "subject": "Eliminate the office of register of probate",
+      "ballotTitle": "Are you in favor of eliminating the office of register of probate by amending articles 71 and 81 of the second part of the constitution to read as follows: [Art.] 71. [County Treasurers, County Attorneys, Sheriffs, and Registers of Deeds Elected.] The county treasurers, county attorneys, sheriffs and registers of deeds, shall be elected by the inhabitants of the several towns, in the several counties in the State, according to the method now practiced, and the laws of the state, provided nevertheless the legislature shall have authority to alter the manner of certifying the votes, and the mode of electing those officers; but not so as to deprive the people of the right they now have of electing them. [Art.] 81. [Judges Not to Act as Counsel.] No judge shall be of counsel, act as advocate, or receive any fees as advocate or counsel, in any probate business which is pending, or may be brought into any court of probate in the county of which he or she is judge.",
+      "summary": "Would remove the elected county office of register of probate, whose duties were moved to circuit court clerks in 2011, and all references to it from the state constitution; approval requires two-thirds of those voting on the question.",
+      "source": "https://gc.nh.gov/bill_status/legacy/bs2016/billText.aspx?id=1803&txtFormat=html&sy=2026"
+    }
+  ],
+  "measureEffective": "2026-12-02",
+  "measureEffectiveNote": "CACR 13 section VII: if approved by 2/3 of those voting on the amendment, it becomes effective when the governor proclaims its adoption. The proclamation follows the Governor and Executive Council's acceptance of the state general election results; 2026-12-02 is an estimated representative date, not a scheduled one.",
+  "sources": [
+    "https://gc.nh.gov/bill_status/legacy/bs2016/billText.aspx?id=1803&txtFormat=html&sy=2026",
+    "https://gc.nh.gov/rsa/html/LXIII/659/659-4.htm",
+    "https://www.sos.nh.gov/2026-election-details",
+    "https://ballotpedia.org/United_States_Senate_election_in_New_Hampshire,_2026",
+    "https://ballotpedia.org/New_Hampshire_gubernatorial_election,_2026",
+    "https://ballotpedia.org/United_States_House_of_Representatives_elections_in_New_Hampshire,_2026",
+    "https://ballotpedia.org/New_Hampshire_Eliminate_Office_of_Register_of_Probate_Amendment_(2026)",
+    "https://ballotpedia.org/New_Hampshire_2026_ballot_measures",
+    "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire",
+    "https://en.wikipedia.org/wiki/2026_New_Hampshire_gubernatorial_election",
+    "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Hampshire"
+  ],
+  "notes": [
+    "The NH Secretary of State site (sos.nh.gov, including candidate filings and the 2026 election details page) returned HTTP 403 to both WebFetch and curl, so the official candidate list could not be read. Candidates come from Ballotpedia and Wikipedia, which agree on every name and party.",
+    "Primary was September 8, 2026. Winners: Senate D Chris Pappas, R John E. Sununu (over Scott Brown); Governor R Kelly Ayotte, D Cinde Warmington; NH-1 D Stefany Shaheen (36.9% over Maura Sullivan 34.7%), R Anthony DiLorenzo (51.5%); NH-2 D Maggie Goodlander (incumbent), R Lily Tang Williams (64.9%).",
+    "Constitution Party ballot access for the Senate race is supported by Ballot Access News (Sep 2, 2026). Independents Tim Harris and Matt Giovonizzi (Senate) and Jon Kiper (Governor) did not qualify.",
+    "The measure's official question text is from the legislature's adopted version of CACR 13 (section V), the primary official source. It needs a two-thirds vote; an identical-purpose amendment failed in 2022 with 62.9%. Ballotpedia lists it as the only 2026 statewide measure (as of Oct 20, 2026).",
+    "RSA 659:4: polls open by 11 AM and close no earlier than 7 PM; towns and cities set hours, the latest closing is 8 PM. All of NH is on Eastern time; EST (UTC-5) after DST ends Nov 1, so 8 PM = 01:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Exact ballot-printed names: sources differ ('Edmond J. LaPlante Jr.' on Wikipedia vs 'Edmond Laplante' on Ballotpedia; 'Lily Tang Williams' vs 'Lily Williams'; 'John E. Sununu' vs 'John Sununu'). Not checked against the SOS list or a sample ballot.",
+    "Robbie Mahrou (Independent, NH-2) and Stephen Villee (Libertarian, Governor) appear as general-election candidates on Ballotpedia and Wikipedia, but their qualification and the printed party label were not checked against an official SOS list.",
+    "The designation 'Question 1' assumes the SOS numbers the only constitutional question as Question 1 (as in 2022). The sample ballot was not seen.",
+    "The effective date 2026-12-02 is an estimate: the amendment takes effect on the governor's proclamation, which has no fixed date.",
+    "The latest closing time (8 PM) follows the task brief and common municipal practice. No official list of each town's hours was read."
+  ]
+}
