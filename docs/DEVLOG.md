@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Maryland on local
+
+**Changed:** MD: Governor/Lt. Governor (4 tickets), Comptroller and Attorney General; Questions 1–3, with Question 3 in the wording the Supreme Court of Maryland ordered; 8 district ballots. All of it comes from the State Board of Elections' lists (updated 10/16). Write-in filers are left out. The effective date (Jan 15) is an estimate (see `MD.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `01738bf`
+
+---
+
 ## 2026-10-23 — South Carolina on local
 
 **Changed:**
