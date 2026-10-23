@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Kentucky on local
+
+**Changed:** KY: U.S. Senate (open seat; Booker, Barr, Campbell), Constitutional Amendment 1 (no pardons near a governor's election), 6 district ballots, from the Secretary of State's filings. Judicial seats are elected by district, so none are listed. The effective date (Nov 23) is a stand-in (see `KY.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `1233d94`
+
+---
+
 ## 2026-10-23 — Wisconsin on local
 
 **Changed:** WI: Gov/Lt Gov, Attorney General, Secretary of State and Treasurer, all checked against an official La Crosse County sample ballot. Questions 1–3 (partial veto, places of worship in emergencies, a ban on preferential treatment) come verbatim from Kenosha County's notice. 8 district ballots: CD-2 has only Pocan. Most House names come from the WEC's June candidates report, because elections.wi.gov returned 403 (see `WI.md`).
