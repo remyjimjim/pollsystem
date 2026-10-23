@@ -1,0 +1,124 @@
+{
+  "_about": "Nevada, Nov 3 2026, built by build-state.py from docs/launch-content/research/NV.json (sources and gaps in NV.md). One ballot per district, each including \"2026 Midterm · Nevada: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Nevada District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        29
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Carrie Ann Buck",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Afzal \"Bobby\" Khan",
+          "affiliation": "No Political Party",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Steven \"Chap\" St John",
+          "affiliation": "No Political Party",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Dina Titus",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Nevada District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        29
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Teresa Benitez-Thompson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Lynn Chapman",
+          "affiliation": "Independent American Party",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "David Flippo",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Nevada District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        29
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Jon Kamerath",
+          "affiliation": "Independent American Party",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Susie Lee",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Marty O'Donnell",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Nevada District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        29
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Russell Best",
+          "affiliation": "Independent American Party",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Steven A. Horsford",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "William Johnson",
+          "affiliation": "No Political Party",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Cody K. Whipple",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Nevada: statewide races & measures"
+}

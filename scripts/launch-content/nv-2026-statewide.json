@@ -1,0 +1,121 @@
+{
+  "_about": "Nevada, Nov 3 2026, built by build-state.py from docs/launch-content/research/NV.json (sources and gaps in NV.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Nevada: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      29
+    ],
+    "closeDate": "2026-11-04T03:00:00Z",
+    "candidates": [
+      {
+        "name": "Aaron D. Ford",
+        "affiliation": "Democratic",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Danielle Ford",
+        "affiliation": "No Political Party",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Joseph Lombardo",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Stavros Anthony",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Janine Hansen",
+        "affiliation": "Independent American Party",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Sandra Jauregui",
+        "affiliation": "Democratic",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Francisco \"Cisco\" Aguilar",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Brad Lee Barnhill",
+        "affiliation": "Independent American Party",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "John T. Kennedy",
+        "affiliation": "Libertarian",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Jim Marchant",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Drew Johnson",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Tya Mathis-Coleman",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Michael MacDougall",
+        "affiliation": "Democratic",
+        "officeName": "State Controller"
+      },
+      {
+        "name": "Andy Matthews",
+        "affiliation": "Republican",
+        "officeName": "State Controller"
+      },
+      {
+        "name": "Nicole Jeanette Cannizzaro",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Adriana Guzmán Fralick",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Kristina Pickering",
+        "affiliation": "Nonpartisan",
+        "officeName": "Justice of the Supreme Court, Seat B"
+      },
+      {
+        "name": "Douglas Herndon",
+        "affiliation": "Nonpartisan",
+        "officeName": "Justice of the Supreme Court, Seat D"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Nevada Question 6: Constitutional right to abortion",
+      "summary": "Should the Nevada Constitution be amended to create an individual’s fundamental right to an abortion, without interference by state or local governments, whenever the abortion is performed by a qualified healthcare professional until fetal viability or when necessary to protect the health or life of the pregnant individual at any point during the pregnancy?\n\nIn short: Second required vote on an initiated amendment, approved by voters in 2024, that would add a constitutional right to abortion until fetal viability, or later when needed to protect the patient's life or health.\n\nOfficial ballot language. Source: https://ballotpedia.org/Nevada_Question_6,_Right_to_Abortion_Initiative_(2026)",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T03:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Nevada Question 7: Voter identification requirements",
+      "summary": "Should the Nevada Constitution be amended to require voters to either present photo identification to verify their identity when voting in-person or to provide certain personal information to verify their identity when voting by mail ballot?\n\nIn short: Second required vote on an initiated amendment, approved by voters in 2024, that would require photo ID to vote in person and, for mail ballots, the last four digits of a Nevada driver's license or Social Security number (or a county-issued number).\n\nOfficial ballot language. Source: https://ballotpedia.org/Nevada_Question_7,_Require_Voter_Identification_Initiative_(2026)",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T03:00:00Z"
+    }
+  ]
+}

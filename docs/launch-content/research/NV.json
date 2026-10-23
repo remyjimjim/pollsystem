@@ -1,0 +1,249 @@
+{
+  "state": "Nevada",
+  "abbr": "NV",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T03:00:00Z",
+  "statewide": [
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Aaron D. Ford",
+          "party": "Democratic"
+        },
+        {
+          "name": "Danielle Ford",
+          "party": "No Political Party"
+        },
+        {
+          "name": "Joseph Lombardo",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Lieutenant Governor",
+      "candidates": [
+        {
+          "name": "Stavros Anthony",
+          "party": "Republican"
+        },
+        {
+          "name": "Janine Hansen",
+          "party": "Independent American Party"
+        },
+        {
+          "name": "Sandra Jauregui",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Francisco \"Cisco\" Aguilar",
+          "party": "Democratic"
+        },
+        {
+          "name": "Brad Lee Barnhill",
+          "party": "Independent American Party"
+        },
+        {
+          "name": "John T. Kennedy",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Jim Marchant",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {
+          "name": "Drew Johnson",
+          "party": "Republican"
+        },
+        {
+          "name": "Tya Mathis-Coleman",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "State Controller",
+      "candidates": [
+        {
+          "name": "Michael MacDougall",
+          "party": "Democratic"
+        },
+        {
+          "name": "Andy Matthews",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Nicole Jeanette Cannizzaro",
+          "party": "Democratic"
+        },
+        {
+          "name": "Adriana Guzmán Fralick",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Justice of the Supreme Court, Seat B",
+      "candidates": [
+        {
+          "name": "Kristina Pickering",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Justice of the Supreme Court, Seat D",
+      "candidates": [
+        {
+          "name": "Douglas Herndon",
+          "party": "Nonpartisan"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Carrie Ann Buck",
+          "party": "Republican"
+        },
+        {
+          "name": "Afzal \"Bobby\" Khan",
+          "party": "No Political Party"
+        },
+        {
+          "name": "Steven \"Chap\" St John",
+          "party": "No Political Party"
+        },
+        {
+          "name": "Dina Titus",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Teresa Benitez-Thompson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Lynn Chapman",
+          "party": "Independent American Party"
+        },
+        {
+          "name": "David Flippo",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Jon Kamerath",
+          "party": "Independent American Party"
+        },
+        {
+          "name": "Susie Lee",
+          "party": "Democratic"
+        },
+        {
+          "name": "Marty O'Donnell",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Russell Best",
+          "party": "Independent American Party"
+        },
+        {
+          "name": "Steven A. Horsford",
+          "party": "Democratic"
+        },
+        {
+          "name": "William Johnson",
+          "party": "No Political Party"
+        },
+        {
+          "name": "Cody K. Whipple",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Question 6",
+      "subject": "Constitutional right to abortion",
+      "ballotTitle": "Should the Nevada Constitution be amended to create an individual’s fundamental right to an abortion, without interference by state or local governments, whenever the abortion is performed by a qualified healthcare professional until fetal viability or when necessary to protect the health or life of the pregnant individual at any point during the pregnancy?",
+      "summary": "Second required vote on an initiated amendment, approved by voters in 2024, that would add a constitutional right to abortion until fetal viability, or later when needed to protect the patient's life or health.",
+      "source": "https://ballotpedia.org/Nevada_Question_6,_Right_to_Abortion_Initiative_(2026)"
+    },
+    {
+      "designation": "Question 7",
+      "subject": "Voter identification requirements",
+      "ballotTitle": "Should the Nevada Constitution be amended to require voters to either present photo identification to verify their identity when voting in-person or to provide certain personal information to verify their identity when voting by mail ballot?",
+      "summary": "Second required vote on an initiated amendment, approved by voters in 2024, that would require photo ID to vote in person and, for mail ballots, the last four digits of a Nevada driver's license or Social Security number (or a county-issued number).",
+      "source": "https://ballotpedia.org/Nevada_Question_7,_Require_Voter_Identification_Initiative_(2026)"
+    }
+  ],
+  "measureEffective": "2026-11-24",
+  "measureEffectiveNote": "Nevada Constitution Art. 19, Sec. 2(4): an initiated amendment approved at its second general election becomes part of the Constitution upon completion of the canvass of votes by the Supreme Court. NRS 293.395(2) sets that canvass for the fourth Tuesday of November after the general election, November 24, 2026, used here as the representative date.",
+  "sources": [
+    "https://www.clarkcountynv.gov/adobe/assets/urn%3Aaaid%3Aaem%3A1db09a57-4c1b-47e1-94d9-e7782c442571/original/as/officesup-26g.pdf",
+    "https://www.clarkcountynv.gov/adobe/assets/urn:aaid:aem:912d393b-be95-46a9-81f0-76326555ef45/original/as/facts-26g.pdf",
+    "https://www.leg.state.nv.us/const/nvconst.html",
+    "https://www.leg.state.nv.us/nrs/nrs-293.html",
+    "https://ballotpedia.org/Nevada_state_executive_official_elections,_2026",
+    "https://ballotpedia.org/United_States_House_of_Representatives_elections_in_Nevada,_2026",
+    "https://ballotpedia.org/Nevada%27s_2nd_Congressional_District_election,_2026",
+    "https://ballotpedia.org/Nevada_Supreme_Court_elections,_2026",
+    "https://ballotpedia.org/Nevada_2026_ballot_measures",
+    "https://ballotpedia.org/Nevada_Question_6,_Right_to_Abortion_Initiative_(2026)",
+    "https://ballotpedia.org/Nevada_Question_7,_Require_Voter_Identification_Initiative_(2026)",
+    "https://www.fox5vegas.com/2026/09/30/nevada-releases-2026-ballot-question-guide-ahead-general-election/",
+    "https://washoelife.washoecounty.gov/washoe-county/mail-ballots-begin-arriving-early-voting-starts-next-weekend-dont-wait-washoe/",
+    "https://en.wikipedia.org/wiki/2026_Nevada_elections"
+  ],
+  "notes": [
+    "No U.S. Senate race in Nevada in 2026 (Cortez Masto's term ends 2029, Rosen's 2031).",
+    "nvsos.gov (and silverstateelection.nv.gov) returned only an Incapsula bot-block page to both WebFetch and curl, so the Secretary of State's candidate list and 2026 Ballot Question Guide could not be read directly.",
+    "Statewide, Supreme Court, and CD1/CD3/CD4 names, parties and ballot order are from Clark County Election Department's official 'All Contests and Candidates in the November 3, 2026 General Election' list (dated 8/24/2026), decoded locally from the PDF with Python stdlib. Names are given there as 'Last, First Middle/Nickname' and are rendered First Last here; candidates are listed alphabetically by surname as on the ballot.",
+    "Party abbreviations on the Clark list: DEM, REP, IAP (Independent American Party), LPN (Libertarian Party of Nevada), NPP (No Political Party, partisan offices), NP (Nonpartisan, judicial offices).",
+    "Every statewide contest (including the unopposed Supreme Court seats) also prints a 'None of these candidates' line (NRS 293.269); it is not a candidate and is not listed.",
+    "Supreme Court Seats B and D are unopposed but still appear on the general ballot: NRS 293.260(3)(a) places unopposed Supreme Court candidates on the general election ballot. No Court of Appeals seat appears on the Clark County list.",
+    "CD2 lies outside Clark County; its candidates are from Ballotpedia (consistent with Wikipedia). Rep. Mark Amodei did not seek re-election.",
+    "Polls close 7:00 p.m. (NRS 293.273). Most of Nevada is Pacific (PST, UTC-8 after DST ends Nov 1): 2026-11-04T03:00:00Z. West Wendover (Elko County) keeps Mountain time: 7:00 p.m. MST = 2026-11-04T02:00:00Z. The latest close statewide is 03:00Z.",
+    "Questions 6 and 7 keep their 2024 numbers (Fox5 report on the Secretary of State's 2026 Ballot Question Guide, Sept 30, 2026); Clark County's fact sheet confirms two statewide questions."
+  ],
+  "unconfirmed": [
+    "CD2 candidate ballot-name forms (middle names/initials) were not checked against an official list or sample ballot; Washoe County's sample ballot is only an address lookup.",
+    "Ballot question text for Questions 6 and 7 is from Ballotpedia, which cites the Secretary of State's 2024 statewide ballot questions page; the 2026 official guide could not be read. Art. 19 Sec. 2(4) requires resubmission 'in the same manner', so the wording should be unchanged.",
+    "Candidate changes after the Clark County list date (Aug 24, 2026) were not checked against an official source; Ballotpedia and Wikipedia (Oct 2026) show the same fields.",
+    "Exact certification date: 2026-11-24 is the statutory Supreme Court canvass date."
+  ]
+}
