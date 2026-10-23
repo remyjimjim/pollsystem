@@ -25,17 +25,28 @@ reopened, saved, and published again, with its candidates unchanged.
 
 The token is the "token" value in the browser's localStorage after signing in.
 """
-import argparse, json, sys, urllib.request, urllib.error
+import argparse, json, sys, time, urllib.request, urllib.error
 
 def call(api, token, method, path, body=None):
     req = urllib.request.Request(api.rstrip('/') + path, method=method,
                                  data=None if body is None else json.dumps(body).encode(),
                                  headers={'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'})
-    try:
-        with urllib.request.urlopen(req, timeout=60) as r:
-            return json.loads(r.read() or b'null')
-    except urllib.error.HTTPError as e:
-        sys.exit(f"✗ {method} {path} -> {e.code}: {e.read().decode(errors='replace')[:400]}")
+    # Bulk loads can hit the API's rate limit or a cold machine: back off and
+    # retry those (429, 5xx, timeouts); anything else stops the run.
+    for attempt in range(6):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return json.loads(r.read() or b'null')
+        except urllib.error.HTTPError as e:
+            if (e.code == 429 or e.code >= 500) and attempt < 5:
+                time.sleep(int(e.headers.get('Retry-After') or 0) or 2 ** attempt * 5)
+                continue
+            sys.exit(f"✗ {method} {path} -> {e.code}: {e.read().decode(errors='replace')[:400]}")
+        except (urllib.error.URLError, TimeoutError) as e:
+            if attempt < 5:
+                time.sleep(2 ** attempt * 5)
+                continue
+            sys.exit(f"✗ {method} {path} -> {e}")
 
 def main():
     p = argparse.ArgumentParser()
