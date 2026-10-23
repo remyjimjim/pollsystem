@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Connecticut on local
+
+**Changed:** CT: Gov/Lt Gov, Attorney General, Secretary of the State, Treasurer, Comptroller (fusion lines combined), no statewide questions, and 5 district ballots. All of it comes from official town sample ballots covering all 5 districts.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `67aba1a`
+
+---
+
 ## 2026-10-23 — Alabama on local
 
 **Changed:** AL: 16 statewide races, among them U.S. Senate (open seat; Moore, Wess) and Governor (Tuberville, Jones). Statewide Amendments 1–4. 7 district ballots on the Legislature's 2023 map, which the U.S. Supreme Court allowed on June 2, 2026; four districts held special primaries. All names come from the Secretary of State's sample ballots for all 67 counties. The effective date (Nov 24) is an estimate.
