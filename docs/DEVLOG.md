@@ -61,6 +61,21 @@ logged.
 
 ---
 
+## 2026-10-23 — Midterm voting rules and whole-ballot results on prod (verified)
+
+**Changed:** The user deployed the prod backend (`flyctl deploy`; deploys are
+blocked for the agent). The frontend had already built from `main`
+(`5f7244c`).
+
+**Verified (prod, read-only):**
+
+- Health is UP and the schema is at 38.
+- `residents_only` is true on all 479 midterm elections.
+- California District 11's results, logged out, list its included statewide
+  election and 14 ballot measures.
+
+---
+
 ## 2026-10-23 — Midterm voting rules and whole-ballot results on staging (verified)
 
 **Requested:**
