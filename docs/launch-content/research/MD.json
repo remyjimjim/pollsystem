@@ -1,0 +1,226 @@
+{
+  "state": "Maryland",
+  "abbr": "MD",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        {
+          "name": "Wes Moore / Aruna Miller",
+          "party": "Democratic"
+        },
+        {
+          "name": "Dan Cox / Rob Krop",
+          "party": "Republican"
+        },
+        {
+          "name": "Andy Ellis / Owen Silverman Andrews",
+          "party": "Green"
+        },
+        {
+          "name": "Cathy White / Cathy Permut",
+          "party": "Working Class Party"
+        }
+      ]
+    },
+    {
+      "office": "Comptroller",
+      "candidates": [
+        {
+          "name": "Brooke Elizabeth Lierman",
+          "party": "Democratic"
+        },
+        {
+          "name": "Sonya Dunn",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Anthony G. Brown",
+          "party": "Democratic"
+        },
+        {
+          "name": "James B. Rutledge, III",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Dan Schwartz",
+          "party": "Democratic"
+        },
+        {
+          "name": "Andy Harris",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "John \"Johnny O\" Olszewski, Jr.",
+          "party": "Democratic"
+        },
+        {
+          "name": "Dave Wallace",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Sarah Elfreth",
+          "party": "Democratic"
+        },
+        {
+          "name": "Berney Flowers",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Glenn F. Ivey",
+          "party": "Democratic"
+        },
+        {
+          "name": "George E. McDermott",
+          "party": "Republican"
+        },
+        {
+          "name": "Sam Husseini",
+          "party": "Green"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Adrian Boafo",
+          "party": "Democratic"
+        },
+        {
+          "name": "Chris Chaffee",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "April McClain Delaney",
+          "party": "Democratic"
+        },
+        {
+          "name": "Robin Ficker",
+          "party": "Republican"
+        },
+        {
+          "name": "Moshe Y. Landman",
+          "party": "Green"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Kweisi Mfume",
+          "party": "Democratic"
+        },
+        {
+          "name": "Scott M. Collier",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Jamie Raskin",
+          "party": "Democratic"
+        },
+        {
+          "name": "Cheryl Riley",
+          "party": "Republican"
+        },
+        {
+          "name": "Nancy Wallace",
+          "party": "Green"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Question 1",
+      "subject": "Budget funding for State employee labor agreements",
+      "ballotTitle": "Arbitration Reform for State Employees Act of 2026: Providing that each budget submitted by the Governor shall include proposed expenditures necessary to implement wages, hours, fringe benefits, health benefits, and other terms and conditions of employment in each collective bargaining memorandum of understanding with State employees, whether the State and State employees reached those terms and conditions by mutual agreement or through a neutral decider's order. (Amending Article III of the Maryland Constitution)",
+      "summary": "Would require the Governor's proposed budget to fund the pay and benefit terms of State employee collective bargaining agreements, whether those terms were negotiated or set by a neutral decision-maker.",
+      "source": "https://elections.maryland.gov/elections/2026/ballot_questions.html"
+    },
+    {
+      "designation": "Question 2",
+      "subject": "Temporary members of the Commission on Judicial Disabilities",
+      "ballotTitle": "Temporary Appointments on the Commission on Judicial Disabilities: Authorizing temporary substitute appointments to the Commission on Judicial Disabilities when a member is recused or disqualified, or when a member's term expires. In these situations, the Commission Chair may recall a former member of the Commission, or the Governor, at the request of the Commission Chair, may appoint a temporary substitute member or extend the term of a current member until a permanent replacement is appointed. Only individuals who meet the constitutional eligibility requirements may be recalled or appointed to the Commission. (Amending Article IV of the Maryland Constitution)",
+      "summary": "Would allow former members to be recalled, or temporary substitutes appointed or terms extended, when a Commission on Judicial Disabilities member is recused, disqualified, or reaches the end of a term without a replacement.",
+      "source": "https://elections.maryland.gov/elections/2026/ballot_questions.html"
+    },
+    {
+      "designation": "Question 3",
+      "subject": "Congressional districting criteria and court review",
+      "ballotTitle": "Electoral Districts – General Assembly and Congressional Representatives: FOR the purpose of clarifying that certain requirements apply only to districts for the election of members of the Senate of Maryland and the House of Delegates; authorizing the General Assembly to grant original jurisdiction to the Supreme Court of Maryland to review the congressional districting plan of the State; and providing that nothing in the Maryland Constitution provides applicable criteria for the boundaries of a congressional districting plan. (Amending Article III of the Maryland Constitution)",
+      "summary": "Would limit the Constitution's districting requirements to state legislative districts, state that the Constitution sets no criteria for congressional district boundaries, and let the General Assembly give the Supreme Court of Maryland original jurisdiction to review congressional maps.",
+      "source": "https://elections.maryland.gov/elections/2026/ballot_questions.html"
+    }
+  ],
+  "measureEffective": "2027-01-15",
+  "measureEffectiveNote": "Under Md. Const. Art. XIV, Sec. 1, an amendment approved by a majority of votes cast on it becomes part of the Constitution when the Governor, after the official canvass, declares it adopted by proclamation ('thenceforth said amendment ... shall be part of the said Constitution'). No fixed statutory date; the 2024 amendment (Question 1) was reportedly proclaimed January 17, 2025, so mid-January 2027 is used as a representative date.",
+  "sources": [
+    "https://elections.maryland.gov/elections/2026/General_candidates/2026_GG_statewide_candidatelist.html",
+    "https://elections.maryland.gov/elections/2026/General_candidates/2026_GG_representativeincongressbydistrict_candidatelist.csv",
+    "https://elections.maryland.gov/elections/2026/General_candidates/2026_GG_governorlt.governor_candidatelist.csv",
+    "https://elections.maryland.gov/elections/2026/ballot_questions.html",
+    "https://elections.maryland.gov/voting/election_day_questions.html",
+    "https://msa.maryland.gov/msa/mdmanual/43const/html/14art14.html",
+    "https://statecourtreport.org/case-tracker/maryland-state-board-elections-v-howell-maryland-state-board-elections-v-wheatley",
+    "https://conduitstreet.mdcounties.org/2026/09/04/md-supreme-court-clears-redistricting-question-for-november-ballot/",
+    "https://wtop.com/national/2026/06/maryland-democrats-choose-nominees-for-us-house-including-a-successor-for-longtime-rep-steny-hoyer/",
+    "https://en.wikipedia.org/wiki/2026_Maryland_gubernatorial_election"
+  ],
+  "notes": [
+    "Candidates are from the SBE 2026 Gubernatorial General Election candidate lists (HTML and CSV, last updated 10/16/2026 6:00 PM), status Active; names rebuilt as first/middle + ballot last name and suffix, parties as listed.",
+    "No U.S. Senate seat is up in Maryland in 2026 (no Senate contest on the SBE list).",
+    "Write-in filers listed as Active on the SBE list were left out: Edward Shlikas (Unaffiliated, CD1), Robert L. Coffman (Republican, CD3), Mildred Marie Hall ('Other Candidates', CD5). Withdrawn candidates and petition candidates who failed signature requirements were also left out.",
+    "James B. Rutledge, III (AG, Republican) was designated by the Republican central committee (03/03/2026), not nominated in the primary.",
+    "CD5 is open (Steny Hoyer retiring); Adrian Boafo won the June 23, 2026 Democratic primary (AP via WTOP).",
+    "Question 3 language was substituted by order of the Supreme Court of Maryland dated Sept 3, 2026 (Wheatley/Howell); the amendment would not change 2026 districts, which use the existing 8-district map.",
+    "Questions 1 and 2 are from the 2026 regular session (Ch. 155, Ch. 878); Question 3 is Ch. 881 (HB 2100). The SBE page also prints 'A vote FOR/AGAINST' explanations for Q1 and Q2, not included in ballotTitle.",
+    "All of Maryland is Eastern time; polls are open 7 AM to 8 PM; 8:00 PM EST on Nov 3 = 01:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Representative effective date 2027-01-15 is an estimate from precedent; the Jan 17, 2025 proclamation date came from a search summary (the governor's PDF was unreadable).",
+    "Ballot-face party wording and name order not checked against a sample ballot; SBE list labels used.",
+    "Whether the 'A vote FOR/AGAINST' explanatory statements for Q1/Q2 print on the ballot face was not confirmed.",
+    "Candidate changes after the SBE list update of 10/16/2026 were not checked."
+  ]
+}

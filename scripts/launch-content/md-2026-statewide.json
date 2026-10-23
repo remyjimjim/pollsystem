@@ -1,0 +1,78 @@
+{
+  "_about": "Maryland, Nov 3 2026, built by build-state.py from docs/launch-content/research/MD.json (sources and gaps in MD.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Maryland: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      21
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Wes Moore / Aruna Miller",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Dan Cox / Rob Krop",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Andy Ellis / Owen Silverman Andrews",
+        "affiliation": "Green",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Cathy White / Cathy Permut",
+        "affiliation": "Working Class Party",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Brooke Elizabeth Lierman",
+        "affiliation": "Democratic",
+        "officeName": "Comptroller"
+      },
+      {
+        "name": "Sonya Dunn",
+        "affiliation": "Republican",
+        "officeName": "Comptroller"
+      },
+      {
+        "name": "Anthony G. Brown",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "James B. Rutledge, III",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Maryland Question 1: Budget funding for State employee labor agreements",
+      "summary": "Arbitration Reform for State Employees Act of 2026: Providing that each budget submitted by the Governor shall include proposed expenditures necessary to implement wages, hours, fringe benefits, health benefits, and other terms and conditions of employment in each collective bargaining memorandum of understanding with State employees, whether the State and State employees reached those terms and conditions by mutual agreement or through a neutral decider's order. (Amending Article III of the Maryland Constitution)\n\nIn short: Would require the Governor's proposed budget to fund the pay and benefit terms of State employee collective bargaining agreements, whether those terms were negotiated or set by a neutral decision-maker.\n\nOfficial ballot language. Source: https://elections.maryland.gov/elections/2026/ballot_questions.html",
+      "effectiveDate": "2027-01-15",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Maryland Question 2: Temporary members of the Commission on Judicial Disabilities",
+      "summary": "Temporary Appointments on the Commission on Judicial Disabilities: Authorizing temporary substitute appointments to the Commission on Judicial Disabilities when a member is recused or disqualified, or when a member's term expires. In these situations, the Commission Chair may recall a former member of the Commission, or the Governor, at the request of the Commission Chair, may appoint a temporary substitute member or extend the term of a current member until a permanent replacement is appointed. Only individuals who meet the constitutional eligibility requirements may be recalled or appointed to the Commission. (Amending Article IV of the Maryland Constitution)\n\nIn short: Would allow former members to be recalled, or temporary substitutes appointed or terms extended, when a Commission on Judicial Disabilities member is recused, disqualified, or reaches the end of a term without a replacement.\n\nOfficial ballot language. Source: https://elections.maryland.gov/elections/2026/ballot_questions.html",
+      "effectiveDate": "2027-01-15",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Maryland Question 3: Congressional districting criteria and court review",
+      "summary": "Electoral Districts – General Assembly and Congressional Representatives: FOR the purpose of clarifying that certain requirements apply only to districts for the election of members of the Senate of Maryland and the House of Delegates; authorizing the General Assembly to grant original jurisdiction to the Supreme Court of Maryland to review the congressional districting plan of the State; and providing that nothing in the Maryland Constitution provides applicable criteria for the boundaries of a congressional districting plan. (Amending Article III of the Maryland Constitution)\n\nIn short: Would limit the Constitution's districting requirements to state legislative districts, state that the Constitution sets no criteria for congressional district boundaries, and let the General Assembly give the Supreme Court of Maryland original jurisdiction to review congressional maps.\n\nOfficial ballot language. Source: https://elections.maryland.gov/elections/2026/ballot_questions.html",
+      "effectiveDate": "2027-01-15",
+      "closeDate": "2026-11-04T01:00:00Z"
+    }
+  ]
+}

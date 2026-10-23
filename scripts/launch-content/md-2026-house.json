@@ -1,0 +1,197 @@
+{
+  "_about": "Maryland, Nov 3 2026, built by build-state.py from docs/launch-content/research/MD.json (sources and gaps in MD.md). One ballot per district, each including \"2026 Midterm · Maryland: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Maryland District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        21
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Dan Schwartz",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Andy Harris",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Maryland District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        21
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "John \"Johnny O\" Olszewski, Jr.",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Dave Wallace",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Maryland District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        21
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Sarah Elfreth",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Berney Flowers",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Maryland District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        21
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Glenn F. Ivey",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "George E. McDermott",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Sam Husseini",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Maryland District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        21
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Adrian Boafo",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Chris Chaffee",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Maryland District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        21
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "April McClain Delaney",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Robin Ficker",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Moshe Y. Landman",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Maryland District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        21
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Kweisi Mfume",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Scott M. Collier",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Maryland District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        21
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Jamie Raskin",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Cheryl Riley",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Nancy Wallace",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Maryland: statewide races & measures"
+}
