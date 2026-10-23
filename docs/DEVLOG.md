@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Delaware on local
+
+**Changed:** DE: one House seat, so one ballot for the whole state ("2026 Midterm Delaware", the first single-ballot state). It has U.S. Senate, Attorney General, Treasurer, Auditor and the at-large House race. No measures (Delaware amends its constitution without a vote). All of it comes from the Department of Elections' list (updated Oct 22).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `d78ea82`
+
+---
+
 ## 2026-10-23 — Mississippi on local
 
 **Changed:** MS: U.S. Senate (Hyde-Smith, Colom, Pinkins), no statewide measures, 4 district ballots, from the Secretary of State's live qualifying list. Judicial seats are elected by district, so none are listed.
