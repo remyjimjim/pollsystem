@@ -51,7 +51,8 @@ class ElectionService(
                 date = dto.date,
                 zipcode = null,
                 status = PollStatus.DRAFT,
-                closeDate = dto.closeDate
+                closeDate = dto.closeDate,
+                residentsOnly = dto.residentsOnly ?: false
             )
         )
         replaceCandidates(saved, dto.candidates)
@@ -78,6 +79,7 @@ class ElectionService(
                 date = dto.date,
                 zipcode = null,
                 closeDate = dto.closeDate,
+                residentsOnly = dto.residentsOnly ?: existing.residentsOnly,
                 creatorEditedAt = Instant.now()
             )
         )

@@ -47,7 +47,8 @@ class BallotMeasureResponseController(
     private val responses: BallotResponseRepository,
     private val blocks: PollBlockService,
     private val snapshots: ResultSnapshotService,
-    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords,
+    private val rules: BallotRules
 ) {
 
     @GetMapping("/me")
@@ -103,6 +104,7 @@ class BallotMeasureResponseController(
         if (blocks.isBlockedFor(org.kodewerks.pollsystem.model.PollKind.BALLOT_MEASURE, measure.id, principal.user.zipcode)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
+        rules.requireResident(measure.election, principal.user.zipcode)
 
         val now = Instant.now()
         val existing = responses.findByUserIdAndMeasureId(principal.user.id, id)

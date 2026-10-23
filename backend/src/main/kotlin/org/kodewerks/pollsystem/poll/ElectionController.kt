@@ -54,7 +54,9 @@ data class ElectionDraftRequest(
     val closeDate: Instant? = null,
     @field:Valid val candidates: List<CandidateInput> = emptyList(),
     /** Elections shown on this one's ballot (V37); null = leave unchanged. */
-    val includedElectionIds: List<Long>? = null
+    val includedElectionIds: List<Long>? = null,
+    /** Only residents of the purview may vote (V38); null = leave unchanged. */
+    val residentsOnly: Boolean? = null
 )
 
 data class ElectionDto(
@@ -84,7 +86,8 @@ data class ElectionDto(
     /** Elections shown on this one's ballot, in order (V37). */
     val includedElectionIds: List<Long> = emptyList(),
     /** Ballots that include this election (its voters arrive through them). */
-    val includedByElectionIds: List<Long> = emptyList()
+    val includedByElectionIds: List<Long> = emptyList(),
+    val residentsOnly: Boolean = false
 ) {
     companion object {
         fun from(
@@ -116,7 +119,8 @@ data class ElectionDto(
             candidatesWidget = candidatesWidget,
             candidatesGroupBy = candidatesGroupBy,
             includedElectionIds = includedElectionIds,
-            includedByElectionIds = includedByElectionIds
+            includedByElectionIds = includedByElectionIds,
+            residentsOnly = e.residentsOnly
         )
     }
 }

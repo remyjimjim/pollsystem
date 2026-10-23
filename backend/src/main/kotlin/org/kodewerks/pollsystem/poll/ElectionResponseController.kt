@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotEmpty
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -57,7 +58,8 @@ class ElectionResponseController(
     private val responses: CandidateResponseRepository,
     private val blocks: PollBlockService,
     private val snapshots: ResultSnapshotService,
-    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords,
+    private val rules: BallotRules
 ) {
 
     @GetMapping("/me")
@@ -108,6 +110,8 @@ class ElectionResponseController(
         if (blocks.isBlockedFor(org.kodewerks.pollsystem.model.PollKind.ELECTION, election.id, principal.user.zipcode)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Submissions disabled by admin for this area")
         }
+        rules.requireResident(election, principal.user.zipcode)
+        rules.requireNoOtherBallot(id, principal.user.id)
 
         val candidatesById = candidates.findByElectionId(id).associateBy { it.id }
         val unknown = body.answers.map { it.candidateId }.filterNot { it in candidatesById }
@@ -150,5 +154,22 @@ class ElectionResponseController(
         snapshots.refresh(PollKind.ELECTION, id)
 
         return mine(principal, id)
+    }
+
+    /** "Cancel my votes": takes back this ballot's votes (its included elections and measures too). */
+    @DeleteMapping
+    @Transactional
+    fun cancel(
+        @AuthenticationPrincipal principal: AppUserDetails,
+        @PathVariable id: Long
+    ): Map<String, Int> {
+        val election = elections.findById(id).orElseThrow {
+            ResponseStatusException(HttpStatus.NOT_FOUND, "Election not found")
+        }
+        val close = election.closeDate
+        if (election.status != PollStatus.PUBLISHED || (close != null && !close.isAfter(Instant.now()))) {
+            throw ResponseStatusException(HttpStatus.CONFLICT, "This poll is closed")
+        }
+        return mapOf("removed" to rules.cancel(id, principal.user))
     }
 }

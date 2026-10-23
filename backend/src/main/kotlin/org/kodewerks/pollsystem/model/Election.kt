@@ -68,7 +68,11 @@ data class Election(
     // When the creator last created/edited/published/archived/restored this poll
     // (admin moderation doesn't touch it). See V25.
     @Column(name = "creator_edited_at", nullable = false)
-    val creatorEditedAt: Instant = Instant.now()
+    val creatorEditedAt: Instant = Instant.now(),
+
+    // Only members whose zipcode is in the purview may vote (V38).
+    @Column(name = "residents_only", nullable = false)
+    val residentsOnly: Boolean = false
 )
 
 @Entity

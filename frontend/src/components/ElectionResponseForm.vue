@@ -87,6 +87,8 @@ const missing = ref<{ kind: 'office' | 'candidate'; office: string; label: strin
 const submitError = ref<string | null>(null)
 const closedReason = ref<string | null>(null)
 const message = ref<string | null>(null)
+// Refused because you voted on another district ballot in the state: a link to it.
+const otherBallot = ref<{ id: number; title: string } | null>(null)
 
 // Per-candidate state used by the legacy Yes/No widget.
 const answers = reactive<Record<number, { response: boolean | null; comment: string }>>({})
@@ -357,8 +359,34 @@ async function submit() {
     setTimeout(() => router.push(`/polls/election/${props.id}/results`), 600)
   } catch (e: any) {
     submitError.value = e?.response?.data?.message ?? t('election.submissionFailed')
+    await findOtherBallot(e)
   } finally {
     submitting.value = false
+  }
+}
+
+/** The 409 names the other ballot ("…you submitted ("Title")…"): find it to link to. */
+async function findOtherBallot(e: any) {
+  otherBallot.value = null
+  const title = e?.response?.status === 409 ? /\("(.+?)"\)/.exec(e?.response?.data?.message ?? '')?.[1] : undefined
+  if (!title) return
+  try {
+    const hits = (await axios.get<{ id: number; title: string }[]>('/api/polls/search', { params: { type: 'Election', title } })).data
+    otherBallot.value = hits.find(h => h.title === title) ?? null
+  } catch { /* the message alone still says which ballot */ }
+}
+
+/** "Cancel my votes": takes back every vote on this ballot (its statewide races and measures too). */
+async function cancelVotes() {
+  if (!window.confirm(t('election.cancelConfirm'))) return
+  submitError.value = null
+  message.value = null
+  try {
+    await axios.delete(`/api/polls/elections/${props.id}/responses`)
+    await load()
+    message.value = t('election.cancelledOk')
+  } catch (e: any) {
+    submitError.value = e?.response?.data?.message ?? t('election.submissionFailed')
   }
 }
 
@@ -406,6 +434,11 @@ onMounted(load)
           @click="chooseReadonly"
           class="rounded border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-50"
         >{{ $t('election.noReview') }}</button>
+        <button
+          @click="cancelVotes"
+          class="rounded border border-red-300 bg-white px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+          data-test="cancel-votes"
+        >{{ $t('election.cancelVotes') }}</button>
       </div>
     </div>
 
@@ -617,7 +650,10 @@ onMounted(load)
         <template #name><a :href="`#${officeAnchor(missing.office)}`" class="font-semibold underline" @click.prevent="goToOffice(missing.office)">{{ missing.label }}</a></template>
       </i18n-t>
     </p>
-    <p v-if="submitError" class="m-0 text-sm text-red-700" role="alert" data-test="submit-error">{{ submitError }}</p>
+    <p v-if="submitError" class="m-0 text-sm text-red-700" role="alert" data-test="submit-error">
+      {{ submitError }}
+      <router-link v-if="otherBallot" :to="`/polls/election/${otherBallot.id}`" class="font-semibold underline">{{ $t('election.goToOtherBallot') }}</router-link>
+    </p>
 
     <div v-if="mode !== 'readonly' && mode !== 'choosing'" class="flex gap-2">
       <button
