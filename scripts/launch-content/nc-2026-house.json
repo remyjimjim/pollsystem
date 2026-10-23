@@ -1,0 +1,364 @@
+{
+  "_about": "North Carolina, Nov 3 2026, built by build-state.py from docs/launch-content/research/NC.json (sources and gaps in NC.md). One ballot per district, each including \"2026 Midterm · North Carolina: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Don Davis",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Laurie Buckhout",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Tom Bailey",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Deborah K. Ross",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Eugene F. Douglass",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Matthew Laszacs",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Raymond Smith",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Greg Murphy",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Daniel Cavender",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Valerie P. Foushee",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Mahesh (Max) Ganorkar",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Guy Meilleur",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Chuck Hubbard",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Virginia Foxx",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Robert B. Luffman",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Cyril Jefferson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Addison McDowell",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Kimberly Hardy",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "David Rouzer",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Maad Abu-Ghazalah",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Colby Watson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Mark Harris",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Bo Whitehead",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 9",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Richard N. Ojeda II",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Richard Hudson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 10",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Ashley Bell",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Pat Harrigan",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Steven Feldman",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 10"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 11",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Jamie Ager",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Jennifer Capps Balkcom",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Travis Groo",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 11"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 12",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Alma S. Adams",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Jack Codiga",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 12"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 13",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Paul Barringer",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Brad Knott",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Steven Swinton",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 13"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm North Carolina District 14",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        34
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Lakesha Womack",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 14"
+        },
+        {
+          "name": "Tim Moore",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 14"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · North Carolina: statewide races & measures"
+}

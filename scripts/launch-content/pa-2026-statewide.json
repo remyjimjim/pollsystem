@@ -1,0 +1,30 @@
+{
+  "_about": "Pennsylvania, Nov 3 2026, built by build-state.py from docs/launch-content/research/PA.json (sources and gaps in PA.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Pennsylvania: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      39
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Josh Shapiro / Austin Davis",
+        "affiliation": "Democratic",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Stacy Garrity / Jason Richey",
+        "affiliation": "Republican",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Ken Krawchuk / John Thomas",
+        "affiliation": "Libertarian",
+        "officeName": "Governor and Lieutenant Governor"
+      }
+    ]
+  }
+}

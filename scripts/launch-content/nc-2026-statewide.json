@@ -1,0 +1,98 @@
+{
+  "_about": "North Carolina, Nov 3 2026, built by build-state.py from docs/launch-content/research/NC.json (sources and gaps in NC.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · North Carolina: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      34
+    ],
+    "closeDate": "2026-11-04T00:30:00Z",
+    "candidates": [
+      {
+        "name": "Roy Cooper",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Michael Whatley",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Shannon W. Bray",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Michael Dublin",
+        "affiliation": "Green",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Anita Earls",
+        "affiliation": "Democratic",
+        "officeName": "NC Supreme Court Associate Justice Seat 01"
+      },
+      {
+        "name": "Sarah Stevens",
+        "affiliation": "Republican",
+        "officeName": "NC Supreme Court Associate Justice Seat 01"
+      },
+      {
+        "name": "John S. Arrowood",
+        "affiliation": "Democratic",
+        "officeName": "NC Court of Appeals Judge Seat 01"
+      },
+      {
+        "name": "Michael C. Byrne",
+        "affiliation": "Republican",
+        "officeName": "NC Court of Appeals Judge Seat 01"
+      },
+      {
+        "name": "Tobias (Toby) Hampson",
+        "affiliation": "Democratic",
+        "officeName": "NC Court of Appeals Judge Seat 02"
+      },
+      {
+        "name": "George Cooper Bell",
+        "affiliation": "Republican",
+        "officeName": "NC Court of Appeals Judge Seat 02"
+      },
+      {
+        "name": "Christine Marie Walczyk",
+        "affiliation": "Democratic",
+        "officeName": "NC Court of Appeals Judge Seat 03"
+      },
+      {
+        "name": "Craig Collins",
+        "affiliation": "Republican",
+        "officeName": "NC Court of Appeals Judge Seat 03"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · North Carolina Constitutional Amendment - Require Photo ID for Voting",
+      "summary": "Constitutional amendment to require all voters, not just those presenting to vote in person, to present photo identification before voting.\n\nIn short: Would amend the state constitution so that the existing photo ID requirement for in-person voting also applies to voters using other methods, such as absentee by mail.\n\nOfficial ballot language. Source: https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/statewide_referendums_20261103.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T00:30:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · North Carolina Constitutional Amendment - Maximum Income Tax Rate of 3.5%",
+      "summary": "Constitutional amendment to keep the State income tax rate from being raised higher than three and one-half percent (3.5%).\n\nIn short: Would lower the maximum State income tax rate allowed by the constitution from 7% to 3.5%, applying to taxable years beginning on or after January 1, 2027.\n\nOfficial ballot language. Source: https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/statewide_referendums_20261103.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T00:30:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · North Carolina Constitutional Amendment - Property Tax Levy Limit",
+      "summary": "Constitutional amendment requiring limits on property tax increases by local governments.\n\nIn short: Would direct the General Assembly to enact general laws limiting how much local property tax levies may increase, with the specific limits set by later legislation.\n\nOfficial ballot language. Source: https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/statewide_referendums_20261103.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T00:30:00Z"
+    }
+  ]
+}

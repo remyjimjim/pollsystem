@@ -1,0 +1,197 @@
+{
+  "state": "Arizona",
+  "abbr": "AZ",
+  "pollCloseLocal": "7:00 PM MST (Arizona does not observe DST), Tuesday, November 3, 2026",
+  "pollCloseUtc": "2026-11-04T02:00:00Z",
+  "statewide": [
+    {
+      "office": "Governor and Lieutenant Governor (joint ticket; first election with a Lieutenant Governor)",
+      "candidates": [
+        {"name": "Katie Hobbs / John Giles", "party": "Democratic"},
+        {"name": "Andy Biggs / Sine Kerr", "party": "Republican"},
+        {"name": "Risa Lombardo / Lisa Castillo", "party": "Green"},
+        {"name": "Teri Hourihan / Angela Harrolle Mohan", "party": "No Labels"}
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {"name": "Adrian Fontes", "party": "Democratic"},
+        {"name": "Alexander Kolodin", "party": "Republican"},
+        {"name": "Duwayne Collier", "party": "Green"}
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {"name": "Kris Mayes", "party": "Democratic"},
+        {"name": "Warren Petersen", "party": "Republican"}
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {"name": "Nick Mansour", "party": "Democratic"},
+        {"name": "Elijah Norton", "party": "Republican"}
+      ]
+    },
+    {
+      "office": "Superintendent of Public Instruction",
+      "candidates": [
+        {"name": "Teresa Leyba Ruiz", "party": "Democratic"},
+        {"name": "Kimberly Yee", "party": "Republican"}
+      ]
+    },
+    {
+      "office": "State Mine Inspector",
+      "candidates": [
+        {"name": "Les Presmyk", "party": "Republican"},
+        {"name": "Brian Matlock", "party": "Democratic"}
+      ]
+    },
+    {
+      "office": "Corporation Commission (2 seats, vote for 2)",
+      "candidates": [
+        {"name": "Kevin Thompson", "party": "Republican"},
+        {"name": "Ralph Heap", "party": "Republican"},
+        {"name": "Jonathon Hill", "party": "Democratic"},
+        {"name": "Clara Pratte", "party": "Democratic"},
+        {"name": "Mike Cease", "party": "Green"}
+      ]
+    }
+  ],
+  "house": [
+    {"district": 1, "candidates": [
+      {"name": "Amish Shah", "party": "Democratic"},
+      {"name": "Jay Feely", "party": "Republican"},
+      {"name": "Monica Alponte", "party": "Libertarian"}
+    ]},
+    {"district": 2, "candidates": [
+      {"name": "Eli Crane", "party": "Republican"},
+      {"name": "Jonathan Nez", "party": "Democratic"},
+      {"name": "Curtis Goodwin", "party": "Libertarian"}
+    ]},
+    {"district": 3, "candidates": [
+      {"name": "Yassamin Ansari", "party": "Democratic"},
+      {"name": "David Redkey", "party": "Green"},
+      {"name": "Alan Aversa", "party": "No Labels"}
+    ]},
+    {"district": 4, "candidates": [
+      {"name": "Greg Stanton", "party": "Democratic"},
+      {"name": "Zuhdi Jasser", "party": "Republican"},
+      {"name": "Tisha Benoit", "party": "No Labels"}
+    ]},
+    {"district": 5, "candidates": [
+      {"name": "Elizabeth Lee", "party": "Democratic"},
+      {"name": "Mark Lamb", "party": "Republican"}
+    ]},
+    {"district": 6, "candidates": [
+      {"name": "Juan Ciscomani", "party": "Republican"},
+      {"name": "JoAnna Mendoza", "party": "Democratic"},
+      {"name": "Gary Swing", "party": "Green"},
+      {"name": "Jereme Peters", "party": "Libertarian"}
+    ]},
+    {"district": 7, "candidates": [
+      {"name": "Adelita Grijalva", "party": "Democratic"},
+      {"name": "Daniel Butierez Sr.", "party": "Republican"}
+    ]},
+    {"district": 8, "candidates": [
+      {"name": "Abraham Hamadeh", "party": "Republican"},
+      {"name": "Bernadette Greene Placentia", "party": "Democratic"}
+    ]},
+    {"district": 9, "candidates": [
+      {"name": "Paul Gosar", "party": "Republican"},
+      {"name": "Danielle Sterbinsky", "party": "Democratic"}
+    ]}
+  ],
+  "measures": [
+    {
+      "designation": "Proposition 141",
+      "subject": "Vehicle-miles-traveled taxes and monitoring",
+      "ballotTitle": "PROPOSED AMENDMENT TO THE CONSTITUTION BY THE LEGISLATURE RELATING TO TAXATION. OFFICIAL TITLE: AMENDING ARTICLE IX, CONSTITUTION OF ARIZONA, BY ADDING SECTION 26. DESCRIPTIVE TITLE: PROHIBITS TAXES OR FEES BASED ON VEHICLE MILES TRAVELED AND LAWS MONITORING OR LIMITING VEHICLE MILES TRAVELED WITHOUT CONSENT.",
+      "summary": "Constitutional amendment barring state and local taxes or fees based on miles driven and laws that monitor or limit miles driven without the driver's consent, with exceptions for interstate commercial-vehicle agreements and government-owned vehicles.",
+      "source": "https://ballotpedia.org/Arizona_Proposition_141,_Prohibit_Taxes_or_Fees_on_Miles_Traveled_in_Motor_Vehicle_Amendment_(2026)"
+    },
+    {
+      "designation": "Proposition 142",
+      "subject": "Race- and ethnicity-based preferential treatment",
+      "ballotTitle": "PROPOSED AMENDMENT TO THE CONSTITUTION BY THE LEGISLATURE RELATING TO THE PROHIBITION OF PREFERENTIAL TREATMENT AND DISCRIMINATION. OFFICIAL TITLE: AMENDING ARTICLE II, SECTION 36, CONSTITUTION OF ARIZONA. DESCRIPTIVE TITLE: ADDS FURTHER DETAILS TO THE CONSTITUTIONAL PROHIBITION AGAINST PREFERENTIAL TREATMENT OR DISCRIMINATION BY THE STATE BASED ON RACE, ETHNICITY, OR OTHER CLASSES.",
+      "summary": "Constitutional amendment expanding the existing ban on state preferential treatment or discrimination based on race or ethnicity, including provisions affecting public education offices and related programs.",
+      "source": "https://ballotpedia.org/Arizona_Proposition_142,_Prohibit_Race-_or_Ethnicity-Based_Preferential_Treatment,_Public_Education_Offices,_and_Disciplinary_Policies_Amendment_(2026)"
+    },
+    {
+      "designation": "Proposition 144",
+      "subject": "Voter ID and citizenship requirements",
+      "ballotTitle": "PROPOSED AMENDMENT TO THE CONSTITUTION BY THE LEGISLATURE RELATING TO ELECTION REQUIREMENTS. OFFICIAL TITLE: AMENDING ARTICLE VII, CONSTITUTION OF ARIZONA, BY ADDING SECTION 19. DESCRIPTIVE TITLE: REQUIRES ALL VOTERS, INCLUDING VOTERS WHO VOTE BY MAIL, TO SHOW GOVERNMENT-ISSUED ID TO VOTE IN EACH ELECTION; MAKES OTHER CHANGES TO ELECTION ADMINISTRATION AND CAMPAIGN FINANCE PROHIBITIONS.",
+      "summary": "Constitutional amendment requiring all voters, including mail voters, to show government-issued ID in each election, and making other changes to election administration and campaign-finance rules.",
+      "source": "https://ballotpedia.org/Arizona_Proposition_144,_Voter_Identification_and_Citizenship_Voting_Requirements_Amendment_(2026)"
+    },
+    {
+      "designation": "Proposition 316",
+      "subject": "Local taxes on groceries",
+      "ballotTitle": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO MUNICIPAL TRANSACTION PRIVILEGE TAX. OFFICIAL TITLE: AMENDING TITLE 42, CHAPTER 6, ARTICLE 1, SECTION 42-6015, ARIZONA REVISED STATUTES. DESCRIPTIVE TITLE: RETROACTIVELY PROHIBITS LOCAL GOVERNMENTS FROM ADOPTING OR INCREASING A TAX ON GROCERIES WITHOUT VOTER APPROVAL AND SETS A MAXIMUM RATE OF 2%.",
+      "summary": "Statute requiring voter approval, retroactively, before a city or town adopts or raises a tax on groceries, and capping such a tax at 2%.",
+      "source": "https://ballotpedia.org/Arizona_Proposition_316,_Limit_Local_Tax_Rate_on_Groceries_to_2%25_of_Base_Price_and_Require_Voter_Approval_to_Increase_Tax_Rate_Measure_(2026)"
+    },
+    {
+      "designation": "Proposition 317",
+      "subject": "Drug cartels as terrorist organizations",
+      "ballotTitle": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO THE ARIZONA DEPARTMENT OF HOMELAND SECURITY. OFFICIAL TITLE: AMENDING TITLE 41, CHAPTER 41, ARTICLE 1, ARIZONA REVISED STATUTES, BY ADDING SECTION 41-4256. DESCRIPTIVE TITLE: DECLARES THAT DRUG CARTELS ARE TERRORIST ORGANIZATIONS; DIRECTS THE ARIZONA DEPARTMENT OF HOMELAND SECURITY TO DO EVERYTHING IN ITS AUTHORITY TO ADDRESS DRUG CARTELS.",
+      "summary": "Statute declaring drug cartels to be terrorist organizations under state law and directing the Arizona Department of Homeland Security to act against them within its authority.",
+      "source": "https://ballotpedia.org/Arizona_Proposition_317,_Designate_Drug_Cartels_as_Terrorist_Organizations_and_Require_State_DHS_to_Address_Threats_Measure_(2026)"
+    },
+    {
+      "designation": "Proposition 318",
+      "subject": "School sports teams and private spaces by sex",
+      "ballotTitle": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO STUDENT ATHLETICS. OFFICIAL TITLE: AMENDING SECTION 15-120.02, ARIZONA REVISED STATUTES. DESCRIPTIVE TITLE: REQUIRES ALL SCHOOLS AND ATHLETIC ASSOCIATIONS TO DESIGNATE ATHLETIC TEAMS AS MALE, FEMALE, OR COED BASED ON THE BIOLOGICAL SEX OF THE ATHLETES AS DEFINED AT BIRTH; PROHIBITS THESE ENTITIES FROM AUTHORIZING USE OF PRIVATE SPACES NOT DESIGNATED FOR A PERSON’S SEX.",
+      "summary": "Statute requiring schools and athletic associations to designate teams by biological sex at birth and barring them from authorizing use of restrooms, locker rooms, and other private spaces not designated for a person's sex.",
+      "source": "https://ballotpedia.org/Arizona_Proposition_318,_Require_All_Schools_and_Athletic_Associations_to_Restrict_Sports_Participation_and_Access_to_Private_Spaces_Based_on_Sex_Measure_(2026)"
+    },
+    {
+      "designation": "Proposition 319",
+      "subject": "Photo traffic enforcement",
+      "ballotTitle": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO PHOTO ENFORCEMENT SYSTEMS. OFFICIAL TITLE: AMENDING SECTION 28-1201, ARIZONA REVISED STATUTES; AMENDING TITLE 28, CHAPTER 3, ARTICLE 21, ARIZONA REVISED STATUTES, BY ADDING SECTION 28-1207. DESCRIPTIVE TITLE: PROHIBITS STATE AGENCIES AND LOCAL GOVERNMENTS FROM USING PHOTO ENFORCEMENT SYSTEMS FOR TRAFFIC ENFORCEMENT UNLESS PROVIDED BY CONTRACT AS OF DECEMBER 31, 2026; REQUIRES LOCAL GOVERNMENTS TO OBTAIN VOTER APPROVAL TO CONTINUE THEIR USE.",
+      "summary": "Statute barring state and local photo traffic enforcement except under contracts in place as of December 31, 2026, and requiring local voter approval to continue using such systems.",
+      "source": "https://ballotpedia.org/Arizona_Proposition_319,_Prohibit_New_Photo_Traffic_Enforcement_Systems_Measure_(2026)"
+    },
+    {
+      "designation": "Proposition 320",
+      "subject": "School district classroom spending (60% rule)",
+      "ballotTitle": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO SCHOOL DISTRICT BUDGETS. OFFICIAL TITLE: AMENDING TITLE 15, CHAPTER 9, ARTICLE 1, ARIZONA REVISED STATUTES BY ADDING SECTION 15-917. DESCRIPTIVE TITLE: REQUIRES CERTAIN SCHOOL DISTRICTS TO SPEND AT LEAST SIXTY PERCENT OF THEIR OPERATIONAL SPENDING ON DIRECT INSTRUCTIONAL EXPENSES AS DEFINED BY THE AUDITOR GENERAL; REDUCES CERTAIN STATE FUNDING FOR NON-COMPLIANT DISTRICTS.",
+      "summary": "Statute requiring certain school districts to spend at least 60% of operational spending on direct instruction and reducing some state funding for districts that do not comply.",
+      "source": "https://ballotpedia.org/Arizona_Proposition_320,_Require_Certain_School_Districts_to_Spend_60%25_of_Operational_Spending_on_Direct_Instruction_Measure_(2026)"
+    }
+  ],
+  "measureEffective": "2026-11-23",
+  "measureEffectiveNote": "Approved measures become law upon the Governor's proclamation (Ariz. Const. art. IV, pt. 1, §1; A.R.S. §16-651), which is issued 'forthwith' after the Secretary of State's canvass. The state canvass is on the third Monday after the general election (A.R.S. §16-648), i.e. 2026-11-23; that date is representative, as the proclamation may come the same day or shortly after.",
+  "sources": [
+    "https://ballotpedia.org/Arizona_2026_ballot_measures",
+    "https://ballotpedia.org/Arizona_state_executive_official_elections,_2026",
+    "https://ballotpedia.org/Arizona_gubernatorial_election,_2026",
+    "https://ballotpedia.org/Arizona_Corporation_Commission_election,_2026",
+    "https://ballotpedia.org/Arizona%27s_1st_Congressional_District_election,_2026",
+    "https://www.thegreenpapers.com/G26/AZ",
+    "https://www.azmed.org/eight-statewide-ballot-measures-set-for-arizonas-november-election",
+    "https://www.fox10phoenix.com/election/2026-arizona-general-election-voter-guide-what-know-about-when-vote-how-register-races",
+    "https://www.azleg.gov/ars/16/00648.htm",
+    "https://www.azleg.gov/ars/16/00651.htm"
+  ],
+  "notes": [
+    "azsos.gov and apps.arizona.vote returned HTTP 403 to every automated fetch; all candidate and measure data is from secondary sources (Ballotpedia, cross-checked with The Green Papers, Fox 10, AZ Medical Association). Ballotpedia cites the SOS '2026 Ballot Language' page (accessed 2026-07-21) for the measure text.",
+    "No U.S. Senate race in Arizona in 2026 (Kelly up 2028, Gallego 2030).",
+    "2026 is the first Arizona election with a Lieutenant Governor, elected on a joint ticket with the Governor. For John Giles (Hobbs's running mate), Ballotpedia lists 'No party preference' and The Green Papers lists 'Republican and Independent'. The ticket is treated as running under the Democratic label, but how the ballot prints it is unconfirmed. Ballotpedia lists Angela Harrolle Mohan (Hourihan's running mate) as No party preference.",
+    "ballotTitle holds the referral heading, OFFICIAL TITLE, and DESCRIPTIVE TITLE as printed; the separate official yes/no 'shall have the effect of' statements are not included. In Prop 319, Ballotpedia shows 'SECTION 28- 1207' with a stray space, normalized to '28-1207'.",
+    "Numbering: all 8 measures are legislative referrals (14x = constitutional, 31x/32x = statutory). Ballotpedia and Axios number the school-spending measure Prop 320; the AZ Medical Association calls it Prop 143. Ballotpedia shows Prop 143 (school-district labor organizations) and Prop 145 (military-family scholarship accounts) as NOT on the ballot, the latter struck by a court on 2026-07-28. Initiative Prop 212 (ESA changes) is also not on the ballot.",
+    "Judicial retention questions (Arizona Supreme Court and Court of Appeals, plus superior court in larger counties) also appear; they are not listed here.",
+    "Write-ins excluded: e.g. Gertritrude Gonzalez and Alice Novoa (Governor); Gerard Davis and Stephen Neal Jr. (Superintendent); Gage Thunder and Dev Gupta (CD1); Jacob Parkman (CD3); Steven Sanders (CD4); Michael Dorland (CD6); William Perry and G. Seville Hatch (CD9).",
+    "Withdrawn or disqualified: Leezah Sun (Governor), Andromeda Crum (CD4), Trevor Dickerson (CD6).",
+    "Ballot names may differ from the Ballotpedia names used here. The Green Papers lists Teri Ann Hourihan, Alex Kolodin, Terry Ruiz, Jo Mendoza, Daniel Butierez, Bernadette Greene-Placentia, Abe Hamadeh, and Dani Sterbinsky."
+  ],
+  "unconfirmed": [
+    "No candidate or measure was confirmed against azsos.gov, which blocked access. Everything rests on Ballotpedia, cross-checked by at least one other secondary source.",
+    "The exact names as printed on the ballot (see the nickname variants in notes) and the party labels as printed (Arizona ballots use party names or abbreviations; full party names are used here).",
+    "Mike Cease (Green, Corporation Commission): listed by Ballotpedia and Fox 10, but a Vote Solar guide describes the field as two Democrats and two Republicans.",
+    "Measure ballot language is as Ballotpedia quoted it from the SOS page on 2026-07-21. No later court-ordered rewrite was found for these 8 measures, but this was not checked against the official publicity pamphlet.",
+    "The exact date of the Governor's proclamation for 2026 measures; 2026-11-23 is the canvass date, used as a representative date."
+  ]
+}

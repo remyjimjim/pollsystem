@@ -1,0 +1,103 @@
+{
+  "state": "Pennsylvania",
+  "abbr": "PA",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "Governor and Lieutenant Governor",
+      "candidates": [
+        { "name": "Josh Shapiro / Austin Davis", "party": "Democratic" },
+        { "name": "Stacy Garrity / Jason Richey", "party": "Republican" },
+        { "name": "Ken Krawchuk / John Thomas", "party": "Libertarian" }
+      ]
+    }
+  ],
+  "house": [
+    { "district": 1, "candidates": [
+      { "name": "Bob Harvie", "party": "Democratic" },
+      { "name": "Brian Fitzpatrick", "party": "Republican" } ] },
+    { "district": 2, "candidates": [
+      { "name": "Brendan F. Boyle", "party": "Democratic" },
+      { "name": "Jessica Arriaga", "party": "Republican" } ] },
+    { "district": 3, "candidates": [
+      { "name": "Chris Rabb", "party": "Democratic" },
+      { "name": "Dennis Mahoney", "party": "The Independent Party" } ] },
+    { "district": 4, "candidates": [
+      { "name": "Madeleine Dean", "party": "Democratic" },
+      { "name": "Aurora Stuski", "party": "Republican" } ] },
+    { "district": 5, "candidates": [
+      { "name": "Mary Gay Scanlon", "party": "Democratic" },
+      { "name": "Nick Manganaro", "party": "Republican" } ] },
+    { "district": 6, "candidates": [
+      { "name": "Chrissy Houlahan", "party": "Democratic" },
+      { "name": "Marty Young", "party": "Republican" } ] },
+    { "district": 7, "candidates": [
+      { "name": "Bob Brooks", "party": "Democratic" },
+      { "name": "Ryan Mackenzie", "party": "Republican" } ] },
+    { "district": 8, "candidates": [
+      { "name": "Paige Cognetti", "party": "Democratic" },
+      { "name": "Rob Bresnahan", "party": "Republican" } ] },
+    { "district": 9, "candidates": [
+      { "name": "Rachel Wallace", "party": "Democratic" },
+      { "name": "Dan Meuser", "party": "Republican" } ] },
+    { "district": 10, "candidates": [
+      { "name": "Janelle Stelson", "party": "Democratic" },
+      { "name": "Scott Perry", "party": "Republican" } ] },
+    { "district": 11, "candidates": [
+      { "name": "Nancy Mannion", "party": "Democratic" },
+      { "name": "Lloyd K. Smucker", "party": "Republican" } ] },
+    { "district": 12, "candidates": [
+      { "name": "Summer Lee", "party": "Democratic" },
+      { "name": "James Hayes", "party": "Republican" } ] },
+    { "district": 13, "candidates": [
+      { "name": "Beth Farnham", "party": "Democratic" },
+      { "name": "John Joyce", "party": "Republican" } ] },
+    { "district": 14, "candidates": [
+      { "name": "Alan Bradstock", "party": "Democratic" },
+      { "name": "Guy Reschenthaler", "party": "Republican" } ] },
+    { "district": 15, "candidates": [
+      { "name": "Ray Bilger", "party": "Democratic" },
+      { "name": "Glenn Thompson", "party": "Republican" } ] },
+    { "district": 16, "candidates": [
+      { "name": "Justin Wagner", "party": "Democratic" },
+      { "name": "Mike Kelly", "party": "Republican" } ] },
+    { "district": 17, "candidates": [
+      { "name": "Chris Deluzio", "party": "Democratic" },
+      { "name": "Tony Guy", "party": "Republican" } ] }
+  ],
+  "measures": [],
+  "measureEffective": "2026-11-03",
+  "measureEffectiveNote": "No statewide ballot questions are on the November 3, 2026 ballot, so nothing takes effect. Rule for reference: under Pa. Const. Art. XI, sec. 1, a proposed amendment approved by a majority of those voting on it becomes part of the Constitution; the election date is used here as a representative date (no measure applies).",
+  "sources": [
+    "https://www.buckscounty.gov/DocumentCenter/View/27847",
+    "https://vote.phila.gov/media/UMOVA_NOTICE_2026_GENERAL_ELECTION.pdf",
+    "https://berkspa.gov/getmedia/1b84fb77-a4ac-4d4f-9852-a152f00fa18f/UMOVA-Notice-GE26-Offices-only_1.pdf",
+    "https://yorkcountypa.gov/DocumentCenter/View/8942/Unofficial-Candidate-Listing-7-31-26?bidId=",
+    "https://www.eriecountycouncilpa.gov/uploads/2026_general_election_unofficial_candidate_listing.pdf",
+    "https://www.beavercountypa.gov/getmedia/f20a324b-98b8-4a61-b13b-4f67a91c27a5/Unofficial-Candidates-on-Ballot-7-23-26.pdf",
+    "https://apps.westmorelandcountypa.gov/elections/ElectionBallots/Ballots/ElectionBallots/8.pdf",
+    "https://apps.westmorelandcountypa.gov/elections/ElectionBallots/Ballots/ElectionBallots/200.pdf",
+    "https://www.spotlightpa.org/news/2026/10/pennsylvania-general-election-day-2026-voter-information-registration-elections/",
+    "https://whyy.org/articles/election-2026-pennsylvania-governor-voter-guide-shapiro-garrity/",
+    "https://www.thegreenpapers.com/G26/PA",
+    "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
+  ],
+  "notes": [
+    "No U.S. Senate seat is up in Pennsylvania in 2026 (McCormick's term runs to 2031, Fetterman's to 2029). Attorney General, Treasurer and Auditor General are not up until 2028.",
+    "No statewide judicial retention questions were found for 2026; Spotlight PA's Oct. 19 voter guide lists none, and the official Westmoreland County sample ballot shows none.",
+    "No statewide ballot questions (Spotlight PA, Oct. 19, 2026; consistent with official Westmoreland sample ballots). Local questions exist in Philadelphia (two charter changes) and Allegheny County; they are out of scope.",
+    "Governor and Lieutenant Governor run as a joint party ticket in the general election.",
+    "Green Party ticket Tony Dastra / Craig Bolton withdrew on Aug. 25, 2026 (Green Papers). It is absent from the Aug. 26 Erie list, the Bucks list and the official Westmoreland sample ballots, and Spotlight PA says Krawchuk is the only third-party candidate. Philadelphia's military/overseas notice still lists it, apparently because the notice was prepared earlier.",
+    "PA-7: Andrew Tupone's petition to run on the Green line was struck by Commonwealth Court, and the Pa. Supreme Court upheld the ruling in Sept. 2026; he is running as a write-in only and is excluded.",
+    "Polls are open 7 AM to 8 PM Eastern statewide; Pennsylvania is entirely in the Eastern time zone. After DST ends on Nov. 1, 8:00 PM EST = 01:00 UTC on Nov. 4.",
+    "Names are given in mixed case. Official county documents print some names in capitals (e.g., Westmoreland: SUMMER LEE, ALAN BRADSTOCK).",
+    "Official county documents confirm districts 1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 14, 16 and 17 and the governor field. Districts 7, 8, 13 and 15 rest on secondary sources that agree with each other."
+  ],
+  "unconfirmed": [
+    "No Department of State certified general-election candidate list could be read: the pa.gov pages returned 404, and electionreturns.pa.gov is behind bot protection. All candidate data comes from county election offices (official, some marked 'unofficial pending DOS certification') or from secondary sources.",
+    "PA-7 (Bob Brooks D, Ryan Mackenzie R), PA-8 (Paige Cognetti D, Rob Bresnahan R), PA-13 (Beth Farnham D, John Joyce R) and PA-15 (Ray Bilger D, Glenn Thompson R): confirmed only through Green Papers, Wikipedia and news reports (Penn Capital-Star, Washington Examiner, StateCollege.com), not an official listing. The exact printed name forms are unverified, for example whether ballots print 'Glenn Thompson' or 'G.T. Thompson'.",
+    "Absence of other third-party or independent House candidates is based on Green Papers and Wikipedia, plus official lists for the districts that have them; the official list for districts 7, 8, 13 and 15 was not seen.",
+    "measureEffective is a representative date only; no statewide measure is on the ballot."
+  ]
+}

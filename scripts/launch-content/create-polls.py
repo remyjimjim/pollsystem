@@ -108,14 +108,24 @@ def main():
             print(f"✓ {p['id']} \"{election['title']}\" includes {include}{' (republished)' if was_published else ''}")
         return
 
+    # Rerunnable: anything already among your polls (same type and title) is
+    # skipped, so a second run never creates duplicates.
+    existing = {(p['type'], p['title']): p['id'] for p in call(a.api, token, 'GET', '/api/creator/polls?showArchived=true')}
     # Either one election with its ballot measures, or a list of elections.
     for election in c.get('elections', []) + ([c['election']] if 'election' in c else []):
         election = {k: v for k, v in election.items() if k != 'formerTitle'}
         if include: election['includedElectionIds'] = include
+        if ('Election', election['title']) in existing:
+            e = {'id': existing[('Election', election['title'])], 'title': election['title']}
+            print(f"· election {e['id']} \"{e['title']}\" already exists")
+            continue
         e = call(a.api, token, 'POST', '/api/polls/elections', election)
         print(f"✓ election {e['id']} \"{e['title']}\" ({len(election['candidates'])} candidates), DRAFT")
         print(f"    {site}/creator/polls/election/{e['id']}/edit")
     for m in c.get('ballotMeasures', []):
+        if ('BallotMeasure', m['title']) in existing:
+            print(f"· ballot measure {existing[('BallotMeasure', m['title'])]} \"{m['title']}\" already exists")
+            continue
         b = call(a.api, token, 'POST', '/api/polls/ballot-measures', {**m, 'electionId': e['id']})
         print(f"✓ ballot measure {b['id']} \"{b['title']}\", DRAFT")
         print(f"    {site}/creator/polls/ballot-measure/{b['id']}/edit")

@@ -1,0 +1,45 @@
+{
+  "_about": "New York, Nov 3 2026, built by build-state.py from docs/launch-content/research/NY.json (sources and gaps in NY.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · New York: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      33
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Kathy C. Hochul / Adrienne E. Adams",
+        "affiliation": "Democratic, Working Families",
+        "officeName": "Governor / Lt. Governor"
+      },
+      {
+        "name": "Bruce A. Blakeman / Todd Hood",
+        "affiliation": "Republican, Conservative, Vote Affordable",
+        "officeName": "Governor / Lt. Governor"
+      },
+      {
+        "name": "Thomas P. DiNapoli",
+        "affiliation": "Democratic, Working Families",
+        "officeName": "Comptroller"
+      },
+      {
+        "name": "Joseph Hernandez",
+        "affiliation": "Republican, Conservative",
+        "officeName": "Comptroller"
+      },
+      {
+        "name": "Letitia A. James",
+        "affiliation": "Democratic, Working Families",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Saritha Komatireddy",
+        "affiliation": "Republican, Conservative",
+        "officeName": "Attorney General"
+      }
+    ]
+  }
+}

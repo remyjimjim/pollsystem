@@ -1,0 +1,380 @@
+{
+  "_about": "Pennsylvania, Nov 3 2026, built by build-state.py from docs/launch-content/research/PA.json (sources and gaps in PA.md). One ballot per district, each including \"2026 Midterm · Pennsylvania: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Bob Harvie",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Brian Fitzpatrick",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Brendan F. Boyle",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Jessica Arriaga",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Chris Rabb",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Dennis Mahoney",
+          "affiliation": "The Independent Party",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Madeleine Dean",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Aurora Stuski",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Mary Gay Scanlon",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Nick Manganaro",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Chrissy Houlahan",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Marty Young",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Bob Brooks",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Ryan Mackenzie",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Paige Cognetti",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Rob Bresnahan",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 9",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Rachel Wallace",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Dan Meuser",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 10",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Janelle Stelson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Scott Perry",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 10"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 11",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Nancy Mannion",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Lloyd K. Smucker",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 11"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 12",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Summer Lee",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "James Hayes",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 12"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 13",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Beth Farnham",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "John Joyce",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 13"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 14",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Alan Bradstock",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 14"
+        },
+        {
+          "name": "Guy Reschenthaler",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 14"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 15",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Ray Bilger",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Glenn Thompson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 15"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 16",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Justin Wagner",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 16"
+        },
+        {
+          "name": "Mike Kelly",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 16"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Pennsylvania District 17",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        39
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Chris Deluzio",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 17"
+        },
+        {
+          "name": "Tony Guy",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 17"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Pennsylvania: statewide races & measures"
+}

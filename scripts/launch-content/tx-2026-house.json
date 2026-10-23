@@ -1,0 +1,882 @@
+{
+  "_about": "Texas, Nov 3 2026, built by build-state.py from docs/launch-content/research/TX.json (sources and gaps in TX.md). One ballot per district, each including \"2026 Midterm · Texas: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Nathaniel Moran",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Yolanda R. Prince",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Steve Toth",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Shaun Finnie",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Keith Self",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Evan Hunt",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Pat Fallon",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Jason Pearce",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Lance Gooden",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Chelsey Hockett",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Jake Ellzey",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Danny Minton",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Alexander Hale",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Lizzie Pannill Fletcher",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Espoir Ngabo",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Jessica Hart Steinmann",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Laura Jones",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 9",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Alex Mealer",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Leticia Gutierrez",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 10",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Chris Gober",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Caitlin Rourk",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 10"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 11",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "August Pfluger",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Claire Reynolds",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 11"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 12",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Craig Goldman",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Angela \"Heli\" Rodriguez Prilliman",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 12"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 13",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Ronny Jackson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Mark Nair",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 13"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 14",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Randy Weber",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 14"
+        },
+        {
+          "name": "Thurman Bill Bartie",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 14"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 15",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Monica De La Cruz",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Bobby Pulido",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 15"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 16",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Adam Bauman",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 16"
+        },
+        {
+          "name": "Veronica Escobar",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 16"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 17",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Pete Sessions",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 17"
+        },
+        {
+          "name": "Casey Shepard",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 17"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 18",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Ronald Dwayne Whitfield",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 18"
+        },
+        {
+          "name": "Christian Dashaun Menefee",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 18"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 19",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Tom Sell",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 19"
+        },
+        {
+          "name": "Kyle Rable",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 19"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 20",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Edgardo Rafael Baez",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 20"
+        },
+        {
+          "name": "Joaquin Castro",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 20"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 21",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Mark Teixeira",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 21"
+        },
+        {
+          "name": "Kristin Hook",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 21"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 22",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Trever Nehls",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 22"
+        },
+        {
+          "name": "Marquette Greene-Scott",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 22"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 23",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Brandon Herrera",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 23"
+        },
+        {
+          "name": "Katy Padilla Stout",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 23"
+        },
+        {
+          "name": "Ben Mendoza",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 23"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 24",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Beth Van Duyne",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 24"
+        },
+        {
+          "name": "Kevin Burge",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 24"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 25",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Roger Williams",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 25"
+        },
+        {
+          "name": "Dione Sims",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 25"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 26",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Brandon Gill",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 26"
+        },
+        {
+          "name": "Steven Shook",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 26"
+        },
+        {
+          "name": "Phil Gray",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 26"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 27",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Michael Cloud",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 27"
+        },
+        {
+          "name": "Tanya Lloyd",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 27"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 28",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Tano E. Tijerina",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 28"
+        },
+        {
+          "name": "Henry Cuellar",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 28"
+        },
+        {
+          "name": "Marlón Durán",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 28"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 29",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Martha Fierro",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 29"
+        },
+        {
+          "name": "Sylvia Garcia",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 29"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 30",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Everett Jackson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 30"
+        },
+        {
+          "name": "Frederick D. Haynes III",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 30"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 31",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "John Carter",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 31"
+        },
+        {
+          "name": "Justin Early",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 31"
+        },
+        {
+          "name": "Greg Stoker",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 31"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 32",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Jace Yarbrough",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 32"
+        },
+        {
+          "name": "Dan Barrios",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 32"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 33",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Patrick David Gillespie",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 33"
+        },
+        {
+          "name": "Colin Allred",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 33"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 34",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Eric Flores",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 34"
+        },
+        {
+          "name": "Vicente Gonzalez",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 34"
+        },
+        {
+          "name": "Chris Royal",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 34"
+        },
+        {
+          "name": "Eddie Espinoza",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 34"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 35",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Carlos De La Cruz",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 35"
+        },
+        {
+          "name": "Johnny C. Garcia",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 35"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 36",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Brian Babin",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 36"
+        },
+        {
+          "name": "Rhonda Hart",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 36"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 37",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Lauren B. Peña",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 37"
+        },
+        {
+          "name": "Greg Casar",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 37"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Texas District 38",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        44
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Jon Bonck",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 38"
+        },
+        {
+          "name": "Melissa McDonough",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 38"
+        },
+        {
+          "name": "Alex McMenemy",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 38"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Texas: statewide races & measures"
+}

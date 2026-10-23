@@ -1,0 +1,588 @@
+{
+  "state": "Florida",
+  "abbr": "FL",
+  "pollCloseLocal": "7:00 PM Central (western Panhandle); 7:00 PM Eastern elsewhere",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        {
+          "name": "Ashley Moody",
+          "party": "Republican"
+        },
+        {
+          "name": "Angie Nixon",
+          "party": "Democratic"
+        },
+        {
+          "name": "Neil J. Gillespie",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "office": "Governor and Lieutenant Governor",
+      "candidates": [
+        {
+          "name": "Byron Donalds / Bryan Avila",
+          "party": "Republican"
+        },
+        {
+          "name": "David Jolly / Gwen Graham",
+          "party": "Democratic"
+        },
+        {
+          "name": "Dean Ocean Abrams / Joe Van Vactor",
+          "party": "No Party Affiliation"
+        },
+        {
+          "name": "Charles Burkett / Ruben A. Coto",
+          "party": "No Party Affiliation"
+        },
+        {
+          "name": "Jeffrey Peter \"Dr. Jeff\" Datto / Juan Santana",
+          "party": "No Party Affiliation"
+        },
+        {
+          "name": "Moliere \"Moe\" Dimanche / Benjiman Rojas",
+          "party": "No Party Affiliation"
+        },
+        {
+          "name": "Scott Eckhard Jewett / Nicole Skelly",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Frank J. Russo / Rachel Rodriguez",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "James Uthmeier",
+          "party": "Republican"
+        },
+        {
+          "name": "Jose Javier Rodriguez",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Chief Financial Officer",
+      "candidates": [
+        {
+          "name": "Blaise Ingoglia",
+          "party": "Republican"
+        },
+        {
+          "name": "Annette Taddeo",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Commissioner of Agriculture",
+      "candidates": [
+        {
+          "name": "Wilton Simpson",
+          "party": "Republican"
+        },
+        {
+          "name": "Joey Mendoza Atkins",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Jimmy Patronis",
+          "party": "Republican"
+        },
+        {
+          "name": "Gay Valimont",
+          "party": "Democratic"
+        },
+        {
+          "name": "Tyler L. Davis",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Austin Rogers",
+          "party": "Republican"
+        },
+        {
+          "name": "Amanda Marie Green",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Kat Cammack",
+          "party": "Republican"
+        },
+        {
+          "name": "Seth Harp",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mike Klein",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Aaron Bean",
+          "party": "Republican"
+        },
+        {
+          "name": "LaShonda \"L.J.\" Holloway",
+          "party": "Democratic"
+        },
+        {
+          "name": "Todd Schaefer",
+          "party": "No Party Affiliation"
+        },
+        {
+          "name": "Mike Sell",
+          "party": "Forward"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "John H. Rutherford",
+          "party": "Republican"
+        },
+        {
+          "name": "Rachel Grage",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Randy Fine",
+          "party": "Republican"
+        },
+        {
+          "name": "Eric Yonce",
+          "party": "Democratic"
+        },
+        {
+          "name": "Andrew Parrott",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Ryan Elijah",
+          "party": "Republican"
+        },
+        {
+          "name": "Bale Dalton",
+          "party": "Democratic"
+        },
+        {
+          "name": "Christopher Dennison",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Mike Haridopolos",
+          "party": "Republican"
+        },
+        {
+          "name": "Jennifer Jenkins",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 9,
+      "candidates": [
+        {
+          "name": "Dan Green",
+          "party": "Republican"
+        },
+        {
+          "name": "Darren Soto",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 10,
+      "candidates": []
+    },
+    {
+      "district": 11,
+      "candidates": [
+        {
+          "name": "Joe Strada",
+          "party": "Republican"
+        },
+        {
+          "name": "James Pericola",
+          "party": "Democratic"
+        },
+        {
+          "name": "Ralph Groves",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 12,
+      "candidates": [
+        {
+          "name": "Gus Michael Bilirakis",
+          "party": "Republican"
+        },
+        {
+          "name": "Kimberly Overman",
+          "party": "Democratic"
+        },
+        {
+          "name": "Branden Scrivener",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 13,
+      "candidates": [
+        {
+          "name": "Anna Paulina Luna",
+          "party": "Republican"
+        },
+        {
+          "name": "Leela Gray",
+          "party": "Democratic"
+        },
+        {
+          "name": "Tony D'Arrigo",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 14,
+      "candidates": [
+        {
+          "name": "Mike Beltran",
+          "party": "Republican"
+        },
+        {
+          "name": "Kathy Castor",
+          "party": "Democratic"
+        },
+        {
+          "name": "Brian Lambert",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 15,
+      "candidates": [
+        {
+          "name": "Laurel Lee",
+          "party": "Republican"
+        },
+        {
+          "name": "Robert People",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 16,
+      "candidates": [
+        {
+          "name": "Sydney Gruters",
+          "party": "Republican"
+        },
+        {
+          "name": "Kelly Kirschner",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mark Davis",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 17,
+      "candidates": [
+        {
+          "name": "Greg Steube",
+          "party": "Republican"
+        },
+        {
+          "name": "Matthew Montavon",
+          "party": "Democratic"
+        },
+        {
+          "name": "Michael J. Quirk",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 18,
+      "candidates": [
+        {
+          "name": "Scott Franklin",
+          "party": "Republican"
+        },
+        {
+          "name": "Curtis Gibson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Deva Simmons",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 19,
+      "candidates": [
+        {
+          "name": "Jim Schwartzel",
+          "party": "Republican"
+        },
+        {
+          "name": "Victor Arias",
+          "party": "Democratic"
+        },
+        {
+          "name": "Seth Haskin",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 20,
+      "candidates": [
+        {
+          "name": "Brent Andersen",
+          "party": "Republican"
+        },
+        {
+          "name": "Debbie Wasserman Schultz",
+          "party": "Democratic"
+        },
+        {
+          "name": "Kedner Maxime",
+          "party": "Independent Party"
+        }
+      ]
+    },
+    {
+      "district": 21,
+      "candidates": [
+        {
+          "name": "Brian Mast",
+          "party": "Republican"
+        },
+        {
+          "name": "James T. Martin",
+          "party": "Democratic"
+        },
+        {
+          "name": "Alexander Cooke",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 22,
+      "candidates": [
+        {
+          "name": "Casey Askar",
+          "party": "Republican"
+        },
+        {
+          "name": "Pia Dandiya",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 23,
+      "candidates": [
+        {
+          "name": "Deborah Adeimy",
+          "party": "Republican"
+        },
+        {
+          "name": "Lois Frankel",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 24,
+      "candidates": [
+        {
+          "name": "Te Mayonna Brown",
+          "party": "Republican"
+        },
+        {
+          "name": "Oliver G. Gilbert III",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 25,
+      "candidates": [
+        {
+          "name": "Scott Singer",
+          "party": "Republican"
+        },
+        {
+          "name": "Jared Moskowitz",
+          "party": "Democratic"
+        },
+        {
+          "name": "Peter Jassenoff",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 26,
+      "candidates": [
+        {
+          "name": "Mario Diaz-Balart",
+          "party": "Republican"
+        },
+        {
+          "name": "Nicole Locklin",
+          "party": "Democratic"
+        },
+        {
+          "name": "Deborah Ann Meidinger Hosey",
+          "party": "No Party Affiliation"
+        }
+      ]
+    },
+    {
+      "district": 27,
+      "candidates": [
+        {
+          "name": "Maria Elvira Salazar",
+          "party": "Republican"
+        },
+        {
+          "name": "Eliott Rodriguez",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 28,
+      "candidates": [
+        {
+          "name": "Carlos A. Gimenez",
+          "party": "Republican"
+        },
+        {
+          "name": "Phil \"Felipe\" Ehr",
+          "party": "Democratic"
+        },
+        {
+          "name": "Eddy Rojas",
+          "party": "No Party Affiliation"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Amendment 1",
+      "subject": "Budget stabilization (rainy-day) fund",
+      "ballotTitle": "Budget Stabilization Fund: Proposing an amendment to the State Constitution to increase the amount of funds that may be retained in the budget stabilization fund from 10% to 25% of general revenue collections, require the legislature to transfer the lesser of $750 million or the amount required to reach 25% of the general revenue collections each year unless certain conditions are met, and allow the legislature to withdraw funds for critical state needs.",
+      "summary": "Raises the cap on the state's budget stabilization fund from 10% to 25% of general revenue collections and requires yearly transfers into it, with withdrawals allowed for critical state needs.",
+      "source": "https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=108"
+    },
+    {
+      "designation": "Amendment 2",
+      "subject": "Property-tax exemption for agricultural equipment",
+      "ballotTitle": "Exemption of Tangible Personal Property on Agricultural Land from Taxation: Proposing an amendment to the State Constitution to exempt tangible personal property habitually located or typically present on land classified as agricultural, used in the production of agricultural products or for agritourism activities, and owned by the landowner or leaseholder of the agricultural land from ad valorem taxation. If approved this amendment would first apply for tax years beginning January 1, 2027.",
+      "summary": "Exempts from property tax the equipment and other tangible personal property kept on agricultural land and used for farming or agritourism by the landowner or leaseholder.",
+      "source": "https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=109"
+    },
+    {
+      "designation": "Amendment 3",
+      "subject": "Homestead exemption increase and non-homestead assessment cap",
+      "ballotTitle": "Increased Homestead Exemption; Lower Cap on Increases in Non-Homestead Property Assessments: This amendment increases the homestead exemption, for all non-school taxes, to $150,000 in 2027 and $250,000 in 2028, and adjusts for inflation thereafter. It requires the Legislature to prescribe a uniform procedure for counties and municipalities, for their respective levies, to increase the homestead exemption up to full assessed value, and allows special districts, subject to referendum approval, to do the same. Persons who are not Florida residents on December 31, 2026, will receive the existing homestead exemption upon qualifying for a homestead exemption, with the increased homestead exemption beginning with the fifth year of exemption, to the extent permitted by the U.S. Constitution. This amendment reduces the annual cap on assessment increases for non-homestead properties from 10% to 5%. This amendment requires counties and municipalities to use property taxes solely for public safety, education and schools, infrastructure, natural resources, bond debt service, retirement benefits for employees, and operations and administration. Other expenditures may be approved by county officers or county or municipal governing bodies unless prohibited by general law, notwithstanding Article VII, Section 9(a) of the Florida Constitution, which allows counties and municipalities to levy property taxes for their respective purposes. This amendment takes effect January 1, 2027.",
+      "summary": "Raises the homestead exemption from non-school property taxes to $150,000 in 2027 and $250,000 in 2028, lowers the annual assessment-increase cap on non-homestead property from 10% to 5%, and limits what counties and cities may spend property taxes on.",
+      "source": "https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=110"
+    }
+  ],
+  "measureEffective": "2027-01-05",
+  "measureEffectiveNote": "Fla. Const. Art. XI, s. 5(e): an approved amendment (60% of votes cast on the measure required) takes effect on the first Tuesday after the first Monday in January following the election (Jan 5, 2027) unless the amendment specifies otherwise. Amendment 3 states it takes effect January 1, 2027; Amendment 2 first applies to tax years beginning January 1, 2027.",
+  "sources": [
+    "https://dos.elections.myflorida.com/candidates/CanList.asp (2026 General Election, all offices, status 'ALL except WIT/DNQ', fetched 2026-10-23)",
+    "https://dos.fl.gov/elections/candidates-committees/political-parties/",
+    "https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=108",
+    "https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=109",
+    "https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=110",
+    "https://dos.elections.myflorida.com/initiatives/initSearch.asp",
+    "https://www.wlrn.org/government-politics/2026-10-15/what-florida-voters-need-to-know-about-amendments-1-and-2",
+    "https://floridaphoenix.com/2026/08/13/toned-down-amendment-3-ballot-language-ready-for-another-judicial-review/",
+    "https://floridaphoenix.com/voter-guides/contests/2026-general-governor/",
+    "https://news.ballotpedia.org/2026/08/24/moskowitz-singer-compete-in-floridas-redrawn-25th-congressional-district/"
+  ],
+  "notes": [
+    "Candidates are those with status Qualified on the Division of Elections list who were not eliminated in the Aug 18, 2026 primary; write-in (WRI) candidates are omitted. Names are rendered First Middle Last from the list's 'Last, First Middle' form.",
+    "Florida ballots print party abbreviations (REP, DEM, NPA, LPF, FFP, IND). Mapped: LPF = Libertarian Party of Florida -> 'Libertarian'; FFP = Florida Forward Party -> 'Forward'; IND = Independent Party of Florida (a registered minor party, not unaffiliated) -> 'Independent Party'.",
+    "U.S. Senate is the election for the seat Ashley Moody was appointed to in 2025 (former Rubio seat, term ending Jan 2029); the DOS list labels it simply 'United States Senator'.",
+    "District 10: Rep. Maxwell Alejandro Frost (DEM) is listed as Unopposed for the general election, so under Florida law no contest appears on the ballot; the entry has no candidates.",
+    "Congressional districts use the mid-decade map enacted in 2026; several incumbents run in renumbered districts (e.g. Moskowitz in CD 25, Wasserman Schultz in CD 20).",
+    "Judicial merit retention: the DOS list shows Supreme Court Justice Carlos G. Muniz up for retention, plus district court of appeal judges; not modeled here.",
+    "All three amendments are legislative referrals; DOS says all 22 citizen-initiative petitions failed to qualify for 2026. Each needs 60% to pass.",
+    "Amendment 3's title and summary are the Attorney General's court-ordered rewrite (Aug 2026), replacing the struck title 'Save Our Homes From Excessive Property Taxes'; the DOS database shows the rewritten text.",
+    "ballotTitle values are 'Title: ballot summary', with the title converted from the database's all-caps to title case; the summary text is verbatim.",
+    "Poll hours are 7 am-7 pm local (s. 100.011, F.S.); the panhandle west of the Apalachicola River is on Central time, so the last polls close at 7 pm CST = 01:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Exact on-ballot rendering of candidate names (nicknames, middle names/initials) and the ballot's printed party labels were not checked against a county sample ballot; names follow the DOS candidate list.",
+    "Whether any further legal challenge to Amendment 3's rewritten ballot language was filed or decided after mid-August 2026 was not confirmed (Oct 15 reporting treats it as on the ballot).",
+    "Secondary reporting mentions six NPA governor tickets; the DOS list shows five qualified NPA tickets (Abrams, Burkett, Datto, Dimanche, Russo), which is what is used."
+  ]
+}

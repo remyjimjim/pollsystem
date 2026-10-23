@@ -1,0 +1,123 @@
+{
+  "_about": "Florida, Nov 3 2026, built by build-state.py from docs/launch-content/research/FL.json (sources and gaps in FL.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Florida: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      10
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Ashley Moody",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Angie Nixon",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Neil J. Gillespie",
+        "affiliation": "No Party Affiliation",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Byron Donalds / Bryan Avila",
+        "affiliation": "Republican",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "David Jolly / Gwen Graham",
+        "affiliation": "Democratic",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Dean Ocean Abrams / Joe Van Vactor",
+        "affiliation": "No Party Affiliation",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Charles Burkett / Ruben A. Coto",
+        "affiliation": "No Party Affiliation",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Jeffrey Peter \"Dr. Jeff\" Datto / Juan Santana",
+        "affiliation": "No Party Affiliation",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Moliere \"Moe\" Dimanche / Benjiman Rojas",
+        "affiliation": "No Party Affiliation",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Scott Eckhard Jewett / Nicole Skelly",
+        "affiliation": "Libertarian",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Frank J. Russo / Rachel Rodriguez",
+        "affiliation": "No Party Affiliation",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "James Uthmeier",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Jose Javier Rodriguez",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Blaise Ingoglia",
+        "affiliation": "Republican",
+        "officeName": "Chief Financial Officer"
+      },
+      {
+        "name": "Annette Taddeo",
+        "affiliation": "Democratic",
+        "officeName": "Chief Financial Officer"
+      },
+      {
+        "name": "Wilton Simpson",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "Joey Mendoza Atkins",
+        "affiliation": "Democratic",
+        "officeName": "Commissioner of Agriculture"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Florida Amendment 1: Budget stabilization (rainy-day) fund",
+      "summary": "Budget Stabilization Fund: Proposing an amendment to the State Constitution to increase the amount of funds that may be retained in the budget stabilization fund from 10% to 25% of general revenue collections, require the legislature to transfer the lesser of $750 million or the amount required to reach 25% of the general revenue collections each year unless certain conditions are met, and allow the legislature to withdraw funds for critical state needs.\n\nIn short: Raises the cap on the state's budget stabilization fund from 10% to 25% of general revenue collections and requires yearly transfers into it, with withdrawals allowed for critical state needs.\n\nOfficial ballot language. Source: https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=108",
+      "effectiveDate": "2027-01-05",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Florida Amendment 2: Property-tax exemption for agricultural equipment",
+      "summary": "Exemption of Tangible Personal Property on Agricultural Land from Taxation: Proposing an amendment to the State Constitution to exempt tangible personal property habitually located or typically present on land classified as agricultural, used in the production of agricultural products or for agritourism activities, and owned by the landowner or leaseholder of the agricultural land from ad valorem taxation. If approved this amendment would first apply for tax years beginning January 1, 2027.\n\nIn short: Exempts from property tax the equipment and other tangible personal property kept on agricultural land and used for farming or agritourism by the landowner or leaseholder.\n\nOfficial ballot language. Source: https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=109",
+      "effectiveDate": "2027-01-05",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Florida Amendment 3: Homestead exemption increase and non-homestead assessment cap",
+      "summary": "Increased Homestead Exemption; Lower Cap on Increases in Non-Homestead Property Assessments: This amendment increases the homestead exemption, for all non-school taxes, to $150,000 in 2027 and $250,000 in 2028, and adjusts for inflation thereafter. It requires the Legislature to prescribe a uniform procedure for counties and municipalities, for their respective levies, to increase the homestead exemption up to full assessed value, and allows special districts, subject to referendum approval, to do the same. Persons who are not Florida residents on December 31, 2026, will receive the existing homestead exemption upon qualifying for a homestead exemption, with the increased homestead exemption beginning with the fifth year of exemption, to the extent permitted by the U.S. Constitution. This amendment reduces the annual cap on assessment increases for non-homestead properties from 10% to 5%. This amendment requires counties and municipalities to use property taxes solely for public safety, education and schools, infrastructure, natural resources, bond debt service, retirement benefits for employees, and operations and administration. Other expenditures may be approved by county officers or county or municipal governing bodies unless prohibited by general law, notwithstanding Article VII, Section 9(a) of the Florida Constitution, which allows counties and municipalities to levy property taxes for their respective purposes. This amendment takes effect January 1, 2027.\n\nIn short: Raises the homestead exemption from non-school property taxes to $150,000 in 2027 and $250,000 in 2028, lowers the annual assessment-increase cap on non-homestead property from 10% to 5%, and limits what counties and cities may spend property taxes on.\n\nOfficial ballot language. Source: https://constitutionalinitiatives.dos.fl.gov/Home/InitDetail?account=10&seqnum=110",
+      "effectiveDate": "2027-01-05",
+      "closeDate": "2026-11-04T01:00:00Z"
+    }
+  ]
+}

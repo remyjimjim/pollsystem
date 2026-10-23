@@ -1,0 +1,845 @@
+{
+ "state": "Texas",
+ "abbr": "TX",
+ "pollCloseLocal": "7:00 PM local time statewide; latest close is 7:00 PM MST in the Mountain Time counties (El Paso, Hudspeth) = 8:00 PM CST",
+ "pollCloseUtc": "2026-11-04T02:00:00Z",
+ "statewide": [
+  {
+   "office": "U.S. Senator",
+   "candidates": [
+    {
+     "name": "Ken Paxton",
+     "party": "Republican"
+    },
+    {
+     "name": "James Talarico",
+     "party": "Democratic"
+    },
+    {
+     "name": "Ted Brown",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "office": "Governor",
+   "candidates": [
+    {
+     "name": "Greg Abbott",
+     "party": "Republican"
+    },
+    {
+     "name": "Gina Hinojosa",
+     "party": "Democratic"
+    },
+    {
+     "name": "Pat Dixon",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "office": "Lieutenant Governor",
+   "candidates": [
+    {
+     "name": "Dan Patrick",
+     "party": "Republican"
+    },
+    {
+     "name": "Vikki Goodwin",
+     "party": "Democratic"
+    },
+    {
+     "name": "Anthony Cristo",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Kevin McCormick",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "office": "Attorney General",
+   "candidates": [
+    {
+     "name": "Mayes Middleton",
+     "party": "Republican"
+    },
+    {
+     "name": "Nathan Johnson",
+     "party": "Democratic"
+    },
+    {
+     "name": "Tom Oxford",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "office": "Comptroller of Public Accounts",
+   "candidates": [
+    {
+     "name": "Don Huffines",
+     "party": "Republican"
+    },
+    {
+     "name": "Sarah Eckhardt",
+     "party": "Democratic"
+    },
+    {
+     "name": "V. Alonzo Echavarria-Garza",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Shehla Faizi",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "office": "Commissioner of the General Land Office",
+   "candidates": [
+    {
+     "name": "Dawn Buckingham",
+     "party": "Republican"
+    },
+    {
+     "name": "Benjamin Flores",
+     "party": "Democratic"
+    },
+    {
+     "name": "Neill Snider",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "office": "Commissioner of Agriculture",
+   "candidates": [
+    {
+     "name": "Nate Sheets",
+     "party": "Republican"
+    },
+    {
+     "name": "Clayton Tucker",
+     "party": "Democratic"
+    },
+    {
+     "name": "Austin R. Kelly",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "office": "Railroad Commissioner",
+   "candidates": [
+    {
+     "name": "Bo French",
+     "party": "Republican"
+    },
+    {
+     "name": "Jon Rosenthal",
+     "party": "Democratic"
+    },
+    {
+     "name": "Arthur DiBianca",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "office": "Chief Justice, Supreme Court",
+   "candidates": [
+    {
+     "name": "Jimmy Blacklock",
+     "party": "Republican"
+    },
+    {
+     "name": "Maggie Ellis",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "office": "Justice, Supreme Court, Place 2 (Unexpired Term)",
+   "candidates": [
+    {
+     "name": "James P. Sullivan",
+     "party": "Republican"
+    },
+    {
+     "name": "Chari Kelly",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "office": "Justice, Supreme Court, Place 7",
+   "candidates": [
+    {
+     "name": "Kyle Hawkins",
+     "party": "Republican"
+    },
+    {
+     "name": "Kristen Hawkins",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "office": "Justice, Supreme Court, Place 8",
+   "candidates": [
+    {
+     "name": "Brett Busby",
+     "party": "Republican"
+    },
+    {
+     "name": "Gisela D. Triana",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "office": "Judge, Court of Criminal Appeals, Place 3",
+   "candidates": [
+    {
+     "name": "Thomas Smith",
+     "party": "Republican"
+    },
+    {
+     "name": "Okey Anyiam",
+     "party": "Democratic"
+    },
+    {
+     "name": "Mark Ash",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "office": "Judge, Court of Criminal Appeals, Place 4",
+   "candidates": [
+    {
+     "name": "Kevin Patrick Yeary",
+     "party": "Republican"
+    },
+    {
+     "name": "Audra Riley",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "office": "Judge, Court of Criminal Appeals, Place 9",
+   "candidates": [
+    {
+     "name": "John Messinger",
+     "party": "Republican"
+    },
+    {
+     "name": "Holly Taylor",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "office": "Chief Justice, 15th Court of Appeals District",
+   "candidates": [
+    {
+     "name": "Scott Brister",
+     "party": "Republican"
+    },
+    {
+     "name": "Jerry Zimmerer",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "office": "Justice, 15th Court of Appeals District, Place 2",
+   "candidates": [
+    {
+     "name": "Scott K. Field",
+     "party": "Republican"
+    },
+    {
+     "name": "Tom Baker",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "office": "Justice, 15th Court of Appeals District, Place 3",
+   "candidates": [
+    {
+     "name": "April Farris",
+     "party": "Republican"
+    },
+    {
+     "name": "Marc M. Meyer",
+     "party": "Democratic"
+    }
+   ]
+  }
+ ],
+ "house": [
+  {
+   "district": 1,
+   "candidates": [
+    {
+     "name": "Nathaniel Moran",
+     "party": "Republican"
+    },
+    {
+     "name": "Yolanda R. Prince",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 2,
+   "candidates": [
+    {
+     "name": "Steve Toth",
+     "party": "Republican"
+    },
+    {
+     "name": "Shaun Finnie",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 3,
+   "candidates": [
+    {
+     "name": "Keith Self",
+     "party": "Republican"
+    },
+    {
+     "name": "Evan Hunt",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 4,
+   "candidates": [
+    {
+     "name": "Pat Fallon",
+     "party": "Republican"
+    },
+    {
+     "name": "Jason Pearce",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 5,
+   "candidates": [
+    {
+     "name": "Lance Gooden",
+     "party": "Republican"
+    },
+    {
+     "name": "Chelsey Hockett",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 6,
+   "candidates": [
+    {
+     "name": "Jake Ellzey",
+     "party": "Republican"
+    },
+    {
+     "name": "Danny Minton",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 7,
+   "candidates": [
+    {
+     "name": "Alexander Hale",
+     "party": "Republican"
+    },
+    {
+     "name": "Lizzie Pannill Fletcher",
+     "party": "Democratic"
+    },
+    {
+     "name": "Espoir Ngabo",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 8,
+   "candidates": [
+    {
+     "name": "Jessica Hart Steinmann",
+     "party": "Republican"
+    },
+    {
+     "name": "Laura Jones",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 9,
+   "candidates": [
+    {
+     "name": "Alex Mealer",
+     "party": "Republican"
+    },
+    {
+     "name": "Leticia Gutierrez",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 10,
+   "candidates": [
+    {
+     "name": "Chris Gober",
+     "party": "Republican"
+    },
+    {
+     "name": "Caitlin Rourk",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 11,
+   "candidates": [
+    {
+     "name": "August Pfluger",
+     "party": "Republican"
+    },
+    {
+     "name": "Claire Reynolds",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 12,
+   "candidates": [
+    {
+     "name": "Craig Goldman",
+     "party": "Republican"
+    },
+    {
+     "name": "Angela \"Heli\" Rodriguez Prilliman",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 13,
+   "candidates": [
+    {
+     "name": "Ronny Jackson",
+     "party": "Republican"
+    },
+    {
+     "name": "Mark Nair",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 14,
+   "candidates": [
+    {
+     "name": "Randy Weber",
+     "party": "Republican"
+    },
+    {
+     "name": "Thurman Bill Bartie",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 15,
+   "candidates": [
+    {
+     "name": "Monica De La Cruz",
+     "party": "Republican"
+    },
+    {
+     "name": "Bobby Pulido",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 16,
+   "candidates": [
+    {
+     "name": "Adam Bauman",
+     "party": "Republican"
+    },
+    {
+     "name": "Veronica Escobar",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 17,
+   "candidates": [
+    {
+     "name": "Pete Sessions",
+     "party": "Republican"
+    },
+    {
+     "name": "Casey Shepard",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 18,
+   "candidates": [
+    {
+     "name": "Ronald Dwayne Whitfield",
+     "party": "Republican"
+    },
+    {
+     "name": "Christian Dashaun Menefee",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 19,
+   "candidates": [
+    {
+     "name": "Tom Sell",
+     "party": "Republican"
+    },
+    {
+     "name": "Kyle Rable",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 20,
+   "candidates": [
+    {
+     "name": "Edgardo Rafael Baez",
+     "party": "Republican"
+    },
+    {
+     "name": "Joaquin Castro",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 21,
+   "candidates": [
+    {
+     "name": "Mark Teixeira",
+     "party": "Republican"
+    },
+    {
+     "name": "Kristin Hook",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 22,
+   "candidates": [
+    {
+     "name": "Trever Nehls",
+     "party": "Republican"
+    },
+    {
+     "name": "Marquette Greene-Scott",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 23,
+   "candidates": [
+    {
+     "name": "Brandon Herrera",
+     "party": "Republican"
+    },
+    {
+     "name": "Katy Padilla Stout",
+     "party": "Democratic"
+    },
+    {
+     "name": "Ben Mendoza",
+     "party": "Independent"
+    }
+   ]
+  },
+  {
+   "district": 24,
+   "candidates": [
+    {
+     "name": "Beth Van Duyne",
+     "party": "Republican"
+    },
+    {
+     "name": "Kevin Burge",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 25,
+   "candidates": [
+    {
+     "name": "Roger Williams",
+     "party": "Republican"
+    },
+    {
+     "name": "Dione Sims",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 26,
+   "candidates": [
+    {
+     "name": "Brandon Gill",
+     "party": "Republican"
+    },
+    {
+     "name": "Steven Shook",
+     "party": "Democratic"
+    },
+    {
+     "name": "Phil Gray",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "district": 27,
+   "candidates": [
+    {
+     "name": "Michael Cloud",
+     "party": "Republican"
+    },
+    {
+     "name": "Tanya Lloyd",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 28,
+   "candidates": [
+    {
+     "name": "Tano E. Tijerina",
+     "party": "Republican"
+    },
+    {
+     "name": "Henry Cuellar",
+     "party": "Democratic"
+    },
+    {
+     "name": "Marlón Durán",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 29,
+   "candidates": [
+    {
+     "name": "Martha Fierro",
+     "party": "Republican"
+    },
+    {
+     "name": "Sylvia Garcia",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 30,
+   "candidates": [
+    {
+     "name": "Everett Jackson",
+     "party": "Republican"
+    },
+    {
+     "name": "Frederick D. Haynes III",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 31,
+   "candidates": [
+    {
+     "name": "John Carter",
+     "party": "Republican"
+    },
+    {
+     "name": "Justin Early",
+     "party": "Democratic"
+    },
+    {
+     "name": "Greg Stoker",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 32,
+   "candidates": [
+    {
+     "name": "Jace Yarbrough",
+     "party": "Republican"
+    },
+    {
+     "name": "Dan Barrios",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 33,
+   "candidates": [
+    {
+     "name": "Patrick David Gillespie",
+     "party": "Republican"
+    },
+    {
+     "name": "Colin Allred",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 34,
+   "candidates": [
+    {
+     "name": "Eric Flores",
+     "party": "Republican"
+    },
+    {
+     "name": "Vicente Gonzalez",
+     "party": "Democratic"
+    },
+    {
+     "name": "Chris Royal",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Eddie Espinoza",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 35,
+   "candidates": [
+    {
+     "name": "Carlos De La Cruz",
+     "party": "Republican"
+    },
+    {
+     "name": "Johnny C. Garcia",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 36,
+   "candidates": [
+    {
+     "name": "Brian Babin",
+     "party": "Republican"
+    },
+    {
+     "name": "Rhonda Hart",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 37,
+   "candidates": [
+    {
+     "name": "Lauren B. Peña",
+     "party": "Republican"
+    },
+    {
+     "name": "Greg Casar",
+     "party": "Democratic"
+    }
+   ]
+  },
+  {
+   "district": 38,
+   "candidates": [
+    {
+     "name": "Jon Bonck",
+     "party": "Republican"
+    },
+    {
+     "name": "Melissa McDonough",
+     "party": "Democratic"
+    },
+    {
+     "name": "Alex McMenemy",
+     "party": "Green"
+    }
+   ]
+  }
+ ],
+ "measures": [],
+ "measureEffective": "2026-12-06",
+ "measureEffectiveNote": "No statewide measures are on the Nov 3, 2026 Texas ballot (the Legislature proposes amendments in odd years; the Legislative Reference Library lists no 2026 amendment election). Rule for reference: a legislatively proposed constitutional amendment takes effect when the official statewide canvass shows majority approval, unless the amendment states a later date (Tex. Const. art. XVII, sec. 1). The governor's state canvass for this election falls within the window set by Election Code sec. 67.012 (18th-33rd day after election day for the general election); 2026-12-06 is the latest day of that window and is notional only.",
+ "sources": [
+  "https://www.sos.texas.gov/elections/forms/2026-ballot-cert.pdf",
+  "https://www.sos.texas.gov/elections/laws/advisory2026-22.shtml",
+  "https://www.votetexas.gov/voting/where.html",
+  "https://lrl.texas.gov/legis/ConstAmends/electiondates.cfm",
+  "https://texas.public.law/statutes/tex._election_code_section_67.012",
+  "https://ballotpedia.org/United_States_House_of_Representatives_elections_in_Texas,_2026",
+  "https://ballotpedia.org/Texas_state_executive_official_elections,_2026",
+  "https://ballotpedia.org/Texas_Supreme_Court_elections,_2026",
+  "https://ballotpedia.org/Texas_intermediate_appellate_court_elections,_2026",
+  "https://ballotpedia.org/Texas_elections,_2026",
+  "https://www.thegreenpapers.com/G26/TX"
+ ],
+ "notes": [
+  "All candidate names and parties come from the official SOS Ballot Certification Report for the 2026 November General Election (certified Aug 28, 2026 by Deputy Secretary of State Dave Nelson), which lists names in capitals with party codes REP/DEM/LIB/GRE/IND; names here are converted to mixed case. Party codes mapped to Republican/Democratic/Libertarian/Green/Independent.",
+  "Candidate order within each race follows the certification (Republican, Democratic, then third parties); actual ballot party order is set by Election Code sec. 52.091 (the governor's party in the last gubernatorial election goes first).",
+  "Write-in candidates are excluded (e.g., U.S. Senate, Governor, Lt. Governor, CD 27, CD 33 have declared write-ins per Ballotpedia/Green Papers).",
+  "Statewide judicial offices include the Supreme Court (Chief Justice, Places 2 [unexpired term], 7, 8), Court of Criminal Appeals (Places 3, 4, 9), and the 15th Court of Appeals, which is elected statewide. The State Board of Education is district-based and not included.",
+  "U.S. Senate seat is Class 2 (Cornyn), open after Ken Paxton defeated Cornyn in the May 26, 2026 Republican runoff.",
+  "Districts are the 2025 mid-decade redistricting map; several incumbents run in new districts.",
+  "Texas Election Code sec. 41.031: polls open 7 a.m. to 7 p.m.; voters in line at 7 p.m. may still vote. DST ends Nov 1, so 7 p.m. CST = 01:00 UTC and 7 p.m. MST = 02:00 UTC on Nov 4."
+ ],
+ "unconfirmed": [
+  "Whether any certified candidate withdrew, died, or was declared ineligible after the Aug 28, 2026 certification (names would generally remain on the ballot); no later SOS amendment to the certification was found.",
+  "Exact mixed-case spelling as printed on county ballots (the certification is all caps): e.g., 'DiBianca', 'McCormick', 'McDonough', 'McMenemy', 'Dashaun', 'Heli' quotes.",
+  "Whether the small part of Culberson County that observes Mountain Time affects the latest close; the 02:00 UTC figure assumes Mountain Time counties (El Paso, Hudspeth) close at 7 p.m. MST, which is the latest anywhere either way.",
+  "Effective date: no measures exist, so measureEffective is a notional placeholder (end of the state canvass window), not a real effective date."
+ ]
+}

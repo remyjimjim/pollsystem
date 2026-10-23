@@ -1,0 +1,353 @@
+{
+  "state": "North Carolina",
+  "abbr": "NC",
+  "pollCloseLocal": "7:30 PM",
+  "pollCloseUtc": "2026-11-04T00:30:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Roy Cooper",
+          "party": "Democratic"
+        },
+        {
+          "name": "Michael Whatley",
+          "party": "Republican"
+        },
+        {
+          "name": "Shannon W. Bray",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Michael Dublin",
+          "party": "Green"
+        }
+      ]
+    },
+    {
+      "office": "NC Supreme Court Associate Justice Seat 01",
+      "candidates": [
+        {
+          "name": "Anita Earls",
+          "party": "Democratic"
+        },
+        {
+          "name": "Sarah Stevens",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "NC Court of Appeals Judge Seat 01",
+      "candidates": [
+        {
+          "name": "John S. Arrowood",
+          "party": "Democratic"
+        },
+        {
+          "name": "Michael C. Byrne",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "NC Court of Appeals Judge Seat 02",
+      "candidates": [
+        {
+          "name": "Tobias (Toby) Hampson",
+          "party": "Democratic"
+        },
+        {
+          "name": "George Cooper Bell",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "NC Court of Appeals Judge Seat 03",
+      "candidates": [
+        {
+          "name": "Christine Marie Walczyk",
+          "party": "Democratic"
+        },
+        {
+          "name": "Craig Collins",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Don Davis",
+          "party": "Democratic"
+        },
+        {
+          "name": "Laurie Buckhout",
+          "party": "Republican"
+        },
+        {
+          "name": "Tom Bailey",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Deborah K. Ross",
+          "party": "Democratic"
+        },
+        {
+          "name": "Eugene F. Douglass",
+          "party": "Republican"
+        },
+        {
+          "name": "Matthew Laszacs",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Raymond Smith",
+          "party": "Democratic"
+        },
+        {
+          "name": "Greg Murphy",
+          "party": "Republican"
+        },
+        {
+          "name": "Daniel Cavender",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Valerie P. Foushee",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mahesh (Max) Ganorkar",
+          "party": "Republican"
+        },
+        {
+          "name": "Guy Meilleur",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Chuck Hubbard",
+          "party": "Democratic"
+        },
+        {
+          "name": "Virginia Foxx",
+          "party": "Republican"
+        },
+        {
+          "name": "Robert B. Luffman",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Cyril Jefferson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Addison McDowell",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Kimberly Hardy",
+          "party": "Democratic"
+        },
+        {
+          "name": "David Rouzer",
+          "party": "Republican"
+        },
+        {
+          "name": "Maad Abu-Ghazalah",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Colby Watson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mark Harris",
+          "party": "Republican"
+        },
+        {
+          "name": "Bo Whitehead",
+          "party": "Green"
+        }
+      ]
+    },
+    {
+      "district": 9,
+      "candidates": [
+        {
+          "name": "Richard N. Ojeda II",
+          "party": "Democratic"
+        },
+        {
+          "name": "Richard Hudson",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 10,
+      "candidates": [
+        {
+          "name": "Ashley Bell",
+          "party": "Democratic"
+        },
+        {
+          "name": "Pat Harrigan",
+          "party": "Republican"
+        },
+        {
+          "name": "Steven Feldman",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 11,
+      "candidates": [
+        {
+          "name": "Jamie Ager",
+          "party": "Democratic"
+        },
+        {
+          "name": "Jennifer Capps Balkcom",
+          "party": "Republican"
+        },
+        {
+          "name": "Travis Groo",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 12,
+      "candidates": [
+        {
+          "name": "Alma S. Adams",
+          "party": "Democratic"
+        },
+        {
+          "name": "Jack Codiga",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 13,
+      "candidates": [
+        {
+          "name": "Paul Barringer",
+          "party": "Democratic"
+        },
+        {
+          "name": "Brad Knott",
+          "party": "Republican"
+        },
+        {
+          "name": "Steven Swinton",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 14,
+      "candidates": [
+        {
+          "name": "Lakesha Womack",
+          "party": "Democratic"
+        },
+        {
+          "name": "Tim Moore",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Amendment - Require Photo ID for Voting",
+      "subject": "Photo ID for all methods of voting",
+      "ballotTitle": "Constitutional amendment to require all voters, not just those presenting to vote in person, to present photo identification before voting.",
+      "summary": "Would amend the state constitution so that the existing photo ID requirement for in-person voting also applies to voters using other methods, such as absentee by mail.",
+      "source": "https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/statewide_referendums_20261103.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment - Maximum Income Tax Rate of 3.5%",
+      "subject": "Lower the constitutional income tax rate cap",
+      "ballotTitle": "Constitutional amendment to keep the State income tax rate from being raised higher than three and one-half percent (3.5%).",
+      "summary": "Would lower the maximum State income tax rate allowed by the constitution from 7% to 3.5%, applying to taxable years beginning on or after January 1, 2027.",
+      "source": "https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/statewide_referendums_20261103.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment - Property Tax Levy Limit",
+      "subject": "Limits on local property tax increases",
+      "ballotTitle": "Constitutional amendment requiring limits on property tax increases by local governments.",
+      "summary": "Would direct the General Assembly to enact general laws limiting how much local property tax levies may increase, with the specific limits set by later legislation.",
+      "source": "https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/statewide_referendums_20261103.pdf"
+    }
+  ],
+  "measureEffective": "2026-11-24",
+  "measureEffectiveNote": "Each enabling act (S.L. 2024-58, S.L. 2026-4, S.L. 2026-5) makes an approved amendment effective upon the State Board of Elections' certification of the referendum results. The State Board's canvass is set by statute for the Tuesday three weeks after Election Day, November 24, 2026 (may recess up to 10 days, to December 4, if county abstracts are missing); used here as the representative date. The income tax cap applies to taxable years beginning on or after January 1, 2027.",
+  "sources": [
+    "https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/2026_general_candidate_list_by_contest.pdf",
+    "https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/statewide_referendums_20261103.pdf",
+    "https://www.ncsbe.gov/results-data/candidate-lists",
+    "https://www.ncsbe.gov/voting/vote-person-election-day",
+    "https://ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-4.html",
+    "https://ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-5.html",
+    "https://house.ncleg.gov/Legislation/SummariesPublication/Summary/2024/6/S921-SMST-118(sl)-v-5/",
+    "https://protectdemocracy.org/wp-content/uploads/2026/08/2026-North-Carolina-Certification-Guide_Final.pdf",
+    "https://www.wunc.org/2026-08-10/state-rep-jennifer-balkcom-to-replace-rep-chuck-edwards-on-nc-11-ballot"
+  ],
+  "notes": [
+    "Candidates and ballot names are from the NCSBE 'Candidate List Grouped by Contest' for the 11/03/2026 election, run Oct 13, 2026; parties are given there as DEM/REP/LIB/GRE and are spelled out here.",
+    "Measure designations are the NCSBE referendum contest titles (report dated Sep 2, 2026); NC does not number its statewide amendments.",
+    "NC judicial elections are partisan, so party labels appear for Supreme Court and Court of Appeals candidates.",
+    "NC-11: Rep. Chuck Edwards withdrew after the primary; the district GOP executive committee chose Jennifer Capps Balkcom on Aug 10, 2026 (WUNC/NC Newsline), consistent with the NCSBE list.",
+    "All of North Carolina is in the Eastern time zone; polls close 7:30 PM EST (UTC-5) on Nov 3, 2026."
+  ],
+  "unconfirmed": [
+    "Exact party wording printed on the ballot face (e.g. 'Democrat' vs 'Democratic') was not checked against a sample ballot; full party names used.",
+    "Exact amendment certification date: 2026-11-24 is the statutory state canvass date; the certificate may be issued later if the canvass recesses or a protest is pending.",
+    "No candidate changes after the Oct 13, 2026 NCSBE list run were checked beyond news cross-checks; Ballotpedia's NC House page could not be read."
+  ]
+}

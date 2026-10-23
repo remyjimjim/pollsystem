@@ -1,0 +1,613 @@
+{
+  "_about": "New York, Nov 3 2026, built by build-state.py from docs/launch-content/research/NY.json (sources and gaps in NY.md). One ballot per district, each including \"2026 Midterm · New York: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Christopher J. Gallant",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Nicholas J. Lalota",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Patrick Halpin",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Andrew R. Garbarino",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Thomas R. Suozzi",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Michael J. LiPetri Jr",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Laura A. Gillen",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Jeanine C. Driscoll",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Blay Tarnoff",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Gregory W. Meeks",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "George Marsh",
+          "affiliation": "Republican, Queens United",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Grace Meng",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Joseph Chou",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Claire Valdez",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Melvin Rivera",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Priscilla Ghaznavi",
+          "affiliation": "Our Future",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Hakeem S. Jeffries",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Lewis Mizrahi",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 9",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Yvette D. Clarke",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Joel Azumah",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 10",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Brad Lander",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Jennifer E. Moore",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 10"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 11",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Mike DeCillis",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Nicole Malliotakis",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 11"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 12",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Micah C. Lasher",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Caroline Shinkle",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Wilneida Negron",
+          "affiliation": "For All of Us",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Karen Ortiz",
+          "affiliation": "Karen Ortiz",
+          "officeName": "U.S. Representative, District 12"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 13",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Darializa Avila Chevalier",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Jomo M. Williams",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 13"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 14",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Alexandria Ocasio-Cortez",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 14"
+        },
+        {
+          "name": "Diamant Hysenaj",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 14"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 15",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Ritchie Torres",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Stylo Sapaskis",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Gonzalo Duran",
+          "affiliation": "Conservative",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Andre Easton",
+          "affiliation": "Socialism PSL",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Jose Vega",
+          "affiliation": "Speak The Truth",
+          "officeName": "U.S. Representative, District 15"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 16",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "George S. Latimer",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 16"
+        },
+        {
+          "name": "Joseph J. Cinquemani",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 16"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 17",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Cait Conley",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 17"
+        },
+        {
+          "name": "Mike Lawler",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 17"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 18",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Pat Ryan",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 18"
+        },
+        {
+          "name": "Jackie Mary Auringer",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 18"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 19",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Josh Riley",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 19"
+        },
+        {
+          "name": "Peter K. Oberacker",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 19"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 20",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Paul D. Tonko",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 20"
+        },
+        {
+          "name": "Ralph F. Ambrosio",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 20"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 21",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Blake Gendebien",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 21"
+        },
+        {
+          "name": "Anthony Constantino",
+          "affiliation": "Republican, Taxpayer Rights",
+          "officeName": "U.S. Representative, District 21"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 22",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "John W. Mannion",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 22"
+        },
+        {
+          "name": "Kailee Buller",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 22"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 23",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Aaron Gies",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 23"
+        },
+        {
+          "name": "Nicholas A. Langworthy",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 23"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 24",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Alissa J. Ellman",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 24"
+        },
+        {
+          "name": "Claudia Tenney",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 24"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 25",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Joseph D. Morelle",
+          "affiliation": "Democratic, Working Families",
+          "officeName": "U.S. Representative, District 25"
+        },
+        {
+          "name": "Virginia E. McIntyre",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 25"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm New York District 26",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        33
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Timothy M. Kennedy",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 26"
+        },
+        {
+          "name": "Dennis E. Hannon",
+          "affiliation": "Republican, Conservative",
+          "officeName": "U.S. Representative, District 26"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · New York: statewide races & measures"
+}

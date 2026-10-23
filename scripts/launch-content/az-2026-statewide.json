@@ -1,0 +1,173 @@
+{
+  "_about": "Arizona, Nov 3 2026, built by build-state.py from docs/launch-content/research/AZ.json (sources and gaps in AZ.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Arizona: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      3
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Katie Hobbs / John Giles",
+        "affiliation": "Democratic",
+        "officeName": "Governor and Lieutenant Governor (joint ticket; first election with a Lieutenant Governor)"
+      },
+      {
+        "name": "Andy Biggs / Sine Kerr",
+        "affiliation": "Republican",
+        "officeName": "Governor and Lieutenant Governor (joint ticket; first election with a Lieutenant Governor)"
+      },
+      {
+        "name": "Risa Lombardo / Lisa Castillo",
+        "affiliation": "Green",
+        "officeName": "Governor and Lieutenant Governor (joint ticket; first election with a Lieutenant Governor)"
+      },
+      {
+        "name": "Teri Hourihan / Angela Harrolle Mohan",
+        "affiliation": "No Labels",
+        "officeName": "Governor and Lieutenant Governor (joint ticket; first election with a Lieutenant Governor)"
+      },
+      {
+        "name": "Adrian Fontes",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Alexander Kolodin",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Duwayne Collier",
+        "affiliation": "Green",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Kris Mayes",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Warren Petersen",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Nick Mansour",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Elijah Norton",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Teresa Leyba Ruiz",
+        "affiliation": "Democratic",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Kimberly Yee",
+        "affiliation": "Republican",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Les Presmyk",
+        "affiliation": "Republican",
+        "officeName": "State Mine Inspector"
+      },
+      {
+        "name": "Brian Matlock",
+        "affiliation": "Democratic",
+        "officeName": "State Mine Inspector"
+      },
+      {
+        "name": "Kevin Thompson",
+        "affiliation": "Republican",
+        "officeName": "Corporation Commission (2 seats, vote for 2)"
+      },
+      {
+        "name": "Ralph Heap",
+        "affiliation": "Republican",
+        "officeName": "Corporation Commission (2 seats, vote for 2)"
+      },
+      {
+        "name": "Jonathon Hill",
+        "affiliation": "Democratic",
+        "officeName": "Corporation Commission (2 seats, vote for 2)"
+      },
+      {
+        "name": "Clara Pratte",
+        "affiliation": "Democratic",
+        "officeName": "Corporation Commission (2 seats, vote for 2)"
+      },
+      {
+        "name": "Mike Cease",
+        "affiliation": "Green",
+        "officeName": "Corporation Commission (2 seats, vote for 2)"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Arizona Proposition 141: Vehicle-miles-traveled taxes and monitoring",
+      "summary": "PROPOSED AMENDMENT TO THE CONSTITUTION BY THE LEGISLATURE RELATING TO TAXATION. OFFICIAL TITLE: AMENDING ARTICLE IX, CONSTITUTION OF ARIZONA, BY ADDING SECTION 26. DESCRIPTIVE TITLE: PROHIBITS TAXES OR FEES BASED ON VEHICLE MILES TRAVELED AND LAWS MONITORING OR LIMITING VEHICLE MILES TRAVELED WITHOUT CONSENT.\n\nIn short: Constitutional amendment barring state and local taxes or fees based on miles driven and laws that monitor or limit miles driven without the driver's consent, with exceptions for interstate commercial-vehicle agreements and government-owned vehicles.\n\nOfficial ballot language. Source: https://ballotpedia.org/Arizona_Proposition_141,_Prohibit_Taxes_or_Fees_on_Miles_Traveled_in_Motor_Vehicle_Amendment_(2026)",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Arizona Proposition 142: Race- and ethnicity-based preferential treatment",
+      "summary": "PROPOSED AMENDMENT TO THE CONSTITUTION BY THE LEGISLATURE RELATING TO THE PROHIBITION OF PREFERENTIAL TREATMENT AND DISCRIMINATION. OFFICIAL TITLE: AMENDING ARTICLE II, SECTION 36, CONSTITUTION OF ARIZONA. DESCRIPTIVE TITLE: ADDS FURTHER DETAILS TO THE CONSTITUTIONAL PROHIBITION AGAINST PREFERENTIAL TREATMENT OR DISCRIMINATION BY THE STATE BASED ON RACE, ETHNICITY, OR OTHER CLASSES.\n\nIn short: Constitutional amendment expanding the existing ban on state preferential treatment or discrimination based on race or ethnicity, including provisions affecting public education offices and related programs.\n\nOfficial ballot language. Source: https://ballotpedia.org/Arizona_Proposition_142,_Prohibit_Race-_or_Ethnicity-Based_Preferential_Treatment,_Public_Education_Offices,_and_Disciplinary_Policies_Amendment_(2026)",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Arizona Proposition 144: Voter ID and citizenship requirements",
+      "summary": "PROPOSED AMENDMENT TO THE CONSTITUTION BY THE LEGISLATURE RELATING TO ELECTION REQUIREMENTS. OFFICIAL TITLE: AMENDING ARTICLE VII, CONSTITUTION OF ARIZONA, BY ADDING SECTION 19. DESCRIPTIVE TITLE: REQUIRES ALL VOTERS, INCLUDING VOTERS WHO VOTE BY MAIL, TO SHOW GOVERNMENT-ISSUED ID TO VOTE IN EACH ELECTION; MAKES OTHER CHANGES TO ELECTION ADMINISTRATION AND CAMPAIGN FINANCE PROHIBITIONS.\n\nIn short: Constitutional amendment requiring all voters, including mail voters, to show government-issued ID in each election, and making other changes to election administration and campaign-finance rules.\n\nOfficial ballot language. Source: https://ballotpedia.org/Arizona_Proposition_144,_Voter_Identification_and_Citizenship_Voting_Requirements_Amendment_(2026)",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Arizona Proposition 316: Local taxes on groceries",
+      "summary": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO MUNICIPAL TRANSACTION PRIVILEGE TAX. OFFICIAL TITLE: AMENDING TITLE 42, CHAPTER 6, ARTICLE 1, SECTION 42-6015, ARIZONA REVISED STATUTES. DESCRIPTIVE TITLE: RETROACTIVELY PROHIBITS LOCAL GOVERNMENTS FROM ADOPTING OR INCREASING A TAX ON GROCERIES WITHOUT VOTER APPROVAL AND SETS A MAXIMUM RATE OF 2%.\n\nIn short: Statute requiring voter approval, retroactively, before a city or town adopts or raises a tax on groceries, and capping such a tax at 2%.\n\nOfficial ballot language. Source: https://ballotpedia.org/Arizona_Proposition_316,_Limit_Local_Tax_Rate_on_Groceries_to_2%25_of_Base_Price_and_Require_Voter_Approval_to_Increase_Tax_Rate_Measure_(2026)",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Arizona Proposition 317: Drug cartels as terrorist organizations",
+      "summary": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO THE ARIZONA DEPARTMENT OF HOMELAND SECURITY. OFFICIAL TITLE: AMENDING TITLE 41, CHAPTER 41, ARTICLE 1, ARIZONA REVISED STATUTES, BY ADDING SECTION 41-4256. DESCRIPTIVE TITLE: DECLARES THAT DRUG CARTELS ARE TERRORIST ORGANIZATIONS; DIRECTS THE ARIZONA DEPARTMENT OF HOMELAND SECURITY TO DO EVERYTHING IN ITS AUTHORITY TO ADDRESS DRUG CARTELS.\n\nIn short: Statute declaring drug cartels to be terrorist organizations under state law and directing the Arizona Department of Homeland Security to act against them within its authority.\n\nOfficial ballot language. Source: https://ballotpedia.org/Arizona_Proposition_317,_Designate_Drug_Cartels_as_Terrorist_Organizations_and_Require_State_DHS_to_Address_Threats_Measure_(2026)",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Arizona Proposition 318: School sports teams and private spaces by sex",
+      "summary": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO STUDENT ATHLETICS. OFFICIAL TITLE: AMENDING SECTION 15-120.02, ARIZONA REVISED STATUTES. DESCRIPTIVE TITLE: REQUIRES ALL SCHOOLS AND ATHLETIC ASSOCIATIONS TO DESIGNATE ATHLETIC TEAMS AS MALE, FEMALE, OR COED BASED ON THE BIOLOGICAL SEX OF THE ATHLETES AS DEFINED AT BIRTH; PROHIBITS THESE ENTITIES FROM AUTHORIZING USE OF PRIVATE SPACES NOT DESIGNATED FOR A PERSON’S SEX.\n\nIn short: Statute requiring schools and athletic associations to designate teams by biological sex at birth and barring them from authorizing use of restrooms, locker rooms, and other private spaces not designated for a person's sex.\n\nOfficial ballot language. Source: https://ballotpedia.org/Arizona_Proposition_318,_Require_All_Schools_and_Athletic_Associations_to_Restrict_Sports_Participation_and_Access_to_Private_Spaces_Based_on_Sex_Measure_(2026)",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Arizona Proposition 319: Photo traffic enforcement",
+      "summary": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO PHOTO ENFORCEMENT SYSTEMS. OFFICIAL TITLE: AMENDING SECTION 28-1201, ARIZONA REVISED STATUTES; AMENDING TITLE 28, CHAPTER 3, ARTICLE 21, ARIZONA REVISED STATUTES, BY ADDING SECTION 28-1207. DESCRIPTIVE TITLE: PROHIBITS STATE AGENCIES AND LOCAL GOVERNMENTS FROM USING PHOTO ENFORCEMENT SYSTEMS FOR TRAFFIC ENFORCEMENT UNLESS PROVIDED BY CONTRACT AS OF DECEMBER 31, 2026; REQUIRES LOCAL GOVERNMENTS TO OBTAIN VOTER APPROVAL TO CONTINUE THEIR USE.\n\nIn short: Statute barring state and local photo traffic enforcement except under contracts in place as of December 31, 2026, and requiring local voter approval to continue using such systems.\n\nOfficial ballot language. Source: https://ballotpedia.org/Arizona_Proposition_319,_Prohibit_New_Photo_Traffic_Enforcement_Systems_Measure_(2026)",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Arizona Proposition 320: School district classroom spending (60% rule)",
+      "summary": "REFERRED TO THE PEOPLE BY THE LEGISLATURE RELATING TO SCHOOL DISTRICT BUDGETS. OFFICIAL TITLE: AMENDING TITLE 15, CHAPTER 9, ARTICLE 1, ARIZONA REVISED STATUTES BY ADDING SECTION 15-917. DESCRIPTIVE TITLE: REQUIRES CERTAIN SCHOOL DISTRICTS TO SPEND AT LEAST SIXTY PERCENT OF THEIR OPERATIONAL SPENDING ON DIRECT INSTRUCTIONAL EXPENSES AS DEFINED BY THE AUDITOR GENERAL; REDUCES CERTAIN STATE FUNDING FOR NON-COMPLIANT DISTRICTS.\n\nIn short: Statute requiring certain school districts to spend at least 60% of operational spending on direct instruction and reducing some state funding for districts that do not comply.\n\nOfficial ballot language. Source: https://ballotpedia.org/Arizona_Proposition_320,_Require_Certain_School_Districts_to_Spend_60%25_of_Operational_Spending_on_Direct_Instruction_Measure_(2026)",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}

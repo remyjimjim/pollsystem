@@ -1,0 +1,250 @@
+{
+  "_about": "Texas, Nov 3 2026, built by build-state.py from docs/launch-content/research/TX.json (sources and gaps in TX.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Texas: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      44
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Ken Paxton",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "James Talarico",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Ted Brown",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Greg Abbott",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Gina Hinojosa",
+        "affiliation": "Democratic",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Pat Dixon",
+        "affiliation": "Libertarian",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Dan Patrick",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Vikki Goodwin",
+        "affiliation": "Democratic",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Anthony Cristo",
+        "affiliation": "Libertarian",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Kevin McCormick",
+        "affiliation": "Green",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Mayes Middleton",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Nathan Johnson",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Tom Oxford",
+        "affiliation": "Libertarian",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Don Huffines",
+        "affiliation": "Republican",
+        "officeName": "Comptroller of Public Accounts"
+      },
+      {
+        "name": "Sarah Eckhardt",
+        "affiliation": "Democratic",
+        "officeName": "Comptroller of Public Accounts"
+      },
+      {
+        "name": "V. Alonzo Echavarria-Garza",
+        "affiliation": "Libertarian",
+        "officeName": "Comptroller of Public Accounts"
+      },
+      {
+        "name": "Shehla Faizi",
+        "affiliation": "Green",
+        "officeName": "Comptroller of Public Accounts"
+      },
+      {
+        "name": "Dawn Buckingham",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of the General Land Office"
+      },
+      {
+        "name": "Benjamin Flores",
+        "affiliation": "Democratic",
+        "officeName": "Commissioner of the General Land Office"
+      },
+      {
+        "name": "Neill Snider",
+        "affiliation": "Libertarian",
+        "officeName": "Commissioner of the General Land Office"
+      },
+      {
+        "name": "Nate Sheets",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "Clayton Tucker",
+        "affiliation": "Democratic",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "Austin R. Kelly",
+        "affiliation": "Libertarian",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "Bo French",
+        "affiliation": "Republican",
+        "officeName": "Railroad Commissioner"
+      },
+      {
+        "name": "Jon Rosenthal",
+        "affiliation": "Democratic",
+        "officeName": "Railroad Commissioner"
+      },
+      {
+        "name": "Arthur DiBianca",
+        "affiliation": "Libertarian",
+        "officeName": "Railroad Commissioner"
+      },
+      {
+        "name": "Jimmy Blacklock",
+        "affiliation": "Republican",
+        "officeName": "Chief Justice, Supreme Court"
+      },
+      {
+        "name": "Maggie Ellis",
+        "affiliation": "Democratic",
+        "officeName": "Chief Justice, Supreme Court"
+      },
+      {
+        "name": "James P. Sullivan",
+        "affiliation": "Republican",
+        "officeName": "Justice, Supreme Court, Place 2 (Unexpired Term)"
+      },
+      {
+        "name": "Chari Kelly",
+        "affiliation": "Democratic",
+        "officeName": "Justice, Supreme Court, Place 2 (Unexpired Term)"
+      },
+      {
+        "name": "Kyle Hawkins",
+        "affiliation": "Republican",
+        "officeName": "Justice, Supreme Court, Place 7"
+      },
+      {
+        "name": "Kristen Hawkins",
+        "affiliation": "Democratic",
+        "officeName": "Justice, Supreme Court, Place 7"
+      },
+      {
+        "name": "Brett Busby",
+        "affiliation": "Republican",
+        "officeName": "Justice, Supreme Court, Place 8"
+      },
+      {
+        "name": "Gisela D. Triana",
+        "affiliation": "Democratic",
+        "officeName": "Justice, Supreme Court, Place 8"
+      },
+      {
+        "name": "Thomas Smith",
+        "affiliation": "Republican",
+        "officeName": "Judge, Court of Criminal Appeals, Place 3"
+      },
+      {
+        "name": "Okey Anyiam",
+        "affiliation": "Democratic",
+        "officeName": "Judge, Court of Criminal Appeals, Place 3"
+      },
+      {
+        "name": "Mark Ash",
+        "affiliation": "Libertarian",
+        "officeName": "Judge, Court of Criminal Appeals, Place 3"
+      },
+      {
+        "name": "Kevin Patrick Yeary",
+        "affiliation": "Republican",
+        "officeName": "Judge, Court of Criminal Appeals, Place 4"
+      },
+      {
+        "name": "Audra Riley",
+        "affiliation": "Democratic",
+        "officeName": "Judge, Court of Criminal Appeals, Place 4"
+      },
+      {
+        "name": "John Messinger",
+        "affiliation": "Republican",
+        "officeName": "Judge, Court of Criminal Appeals, Place 9"
+      },
+      {
+        "name": "Holly Taylor",
+        "affiliation": "Democratic",
+        "officeName": "Judge, Court of Criminal Appeals, Place 9"
+      },
+      {
+        "name": "Scott Brister",
+        "affiliation": "Republican",
+        "officeName": "Chief Justice, 15th Court of Appeals District"
+      },
+      {
+        "name": "Jerry Zimmerer",
+        "affiliation": "Democratic",
+        "officeName": "Chief Justice, 15th Court of Appeals District"
+      },
+      {
+        "name": "Scott K. Field",
+        "affiliation": "Republican",
+        "officeName": "Justice, 15th Court of Appeals District, Place 2"
+      },
+      {
+        "name": "Tom Baker",
+        "affiliation": "Democratic",
+        "officeName": "Justice, 15th Court of Appeals District, Place 2"
+      },
+      {
+        "name": "April Farris",
+        "affiliation": "Republican",
+        "officeName": "Justice, 15th Court of Appeals District, Place 3"
+      },
+      {
+        "name": "Marc M. Meyer",
+        "affiliation": "Democratic",
+        "officeName": "Justice, 15th Court of Appeals District, Place 3"
+      }
+    ]
+  }
+}

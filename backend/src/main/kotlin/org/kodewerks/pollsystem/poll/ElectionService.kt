@@ -131,8 +131,12 @@ class ElectionService(
             throw ResponseStatusException(HttpStatus.CONFLICT, "Only DRAFT can be published")
         }
         val electionCandidates = candidates.findByElectionId(id)
-        if (electionCandidates.isEmpty()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one candidate required")
+        // An election needs something to vote on: candidates, or ballot measures
+        // (statewide measures with no statewide races), or included elections (a
+        // district whose House race is unopposed and off the ballot still gets
+        // the statewide races).
+        if (electionCandidates.isEmpty() && ballotMeasures.draftsOf(id).isEmpty() && includes.of(id).isEmpty()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one candidate, ballot measure or included election required")
         }
         // A re-publish is identified by the election having cast votes
         // already. Election entities don't carry a publish-time tracker

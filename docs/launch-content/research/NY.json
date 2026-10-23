@@ -1,0 +1,445 @@
+{
+ "state": "New York",
+ "abbr": "NY",
+ "pollCloseLocal": "9:00 PM EST (polls open 6:00 AM - 9:00 PM, Tuesday November 3, 2026)",
+ "pollCloseUtc": "2026-11-04T02:00:00Z",
+ "statewide": [
+  {
+   "office": "Governor / Lt. Governor",
+   "candidates": [
+    {
+     "name": "Kathy C. Hochul / Adrienne E. Adams",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Bruce A. Blakeman / Todd Hood",
+     "party": "Republican, Conservative, Vote Affordable"
+    }
+   ]
+  },
+  {
+   "office": "Comptroller",
+   "candidates": [
+    {
+     "name": "Thomas P. DiNapoli",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Joseph Hernandez",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "office": "Attorney General",
+   "candidates": [
+    {
+     "name": "Letitia A. James",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Saritha Komatireddy",
+     "party": "Republican, Conservative"
+    }
+   ]
+  }
+ ],
+ "house": [
+  {
+   "district": 1,
+   "candidates": [
+    {
+     "name": "Christopher J. Gallant",
+     "party": "Democratic"
+    },
+    {
+     "name": "Nicholas J. Lalota",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 2,
+   "candidates": [
+    {
+     "name": "Patrick Halpin",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Andrew R. Garbarino",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 3,
+   "candidates": [
+    {
+     "name": "Thomas R. Suozzi",
+     "party": "Democratic"
+    },
+    {
+     "name": "Michael J. LiPetri Jr",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 4,
+   "candidates": [
+    {
+     "name": "Laura A. Gillen",
+     "party": "Democratic"
+    },
+    {
+     "name": "Jeanine C. Driscoll",
+     "party": "Republican, Conservative"
+    },
+    {
+     "name": "Blay Tarnoff",
+     "party": "Libertarian"
+    }
+   ]
+  },
+  {
+   "district": 5,
+   "candidates": [
+    {
+     "name": "Gregory W. Meeks",
+     "party": "Democratic"
+    },
+    {
+     "name": "George Marsh",
+     "party": "Republican, Queens United"
+    }
+   ]
+  },
+  {
+   "district": 6,
+   "candidates": [
+    {
+     "name": "Grace Meng",
+     "party": "Democratic"
+    },
+    {
+     "name": "Joseph Chou",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 7,
+   "candidates": [
+    {
+     "name": "Claire Valdez",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Melvin Rivera",
+     "party": "Republican, Conservative"
+    },
+    {
+     "name": "Priscilla Ghaznavi",
+     "party": "Our Future"
+    }
+   ]
+  },
+  {
+   "district": 8,
+   "candidates": [
+    {
+     "name": "Hakeem S. Jeffries",
+     "party": "Democratic"
+    },
+    {
+     "name": "Lewis Mizrahi",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 9,
+   "candidates": [
+    {
+     "name": "Yvette D. Clarke",
+     "party": "Democratic"
+    },
+    {
+     "name": "Joel Azumah",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 10,
+   "candidates": [
+    {
+     "name": "Brad Lander",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Jennifer E. Moore",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 11,
+   "candidates": [
+    {
+     "name": "Mike DeCillis",
+     "party": "Democratic"
+    },
+    {
+     "name": "Nicole Malliotakis",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 12,
+   "candidates": [
+    {
+     "name": "Micah C. Lasher",
+     "party": "Democratic"
+    },
+    {
+     "name": "Caroline Shinkle",
+     "party": "Republican, Conservative"
+    },
+    {
+     "name": "Wilneida Negron",
+     "party": "For All of Us"
+    },
+    {
+     "name": "Karen Ortiz",
+     "party": "Karen Ortiz"
+    }
+   ]
+  },
+  {
+   "district": 13,
+   "candidates": [
+    {
+     "name": "Darializa Avila Chevalier",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Jomo M. Williams",
+     "party": "Republican"
+    }
+   ]
+  },
+  {
+   "district": 14,
+   "candidates": [
+    {
+     "name": "Alexandria Ocasio-Cortez",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Diamant Hysenaj",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 15,
+   "candidates": [
+    {
+     "name": "Ritchie Torres",
+     "party": "Democratic"
+    },
+    {
+     "name": "Stylo Sapaskis",
+     "party": "Republican"
+    },
+    {
+     "name": "Gonzalo Duran",
+     "party": "Conservative"
+    },
+    {
+     "name": "Andre Easton",
+     "party": "Socialism PSL"
+    },
+    {
+     "name": "Jose Vega",
+     "party": "Speak The Truth"
+    }
+   ]
+  },
+  {
+   "district": 16,
+   "candidates": [
+    {
+     "name": "George S. Latimer",
+     "party": "Democratic"
+    },
+    {
+     "name": "Joseph J. Cinquemani",
+     "party": "Republican"
+    }
+   ]
+  },
+  {
+   "district": 17,
+   "candidates": [
+    {
+     "name": "Cait Conley",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Mike Lawler",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 18,
+   "candidates": [
+    {
+     "name": "Pat Ryan",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Jackie Mary Auringer",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 19,
+   "candidates": [
+    {
+     "name": "Josh Riley",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Peter K. Oberacker",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 20,
+   "candidates": [
+    {
+     "name": "Paul D. Tonko",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Ralph F. Ambrosio",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 21,
+   "candidates": [
+    {
+     "name": "Blake Gendebien",
+     "party": "Democratic"
+    },
+    {
+     "name": "Anthony Constantino",
+     "party": "Republican, Taxpayer Rights"
+    }
+   ]
+  },
+  {
+   "district": 22,
+   "candidates": [
+    {
+     "name": "John W. Mannion",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Kailee Buller",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 23,
+   "candidates": [
+    {
+     "name": "Aaron Gies",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Nicholas A. Langworthy",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 24,
+   "candidates": [
+    {
+     "name": "Alissa J. Ellman",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Claudia Tenney",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 25,
+   "candidates": [
+    {
+     "name": "Joseph D. Morelle",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Virginia E. McIntyre",
+     "party": "Republican, Conservative"
+    }
+   ]
+  },
+  {
+   "district": 26,
+   "candidates": [
+    {
+     "name": "Timothy M. Kennedy",
+     "party": "Democratic"
+    },
+    {
+     "name": "Dennis E. Hannon",
+     "party": "Republican, Conservative"
+    }
+   ]
+  }
+ ],
+ "measures": [],
+ "measureEffective": "2027-01-01",
+ "measureEffectiveNote": "No statewide ballot proposal appears to be on the 2026 ballot. Rule for reference: a constitutional amendment approved by voters becomes part of the constitution on January 1 next after approval (NY Const. art. XIX, sec. 1), so 2027-01-01 would apply to any 2026 amendment.",
+ "sources": [
+  "https://elections.ny.gov/system/files/documents/2026/10/accessible-2026-general-ballot-certification-10.7.2026.pdf",
+  "https://web.archive.org/web/20261010010323/https://elections.ny.gov/system/files/documents/2026/10/accessible-2026-general-ballot-certification-10.7.2026.pdf",
+  "https://web.archive.org/cdx/search/cdx?url=elections.ny.gov/*&from=2026 (index of archived BOE pages: 2024 and 2025 statewide-ballot-proposal pages exist, no 2026 one)",
+  "https://www.elections.ny.gov/ (Upcoming Elections: polls open 6:00am - 9:00pm, per search snippet; site blocks automated fetch)",
+  "https://oneidacountynyvotes.gov/election-calendar/",
+  "https://ballotpedia.org/2026_ballot_measures",
+  "https://ballotpedia.org/New_York_2026_ballot_propositions (404 - page does not exist)",
+  "https://www.thegreenpapers.com/G26/NY",
+  "https://en.wikipedia.org/wiki/Larry_Sharpe_(political_activist)"
+ ],
+ "notes": [
+  "Candidates and party lines are taken from the NYS Board of Elections Amended Certification for the November 3, 2026 General Election dated October 7, 2026 (latest version found), read via a Wayback Machine copy because elections.ny.gov serves a Cloudflare challenge to automated requests.",
+  "No U.S. Senate race in New York in 2026 (Schumer's seat is up in 2028, Gillibrand's in 2030); the certification lists only Governor/Lt. Governor, Comptroller and Attorney General statewide.",
+  "Fusion lines combined, major party first. Empty party lines on the certification (e.g. Working Families in CD1, 3, 5, 6, 8, 9, 11, 12, 15, 16, 21, 26; Conservative in CD5, 13, 16, 21) are omitted.",
+  "CD15: the Republican (Stylo Sapaskis) and Conservative (Gonzalo Duran) lines carry different candidates, so both are listed separately.",
+  "CD12: 'Karen Ortiz' is the name of the independent body on whose line Karen Ortiz appears.",
+  "Larry Sharpe (Libertarian / We The People nominee per Wikipedia) does not appear on the official Oct 7 certification for Governor.",
+  "Names normalized from PDF text-extraction artifacts: 'Ocasio - Cortez' -> 'Ocasio-Cortez', 'Ghaznav i' -> 'Ghaznavi'. 'Lalota' and 'LiPetri Jr' are kept as printed in the certification (the congressman usually styles it LaLota).",
+  "Five New York City charter questions and some county questions (e.g. Albany County) are on local ballots; they are not statewide and are excluded."
+ ],
+ "unconfirmed": [
+  "Absence of any statewide ballot proposal: no official BOE 2026 proposal page or certification was found (the 2024 and 2025 pages exist in the archive); Ballotpedia has no NY 2026 propositions page. Not confirmed from an official 'no proposals' statement.",
+  "Whether the BOE amended the general-election certification after October 7, 2026 (no later version found in the archive).",
+  "Spelling 'Priscilla Ghaznavi' (CD7) - PDF text extraction split the surname; exact printed form not visually verified.",
+  "Poll hours taken from search snippets of elections.ny.gov and county/university pages; the BOE page itself could not be fetched directly."
+ ]
+}
