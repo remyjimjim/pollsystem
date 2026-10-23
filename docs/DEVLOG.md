@@ -61,6 +61,21 @@ logged.
 
 ---
 
+## 2026-10-23 — Vote-form link fix live; staging deployed (verified)
+
+**Requested:**
+
+> push it, then deploy to staging
+
+**Verified:**
+
+- Pushed `4b9b3d1`, so the "Please make a selection for: <office>" link and
+  the always-visible form (`82e9719`) reached the prod site.
+- Staging deployed (fast-forward, healthy).
+- CI run 39894561624 all green.
+
+---
+
 ## 2026-10-23 — Midterms published on staging and prod: WA, CA, CO (verified)
 
 **Requested:**
