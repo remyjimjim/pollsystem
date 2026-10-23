@@ -134,3 +134,57 @@ describe('ElectionResponseForm: ballot measures on the ballot', () => {
   })
 })
 
+
+describe('ElectionResponseForm: an office still to choose', () => {
+  const TWO_OFFICES = [
+    ...CANDIDATES,
+    { id: 13, name: 'Sam Lee', affiliation: 'Nonpartisan', officeName: 'Supreme Court Justice Position 1' },
+    { id: 14, name: 'Ari Moss', affiliation: 'Nonpartisan', officeName: 'Supreme Court Justice Position 1' },
+  ]
+  function mountTwoOffices() {
+    CANDIDATES.push(...TWO_OFFICES.slice(2))
+    return mountWith('selectOneRadio', { measures: MEASURES })
+  }
+  afterEach(() => { CANDIDATES.splice(2) })
+
+  it('keeps the form on screen, links the office, and the link goes to it', async () => {
+    const w = mountTwoOffices()
+    await flushPromises()
+    await w.find('input#candidate-11').setValue(true)        // Mayor chosen
+    await w.find('input#measure-31-yes').setValue(true)      // a measure answered too
+    await w.find('button').trigger('click')
+    await flushPromises()
+
+    expect(axios.post).not.toHaveBeenCalled()
+    const msg = w.find('[data-test="missing-choice"]')
+    expect(msg.text()).toBe('Please make a selection for: Supreme Court Justice Position 1')
+    // The form, and what was already chosen, stay on screen.
+    expect((w.find('input#candidate-11').element as HTMLInputElement).checked).toBe(true)
+    expect((w.find('input#measure-31-yes').element as HTMLInputElement).checked).toBe(true)
+
+    const link = msg.find('a')
+    const section = w.find(link.attributes('href')!)
+    expect(section.find('legend').text()).toBe('Supreme Court Justice Position 1')
+    expect(section.attributes('data-missing')).toBe('true')
+    await link.trigger('click')
+    expect(document.activeElement).toBe(w.find('input#candidate-13').element)
+
+    // Choosing someone there clears the message.
+    await w.find('input#candidate-13').setValue(true)
+    expect(w.find('[data-test="missing-choice"]').exists()).toBe(false)
+    expect(section.attributes('data-missing')).toBeUndefined()
+    w.unmount()
+  })
+
+  it('a failed submission is shown by the button, without hiding the form', async () => {
+    vi.mocked(axios.post).mockRejectedValue({ response: { data: { message: 'Voting on this election has closed' } } })
+    const w = mountWith('selectOneRadio')
+    await flushPromises()
+    await w.find('input#candidate-11').setValue(true)
+    await w.find('button').trigger('click')
+    await flushPromises()
+    expect(w.find('[data-test="submit-error"]').text()).toBe('Voting on this election has closed')
+    expect(w.find('input#candidate-11').exists()).toBe(true)
+    w.unmount()
+  })
+})

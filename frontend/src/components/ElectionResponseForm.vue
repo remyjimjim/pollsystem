@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -73,6 +73,10 @@ const mine = ref<MyElectionResponsesDto | null>(null)
 const loading = ref(true)
 const submitting = ref(false)
 const error = ref<string | null>(null)
+// Problems with a submission. Shown by the Submit button, with the form still
+// on screen: the office (or candidate) still to choose links to its section.
+const missing = ref<{ kind: 'office' | 'candidate'; office: string; label: string } | null>(null)
+const submitError = ref<string | null>(null)
 const closedReason = ref<string | null>(null)
 const message = ref<string | null>(null)
 
@@ -198,6 +202,28 @@ async function loadMeasures() {
   }
 }
 
+/** The section for an office, so a "please choose" message can link to it. */
+function officeAnchor(office: string): string {
+  return `office-${groupedByOffice.value.findIndex(([name]) => name === office)}`
+}
+
+/** Scroll to an office's section and put the cursor on its first choice. */
+function goToOffice(office: string) {
+  const el = document.getElementById(officeAnchor(office))
+  el?.scrollIntoView?.({ behavior: 'smooth', block: 'center' })
+  el?.querySelector<HTMLElement>('input:not([type=hidden]), select')?.focus({ preventScroll: true })
+}
+
+// Once the office has a choice, the message (and its red outline) goes away.
+watch([selectionByOffice, answers], () => {
+  const m = missing.value
+  if (!m) return
+  const done = m.kind === 'office'
+    ? (selectionByOffice[m.office]?.size ?? 0) > 0
+    : (election.value?.candidates ?? []).filter(c => c.officeName === m.office).every(c => answers[c.id]?.response != null)
+  if (done) missing.value = null
+}, { deep: true })
+
 function chooseEdit() { mode.value = 'editing' }
 function chooseReadonly() { mode.value = 'readonly' }
 
@@ -242,21 +268,22 @@ async function submit() {
   if (widget.value === 'legacy') {
     for (const c of candidatesList) {
       if (answers[c.id]?.response == null) {
-        error.value = t('election.validation.yesNoFor', { name: c.name })
+        missing.value = { kind: 'candidate', office: c.officeName, label: c.name }
         return
       }
     }
   } else {
     for (const [office] of groupedByOffice.value) {
       if ((selectionByOffice[office]?.size ?? 0) === 0) {
-        error.value = t('election.validation.selectionFor', { office })
+        missing.value = { kind: 'office', office, label: office }
         return
       }
     }
   }
 
+  missing.value = null
+  submitError.value = null
   submitting.value = true
-  error.value = null
   try {
     // Public comments: offer to replace any listed word; a "No" keeps that comment private.
     const legacy = widget.value === 'legacy'
@@ -301,7 +328,7 @@ async function submit() {
     message.value = t('election.submittedOk')
     setTimeout(() => router.push(`/polls/election/${props.id}/results`), 600)
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? t('election.submissionFailed')
+    submitError.value = e?.response?.data?.message ?? t('election.submissionFailed')
   } finally {
     submitting.value = false
   }
@@ -362,9 +389,12 @@ onMounted(load)
 
     <fieldset
       v-for="[officeName, group] in groupedByOffice"
+      :id="officeAnchor(officeName)"
       :key="officeName"
       :disabled="mode === 'readonly'"
-      class="rounded-md border border-slate-200 p-4 disabled:opacity-90"
+      class="scroll-mt-4 rounded-md border p-4 disabled:opacity-90"
+      :class="missing?.office === officeName ? 'border-red-400 ring-2 ring-red-200' : 'border-slate-200'"
+      :data-missing="missing?.office === officeName ? 'true' : undefined"
     >
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ officeName }}</legend>
 
@@ -552,6 +582,13 @@ onMounted(load)
     </template>
 
     <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
+    <p v-if="missing" class="m-0 text-sm text-red-700" role="alert" data-test="missing-choice">
+      <i18n-t :keypath="missing.kind === 'office' ? 'election.validation.selectionFor' : 'election.validation.yesNoFor'" tag="span">
+        <template #office><a :href="`#${officeAnchor(missing.office)}`" class="font-semibold underline" @click.prevent="goToOffice(missing.office)">{{ missing.label }}</a></template>
+        <template #name><a :href="`#${officeAnchor(missing.office)}`" class="font-semibold underline" @click.prevent="goToOffice(missing.office)">{{ missing.label }}</a></template>
+      </i18n-t>
+    </p>
+    <p v-if="submitError" class="m-0 text-sm text-red-700" role="alert" data-test="submit-error">{{ submitError }}</p>
 
     <div v-if="mode !== 'readonly' && mode !== 'choosing'" class="flex gap-2">
       <button
