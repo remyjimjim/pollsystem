@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-23 — Midterms published on staging and prod: WA, CA, CO (verified)
+
+**Requested:**
+
+> Publish on staging then prod please...
+
+**Changed:**
+
+- **Staging:** published all 73 midterm elections; the 31 measures went live
+  with their statewide elections.
+- **Prod:**
+  1. `--retitle` renamed Washington's 14 live polls to the "2026 Midterm · "
+     format (0 votes at the time).
+  2. Created California and Colorado (62 elections, 28 measures).
+  3. Published the 62.
+
+**Verified:**
+
+- Staging: 73 elections and 31 measures, all PUBLISHED. Public search
+  "Midterm" returns 104.
+- Prod (read-only): 73 elections and 31 measures, all PUBLISHED, and every
+  title starts with "2026 Midterm".
+- Prod close dates: Washington's intact after the rename (04:00Z), California
+  04:00Z (8 pm Pacific), Colorado 02:00Z (7 pm Mountain).
+- Public search on ballotbox.us.com for "Midterm" returns 104 (73 elections,
+  31 measures).
+
+---
+
 ## 2026-10-23 — Midterm content on staging, as drafts (verified)
 
 **Requested:**

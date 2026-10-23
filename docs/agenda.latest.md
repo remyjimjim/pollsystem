@@ -113,6 +113,9 @@ means re-warming the email domain, redirects, and confused users.
 
 - **Launch content:** real creators and admins with real polls, so day one isn't
   an empty site.
+  - ✅ **California and Colorado live too, 2026-10-23:** 73 elections and
+    31 measures across WA, CA and CO, all titled "2026 Midterm · …", on
+    staging and prod.
   - ✅ **Washington live, 2026-10-23:** the Supreme Court election with the 3
     statewide measures, and the 10 U.S. House district elections. All close
     8 pm Pacific on Nov 3. Content files are in `scripts/launch-content/`;
