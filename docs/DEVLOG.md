@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Idaho on local
+
+**Changed:** ID: 8 statewide races. U.S. Senate has no Democrat: Roth withdrew and Achilles runs as an Independent. HJR 4 (marijuana legalization reserved to the Legislature), HJR 6 (English as official language) and Proposition 1 (reproductive freedom). 2 district ballots. Candidates come from the Secretary of State's filing portal (final list). The multiple-choice advisory question on a state gun is left out (see `ID.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `1b59a95`
+
+---
+
 ## 2026-10-23 — Nevada on local
 
 **Changed:** NV: 8 statewide races, including Governor and two unopposed Supreme Court seats. Questions 6 and 7 are the second votes on abortion rights and voter ID. 4 district ballots. nvsos.gov blocks automated reads, so this comes from Clark County's official list of all contests (Aug 24). CD2 names (outside Clark) rest on Ballotpedia (see `NV.md`).
