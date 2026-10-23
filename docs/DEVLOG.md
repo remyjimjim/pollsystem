@@ -61,6 +61,19 @@ logged.
 
 ---
 
+## 2026-10-23 — New Jersey on local
+
+**Changed:** NJ: U.S. Senate (4 candidates), no public questions, 12 district
+ballots, from the Division of Elections' official lists. Libertarian Lana
+Leguía (NJ-7) is left out: a court removed her and the amended certification
+drops her (see `NJ.md`).
+
+**Verified:** built, loaded and published on local.
+
+**Commit:** `5680da4`
+
+---
+
 ## 2026-10-23 — Michigan and Illinois on local
 
 **Changed:**
