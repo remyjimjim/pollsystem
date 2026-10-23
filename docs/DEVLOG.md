@@ -61,6 +61,51 @@ logged.
 
 ---
 
+## 2026-10-23 — All-states pipeline; first six states on local
+
+**Requested:**
+
+> I am hoping to get all the states loaded by the end of the week so I can
+> launch by Monday. The reason I'd like to get all the states up is so people
+> can get their votes recorded by the Nov 3rd so they can see the results and
+> compare.
+
+**Changed:**
+
+- `docs/launch-content/research/`: one `XX.json` (format in its README) and
+  `XX.md` (sources and gaps) per state, researched from official sources
+  where reachable.
+- `build-state.py`: research file → statewide content (races plus measures)
+  and one district ballot per House seat, each including the statewide
+  election. It checks district counts against the 2020 apportionment (435
+  seats). A state with one seat gets a single ballot, "2026 Midterm <State>".
+- `load-state.bash local|staging|prod XX… [--publish]` creates the polls,
+  then publishes them statewide first. It can be rerun:
+  `create-polls.py` now skips polls that already exist.
+- Backend: an election can be published with only ballot measures, or with
+  only included elections. Florida District 10's House race is unopposed and
+  isn't on the ballot, but its ballot still carries the statewide races.
+- Loaded and published on local: NC, FL, NY, AZ, TX, PA.
+
+**Verified:**
+
+- `MeasuresOnlyElectionTest` (3), `ElectionIncludesTest`, and
+  `ElectionServiceTest` pass.
+- Local search with type=Election lists the district ballots only.
+- FL District 10 is PUBLISHED with 0 of its own candidates and includes the
+  statewide election.
+
+**Gaps (in each XX.md):**
+
+- AZ: the Secretary of State's site returns 403, so its data comes from
+  Ballotpedia and other secondary sources.
+- PA: districts 7, 8, 13 and 15 rest on secondary sources.
+- NY: no statewide proposals found.
+
+**Commit:** `eecbc3e`
+
+---
+
 ## 2026-10-23 — One ballot per district live on staging and prod (verified)
 
 **Requested:**
