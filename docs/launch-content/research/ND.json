@@ -1,0 +1,191 @@
+{
+  "state": "North Dakota",
+  "abbr": "ND",
+  "pollCloseLocal": "9:00 PM",
+  "pollCloseUtc": "2026-11-04T04:00:00Z",
+  "statewide": [
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Michael Howe",
+          "party": "Republican"
+        },
+        {
+          "name": "Ryan Braunberger",
+          "party": "Democratic-NPL"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Drew Wrigley",
+          "party": "Republican"
+        },
+        {
+          "name": "Tim Lamb",
+          "party": "Democratic-NPL"
+        }
+      ]
+    },
+    {
+      "office": "Agriculture Commissioner",
+      "candidates": [
+        {
+          "name": "Doug Goehring",
+          "party": "Republican"
+        },
+        {
+          "name": "Vern Thompson",
+          "party": "Democratic-NPL"
+        }
+      ]
+    },
+    {
+      "office": "Tax Commissioner",
+      "candidates": [
+        {
+          "name": "Brian Kroshus",
+          "party": "Republican"
+        },
+        {
+          "name": "Mark Nelson",
+          "party": "Democratic-NPL"
+        }
+      ]
+    },
+    {
+      "office": "Public Service Commissioner",
+      "candidates": [
+        {
+          "name": "Sheri Haugen-Hoffart",
+          "party": "Republican"
+        },
+        {
+          "name": "John M Pederson",
+          "party": "Democratic-NPL"
+        }
+      ]
+    },
+    {
+      "office": "Public Service Commissioner, Unexpired 2-Year Term",
+      "candidates": [
+        {
+          "name": "Jill Kringstad",
+          "party": "Republican"
+        },
+        {
+          "name": "Scot Kelsh",
+          "party": "Democratic-NPL"
+        }
+      ]
+    },
+    {
+      "office": "Superintendent of Public Instruction, Unexpired 2-Year Term",
+      "candidates": [
+        {
+          "name": "Levi Bachmeier",
+          "party": "Nonpartisan"
+        },
+        {
+          "name": "Tracy Layne Foss",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Justice of the Supreme Court",
+      "candidates": [
+        {
+          "name": "Jerod Tufte",
+          "party": "Nonpartisan"
+        },
+        {
+          "name": "Ariston E Johnson",
+          "party": "Nonpartisan"
+        }
+      ]
+    },
+    {
+      "office": "Justice of the Supreme Court, Unexpired 8-Year Term",
+      "candidates": [
+        {
+          "name": "Douglas A Bahr",
+          "party": "Nonpartisan"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 0,
+      "candidates": [
+        {
+          "name": "Julie Fedorchak",
+          "party": "Republican"
+        },
+        {
+          "name": "Trygve Hammer",
+          "party": "Democratic-NPL"
+        },
+        {
+          "name": "Helene Neville",
+          "party": "Independent"
+        },
+        {
+          "name": "Charles Tuttle",
+          "party": "Independent"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Measure No. 1",
+      "subject": "60% vote to approve constitutional amendments",
+      "ballotTitle": "This constitutional measure would amend and reenact section 9 of article III and section 16 of article IV of the Constitution of North Dakota. The proposed amendment would require constitutional amendments submitted to the electors, by resolution adopted by the legislative assembly proposing a constitutional amendment and each initiative petition and measure proposing a constitutional amendment, to receive an affirmative vote of at least sixty percent of those voting on the question for enactment. The estimated fiscal impact of this measure is none.",
+      "summary": "Would raise the vote needed to approve future amendments to the North Dakota Constitution, whether proposed by the Legislature or by initiative, from a simple majority to at least 60 percent.",
+      "source": "https://www.sos.nd.gov/sites/default/files/documents/elections/measures/ballot-language-2026-general-measure1.pdf"
+    },
+    {
+      "designation": "Initiated Constitutional Measure No. 2",
+      "subject": "State-funded free school breakfast and lunch",
+      "ballotTitle": "This initiated measure amendment would amend and add a new section to article VIII of the North Dakota Constitution. It would mandate all public school districts, public schools, and public charter schools to provide one breakfast and one lunch each school day to enrolled students at no cost to the student, parent, or guardians. It would allow nonpublic schools, Bureau of Indian Education schools, and other tribal schools the option to provide the same. It would require the State of North Dakota to reimburse school districts and schools at one hundred percent of the current rates used by the state for free meals, and the rate shall be adjusted annually for inflation. It would require the legislative assembly to identify a source of funds for reimbursement and if a source of funds is unable to be identified, reimbursement funds would be appropriated from the legacy earnings fund. This amendment would supersede any other part of the constitution that conflicts with it. The estimated fiscal impact of this measure is a $124.3 million to $134.3 million increase in ongoing biennial expenditures for the 2027–2029 biennium and will be adjusted for inflation every year after that.",
+      "summary": "Would amend the state constitution to require public schools to give every enrolled student one breakfast and one lunch each school day at no cost, with the state reimbursing schools and drawing on Legacy Fund earnings if no other funding source is identified.",
+      "source": "https://www.sos.nd.gov/sites/default/files/documents/elections/measures/ballot-language-2026-general-measure2.pdf"
+    }
+  ],
+  "measureEffective": "2026-12-03",
+  "measureEffectiveNote": "An approved initiated measure, including an initiated constitutional amendment, becomes law thirty days after the election (N.D. Const. art. III, secs. 8-9), i.e. December 3, 2026 for Measure No. 2; its meal requirements then apply from the first full school year beginning at least 90 days after that date. A legislatively referred amendment (Measure No. 1) 'is a part of this constitution' once approved by a majority (art. IV, sec. 16), with no separate date stated; Dec 3, 2026 is used as the representative date for both.",
+  "sources": [
+    "https://vip.sos.nd.gov/candidatelist.aspx?eid=348",
+    "https://www.sos.nd.gov/elections/voter/ballot-measures/measures-ballot",
+    "https://www.sos.nd.gov/sites/default/files/documents/elections/measures/ballot-language-2026-general-measure1.pdf",
+    "https://www.sos.nd.gov/sites/default/files/documents/elections/measures/ballot-language-2026-general-measure2.pdf",
+    "https://www.sos.nd.gov/sites/default/files/documents/elections/measures/analysis-2026-general-measure1.pdf",
+    "https://www.sos.nd.gov/sites/default/files/documents/elections/measures/analysis-2026-general-measure2.pdf",
+    "https://www.sos.nd.gov/sites/default/files/documents/elections/2026-general-measure-guide.pdf",
+    "https://www.sos.nd.gov/sites/default/files/documents/elections/measures/schoollunches-measure-full-text.pdf",
+    "https://www.ndlegis.gov/cencode/t16-1c01.pdf",
+    "https://www.ndlegis.gov/constit/a03.pdf",
+    "https://www.ndlegis.gov/constit/a04.pdf",
+    "https://ballotpedia.org/North_Dakota_elections,_2026"
+  ],
+  "notes": [
+    "No U.S. Senate or Governor race in North Dakota in 2026 (Senate seats next up 2028 and 2030; Governor 2028).",
+    "Candidates and party labels are from the Secretary of State's '2026 General Election Contest/Candidate List' (statewide jurisdiction), read 2026-10-23. 'Democratic-NPL' is the party name as listed there.",
+    "House independents Helene Neville and Charles Tuttle are listed by the SOS as 'independent nomination'; shown here as 'Independent'.",
+    "Supreme Court, Superintendent of Public Instruction and their candidates are nonpartisan. The Supreme Court unexpired-term seat (Douglas A Bahr) is unopposed but is listed as a general-election contest; the Superintendent and the second PSC seat are 2-year unexpired-term contests.",
+    "Ballotpedia's candidate list (cross-check) matches the SOS list; it gives 'Timothy Lamb' for the AG nominee, the SOS lists 'Tim Lamb'.",
+    "A separate Constitutional Measure 1 (single-subject rule) was on the June 9, 2026 primary ballot (passed per Ballotpedia); it is not on the November ballot.",
+    "Polls: N.D.C.C. 16.1-01-03 requires polls to stay open until 7 p.m. and allows local governments to set a later close, no later than 9 p.m. The southwest is on Mountain time, so the latest possible close is 9 p.m. MST = 04:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "pollCloseUtc is the statutory latest close (9 p.m. MST); whether any Mountain-time precinct actually sets a 9 p.m. close was not verified county by county.",
+    "Ballot-face party wording for the independents (e.g. 'Independent' vs 'Independent Nomination') and for 'Democratic-NPL' was not checked against a printed sample ballot.",
+    "Measure No. 1 ballot language: the SOS official ballot-language PDF reads 'by resolution adopted by the legislative assembly proposing a constitutional amendment and each initiative petition…'; the SOS voter guide's reproduction omits 'proposing a constitutional amendment' after 'legislative assembly'. The ballot-language PDF text is used.",
+    "Effective date of Measure No. 1 (legislative referral) is not fixed by a stated rule beyond approval; Dec 3, 2026 is representative only."
+  ]
+}
