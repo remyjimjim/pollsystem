@@ -1,0 +1,222 @@
+{
+  "_about": "Missouri, Nov 3 2026, built by build-state.py from docs/launch-content/research/MO.json (sources and gaps in MO.md). One ballot per district, each including \"2026 Midterm · Missouri: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Missouri District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        26
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Paul Berry III",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Wesley Bell",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Tom Schmitz",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Missouri District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        26
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Ann Wagner",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Fred Wellman",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Brandon Coulter Daugherty",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Missouri District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        26
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Bob Onder",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Bethany E Mann",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Jim Higgins",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Missouri District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        26
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Mark Alford",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Jordan Herrera",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Thomas Holbrook",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Missouri District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        26
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Rick Brattin",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Emanuel Cleaver, II",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Randall (Randy) Langkraehr",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Missouri District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        26
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Chris Stigall",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Josh Smead",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Andy Maidment",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Missouri District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        26
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Eric W. Burlison",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Missi Hesketh",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Kevin Craig",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Missouri District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        26
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Jason T. Smith",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Chris Reichard",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Rebecca Sharpe Lombard",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Missouri: statewide races & measures"
+}

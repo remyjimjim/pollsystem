@@ -1,0 +1,67 @@
+{
+  "_about": "Missouri, Nov 3 2026, built by build-state.py from docs/launch-content/research/MO.json (sources and gaps in MO.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Missouri: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      26
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Scott Fitzpatrick",
+        "affiliation": "Republican",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Quentin Wilson",
+        "affiliation": "Democratic",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Dustin Coffell",
+        "affiliation": "Libertarian",
+        "officeName": "State Auditor"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Missouri Amendment 3: Repeal 2024 abortion-rights amendment; abortion limits; gender transition procedures for minors",
+      "summary": "Shall the Missouri Constitution be amended to: Repeal the 2024 voter-approved Amendment providing reproductive healthcare rights, including abortion through fetal viability; Allow abortions for rape and incest (under twelve-weeks’ gestation), emergencies, and fetal anomalies; Allow legislation regulating abortion; Ensure parental consent for minors’ abortions; Prohibit gender transition procedures for minors?\n\nIn short: Legislatively referred amendment that would repeal the 2024 reproductive-freedom amendment, allow abortion only for medical emergencies, fetal anomalies, and rape or incest before twelve weeks, and prohibit gender transition procedures for minors.\n\nOfficial ballot language. Source: https://www.sos.mo.gov/petitions/2026ballotmeasures",
+      "effectiveDate": "2026-12-03",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Missouri Amendment 6: Initiative and referendum powers; limits on legislative changes to voter-passed measures",
+      "summary": "Shall the Missouri Constitution be amended to: expand the initiative and referendum petition process by making it a fundamental right; allow courts to revise ballot summaries through lawsuits; prohibit the legislature from weakening initiative or referendum powers; prohibit the legislature from changing or repealing laws enacted through the initiative process, or passing laws similar to those rejected by referendum, without approval from at least 80% of both chambers; and preserve existing majority vote and signature requirements for initiative and referendum petitions?\n\nIn short: Citizen-initiated amendment that would make initiative and referendum a fundamental right and bar the legislature from changing or repealing voter-enacted measures unless at least 80% of each chamber refers the change to voters.\n\nOfficial ballot language. Source: https://www.sos.mo.gov/petitions/2026ballotmeasures",
+      "effectiveDate": "2026-12-03",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Missouri Amendment 7: Show-Me Prosperity Fund endowment to replace state taxes",
+      "summary": "Shall the Missouri Constitution be amended to establish a permanent public endowment fund to support state government instead of taxing Missouri residents, prohibit the General Assembly from appropriating or diverting the fund, and eliminate state-imposed taxes once the fund generates sufficient revenue to replace them?\n\nIn short: Legislatively referred amendment that would create a permanent state investment fund whose earnings, once sufficient as certified by the State Treasurer, would replace and eliminate state-imposed taxes.\n\nOfficial ballot language. Source: https://www.sos.mo.gov/petitions/2026ballotmeasures",
+      "effectiveDate": "2026-12-03",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Missouri Amendment 8: Election and removal of county sheriffs",
+      "summary": "Shall the Missouri Constitution be amended to support law enforcement by preserving the right of citizens to elect a county sheriff, prohibiting the removal of a county sheriff except by a writ of quo warranto, and recognizing the office of sheriff as part of the administration of justice?\n\nIn short: Legislatively referred amendment that would put the election of county sheriffs in the constitution and allow removal of a sheriff only through a quo warranto action brought by the Attorney General.\n\nOfficial ballot language. Source: https://www.sos.mo.gov/petitions/2026ballotmeasures",
+      "effectiveDate": "2026-12-03",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Missouri Proposition A: Referendum on the 2025 congressional district map (House Bill 1)",
+      "summary": "Do the people of the state of Missouri approve the act of the General Assembly entitled “House Bill No. 1 (2025 Second Extraordinary Session),” which repeals Missouri’s existing congressional plan, and replaces it with new congressional boundaries that keep more counties intact?\n\nIn short: Citizen veto referendum on the congressional map passed in 2025: a yes vote approves the new districts, a no vote keeps the districts enacted in 2022.\n\nOfficial ballot language. Source: https://www.sos.mo.gov/petitions/2026ballotmeasures",
+      "effectiveDate": "2026-12-03",
+      "closeDate": "2026-11-04T01:00:00Z"
+    }
+  ]
+}
