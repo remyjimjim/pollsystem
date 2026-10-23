@@ -185,6 +185,7 @@
     "cancelConfirm": "Alle Ihre Stimmen auf diesem Stimmzettel zurückziehen, einschließlich der landesweiten Wahlen und Abstimmungen?",
     "cancelledOk": "Ihre Stimmen auf diesem Stimmzettel wurden zurückgezogen.",
     "goToOtherBallot": "Zu diesem Stimmzettel",
+    "votedElsewhere": "Sie haben auf {ballot} abgestimmt. Sie können in Ihrem Bundesstaat nur auf einem Bezirksstimmzettel abstimmen. Um stattdessen hier abzustimmen, öffnen Sie jenen Stimmzettel und ziehen Sie dort zuerst Ihre Stimmen zurück.",
     "readonlyNote": "Ihre vorherigen Stimmen werden unten angezeigt. Sie können hier nicht geändert werden.",
     "submitVotes": "Stimmen abgeben",
     "updateVotes": "Stimmen aktualisieren",

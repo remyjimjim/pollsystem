@@ -84,6 +84,23 @@ class BallotRulesTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `another district ballot names the one you voted on, and cancelling there keeps your shared statewide votes`() {
+        val c = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "br-keep")
+        val statewide = election(c, "Keep statewide", "U.S. Senator")
+        val d10 = election(c, "Keep District 10", "U.S. Representative, District 10", listOf(statewide))
+        val d12 = election(c, "Keep District 12", "U.S. Representative, District 12", listOf(statewide))
+        val voter = fixtures.createUser(emailPrefix = "br-keep-v")
+        vote(voter, d10); vote(voter, statewide)
+
+        assertThat(votes.mine(AppUserDetails(voter), d12).otherBallot).isEqualTo(OtherBallot(d10, "Keep District 10"))
+        assertThat(votes.mine(AppUserDetails(voter), d10).otherBallot).isNull()
+
+        votes.cancel(AppUserDetails(voter), d12)
+        assertThat(votes.mine(AppUserDetails(voter), d10).responses).hasSize(2)
+        assertThat(votes.mine(AppUserDetails(voter), statewide).responses).hasSize(2)   // still there
+    }
+
+    @Test
     fun `cancelling removes only that voter's rows from the published results`() {
         val c = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "br-snap")
         val e = election(c, "Snap statewide", "U.S. Senator")

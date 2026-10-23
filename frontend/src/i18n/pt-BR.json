@@ -185,6 +185,7 @@
     "cancelConfirm": "Retirar todos os seus votos nesta cédula, incluindo as disputas estaduais e as medidas?",
     "cancelledOk": "Seus votos nesta cédula foram cancelados.",
     "goToOtherBallot": "Ir para essa cédula",
+    "votedElsewhere": "Você votou em {ballot}. Você só pode votar em uma cédula de distrito no seu estado. Para votar nesta, abra aquela cédula e cancele seus votos lá primeiro.",
     "readonlyNote": "Seus votos anteriores são exibidos abaixo. Eles não podem ser modificados aqui.",
     "submitVotes": "Enviar votos",
     "updateVotes": "Atualizar votos",

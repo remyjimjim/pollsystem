@@ -64,6 +64,7 @@ interface MyBallotResponseDto {
 interface MyElectionResponsesDto {
   electionId: number
   hasResponses: boolean
+  otherBallot?: { id: number; title: string } | null
   firstSubmittedAt: string | null
   responses: MyCandidateResponseDto[]
 }
@@ -89,6 +90,7 @@ const closedReason = ref<string | null>(null)
 const message = ref<string | null>(null)
 // Refused because you voted on another district ballot in the state: a link to it.
 const otherBallot = ref<{ id: number; title: string } | null>(null)
+const votedElsewhere = ref<{ id: number; title: string } | null>(null)
 
 // Per-candidate state used by the legacy Yes/No widget.
 const answers = reactive<Record<number, { response: boolean | null; comment: string }>>({})
@@ -163,6 +165,8 @@ async function load() {
     election.value = { ...res.data, candidates: parts.flatMap(p => p.candidates) }
     const mineAll = await Promise.all(parts.map(p =>
       axios.get<MyElectionResponsesDto>(`/api/polls/elections/${p.id}/responses/me`).then(r => r.data)))
+    // Voted on another district ballot in the state: this one isn't yours to fill in.
+    votedElsewhere.value = mineAll[0].otherBallot ?? null
     mine.value = {
       ...mineAll[0],
       hasResponses: mineAll.some(m => m.hasResponses),
@@ -404,6 +408,15 @@ onMounted(load)
     >
       {{ $t('nav.viewResults') }}
     </router-link>
+  </div>
+
+  <div v-else-if="election && votedElsewhere" class="rounded-md border border-sky-300 bg-sky-50 p-4" data-test="voted-elsewhere">
+    <h2 class="mb-2 text-xl font-semibold text-slate-800">{{ election.title }}</h2>
+    <i18n-t keypath="election.votedElsewhere" tag="p" class="m-0 text-sm text-slate-700">
+      <template #ballot>
+        <router-link :to="`/polls/election/${votedElsewhere.id}`" class="font-semibold underline">{{ votedElsewhere.title }}</router-link>
+      </template>
+    </i18n-t>
   </div>
 
   <div v-else-if="election" class="flex flex-col gap-4">

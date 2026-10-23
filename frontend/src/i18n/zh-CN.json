@@ -185,6 +185,7 @@
     "cancelConfirm": "撤销您在此选票上的所有投票（包括全州选举和投票议案）？",
     "cancelledOk": "您在此选票上的投票已撤销。",
     "goToOtherBallot": "前往该选票",
+    "votedElsewhere": "您已在 {ballot} 投票。您只能在本州的一张选区选票上投票。若要改为在此投票，请先打开那张选票并撤销您在那里的投票。",
     "readonlyNote": "您之前的投票如下所示，不能在此处修改。",
     "submitVotes": "提交投票",
     "updateVotes": "更新投票",

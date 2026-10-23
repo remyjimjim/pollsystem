@@ -185,6 +185,7 @@
     "cancelConfirm": "Retirer tous vos votes sur ce bulletin, y compris ses scrutins à l'échelle de l'État et ses mesures ?",
     "cancelledOk": "Vos votes sur ce bulletin ont été annulés.",
     "goToOtherBallot": "Aller à ce bulletin",
+    "votedElsewhere": "Vous avez voté sur {ballot}. Vous ne pouvez voter que sur un seul bulletin de district dans votre État. Pour voter sur celui-ci, ouvrez ce bulletin et annulez-y d'abord vos votes.",
     "readonlyNote": "Vos votes précédents sont affichés ci-dessous. Ils ne peuvent pas être modifiés ici.",
     "submitVotes": "Envoyer les votes",
     "updateVotes": "Mettre à jour les votes",

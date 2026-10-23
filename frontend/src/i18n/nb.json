@@ -185,6 +185,7 @@
     "cancelConfirm": "Trekke tilbake alle stemmene dine på denne stemmeseddelen, inkludert delstatsvalgene og forslagene?",
     "cancelledOk": "Stemmene dine på denne stemmeseddelen ble trukket tilbake.",
     "goToOtherBallot": "Gå til den stemmeseddelen",
+    "votedElsewhere": "Du stemte på {ballot}. Du kan bare stemme på én distriktsstemmeseddel i delstaten din. For å stemme på denne i stedet, åpne den stemmeseddelen og trekk tilbake stemmene dine der først.",
     "readonlyNote": "Dine tidligere stemmer vises nedenfor. De kan ikke endres her.",
     "submitVotes": "Send stemmer",
     "updateVotes": "Oppdater stemmer",

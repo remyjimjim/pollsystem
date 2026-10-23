@@ -185,6 +185,7 @@
     "cancelConfirm": "¿Retirar todos sus votos en esta boleta, incluidas sus contiendas estatales y medidas?",
     "cancelledOk": "Se cancelaron sus votos en esta boleta.",
     "goToOtherBallot": "Ir a esa boleta",
+    "votedElsewhere": "Usted votó en {ballot}. Solo puede votar en una boleta de distrito de su estado. Para votar en esta, abra esa boleta y cancele allí sus votos primero.",
     "readonlyNote": "Sus votos anteriores se muestran a continuación. No se pueden modificar aquí.",
     "submitVotes": "Enviar votos",
     "updateVotes": "Actualizar votos",

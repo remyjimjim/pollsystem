@@ -31,24 +31,27 @@ class BallotRules(
         }
     }
 
+    /** The other ballot (sharing an included election with this one) whose own races the user voted on, if any. */
+    fun otherBallotVoted(electionId: Long, userId: Long): OtherBallot? = jdbc.query(
+        """
+        SELECT DISTINCT e.id, e.title FROM election_includes mine
+        JOIN election_includes sib ON sib.included_election_id = mine.included_election_id
+                                  AND sib.election_id <> mine.election_id
+        JOIN elections e ON e.id = sib.election_id
+        JOIN candidates c ON c.election_id = sib.election_id
+        JOIN candidate_responses cr ON cr.candidate_id = c.id AND cr.user_id = ?
+        WHERE mine.election_id = ?
+        ORDER BY e.title
+        """.trimIndent(), { rs, _ -> OtherBallot(rs.getLong("id"), rs.getString("title")) }, userId, electionId
+    ).firstOrNull()
+
     /** Refuses a vote on [electionId] when the user voted on another ballot sharing its included election. */
     fun requireNoOtherBallot(electionId: Long, userId: Long) {
-        val other = jdbc.queryForList(
-            """
-            SELECT DISTINCT e.title FROM election_includes mine
-            JOIN election_includes sib ON sib.included_election_id = mine.included_election_id
-                                      AND sib.election_id <> mine.election_id
-            JOIN elections e ON e.id = sib.election_id
-            JOIN candidates c ON c.election_id = sib.election_id
-            JOIN candidate_responses cr ON cr.candidate_id = c.id AND cr.user_id = ?
-            WHERE mine.election_id = ?
-            ORDER BY e.title
-            """.trimIndent(), String::class.java, userId, electionId
-        )
-        if (other.isNotEmpty()) {
+        val other = otherBallotVoted(electionId, userId)
+        if (other != null) {
             throw ResponseStatusException(
                 HttpStatus.CONFLICT,
-                "You need to \"Cancel\" your vote from the other midterm you submitted (\"${other.first()}\"). " +
+                "You need to \"Cancel\" your vote from the other midterm you submitted (\"${other.title}\"). " +
                     "You need to know your state voting district and choose the right election."
             )
         }
@@ -56,13 +59,16 @@ class BallotRules(
 
     /**
      * Takes back the user's votes on this ballot: its own races, its included
-     * elections' races, and their ballot measures. Each poll's published
+     * elections' races, and their ballot measures. The included elections are
+     * shared with the other district ballots, so if the user voted through
+     * another one, those votes are theirs and stay. Each poll's published
      * results lose this user's rows; nothing else in them changes, so a
      * cancel never reveals anyone else's vote.
      */
     @Transactional
     fun cancel(electionId: Long, user: User): Int {
-        val elections = listOf(electionId) + includes.of(electionId)
+        val shared = if (otherBallotVoted(electionId, user.id) == null) includes.of(electionId) else emptyList()
+        val elections = listOf(electionId) + shared
         var removed = 0
         for (id in elections) {
             removed += jdbc.update(
@@ -87,3 +93,5 @@ class BallotRules(
         }
     }
 }
+
+data class OtherBallot(val id: Long, val title: String)

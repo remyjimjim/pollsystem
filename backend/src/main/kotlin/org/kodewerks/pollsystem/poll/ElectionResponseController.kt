@@ -47,7 +47,9 @@ data class MyElectionResponsesDto(
     val electionId: Long,
     val hasResponses: Boolean,
     val firstSubmittedAt: Instant?,
-    val responses: List<MyCandidateResponseDto>
+    val responses: List<MyCandidateResponseDto>,
+    /** A district ballot sharing this one's statewide election that the user voted on instead. */
+    val otherBallot: OtherBallot? = null
 )
 
 @RestController
@@ -85,7 +87,8 @@ class ElectionResponseController(
                     dateSubmitted = it.dateSubmitted,
                     lastModified = it.lastModified
                 )
-            }
+            },
+            otherBallot = rules.otherBallotVoted(id, principal.user.id)
         )
     }
 

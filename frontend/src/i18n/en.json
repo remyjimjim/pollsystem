@@ -211,6 +211,7 @@
     "cancelConfirm": "Take back all your votes on this ballot, including its statewide races and measures?",
     "cancelledOk": "Your votes on this ballot were cancelled.",
     "goToOtherBallot": "Go to that ballot",
+    "votedElsewhere": "You voted on {ballot}. You can vote on only one district ballot in your state. To vote on this one instead, open that ballot and cancel your votes there first.",
     "readonlyNote": "Your previous votes are shown below. They cannot be modified here.",
     "submitVotes": "Submit votes",
     "updateVotes": "Update votes",
