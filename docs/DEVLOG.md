@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-10-23 — Launch content: Washington research, statewide election drafted
+
+**Requested:**
+
+> yes, start the Washington research
+
+> That looks extremely promising, you just earned your salt for at least
+> another month, have at #1...
+
+**Decision:**
+
+- Washington first. The plan:
+  - one statewide election with the five Supreme Court races and the three
+    initiatives attached (a measure needs a parent election);
+  - ten district House elections ("Washington CD-N: U.S. House, Nov 3
+    2026"), purview Washington, closing 8 pm Pacific on Nov 3;
+  - measures shown with their official ballot titles, verbatim.
+- Research is from official sources first. Ballotpedia and theleahfiles
+  couldn't be used: empty pages or not found.
+
+**Changed:**
+
+- `2628948`: the research doc, the content file, and `create-polls.py`, which
+  creates drafts via the API.
+
+**Verified:**
+
+- Hand-checked the names, measures and Supreme Court contests against
+  Snohomish County's official ballot report (PDF text extracted).
+- Created locally as drafts (election 259, measures 182–184) and checked in
+  the editor.
+
+**Commits:** `2628948`
+
+---
+
 ## 2026-10-23 — Age checkbox live, deployed in order (verified)
 
 **Requested:**
