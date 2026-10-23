@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Iowa on local
+
+**Changed:** IA: 7 statewide races and Statewide Public Measure 1 (a two-thirds vote to raise income tax). 4 district ballots. Candidates come from the Secretary of State's list (Wayback copy of Oct 17) and match the Linn County sample ballot. Also: build-state.py now labels ranked-choice races (`rankedChoice`, `houseRankedChoice`) for Maine and Alaska.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `b313b7c`
+
+---
+
 ## 2026-10-23 — Connecticut on local
 
 **Changed:** CT: Gov/Lt Gov, Attorney General, Secretary of the State, Treasurer, Comptroller (fusion lines combined), no statewide questions, and 5 district ballots. All of it comes from official town sample ballots covering all 5 districts.
