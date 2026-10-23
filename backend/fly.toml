@@ -22,11 +22,11 @@ primary_region = "iad"
   force_https = true
   auto_stop_machines = true        # stop when idle — no compute charge while stopped
   auto_start_machines = true       # wake on the next request
-  # 0 until launch: with no users, let prod sleep. A warm machine's 15 s health
-  # check queries the DB, which keeps Neon from ever scaling to zero (~$40/month
-  # idle; see docs/COSTS.md "Actual bills"). First visit after idle wakes it in
-  # ~10-30 s. SET BACK TO 1 AT LAUNCH to avoid cold starts for real users.
-  min_machines_running = 0
+  # 1 from launch (Oct 26, 2026): one machine always up, so no visitor waits
+  # 10-30 s for a cold JVM. Its 15 s health check queries the DB, so Neon stays
+  # awake too (~$40/month; see docs/COSTS.md "Actual bills"). It was 0 before
+  # launch, letting prod sleep while there were no users.
+  min_machines_running = 1
   processes = ["app"]
 
 # Health check hits the actuator endpoint (spring-boot-starter-actuator is a
