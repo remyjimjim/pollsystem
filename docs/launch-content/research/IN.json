@@ -1,0 +1,113 @@
+{
+  "state": "Indiana",
+  "abbr": "IN",
+  "pollCloseLocal": "6:00 PM",
+  "pollCloseUtc": "2026-11-04T00:00:00Z",
+  "statewide": [
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        { "name": "Max Engling", "party": "Republican" },
+        { "name": "Beau Bayh", "party": "Democratic" },
+        { "name": "Lauri A. Shillings", "party": "Libertarian" },
+        { "name": "Greg Ballard", "party": "Lincoln Party" }
+      ]
+    },
+    {
+      "office": "State Comptroller (Auditor of State)",
+      "candidates": [
+        { "name": "Elise Nieshalla", "party": "Republican" },
+        { "name": "Jessica Bailey", "party": "Democratic" },
+        { "name": "John Schick", "party": "Libertarian" }
+      ]
+    },
+    {
+      "office": "Treasurer of State",
+      "candidates": [
+        { "name": "Daniel Elliott", "party": "Republican" },
+        { "name": "Coumba Kebe", "party": "Democratic" }
+      ]
+    }
+  ],
+  "house": [
+    { "district": 1, "candidates": [
+      { "name": "Barb Regnitz", "party": "Republican" },
+      { "name": "Frank J. Mrvan", "party": "Democratic" } ] },
+    { "district": 2, "candidates": [
+      { "name": "Rudy Yakym", "party": "Republican" },
+      { "name": "Jamee Decio", "party": "Democratic" },
+      { "name": "William Eric Henry", "party": "Libertarian" } ] },
+    { "district": 3, "candidates": [
+      { "name": "Marlin A. Stutzman", "party": "Republican" },
+      { "name": "Kelly Thompson", "party": "Democratic" } ] },
+    { "district": 4, "candidates": [
+      { "name": "Jim Baird", "party": "Republican" },
+      { "name": "Drew Cox", "party": "Democratic" } ] },
+    { "district": 5, "candidates": [
+      { "name": "Victoria Spartz", "party": "Republican" },
+      { "name": "J.D. Ford", "party": "Democratic" } ] },
+    { "district": 6, "candidates": [
+      { "name": "Jefferson Shreve", "party": "Republican" },
+      { "name": "Cynthia (Cinde) Wirth", "party": "Democratic" } ] },
+    { "district": 7, "candidates": [
+      { "name": "Patrick McAuley", "party": "Republican" },
+      { "name": "André Carson", "party": "Democratic" },
+      { "name": "James M Sceniak", "party": "Libertarian" } ] },
+    { "district": 8, "candidates": [
+      { "name": "Mark Messmer", "party": "Republican" },
+      { "name": "Mary Allen", "party": "Democratic" } ] },
+    { "district": 9, "candidates": [
+      { "name": "Erin Houchin", "party": "Republican" },
+      { "name": "Brad A. Meyer", "party": "Democratic" },
+      { "name": "Tonya L. Hudson", "party": "Libertarian" } ] }
+  ],
+  "measures": [
+    {
+      "designation": "Public Question #1",
+      "subject": "Denial of bail for offenses other than murder or treason",
+      "ballotTitle": "Currently, under the Constitution of the State of Indiana, a person charged with murder or treason is not entitled to be released on bail if the proof is evident or the presumption strong. Shall the Constitution of the State of Indiana be amended to provide that a person charged with an offense other than murder or treason is not entitled to bail if: (1) the proof is evident or the presumption strong; and (2) the state proves by clear and convincing evidence that no release conditions will reasonably protect the safety of any other person or the community. (This question concerns Article 1, Section 17 of the Constitution of the State of Indiana.)",
+      "summary": "Would amend Article 1, Section 17 so a court could deny bail to a person charged with any offense, not only murder or treason, when the proof is evident or the presumption strong and the state shows by clear and convincing evidence that no release conditions would reasonably protect others or the community.",
+      "source": "https://www.in.gov/counties/noble/files/2026-general-election-sample-balllots/P7.pdf"
+    },
+    {
+      "designation": "Public Question #2",
+      "subject": "Residency of city and town court judges",
+      "ballotTitle": "Shall the Constitution of the State of Indiana be amended to permit the judge of a city or town court to reside in: (1) the county in which the court is located; or (2) the bordering county closest to the city or town in which the court is located? (This question concerns Article 6, Section 6 of the Constitution of the State of Indiana.)",
+      "summary": "Would amend Article 6, Section 6 to let a city or town court judge live in the county where the court is located or in the bordering county closest to that city or town.",
+      "source": "https://www.in.gov/counties/noble/files/2026-general-election-sample-balllots/P7.pdf"
+    }
+  ],
+  "measureEffective": "2026-11-03",
+  "measureEffectiveNote": "Indiana Constitution Article 16, Section 1(c): if a majority of the electors voting on the amendment ratify it, the amendment becomes a part of the Constitution. No separate effective date was found for either amendment, so the election day, November 3, 2026, is used as the representative date. Official confirmation of the result comes later, when the Election Division tabulates the statewide returns and the Secretary of State certifies them; that date was not confirmed.",
+  "sources": [
+    "https://www.in.gov/sos/elections/candidate-information/",
+    "https://www.in.gov/sos/elections/files/Candidate_List_Abbreviated_20260922_011251PM.xlsx",
+    "https://www.in.gov/counties/noble/files/2026-general-election-sample-balllots/P7.pdf",
+    "https://www.in.gov/counties/switzerland/files/SWITZERLAND-SAMPLE-BALLOTS-9.30.2026.pdf",
+    "https://www.in.gov/counties/white/files/general-election-2026/Candidate_List_GE26.pdf",
+    "https://indianacapitalchronicle.com/voter-guides/2026-general-election/",
+    "https://indianacapitalchronicle.com/2026/02/17/indiana-bail-amendment-clears-general-assembly-sending-detention-question-to-november-ballot/",
+    "https://www.fox19.com/2026/10/07/election-2026-explaining-kentucky-indianas-ballot-measures/",
+    "https://www.wndu.com/2025/12/11/indiana-senate-rejects-redistricting-bill",
+    "https://statedemocracy.law.wisc.edu/directdemocracy50-state/2023/indiana/"
+  ],
+  "notes": [
+    "Candidates are from the Indiana Election Division's 'Candidate List - Abbreviated' for the 2026 General Election (all counties, run 2026-09-22, posted on the SOS candidate-information page). Its first column is 'BALLOT NAME', which is used verbatim here. Ballots print the names in capitals.",
+    "Candidate order follows the sample ballots: Republican, Democratic, Libertarian, then Lincoln Party.",
+    "Party labels follow the official list. Ballots print 'Republican Party' (Noble County) or 'REPUBLICAN' (Switzerland County). The minor party is 'Lincoln Party' on the official list and 'LINCOLN' on the Switzerland ballot.",
+    "No U.S. Senate seat is up in Indiana in 2026. The only statewide executive offices on the ballot are Secretary of State, State Comptroller (Auditor of State) and Treasurer of State.",
+    "Statewide judicial retention questions appear but are not modeled here: Court of Appeals Judges Mary A. DeBoer (Fourth District) and Paul A. Felix (Fifth District), and Tax Court Judge Justin L. McAdam. They appear on sample ballots from Noble and Switzerland counties, which are in different parts of the state. No Supreme Court retention question appeared.",
+    "Redistricting: on 2025-12-11 the Indiana Senate voted 31-19 against the mid-decade congressional map the House had passed, so the 2022 map stays in effect. All nine incumbents seeking reelection are listed in their current districts.",
+    "Write-ins are excluded: Andrew Delano (Secretary of State); Alexander R (Alex) Degman and 'Prescription Dope Deaths Johnson, Jr' (CD1); Phillip D. Beachy (CD3); David E. Bokash (CD4); Floyd Michael Taylor (CD9).",
+    "Public question text comes from two official county sample ballots (Noble P7, dated 2026-09-05, and Switzerland, dated 2026-09-30), decoded with the Python standard library. The two ballots match word for word. PDF extraction dropped spaces at line breaks, and they were restored by comparing the two layouts, which break lines in different places.",
+    "PQ1 is Senate Joint Resolution 1, first passed in 2023 and passed again in 2026 (the House vote was 75-11).",
+    "Polls are open 6 a.m. to 6 p.m. local time. The northwest and southwest counties are on Central time, so the last polls close at 6:00 PM CST (UTC-6), which is 00:00 UTC on Nov 4. Eastern-time counties close at 6:00 PM EST, which is 23:00 UTC."
+  ],
+  "unconfirmed": [
+    "No changes to candidates after the official list run of 2026-09-22 were checked, beyond the matching sample ballots dated 2026-09-30.",
+    "The spacing and line breaks of the public question text were rebuilt from PDF text extraction. In particular, the breaks around '(1)' and '(2)' in PQ1 may be printed as line breaks rather than spaces.",
+    "The effective date: Article 16 makes an amendment part of the Constitution on ratification. The date the Secretary of State certifies the result was not found.",
+    "The joint resolution that produced PQ2 (city and town court judge residency) was not identified.",
+    "Ballotpedia pages could not be read, so they were not used to cross-check."
+  ]
+}

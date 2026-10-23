@@ -1,0 +1,76 @@
+{
+  "_about": "Indiana, Nov 3 2026, built by build-state.py from docs/launch-content/research/IN.json (sources and gaps in IN.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Indiana: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      15
+    ],
+    "closeDate": "2026-11-04T00:00:00Z",
+    "candidates": [
+      {
+        "name": "Max Engling",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Beau Bayh",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Lauri A. Shillings",
+        "affiliation": "Libertarian",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Greg Ballard",
+        "affiliation": "Lincoln Party",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Elise Nieshalla",
+        "affiliation": "Republican",
+        "officeName": "State Comptroller (Auditor of State)"
+      },
+      {
+        "name": "Jessica Bailey",
+        "affiliation": "Democratic",
+        "officeName": "State Comptroller (Auditor of State)"
+      },
+      {
+        "name": "John Schick",
+        "affiliation": "Libertarian",
+        "officeName": "State Comptroller (Auditor of State)"
+      },
+      {
+        "name": "Daniel Elliott",
+        "affiliation": "Republican",
+        "officeName": "Treasurer of State"
+      },
+      {
+        "name": "Coumba Kebe",
+        "affiliation": "Democratic",
+        "officeName": "Treasurer of State"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Indiana Public Question #1: Denial of bail for offenses other than murder or treason",
+      "summary": "Currently, under the Constitution of the State of Indiana, a person charged with murder or treason is not entitled to be released on bail if the proof is evident or the presumption strong. Shall the Constitution of the State of Indiana be amended to provide that a person charged with an offense other than murder or treason is not entitled to bail if: (1) the proof is evident or the presumption strong; and (2) the state proves by clear and convincing evidence that no release conditions will reasonably protect the safety of any other person or the community. (This question concerns Article 1, Section 17 of the Constitution of the State of Indiana.)\n\nIn short: Would amend Article 1, Section 17 so a court could deny bail to a person charged with any offense, not only murder or treason, when the proof is evident or the presumption strong and the state shows by clear and convincing evidence that no release conditions would reasonably protect others or the community.\n\nOfficial ballot language. Source: https://www.in.gov/counties/noble/files/2026-general-election-sample-balllots/P7.pdf",
+      "effectiveDate": "2026-11-03",
+      "closeDate": "2026-11-04T00:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Indiana Public Question #2: Residency of city and town court judges",
+      "summary": "Shall the Constitution of the State of Indiana be amended to permit the judge of a city or town court to reside in: (1) the county in which the court is located; or (2) the bordering county closest to the city or town in which the court is located? (This question concerns Article 6, Section 6 of the Constitution of the State of Indiana.)\n\nIn short: Would amend Article 6, Section 6 to let a city or town court judge live in the county where the court is located or in the bordering county closest to that city or town.\n\nOfficial ballot language. Source: https://www.in.gov/counties/noble/files/2026-general-election-sample-balllots/P7.pdf",
+      "effectiveDate": "2026-11-03",
+      "closeDate": "2026-11-04T00:00:00Z"
+    }
+  ]
+}
