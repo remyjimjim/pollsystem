@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-10-23 — Midterm voting rules and whole-ballot results on staging (verified)
+
+**Requested:**
+
+> push it and deploy to staging
+
+**Changed:** Pushed `5f7244c`. Staging deployed and ran V38 (residents only).
+
+**Verified (staging):**
+
+- California District 11's results, logged out, list its included statewide
+  election and its 14 ballot measures.
+- The district ballot is `residentsOnly: true`.
+- A vote on it from the staging super, whose zipcode isn't in California, is
+  refused with 403, "You can only vote on midterms from your own state."
+
+---
+
 ## 2026-10-23 — A district ballot's results show the whole ballot
 
 **Requested:**
