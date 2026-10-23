@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-23 — UptimeRobot monitors updated for ballotbox.us.com
+
+**Requested:**
+
+> Let's set up UptimeRobot next
+
+**Changed:** `docs/MONITORING.md` now points its monitors at
+`https://ballotbox.us.com/` and `…/api/polls/search?title=uptime-check`, in
+place of the old pages.dev address. The advice to keep monitors paused until
+launch is dropped, since launch is Monday.
+
+**Verified:** each monitor URL answers as expected:
+
+- the prod and staging sites return 200;
+- the prod and staging API return `[]`;
+- the prod and staging backend health return `UP`.
+
+The UptimeRobot account and monitors are set up by the user, since the agent
+can't create third-party accounts.
+
+**Commit:** `781c348`
+
+---
+
 ## 2026-10-23 — Prod keeps one machine warm from launch
 
 **Requested:**
