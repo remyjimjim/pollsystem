@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-23 — All states on staging; bulk-publish retries
+
+**Requested:**
+
+> push it and deploy
+
+**Changed:**
+
+- Pushed `main` (CI passed). Staging deployed with the publish rule for
+  measures-only and include-only elections.
+- `load-state.bash staging` for all 47 new states. Publishing stopped after
+  149 elections with an error that wasn't captured. Publishing the next one
+  by hand worked, so the failure was transient (likely the rate limiter).
+- `create-polls.py` now retries 429, 5xx and timeouts with backoff, then
+  publishes the remaining drafts.
+- The user deployed the prod backend themselves: the permission check
+  blocks prod deploys and prod writes from this session.
+
+**Commit:** `61ebc59`
+
+---
+
 ## 2026-10-23 — Wyoming on local
 
 **Changed:** WY: one ballot for the whole state: U.S. Senate (Hageman vs Byrd), Governor, 4 other statewide offices, the open at-large House seat (4 candidates), and Initiative Proposition 1 (50% homeowner property-tax exemption). From official SoS lists.
