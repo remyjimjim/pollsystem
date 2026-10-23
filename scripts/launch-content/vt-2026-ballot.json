@@ -1,0 +1,146 @@
+{
+  "_about": "Vermont, Nov 3 2026, built by build-state.py from docs/launch-content/research/VT.json (sources and gaps in VT.md). One House seat, so one ballot for the whole state.",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm Vermont",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      46
+    ],
+    "closeDate": "2026-11-04T00:00:00Z",
+    "candidates": [
+      {
+        "name": "Amanda Janoo",
+        "affiliation": "Democratic, Progressive",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Phil Scott",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Dean Roy",
+        "affiliation": "Freedom and Unity",
+        "officeName": "Governor"
+      },
+      {
+        "name": "June Goodband",
+        "affiliation": "Peace and Justice",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Brian Judd",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Molly Gray",
+        "affiliation": "Democratic",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "John S. Rodgers",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Mike Pieciak",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Lynn LaFleur",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Zachary Hampl",
+        "affiliation": "Progressive",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Sarah Copeland Hanzas",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "H. Brooke Paige",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Rachel Shaw",
+        "affiliation": "Progressive",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Tim Ashe",
+        "affiliation": "Democratic",
+        "officeName": "Auditor of Accounts"
+      },
+      {
+        "name": "Ivar Kronick",
+        "affiliation": "Republican",
+        "officeName": "Auditor of Accounts"
+      },
+      {
+        "name": "Charity R. Clark",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Edwin Howell Kemon",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Becca Balint",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Gerald Malloy",
+        "affiliation": "Republican",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Phoenix K. Altair",
+        "affiliation": "Independent",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Adam Ortiz",
+        "affiliation": "Independent",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Suzanne \"Suz\" Seymour",
+        "affiliation": "Independent",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Ryan P. Walton",
+        "affiliation": "Independent",
+        "officeName": "U.S. Representative, At-Large"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Vermont Proposal 3: Constitutional right to collectively bargain",
+      "summary": "To see if the voters will amend the Vermont Constitution by adding Article 23 to read: Article 23. [Right to collectively bargain] That employees have a right to organize or join a labor organization for the purpose of collectively bargaining with their employer through an exclusive representative of their choosing for the purpose of negotiating wages, hours, and working conditions and to protect their economic welfare and safety in the workplace. Therefore, no law shall be adopted that interferes with, negates, or diminishes the right of employees to collectively bargain with respect to wages, hours, and other terms and conditions of employment and workplace safety, or that prohibits the application or execution of an agreement between an employer and a labor organization representing the employer’s employees that requires membership in the labor organization as a condition of employment.\n\nIn short: Would add to the Vermont Constitution a right of employees to organize and bargain collectively through a union, and bar laws that restrict that right or prohibit contracts requiring union membership as a condition of employment.\n\nOfficial ballot language. Source: https://legislature.vermont.gov/Documents/2026/Docs/BILLS/PR0003/PR0003%20As%20adopted%20by%20the%20Senate%20Official.pdf",
+      "effectiveDate": "2026-11-03",
+      "closeDate": "2026-11-04T00:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Vermont Proposal 4: Equal protection under the law",
+      "summary": "To see if the voters will amend the Vermont Constitution by adding Article 23 to read: Article 23. [Equality of rights] That the people are guaranteed equal protection under the law. The State shall not deny equal treatment under the law on account of a person’s race, ethnicity, sex, religion, disability, sexual orientation, gender identity, gender expression, or national origin. Nothing in this Article shall be interpreted or applied to prevent the adoption or implementation of measures intended to provide equality of treatment and opportunity for members of groups that have historically been subject to discrimination.\n\nIn short: Would add to the Vermont Constitution a guarantee of equal protection under the law, barring the State from denying equal treatment based on listed characteristics while allowing measures meant to remedy historical discrimination.\n\nOfficial ballot language. Source: https://legislature.vermont.gov/Documents/2026/Docs/BILLS/PR0004/PR0004%20As%20adopted%20by%20the%20Senate%20Official.pdf",
+      "effectiveDate": "2026-11-03",
+      "closeDate": "2026-11-04T00:00:00Z"
+    }
+  ]
+}

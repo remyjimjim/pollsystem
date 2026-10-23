@@ -1,0 +1,182 @@
+{
+  "state": "Vermont",
+  "abbr": "VT",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T00:00:00Z",
+  "statewide": [
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Amanda Janoo",
+          "party": "Democratic, Progressive"
+        },
+        {
+          "name": "Phil Scott",
+          "party": "Republican"
+        },
+        {
+          "name": "Dean Roy",
+          "party": "Freedom and Unity"
+        },
+        {
+          "name": "June Goodband",
+          "party": "Peace and Justice"
+        },
+        {
+          "name": "Brian Judd",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Lieutenant Governor",
+      "candidates": [
+        {
+          "name": "Molly Gray",
+          "party": "Democratic"
+        },
+        {
+          "name": "John S. Rodgers",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {
+          "name": "Mike Pieciak",
+          "party": "Democratic"
+        },
+        {
+          "name": "Lynn LaFleur",
+          "party": "Republican"
+        },
+        {
+          "name": "Zachary Hampl",
+          "party": "Progressive"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Sarah Copeland Hanzas",
+          "party": "Democratic"
+        },
+        {
+          "name": "H. Brooke Paige",
+          "party": "Republican"
+        },
+        {
+          "name": "Rachel Shaw",
+          "party": "Progressive"
+        }
+      ]
+    },
+    {
+      "office": "Auditor of Accounts",
+      "candidates": [
+        {
+          "name": "Tim Ashe",
+          "party": "Democratic"
+        },
+        {
+          "name": "Ivar Kronick",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Charity R. Clark",
+          "party": "Democratic"
+        },
+        {
+          "name": "Edwin Howell Kemon",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 0,
+      "candidates": [
+        {
+          "name": "Becca Balint",
+          "party": "Democratic"
+        },
+        {
+          "name": "Gerald Malloy",
+          "party": "Republican"
+        },
+        {
+          "name": "Phoenix K. Altair",
+          "party": "Independent"
+        },
+        {
+          "name": "Adam Ortiz",
+          "party": "Independent"
+        },
+        {
+          "name": "Suzanne \"Suz\" Seymour",
+          "party": "Independent"
+        },
+        {
+          "name": "Ryan P. Walton",
+          "party": "Independent"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Proposal 3",
+      "subject": "Constitutional right to collectively bargain",
+      "ballotTitle": "To see if the voters will amend the Vermont Constitution by adding Article 23 to read: Article 23. [Right to collectively bargain] That employees have a right to organize or join a labor organization for the purpose of collectively bargaining with their employer through an exclusive representative of their choosing for the purpose of negotiating wages, hours, and working conditions and to protect their economic welfare and safety in the workplace. Therefore, no law shall be adopted that interferes with, negates, or diminishes the right of employees to collectively bargain with respect to wages, hours, and other terms and conditions of employment and workplace safety, or that prohibits the application or execution of an agreement between an employer and a labor organization representing the employer’s employees that requires membership in the labor organization as a condition of employment.",
+      "summary": "Would add to the Vermont Constitution a right of employees to organize and bargain collectively through a union, and bar laws that restrict that right or prohibit contracts requiring union membership as a condition of employment.",
+      "source": "https://legislature.vermont.gov/Documents/2026/Docs/BILLS/PR0003/PR0003%20As%20adopted%20by%20the%20Senate%20Official.pdf"
+    },
+    {
+      "designation": "Proposal 4",
+      "subject": "Equal protection under the law",
+      "ballotTitle": "To see if the voters will amend the Vermont Constitution by adding Article 23 to read: Article 23. [Equality of rights] That the people are guaranteed equal protection under the law. The State shall not deny equal treatment under the law on account of a person’s race, ethnicity, sex, religion, disability, sexual orientation, gender identity, gender expression, or national origin. Nothing in this Article shall be interpreted or applied to prevent the adoption or implementation of measures intended to provide equality of treatment and opportunity for members of groups that have historically been subject to discrimination.",
+      "summary": "Would add to the Vermont Constitution a guarantee of equal protection under the law, barring the State from denying equal treatment based on listed characteristics while allowing measures meant to remedy historical discrimination.",
+      "source": "https://legislature.vermont.gov/Documents/2026/Docs/BILLS/PR0004/PR0004%20As%20adopted%20by%20the%20Senate%20Official.pdf"
+    }
+  ],
+  "measureEffective": "2026-11-03",
+  "measureEffectiveNote": "Sec. 3 of each proposal: the amendment 'shall become a part of the Constitution of the State of Vermont on the first Tuesday after the first Monday of November 2026 when ratified and adopted by the people of this State in accordance with the provisions of 17 V.S.A. chapter 32', i.e. Election Day, Nov 3, 2026, once ratification is confirmed by the official canvass.",
+  "sources": [
+    "https://outside.vermont.gov/dept/sos/Elections_Division/election_info_resources/candidates/2026_general_election_qualified_candidates.xlsx",
+    "https://sos.vermont.gov/elections/election-info-resources/candidates/",
+    "https://sos.vermont.gov/elections/election-info-resources",
+    "https://sos.vermont.gov/elections/election-info-resources/election-law/",
+    "https://sos.vermont.gov/vsara/learn/constitution/amending-the-constitution/proposals",
+    "https://legislature.vermont.gov/Documents/2026/Docs/BILLS/PR0003/PR0003%20As%20adopted%20by%20the%20Senate%20Official.pdf",
+    "https://legislature.vermont.gov/Documents/2026/Docs/BILLS/PR0004/PR0004%20As%20adopted%20by%20the%20Senate%20Official.pdf",
+    "https://ballotpedia.org/Vermont_elections,_2026",
+    "https://ballotpedia.org/Vermont_Proposal_3,_Right_to_Collective_Bargaining_Amendment_(2026)",
+    "https://ballotpedia.org/Vermont_Proposal_4,_Equal_Protection_of_Law_Amendment_(2026)"
+  ],
+  "notes": [
+    "No U.S. Senate race in Vermont in 2026. Vermont elects Governor and Lieutenant Governor separately (not as a ticket), all statewide officers to 2-year terms.",
+    "Candidates are from the SOS '2026 General Election Qualified Candidates' spreadsheet, read 2026-10-23. Names are listed there in capitals and are given here in normal case with initials and nicknames as listed. Write-ins (e.g. Cris Ericson for U.S. House per Ballotpedia) are omitted.",
+    "Fusion: Amanda Janoo is listed as DEM/PROG, combined here as 'Democratic, Progressive' (major party first). 'Peace and Justice' and 'Freedom and Unity' are the party labels as listed by the SOS (Ballotpedia: 'Green Mountain Peace and Justice Party of Vermont', 'Freedom and Unity Party').",
+    "Candidates are ordered major parties first; Vermont ballots list candidates alphabetically by surname.",
+    "Vermont Constitution requires a majority for Governor, Lieutenant Governor and Treasurer; if no candidate wins a majority, the General Assembly elects the officer in January (SOS election-law page).",
+    "H. Brooke Paige (R) withdrew from the AG, Auditor and Treasurer races after the primary (Ballotpedia) and remains the Republican nominee for Secretary of State, consistent with the SOS list.",
+    "Proposals 3 and 4 are legislatively referred constitutional amendments (PR.3 completed legislative passage May 1, 2025; PR.4 May 13, 2026, per the SOS/VSARA proposals list). Both texts number the new provision 'Article 23' of Chapter I.",
+    "Polls open between 5 and 10 a.m. and close at 7 p.m. statewide (SOS); all of Vermont is on Eastern time, 7 p.m. EST = 00:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Proposal ballot wording ('To see if the voters will amend the Vermont Constitution by adding Article 23 to read: …') is from Ballotpedia, which cites the legislature; the amendment text matches the official PR.3/PR.4 documents, but the printed ballot (or SOS sample ballot) was not seen.",
+    "How the two 'Article 23' amendments would be numbered if both pass was not determined.",
+    "Ballot-face party labels and name case were not checked against a printed sample ballot."
+  ]
+}
