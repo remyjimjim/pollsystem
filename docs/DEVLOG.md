@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — West Virginia on local
+
+**Changed:** WV: U.S. Senate (Capito, Anderson, Wilson), Amendment 1 (citizens-only voting), 2 district ballots. Candidates come from the Secretary of State's candidate list. Statewide courts were decided in May. The amendment wording comes from the legal notice printed in the Moorefield Examiner, because wvlegislature.gov returned 500 (see `WV.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `b743199`
+
+---
+
 ## 2026-10-23 — Maine on local
 
 **Changed:** ME: U.S. Senate is Collins vs Jackson: Platner won the Democratic primary, then withdrew on 7/10. Governor has 3 candidates. 2 district ballots, no referendum questions. The Senate and House races are ranked-choice, and their offices say so; Governor isn't ranked-choice. Taken from the Secretary of State's final candidate list and its withdrawals/replacements list.
