@@ -1,0 +1,180 @@
+{
+  "_about": "Alabama, Nov 3 2026, built by build-state.py from docs/launch-content/research/AL.json (sources and gaps in AL.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Alabama: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      1
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Doug Jones",
+        "affiliation": "Democrat",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Tommy Tuberville",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Phillip Ensler",
+        "affiliation": "Democrat",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "John Wahl",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Everett Wess",
+        "affiliation": "Democrat",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Barry Moore",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Jeff McLaughlin",
+        "affiliation": "Democrat",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Katherine Robertson",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Brad Mendheim",
+        "affiliation": "Republican",
+        "officeName": "Associate Justice of the Supreme Court, Place 7"
+      },
+      {
+        "name": "Ashleigh Meyer Dunham",
+        "affiliation": "Democrat",
+        "officeName": "Associate Justice of the Supreme Court, Place 8"
+      },
+      {
+        "name": "Greg Shaw",
+        "affiliation": "Republican",
+        "officeName": "Associate Justice of the Supreme Court, Place 8"
+      },
+      {
+        "name": "Benjamin M. Bowden",
+        "affiliation": "Republican",
+        "officeName": "Court of Civil Appeals Judge, Place 4"
+      },
+      {
+        "name": "Matt Fridy",
+        "affiliation": "Republican",
+        "officeName": "Court of Civil Appeals Judge, Place 5"
+      },
+      {
+        "name": "Mary Windom",
+        "affiliation": "Republican",
+        "officeName": "Court of Criminal Appeals Judge, Place 4"
+      },
+      {
+        "name": "Riggs Walker",
+        "affiliation": "Republican",
+        "officeName": "Court of Criminal Appeals Judge, Place 5"
+      },
+      {
+        "name": "Wayne Rogers",
+        "affiliation": "Democrat",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Caroleene Dobson",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Rosilyn Houston",
+        "affiliation": "Democrat",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Young Boozer",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Violet Edwards",
+        "affiliation": "Democrat",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Andrew Sorrell",
+        "affiliation": "Republican",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Ron Sparks",
+        "affiliation": "Democrat",
+        "officeName": "Commissioner of Agriculture and Industries"
+      },
+      {
+        "name": "Corey Hill",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Agriculture and Industries"
+      },
+      {
+        "name": "James O. Gordon",
+        "affiliation": "Democrat",
+        "officeName": "Public Service Commission, Place No. 1"
+      },
+      {
+        "name": "Matt Gentry",
+        "affiliation": "Republican",
+        "officeName": "Public Service Commission, Place No. 1"
+      },
+      {
+        "name": "Sheila D. McNeil",
+        "affiliation": "Democrat",
+        "officeName": "Public Service Commission, Place No. 2"
+      },
+      {
+        "name": "Jim Zig Zeigler",
+        "affiliation": "Republican",
+        "officeName": "Public Service Commission, Place No. 2"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Alabama Statewide Amendment 1: Lieutenant Governor vacancies, legislative officer pay and travel approval",
+      "summary": "Proposing an amendment to the Constitution of Alabama of 2022, to provide for the election of a Lieutenant Governor if the Office of Lieutenant Governor becomes vacant during the first two years of a term, to authorize the Legislature to set the salary of the Lieutenant Governor and officers of the Legislature, and to require any expenditure of legislative funds for travel to be approved by a legislative officer. (Proposed by Act 2026-341)\n\nIn short: Would require an election to fill a Lieutenant Governor vacancy arising more than 60 days before the next general election for state officers, let the Legislature set the pay of the Lieutenant Governor and legislative officers by joint resolution, and require a chamber's elected officer to approve legislators' travel spending.\n\nOfficial ballot language. Source: https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Alabama Statewide Amendment 2: Merging county school systems",
+      "summary": "Proposing an amendment to the Constitution of Alabama of 2022, to provide a process for the creation of a consolidated county school system by merging two or more contiguous county boards of education; to require the State Board of Education to conduct an impact study on the potential effects of the consolidation; to require publication of the impact study; to provide a procedure for protesting a proposed consolidation of two or more county school systems; and to require the State Board of Education to adopt rules. (Proposed by Act 2026-378)\n\nIn short: Would let neighboring county boards of education agree to merge into one multi-county school system after a published State Board of Education impact study, with a vote in the affected counties required if at least 25 percent of qualified voters in any affected system protest.\n\nOfficial ballot language. Source: https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Alabama Statewide Amendment 3: Pledge of Allegiance and student-led prayer in public schools",
+      "summary": "Proposing an amendment to the Constitution of Alabama of 2022, to require local boards of education to adopt policies requiring each public K-12 school to recite The Pledge of Allegiance to the United States flag at the beginning of each school day; and to require local boards of education to adopt a policy authorizing student-initiated and student-led prayer. (Proposed by Act 2026-379)\n\nIn short: Would require local school boards to adopt policies for a daily Pledge of Allegiance at the start of each school day and for voluntary student-initiated, student-led prayer in public K-12 schools, with students able to opt out of either.\n\nOfficial ballot language. Source: https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Alabama Statewide Amendment 4: Weekly Star-Spangled Banner in public schools",
+      "summary": "Proposing an amendment to the Constitution of Alabama of 2022, to require local boards of education to adopt policies requiring each public K-12 school to broadcast or sanction the performance of the first stanza of The Star-Spangled Banner at least once per week during school hours. (Proposed by Act 2026-424)\n\nIn short: Would require local school boards to adopt policies under which each public K-12 school broadcasts, or allows a school-approved group or vocalist to perform, the first stanza of The Star-Spangled Banner at least once a week during school hours.\n\nOfficial ballot language. Source: https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    }
+  ]
+}

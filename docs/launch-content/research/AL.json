@@ -1,0 +1,353 @@
+{
+  "state": "Alabama",
+  "abbr": "AL",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Doug Jones",
+          "party": "Democrat"
+        },
+        {
+          "name": "Tommy Tuberville",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Lieutenant Governor",
+      "candidates": [
+        {
+          "name": "Phillip Ensler",
+          "party": "Democrat"
+        },
+        {
+          "name": "John Wahl",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Everett Wess",
+          "party": "Democrat"
+        },
+        {
+          "name": "Barry Moore",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Jeff McLaughlin",
+          "party": "Democrat"
+        },
+        {
+          "name": "Katherine Robertson",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Associate Justice of the Supreme Court, Place 7",
+      "candidates": [
+        {
+          "name": "Brad Mendheim",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Associate Justice of the Supreme Court, Place 8",
+      "candidates": [
+        {
+          "name": "Ashleigh Meyer Dunham",
+          "party": "Democrat"
+        },
+        {
+          "name": "Greg Shaw",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Court of Civil Appeals Judge, Place 4",
+      "candidates": [
+        {
+          "name": "Benjamin M. Bowden",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Court of Civil Appeals Judge, Place 5",
+      "candidates": [
+        {
+          "name": "Matt Fridy",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Court of Criminal Appeals Judge, Place 4",
+      "candidates": [
+        {
+          "name": "Mary Windom",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Court of Criminal Appeals Judge, Place 5",
+      "candidates": [
+        {
+          "name": "Riggs Walker",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Wayne Rogers",
+          "party": "Democrat"
+        },
+        {
+          "name": "Caroleene Dobson",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {
+          "name": "Rosilyn Houston",
+          "party": "Democrat"
+        },
+        {
+          "name": "Young Boozer",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "State Auditor",
+      "candidates": [
+        {
+          "name": "Violet Edwards",
+          "party": "Democrat"
+        },
+        {
+          "name": "Andrew Sorrell",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Commissioner of Agriculture and Industries",
+      "candidates": [
+        {
+          "name": "Ron Sparks",
+          "party": "Democrat"
+        },
+        {
+          "name": "Corey Hill",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Public Service Commission, Place No. 1",
+      "candidates": [
+        {
+          "name": "James O. Gordon",
+          "party": "Democrat"
+        },
+        {
+          "name": "Matt Gentry",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Public Service Commission, Place No. 2",
+      "candidates": [
+        {
+          "name": "Sheila D. McNeil",
+          "party": "Democrat"
+        },
+        {
+          "name": "Jim Zig Zeigler",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Clyde Jones",
+          "party": "Democrat"
+        },
+        {
+          "name": "Jerry Carl",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Shomari C. Figures",
+          "party": "Democrat"
+        },
+        {
+          "name": "Rhett Marques",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Lee McInnis",
+          "party": "Democrat"
+        },
+        {
+          "name": "Mike Rogers",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Amanda N. Pusczek",
+          "party": "Democrat"
+        },
+        {
+          "name": "Robert B. Aderholt",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Andrew Sneed",
+          "party": "Democrat"
+        },
+        {
+          "name": "Dale W. Strong",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Maurice Mercer",
+          "party": "Democrat"
+        },
+        {
+          "name": "Gary Palmer",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Terri Sewell",
+          "party": "Democrat"
+        },
+        {
+          "name": "Ammie Akin",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Statewide Amendment 1",
+      "subject": "Lieutenant Governor vacancies, legislative officer pay and travel approval",
+      "ballotTitle": "Proposing an amendment to the Constitution of Alabama of 2022, to provide for the election of a Lieutenant Governor if the Office of Lieutenant Governor becomes vacant during the first two years of a term, to authorize the Legislature to set the salary of the Lieutenant Governor and officers of the Legislature, and to require any expenditure of legislative funds for travel to be approved by a legislative officer. (Proposed by Act 2026-341)",
+      "summary": "Would require an election to fill a Lieutenant Governor vacancy arising more than 60 days before the next general election for state officers, let the Legislature set the pay of the Lieutenant Governor and legislative officers by joint resolution, and require a chamber's elected officer to approve legislators' travel spending.",
+      "source": "https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf"
+    },
+    {
+      "designation": "Statewide Amendment 2",
+      "subject": "Merging county school systems",
+      "ballotTitle": "Proposing an amendment to the Constitution of Alabama of 2022, to provide a process for the creation of a consolidated county school system by merging two or more contiguous county boards of education; to require the State Board of Education to conduct an impact study on the potential effects of the consolidation; to require publication of the impact study; to provide a procedure for protesting a proposed consolidation of two or more county school systems; and to require the State Board of Education to adopt rules. (Proposed by Act 2026-378)",
+      "summary": "Would let neighboring county boards of education agree to merge into one multi-county school system after a published State Board of Education impact study, with a vote in the affected counties required if at least 25 percent of qualified voters in any affected system protest.",
+      "source": "https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf"
+    },
+    {
+      "designation": "Statewide Amendment 3",
+      "subject": "Pledge of Allegiance and student-led prayer in public schools",
+      "ballotTitle": "Proposing an amendment to the Constitution of Alabama of 2022, to require local boards of education to adopt policies requiring each public K-12 school to recite The Pledge of Allegiance to the United States flag at the beginning of each school day; and to require local boards of education to adopt a policy authorizing student-initiated and student-led prayer. (Proposed by Act 2026-379)",
+      "summary": "Would require local school boards to adopt policies for a daily Pledge of Allegiance at the start of each school day and for voluntary student-initiated, student-led prayer in public K-12 schools, with students able to opt out of either.",
+      "source": "https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf"
+    },
+    {
+      "designation": "Statewide Amendment 4",
+      "subject": "Weekly Star-Spangled Banner in public schools",
+      "ballotTitle": "Proposing an amendment to the Constitution of Alabama of 2022, to require local boards of education to adopt policies requiring each public K-12 school to broadcast or sanction the performance of the first stanza of The Star-Spangled Banner at least once per week during school hours. (Proposed by Act 2026-424)",
+      "summary": "Would require local school boards to adopt policies under which each public K-12 school broadcasts, or allows a school-approved group or vocalist to perform, the first stanza of The Star-Spangled Banner at least once a week during school hours.",
+      "source": "https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf"
+    }
+  ],
+  "measureEffective": "2026-11-24",
+  "measureEffectiveNote": "Under Sections 284-285 of the Constitution of Alabama of 2022, an amendment approved by a majority of those voting on it becomes valid as part of the Constitution; in practice it takes effect when the State Canvassing Board (Governor, Attorney General, Secretary of State) fully executes the certification of results. The Board certified on Nov 28, 2022 (20 days after that general) and Nov 26, 2024 (21 days after); 2026-11-24, 21 days after Nov 3, is used as a representative date, not a fixed statutory deadline.",
+  "sources": [
+    "https://www.sos.alabama.gov/alabama-votes/2026-general-election-sample-ballots",
+    "https://www.sos.alabama.gov/sites/default/files/sample-ballots/2026/gen/2026GeneralElectionStatewideBack.pdf",
+    "https://www.sos.alabama.gov/alabama-votes/voter/election-information/2026",
+    "https://www.sos.alabama.gov/sites/default/files/election-2026/2026GeneralElectionStateCertificationofDemocraticCandidates.pdf",
+    "https://www.sos.alabama.gov/sites/default/files/election-2026/2026GeneralElectionStateCertificationofRepublicanCandidates.pdf",
+    "https://www.sos.alabama.gov/sites/default/files/election-2026/2026GeneralElection-StateCertificationofIndependentCandidate.pdf",
+    "https://www.sos.alabama.gov/sites/default/files/election-2026/2026GeneralElectionStateCertificationofConstitutionalAmendments.pdf",
+    "https://www.sos.alabama.gov/sites/default/files/election-2026/2026-VoterGuide.pdf",
+    "https://sos.alabama.gov/sites/default/files/2022-11/ALStateCanvassingBoard-2022-11-28-Minutes.pdf",
+    "https://www.scotusblog.com/2026/05/court-clears-way-for-alabama-to-use-congressional-map-blocked-by-lower-court-as-racially-discrim/",
+    "https://www.npr.org/2026/06/02/nx-s1-5844744/supreme-court-alabama-congressional-districts",
+    "https://www.wbhm.org/local-news/2026-08-11/2026-alabama-special-congressional-primary-results",
+    "https://alabamareflector.com/2026/08/05/alabamians-to-vote-on-four-statewide-constitutional-amendments-in-november/",
+    "https://www.thegreenpapers.com/G26/AL"
+  ],
+  "notes": [
+    "Candidates, offices and parties are taken from the official SOS sample ballots for all 67 counties (general election, Nov 3, 2026), text-extracted with a Python standard-library script; every county ballot agrees on every statewide and congressional contest. Names are printed in capitals and converted to mixed case here; party labels are as printed ('Democrat', 'Republican').",
+    "No independent or minor-party candidate appears in any statewide or congressional contest on any county sample ballot; independents appear only in some legislative and local contests.",
+    "Unopposed on the ballot: Supreme Court Place 7 (Mendheim), Court of Civil Appeals Places 4 and 5, Court of Criminal Appeals Places 4 and 5. Alabama judicial races are partisan.",
+    "Congressional map: NOT the court-ordered remedial map. On June 2, 2026 the U.S. Supreme Court (6-3) stayed the three-judge court's May 26 order, letting Alabama use the Legislature's 2023 plan for 2026; special congressional primaries were held Aug 11, 2026 in CDs 1, 2, 6 and 7 under that plan. Sample ballots confirm (e.g., all of Mobile and Baldwin in CD 1).",
+    "U.S. Senate seat is the Class 2 seat (Tuberville, running for Governor); Rep. Barry Moore (former CD 1) is the Republican nominee.",
+    "The four statewide amendments follow the federal/state/local offices and are listed on the ballot as 'Statewide Amendment 1'-'4'; county-specific local amendments on some ballots are excluded.",
+    "Polls are open 7 A.M. to 7 P.M. (SOS 2026 voter guide); the latest close is 7:00 PM CST = 01:00 UTC Nov 4. The guide notes polling places in the Eastern Time zone may run 7-7 Eastern, closing an hour earlier in UTC."
+  ],
+  "unconfirmed": [
+    "The SOS candidate and amendment certification PDFs are scanned images (JBIG2) and could not be read; candidate data rests on the official sample ballots, which are themselves SOS-published, with Green Papers and news as cross-checks.",
+    "Exact mixed-case spelling of names (ballots are all caps), e.g. 'McLaughlin', 'McInnis', 'McNeil', 'Jim Zig Zeigler' (printed without quotation marks).",
+    "Statewide Amendment 2 ballot text is printed '(Proposed by Act 2026- 378)' with a stray space on the sample ballots; normalised to 'Act 2026-378' to match the official ballot statement.",
+    "Amendment effective date: 2026-11-24 is an estimate from prior State Canvassing Board practice; the statutory canvass deadline was not confirmed from the Code text.",
+    "Further litigation over the congressional map after the June 2 stay was not tracked; the sample ballots show the 2023 plan in use."
+  ]
+}

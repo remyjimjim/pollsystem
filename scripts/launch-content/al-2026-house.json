@@ -1,0 +1,160 @@
+{
+  "_about": "Alabama, Nov 3 2026, built by build-state.py from docs/launch-content/research/AL.json (sources and gaps in AL.md). One ballot per district, each including \"2026 Midterm · Alabama: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Alabama District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        1
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Clyde Jones",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Jerry Carl",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Alabama District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        1
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Shomari C. Figures",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Rhett Marques",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Alabama District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        1
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Lee McInnis",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Mike Rogers",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Alabama District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        1
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Amanda N. Pusczek",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Robert B. Aderholt",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Alabama District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        1
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Andrew Sneed",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Dale W. Strong",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Alabama District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        1
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Maurice Mercer",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Gary Palmer",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Alabama District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        1
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Terri Sewell",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Ammie Akin",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Alabama: statewide races & measures"
+}
