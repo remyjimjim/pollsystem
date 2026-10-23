@@ -1,0 +1,39 @@
+{
+  "_about": "Kentucky, Nov 3 2026, built by build-state.py from docs/launch-content/research/KY.json (sources and gaps in KY.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Kentucky: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      18
+    ],
+    "closeDate": "2026-11-04T00:00:00Z",
+    "candidates": [
+      {
+        "name": "Charles Booker",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Andy Barr",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Christopher Campbell",
+        "affiliation": "Kentucky Party",
+        "officeName": "U.S. Senator"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Kentucky Constitutional Amendment 1: Limit on governor's pardons and commutations around gubernatorial elections",
+      "summary": "Are you in favor of limiting a Governor's ability to grant pardons or commute sentences by prohibiting him or her from granting pardons or commuting sentences during the time period beginning 60 days prior to the general election at which the Governor is elected, and ending when the Governor is sworn in for that term by amending the Constitution of Kentucky as stated below?\n\nIn short: Would amend Section 77 of the Kentucky Constitution to bar the Governor from granting pardons or commuting sentences from 60 days before a gubernatorial election until the fifth Tuesday after that election (when the new term begins), and would make the section's language gender-neutral.\n\nOfficial ballot language. Source: https://sos.ky.gov/elections/Pages/Constitutional-Amendments.aspx",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T00:00:00Z"
+    }
+  ]
+}

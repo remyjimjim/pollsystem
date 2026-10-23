@@ -1,0 +1,168 @@
+{
+  "_about": "Kentucky, Nov 3 2026, built by build-state.py from docs/launch-content/research/KY.json (sources and gaps in KY.md). One ballot per district, each including \"2026 Midterm · Kentucky: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kentucky District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        18
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "John \"Drew\" Williams",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "James R. Comer",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kentucky District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        18
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Megan Wingfield",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "S. Brett Guthrie",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Thomas A. Loecken",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kentucky District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        18
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Morgan McGarvey",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Maria Teresa Rodriguez",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kentucky District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        18
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Melissa Claire Strange",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Ed Gallrein",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Jeremy Todd",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kentucky District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        18
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Ned Pillersdorf",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Hal Rogers",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Gerardo Serrano",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Mikel Wein",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kentucky District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        18
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Zach Dembo",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Ralph Alvarado",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Jay J Bowman",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Pete Lynch",
+          "affiliation": "Kentucky Party",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Kentucky: statewide races & measures"
+}

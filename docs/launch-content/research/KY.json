@@ -1,0 +1,168 @@
+{
+  "state": "Kentucky",
+  "abbr": "KY",
+  "pollCloseLocal": "6:00 PM",
+  "pollCloseUtc": "2026-11-04T00:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        {
+          "name": "Charles Booker",
+          "party": "Democratic"
+        },
+        {
+          "name": "Andy Barr",
+          "party": "Republican"
+        },
+        {
+          "name": "Christopher Campbell",
+          "party": "Kentucky Party"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "John \"Drew\" Williams",
+          "party": "Democratic"
+        },
+        {
+          "name": "James R. Comer",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Megan Wingfield",
+          "party": "Democratic"
+        },
+        {
+          "name": "S. Brett Guthrie",
+          "party": "Republican"
+        },
+        {
+          "name": "Thomas A. Loecken",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Morgan McGarvey",
+          "party": "Democratic"
+        },
+        {
+          "name": "Maria Teresa Rodriguez",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Melissa Claire Strange",
+          "party": "Democratic"
+        },
+        {
+          "name": "Ed Gallrein",
+          "party": "Republican"
+        },
+        {
+          "name": "Jeremy Todd",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Ned Pillersdorf",
+          "party": "Democratic"
+        },
+        {
+          "name": "Hal Rogers",
+          "party": "Republican"
+        },
+        {
+          "name": "Gerardo Serrano",
+          "party": "Independent"
+        },
+        {
+          "name": "Mikel Wein",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Zach Dembo",
+          "party": "Democratic"
+        },
+        {
+          "name": "Ralph Alvarado",
+          "party": "Republican"
+        },
+        {
+          "name": "Jay J Bowman",
+          "party": "Independent"
+        },
+        {
+          "name": "Pete Lynch",
+          "party": "Kentucky Party"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Amendment 1",
+      "subject": "Limit on governor's pardons and commutations around gubernatorial elections",
+      "ballotTitle": "Are you in favor of limiting a Governor's ability to grant pardons or commute sentences by prohibiting him or her from granting pardons or commuting sentences during the time period beginning 60 days prior to the general election at which the Governor is elected, and ending when the Governor is sworn in for that term by amending the Constitution of Kentucky as stated below?",
+      "summary": "Would amend Section 77 of the Kentucky Constitution to bar the Governor from granting pardons or commuting sentences from 60 days before a gubernatorial election until the fifth Tuesday after that election (when the new term begins), and would make the section's language gender-neutral.",
+      "source": "https://sos.ky.gov/elections/Pages/Constitutional-Amendments.aspx"
+    }
+  ],
+  "measureEffective": "2026-11-23",
+  "measureEffectiveNote": "Neither SB 10 (2026 Ky. Acts ch. 12) nor Ky. Const. Sections 256-257 sets a separate effective date; an amendment approved by a majority voting on it becomes part of the Constitution, taken here as effective when the State Board of Elections tabulates and certifies the statewide result. KRS 118.425(5) requires the State Board to meet no later than the third Monday after the election, November 23, 2026 (per the SBE 2026 Election Calendar); used as the representative date.",
+  "sources": [
+    "https://web.sos.ky.gov/CandidateFilings/Default.aspx?id=3",
+    "https://web.sos.ky.gov/CandidateFilings/Default.aspx?id=4",
+    "https://web.sos.ky.gov/CandidateFilings/Default.aspx?id=14",
+    "https://web.sos.ky.gov/CandidateFilings/Default.aspx?id=15",
+    "https://web.sos.ky.gov/CandidateFilings/Default.aspx?id=23",
+    "https://web.sos.ky.gov/CandidateFilings/Default.aspx?cand=11733",
+    "https://sos.ky.gov/elections/Pages/Constitutional-Amendments.aspx",
+    "https://apps.legislature.ky.gov/record/26rs/sb10.html",
+    "https://apps.legislature.ky.gov/recorddocuments/bill/26RS/sb10/bill.pdf",
+    "https://elect.ky.gov/Resources/Documents/2026%20Election%20Calendar.pdf",
+    "https://www.lpm.org/news/2026-05-19/charles-booker-wins-democratic-primary-for-us-senate-in-kentucky-will-face-barr",
+    "https://spectrumnews1.com/ky/louisville/news/2026/05/20/massie-loses-primary-to-trump-endorsed-ed-gallrein",
+    "https://www.wuky.org/wuky-news/2026-06-09/congressional-contender-zach-dembo-gets-a-warm-welcome-from-beshear-at-lexington-rally"
+  ],
+  "notes": [
+    "Candidates are from the Kentucky Secretary of State's 'Candidate Filings' database for the 2026 General Election (read 2026-10-23); the database lists primary nominees plus independent and minor-party filers, with primary losers dropped. Write-ins (Senate: Thomas Michael Murphy; KY-4: Peter Harmon Williams; KY-6: Robert Quigley; KY-5: Billy Ray Wilson) are left out.",
+    "KY-4: Mohammad Wael Ahmad (Kentucky Party) is listed by the SOS as withdrawn/deceased/disqualified and is omitted. Ed Gallrein defeated Rep. Thomas Massie in the May 19 primary (news cross-check).",
+    "Party labels are the SOS filing labels shortened ('Republican Party' -> 'Republican'); 'Kentucky Party' is kept in full because 'Kentucky' alone would be ambiguous.",
+    "No statewide judicial race: the 2026 Supreme Court (3rd District, Debra Hembree Lambert, unopposed) and Court of Appeals (3rd/2nd and 5th/1st) seats are elected by district and are nonpartisan, so they are not included.",
+    "Constitutional Amendment 1 is the only statewide measure (SOS filings list Yes/No for 'Constitutional Amendment 1' only; the SOS 2026 Constitutional Amendments page shows one). The ballot prints the question followed by the full amended text of Section 77; ballotTitle holds the question only.",
+    "Polls are open 6 a.m. to 6 p.m. prevailing local time (SBE 2026 calendar, KRS 118.035). Western Kentucky is on Central time; 6 PM CST (UTC-6) on Nov 3 = 00:00 UTC Nov 4, the latest close in the state. Eastern Kentucky closes at 23:00 UTC."
+  ],
+  "unconfirmed": [
+    "Exact party wording printed on the ballot face (e.g. 'Democratic' vs 'Democratic Party') and candidate order were not checked against a county sample ballot.",
+    "Effective date: no Kentucky source read states explicitly when an approved amendment takes effect; 2026-11-23 is the statutory deadline for the State Board of Elections' tabulation, and the board may certify earlier.",
+    "Whether the 'Constitutional Amendment 1' designation is printed on the ballot itself, or only used by the SOS, was not checked against a sample ballot."
+  ]
+}
