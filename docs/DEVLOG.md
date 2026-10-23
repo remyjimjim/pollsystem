@@ -61,6 +61,20 @@ logged.
 
 ---
 
+## 2026-10-23 — Keep Python bytecode out of git
+
+**Requested:** (cleanup after the launch-content commit)
+
+**Changed:**
+
+- `89a354a`: removed a `__pycache__/*.pyc` that `2628948` had committed by
+  accident (left over from checking `create-polls.py`).
+- Added `__pycache__/` and `*.pyc` to `.gitignore`.
+
+**Commits:** `89a354a`
+
+---
+
 ## 2026-10-23 — Launch content: Washington research, statewide election drafted
 
 **Requested:**
