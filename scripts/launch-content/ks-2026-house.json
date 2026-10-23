@@ -1,0 +1,114 @@
+{
+  "_about": "Kansas, Nov 3 2026, built by build-state.py from docs/launch-content/research/KS.json (sources and gaps in KS.md). One ballot per district, each including \"2026 Midterm · Kansas: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kansas District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        17
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Lauren Reinhold",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Tracey Mann",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Steven Jacob",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kansas District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        17
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Don Coover",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Derek Schmidt",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "John Hauer",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kansas District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        17
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Sharice L. Davids",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Eric Jenkins",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Steven A Hohe",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Kansas District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        17
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Katy Tyndell",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Ron Estes",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Drew Cranmer",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Kansas: statewide races & measures"
+}

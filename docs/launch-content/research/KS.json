@@ -1,0 +1,129 @@
+{
+  "state": "Kansas",
+  "abbr": "KS",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T02:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        { "name": "Adam Hamilton", "party": "Democratic" },
+        { "name": "Roger Marshall", "party": "Republican" },
+        { "name": "David C Graham", "party": "Libertarian" }
+      ]
+    },
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        { "name": "Cindy Holscher / KC Ohaebosim", "party": "Democratic" },
+        { "name": "Ty Masterson / Jeffrey Klemp", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        { "name": "Jennifer Day", "party": "Democratic" },
+        { "name": "Pat Proctor", "party": "Republican" },
+        { "name": "Scott E. Morgan", "party": "United Kansas" }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        { "name": "Chris Mann", "party": "Democratic" },
+        { "name": "Kris Kobach", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        { "name": "Juan C. Luengo", "party": "Democratic" },
+        { "name": "Steven Johnson", "party": "Republican" },
+        { "name": "Eric Lund", "party": "Libertarian" }
+      ]
+    },
+    {
+      "office": "Commissioner of Insurance",
+      "candidates": [
+        { "name": "Dinah Sykes", "party": "Democratic" },
+        { "name": "Daniel Hawkins", "party": "Republican" },
+        { "name": "Ric Koehn", "party": "Libertarian" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        { "name": "Lauren Reinhold", "party": "Democratic" },
+        { "name": "Tracey Mann", "party": "Republican" },
+        { "name": "Steven Jacob", "party": "Libertarian" }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        { "name": "Don Coover", "party": "Democratic" },
+        { "name": "Derek Schmidt", "party": "Republican" },
+        { "name": "John Hauer", "party": "Libertarian" }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        { "name": "Sharice L. Davids", "party": "Democratic" },
+        { "name": "Eric Jenkins", "party": "Republican" },
+        { "name": "Steven A Hohe", "party": "Libertarian" }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        { "name": "Katy Tyndell", "party": "Democratic" },
+        { "name": "Ron Estes", "party": "Republican" },
+        { "name": "Drew Cranmer", "party": "Libertarian" }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Amendment (HCR 5004)",
+      "subject": "Citizenship requirement for voting",
+      "ballotTitle": "Explanatory statement. This amendment would clarify that only a person who is a citizen of the United States is eligible to vote in this state. A vote for this proposition would clarify that only a person who is a citizen of the United States is eligible to vote in this state. A vote against this proposition would make no change to the constitution of the state of Kansas, and the language concerning voter qualifications would remain the same.",
+      "summary": "Would reword Article 5, Section 1 of the Kansas Constitution to state that no person is a qualified elector unless the person is a U.S. citizen, is at least 18, and (with existing exceptions) resides in the voting area.",
+      "source": "https://www.sos.ks.gov/elections/proposed-constitutional-amendments.html"
+    }
+  ],
+  "measureEffective": "2026-12-01",
+  "measureEffectiveNote": "Kansas Constitution Art. 14, Sec. 1: if a majority of electors voting on an amendment vote for it, it 'shall become a part of the constitution'; no separate effective date is set in HCR 5004. Taken as effective on certification of the results by the State Board of Canvassers, whose last day to certify the general election is December 1, 2026 (Kansas SOS Important Election Dates); used as the representative date.",
+  "sources": [
+    "https://www.sos.ks.gov/elections/elections_upcoming_candidate.aspx",
+    "https://www.sos.ks.gov/elections/proposed-constitutional-amendments.html",
+    "https://www.sos.ks.gov/elections/26elec/2026-General-Election-Constitutional-Amendment-Citizen-Clarification.pdf",
+    "https://www.sos.ks.gov/elections/important-election-dates.html",
+    "https://kslegislature.gov/li/b2025_26/measures/documents/supp_note_hcr5004_01_0000.pdf",
+    "https://www.kslegislature.gov/li_2024/b2023_24/statute/025_000_0000_chapter/025_001_0000_article/025_001_0006_section/025_001_0006_k/",
+    "https://www.ksrevisor.gov/kanconst/093_014_0001.html",
+    "https://shermancountyks.gov/election-office",
+    "https://kansasreflector.com/2026/04/22/u-s-rep-sharice-davids-celebrates-end-of-gop-bid-to-gerrymander-kansas-congressional-districts/",
+    "https://kansasreflector.com/2026/08/04/early-results-show-kansans-rejecting-constitutional-amendment-by-wide-margin/",
+    "https://lawrencekstimes.com/2026/08/04/kr-masterson-holscher-gov/"
+  ],
+  "notes": [
+    "All candidates and party labels come from the Kansas SOS 'Candidate Lists' table for the 2026 General election (election id 36), fetched 2026-10-23. Names are given as the SOS list shows them (e.g. 'David C Graham', 'Steven A Hohe' without periods).",
+    "Governor and Lieutenant Governor run as a joint ticket ('Governor / Lt. Governor' on the SOS list); each ticket is one entry. The SOS list has only the Democratic and Republican tickets.",
+    "Attorney General has only two printed candidates (Democratic, Republican).",
+    "Redistricting: Republican efforts to redraw the congressional map mid-decade (a special-session petition in Nov 2025, then the 2026 regular session) did not produce a new map (Kansas Reflector, 2026-04-22). The 2022 map remains in effect for the four districts.",
+    "Kansas Supreme Court retention: Justices Eric S. Rosen and Larkin E. Walsh. Court of Appeals retention: Lesley Ann Isherwood, Amy Fellows Cline, Kim R. Schroeder, Lori Ann Bolton Fleming, Jacy Hurst. Both are on the SOS list but not modeled here.",
+    "The August 4, 2026 primary ballot carried a separate amendment to elect Supreme Court justices; voters rejected it (about 61% No). It is not on the November ballot. The SOS page lists only the citizenship amendment for November 3.",
+    "ballotTitle is the explanatory statement and the for/against statements, verbatim from the SOS page, with the opening/closing quotation marks dropped. The ballot then prints 'Shall the following be adopted?' and the full text of amended Art. 5, Sec. 1, with deletions struck through. That text is omitted here for length.",
+    "Poll hours (K.S.A. 25-106): Central-time counties default to 7 AM-7 PM and may close as late as 8 PM CST. Mountain-time counties (Greeley, Hamilton, Sherman, Wallace) default to 6 AM-6 PM and may close as late as 7 PM MST. Sherman County's election page shows 7 AM-7 PM Mountain. The latest close anywhere is therefore 02:00 UTC on Nov 4 (7 PM MST, or 8 PM CST if a Central county sets it)."
+  ],
+  "unconfirmed": [
+    "Exact ballot-face formatting (name punctuation, party wording) was not checked against a printed sample ballot. The SOS candidate table was used as-is.",
+    "Candidate changes after 2026-10-23 were not checked. The SOS table updates automatically as filings change.",
+    "Whether any Central-time county set an 8 PM CST close was not checked. It does not change pollCloseUtc, because the 7 PM MST close in Sherman County is also 02:00 UTC. The Sherman County hours come from a search snippet of its election page, which returned 403 when fetched directly.",
+    "Effective date: Kansas law sets no explicit effective date for an approved amendment. 2026-12-01 is the State Board of Canvassers' deadline to certify, and certification may come earlier.",
+    "The HCR 5004 supplemental note words the explanatory statement slightly differently ('would clarify only a person'). The SOS ballot-language page's wording ('would clarify that only a person') was used."
+  ]
+}

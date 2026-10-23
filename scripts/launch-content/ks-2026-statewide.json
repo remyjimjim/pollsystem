@@ -1,0 +1,104 @@
+{
+  "_about": "Kansas, Nov 3 2026, built by build-state.py from docs/launch-content/research/KS.json (sources and gaps in KS.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Kansas: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      17
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Adam Hamilton",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Roger Marshall",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "David C Graham",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Cindy Holscher / KC Ohaebosim",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Ty Masterson / Jeffrey Klemp",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Jennifer Day",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Pat Proctor",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Scott E. Morgan",
+        "affiliation": "United Kansas",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Chris Mann",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Kris Kobach",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Juan C. Luengo",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Steven Johnson",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Eric Lund",
+        "affiliation": "Libertarian",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Dinah Sykes",
+        "affiliation": "Democratic",
+        "officeName": "Commissioner of Insurance"
+      },
+      {
+        "name": "Daniel Hawkins",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Insurance"
+      },
+      {
+        "name": "Ric Koehn",
+        "affiliation": "Libertarian",
+        "officeName": "Commissioner of Insurance"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Kansas Constitutional Amendment (HCR 5004)",
+      "summary": "Explanatory statement. This amendment would clarify that only a person who is a citizen of the United States is eligible to vote in this state. A vote for this proposition would clarify that only a person who is a citizen of the United States is eligible to vote in this state. A vote against this proposition would make no change to the constitution of the state of Kansas, and the language concerning voter qualifications would remain the same.\n\nIn short: Would reword Article 5, Section 1 of the Kansas Constitution to state that no person is a qualified elector unless the person is a U.S. citizen, is at least 18, and (with existing exceptions) resides in the voting area.\n\nOfficial ballot language. Source: https://www.sos.ks.gov/elections/proposed-constitutional-amendments.html",
+      "effectiveDate": "2026-12-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}
