@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Rhode Island on local
+
+**Changed:** RI: 6 statewide races, Questions 1–5 (bonds totalling $600M, matching the enacted FY2027 budget), 2 district ballots. Every RI election site returned 403, so the candidates and the question wording rest on Ballotpedia and Wikipedia, which agree (see `RI.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `6bf930b`
+
+---
+
 ## 2026-10-23 — Arkansas on local
 
 **Changed:** AR: 8 statewide races, three with a single Republican candidate. Issues 1–4 (citizens-only voting, right to bear arms, economic development districts, $500M water bonds). 4 district ballots. Candidates come from the Secretary of State's results feed for Nov 3 (Oct 21). Measure wording comes from the SoS's public notices.
