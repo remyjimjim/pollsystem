@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Massachusetts on local
+
+**Changed:** MA: 6 statewide races, Questions 1–9 (8 initiatives and a referendum on the 2024 firearms law), 9 district ballots. MA-2, MA-5 and MA-7 have only the Democratic incumbent. Taken from the Secretary of the Commonwealth's candidate list and Information for Voters booklet, via Wayback copies of Oct 15–16. A few measures take effect later than the representative date, as their own text says.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `4f97b79`
+
+---
+
 ## 2026-10-23 — Delaware on local
 
 **Changed:** DE: one House seat, so one ballot for the whole state ("2026 Midterm Delaware", the first single-ballot state). It has U.S. Senate, Attorney General, Treasurer, Auditor and the at-large House race. No measures (Delaware amends its constitution without a vote). All of it comes from the Department of Elections' list (updated Oct 22).
