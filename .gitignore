@@ -52,3 +52,7 @@ docs/Pollsystem specific commands.txt
 backups/
 # Daily prod backups (scripts/backup-prod.bash): personal data, never commit.
 assets/data-backups/
+
+# Python bytecode
+__pycache__/
+*.pyc
