@@ -193,7 +193,8 @@
       "selectionFor": "Bitte treffen Sie eine Auswahl für: {office}"
     },
     "measuresHeading": "Abstimmungsvorlagen",
-    "measuresOptional": "Optional: Lassen Sie eine Vorlage leer, um sie zu überspringen."
+    "measuresOptional": "Optional: Lassen Sie eine Vorlage leer, um sie zu überspringen.",
+    "purviewLabel": "Geltungsbereich:"
   },
   "questionnaire": {
     "closesLabel": "Schließt",
@@ -255,7 +256,8 @@
     "privacyAnswered": "Aus Datenschutzgründen werden Ergebnisse erst angezeigt, wenn mindestens {k} Personen geantwortet haben. Die Ergebnisse werden alle {step} Antworten aktualisiert.",
     "soFar": "Noch hat niemand geantwortet. | Bisher hat 1 Person geantwortet. | Bisher haben {n} Personen geantwortet.",
     "superLive": "Super-Ansicht: Live-Ergebnisse mit Rohzahlen.",
-    "countWithheld": "weniger als {n}"
+    "countWithheld": "weniger als {n}",
+    "alsoOnBallot": "Ebenfalls auf diesem Stimmzettel (zu den Ergebnissen):"
   },
   "notFound": {
     "heading": "Nicht gefunden",

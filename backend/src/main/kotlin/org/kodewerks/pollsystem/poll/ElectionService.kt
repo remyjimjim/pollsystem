@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.poll
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.Candidate
 import org.kodewerks.pollsystem.model.Election
 import org.kodewerks.pollsystem.model.Office
@@ -32,6 +33,7 @@ class ElectionService(
     private val grants: CreatorGrantGuard,
     private val objectMapper: ObjectMapper,
     private val ballotMeasures: BallotMeasureService,
+    private val includes: ElectionIncludes,
     private val history: PollHistoryService
 ) {
 
@@ -54,6 +56,7 @@ class ElectionService(
         )
         replaceCandidates(saved, dto.candidates)
         applyPurview(saved.id, dto)
+        applyIncludes(saved.id, creator, dto.includedElectionIds)
         grants.requireCovers(creator, pt, purviews.purviewOf(PollKind.ELECTION, saved.id))
         return saved
     }
@@ -80,8 +83,33 @@ class ElectionService(
         )
         replaceCandidates(updated, dto.candidates)
         applyPurview(updated.id, dto)
+        applyIncludes(updated.id, creator, dto.includedElectionIds)
         grants.requireCovers(creator, pt, purviews.purviewOf(PollKind.ELECTION, updated.id))
         return updated
+    }
+
+    /**
+     * The elections shown on this one's ballot (V37); null leaves them as they
+     * are. One level: an included election can't include others, and a ballot
+     * that includes others can't itself be included. Only your own elections,
+     * unless you're a super.
+     */
+    private fun applyIncludes(electionId: Long, creator: User, ids: List<Long>?) {
+        if (ids == null) return
+        val wanted = ids.distinct()
+        fun bad(msg: String): Nothing = throw ResponseStatusException(HttpStatus.BAD_REQUEST, msg)
+        if (electionId in wanted) bad("An election can't include itself")
+        if (wanted.isNotEmpty() && includes.includedBy(electionId).isNotEmpty()) {
+            bad("This election is included on another ballot, so it can't include others")
+        }
+        for (id in wanted) {
+            val other = elections.findById(id).orElseThrow { ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown election $id") }
+            if (other.creator.id != creator.id && creator.access != AccessLevel.SUPER) {
+                throw ResponseStatusException(HttpStatus.FORBIDDEN, "You can only include your own elections")
+            }
+            if (includes.of(id).isNotEmpty()) bad("\"${other.title}\" includes other elections, so it can't be included")
+        }
+        includes.replace(electionId, wanted)
     }
 
     /** Elections carry a County/State/Nationwide purview (poll_purviews); ZIP is rejected. */
@@ -153,7 +181,9 @@ class ElectionService(
             regionStateIds = purviews.regionStateIdsOf(purviewRows),
             regionLabel = purviews.regionLabel(purviewRows),
             candidatesWidget = widget,
-            candidatesGroupBy = groupBy
+            candidatesGroupBy = groupBy,
+            includedElectionIds = includes.of(e.id),
+            includedByElectionIds = includes.includedBy(e.id)
         )
     }
 

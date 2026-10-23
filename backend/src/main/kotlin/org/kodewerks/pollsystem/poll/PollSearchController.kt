@@ -53,7 +53,8 @@ class PollSearchController(
     private val pollPurviews: PollPurviewRepository,
     private val purviewService: PollPurviewService,
     private val blockService: PollBlockService,
-    private val participation: PollParticipationService
+    private val participation: PollParticipationService,
+    private val includes: ElectionIncludes
 ) {
 
     /** Maps the search-row `type` string back to the block-table enum. */
@@ -181,10 +182,16 @@ class PollSearchController(
         if (type == null || type.equals("Election", ignoreCase = true)) {
             val pool = elections.findActive(now) +
                 if (includeClosed) elections.findExpiredElections(now) else emptyList()
+            // An election included on a published ballot (e.g. a state's statewide
+            // races, on every district's ballot) isn't listed on its own; a search
+            // for one of its candidates finds the ballots that include it (V37).
+            val onBallots = includes.includedByPublished()
             for (e in pool) {
+                if (e.id in onBallots) continue
                 if (!textMatch(
                         titleHit = titleHit(e.title, titleQuery),
-                        candidateHit = e.id in electionsWithCandidate
+                        candidateHit = e.id in electionsWithCandidate ||
+                            includes.of(e.id).any { it in electionsWithCandidate }
                     )
                 ) continue
                 if (!matches(e.creator.email, creatorEmail)) continue
@@ -256,7 +263,8 @@ class PollSearchController(
     fun suggestions(): SearchSuggestions {
         val now = Instant.now()
         val activeQuestionnaires = questionnaires.findActive(now)
-        val activeElections = elections.findActive(now)
+        val onBallots = includes.includedByPublished()
+        val activeElections = elections.findActive(now).filterNot { it.id in onBallots }
         val activeBallotMeasures = ballotMeasures.findActive(now)
 
         val titles = (

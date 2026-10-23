@@ -11,6 +11,13 @@ Usage:
   scripts/launch-content/create-polls.py CONTENT.json --api URL --token-file FILE
   scripts/launch-content/create-polls.py --api URL --token-file FILE --publish-election ID [ID ...]
   scripts/launch-content/create-polls.py --api URL --token-file FILE --retitle RENAMES.json
+  scripts/launch-content/create-polls.py HOUSE.json --api URL --token-file FILE --link-ballots
+
+A content file with "includeElectionTitled" makes each of its elections a
+district ballot that includes that (statewide) election, found by title among
+your polls. --link-ballots applies the file's titles and includes to elections
+that already exist (found by "title" or "formerTitle"): a published one is
+reopened, saved, and published again, with its candidates unchanged.
 
   --api         backend base URL, e.g. http://localhost:8080 or https://pollsystem-backend.fly.dev
   --token-file  a file holding the creating account's JWT (git-ignored; never printed)
@@ -38,6 +45,7 @@ def main():
     p.add_argument('--site')
     p.add_argument('--publish-election', type=int, nargs='+')
     p.add_argument('--retitle', help='rename polls: {"renames": [{"type", "from", "to"}]} (a super token)')
+    p.add_argument('--link-ballots', action='store_true', help='apply titles and includes from CONTENT to existing elections')
     a = p.parse_args()
     token = open(a.token_file).read().strip()
     site = (a.site or ('http://localhost:3000' if 'localhost' in a.api else 'https://ballotbox.us.com')).rstrip('/')
@@ -68,8 +76,42 @@ def main():
         p.error('give a content file, or --publish-election ID')
 
     c = json.load(open(a.content))
+    include = []
+    if c.get('includeElectionTitled'):
+        mine = call(a.api, token, 'GET', '/api/creator/polls')
+        hits = [p for p in mine if p['type'] == 'Election' and p['title'] == c['includeElectionTitled']]
+        if len(hits) != 1:
+            sys.exit(f"✗ expected one election titled \"{c['includeElectionTitled']}\", found {len(hits)}")
+        include = [hits[0]['id']]
+
+    if a.link_ballots:
+        mine = call(a.api, token, 'GET', '/api/creator/polls')
+        by_title = {p['title']: p for p in mine if p['type'] == 'Election'}
+        for election in c['elections']:
+            p = by_title.get(election['title']) or by_title.get(election.get('formerTitle'))
+            if p is None:
+                sys.exit(f"✗ no election titled \"{election['title']}\" or \"{election.get('formerTitle')}\"")
+            cur = call(a.api, token, 'GET', f"/api/polls/elections/{p['id']}")
+            if cur['title'] == election['title'] and cur.get('includedElectionIds') == include:
+                print(f"· {p['id']} already \"{election['title']}\"")
+                continue
+            was_published = cur['status'] == 'PUBLISHED'
+            if was_published:
+                call(a.api, token, 'POST', f"/api/creator/polls/election/{p['id']}/reopen")
+            body = {'pollTypeId': cur['pollTypeId'], 'title': election['title'], 'date': cur['date'],
+                    'scopeLevel': cur['scopeLevel'], 'regionIds': cur['regionIds'], 'closeDate': cur['closeDate'],
+                    'candidates': [{'name': x['name'], 'affiliation': x['affiliation'], 'officeName': x['officeName']} for x in cur['candidates']],
+                    'includedElectionIds': include}
+            call(a.api, token, 'PUT', f"/api/polls/elections/{p['id']}", body)
+            if was_published:
+                call(a.api, token, 'POST', f"/api/polls/elections/{p['id']}/publish?confirmed=true")
+            print(f"✓ {p['id']} \"{election['title']}\" includes {include}{' (republished)' if was_published else ''}")
+        return
+
     # Either one election with its ballot measures, or a list of elections.
     for election in c.get('elections', []) + ([c['election']] if 'election' in c else []):
+        election = {k: v for k, v in election.items() if k != 'formerTitle'}
+        if include: election['includedElectionIds'] = include
         e = call(a.api, token, 'POST', '/api/polls/elections', election)
         print(f"✓ election {e['id']} \"{e['title']}\" ({len(election['candidates'])} candidates), DRAFT")
         print(f"    {site}/creator/polls/election/{e['id']}/edit")

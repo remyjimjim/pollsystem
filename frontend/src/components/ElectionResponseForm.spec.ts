@@ -188,3 +188,40 @@ describe('ElectionResponseForm: an office still to choose', () => {
     w.unmount()
   })
 })
+
+describe('ElectionResponseForm: one ballot per district', () => {
+  it('shows the district race, the included statewide races and their measures, and sends each election its own votes', async () => {
+    const district = { id: 7, title: 'District 1', date: '2026-11-03', zipcode: null, status: 'PUBLISHED', closeDate: null,
+      candidatesWidget: 'selectOneRadio', candidatesGroupBy: 'officeName', includedElectionIds: [8],
+      candidates: [{ id: 21, name: 'Hal House', affiliation: 'Ind', officeName: 'U.S. Representative, District 1' }] }
+    const statewide = { id: 8, title: 'Statewide', date: '2026-11-03', zipcode: null, status: 'PUBLISHED', closeDate: null,
+      candidatesWidget: 'selectOneRadio', candidatesGroupBy: 'officeName', includedElectionIds: [],
+      candidates: [{ id: 31, name: 'Sam Senator', affiliation: 'Ind', officeName: 'U.S. Senator' },
+                   { id: 32, name: 'Sue Senator', affiliation: 'Ind', officeName: 'U.S. Senator' }] }
+    vi.mocked(axios.get).mockImplementation(async (url: string, cfg?: any) => {
+      if (url === '/api/polls/elections/7') return { data: district }
+      if (url === '/api/polls/elections/8') return { data: statewide }
+      if (url === '/api/polls/ballot-measures') return { data: cfg?.params?.electionId === 8 ? MEASURES : [] }
+      if (url.startsWith('/api/polls/ballot-measures/')) return { data: { measureId: 31, hasResponse: false, response: null, comment: null, dateSubmitted: null } }
+      return { data: { electionId: 0, hasResponses: false, firstSubmittedAt: null, responses: [] } }
+    })
+    vi.mocked(axios.post).mockResolvedValue({ data: {} })
+    const w = mount(ElectionResponseForm, { props: { id: 7 }, attachTo: document.body })
+    await flushPromises()
+
+    expect(w.findAll('fieldset legend').map(l => l.text())).toEqual(['U.S. Representative, District 1', 'U.S. Senator', 'Free Money Mondays'])
+    await w.find('input#candidate-21').setValue(true)
+    await w.find('input#candidate-32').setValue(true)
+    await w.find('input#measure-31-no').setValue(true)
+    await w.find('button').trigger('click')
+    await flushPromises()
+
+    const posts = vi.mocked(axios.post).mock.calls.map(c => [c[0], (c[1] as any).answers?.map((a: any) => a.candidateId) ?? (c[1] as any).response])
+    expect(posts).toEqual([
+      ['/api/polls/elections/7/responses', [21]],
+      ['/api/polls/elections/8/responses', [31, 32]],
+      ['/api/polls/ballot-measures/31/responses', false],
+    ])
+    w.unmount()
+  })
+})

@@ -22,12 +22,16 @@ interface ElectionDto {
   id: number
   title: string
   date: string
-  zipcode: string
+  zipcode: string | null
+  /** The purview as words, e.g. "Colorado" or "Nationwide". */
+  regionLabel?: string
   status: string
   closeDate: string | null
   candidates: CandidateDto[]
   candidatesWidget: string | null
   candidatesGroupBy: string | null
+  /** Elections shown on this one's ballot, e.g. a state's statewide races on a district ballot (V37). */
+  includedElectionIds?: number[]
 }
 
 interface MyCandidateResponseDto {
@@ -70,6 +74,10 @@ const router = useRouter()
 
 const election = ref<ElectionDto | null>(null)
 const mine = ref<MyElectionResponsesDto | null>(null)
+// One ballot, several elections: this one plus any it includes. Each vote is
+// sent to the election its candidate belongs to.
+const electionOf = reactive<Record<number, number>>({})
+const ballotIds = ref<number[]>([])
 const loading = ref(true)
 const submitting = ref(false)
 const error = ref<string | null>(null)
@@ -141,10 +149,23 @@ async function load() {
       closedReason.value = t('election.closedNote')
       return
     }
-    const mineRes = await axios.get<MyElectionResponsesDto>(
-      `/api/polls/elections/${props.id}/responses/me`
-    )
-    mine.value = mineRes.data
+    // Add the included elections' candidates (those still open) after this one's.
+    const parts: ElectionDto[] = [res.data]
+    for (const id of res.data.includedElectionIds ?? []) {
+      const inc = (await axios.get<ElectionDto>(`/api/polls/elections/${id}`)).data
+      const open = inc.status === 'PUBLISHED' && (!inc.closeDate || new Date(inc.closeDate).getTime() > Date.now())
+      if (open) parts.push(inc)
+    }
+    for (const part of parts) for (const c of part.candidates) electionOf[c.id] = part.id
+    ballotIds.value = parts.map(p => p.id)
+    election.value = { ...res.data, candidates: parts.flatMap(p => p.candidates) }
+    const mineAll = await Promise.all(parts.map(p =>
+      axios.get<MyElectionResponsesDto>(`/api/polls/elections/${p.id}/responses/me`).then(r => r.data)))
+    mine.value = {
+      ...mineAll[0],
+      hasResponses: mineAll.some(m => m.hasResponses),
+      responses: mineAll.flatMap(m => m.responses)
+    }
     seedAnswers()
     await loadMeasures()
     mode.value = mine.value.hasResponses || votedOnMeasure.value ? 'choosing' : 'fresh'
@@ -180,9 +201,12 @@ function seedAnswers() {
 }
 
 async function loadMeasures() {
-  measures.value = (await axios.get<BallotMeasureDto[]>('/api/polls/ballot-measures', {
-    params: { electionId: props.id }
-  })).data ?? []
+  // Every election on the ballot can bring measures (a district ballot's come
+  // from the statewide election it includes).
+  const ids = ballotIds.value.length ? ballotIds.value : [props.id]
+  measures.value = (await Promise.all(ids.map(id => axios.get<BallotMeasureDto[]>('/api/polls/ballot-measures', {
+    params: { electionId: id }
+  }).then(r => r.data ?? [])))).flat()
   const mineList = await Promise.all(measures.value.map(m =>
     axios.get<MyBallotResponseDto>(`/api/polls/ballot-measures/${m.id}/responses/me`).then(r => r.data)
   ))
@@ -314,7 +338,11 @@ async function submit() {
         commentPublic: commentPublic[c.id] ?? false
       }
     })
-    await axios.post(`/api/polls/elections/${props.id}/responses`, { answers: payload })
+    // Each election on the ballot gets its own candidates' votes.
+    for (const id of ballotIds.value.length ? ballotIds.value : [props.id]) {
+      const answers = payload.filter(p => (electionOf[p.candidateId] ?? props.id) === id)
+      if (answers.length) await axios.post(`/api/polls/elections/${id}/responses`, { answers })
+    }
     // Then each ballot measure that was answered.
     for (const m of measures.value) {
       const a = measureAnswers[m.id]
@@ -355,7 +383,8 @@ onMounted(load)
       <h2 class="mb-1 text-xl font-semibold text-slate-800">{{ election.title }}</h2>
       <p class="m-0 text-sm text-slate-500">
         {{ $t('election.dateLabel') }} {{ new Date(election.date).toLocaleDateString() }}
-        · {{ $t('election.zipcodeLabel') }} {{ election.zipcode }}
+        <template v-if="election.regionLabel">· {{ $t('election.purviewLabel') }} {{ election.regionLabel }}</template>
+        <template v-else-if="election.zipcode">· {{ $t('election.zipcodeLabel') }} {{ election.zipcode }}</template>
         <template v-if="election.closeDate">
           · {{ $t('election.closesLabel') }} {{ new Date(election.closeDate).toLocaleString() }}
         </template>

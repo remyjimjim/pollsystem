@@ -193,7 +193,8 @@
       "selectionFor": "Veuillez faire une sélection pour : {office}"
     },
     "measuresHeading": "Mesures soumises au vote",
-    "measuresOptional": "Facultatif : laissez une mesure vide pour l’ignorer."
+    "measuresOptional": "Facultatif : laissez une mesure vide pour l’ignorer.",
+    "purviewLabel": "Périmètre :"
   },
   "questionnaire": {
     "closesLabel": "Clôture",
@@ -255,7 +256,8 @@
     "privacyAnswered": "Pour la confidentialité, les résultats ne s'affichent qu'à partir de {k} répondants. Ils sont mis à jour tous les {step} répondants.",
     "soFar": "Personne n'a encore répondu. | 1 personne a répondu jusqu'ici. | {n} personnes ont répondu jusqu'ici.",
     "superLive": "Vue super : résultats en direct avec les chiffres bruts.",
-    "countWithheld": "moins de {n}"
+    "countWithheld": "moins de {n}",
+    "alsoOnBallot": "Aussi sur ce bulletin (voir leurs résultats) :"
   },
   "notFound": {
     "heading": "Introuvable",

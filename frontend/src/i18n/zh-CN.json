@@ -193,7 +193,8 @@
       "selectionFor": "请为以下职位做出选择：{office}"
     },
     "measuresHeading": "投票议案",
-    "measuresOptional": "可选：留空即跳过该议案。"
+    "measuresOptional": "可选：留空即跳过该议案。",
+    "purviewLabel": "覆盖范围："
   },
   "questionnaire": {
     "closesLabel": "截止",
@@ -255,7 +256,8 @@
     "privacyAnswered": "为保护隐私，至少 {k} 人回答后才会显示结果。结果每增加 {step} 位回复者更新一次。",
     "soFar": "还没有人回复。 | 目前已有 1 人回复。 | 目前已有 {n} 人回复。",
     "superLive": "超级管理员视图：带原始数字的实时结果。",
-    "countWithheld": "少于 {n}"
+    "countWithheld": "少于 {n}",
+    "alsoOnBallot": "本选票上的其他项目（查看结果）："
   },
   "notFound": {
     "heading": "未找到",

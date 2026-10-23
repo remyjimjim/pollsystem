@@ -219,7 +219,8 @@
       "selectionFor": "Please make a selection for: {office}"
     },
     "measuresHeading": "Ballot measures",
-    "measuresOptional": "Optional: leave a measure blank to skip it."
+    "measuresOptional": "Optional: leave a measure blank to skip it.",
+    "purviewLabel": "Purview:"
   },
   "questionnaire": {
     "closesLabel": "Closes",
@@ -294,7 +295,8 @@
     "privacyAnswered": "For privacy, results aren't shown until at least {k} people have answered. Results are updated every {step} respondents.",
     "soFar": "No one has responded yet. | 1 person has responded so far. | {n} people have responded so far.",
     "superLive": "Super view: live results with raw numbers.",
-    "countWithheld": "fewer than {n}"
+    "countWithheld": "fewer than {n}",
+    "alsoOnBallot": "Also on this ballot (see their results):"
   },
   "notFound": {
     "heading": "Not Found",

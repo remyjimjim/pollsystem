@@ -52,7 +52,9 @@ data class ElectionDraftRequest(
     val scopeLevel: ScopeLevel = ScopeLevel.STATE,
     val regionIds: List<Long> = emptyList(),
     val closeDate: Instant? = null,
-    @field:Valid val candidates: List<CandidateInput> = emptyList()
+    @field:Valid val candidates: List<CandidateInput> = emptyList(),
+    /** Elections shown on this one's ballot (V37); null = leave unchanged. */
+    val includedElectionIds: List<Long>? = null
 )
 
 data class ElectionDto(
@@ -78,7 +80,11 @@ data class ElectionDto(
      *  to the legacy per-candidate Yes/No ballot. */
     val candidatesWidget: String?,
     /** Field name to group candidates by before rendering (e.g. "officeName"). */
-    val candidatesGroupBy: String?
+    val candidatesGroupBy: String?,
+    /** Elections shown on this one's ballot, in order (V37). */
+    val includedElectionIds: List<Long> = emptyList(),
+    /** Ballots that include this election (its voters arrive through them). */
+    val includedByElectionIds: List<Long> = emptyList()
 ) {
     companion object {
         fun from(
@@ -89,7 +95,9 @@ data class ElectionDto(
             regionStateIds: List<Long>,
             regionLabel: String,
             candidatesWidget: String?,
-            candidatesGroupBy: String?
+            candidatesGroupBy: String?,
+            includedElectionIds: List<Long> = emptyList(),
+            includedByElectionIds: List<Long> = emptyList()
         ) = ElectionDto(
             id = e.id,
             pollTypeId = e.pollType.id,
@@ -106,7 +114,9 @@ data class ElectionDto(
             dateSubmitted = e.dateSubmitted,
             candidates = candidates.map(CandidateDto::from),
             candidatesWidget = candidatesWidget,
-            candidatesGroupBy = candidatesGroupBy
+            candidatesGroupBy = candidatesGroupBy,
+            includedElectionIds = includedElectionIds,
+            includedByElectionIds = includedByElectionIds
         )
     }
 }

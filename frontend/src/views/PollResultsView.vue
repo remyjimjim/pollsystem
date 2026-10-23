@@ -92,6 +92,22 @@ interface BallotMeasureResultsDto {
 
 const route = useRoute()
 const type = computed(() => String(route.params.type))
+// A district ballot's results are its own race; the statewide races it
+// includes (V37) have their own results page, linked here.
+const alsoOnBallot = ref<{ id: number; title: string }[]>([])
+const alsoOnBallotFor = ref<string | null>(null)
+async function loadAlsoOnBallot() {
+  const key = `${type.value}/${id.value}`
+  if (alsoOnBallotFor.value === key) return
+  alsoOnBallotFor.value = key
+  alsoOnBallot.value = []
+  if (type.value !== 'election') return
+  try {
+    const e = (await axios.get<{ includedElectionIds?: number[] }>(`/api/polls/elections/${id.value}`)).data
+    alsoOnBallot.value = await Promise.all((e.includedElectionIds ?? []).map(async i =>
+      ({ id: i, title: (await axios.get<{ title: string }>(`/api/polls/elections/${i}`)).data.title })))
+  } catch { /* the links are a convenience; results still show */ }
+}
 const id = computed(() => Number(route.params.id))
 
 const qData = ref<QuestionnaireResultsDto | null>(null)
@@ -301,6 +317,7 @@ async function load() {
       eData.value = res.data
       qData.value = null
       bData.value = null
+      void loadAlsoOnBallot()
     } else {
       const res = await axios.get<BallotMeasureResultsDto>(
         `/api/polls/ballot-measures/${id.value}/results`,
@@ -395,6 +412,12 @@ function purviewCount(n: number | null): string {
         {{ $t('results.purviewArea', { area: purviewArea }) }}
       </p>
       <h1 v-else class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('results.heading') }}</h1>
+      <p v-if="alsoOnBallot.length" class="mb-4 text-sm text-slate-700" data-test="also-on-ballot">
+        {{ $t('results.alsoOnBallot') }}
+        <template v-for="(e, i) in alsoOnBallot" :key="e.id">
+          <router-link :to="`/polls/election/${e.id}/results`" class="font-semibold underline">{{ e.title }}</router-link><template v-if="i < alsoOnBallot.length - 1">, </template>
+        </template>
+      </p>
 
       <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
       <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>

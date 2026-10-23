@@ -1,9 +1,9 @@
 {
-  "_about": "California, Nov 3 2026: the 52 U.S. House races (top-two), one election per district, party preference as listed on the Secretary of State's certified list. Sources: docs/launch-content/california-2026-general.md.",
+  "_about": "California, Nov 3 2026: the 52 U.S. House races (top-two), one election per district, party preference as listed on the Secretary of State's certified list. Sources: docs/launch-content/california-2026-general.md. One ballot per district (V37): each includes \"2026 Midterm · California: statewide offices & propositions\" (its statewide races and measures); \"formerTitle\" is the title before 2026-10-23.",
   "elections": [
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-1: U.S. House",
+      "title": "2026 Midterm California District 1",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -21,11 +21,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 1"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-1: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-2: U.S. House",
+      "title": "2026 Midterm California District 2",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -43,11 +44,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 2"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-2: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-3: U.S. House",
+      "title": "2026 Midterm California District 3",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -65,11 +67,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 3"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-3: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-4: U.S. House",
+      "title": "2026 Midterm California District 4",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -87,11 +90,12 @@
           "affiliation": "Democratic",
           "officeName": "U.S. Representative, District 4"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-4: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-5: U.S. House",
+      "title": "2026 Midterm California District 5",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -109,11 +113,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 5"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-5: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-6: U.S. House",
+      "title": "2026 Midterm California District 6",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -131,11 +136,12 @@
           "affiliation": "No Party Preference",
           "officeName": "U.S. Representative, District 6"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-6: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-7: U.S. House",
+      "title": "2026 Midterm California District 7",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -153,11 +159,12 @@
           "affiliation": "Democratic",
           "officeName": "U.S. Representative, District 7"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-7: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-8: U.S. House",
+      "title": "2026 Midterm California District 8",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -175,11 +182,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 8"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-8: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-9: U.S. House",
+      "title": "2026 Midterm California District 9",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -197,11 +205,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 9"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-9: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-10: U.S. House",
+      "title": "2026 Midterm California District 10",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -219,11 +228,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 10"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-10: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-11: U.S. House",
+      "title": "2026 Midterm California District 11",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -241,11 +251,12 @@
           "affiliation": "Democratic",
           "officeName": "U.S. Representative, District 11"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-11: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-12: U.S. House",
+      "title": "2026 Midterm California District 12",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -263,11 +274,12 @@
           "affiliation": "Democratic",
           "officeName": "U.S. Representative, District 12"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-12: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-13: U.S. House",
+      "title": "2026 Midterm California District 13",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -285,11 +297,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 13"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-13: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-14: U.S. House",
+      "title": "2026 Midterm California District 14",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -307,11 +320,12 @@
           "affiliation": "Democratic",
           "officeName": "U.S. Representative, District 14"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-14: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-15: U.S. House",
+      "title": "2026 Midterm California District 15",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -329,11 +343,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 15"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-15: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-16: U.S. House",
+      "title": "2026 Midterm California District 16",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -351,11 +366,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 16"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-16: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-17: U.S. House",
+      "title": "2026 Midterm California District 17",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -373,11 +389,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 17"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-17: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-18: U.S. House",
+      "title": "2026 Midterm California District 18",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -395,11 +412,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 18"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-18: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-19: U.S. House",
+      "title": "2026 Midterm California District 19",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -417,11 +435,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 19"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-19: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-20: U.S. House",
+      "title": "2026 Midterm California District 20",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -439,11 +458,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 20"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-20: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-21: U.S. House",
+      "title": "2026 Midterm California District 21",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -461,11 +481,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 21"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-21: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-22: U.S. House",
+      "title": "2026 Midterm California District 22",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -483,11 +504,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 22"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-22: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-23: U.S. House",
+      "title": "2026 Midterm California District 23",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -505,11 +527,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 23"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-23: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-24: U.S. House",
+      "title": "2026 Midterm California District 24",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -527,11 +550,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 24"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-24: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-25: U.S. House",
+      "title": "2026 Midterm California District 25",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -549,11 +573,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 25"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-25: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-26: U.S. House",
+      "title": "2026 Midterm California District 26",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -571,11 +596,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 26"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-26: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-27: U.S. House",
+      "title": "2026 Midterm California District 27",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -593,11 +619,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 27"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-27: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-28: U.S. House",
+      "title": "2026 Midterm California District 28",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -615,11 +642,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 28"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-28: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-29: U.S. House",
+      "title": "2026 Midterm California District 29",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -637,11 +665,12 @@
           "affiliation": "Democratic",
           "officeName": "U.S. Representative, District 29"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-29: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-30: U.S. House",
+      "title": "2026 Midterm California District 30",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -659,11 +688,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 30"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-30: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-31: U.S. House",
+      "title": "2026 Midterm California District 31",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -681,11 +711,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 31"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-31: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-32: U.S. House",
+      "title": "2026 Midterm California District 32",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -703,11 +734,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 32"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-32: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-33: U.S. House",
+      "title": "2026 Midterm California District 33",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -725,11 +757,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 33"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-33: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-34: U.S. House",
+      "title": "2026 Midterm California District 34",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -747,11 +780,12 @@
           "affiliation": "Democratic",
           "officeName": "U.S. Representative, District 34"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-34: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-35: U.S. House",
+      "title": "2026 Midterm California District 35",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -769,11 +803,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 35"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-35: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-36: U.S. House",
+      "title": "2026 Midterm California District 36",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -791,11 +826,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 36"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-36: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-37: U.S. House",
+      "title": "2026 Midterm California District 37",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -813,11 +849,12 @@
           "affiliation": "Democratic",
           "officeName": "U.S. Representative, District 37"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-37: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-38: U.S. House",
+      "title": "2026 Midterm California District 38",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -835,11 +872,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 38"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-38: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-39: U.S. House",
+      "title": "2026 Midterm California District 39",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -857,11 +895,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 39"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-39: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-40: U.S. House",
+      "title": "2026 Midterm California District 40",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -879,11 +918,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 40"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-40: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-41: U.S. House",
+      "title": "2026 Midterm California District 41",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -901,11 +941,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 41"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-41: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-42: U.S. House",
+      "title": "2026 Midterm California District 42",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -923,11 +964,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 42"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-42: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-43: U.S. House",
+      "title": "2026 Midterm California District 43",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -945,11 +987,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 43"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-43: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-44: U.S. House",
+      "title": "2026 Midterm California District 44",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -967,11 +1010,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 44"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-44: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-45: U.S. House",
+      "title": "2026 Midterm California District 45",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -989,11 +1033,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 45"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-45: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-46: U.S. House",
+      "title": "2026 Midterm California District 46",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -1011,11 +1056,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 46"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-46: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-47: U.S. House",
+      "title": "2026 Midterm California District 47",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -1033,11 +1079,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 47"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-47: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-48: U.S. House",
+      "title": "2026 Midterm California District 48",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -1055,11 +1102,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 48"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-48: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-49: U.S. House",
+      "title": "2026 Midterm California District 49",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -1077,11 +1125,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 49"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-49: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-50: U.S. House",
+      "title": "2026 Midterm California District 50",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -1099,11 +1148,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 50"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-50: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-51: U.S. House",
+      "title": "2026 Midterm California District 51",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -1121,11 +1171,12 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 51"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-51: U.S. House"
     },
     {
       "pollTypeId": 1,
-      "title": "2026 Midterm · California D-52: U.S. House",
+      "title": "2026 Midterm California District 52",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -1143,7 +1194,9 @@
           "affiliation": "Republican",
           "officeName": "U.S. Representative, District 52"
         }
-      ]
+      ],
+      "formerTitle": "2026 Midterm · California D-52: U.S. House"
     }
-  ]
+  ],
+  "includeElectionTitled": "2026 Midterm · California: statewide offices & propositions"
 }
