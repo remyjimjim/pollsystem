@@ -1,0 +1,135 @@
+{
+  "_about": "South Dakota, Nov 3 2026, built by build-state.py from docs/launch-content/research/SD.json (sources and gaps in SD.md). One House seat, so one ballot for the whole state.",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm South Dakota",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      42
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Mike Rounds",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Brian L Bengs",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Larry Rhoden / Tony Venhuizen",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Dan Ahlers / Steven McCleerey",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Heather Baxter",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Terrence Davis",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Tamara J. Lesnar",
+        "affiliation": "Libertarian",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Lance Russell",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Catherine Barranco",
+        "affiliation": "Republican",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Tom Cool",
+        "affiliation": "Democratic",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Melissa Hull",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Margaret Kuipers",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Brock Greenfield",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of School and Public Lands"
+      },
+      {
+        "name": "Raeann Mettler",
+        "affiliation": "Democratic",
+        "officeName": "Commissioner of School and Public Lands"
+      },
+      {
+        "name": "Don Haggar",
+        "affiliation": "Republican",
+        "officeName": "Public Utilities Commissioner"
+      },
+      {
+        "name": "Frank Kloucek",
+        "affiliation": "Democratic",
+        "officeName": "Public Utilities Commissioner"
+      },
+      {
+        "name": "Marty Jackley",
+        "affiliation": "Republican",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Nicole \"Nikki\" Gronli",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Representative, At-Large"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · South Dakota Constitutional Amendment I: End Medicaid expansion if federal share drops below 90%",
+      "summary": "Title: An Amendment to the South Dakota Constitution that Repeals Expanded Medicaid Coverage if Federal Funding for the Program Drops below 90%. Attorney General Explanation: Medicaid is a program, funded by the State and the federal government, to provide medical coverage for low-income children, pregnant women, disabled individuals, and the elderly. In the 2022 General Election the voters approved Constitutional Amendment D, which expanded Medicaid eligibility in South Dakota. Amendment D requires the State to also provide Medicaid benefits to anyone over the age of 18 and under 65 whose income is at or below 133% of the federal property level, plus 5% of the federal poverty level for the applicable family size. Currently, federal law requires the federal government to fund 90% of South Dakota’s Medicaid expansion. This proposed Constitutional Amendment ends the expanded Medicaid coverage if the federal funding for expansion drops below 90%. If federal funding drops below that 90% threshold, Medicaid coverage will once again only apply to low-income children, pregnant women, disabled individuals, and the elderly. Vote “Yes” to adopt the amendment. Vote “No” to leave the Constitution as it is.\n\nIn short: Would end the constitutional requirement for expanded Medicaid coverage (approved by voters in 2022) if the federal government's share of the cost falls below 90%.\n\nOfficial ballot language. Source: https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf",
+      "effectiveDate": "2027-07-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · South Dakota Constitutional Amendment J: Only U.S. citizens may vote",
+      "summary": "Title: An Amendment to the South Dakota Constitution Clarifying that an Individual Must Be a Citizen of the United States to be Eligible to Vote. Attorney General Explanation: Article VII, § 2 of the South Dakota Constitution defines who is qualified to vote in state elections. Among these qualifications are age, residency, and United States citizenship requirements. Article VII, § 2 also establishes that individuals may be disqualified from voting because of mental incompetence or a felony conviction. This constitutional amendment adds people who are not United States citizens to the list of individuals disqualified from voting, clarifying the existing requirement that only citizens may vote in state elections. Vote “Yes” to adopt the amendment. Vote “No” to leave the Constitution as it is.\n\nIn short: Would add non-citizens of the United States to the constitution's list of people disqualified from voting.\n\nOfficial ballot language. Source: https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf",
+      "effectiveDate": "2027-07-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · South Dakota Constitutional Amendment K: Trust fund for unclaimed property",
+      "summary": "Title: An Amendment to the South Dakota Constitution Establishing the Trust for Unclaimed Property Fund. Attorney General Explanation: Under South Dakota statute, intangible property is presumed to be abandoned if it remains unclaimed by the owner for more than three years after it became payable or distributable. Examples of intangible property are traveler’s checks, money orders, bank deposits, refunds, stocks, funds owed under a life insurance policy, and property held in a safe deposit box. Abandoned intangible property is transferred to the State Treasurer to hold while waiting for the owner to claim it. The State Treasurer must provide public notice of the abandoned property. This proposed constitutional amendment establishes a trust fund where unclaimed abandoned property will be deposited. Portions of the interest and income from this fund will be distributed into the general fund for the benefit of the state. This proposed amendment requires the Legislature to determine the amount to be distributed that promotes the growth of the trust fund and the distributed amount. Vote “Yes” to adopt the amendment. Vote “No” to leave the Constitution as it is.\n\nIn short: Would create a constitutional trust fund to hold unclaimed abandoned property, with part of its earnings distributed to the state general fund in amounts set by the Legislature.\n\nOfficial ballot language. Source: https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf",
+      "effectiveDate": "2027-07-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · South Dakota Constitutional Amendment L: 60% vote to approve constitutional amendments",
+      "summary": "Title: An Amendment to the South Dakota Constitution Requiring that a Proposed Constitutional Amendment or Revision Receive an Affirmative Vote of Sixty Percent of the Votes Cast. Attorney General Explanation: The State Constitution provides that any proposed constitutional amendment or revision must be submitted to the voters for approval. Currently, a proposed constitutional amendment or revision becomes part of the Constitution if approved by a majority of the votes cast. This proposed Constitutional Amendment increases the number of votes required for a proposed constitutional amendment or revision to become part of the Constitution. If passed, further constitutional amendments must receive an affirmative vote of sixty percent of the votes cast to be implemented. Vote “Yes” to adopt the amendment. Vote “No” to leave the Constitution as it is.\n\nIn short: Would require future constitutional amendments and revisions to win at least 60% of the votes cast, instead of a simple majority, to become part of the constitution.\n\nOfficial ballot language. Source: https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf",
+      "effectiveDate": "2027-07-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}

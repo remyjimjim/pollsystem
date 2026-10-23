@@ -1,0 +1,182 @@
+{
+  "state": "South Dakota",
+  "abbr": "SD",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T02:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Mike Rounds",
+          "party": "Republican"
+        },
+        {
+          "name": "Brian L Bengs",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        {
+          "name": "Larry Rhoden / Tony Venhuizen",
+          "party": "Republican"
+        },
+        {
+          "name": "Dan Ahlers / Steven McCleerey",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Heather Baxter",
+          "party": "Republican"
+        },
+        {
+          "name": "Terrence Davis",
+          "party": "Democratic"
+        },
+        {
+          "name": "Tamara J. Lesnar",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Lance Russell",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "State Auditor",
+      "candidates": [
+        {
+          "name": "Catherine Barranco",
+          "party": "Republican"
+        },
+        {
+          "name": "Tom Cool",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {
+          "name": "Melissa Hull",
+          "party": "Republican"
+        },
+        {
+          "name": "Margaret Kuipers",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Commissioner of School and Public Lands",
+      "candidates": [
+        {
+          "name": "Brock Greenfield",
+          "party": "Republican"
+        },
+        {
+          "name": "Raeann Mettler",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Public Utilities Commissioner",
+      "candidates": [
+        {
+          "name": "Don Haggar",
+          "party": "Republican"
+        },
+        {
+          "name": "Frank Kloucek",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 0,
+      "candidates": [
+        {
+          "name": "Marty Jackley",
+          "party": "Republican"
+        },
+        {
+          "name": "Nicole \"Nikki\" Gronli",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Amendment I",
+      "subject": "End Medicaid expansion if federal share drops below 90%",
+      "ballotTitle": "Title: An Amendment to the South Dakota Constitution that Repeals Expanded Medicaid Coverage if Federal Funding for the Program Drops below 90%. Attorney General Explanation: Medicaid is a program, funded by the State and the federal government, to provide medical coverage for low-income children, pregnant women, disabled individuals, and the elderly. In the 2022 General Election the voters approved Constitutional Amendment D, which expanded Medicaid eligibility in South Dakota. Amendment D requires the State to also provide Medicaid benefits to anyone over the age of 18 and under 65 whose income is at or below 133% of the federal property level, plus 5% of the federal poverty level for the applicable family size. Currently, federal law requires the federal government to fund 90% of South Dakota’s Medicaid expansion. This proposed Constitutional Amendment ends the expanded Medicaid coverage if the federal funding for expansion drops below 90%. If federal funding drops below that 90% threshold, Medicaid coverage will once again only apply to low-income children, pregnant women, disabled individuals, and the elderly. Vote “Yes” to adopt the amendment. Vote “No” to leave the Constitution as it is.",
+      "summary": "Would end the constitutional requirement for expanded Medicaid coverage (approved by voters in 2022) if the federal government's share of the cost falls below 90%.",
+      "source": "https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment J",
+      "subject": "Only U.S. citizens may vote",
+      "ballotTitle": "Title: An Amendment to the South Dakota Constitution Clarifying that an Individual Must Be a Citizen of the United States to be Eligible to Vote. Attorney General Explanation: Article VII, § 2 of the South Dakota Constitution defines who is qualified to vote in state elections. Among these qualifications are age, residency, and United States citizenship requirements. Article VII, § 2 also establishes that individuals may be disqualified from voting because of mental incompetence or a felony conviction. This constitutional amendment adds people who are not United States citizens to the list of individuals disqualified from voting, clarifying the existing requirement that only citizens may vote in state elections. Vote “Yes” to adopt the amendment. Vote “No” to leave the Constitution as it is.",
+      "summary": "Would add non-citizens of the United States to the constitution's list of people disqualified from voting.",
+      "source": "https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment K",
+      "subject": "Trust fund for unclaimed property",
+      "ballotTitle": "Title: An Amendment to the South Dakota Constitution Establishing the Trust for Unclaimed Property Fund. Attorney General Explanation: Under South Dakota statute, intangible property is presumed to be abandoned if it remains unclaimed by the owner for more than three years after it became payable or distributable. Examples of intangible property are traveler’s checks, money orders, bank deposits, refunds, stocks, funds owed under a life insurance policy, and property held in a safe deposit box. Abandoned intangible property is transferred to the State Treasurer to hold while waiting for the owner to claim it. The State Treasurer must provide public notice of the abandoned property. This proposed constitutional amendment establishes a trust fund where unclaimed abandoned property will be deposited. Portions of the interest and income from this fund will be distributed into the general fund for the benefit of the state. This proposed amendment requires the Legislature to determine the amount to be distributed that promotes the growth of the trust fund and the distributed amount. Vote “Yes” to adopt the amendment. Vote “No” to leave the Constitution as it is.",
+      "summary": "Would create a constitutional trust fund to hold unclaimed abandoned property, with part of its earnings distributed to the state general fund in amounts set by the Legislature.",
+      "source": "https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment L",
+      "subject": "60% vote to approve constitutional amendments",
+      "ballotTitle": "Title: An Amendment to the South Dakota Constitution Requiring that a Proposed Constitutional Amendment or Revision Receive an Affirmative Vote of Sixty Percent of the Votes Cast. Attorney General Explanation: The State Constitution provides that any proposed constitutional amendment or revision must be submitted to the voters for approval. Currently, a proposed constitutional amendment or revision becomes part of the Constitution if approved by a majority of the votes cast. This proposed Constitutional Amendment increases the number of votes required for a proposed constitutional amendment or revision to become part of the Constitution. If passed, further constitutional amendments must receive an affirmative vote of sixty percent of the votes cast to be implemented. Vote “Yes” to adopt the amendment. Vote “No” to leave the Constitution as it is.",
+      "summary": "Would require future constitutional amendments and revisions to win at least 60% of the votes cast, instead of a simple majority, to become part of the constitution.",
+      "source": "https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf"
+    }
+  ],
+  "measureEffective": "2027-07-01",
+  "measureEffectiveNote": "SDCL 2-1-12: each constitutional amendment, initiated measure or referred law approved by a majority is effective on the first day of July after the State Canvassing Board completes the official canvass, i.e. July 1, 2027 for the Nov 3, 2026 election (also stated in the SOS 2026 ballot question pamphlet).",
+  "sources": [
+    "https://vip.sdsos.gov/candidatelist.aspx?eid=774",
+    "https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026-ballot-questions.aspx",
+    "https://sdsos.gov/elections-voting/upcoming-elections/general-information/2026%20Election%20Information/2026%20Ballot%20Question%20Information/2026%20Ballot%20Question%20Files/2026%20BQ/2026GeneralBQPamphletFINAL.pdf",
+    "https://sdlegislature.gov/api/Statutes/12-2-3.html",
+    "https://sdlegislature.gov/api/Statutes/2-1-12.html",
+    "https://ballotpedia.org/South_Dakota_elections,_2026"
+  ],
+  "notes": [
+    "Candidates are from the Secretary of State's VIP candidate list for the 2026 general election (eid=774), read 2026-10-23; the list gives party codes (REP/DEM/LIB/IND), spelled out here. Ballot order numbers on that list put Republicans first, then Democrats, then others.",
+    "Governor and Lieutenant Governor are elected jointly (listed as 'Governor and Lieutenant Governor'); Larry Rhoden won the Republican nomination after a primary runoff (Ballotpedia).",
+    "U.S. Senate: Democratic nominee Julian Beaudion withdrew on 08/04/2026 and is marked 'Withdrawn' on the SOS list; no replacement Democrat is listed, so the race is Rounds (R) vs Brian L Bengs (Independent).",
+    "Attorney General: Lance Russell (R) is the only listed candidate; included as an unopposed contest.",
+    "Ballotpedia (cross-check) agrees on every nominee and lists no state Supreme Court retention election in South Dakota for 2026.",
+    "Measures I-L are the four legislatively referred amendments on the ballot. Ballot titles and Attorney General explanations are from the SOS 2026 ballot question pamphlet (the AG statement PDFs are scanned images). Other petitions on the SOS page (initiative/referendum amendments, property-tax repeal, SB 245 referendum, school prayer) are listed as circulating or potential and do not appear in the pamphlet or on Ballotpedia's list.",
+    "SDCL 12-2-3: polls open 7 a.m. to 7 p.m. local time. West River is on Mountain time, so the last polls close at 7 p.m. MST = 02:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Ballot-face party wording (e.g. 'Democrat' vs 'Democratic', 'Independent') was not checked against a printed sample ballot.",
+    "Amendment I's AG explanation reads 'federal property level' (apparently meaning 'federal poverty level'); kept verbatim from the SOS pamphlet.",
+    "Whether the ballot prints the 'Vote Yes/No' recitation exactly as in the pamphlet was not checked against a sample ballot.",
+    "No Democratic replacement for the U.S. Senate race after Beaudion's withdrawal was found; the SOS list shows none."
+  ]
+}
