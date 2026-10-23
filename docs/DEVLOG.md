@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-23 — Fix: Cancel on another district ballot removed shared votes
+
+**Requested:**
+
+> when I login as a california voter and vote for the midterm for district
+> 10 then go to /polls/search and select the midterm for district 12 it shows
+> the votes that were selected for district 10 and if I click the 'Cancel' my
+> votes then … the only selection that survived is the selection for U.S. Rep
+> District 10. I don't think the other selections should disappear.
+
+**Changed:**
+
+- `BallotRules.otherBallotVoted` finds the sibling ballot whose own races
+  the user voted on. `/responses/me` returns it as `otherBallot`.
+- Voting form: on such a ballot, the form shows "You voted on <ballot>. You
+  can vote on only one district ballot in your state…" with a link (9
+  languages), in place of the form and its Cancel button.
+- Cancel on a ballot the user didn't vote on now removes only that ballot's
+  own races. The shared statewide votes and measures stay.
+
+**Verified:**
+
+- `BallotRulesTest` (4) passes, including this scenario.
+- Local API: voted on WA District 1 and the statewide election. District 2
+  then reports District 1 as the other ballot, and cancelling on District 2
+  removed nothing.
+
+**Commit:** `9b88a9a`
+
+---
+
 ## 2026-10-23 — Midterm voting rules and "Cancel my votes" (V38)
 
 **Requested:**
