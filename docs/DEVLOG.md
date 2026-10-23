@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-23 — Washington launch content on prod, as drafts (verified)
+
+**Requested:**
+
+> It is saved
+
+**Changed:**
+
+- The owner saved a prod sign-in token for their super account in the
+  git-ignored `.devcontainer/prod-super-token.secrets.env`. The first attempt
+  held other clipboard text; it was checked without being printed.
+  `/api/auth/me` confirmed remyjimjim@proton.me, SUPER.
+- `create-polls.py` ran against prod with `wa-2026-statewide.json` and
+  `wa-2026-house.json`. That created election 1 (Supreme Court) with ballot
+  measures 1–3, and elections 2–11 (CD-1 to CD-10).
+
+**Verified:**
+
+- Before: prod had 0 polls (read-only check).
+- After: 11 elections (30 candidates) and 3 ballot measures, **all DRAFT**.
+- **Not published:** that waits for the owner's review and a check of
+  IP26-645's title against the printed voters' pamphlet.
+
+---
+
 ## 2026-10-23 — Launch content: Washington's 10 House elections drafted
 
 **Requested:**
