@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-23 — One ballot per district live on staging and prod (verified)
+
+**Requested:**
+
+> push it and deploy to staging, then prod!
+
+**Changed:**
+
+- Pushed `ec5153a`. Staging deployed with V37.
+- `--link-ballots` on staging relinked the 70 district elections (WA 10,
+  CA 52, CO 8), renamed and republished them.
+- Waited for the prod site's build of `ec5153a`, then deployed the prod
+  backend: **v20**, schema 37.
+- `--link-ballots` on prod: 70 relinked and republished.
+
+**Verified:**
+
+- **Staging and prod:** search type=Election "Midterm" lists 70 ballots (WA 10,
+  CA 52, CO 8), with no statewide election listed. All 73 elections are
+  PUBLISHED.
+- **Prod (read-only):**
+  - 70 `election_includes` rows across the 3 statewide elections;
+  - the 2 existing candidate votes are intact. Republishing keeps identical
+    candidates, so their rows aren't rewritten.
+
+---
+
 ## 2026-10-23 — One ballot per district (local)
 
 **Requested:**
