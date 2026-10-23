@@ -61,6 +61,22 @@ logged.
 
 ---
 
+## 2026-10-23 — South Carolina on local
+
+**Changed:**
+
+- SC: 8 statewide races, no statewide questions, 7 district ballots, all from
+  the Election Commission's candidate tracking.
+- U.S. Senate: Darline Graham (R) is the nominee. She was appointed after
+  Sen. Lindsey Graham died on July 11 and won the Aug 25 special runoff. I
+  checked this against AP-sourced coverage myself.
+
+**Verified:** built, loaded and published on local.
+
+**Commit:** `307b75c`
+
+---
+
 ## 2026-10-23 — Tennessee on local
 
 **Changed:**
