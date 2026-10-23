@@ -1,0 +1,148 @@
+{
+  "_about": "Idaho, Nov 3 2026, built by build-state.py from docs/launch-content/research/ID.json (sources and gaps in ID.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Idaho: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      13
+    ],
+    "closeDate": "2026-11-04T04:00:00Z",
+    "candidates": [
+      {
+        "name": "Jim Risch",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Matt Loesby",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Natalie M Fleming",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Todd Achilles",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Brad Little",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Terri Pickens",
+        "affiliation": "Democratic",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Pro-Life",
+        "affiliation": "Constitution",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Paul Sand",
+        "affiliation": "Libertarian",
+        "officeName": "Governor"
+      },
+      {
+        "name": "John R. Stegner",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Scott Bedke",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Eric Myricks",
+        "affiliation": "Democratic",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Phil McGrane",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Shawn Keenan",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Brandon D Woolf",
+        "affiliation": "Republican",
+        "officeName": "State Controller"
+      },
+      {
+        "name": "Rakesh Mohan",
+        "affiliation": "Democratic",
+        "officeName": "State Controller"
+      },
+      {
+        "name": "Julie A. Ellsworth",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Kevin A Jones",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Raul R. Labrador",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Lori Hickman",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Debbie Critchfield",
+        "affiliation": "Republican",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Becky Sundin Mitchell",
+        "affiliation": "Democratic",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Teresa Roundy",
+        "affiliation": "Constitution",
+        "officeName": "Superintendent of Public Instruction"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Idaho HJR 4: Legislature's exclusive authority to legalize marijuana and other psychoactive substances",
+      "summary": "Shall Section 26, Article III of the Constitution of the State of Idaho be amended to provide that only the Idaho Legislature shall have power and authority to legalize the growing, producing, manufacturing, transporting, selling, delivering, dispensing, administering, prescribing, distributing, possessing, or using of marijuana, narcotics, or other psychoactive substances?\n\nIn short: Would amend the state constitution so that only the Legislature, and not a citizen initiative, could legalize marijuana, narcotics, or other psychoactive substances.\n\nOfficial ballot language. Source: https://voteidaho.gov/idaho-general-election/",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Idaho HJR 6: English as the official state language in the constitution",
+      "summary": "Shall Article X of the Constitution of the State of Idaho be amended by the addition of a new Section 8, to provide that the English language shall be the official language for the state of Idaho, and to further provide that, except as required by federal law, English shall be used in all public proceedings, public documents, public instruction, and any other public acts of any public institution in the state of Idaho?\n\nIn short: Would add a constitutional section making English the official state language and requiring its use in public proceedings, documents, instruction and other public acts, except where federal law requires otherwise.\n\nOfficial ballot language. Source: https://voteidaho.gov/idaho-general-election/",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Idaho Proposition 1: Reproductive Freedom and Privacy Act (abortion and reproductive rights)",
+      "summary": "Measure creating right to abortion before fetus viability, and post-viability to protect health; right to privacy; healthcare provider liability protections.\n\nIn short: Initiated statute that would create a statutory right to reproductive decisions, including abortion before fetal viability and afterward in a medical emergency, and would bar penalties against patients and providers for exercising that right.\n\nOfficial ballot language. Source: https://voteidaho.gov/idaho-general-election/",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T04:00:00Z"
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "state": "Idaho",
+  "abbr": "ID",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T04:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        { "name": "Jim Risch", "party": "Republican" },
+        { "name": "Matt Loesby", "party": "Libertarian" },
+        { "name": "Natalie M Fleming", "party": "Independent" },
+        { "name": "Todd Achilles", "party": "Independent" }
+      ]
+    },
+    {
+      "office": "Governor",
+      "candidates": [
+        { "name": "Brad Little", "party": "Republican" },
+        { "name": "Terri Pickens", "party": "Democratic" },
+        { "name": "Pro-Life", "party": "Constitution" },
+        { "name": "Paul Sand", "party": "Libertarian" },
+        { "name": "John R. Stegner", "party": "Independent" }
+      ]
+    },
+    {
+      "office": "Lieutenant Governor",
+      "candidates": [
+        { "name": "Scott Bedke", "party": "Republican" },
+        { "name": "Eric Myricks", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        { "name": "Phil McGrane", "party": "Republican" },
+        { "name": "Shawn Keenan", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "State Controller",
+      "candidates": [
+        { "name": "Brandon D Woolf", "party": "Republican" },
+        { "name": "Rakesh Mohan", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        { "name": "Julie A. Ellsworth", "party": "Republican" },
+        { "name": "Kevin A Jones", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        { "name": "Raul R. Labrador", "party": "Republican" },
+        { "name": "Lori Hickman", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Superintendent of Public Instruction",
+      "candidates": [
+        { "name": "Debbie Critchfield", "party": "Republican" },
+        { "name": "Becky Sundin Mitchell", "party": "Democratic" },
+        { "name": "Teresa Roundy", "party": "Constitution" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        { "name": "Russ Fulcher", "party": "Republican" },
+        { "name": "Kaylee Peterson", "party": "Democratic" },
+        { "name": "Brendan J. Gomez", "party": "Constitution" },
+        { "name": "Sarah Zabel", "party": "Independent" }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        { "name": "Mike Simpson", "party": "Republican" },
+        { "name": "Ellie Gilbreath", "party": "Democratic" },
+        { "name": "Will Johanson", "party": "Libertarian" },
+        { "name": "Emre Houser", "party": "Independent" },
+        { "name": "Tripp Charles Hutchinson", "party": "Independent" }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "HJR 4",
+      "subject": "Legislature's exclusive authority to legalize marijuana and other psychoactive substances",
+      "ballotTitle": "Shall Section 26, Article III of the Constitution of the State of Idaho be amended to provide that only the Idaho Legislature shall have power and authority to legalize the growing, producing, manufacturing, transporting, selling, delivering, dispensing, administering, prescribing, distributing, possessing, or using of marijuana, narcotics, or other psychoactive substances?",
+      "summary": "Would amend the state constitution so that only the Legislature, and not a citizen initiative, could legalize marijuana, narcotics, or other psychoactive substances.",
+      "source": "https://voteidaho.gov/idaho-general-election/"
+    },
+    {
+      "designation": "HJR 6",
+      "subject": "English as the official state language in the constitution",
+      "ballotTitle": "Shall Article X of the Constitution of the State of Idaho be amended by the addition of a new Section 8, to provide that the English language shall be the official language for the state of Idaho, and to further provide that, except as required by federal law, English shall be used in all public proceedings, public documents, public instruction, and any other public acts of any public institution in the state of Idaho?",
+      "summary": "Would add a constitutional section making English the official state language and requiring its use in public proceedings, documents, instruction and other public acts, except where federal law requires otherwise.",
+      "source": "https://voteidaho.gov/idaho-general-election/"
+    },
+    {
+      "designation": "Proposition 1",
+      "subject": "Reproductive Freedom and Privacy Act (abortion and reproductive rights)",
+      "ballotTitle": "Measure creating right to abortion before fetus viability, and post-viability to protect health; right to privacy; healthcare provider liability protections.",
+      "summary": "Initiated statute that would create a statutory right to reproductive decisions, including abortion before fetal viability and afterward in a medical emergency, and would bar penalties against patients and providers for exercising that right.",
+      "source": "https://voteidaho.gov/idaho-general-election/"
+    }
+  ],
+  "measureEffective": "2026-11-24",
+  "measureEffectiveNote": "Constitutional amendments take effect on adoption, which is determined by the State Board of Canvassers; Idaho Code 34-1211 requires it to convene within 21 days after the general election, i.e. by November 24, 2026, used here as the representative date. HJR 4's text says 'Effective immediately upon adoption by the voters of Idaho.' Proposition 1, if approved, takes effect January 1, 2027 under its Section 2.",
+  "sources": [
+    "https://api-run.voteidaho.gov/api/FiledCandidates/SearchCandidates",
+    "https://run.voteidaho.gov/search",
+    "https://voteidaho.gov/idaho-general-election/",
+    "https://voteidaho.gov/initiatives-amendments/",
+    "https://archive.voteidaho.gov/download/2026_Voter_Pamphlet.pdf",
+    "https://legislature.idaho.gov/proposed-amendment-to-the-idaho-constitution/",
+    "https://legislature.idaho.gov/statutesrules/idstat/title34/t34ch12/sect34-1211/",
+    "https://legislature.idaho.gov/statutesrules/idstat/title34/t34ch18/sect34-1809/",
+    "https://www.thegreenpapers.com/G26/ID"
+  ],
+  "notes": [
+    "Candidates are from the Idaho Secretary of State candidate portal (run.voteidaho.gov, 'Search Filed Candidates'), election '11/03/2026 - 2026 GENERAL', which reports isFinalList=true (592 filings, read 2026-10-23). Only status 'Approved', non-write-in filings are included; names are the portal's ballot names.",
+    "Write-in excluded: Jacob Burnett (Independent, Governor). Withdrawn and excluded: David Roth (Democratic, U.S. Senator, withdrew 2026-09-01) and C. Sierra (Constitution, U.S. House District 2).",
+    "No Democratic candidate remains in the U.S. Senate race; Todd Achilles is listed as Independent.",
+    "The Constitution Party nominee for Governor is listed under the ballot name 'Pro-Life' (Green Papers lists him as Marvin \"Pro Life\" Richardson).",
+    "Governor and Lieutenant Governor are elected separately in Idaho.",
+    "Also on the statewide ballot: a non-binding Advisory Question (House Bill 932) asking voters to pick a state gun from six options (Winchester Model 1894; Winchester Model 1873; 1873 Colt Single Action Army Revolver; M1 Garand rifle; Colt M1911 pistol; Remington Model 700). It is multiple-choice rather than yes/no, so it is left out of 'measures'.",
+    "Idaho polls are open 8:00 a.m. to 8:00 p.m. local time. Northern Idaho (the panhandle) is on Pacific time, so the last polls close at 8:00 PM PST (UTC-8) = 04:00 UTC on Nov 4, 2026; southern Idaho closes at 8:00 PM MST = 03:00 UTC."
+  ],
+  "unconfirmed": [
+    "Exact ballot-face spelling of names (e.g. 'Brandon D Woolf', 'Kevin A Jones', 'Natalie M Fleming' without periods) was taken from the SOS filing portal, not a printed sample ballot.",
+    "Which Proposition 1 title prints on the ballot: the short ballot title is used here; the voter pamphlet also gives a ~200-word long ballot title, and Idaho Code 34-1809 does not clearly say which one is printed.",
+    "Measure designations ('HJR 4', 'HJR 6', 'Proposition 1') follow the voter pamphlet headings; exact ballot-face labels were not checked against a sample ballot.",
+    "Exact certification date: 2026-11-24 is the statutory deadline for the state canvass, which may finish earlier.",
+    "The Senate Democratic withdrawal and the Achilles independent bid were not cross-checked in news (web search budget exhausted); they rest only on the SOS portal data."
+  ]
+}

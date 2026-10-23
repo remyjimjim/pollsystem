@@ -1,0 +1,75 @@
+{
+  "_about": "Idaho, Nov 3 2026, built by build-state.py from docs/launch-content/research/ID.json (sources and gaps in ID.md). One ballot per district, each including \"2026 Midterm · Idaho: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Idaho District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        13
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Russ Fulcher",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Kaylee Peterson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Brendan J. Gomez",
+          "affiliation": "Constitution",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Sarah Zabel",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Idaho District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        13
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Mike Simpson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Ellie Gilbreath",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Will Johanson",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Emre Houser",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Tripp Charles Hutchinson",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Idaho: statewide races & measures"
+}
