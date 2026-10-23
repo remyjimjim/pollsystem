@@ -262,7 +262,7 @@
     "soFar": "Personne n'a encore répondu. | 1 personne a répondu jusqu'ici. | {n} personnes ont répondu jusqu'ici.",
     "superLive": "Vue super : résultats en direct avec les chiffres bruts.",
     "countWithheld": "moins de {n}",
-    "alsoOnBallot": "Aussi sur ce bulletin (voir leurs résultats) :"
+    "alsoOnBallot": "Aussi sur ce bulletin"
   },
   "notFound": {
     "heading": "Introuvable",

@@ -262,7 +262,7 @@
     "soFar": "Ingen har svart ennå. | 1 person har svart så langt. | {n} personer har svart så langt.",
     "superLive": "Super-visning: sanntidsresultater med råtall.",
     "countWithheld": "færre enn {n}",
-    "alsoOnBallot": "Også på denne stemmeseddelen (se resultatene):"
+    "alsoOnBallot": "Også på denne stemmeseddelen"
   },
   "notFound": {
     "heading": "Ikke funnet",

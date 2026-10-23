@@ -262,7 +262,7 @@
     "soFar": "Noch hat niemand geantwortet. | Bisher hat 1 Person geantwortet. | Bisher haben {n} Personen geantwortet.",
     "superLive": "Super-Ansicht: Live-Ergebnisse mit Rohzahlen.",
     "countWithheld": "weniger als {n}",
-    "alsoOnBallot": "Ebenfalls auf diesem Stimmzettel (zu den Ergebnissen):"
+    "alsoOnBallot": "Ebenfalls auf diesem Stimmzettel"
   },
   "notFound": {
     "heading": "Nicht gefunden",

@@ -262,7 +262,7 @@
     "soFar": "Nessuno ha ancora risposto. | Finora ha risposto 1 persona. | Finora hanno risposto {n} persone.",
     "superLive": "Vista super: risultati in tempo reale con i numeri esatti.",
     "countWithheld": "meno di {n}",
-    "alsoOnBallot": "Anche su questa scheda (vedi i risultati):"
+    "alsoOnBallot": "Anche su questa scheda"
   },
   "notFound": {
     "heading": "Non trovato",

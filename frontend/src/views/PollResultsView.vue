@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PublicCommentsList from '../components/PublicCommentsList.vue'
+import BallotPartResults, { type BallotPart } from '../components/BallotPartResults.vue'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -67,6 +68,9 @@ interface ElectionResultsDto {
   visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
   /** Respondents inside / outside the purview; null = withheld (a small group). */
   purviewCounts?: { inside: number | null; outside: number | null }
+  /** The rest of the ballot: included elections and every ballot measure on it. */
+  includedElectionIds?: number[]
+  ballotMeasureIds?: number[]
 }
 
 interface BallotMeasureResultsDto {
@@ -92,21 +96,24 @@ interface BallotMeasureResultsDto {
 
 const route = useRoute()
 const type = computed(() => String(route.params.type))
-// A district ballot's results are its own race; the statewide races it
-// includes (V37) have their own results page, linked here.
-const alsoOnBallot = ref<{ id: number; title: string }[]>([])
-const alsoOnBallotFor = ref<string | null>(null)
-async function loadAlsoOnBallot() {
-  const key = `${type.value}/${id.value}`
-  if (alsoOnBallotFor.value === key) return
-  alsoOnBallotFor.value = key
-  alsoOnBallot.value = []
-  if (type.value !== 'election') return
+// A district ballot's results: its own race, then the rest of the ballot (the
+// statewide election it includes, V37, and every ballot measure), each with
+// the same filters and its own small-poll privacy.
+const ballotParts = ref<BallotPart[]>([])
+async function loadBallotParts(own: ElectionResultsDto, params: Record<string, string>) {
+  const forId = id.value
   try {
-    const e = (await axios.get<{ includedElectionIds?: number[] }>(`/api/polls/elections/${id.value}`)).data
-    alsoOnBallot.value = await Promise.all((e.includedElectionIds ?? []).map(async i =>
-      ({ id: i, title: (await axios.get<{ title: string }>(`/api/polls/elections/${i}`)).data.title })))
-  } catch { /* the links are a convenience; results still show */ }
+    const parts: BallotPart[] = []
+    for (const i of own.includedElectionIds ?? []) {
+      const r = (await axios.get<ElectionResultsDto>(`/api/polls/elections/${i}/results`, { params })).data
+      parts.push({ key: `e${i}`, title: r.title, visibility: r.visibility, suppressed: r.suppressed, suppressionMessage: r.suppressionMessage, perCandidate: r.perCandidate })
+    }
+    for (const m of own.ballotMeasureIds ?? []) {
+      const r = (await axios.get<BallotMeasureResultsDto>(`/api/polls/ballot-measures/${m}/results`, { params })).data
+      parts.push({ key: `m${m}`, title: r.title, visibility: r.visibility, suppressed: r.suppressed, suppressionMessage: r.suppressionMessage, measure: r })
+    }
+    if (id.value === forId) ballotParts.value = parts
+  } catch { /* the ballot's own results still show */ }
 }
 const id = computed(() => Number(route.params.id))
 
@@ -317,7 +324,8 @@ async function load() {
       eData.value = res.data
       qData.value = null
       bData.value = null
-      void loadAlsoOnBallot()
+      ballotParts.value = []
+      void loadBallotParts(res.data, params)
     } else {
       const res = await axios.get<BallotMeasureResultsDto>(
         `/api/polls/ballot-measures/${id.value}/results`,
@@ -412,12 +420,6 @@ function purviewCount(n: number | null): string {
         {{ $t('results.purviewArea', { area: purviewArea }) }}
       </p>
       <h1 v-else class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('results.heading') }}</h1>
-      <p v-if="alsoOnBallot.length" class="mb-4 text-sm text-slate-700" data-test="also-on-ballot">
-        {{ $t('results.alsoOnBallot') }}
-        <template v-for="(e, i) in alsoOnBallot" :key="e.id">
-          <router-link :to="`/polls/election/${e.id}/results`" class="font-semibold underline">{{ e.title }}</router-link><template v-if="i < alsoOnBallot.length - 1">, </template>
-        </template>
-      </p>
 
       <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
       <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
@@ -653,6 +655,11 @@ function purviewCount(n: number | null): string {
             </div>
           </section>
         </template>
+      </template>
+
+      <template v-if="eData && ballotParts.length">
+        <h2 class="mb-0 mt-8 text-lg font-semibold text-slate-800" data-test="also-on-ballot">{{ $t('results.alsoOnBallot') }}</h2>
+        <BallotPartResults v-for="p in ballotParts" :key="p.key" :part="p" />
       </template>
     </template>
   </div>

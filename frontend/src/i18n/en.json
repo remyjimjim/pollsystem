@@ -301,7 +301,7 @@
     "soFar": "No one has responded yet. | 1 person has responded so far. | {n} people have responded so far.",
     "superLive": "Super view: live results with raw numbers.",
     "countWithheld": "fewer than {n}",
-    "alsoOnBallot": "Also on this ballot (see their results):"
+    "alsoOnBallot": "Also on this ballot"
   },
   "notFound": {
     "heading": "Not Found",

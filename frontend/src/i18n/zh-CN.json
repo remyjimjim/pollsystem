@@ -262,7 +262,7 @@
     "soFar": "还没有人回复。 | 目前已有 1 人回复。 | 目前已有 {n} 人回复。",
     "superLive": "超级管理员视图：带原始数字的实时结果。",
     "countWithheld": "少于 {n}",
-    "alsoOnBallot": "本选票上的其他项目（查看结果）："
+    "alsoOnBallot": "本选票上的其他项目"
   },
   "notFound": {
     "heading": "未找到",

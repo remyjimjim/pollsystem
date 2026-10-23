@@ -46,7 +46,10 @@ data class ElectionResultsDto(
     val purviewAreas: List<String> = emptyList(),
     val visibility: ResultsVisibility,
     /** Respondents inside / outside the purview (null = withheld, small group). */
-    val purviewCounts: PurviewCounts = PurviewCounts(null, null)
+    val purviewCounts: PurviewCounts = PurviewCounts(null, null),
+    /** The rest of the ballot (V37), so its results page can show them all: included elections, and the published measures of this one and those. */
+    val includedElectionIds: List<Long> = emptyList(),
+    val ballotMeasureIds: List<Long> = emptyList()
 )
 
 @RestController
@@ -57,7 +60,9 @@ class ElectionResultsController(
     private val blocks: PollBlockService,
     private val purviews: PollPurviewService,
     private val access: ResultsAccess,
-    private val publicComments: PublicComments
+    private val publicComments: PublicComments,
+    private val includes: ElectionIncludes,
+    private val measures: org.kodewerks.pollsystem.repository.BallotMeasureRepository
 ) {
 
     @GetMapping
@@ -104,7 +109,11 @@ class ElectionResultsController(
             purviewLevel = purviews.scopeLevelOf(purviewRows),
             purviewAreas = purviews.areaNames(purviewRows),
             visibility = r.visibility,
-            purviewCounts = r.purviewCounts
+            purviewCounts = r.purviewCounts,
+            includedElectionIds = includes.of(id),
+            ballotMeasureIds = (listOf(id) + includes.of(id)).flatMap { e ->
+                measures.findByElectionId(e).filter { it.status != org.kodewerks.pollsystem.model.PollStatus.DRAFT }.map { it.id }
+            }
         )
     }
 }
