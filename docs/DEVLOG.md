@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Alabama on local
+
+**Changed:** AL: 16 statewide races, among them U.S. Senate (open seat; Moore, Wess) and Governor (Tuberville, Jones). Statewide Amendments 1–4. 7 district ballots on the Legislature's 2023 map, which the U.S. Supreme Court allowed on June 2, 2026; four districts held special primaries. All names come from the Secretary of State's sample ballots for all 67 counties. The effective date (Nov 24) is an estimate.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `038a079`
+
+---
+
 ## 2026-10-23 — Kansas on local
 
 **Changed:** KS: 6 statewide races (U.S. Senate, Gov/Lt Gov, Secretary of State, Attorney General, Treasurer, Insurance Commissioner), the citizenship-for-voting amendment (HCR 5004), and 4 district ballots on the 2022 map. All of it comes from the Secretary of State's candidate table and amendment page.
