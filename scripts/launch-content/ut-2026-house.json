@@ -1,0 +1,149 @@
+{
+  "_about": "Utah, Nov 3 2026, built by build-state.py from docs/launch-content/research/UT.json (sources and gaps in UT.md). One ballot per district, each including \"2026 Midterm · Utah: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Utah District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        45
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Jesse West",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Ben McAdams",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Elias Henry Montgomery",
+          "affiliation": "Unaffiliated",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Riley Owen",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Utah District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        45
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Peter Crosby",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Daniel Cottam",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Robert M. Moesinger",
+          "affiliation": "Unaffiliated",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Blake D. Moore",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Carlton E. Bowen",
+          "affiliation": "Independent American",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Utah District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        45
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Kent S. Udell",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Cassie Easley",
+          "affiliation": "Constitution",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Celeste Maloy",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Ayden Scott",
+          "affiliation": "Unaffiliated",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Michael R. Stoddard",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Adonis Hooslyn",
+          "affiliation": "Unaffiliated",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Utah District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        45
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Taylor Wright",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Jonny Larsen",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Steven Burt",
+          "affiliation": "Unaffiliated",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Mike Kennedy",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Utah: statewide races & measures"
+}

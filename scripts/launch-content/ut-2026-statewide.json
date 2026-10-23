@@ -1,0 +1,30 @@
+{
+  "_about": "Utah, Nov 3 2026, built by build-state.py from docs/launch-content/research/UT.json (sources and gaps in UT.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Utah: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      45
+    ],
+    "closeDate": "2026-11-04T03:00:00Z",
+    "candidates": []
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Utah Constitutional Amendment A: How proposed constitutional amendments are published",
+      "summary": "Shall the Utah Constitution be amended to change how proposed constitutional amendments are published, requiring publication for 60 days immediately before the general election in a manner established by state law instead of in newspapers? If voters approve Constitutional Amendment A, state statute would change to require the Lieutenant Governor to publish the full text of all proposed constitutional amendments and other ballot questions from the Legislature, on the Utah Public Notice Website and on the Lieutenant Governor's website for 60 days immediately before the general election.\n\nIn short: Would replace the constitutional requirement to publish proposed amendments in newspapers with publication for 60 days before the general election in a manner set by state law.\n\nOfficial ballot language. Source: https://www.utah.gov/pmn/files/1482453.pdf",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T03:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Utah Constitutional Amendment B: 60% vote for citizen initiatives that raise taxes",
+      "summary": "Shall the Utah Constitution be amended to require that citizen-proposed laws that increase taxes compared to existing law be approved by at least 60% of voters, instead of a simple majority?\n\nIn short: Would require statewide citizen initiatives that impose, expand or raise a tax to receive at least 60% of the vote, rather than a simple majority, to pass.\n\nOfficial ballot language. Source: https://www.utah.gov/pmn/files/1482453.pdf",
+      "effectiveDate": "2026-11-23",
+      "closeDate": "2026-11-04T03:00:00Z"
+    }
+  ]
+}

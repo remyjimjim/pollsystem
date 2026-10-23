@@ -1,0 +1,147 @@
+{
+  "state": "Utah",
+  "abbr": "UT",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T03:00:00Z",
+  "statewide": [],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Jesse West",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Ben McAdams",
+          "party": "Democratic"
+        },
+        {
+          "name": "Elias Henry Montgomery",
+          "party": "Unaffiliated"
+        },
+        {
+          "name": "Riley Owen",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Peter Crosby",
+          "party": "Democratic"
+        },
+        {
+          "name": "Daniel Cottam",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Robert M. Moesinger",
+          "party": "Unaffiliated"
+        },
+        {
+          "name": "Blake D. Moore",
+          "party": "Republican"
+        },
+        {
+          "name": "Carlton E. Bowen",
+          "party": "Independent American"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Kent S. Udell",
+          "party": "Democratic"
+        },
+        {
+          "name": "Cassie Easley",
+          "party": "Constitution"
+        },
+        {
+          "name": "Celeste Maloy",
+          "party": "Republican"
+        },
+        {
+          "name": "Ayden Scott",
+          "party": "Unaffiliated"
+        },
+        {
+          "name": "Michael R. Stoddard",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Adonis Hooslyn",
+          "party": "Unaffiliated"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Taylor Wright",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Jonny Larsen",
+          "party": "Democratic"
+        },
+        {
+          "name": "Steven Burt",
+          "party": "Unaffiliated"
+        },
+        {
+          "name": "Mike Kennedy",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Amendment A",
+      "subject": "How proposed constitutional amendments are published",
+      "ballotTitle": "Shall the Utah Constitution be amended to change how proposed constitutional amendments are published, requiring publication for 60 days immediately before the general election in a manner established by state law instead of in newspapers? If voters approve Constitutional Amendment A, state statute would change to require the Lieutenant Governor to publish the full text of all proposed constitutional amendments and other ballot questions from the Legislature, on the Utah Public Notice Website and on the Lieutenant Governor's website for 60 days immediately before the general election.",
+      "summary": "Would replace the constitutional requirement to publish proposed amendments in newspapers with publication for 60 days before the general election in a manner set by state law.",
+      "source": "https://www.utah.gov/pmn/files/1482453.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment B",
+      "subject": "60% vote for citizen initiatives that raise taxes",
+      "ballotTitle": "Shall the Utah Constitution be amended to require that citizen-proposed laws that increase taxes compared to existing law be approved by at least 60% of voters, instead of a simple majority?",
+      "summary": "Would require statewide citizen initiatives that impose, expand or raise a tax to receive at least 60% of the vote, rather than a simple majority, to pass.",
+      "source": "https://www.utah.gov/pmn/files/1482453.pdf"
+    }
+  ],
+  "measureEffective": "2026-11-23",
+  "measureEffectiveNote": "Each amendment's resolution sets its own effective date if approved by a majority voting on it. Amendment B (Utah Const. art. VI, sec. 1, contingently effective text on le.utah.gov) takes effect November 23, 2026; Amendment A (art. XXIII, sec. 1) takes effect January 1, 2027. 2026-11-23, the earlier date, is used as the representative date.",
+  "sources": [
+    "https://www.utah.gov/pmn/files/1482453.pdf",
+    "https://www.utah.gov/pmn/files/1492833.pdf",
+    "https://vote.utah.gov/2026-candidate-filings/",
+    "https://le.utah.gov/xcode/ArticleVI/UC_AVI_S1_2026112320250507.html",
+    "https://le.utah.gov/xcode/ArticleXXIII/UC_AXXIII_S1_2025050720250507.html",
+    "https://www.daviscountyutah.gov/docs/librariesprovider11/election-files/2026-general-election-sample-ballot.pdf",
+    "https://www.utah.gov/pmn/files/1484353.pdf",
+    "https://utahnewsdispatch.com/2026/03/16/2026-elections-utah-new-map-draws-41-candidates-for-congress/"
+  ],
+  "notes": [
+    "No U.S. Senate seat is up in Utah in 2026 (Lee's term ends 2029, Curtis's 2031) and no statewide executive office is elected until 2028, so there are no statewide candidate races; statewide is an empty list.",
+    "Statewide judicial retention questions (not modeled): Utah Supreme Court Justice Jill M. Pohlman; Court of Appeals Judges Michele M. Christiansen Forster, David Ned Mortensen, John David Luthy, Ryan M. Harris, Amy Jo Oliver and Gregory Keith Orme. vote.utah.gov lists a Matthew L. Bell retention as 'Withdrew'.",
+    "U.S. House candidates, parties and order are from the Lieutenant Governor's 2026 General Election Certification (signed Aug 28, 2026), cross-checked against vote.utah.gov candidate filings (last updated Oct 5, 2026); both agree. Names are printed in capitals on the ballot and given in title case here.",
+    "Districts are the court-ordered map adopted by the Third District Court in late 2025 (District 1 is a Salt Lake County-only seat); the LG certification's district descriptions follow that map, so it is the map in effect for 2026.",
+    "The LG certification states that no statewide ballot propositions (initiatives/referendums) qualified; the only statewide measures are the two legislatively referred amendments.",
+    "Polls close at 8:00 p.m. MST (UTC-7, after DST ends Nov 1), i.e. 2026-11-04T03:00:00Z; all of Utah is on Mountain time. Mail ballots must be received by 8 p.m. on election day (Davis and Uintah County notices)."
+  ],
+  "unconfirmed": [
+    "An ***AMENDED*** LG certification (utah.gov/pmn file 1492833) exists, but its scanned layout could not be fully read; its U.S. House and amendment content matches the original, and what was amended was not determined.",
+    "Status of any remaining appeals against the court-ordered congressional map was not verified from official sources (web search budget exhausted); news snippets indicate the federal suit was dropped.",
+    "Party labels are as given in the LG certification (e.g. 'Democratic', 'Unaffiliated'); some county ballots print abbreviations (DEM, REP, IAP) instead.",
+    "Candidate changes after the Oct 5, 2026 vote.utah.gov update were not checked."
+  ]
+}
