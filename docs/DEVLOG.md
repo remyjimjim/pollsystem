@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Montana on local
+
+**Changed:** MT: U.S. Senate (open seat) and Supreme Court Seat 4, plus CI-132, CI-133 and I-194. 2 district ballots. sosmt.gov blocked every request, so the candidates and ballot wording rest on Montana Free Press and Ballotpedia, which agree. The qualified measures list comes from a Wayback copy of the SoS page (see `MT.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `7e76677`
+
+---
+
 ## 2026-10-23 — Hawaii on local
 
 **Changed:** HI: Gov/Lt Gov and three Office of Hawaiian Affairs trustee races (At-Large is vote for 3), Questions 1–2 (judicial confirmation time, county RISE bonds), 2 district ballots. All of it comes from the Office of Elections' candidate report (Oct 22) and amendments page.
