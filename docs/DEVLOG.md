@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Kansas on local
+
+**Changed:** KS: 6 statewide races (U.S. Senate, Gov/Lt Gov, Secretary of State, Attorney General, Treasurer, Insurance Commissioner), the citizenship-for-voting amendment (HCR 5004), and 4 district ballots on the 2022 map. All of it comes from the Secretary of State's candidate table and amendment page.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `512781f`
+
+---
+
 ## 2026-10-23 — Ohio on local
 
 **Changed:** OH: 8 statewide races, including the U.S. Senate special and two Supreme Court seats. Issue 3 is the photo-ID amendment. There are 15 district ballots. ohiosos.gov returned 403 all session, so statewide races come from five county boards' certified lists, which agree. House districts 2, 4, 6, 7 and 10–13 rest on secondary sources (see `OH.md`).
