@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-23 — A district ballot's results show the whole ballot
+
+**Requested:**
+
+> After making my selections and submitting my vote on ' 2026 Midterm
+> California District 11' and then perusing the results … only the selection
+> for the U.S. Representative, District 11 are in the results.
+
+**Changed:**
+
+- `ElectionResultsDto` adds `includedElectionIds` and `ballotMeasureIds`.
+  The measure ids are the published measures of the election and of the
+  elections it includes.
+- `PollResultsView`: after the ballot's own race comes an "Also on this
+  ballot" section. It shows the statewide races and every measure through
+  the new `BallotPartResults`, using the same filters. A part below its
+  privacy minimum shows only its count so far.
+- This replaces the old "see their results" links, which used endpoints that
+  need a login, so logged-out visitors saw no links at all.
+
+**Verified:**
+
+- 18 results and ballot-rules tests pass; the frontend type-checks.
+- Logged-out screenshot of California District 11's results: the House race,
+  then Governor, Lieutenant Governor, Secretary of State, Controller, and so
+  on, down to the measures.
+
+**Commit:** `3dbe042`
+
+---
+
 ## 2026-10-23 — Fix: Cancel on another district ballot removed shared votes
 
 **Requested:**
