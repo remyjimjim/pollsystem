@@ -1,0 +1,170 @@
+{
+  "state": "Georgia",
+  "abbr": "GA",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T00:00:00Z",
+  "statewide": [
+    {"office": "U.S. Senator", "candidates": [
+      {"name": "Mike Collins", "party": "Republican"},
+      {"name": "Jon Ossoff", "party": "Democrat"}
+    ]},
+    {"office": "Governor", "candidates": [
+      {"name": "Rick Jackson", "party": "Republican"},
+      {"name": "Keisha Lance Bottoms", "party": "Democrat"}
+    ]},
+    {"office": "Lieutenant Governor", "candidates": [
+      {"name": "Greg Dolezal", "party": "Republican"},
+      {"name": "Josh McLaurin", "party": "Democrat"}
+    ]},
+    {"office": "Secretary of State", "candidates": [
+      {"name": "Tim Fleming", "party": "Republican"},
+      {"name": "Penny Brown Reynolds", "party": "Democrat"}
+    ]},
+    {"office": "Attorney General", "candidates": [
+      {"name": "Brian Strickland", "party": "Republican"},
+      {"name": "Tanya Miller", "party": "Democrat"}
+    ]},
+    {"office": "Commissioner of Agriculture", "candidates": [
+      {"name": "Tyler Harper", "party": "Republican"},
+      {"name": "Katherine E. Juhan-Arnold", "party": "Democrat"}
+    ]},
+    {"office": "Commissioner of Insurance", "candidates": [
+      {"name": "John King", "party": "Republican"},
+      {"name": "Keisha Sean Waites", "party": "Democrat"}
+    ]},
+    {"office": "State School Superintendent", "candidates": [
+      {"name": "Richard Woods", "party": "Republican"},
+      {"name": "Lydia Powell", "party": "Democrat"}
+    ]},
+    {"office": "Commissioner of Labor", "candidates": [
+      {"name": "Bárbara Rivera Holmes", "party": "Republican"},
+      {"name": "Nikki Porcher", "party": "Democrat"}
+    ]},
+    {"office": "Public Service Commissioner - District 3", "candidates": [
+      {"name": "Fitz Johnson", "party": "Republican"},
+      {"name": "Peter Hubbard", "party": "Democrat"}
+    ]},
+    {"office": "Public Service Commissioner - District 5", "candidates": [
+      {"name": "Josh Tolbert", "party": "Republican"},
+      {"name": "Shelia Edwards", "party": "Democrat"}
+    ]}
+  ],
+  "house": [
+    {"district": 1, "candidates": [
+      {"name": "Jim Kingston", "party": "Republican"},
+      {"name": "Amanda Hollowell", "party": "Democrat"}
+    ]},
+    {"district": 2, "candidates": [
+      {"name": "Matt Day", "party": "Republican"},
+      {"name": "Sanford Bishop", "party": "Democrat"}
+    ]},
+    {"district": 3, "candidates": [
+      {"name": "Brian Jack", "party": "Republican"},
+      {"name": "Maura Keller", "party": "Democrat"}
+    ]},
+    {"district": 4, "candidates": [
+      {"name": "Jim Duffie", "party": "Republican"},
+      {"name": "Henry \"Hank\" Johnson, Jr.", "party": "Democrat"}
+    ]},
+    {"district": 5, "candidates": [
+      {"name": "John \"Bongo\" Salvesen", "party": "Republican"},
+      {"name": "Nikema Williams", "party": "Democrat"}
+    ]},
+    {"district": 6, "candidates": [
+      {"name": "Kevin E. Martin", "party": "Republican"},
+      {"name": "Lucy McBath", "party": "Democrat"}
+    ]},
+    {"district": 7, "candidates": [
+      {"name": "Rich McCormick", "party": "Republican"},
+      {"name": "Tony Kozycki", "party": "Democrat"}
+    ]},
+    {"district": 8, "candidates": [
+      {"name": "Austin Scott", "party": "Republican"},
+      {"name": "Kelly Esti", "party": "Democrat"}
+    ]},
+    {"district": 9, "candidates": [
+      {"name": "Andrew Clyde", "party": "Republican"},
+      {"name": "Caitlyn Gegen", "party": "Democrat"}
+    ]},
+    {"district": 10, "candidates": [
+      {"name": "Houston Gaines", "party": "Republican"},
+      {"name": "Pamela \"Pam\" Delancy", "party": "Democrat"}
+    ]},
+    {"district": 11, "candidates": [
+      {"name": "John Cowan", "party": "Republican"},
+      {"name": "Chris Harden", "party": "Democrat"}
+    ]},
+    {"district": 12, "candidates": [
+      {"name": "Rick W. Allen", "party": "Republican"},
+      {"name": "Ceretta Smith", "party": "Democrat"}
+    ]},
+    {"district": 13, "candidates": [
+      {"name": "Jonathan Chavez", "party": "Republican"},
+      {"name": "Jasmine Clark", "party": "Democrat"}
+    ]},
+    {"district": 14, "candidates": [
+      {"name": "Clay Fuller", "party": "Republican"},
+      {"name": "Shawn Harris", "party": "Democrat"}
+    ]}
+  ],
+  "measures": [
+    {
+      "designation": "Amendment 1",
+      "subject": "Conservation use property acreage limit",
+      "ballotTitle": "Shall the Constitution of Georgia, for the purpose of protecting family farmland, be amended so as to increase the maximum acreage to qualify for assessment and taxation as a bona fide conservation use property from 2,000 acres to 4,000 acres?",
+      "summary": "Raises the maximum acreage of a single owner's agricultural and timber land that can qualify for reduced conservation-use property tax assessment from 2,000 to 4,000 acres.",
+      "source": "https://www.columbiacountyga.gov/DocumentCenter/View/10734"
+    },
+    {
+      "designation": "Amendment 2",
+      "subject": "Nonpartisan election of probate judges",
+      "ballotTitle": "Shall the Constitution of Georgia be amended so as to require that all probate court judges be elected in nonpartisan elections?",
+      "summary": "Requires that all probate court judges in Georgia be elected in nonpartisan elections rather than with party labels.",
+      "source": "https://www.columbiacountyga.gov/DocumentCenter/View/10734"
+    },
+    {
+      "designation": "Amendment 3",
+      "subject": "Next Generation 9-1-1 Fund",
+      "ballotTitle": "Shall the Constitution of Georgia be amended so as to authorize the General Assembly to dedicate certain existing revenues, including revenues reallocated by law, to a nonlapsing fund to be used exclusively for the expansion, maintenance, and operation of emergency 9-1-1 systems in this state?",
+      "summary": "Allows the legislature to create a Georgia Next Generation 9-1-1 Fund and dedicate certain existing revenues to it, to be spent only on 9-1-1 systems.",
+      "source": "https://www.columbiacountyga.gov/DocumentCenter/View/10734"
+    }
+  ],
+  "measureEffective": "2027-01-01",
+  "measureEffectiveNote": "Ga. Const. Art. X, Sec. I, Para. VI: unless the amendment or the resolution proposing it provides otherwise, a ratified amendment takes effect on January 1 following ratification. None of the three resolutions (HR 32, HR 251, HR 1243) sets another date, so all three would take effect January 1, 2027; Amendment 1's enabling statute is also reported (Capitol Beat) to take effect January 1, 2027.",
+  "sources": [
+    "https://www.whitecountyga.gov/DocumentCenter/View/3746/11032026-Consolidated-Sample-Ballot-Write-Ins",
+    "https://www.fultoncountyga.gov/-/media/2026-Election/November-3-Election/Sample-Ballot--Consolidated--Nov-32026-General--Special-Election--1082026.pdf",
+    "https://dekalbcountyga.gov/sites/default/files/2026-09/sample-booklet.pdf",
+    "https://www.gwinnettcounty.com/documents/d/gwinnett-county/nov-3-general-election-special-election-consolidated-sample-ballot-english-spanish",
+    "https://assets.cobbcounty.gov/files/2026-09/SAMPLE%20BALLOT%20DRAFT%20v4%20WEB.pdf",
+    "https://www.maconbibb.us/wp-content/uploads/2026/09/Sample-Ballot-for-November-3-2026-General-and-Special-Election-rev-9-17.pdf",
+    "https://www.houstoncountyga.gov/skins/userfiles/files/November%202026%20Sample%20Ballot.pdf",
+    "https://www.columbiacountyga.gov/DocumentCenter/View/10721",
+    "https://www.augustaga.gov/DocumentCenter/View/21864/Composite-Sample-Ballot-Nov-2026",
+    "https://www.columbiacountyga.gov/DocumentCenter/View/10734",
+    "https://sos.ga.gov/sites/default/files/2026-09/2026%20Constitutional%20Summaries%20booklet%20FINAL.pdf",
+    "https://app.enhancedvoting.com/ebd/voter/Georgia/sampleballots/jurisdiction/6c9ec5f8-48f5-4584-8460-a3643fbedc6b/election/01000000-45b5-d8ef-4966-08df0ea95468/precinct/ad443f22-412b-45cb-b27d-0c7747dad0fe/ballotStyle/01000000-46d7-8781-5178-08df0ea954cf",
+    "https://ballotpedia.org/Georgia_2026_ballot_measures",
+    "https://ballotpedia.org/Georgia_Public_Service_Commission_election,_2026",
+    "https://ballotpedia.org/United_States_Senate_election_in_Georgia,_2026",
+    "https://www.wtoc.com/2026/06/17/primary-season-is-over-now-georgia-heads-into-nationally-watched-fight/",
+    "https://ballot-access.org/?p=94280",
+    "https://www.votesee.org/ballot/georgia/district-1"
+  ],
+  "notes": [
+    "Candidate names and party labels are taken from official county sample ballots (SOS-generated ballot content). Georgia ballots print 'Republican' and 'Democrat' (some counties abbreviate 'Rep'/'Dem'). Candidates are listed in ballot order (Republican first).",
+    "Only Republicans and Democrats appear for statewide and congressional offices. Libertarians failed to regain ballot access in 2026; Chase Oliver (Governor), Allen Buckley (Senate), Thomas Blooming (PSC 5) and others are listed by Ballotpedia as withdrawn/disqualified.",
+    "Certified write-in candidates (left out per spec) exist for U.S. Senate, Governor, and House districts 10, 11, 13 and 14, per the SOS final write-in list published 2026-09-15 (reproduced in the White County sample ballot).",
+    "Two PSC seats (Districts 3 and 5) are elected statewide. Peter Hubbard (D, PSC 3) is the incumbent; PSC 5 is open (Tricia Pridemore did not run).",
+    "Printed ballot captions: Amendment 1 'Increases the maximum qualifying acreage for assessment and taxation as bona fide conservation use property.' (HR 32, Ga. L. 2025, p. 1081); Amendment 2 'Provides for the nonpartisan election of all probate court judges.' (HR 251, Ga. L. 2026, p. 1110); Amendment 3 'Authorizes creation of Georgia Next Generation 9-1-1 Fund for 9-1-1 systems expansion, maintenance, and operation.' (HR 1243, Ga. L. 2026, p. 1109). ballotTitle holds the question text only.",
+    "No statewide (statutory) referendum questions appear on the consolidated sample ballots reviewed; the SOS booklet covers 'Constitutional Amendments 1-3' only.",
+    "Georgia is entirely in the Eastern time zone; polls are open 7:00 AM to 7:00 PM. On Nov 3, 2026 that is EST (UTC-5), so 7:00 PM = 00:00 UTC Nov 4. Voters in line at 7:00 PM may still vote.",
+    "Name styling varies slightly by county: Fulton prints John \"BONGO\" Salvesen, DeKalb prints John \"Bongo\" Salvesen; Gwinnett prints Henry \"Hank\" Johnson Jr. without the comma DeKalb uses. Ballotpedia uses shorter/longer forms (e.g. James Kingston, Clayton Fuller, Sanford Bishop Jr., Pamela DeLancy) that differ from the ballots."
+  ],
+  "unconfirmed": [
+    "GA-1: no official sample ballot text for District 1 could be read. 'Jim Kingston' (R) vs 'Amanda Hollowell' (D) comes from news/voter guides (WTOC, votesee); Ballotpedia lists 'James Kingston'. The exact first-name form printed on the ballot is unconfirmed.",
+    "GA-3: 'Brian Jack' (R) and 'Maura Keller' (D) are confirmed only through a search-engine rendering of an official Enhanced Voting sample ballot (Heard County precinct) and Ballotpedia; no county PDF was read directly.",
+    "The SOS candidate-qualifying pages and the SOS constitutional booklet on sos.ga.gov could not be fetched (Cloudflare 403); the booklet was read from Columbia County's copy instead."
+  ]
+}

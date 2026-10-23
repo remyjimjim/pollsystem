@@ -1,0 +1,148 @@
+{
+  "_about": "Georgia, Nov 3 2026, built by build-state.py from docs/launch-content/research/GA.json (sources and gaps in GA.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Georgia: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      11
+    ],
+    "closeDate": "2026-11-04T00:00:00Z",
+    "candidates": [
+      {
+        "name": "Mike Collins",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Jon Ossoff",
+        "affiliation": "Democrat",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Rick Jackson",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Keisha Lance Bottoms",
+        "affiliation": "Democrat",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Greg Dolezal",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Josh McLaurin",
+        "affiliation": "Democrat",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Tim Fleming",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Penny Brown Reynolds",
+        "affiliation": "Democrat",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Brian Strickland",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Tanya Miller",
+        "affiliation": "Democrat",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Tyler Harper",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "Katherine E. Juhan-Arnold",
+        "affiliation": "Democrat",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "John King",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Insurance"
+      },
+      {
+        "name": "Keisha Sean Waites",
+        "affiliation": "Democrat",
+        "officeName": "Commissioner of Insurance"
+      },
+      {
+        "name": "Richard Woods",
+        "affiliation": "Republican",
+        "officeName": "State School Superintendent"
+      },
+      {
+        "name": "Lydia Powell",
+        "affiliation": "Democrat",
+        "officeName": "State School Superintendent"
+      },
+      {
+        "name": "Bárbara Rivera Holmes",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Labor"
+      },
+      {
+        "name": "Nikki Porcher",
+        "affiliation": "Democrat",
+        "officeName": "Commissioner of Labor"
+      },
+      {
+        "name": "Fitz Johnson",
+        "affiliation": "Republican",
+        "officeName": "Public Service Commissioner - District 3"
+      },
+      {
+        "name": "Peter Hubbard",
+        "affiliation": "Democrat",
+        "officeName": "Public Service Commissioner - District 3"
+      },
+      {
+        "name": "Josh Tolbert",
+        "affiliation": "Republican",
+        "officeName": "Public Service Commissioner - District 5"
+      },
+      {
+        "name": "Shelia Edwards",
+        "affiliation": "Democrat",
+        "officeName": "Public Service Commissioner - District 5"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Georgia Amendment 1: Conservation use property acreage limit",
+      "summary": "Shall the Constitution of Georgia, for the purpose of protecting family farmland, be amended so as to increase the maximum acreage to qualify for assessment and taxation as a bona fide conservation use property from 2,000 acres to 4,000 acres?\n\nIn short: Raises the maximum acreage of a single owner's agricultural and timber land that can qualify for reduced conservation-use property tax assessment from 2,000 to 4,000 acres.\n\nOfficial ballot language. Source: https://www.columbiacountyga.gov/DocumentCenter/View/10734",
+      "effectiveDate": "2027-01-01",
+      "closeDate": "2026-11-04T00:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Georgia Amendment 2: Nonpartisan election of probate judges",
+      "summary": "Shall the Constitution of Georgia be amended so as to require that all probate court judges be elected in nonpartisan elections?\n\nIn short: Requires that all probate court judges in Georgia be elected in nonpartisan elections rather than with party labels.\n\nOfficial ballot language. Source: https://www.columbiacountyga.gov/DocumentCenter/View/10734",
+      "effectiveDate": "2027-01-01",
+      "closeDate": "2026-11-04T00:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Georgia Amendment 3: Next Generation 9-1-1 Fund",
+      "summary": "Shall the Constitution of Georgia be amended so as to authorize the General Assembly to dedicate certain existing revenues, including revenues reallocated by law, to a nonlapsing fund to be used exclusively for the expansion, maintenance, and operation of emergency 9-1-1 systems in this state?\n\nIn short: Allows the legislature to create a Georgia Next Generation 9-1-1 Fund and dedicate certain existing revenues to it, to be spent only on 9-1-1 systems.\n\nOfficial ballot language. Source: https://www.columbiacountyga.gov/DocumentCenter/View/10734",
+      "effectiveDate": "2027-01-01",
+      "closeDate": "2026-11-04T00:00:00Z"
+    }
+  ]
+}

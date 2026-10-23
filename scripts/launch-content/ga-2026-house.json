@@ -1,0 +1,314 @@
+{
+  "_about": "Georgia, Nov 3 2026, built by build-state.py from docs/launch-content/research/GA.json (sources and gaps in GA.md). One ballot per district, each including \"2026 Midterm · Georgia: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Jim Kingston",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Amanda Hollowell",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Matt Day",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Sanford Bishop",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Brian Jack",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Maura Keller",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Jim Duffie",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Henry \"Hank\" Johnson, Jr.",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "John \"Bongo\" Salvesen",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Nikema Williams",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Kevin E. Martin",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Lucy McBath",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Rich McCormick",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Tony Kozycki",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Austin Scott",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Kelly Esti",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 9",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Andrew Clyde",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Caitlyn Gegen",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 10",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Houston Gaines",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Pamela \"Pam\" Delancy",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 10"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 11",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "John Cowan",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Chris Harden",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 11"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 12",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Rick W. Allen",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Ceretta Smith",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 12"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 13",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Jonathan Chavez",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Jasmine Clark",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 13"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Georgia District 14",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        11
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Clay Fuller",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 14"
+        },
+        {
+          "name": "Shawn Harris",
+          "affiliation": "Democrat",
+          "officeName": "U.S. Representative, District 14"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Georgia: statewide races & measures"
+}
