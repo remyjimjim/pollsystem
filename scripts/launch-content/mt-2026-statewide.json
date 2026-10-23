@@ -1,0 +1,68 @@
+{
+  "_about": "Montana, Nov 3 2026, built by build-state.py from docs/launch-content/research/MT.json (sources and gaps in MT.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Montana: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      27
+    ],
+    "closeDate": "2026-11-04T03:00:00Z",
+    "candidates": [
+      {
+        "name": "Kurt Alme",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Alani Bankhead",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Kyle Austin",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Seth Bodnar",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Amy Eddy",
+        "affiliation": "Nonpartisan",
+        "officeName": "MT Supreme Court Justice Seat 4"
+      },
+      {
+        "name": "Dan Wilson",
+        "affiliation": "Nonpartisan",
+        "officeName": "MT Supreme Court Justice Seat 4"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Montana CI-132: Keep judicial elections nonpartisan",
+      "summary": "CI-132 amends the Montana Constitution to require that judicial elections remain nonpartisan.\n\nIn short: Would add a section to Article VII of the Montana Constitution stating that judicial elections shall remain nonpartisan.\n\nOfficial ballot language. Source: https://ballotpedia.org/Montana_CI-132,_Require_Nonpartisan_Judicial_Elections_Initiative_(2026)",
+      "effectiveDate": "2027-07-01",
+      "closeDate": "2026-11-04T03:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Montana CI-133: Constitutional right to initiative and referendum",
+      "summary": "The Montana constitution reserves to the people the powers of initiative and referendum. CI-133 amends the constitution to secure this fundamental right from interference by the government. Specifically, CI-133 requires impartial, predictable, open, and timely processes for ballot issues. Petitions and ballot statements must be approved within 90 days of the initial submission, and legal challenges to ballot qualification must be resolved before the deadline for finalizing ballots. CI-133 requires the state to allow ample time for signature gathering, prohibits disqualification of petitions because of minor or technical issues, allows voters to withdraw their signatures if they so choose, and prohibits the use of government resources to support or oppose a ballot measure.\n\nIn short: Would add the initiative and referendum power to the constitution's Declaration of Rights, setting deadlines and process rules for approving, challenging and qualifying ballot issues.\n\nOfficial ballot language. Source: https://ballotpedia.org/Montana_CI-133,_Add_Right_to_Initiative_and_Referendum_Power_to_Declaration_of_Rights_Amendment_(2026)",
+      "effectiveDate": "2027-07-01",
+      "closeDate": "2026-11-04T03:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Montana I-194: Political spending by corporations and other entities",
+      "summary": "I-194, if passed, limits the powers of artificial persons to those powers necessary or convenient as provided by law. These powers must exclude contributing anything of value to candidate elections, supporting or opposing political parties, or supporting or opposing state or local ballot issues. Artificial persons include non-profits, trusts, partnerships, corporations, trade associations, or unincorporated associations and includes all such entities doing business in Montana. Any violation of I-194 is punished by forfeiting all privileges to do business in Montana. Those privileges may be, but are not automatically, restored upon disgorgement and certification of compliance with I-194. I-194 does not apply to the distribution of news, commentary, or editorial content. I-194 also does not apply to the state of Montana, political subdivisions, individuals, political committees, or public corporations.\n\nIn short: A statutory initiative that would bar corporations, nonprofits, trusts and similar entities from spending on candidate elections, political parties or ballot issues, with loss of state-conferred business privileges as the penalty.\n\nOfficial ballot language. Source: https://ballotpedia.org/Montana_I-194,_Exclude_Political_Spending_from_Artificial_Persons%E2%80%99_Charter_Powers_Initiative_(2026)",
+      "effectiveDate": "2027-07-01",
+      "closeDate": "2026-11-04T03:00:00Z"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "_about": "Montana, Nov 3 2026, built by build-state.py from docs/launch-content/research/MT.json (sources and gaps in MT.md). One ballot per district, each including \"2026 Midterm · Montana: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Montana District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        27
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Aaron Flint",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Sam Forstag",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Nick Sheedy",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Montana District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        27
+      ],
+      "closeDate": "2026-11-04T03:00:00Z",
+      "candidates": [
+        {
+          "name": "Troy Downing",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Brian J Miller",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Patrick McCracken",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Michael D Eisenhauer",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Montana: statewide races & measures"
+}

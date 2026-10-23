@@ -1,0 +1,94 @@
+{
+  "state": "Montana",
+  "abbr": "MT",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T03:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        { "name": "Kurt Alme", "party": "Republican" },
+        { "name": "Alani Bankhead", "party": "Democratic" },
+        { "name": "Kyle Austin", "party": "Libertarian" },
+        { "name": "Seth Bodnar", "party": "Independent" }
+      ]
+    },
+    {
+      "office": "MT Supreme Court Justice Seat 4",
+      "candidates": [
+        { "name": "Amy Eddy", "party": "Nonpartisan" },
+        { "name": "Dan Wilson", "party": "Nonpartisan" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        { "name": "Aaron Flint", "party": "Republican" },
+        { "name": "Sam Forstag", "party": "Democratic" },
+        { "name": "Nick Sheedy", "party": "Libertarian" }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        { "name": "Troy Downing", "party": "Republican" },
+        { "name": "Brian J Miller", "party": "Democratic" },
+        { "name": "Patrick McCracken", "party": "Libertarian" },
+        { "name": "Michael D Eisenhauer", "party": "Independent" }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "CI-132",
+      "subject": "Keep judicial elections nonpartisan",
+      "ballotTitle": "CI-132 amends the Montana Constitution to require that judicial elections remain nonpartisan.",
+      "summary": "Would add a section to Article VII of the Montana Constitution stating that judicial elections shall remain nonpartisan.",
+      "source": "https://ballotpedia.org/Montana_CI-132,_Require_Nonpartisan_Judicial_Elections_Initiative_(2026)"
+    },
+    {
+      "designation": "CI-133",
+      "subject": "Constitutional right to initiative and referendum",
+      "ballotTitle": "The Montana constitution reserves to the people the powers of initiative and referendum. CI-133 amends the constitution to secure this fundamental right from interference by the government. Specifically, CI-133 requires impartial, predictable, open, and timely processes for ballot issues. Petitions and ballot statements must be approved within 90 days of the initial submission, and legal challenges to ballot qualification must be resolved before the deadline for finalizing ballots. CI-133 requires the state to allow ample time for signature gathering, prohibits disqualification of petitions because of minor or technical issues, allows voters to withdraw their signatures if they so choose, and prohibits the use of government resources to support or oppose a ballot measure.",
+      "summary": "Would add the initiative and referendum power to the constitution's Declaration of Rights, setting deadlines and process rules for approving, challenging and qualifying ballot issues.",
+      "source": "https://ballotpedia.org/Montana_CI-133,_Add_Right_to_Initiative_and_Referendum_Power_to_Declaration_of_Rights_Amendment_(2026)"
+    },
+    {
+      "designation": "I-194",
+      "subject": "Political spending by corporations and other entities",
+      "ballotTitle": "I-194, if passed, limits the powers of artificial persons to those powers necessary or convenient as provided by law. These powers must exclude contributing anything of value to candidate elections, supporting or opposing political parties, or supporting or opposing state or local ballot issues. Artificial persons include non-profits, trusts, partnerships, corporations, trade associations, or unincorporated associations and includes all such entities doing business in Montana. Any violation of I-194 is punished by forfeiting all privileges to do business in Montana. Those privileges may be, but are not automatically, restored upon disgorgement and certification of compliance with I-194. I-194 does not apply to the distribution of news, commentary, or editorial content. I-194 also does not apply to the state of Montana, political subdivisions, individuals, political committees, or public corporations.",
+      "summary": "A statutory initiative that would bar corporations, nonprofits, trusts and similar entities from spending on candidate elections, political parties or ballot issues, with loss of state-conferred business privileges as the penalty.",
+      "source": "https://ballotpedia.org/Montana_I-194,_Exclude_Political_Spending_from_Artificial_Persons%E2%80%99_Charter_Powers_Initiative_(2026)"
+    }
+  ],
+  "measureEffective": "2027-07-01",
+  "measureEffectiveNote": "Under MCA 13-27-105(2), an approved constitutional initiative takes effect on July 1 following approval unless it provides otherwise, so CI-132 and CI-133 take effect 2027-07-01 (used as the representative date). A statutory initiative takes effect October 1 following approval unless the petition says otherwise (MCA 13-27-105(1)); Ballotpedia reports that I-194 sets its own effective date of January 1, 2027.",
+  "sources": [
+    "https://web.archive.org/web/20261010191005/https://sosmt.gov/elections/ballot_issues/proposed-2026-ballot-issues/",
+    "https://archive.legmt.gov/bills/mca/title_0130/chapter_0270/part_0010/section_0050/0130-0270-0010-0050.html",
+    "https://projects.montanafreepress.org/election-guide-2026/",
+    "https://montanafreepress.org/2026/10/13/ballot-initiatives-montana-election/",
+    "https://ballotpedia.org/United_States_Senate_election_in_Montana,_2026",
+    "https://ballotpedia.org/United_States_House_of_Representatives_elections_in_Montana,_2026",
+    "https://ballotpedia.org/Montana_Supreme_Court_elections,_2026",
+    "https://ballotpedia.org/Montana_2026_ballot_measures"
+  ],
+  "notes": [
+    "sosmt.gov (Secretary of State) blocked every request with a firewall 403 (curl and WebFetch alike), so the official candidate list, ballot statements and voter information pamphlet could not be read directly.",
+    "The measure list comes from the Secretary of State's 'Proposed 2026 Ballot Issues' page as archived by the Wayback Machine on 2026-10-10. It shows CI-132, CI-133 and I-194 as 'Qualified for 2026 General Election ballot (8/17/2026)', and no legislative referral is listed. Montana Free Press (Oct 13) and Ballotpedia also report three measures.",
+    "Ballot statements are quoted from Ballotpedia, which cites the Secretary of State's ballot language. The SOS page paraphrases I-194 with 'this act' where Ballotpedia's ballot text says 'I-194'.",
+    "Candidates come from Montana Free Press's 2026 Election Guide (updated Oct 22, 2026) and Ballotpedia, which agree. Name spellings (e.g. 'Brian J Miller', 'Michael D Eisenhauer') follow MTFP.",
+    "U.S. Senate: incumbent Steve Daines withdrew on March 4, 2026 (Ballotpedia), so the seat is open.",
+    "Supreme Court Seat 4 (Justice Beth Baker, not running) is the only Supreme Court seat on the ballot; the race is nonpartisan. Public Service Commission races are by district and are left out.",
+    "Montana is entirely in Mountain time; polls close 8 PM MST on Nov 3 (2026-11-04T03:00Z)."
+  ],
+  "unconfirmed": [
+    "Every candidate list is from secondary sources (MTFP, Ballotpedia); the official Secretary of State certified candidate list was not readable.",
+    "Jami Dee Woodman (U.S. Senate): MTFP lists her as 'no party affiliation' but Ballotpedia calls her a write-in candidate; she is left out as a write-in, not confirmed against the official ballot.",
+    "Ballot statements were not compared against the official SOS ballot-statement documents or the voter information pamphlet; any fiscal statement printed with I-194 is not included.",
+    "Ballot-face party wording (Montana ballots may print 'Democrat') and the exact Supreme Court office label were not checked against a sample ballot.",
+    "Whether CI-132 or CI-133 specifies its own effective date (instead of the July 1 default) was not checked in the full text."
+  ]
+}
