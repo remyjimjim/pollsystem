@@ -61,6 +61,21 @@ logged.
 
 ---
 
+## 2026-10-23 — Prod keeps one machine warm from launch
+
+**Requested:**
+
+> make the edit and commit it, I'll deploy Monday
+
+**Changed:** `backend/fly.toml` now sets `min_machines_running = 1`, up from 0.
+One machine stays up, so visitors skip the 10–30 s cold start. Neon stays
+awake as well, costing about $40 a month. Nothing changes until the user's
+prod backend deploy on launch day, Monday Oct 26.
+
+**Commit:** `b7b2cdb`
+
+---
+
 ## 2026-10-23 — Midterm voting rules and whole-ballot results on prod (verified)
 
 **Changed:** The user deployed the prod backend (`flyctl deploy`; deploys are
