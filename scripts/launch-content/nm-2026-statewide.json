@@ -1,0 +1,141 @@
+{
+  "_about": "New Mexico, Nov 3 2026, built by build-state.py from docs/launch-content/research/NM.json (sources and gaps in NM.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · New Mexico: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      32
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Ben R Lujan",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Larry E Marker",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Greggory D Hull / David M Gallegos",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Deb Haaland / Stephanie Garcia Richard",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Amanda López Askin",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Ramona L Goolsby",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Raul Torrez",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Samuel Isaiah Kane, Sr",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Joshua James Ryan Lawrence",
+        "affiliation": "Republican",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Joseph M Maestas",
+        "affiliation": "Democratic",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "James F Ellison",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Laura M Montoya",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Michael Jack Perry",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Public Lands"
+      },
+      {
+        "name": "Juan De Jesus Sanchez, III",
+        "affiliation": "Democratic",
+        "officeName": "Commissioner of Public Lands"
+      },
+      {
+        "name": "Kris Houghton",
+        "affiliation": "Democratic",
+        "officeName": "Judge of the Court of Appeals Position 1"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · New Mexico Constitutional Amendment 1: Veto messages and bills not acted on by the governor",
+      "summary": "Proposing an amendment to Article 4, Section 22 of the Constitution of New Mexico to require the governor to provide veto messages on all bills vetoed in whole or in part and to provide that all bills passed by the legislature and not acted on by the governor will become law.\n\nIn short: Would make bills the governor neither signs nor vetoes in time become law, ending the pocket veto, and would require a written explanation for every full or partial veto.\n\nOfficial ballot language. Source: https://www.nmlegis.gov/Sessions/25%20Regular/final/HJR02.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · New Mexico Constitutional Amendment 2: Holding school elections with partisan elections",
+      "summary": "Proposing to amend Article 7, Section 1 of the Constitution of New Mexico to remove the requirement that school elections be separate from partisan elections.\n\nIn short: Would remove the constitutional requirement that school elections be held separately from partisan elections.\n\nOfficial ballot language. Source: https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · New Mexico Constitutional Amendment 3: Appointment of university boards of regents",
+      "summary": "Proposing an amendment to Article 12, Section 13 of the Constitution of New Mexico to establish nominating committees to provide lists of nominees to the governor for appointment of nonstudent members to the boards of regents of state educational institutions; providing that student members of boards of regents shall be appointed from a list provided by an elected student governing body of the institution; providing that, except for a student member, members of the boards of regents shall not have changed their political party registration in the twelve months preceding appointment.\n\nIn short: Would require the governor to appoint regents of state educational institutions from lists supplied by nominating committees (student regents from a list by the elected student government) and bar nonstudent regents who changed party registration in the prior twelve months.\n\nOfficial ballot language. Source: https://www.nmlegis.gov/Sessions/26%20Regular/final/HJR01.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · New Mexico Constitutional Amendment 4: Salary for state legislators",
+      "summary": "Proposing to amend Article 4, Section 10 of the Constitution of New Mexico to allow legislative compensation that is limited to the median household income for New Mexico, to require legislative compensation to be reduced if the median household income for New Mexico falls, to allow legislative compensation to be increased only if the median household income for New Mexico rises and to provide for delayed implementation.\n\nIn short: Would allow state legislators to be paid compensation capped at New Mexico's median household income, rising or falling with that income, with implementation delayed.\n\nOfficial ballot language. Source: https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · New Mexico Bond Question 1: Senior citizen facility bonds ($21.6 million)",
+      "summary": "The 2026 Capital Projects General Obligation Bond Act authorizes the issuance and sale of senior citizen facility improvement, construction and equipment acquisition bonds. Shall the state be authorized to issue general obligation bonds in an amount not to exceed twenty-one million five hundred eighty-two thousand two hundred thirteen dollars ($21,582,213) to make capital expenditures for certain senior citizen facility improvement, construction and equipment acquisition projects and provide for a general property tax imposition and levy for the payment of principal of, interest on and expenses incurred in connection with the issuance of the bonds and the collection of the tax as permitted by law?\n\nIn short: Would authorize up to $21,582,213 in state general obligation bonds, repaid by a statewide property tax, for senior citizen facility improvement, construction and equipment projects.\n\nOfficial ballot language. Source: https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · New Mexico Bond Question 2: Library acquisition bonds ($19.3 million)",
+      "summary": "The 2026 Capital Projects General Obligation Bond Act authorizes the issuance and sale of library acquisition bonds. Shall the state be authorized to issue general obligation bonds in an amount not to exceed nineteen million three hundred twenty-four thousand one hundred eighty-eight dollars ($19,324,188) to make capital expenditures for academic, public school, public and tribal library resource acquisitions and provide for a general property tax imposition and levy for the payment of principal of, interest on and expenses incurred in connection with the issuance of the bonds and the collection of the tax as permitted by law?\n\nIn short: Would authorize up to $19,324,188 in state general obligation bonds, repaid by a statewide property tax, for academic, public school, public and tribal library resource acquisitions.\n\nOfficial ballot language. Source: https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · New Mexico Bond Question 3: Higher education, special and tribal school bonds ($352.2 million)",
+      "summary": "The 2026 Capital Projects General Obligation Bond Act authorizes the issuance and sale of higher education, special schools and tribal schools capital improvement and acquisition bonds. Shall the state be authorized to issue general obligation bonds in an amount not to exceed three hundred fifty-two million two hundred twenty five thousand three hundred seventy-nine dollars ($352,225,379) to make capital expenditures for certain higher education, special schools and tribal schools capital improvements and acquisitions and provide for a general property tax imposition and levy for the payment of principal of, interest on and expenses incurred in connection with the issuance of the bonds and the collection of the tax as permitted by law?\n\nIn short: Would authorize up to $352,225,379 in state general obligation bonds, repaid by a statewide property tax, for capital improvements and acquisitions at higher education institutions, special schools and tribal schools.\n\nOfficial ballot language. Source: https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}

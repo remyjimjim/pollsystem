@@ -1,0 +1,169 @@
+{
+  "state": "New Mexico",
+  "abbr": "NM",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T02:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        { "name": "Ben R Lujan", "party": "Democratic" },
+        { "name": "Larry E Marker", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        { "name": "Greggory D Hull / David M Gallegos", "party": "Republican" },
+        { "name": "Deb Haaland / Stephanie Garcia Richard", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        { "name": "Amanda López Askin", "party": "Democratic" },
+        { "name": "Ramona L Goolsby", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        { "name": "Raul Torrez", "party": "Democratic" },
+        { "name": "Samuel Isaiah Kane, Sr", "party": "Republican" }
+      ]
+    },
+    {
+      "office": "State Auditor",
+      "candidates": [
+        { "name": "Joshua James Ryan Lawrence", "party": "Republican" },
+        { "name": "Joseph M Maestas", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        { "name": "James F Ellison", "party": "Republican" },
+        { "name": "Laura M Montoya", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Commissioner of Public Lands",
+      "candidates": [
+        { "name": "Michael Jack Perry", "party": "Republican" },
+        { "name": "Juan De Jesus Sanchez, III", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Judge of the Court of Appeals Position 1",
+      "candidates": [
+        { "name": "Kris Houghton", "party": "Democratic" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        { "name": "Melanie Ann Stansbury", "party": "Democratic" },
+        { "name": "Ndidiamaka Ekwua Charlene Okpareke", "party": "Republican" }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        { "name": "Gregory G Cunningham", "party": "Republican" },
+        { "name": "Gabriel Vasquez", "party": "Democratic" }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        { "name": "Teresa Leger Fernandez", "party": "Democratic" },
+        { "name": "Martin Zamora", "party": "Republican" }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Amendment 1",
+      "subject": "Veto messages and bills not acted on by the governor",
+      "ballotTitle": "Proposing an amendment to Article 4, Section 22 of the Constitution of New Mexico to require the governor to provide veto messages on all bills vetoed in whole or in part and to provide that all bills passed by the legislature and not acted on by the governor will become law.",
+      "summary": "Would make bills the governor neither signs nor vetoes in time become law, ending the pocket veto, and would require a written explanation for every full or partial veto.",
+      "source": "https://www.nmlegis.gov/Sessions/25%20Regular/final/HJR02.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment 2",
+      "subject": "Holding school elections with partisan elections",
+      "ballotTitle": "Proposing to amend Article 7, Section 1 of the Constitution of New Mexico to remove the requirement that school elections be separate from partisan elections.",
+      "summary": "Would remove the constitutional requirement that school elections be held separately from partisan elections.",
+      "source": "https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment 3",
+      "subject": "Appointment of university boards of regents",
+      "ballotTitle": "Proposing an amendment to Article 12, Section 13 of the Constitution of New Mexico to establish nominating committees to provide lists of nominees to the governor for appointment of nonstudent members to the boards of regents of state educational institutions; providing that student members of boards of regents shall be appointed from a list provided by an elected student governing body of the institution; providing that, except for a student member, members of the boards of regents shall not have changed their political party registration in the twelve months preceding appointment.",
+      "summary": "Would require the governor to appoint regents of state educational institutions from lists supplied by nominating committees (student regents from a list by the elected student government) and bar nonstudent regents who changed party registration in the prior twelve months.",
+      "source": "https://www.nmlegis.gov/Sessions/26%20Regular/final/HJR01.pdf"
+    },
+    {
+      "designation": "Constitutional Amendment 4",
+      "subject": "Salary for state legislators",
+      "ballotTitle": "Proposing to amend Article 4, Section 10 of the Constitution of New Mexico to allow legislative compensation that is limited to the median household income for New Mexico, to require legislative compensation to be reduced if the median household income for New Mexico falls, to allow legislative compensation to be increased only if the median household income for New Mexico rises and to provide for delayed implementation.",
+      "summary": "Would allow state legislators to be paid compensation capped at New Mexico's median household income, rising or falling with that income, with implementation delayed.",
+      "source": "https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf"
+    },
+    {
+      "designation": "Bond Question 1",
+      "subject": "Senior citizen facility bonds ($21.6 million)",
+      "ballotTitle": "The 2026 Capital Projects General Obligation Bond Act authorizes the issuance and sale of senior citizen facility improvement, construction and equipment acquisition bonds. Shall the state be authorized to issue general obligation bonds in an amount not to exceed twenty-one million five hundred eighty-two thousand two hundred thirteen dollars ($21,582,213) to make capital expenditures for certain senior citizen facility improvement, construction and equipment acquisition projects and provide for a general property tax imposition and levy for the payment of principal of, interest on and expenses incurred in connection with the issuance of the bonds and the collection of the tax as permitted by law?",
+      "summary": "Would authorize up to $21,582,213 in state general obligation bonds, repaid by a statewide property tax, for senior citizen facility improvement, construction and equipment projects.",
+      "source": "https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf"
+    },
+    {
+      "designation": "Bond Question 2",
+      "subject": "Library acquisition bonds ($19.3 million)",
+      "ballotTitle": "The 2026 Capital Projects General Obligation Bond Act authorizes the issuance and sale of library acquisition bonds. Shall the state be authorized to issue general obligation bonds in an amount not to exceed nineteen million three hundred twenty-four thousand one hundred eighty-eight dollars ($19,324,188) to make capital expenditures for academic, public school, public and tribal library resource acquisitions and provide for a general property tax imposition and levy for the payment of principal of, interest on and expenses incurred in connection with the issuance of the bonds and the collection of the tax as permitted by law?",
+      "summary": "Would authorize up to $19,324,188 in state general obligation bonds, repaid by a statewide property tax, for academic, public school, public and tribal library resource acquisitions.",
+      "source": "https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf"
+    },
+    {
+      "designation": "Bond Question 3",
+      "subject": "Higher education, special and tribal school bonds ($352.2 million)",
+      "ballotTitle": "The 2026 Capital Projects General Obligation Bond Act authorizes the issuance and sale of higher education, special schools and tribal schools capital improvement and acquisition bonds. Shall the state be authorized to issue general obligation bonds in an amount not to exceed three hundred fifty-two million two hundred twenty five thousand three hundred seventy-nine dollars ($352,225,379) to make capital expenditures for certain higher education, special schools and tribal schools capital improvements and acquisitions and provide for a general property tax imposition and levy for the payment of principal of, interest on and expenses incurred in connection with the issuance of the bonds and the collection of the tax as permitted by law?",
+      "summary": "Would authorize up to $352,225,379 in state general obligation bonds, repaid by a statewide property tax, for capital improvements and acquisitions at higher education institutions, special schools and tribal schools.",
+      "source": "https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf"
+    }
+  ],
+  "measureEffective": "2026-11-24",
+  "measureEffectiveNote": "Under N.M. Const. art. XIX, sec. 1, an amendment approved by a majority of those voting on it becomes part of the constitution; it takes effect once the State Canvassing Board certifies the results. The board meets on the third Tuesday after the election (NMSA 1978, sec. 1-13-15), which is November 24, 2026, so that date is used here. Bond authorizations likewise rest on the certified result. Amendment 4 provides for delayed implementation of legislator pay.",
+  "sources": [
+    "https://candidateportal.servis.sos.state.nm.us/CandidateList.aspx",
+    "https://candidateportal.servis.sos.state.nm.us/CandidateList.aspx?eid=2911&cty=99",
+    "https://www.sos.nm.gov/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf",
+    "https://www.rooseveltcounty.com/wp-content/uploads/2026/08/2026-CA-and-GOB-Questions.pdf",
+    "https://www.santafecountynm.gov/uploads/documents/GENERAL_2026-Master_Ballot_List.pdf",
+    "https://www.santafecountynm.gov/uploads/documents/Sample-SANT_PCT001.pdf",
+    "https://www.santafecountynm.gov/uploads/documents/2026_Constitutional_Amendments_and_Bond_Questions_General_Election.pdf",
+    "https://www.nmlegis.gov/Sessions/25%20Regular/final/HJR02.pdf",
+    "https://www.nmlegis.gov/Sessions/26%20Regular/final/HJR01.pdf",
+    "https://www.sos.nm.gov/wp-content/uploads/2026/04/2026-General-Election-Proclamation-English.pdf",
+    "https://ballotpedia.org/New_Mexico_2026_ballot_measures"
+  ],
+  "notes": [
+    "Candidates are from the SOS Candidate Portal '2026 General Election Contest/Candidate List' (status Qualified, ballot order 1-2), cross-checked against the Santa Fe County sample ballot (style 01) and master ballot list. Names are printed in capitals without periods (e.g. 'BEN R LUJAN'); they are shown in title case here with the printed spelling kept. Party labels print as 'DEMOCRATIC PARTY' / 'REPUBLICAN PARTY'.",
+    "Candidates are listed in ballot order. Every statewide and congressional race has exactly one Democrat and one Republican. Excluded as Disqualified or Withdrawn: Mira OConnell (DTS) and Bob Perls (Forward) for U.S. Senate; four DTS governor filers; Maggie Toulouse Oliver (Dem Lt Gov, withdrawn) and Jose JC Lopez (DTS Lt Gov); Michael J Vigil (Forward) for State Auditor.",
+    "Governor and Lieutenant Governor print as one ticket ('DEB HAALAND and / y STEPHANIE GARCIA RICHARD'), shown here as 'Governor / Lieutenant Governor'.",
+    "Judge of the Court of Appeals Position 1 is a partisan race with one candidate, Kris Houghton (Democratic).",
+    "Statewide judicial retention questions are on the ballot but are not modeled: Supreme Court Justices David K Thomson and Shannon Bacon, and Court of Appeals Judge J Miles Hanisee. District and metropolitan court retentions vary by county.",
+    "Measure texts are verbatim from the county ballot copies. Amendments 1 and 3 match the titles of HJR 2 (2025) and HJR 1 (2026). Amendments 2 and 4 and the three bond questions match the SOS publication 'Statewide Constitutional Amendments and General Obligation Bonds' (Roosevelt County copy; the sos.nm.gov URL returned 404) and the Santa Fe County master ballot list.",
+    "Discrepancy: the SOS publication words Amendment 1 with the clauses in the opposite order and says 'six months' in Amendment 3. The Santa Fe County ballot, its master ballot list and the enacted joint resolutions all say 'twelve months' with the HJR 2 clause order, so the ballot wording is used.",
+    "Ballotpedia lists older bond amounts ($30M, $20M, $230M); the official ballot amounts ($21,582,213; $19,324,188; $352,225,379) are used.",
+    "All of New Mexico is on Mountain time. Polls are open 7:00 a.m. to 7:00 p.m.; 7:00 PM MST (UTC-7) on Nov 3 = 02:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Bond Question 1's printed text was only partly readable in the Santa Fe master list (some glyphs did not decode); the wording used comes from the SOS publication and the Santa Fe County copy, which agree.",
+    "The canvass-date rule (NMSA 1-13-15, third Tuesday after the election) and the effective-on-certification rule come from memory and could not be fetched (Justia returned 403, web search budget exhausted). 2026-11-24 is representative only.",
+    "Only one Santa Fe County ballot style was checked; ballots in CD-2 (Gregory G Cunningham, Gabriel Vasquez) were not seen, so those names come from the SOS candidate portal alone.",
+    "The name case shown (e.g. 'Juan De Jesus Sanchez, III', 'Samuel Isaiah Kane, Sr') is a title-casing of all-caps ballot text; candidates' preferred casing and accents (e.g. Luján, Raúl) do not appear on the ballot and were not added."
+  ]
+}
