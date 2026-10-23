@@ -1,0 +1,145 @@
+{
+  "state": "Wyoming",
+  "abbr": "WY",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T02:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Harriet Hageman",
+          "party": "Republican"
+        },
+        {
+          "name": "James Byrd",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Eric Barlow",
+          "party": "Republican"
+        },
+        {
+          "name": "Kenneth R. Casner",
+          "party": "Democratic"
+        },
+        {
+          "name": "Rebecca Bextel",
+          "party": "Constitution"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Robert Short",
+          "party": "Republican"
+        },
+        {
+          "name": "Bryan McCarty",
+          "party": "Democratic"
+        },
+        {
+          "name": "Tamara Trujillo",
+          "party": "Constitution"
+        }
+      ]
+    },
+    {
+      "office": "State Auditor",
+      "candidates": [
+        {
+          "name": "Kristi Racines",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {
+          "name": "Curt Meier",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Superintendent of Public Instruction",
+      "candidates": [
+        {
+          "name": "Steve Harshman",
+          "party": "Republican"
+        },
+        {
+          "name": "Ana Cordova",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 0,
+      "candidates": [
+        {
+          "name": "Chuck Gray",
+          "party": "Republican"
+        },
+        {
+          "name": "Lisa Kinney",
+          "party": "Democratic"
+        },
+        {
+          "name": "Shawn Johnson",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Jeffrey Haggit",
+          "party": "Constitution"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Proposed Initiative Proposition Number One",
+      "subject": "50% homeowner property tax exemption",
+      "ballotTitle": "Shall a law be enacted: Establishing a property tax exemption for qualified homeowners’ primary residence in the amount of fifty percent (50%) of the assessed value of the dwelling; AND Defining “homeowner” and “primary residence”; providing that no more than one exemption shall apply to a single property or be claimed by a single owner per year; requiring a homeowner to be a resident of Wyoming for at least one year and to have occupied the primary residence for at least six months of the previous tax year to qualify; requiring an initial sworn claim to be filed with the county assessor by the fourth Monday in May; providing for continuing the exemption in subsequent years through annually confirming eligibility; providing a penalty for false claims; clarifying that the exemption applies to the residential structure; and specifying applicability? Estimated Fiscal Impact: Anticipated Revenue / (decrease) Fiscal Year 2028 ($92,614,266) Fiscal Year 2029 ($95,855,766)",
+      "summary": "Would enact a state law exempting 50% of the assessed value of a qualifying Wyoming homeowner's primary residence from property tax, with residency and occupancy requirements and an annual eligibility confirmation.",
+      "source": "https://sos.wyo.gov/Elections/Docs/2026/2026_Statewide_Ballot_Propositions.pdf"
+    }
+  ],
+  "measureEffective": "2027-02-09",
+  "measureEffectiveNote": "Wyo. Const. art. 3, sec. 52(f): an initiated measure is enacted only if votes in favor exceed 50% of those voting in the general election (not just on the question), and an initiated law becomes effective ninety days after the Secretary of State certifies the returns. The state canvassing board meets no later than the second Wednesday after the election (W.S. 22-16-118), Nov 11, 2026; 90 days later is Feb 9, 2027, used as the representative date. The SOS fiscal note says the earliest applicable tax year would be 2027.",
+  "sources": [
+    "https://sos.wyo.gov/Elections/2026ElectionInformation.aspx",
+    "https://sos.wyo.gov/Elections/Docs/2026/2026_WY_General_Election_Candidates.csv",
+    "https://sos.wyo.gov/Elections/Docs/2026/2026_Statewide_Ballot_Propositions.pdf",
+    "https://sos.wyo.gov/Elections/Docs/2026/2026_Voter_Guide.pdf",
+    "https://sos.wyo.gov/Elections/Docs/2026/2026_Judges_Standing_for_Retention.pdf",
+    "https://sos.wyo.gov/faqs.aspx?root=ELEC",
+    "https://sos.wyo.gov/Forms/Publications/WYConstitution.pdf",
+    "https://wyoleg.gov/statutes/compress/title22.pdf",
+    "https://ballotpedia.org/Wyoming_elections,_2026"
+  ],
+  "notes": [
+    "Wyoming has no Lieutenant Governor; Governor is a single-candidate race. Gov. Mark Gordon is term-limited; Sen. Cynthia Lummis is not on the ballot, and Rep. Harriet Hageman is the Republican Senate nominee, leaving the House seat open.",
+    "Candidates and ballot names are from the SOS 'General Election Candidates' data file (Ballot Name column), read 2026-10-23; party codes REP/DEM/LBR/CT are spelled out (CT = Constitution Party). No statewide candidate has a withdrawal date.",
+    "State Auditor (Kristi Racines) and State Treasurer (Curt Meier) are unopposed Republicans; included as single-candidate contests.",
+    "Supreme Court retention (not modeled): Justices Bridget Hill (SC-02) and Robert C. Jarosh (SC-01) are on the SOS list; 'Judges Standing for Retention' PDF lists them.",
+    "Measures: Proposed Initiative Proposition Number One is the only 2026 statewide ballot proposition in the SOS propositions document and voter guide; no legislatively referred constitutional amendment is listed. Ballot language is quoted from the SOS document; ballot choices are FOR / AGAINST.",
+    "Polls are open 7 a.m. to 7 p.m. (SOS FAQ; W.S. 22-13-117). All of Wyoming is on Mountain time: 7 p.m. MST = 02:00 UTC Nov 4.",
+    "Ballotpedia (cross-check) agrees on all nominees and the single measure; it gives 'Ken Casner' and 'Jeff Haggit', the SOS ballot names are 'Kenneth R. Casner' and 'Jeffrey Haggit'."
+  ],
+  "unconfirmed": [
+    "Whether the printed ballot shows the estimated fiscal impact lines beneath the proposition (the SOS document says it reproduces the ballot language and includes them in the ballot-language block, and the voter guide prints them too); kept in ballotTitle.",
+    "Exact state canvass certification date (the board meets no later than Nov 11, 2026); the effective date moves with it.",
+    "Ballot-face party labels (e.g. 'Constitution' vs 'Constitution Party') were not checked against a printed sample ballot."
+  ]
+}

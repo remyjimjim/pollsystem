@@ -1,0 +1,104 @@
+{
+  "_about": "Wyoming, Nov 3 2026, built by build-state.py from docs/launch-content/research/WY.json (sources and gaps in WY.md). One House seat, so one ballot for the whole state.",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm Wyoming",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      51
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Harriet Hageman",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "James Byrd",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Eric Barlow",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Kenneth R. Casner",
+        "affiliation": "Democratic",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Rebecca Bextel",
+        "affiliation": "Constitution",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Robert Short",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Bryan McCarty",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Tamara Trujillo",
+        "affiliation": "Constitution",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Kristi Racines",
+        "affiliation": "Republican",
+        "officeName": "State Auditor"
+      },
+      {
+        "name": "Curt Meier",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Steve Harshman",
+        "affiliation": "Republican",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Ana Cordova",
+        "affiliation": "Democratic",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Chuck Gray",
+        "affiliation": "Republican",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Lisa Kinney",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Shawn Johnson",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Representative, At-Large"
+      },
+      {
+        "name": "Jeffrey Haggit",
+        "affiliation": "Constitution",
+        "officeName": "U.S. Representative, At-Large"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Wyoming Proposed Initiative Proposition Number One",
+      "summary": "Shall a law be enacted: Establishing a property tax exemption for qualified homeowners’ primary residence in the amount of fifty percent (50%) of the assessed value of the dwelling; AND Defining “homeowner” and “primary residence”; providing that no more than one exemption shall apply to a single property or be claimed by a single owner per year; requiring a homeowner to be a resident of Wyoming for at least one year and to have occupied the primary residence for at least six months of the previous tax year to qualify; requiring an initial sworn claim to be filed with the county assessor by the fourth Monday in May; providing for continuing the exemption in subsequent years through annually confirming eligibility; providing a penalty for false claims; clarifying that the exemption applies to the residential structure; and specifying applicability? Estimated Fiscal Impact: Anticipated Revenue / (decrease) Fiscal Year 2028 ($92,614,266) Fiscal Year 2029 ($95,855,766)\n\nIn short: Would enact a state law exempting 50% of the assessed value of a qualifying Wyoming homeowner's primary residence from property tax, with residency and occupancy requirements and an annual eligibility confirmation.\n\nOfficial ballot language. Source: https://sos.wyo.gov/Elections/Docs/2026/2026_Statewide_Ballot_Propositions.pdf",
+      "effectiveDate": "2027-02-09",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}
