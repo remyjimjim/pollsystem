@@ -1,0 +1,130 @@
+{
+  "_about": "South Carolina, Nov 3 2026, built by build-state.py from docs/launch-content/research/SC.json (sources and gaps in SC.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · South Carolina: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      41
+    ],
+    "closeDate": "2026-11-04T00:00:00Z",
+    "candidates": [
+      {
+        "name": "Annie Andrews",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Darline Graham",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Mark Hackett",
+        "affiliation": "Constitution",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Kasie Whitener",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Michael Addison / Candace Brewer",
+        "affiliation": "United Citizens",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Walid Hakim / Arnold E Karr",
+        "affiliation": "Green",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Jermaine Johnson / Sam Skardon",
+        "affiliation": "Democratic",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Alan Wilson / Mike Reichenbach",
+        "affiliation": "Republican",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Jason Belton",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Mark Hammond",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Richard Hricik",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "David Stumbo",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Vincent Coe",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Curtis Loftis",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Tiffany Boozer",
+        "affiliation": "Democratic",
+        "officeName": "Comptroller General"
+      },
+      {
+        "name": "Mike Burkhold",
+        "affiliation": "Republican",
+        "officeName": "Comptroller General"
+      },
+      {
+        "name": "Baba Amin Ojuok",
+        "affiliation": "United Citizens",
+        "officeName": "State Superintendent of Education"
+      },
+      {
+        "name": "Ellen Weaver",
+        "affiliation": "Republican",
+        "officeName": "State Superintendent of Education"
+      },
+      {
+        "name": "Sylvia Wright",
+        "affiliation": "Democratic",
+        "officeName": "State Superintendent of Education"
+      },
+      {
+        "name": "DeShawn Blanding",
+        "affiliation": "Democratic",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "Chris Nelums",
+        "affiliation": "United Citizens",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "Cody Simpson",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Agriculture"
+      },
+      {
+        "name": "Michael Sullens",
+        "affiliation": "Libertarian",
+        "officeName": "Commissioner of Agriculture"
+      }
+    ]
+  }
+}

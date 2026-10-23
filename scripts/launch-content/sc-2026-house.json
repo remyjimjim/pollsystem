@@ -1,0 +1,180 @@
+{
+  "_about": "South Carolina, Nov 3 2026, built by build-state.py from docs/launch-content/research/SC.json (sources and gaps in SC.md). One ballot per district, each including \"2026 Midterm · South Carolina: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm South Carolina District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        41
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Jenny Costa Honeycutt",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Nancy Lacore",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Bill Reeside",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm South Carolina District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        41
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Zyon Khalifa",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Dayna Alane Smith",
+          "affiliation": "Workers",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Joe Wilson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm South Carolina District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        41
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Sheri Biggs",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Brian Corriea",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Eunice Lehmacher",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm South Carolina District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        41
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Jessica Ethridge",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Courtney McClain",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "William Timmons",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm South Carolina District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        41
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Wes Climer",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Mallory Dittmer",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm South Carolina District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        41
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "James E Jim Clyburn",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "John Peterson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm South Carolina District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        41
+      ],
+      "closeDate": "2026-11-04T00:00:00Z",
+      "candidates": [
+        {
+          "name": "Russell Fry",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "John Gregory Vincent",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · South Carolina: statewide races & measures"
+}

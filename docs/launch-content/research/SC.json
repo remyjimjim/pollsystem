@@ -1,0 +1,274 @@
+{
+  "state": "South Carolina",
+  "abbr": "SC",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T00:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Annie Andrews",
+          "party": "Democratic"
+        },
+        {
+          "name": "Darline Graham",
+          "party": "Republican"
+        },
+        {
+          "name": "Mark Hackett",
+          "party": "Constitution"
+        },
+        {
+          "name": "Kasie Whitener",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "office": "Governor and Lieutenant Governor",
+      "candidates": [
+        {
+          "name": "Michael Addison / Candace Brewer",
+          "party": "United Citizens"
+        },
+        {
+          "name": "Walid Hakim / Arnold E Karr",
+          "party": "Green"
+        },
+        {
+          "name": "Jermaine Johnson / Sam Skardon",
+          "party": "Democratic"
+        },
+        {
+          "name": "Alan Wilson / Mike Reichenbach",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Jason Belton",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mark Hammond",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Richard Hricik",
+          "party": "Democratic"
+        },
+        {
+          "name": "David Stumbo",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {
+          "name": "Vincent Coe",
+          "party": "Democratic"
+        },
+        {
+          "name": "Curtis Loftis",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Comptroller General",
+      "candidates": [
+        {
+          "name": "Tiffany Boozer",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mike Burkhold",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "State Superintendent of Education",
+      "candidates": [
+        {
+          "name": "Baba Amin Ojuok",
+          "party": "United Citizens"
+        },
+        {
+          "name": "Ellen Weaver",
+          "party": "Republican"
+        },
+        {
+          "name": "Sylvia Wright",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Commissioner of Agriculture",
+      "candidates": [
+        {
+          "name": "DeShawn Blanding",
+          "party": "Democratic"
+        },
+        {
+          "name": "Chris Nelums",
+          "party": "United Citizens"
+        },
+        {
+          "name": "Cody Simpson",
+          "party": "Republican"
+        },
+        {
+          "name": "Michael Sullens",
+          "party": "Libertarian"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Jenny Costa Honeycutt",
+          "party": "Republican"
+        },
+        {
+          "name": "Nancy Lacore",
+          "party": "Democratic"
+        },
+        {
+          "name": "Bill Reeside",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Zyon Khalifa",
+          "party": "Democratic"
+        },
+        {
+          "name": "Dayna Alane Smith",
+          "party": "Workers"
+        },
+        {
+          "name": "Joe Wilson",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Sheri Biggs",
+          "party": "Republican"
+        },
+        {
+          "name": "Brian Corriea",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Eunice Lehmacher",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Jessica Ethridge",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Courtney McClain",
+          "party": "Democratic"
+        },
+        {
+          "name": "William Timmons",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Wes Climer",
+          "party": "Republican"
+        },
+        {
+          "name": "Mallory Dittmer",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "James E Jim Clyburn",
+          "party": "Democratic"
+        },
+        {
+          "name": "John Peterson",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Russell Fry",
+          "party": "Republican"
+        },
+        {
+          "name": "John Gregory Vincent",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "measures": [],
+  "measureEffective": "2027-01-12",
+  "measureEffectiveNote": "No statewide constitutional amendment or advisory question is on the November 3, 2026 South Carolina ballot (the SEC referendum search for this election lists only local questions), so nothing takes effect. Rule for reference: under S.C. Const. Art. XVI, sec. 1, an amendment approved by a majority of voters becomes part of the constitution only when the General Assembly ratifies it by majority vote at its next session; 2027-01-12 (the second Tuesday in January, when the 2027 session convenes) is used as the representative earliest date. Advisory questions have no legal effect.",
+  "sources": [
+    "https://vrems.scvotes.sc.gov/Candidate/CandidateSearch?electionId=22596",
+    "https://vrems.scvotes.sc.gov/Candidate/ReferendumSearch?electionId=22596",
+    "https://vrems.scvotes.sc.gov/Candidate/GetElections?electionType=General&year=2026",
+    "https://scvotes.gov/voters/2026prep/",
+    "https://www.opb.org/article/2026/08/26/darline-graham-wins-south-carolina-gop-nomination-to-replace-her-late-brother-in-us-senate/",
+    "https://politics1.com/sc.htm"
+  ],
+  "notes": [
+    "Candidates, ballot names and parties are from the SC Election Commission Candidate Tracking System (VREMS) for the 11/3/2026 Statewide General Election, retrieved 2026-10-23; only candidates with status 'Active' are included (defeated, withdrawn, decertified, deceased and not-certified filers excluded).",
+    "U.S. Senate: Sen. Lindsey Graham (R), renominated in the June 9 primary, died July 11, 2026 (VREMS status 'Deceased After Primary'). Gov. McMaster appointed his sister Darline Graham to the seat; she won the Aug 11 special Republican primary and Aug 25 runoff over Rep. Ralph Norman (AP via OPB). This is the regular election for the full term; no separate special Senate contest is listed.",
+    "No fusion candidacies: each active candidate appears once in VREMS under a single party.",
+    "Adjutant General is no longer elected in South Carolina (appointed since 2019); VREMS lists no such office. Lieutenant Governor is elected on a ticket with the Governor.",
+    "VREMS shows ballot names without punctuation (e.g. 'James E Jim Clyburn', 'Arnold E Karr'); kept as given.",
+    "Poll hours 7:00 a.m. to 7:00 p.m. (scvotes.gov 2026 prep page). All of South Carolina is Eastern time; 7:00 PM EST (UTC-5) = 00:00 UTC Nov 4."
+  ],
+  "unconfirmed": [
+    "Printed ballot-face punctuation of names (quotes/periods, e.g. James E. \"Jim\" Clyburn) not checked against a sample ballot (VREMS sample ballots require voter login).",
+    "SC-2: VREMS lists Dayna Alane Smith as 'Workers'; politics1.com shows 'Dayna Smith (UC)'. Official label used.",
+    "Superintendent of Education: politics1.com gives the UC candidate as Steven \"Baba Amin Ojuok\" Richmond; VREMS ballot name 'Baba Amin Ojuok' used.",
+    "Absence of statewide questions rests on the VREMS referendum search (only local questions returned); Ballotpedia's 2026 measures page could not be read to cross-check."
+  ]
+}
