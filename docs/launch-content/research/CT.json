@@ -1,0 +1,183 @@
+{
+ "state": "Connecticut",
+ "abbr": "CT",
+ "pollCloseLocal": "8:00 PM EST (polls open 6:00 AM - 8:00 PM, Tuesday November 3, 2026)",
+ "pollCloseUtc": "2026-11-04T01:00:00Z",
+ "statewide": [
+  {
+   "office": "Gov / Lt Gov",
+   "candidates": [
+    {
+     "name": "Ned Lamont / Susan Bysiewicz",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Ryan Fazio / Matt Corey",
+     "party": "Republican, Independent"
+    }
+   ]
+  },
+  {
+   "office": "Attorney General",
+   "candidates": [
+    {
+     "name": "William Tong",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "John Bolton",
+     "party": "Republican"
+    }
+   ]
+  },
+  {
+   "office": "Secretary of the State",
+   "candidates": [
+    {
+     "name": "Stephanie Thomas",
+     "party": "Democratic, Working Families, Independent"
+    },
+    {
+     "name": "Peter Lumaj",
+     "party": "Republican"
+    }
+   ]
+  },
+  {
+   "office": "Treasurer",
+   "candidates": [
+    {
+     "name": "Erick Russell",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Fred Wilms",
+     "party": "Republican, Independent"
+    }
+   ]
+  },
+  {
+   "office": "Comptroller",
+   "candidates": [
+    {
+     "name": "Sean Scanlon",
+     "party": "Democratic, Working Families, Independent"
+    },
+    {
+     "name": "Jennifer S. Tooker",
+     "party": "Republican"
+    }
+   ]
+  }
+ ],
+ "house": [
+  {
+   "district": 1,
+   "candidates": [
+    {
+     "name": "Luke Bronin",
+     "party": "Democratic"
+    },
+    {
+     "name": "Amy Chai",
+     "party": "Republican"
+    },
+    {
+     "name": "Mary L. Sanders",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 2,
+   "candidates": [
+    {
+     "name": "Joe Courtney",
+     "party": "Democratic"
+    },
+    {
+     "name": "George Patrick Austin",
+     "party": "Republican, Independent"
+    }
+   ]
+  },
+  {
+   "district": 3,
+   "candidates": [
+    {
+     "name": "Rosa L. DeLauro",
+     "party": "Democratic"
+    },
+    {
+     "name": "Christopher Lancia",
+     "party": "Republican"
+    },
+    {
+     "name": "Thomas Egan",
+     "party": "Independent"
+    }
+   ]
+  },
+  {
+   "district": 4,
+   "candidates": [
+    {
+     "name": "Jim Himes",
+     "party": "Democratic"
+    },
+    {
+     "name": "Michael Ted Goldstein",
+     "party": "Republican"
+    },
+    {
+     "name": "Benjamin Wesley",
+     "party": "Independent"
+    }
+   ]
+  },
+  {
+   "district": 5,
+   "candidates": [
+    {
+     "name": "Jahana Hayes",
+     "party": "Democratic, Working Families"
+    },
+    {
+     "name": "Chris Shea",
+     "party": "Republican"
+    }
+   ]
+  }
+ ],
+ "measures": [],
+ "measureEffective": "2026-11-25",
+ "measureEffectiveNote": "No statewide question is on the 2026 ballot. For reference only: under CT Const. art. XII an amendment approved by the voters becomes part of the constitution, and the result is declared after the state canvass (CGS 9-315, held by the last Wednesday of the election month), i.e. about November 25, 2026.",
+ "sources": [
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-2026/north-branford_sample.pdf",
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-ada-2026/bloomfield_sample_ada.pdf",
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-ada-2026/norwich_sample_ada.pdf",
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-2026/westport_sample.pdf",
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-2026/greenwich_sample.pdf",
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-ada-2026/fairfield_sample_ada.pdf",
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-ada-2026/meriden_sample_ada.pdf",
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-ada-2026/torrington_sample_ada.pdf",
+  "https://portal.ct.gov/-/media/sots/electionservices/town_ballots/2026/nov-2026/oxford_sample.pdf",
+  "https://ctmirror.org/2026/10/20/after-larsons-loss-cts-1st-district-will-elect-a-new-member/",
+  "https://www.ctpublic.org/news/2026-10-20/congress-election-ct-1st-district-bronin-chai-larson"
+ ],
+ "notes": [
+  "All candidates, party lines and spellings come from official SOTS town sample ballots (portal.ct.gov) for the Nov 3, 2026 State Election, decoded from PDF with a Python standard-library script. Ballots read: North Branford (CD3), Bloomfield and Torrington (CD1), Norwich (CD2), Westport, Greenwich and Fairfield (CD4), Meriden and Torrington (CD5).",
+  "Ballot columns are Democratic (A), Republican (B), Working Families (C), Independent (D); CD1 adds a Green Party column. Fusion lines are combined, major party first; 'Independent' is the Independent Party of Connecticut line, not 'unaffiliated'.",
+  "Statewide candidates are identical on every ballot read; no Libertarian or Green statewide candidates appear.",
+  "No U.S. Senate race in Connecticut in 2026 (Blumenthal's term runs to 2029, Murphy's to 2031).",
+  "CD1: Luke Bronin defeated Rep. John Larson in the Aug 11, 2026 Democratic primary (CT Mirror / CT Public); Larson is not on the ballot. Mark Stewart Greenstein is a write-in, left out.",
+  "No statewide question appears on any of the sample ballots read; the only question found (Norwich police headquarters bond) is local and left out.",
+  "Polls in Connecticut are open 6:00 AM - 8:00 PM; the whole state is Eastern time, EST (UTC-5) after DST ends Nov 1."
+ ],
+ "unconfirmed": [
+  "No official SOTS statement or list of 2026 statewide ballot questions was found; 'no statewide questions' rests on sample ballots from all five districts plus news/Ballotpedia searches (Ballotpedia's CT 2026 measures page could not be read).",
+  "The SOTS consolidated statewide candidate list was not found as a readable page; candidates come from town sample ballots, so a late change after those ballots were posted would be missed.",
+  "Some sample ballots (Hartford, Bridgeport, Danbury, Avon) use font encodings the decoder could not read; the districts were covered by other towns.",
+  "Measure effective date is reference only (no measures); the exact canvass date was not checked."
+ ]
+}
