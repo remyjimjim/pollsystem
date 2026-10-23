@@ -10,6 +10,7 @@ page (its draft measures go live with it), or rerun with --publish-election ID.
 Usage:
   scripts/launch-content/create-polls.py CONTENT.json --api URL --token-file FILE
   scripts/launch-content/create-polls.py --api URL --token-file FILE --publish-election ID [ID ...]
+  scripts/launch-content/create-polls.py --api URL --token-file FILE --retitle RENAMES.json
 
   --api         backend base URL, e.g. http://localhost:8080 or https://pollsystem-backend.fly.dev
   --token-file  a file holding the creating account's JWT (git-ignored; never printed)
@@ -36,10 +37,28 @@ def main():
     p.add_argument('--token-file', required=True)
     p.add_argument('--site')
     p.add_argument('--publish-election', type=int, nargs='+')
+    p.add_argument('--retitle', help='rename polls: {"renames": [{"type", "from", "to"}]} (a super token)')
     a = p.parse_args()
     token = open(a.token_file).read().strip()
     site = (a.site or ('http://localhost:3000' if 'localhost' in a.api else 'https://ballotbox.us.com')).rstrip('/')
 
+    if a.retitle:
+        # Super-only edit. It also sets the close date, so send the current one
+        # back unchanged (leaving it out would clear it). Already-renamed polls
+        # are skipped, so this can be rerun safely.
+        rows = call(a.api, token, 'GET', '/api/super/polls')
+        for r in json.load(open(a.retitle))['renames']:
+            done = [x for x in rows if x['type'] == r['type'] and x['title'] == r['to']]
+            found = [x for x in rows if x['type'] == r['type'] and x['title'] == r['from']]
+            if done and not found:
+                print(f"· already \"{r['to']}\"")
+                continue
+            if len(found) != 1:
+                sys.exit(f"✗ expected one {r['type']} titled \"{r['from']}\", found {len(found)}")
+            x = found[0]
+            call(a.api, token, 'PUT', f"/api/super/polls/{r['type']}/{x['id']}", {'title': r['to'], 'closeDate': x['closeDate']})
+            print(f"✓ {r['type']} {x['id']}: \"{r['to']}\"")
+        return
     if a.publish_election:
         for eid in a.publish_election:
             e = call(a.api, token, 'POST', f'/api/polls/elections/{eid}/publish?confirmed=true')

@@ -1,0 +1,235 @@
+{
+  "_about": "California, Nov 3 2026: statewide offices and the 14 propositions. Research and sources: docs/launch-content/california-2026-general.md.",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · California: statewide offices & propositions",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      5
+    ],
+    "closeDate": "2026-11-04T04:00:00Z",
+    "candidates": [
+      {
+        "name": "Xavier Becerra",
+        "affiliation": "Democratic",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Steve Hilton",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Fiona Ma",
+        "affiliation": "Democratic",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Gloria Romero",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Shirley N. Weber",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Donald P. (Don) Wagner",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Malia M. Cohen",
+        "affiliation": "Democratic",
+        "officeName": "Controller"
+      },
+      {
+        "name": "Herb W Morgan",
+        "affiliation": "Republican",
+        "officeName": "Controller"
+      },
+      {
+        "name": "Eleni Kounalakis",
+        "affiliation": "Democratic",
+        "officeName": "Treasurer"
+      },
+      {
+        "name": "Jennifer Hawks",
+        "affiliation": "Republican",
+        "officeName": "Treasurer"
+      },
+      {
+        "name": "Rob Bonta",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Michael E. Gates",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Ben Allen",
+        "affiliation": "Democratic",
+        "officeName": "Insurance Commissioner"
+      },
+      {
+        "name": "Jane Kim",
+        "affiliation": "Democratic",
+        "officeName": "Insurance Commissioner"
+      },
+      {
+        "name": "Richard Barrera",
+        "affiliation": "Non-Partisan",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Sonja Shaw",
+        "affiliation": "Non-Partisan",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Nelson Esparza",
+        "affiliation": "Democratic",
+        "officeName": "Board of Equalization, District 1"
+      },
+      {
+        "name": "Shannon Grove",
+        "affiliation": "Republican",
+        "officeName": "Board of Equalization, District 1"
+      },
+      {
+        "name": "Sally J. Lieber",
+        "affiliation": "Democratic",
+        "officeName": "Board of Equalization, District 2"
+      },
+      {
+        "name": "John Pimentel",
+        "affiliation": "Democratic",
+        "officeName": "Board of Equalization, District 2"
+      },
+      {
+        "name": "Mike Gipson",
+        "affiliation": "Democratic",
+        "officeName": "Board of Equalization, District 3"
+      },
+      {
+        "name": "Samuel P. Sukaton",
+        "affiliation": "Democratic",
+        "officeName": "Board of Equalization, District 3"
+      },
+      {
+        "name": "Tom Umberg",
+        "affiliation": "Democratic",
+        "officeName": "Board of Equalization, District 4"
+      },
+      {
+        "name": "Denis Bilodeau",
+        "affiliation": "Republican",
+        "officeName": "Board of Equalization, District 4"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 1: Authorizes Bonds for Housing Affordability Programs",
+      "summary": "Authorizes Bonds for Housing Affordability Programs. Legislative Statute.\n\n$11.25 billion in state general obligation bonds for affordable housing, veterans' mortgages, supportive housing and down-payment help.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/1/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 2: Increases State's Rainy Day Fund",
+      "summary": "Increases State's Rainy Day Fund. Legislative Constitutional Amendment.\n\nRaises the size of the state's budget reserve used during economic downturns.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/2/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 3: Provides Permanent Funding for Schools and Health Care by Extending Existing Tax on High Incomes",
+      "summary": "Provides Permanent Funding for Schools and Health Care by Extending Existing Tax on High Incomes. Initiative Constitutional Amendment.\n\nMakes permanent the existing higher income-tax rates on earners over about $371,000, which would otherwise expire in 2031.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/3/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 4: Repeals Prohibition Against Public Funding of Election Campaigns",
+      "summary": "Repeals Prohibition Against Public Funding of Election Campaigns. Legislative Statute.\n\nLets state and local governments publicly fund candidate campaigns, but not with education, transportation or public-safety funds.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/4/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 5: Changes Recall Election Process for Statewide Officers",
+      "summary": "Changes Recall Election Process for Statewide Officers. Legislative Constitutional Amendment.\n\nFills a recalled statewide officer's seat by a later special election or appointment, not by a replacement vote on the same ballot.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/5/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 37: Creates Loan Program for Middle-Income Buyers of Qualified New Homes",
+      "summary": "Creates Loan Program for Middle-Income Buyers of Qualified New Homes. Initiative Statute.\n\n$25 billion in bonds to fund fixed-rate loans for up to 17% of the price of new homes under about $1.5 million, repaid by borrowers' mortgage payments rather than the state.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/37/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 38: Authorizes Bonds for Immunology Medical Research",
+      "summary": "Authorizes Bonds for Immunology Medical Research. Initiative Statute.\n\n$8.4 billion in bonds for immunology research, half to one UC-affiliated nonprofit institute and half to grants.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/38/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 39: Prohibits Citizens from Voting Unless They Present Government-Issued Identification",
+      "summary": "Prohibits Citizens from Voting Unless They Present Government-Issued Identification. Initiative Constitutional Amendment.\n\nRequires government ID to vote in person, and the last four digits of an ID number on mail-ballot envelopes.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/39/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 40: Imposes One-Time Tax on Certain Taxpayers",
+      "summary": "Imposes One-Time Tax on Certain Taxpayers. Initiative Constitutional Amendment and Statute.\n\nA one-time 5% tax on certain taxpayers with assets over $1 billion, mainly for health care.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/40/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 41: Prohibits New State Taxes That Exclude Revenues from State Spending Limit. Requires Audits for New State Special Taxes",
+      "summary": "Prohibits New State Taxes That Exclude Revenues from State Spending Limit. Requires Audits for New State Special Taxes. Initiative Constitutional Amendment.\n\nVoids state taxes enacted after January 1, 2026 that are exempted from the spending limit, and requires audits of programs funded by new special taxes.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/41/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 42: Prohibits New State Personal Property Taxes and Certain Retroactive State Taxes",
+      "summary": "Prohibits New State Personal Property Taxes and Certain Retroactive State Taxes. Initiative Constitutional Amendment.\n\nBans new state taxes on owning non-real-estate property, and retroactive state taxes; voids conflicting taxes enacted after January 1, 2026.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/42/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 43: Limits Voters' Ability to Raise Revenues for Local Government Services",
+      "summary": "Limits Voters' Ability to Raise Revenues for Local Government Services. Legislative Constitutional Amendment.\n\nRaises the vote needed to pass citizen-proposed local special taxes from a majority to two-thirds, starting in 2027.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/43/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 44: Requires Community Health Clinics Spend 90% of Revenue on Program Services",
+      "summary": "Requires Community Health Clinics Spend 90% of Revenue on Program Services. Initiative Statute.\n\nPenalizes nonprofit federally qualified community clinics that spend less than 90% of revenue on program services.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/44/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · California Proposition 45: Modifies Environmental Review for Certain Projects",
+      "summary": "Modifies Environmental Review for Certain Projects. Initiative Statute.\n\nSets deadlines under CEQA to speed environmental review and lawsuits for many housing, transportation, water and health projects.\n\nOfficial title; summary from the official Voter Information Guide. Source: https://voterguide.sos.ca.gov/propositions/45/",
+      "effectiveDate": "2026-12-16",
+      "closeDate": "2026-11-04T04:00:00Z"
+    }
+  ]
+}

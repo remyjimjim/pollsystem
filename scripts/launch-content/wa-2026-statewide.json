@@ -2,42 +2,84 @@
   "_about": "Washington, Nov 3 2026 general election: the statewide contests. Research and sources: docs/launch-content/washington-2026-general.md. Ballot titles are verbatim from the Attorney General's ballot-title letters (check against the printed voters' pamphlet before publishing).",
   "election": {
     "pollTypeId": 1,
-    "title": "Washington 2026: Supreme Court & statewide measures",
+    "title": "2026 Midterm · Washington: Supreme Court & statewide measures",
     "date": "2026-11-03",
     "scopeLevel": "STATE",
-    "regionIds": [48],
+    "regionIds": [
+      48
+    ],
     "closeDate": "2026-11-04T04:00:00Z",
     "candidates": [
-      { "name": "Colleen Melody", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 1" },
-      { "name": "Scott Edwards", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 1" },
-      { "name": "David Stevens", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 3" },
-      { "name": "Jaime Michelle Hawk", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 3" },
-      { "name": "Ian Birk", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 4" },
-      { "name": "Sean O'Donnell", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 4" },
-      { "name": "Theo Angelis", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 5" },
-      { "name": "Dave Larson", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 5" },
-      { "name": "Debra L. Stephens", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 7" },
-      { "name": "Todd A. Bloom", "affiliation": "Nonpartisan", "officeName": "Supreme Court Justice Position 7" }
+      {
+        "name": "Colleen Melody",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 1"
+      },
+      {
+        "name": "Scott Edwards",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 1"
+      },
+      {
+        "name": "David Stevens",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 3"
+      },
+      {
+        "name": "Jaime Michelle Hawk",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 3"
+      },
+      {
+        "name": "Ian Birk",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 4"
+      },
+      {
+        "name": "Sean O'Donnell",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 4"
+      },
+      {
+        "name": "Theo Angelis",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 5"
+      },
+      {
+        "name": "Dave Larson",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 5"
+      },
+      {
+        "name": "Debra L. Stephens",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 7"
+      },
+      {
+        "name": "Todd A. Bloom",
+        "affiliation": "Nonpartisan",
+        "officeName": "Supreme Court Justice Position 7"
+      }
     ]
   },
   "ballotMeasures": [
     {
       "pollTypeId": 3,
-      "title": "Initiative Measure No. IP26-645: state and local taxes",
+      "title": "2026 Midterm · Washington Initiative IP26-645: state and local taxes",
       "summary": "Initiative Measure No. IP26-645 concerns state and local taxes. This measure would repeal a 9.9% tax on annual individual income over $1,000,000; prohibit taxes measured by individual income and taxes on individual income or the receipt of individual income; and define \"income.\" This measure would decrease funding for public K-12 education, higher education (including universities and community colleges), and human services (primarily healthcare). Should this measure be enacted into law?\n\nOfficial ballot title (Initiative to the People). Source: https://www.sos.wa.gov/sites/default/files/2026-07/IP26-645%20Ballot%20title%20%26%20Summary.pdf",
       "effectiveDate": "2026-12-03",
       "closeDate": "2026-11-04T04:00:00Z"
     },
     {
       "pollTypeId": 3,
-      "title": "Initiative Measure No. IL26-001: parental rights in public schools",
+      "title": "2026 Midterm · Washington Initiative IL26-001: parental rights in public schools",
       "summary": "Initiative Measure No. IL26-001 concerns parental rights relating to their children in public school. This measure would repeal amendments to a statute listing certain rights of parents and guardians of public-school children and re-enact the law as it was originally enacted by Initiative to the Legislature 2081. Should this measure be enacted into law?\n\nOfficial ballot title (Initiative to the Legislature). Source: https://www.sos.wa.gov/sites/default/files/2026-03/INITIATIVE%20IL26-001%20ballottitleletter.pdf",
       "effectiveDate": "2026-12-03",
       "closeDate": "2026-11-04T04:00:00Z"
     },
     {
       "pollTypeId": 3,
-      "title": "Initiative Measure No. IL26-638: K-12 school athletics",
+      "title": "2026 Midterm · Washington Initiative IL26-638: K-12 school athletics",
       "summary": "Initiative Measure No. IL26-638 concerns participation in athletics at K-12 schools. This measure would prohibit students it defines as \"biologically male\" from competing in certain school athletic activities intended for female students only. It would require verification of biological sex by students' healthcare providers. Should this measure be enacted into law?\n\nOfficial ballot title (Initiative to the Legislature). Source: https://www.sos.wa.gov/sites/default/files/2026-03/INITIATIVE%20IL26-638%20ballottitleletter.pdf",
       "effectiveDate": "2026-12-03",
       "closeDate": "2026-11-04T04:00:00Z"

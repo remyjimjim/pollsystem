@@ -1,0 +1,235 @@
+{
+  "_about": "Colorado, Nov 3 2026: U.S. Senate, statewide offices and the 14 statewide measures (official ballot titles verbatim from the Secretary of State). District CU Regent / State Board of Education races and regional Ballot Issue 7A are left out. Sources: docs/launch-content/colorado-2026-general.md.",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Colorado: U.S. Senate, statewide offices & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      6
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "John Hickenlooper",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Mark Baisley",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Bob Chew",
+        "affiliation": "Forward",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Christopher Baum",
+        "affiliation": "Approval Voting",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Blake Huber",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Adam Withrow",
+        "affiliation": "Unity",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Phil Weiser / Lesley Dahlkemper",
+        "affiliation": "Democratic",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Victor Marx / George Washington Markert",
+        "affiliation": "Republican",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Stephen T. Hamilton / James K Treibert",
+        "affiliation": "American Constitution",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Eric Mulder / Wayne Harlos",
+        "affiliation": "Libertarian",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Jeff Peckman / T.J. Cole",
+        "affiliation": "Unity",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Erik Underwood / Frank Atwood",
+        "affiliation": "Approval Voting",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Greg Lopez / Taralyn Romero",
+        "affiliation": "Unaffiliated",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Amanda Gonzalez",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "James Wiley",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Sean Vadney",
+        "affiliation": "Libertarian",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Amanda Campbell",
+        "affiliation": "American Constitution",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Celeste Landry",
+        "affiliation": "Forward",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Jeff Bridges",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Kevin Grantham",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Jodie Barr",
+        "affiliation": "Libertarian",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Marilee Langner Sturgis",
+        "affiliation": "Approval Voting",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Jena Griswold",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Michael J. Allen",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Amendment 81: Law Enforcement Reporting Requirements to Federal Authorities",
+      "summary": "Shall there be an amendment to the Colorado Constitution requiring law enforcement to notify the department of homeland security when a person is charged with either a violent crime or any crime if the person has a prior felony conviction if law enforcement cannot determine that the person is lawfully present in the United States?\n\nOfficial ballot title (Initiative #95). Amendments need 55% to pass. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Amendment 82: Right to Natural Gas",
+      "summary": "Shall there be an amendment to the Colorado Constitution creating new law granting the right for consumers to purchase natural gas for cooking or heating in homes or businesses and for distributors and utilities to sell natural gas to consumers?\n\nOfficial ballot title (Initiative #177). Amendments need 55% to pass. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Amendment 83: Constitutional Right to Hunt and Fish",
+      "summary": "Shall there be an amendment to the Colorado Constitution creating a constitutional right to hunt, fish, and harvest fish and wildlife by traditional methods, including all species of fish and wildlife managed by the state except non-game species, endangered species, or any species that is illegal to hunt under federal law, and, in connection therewith, establishing hunting and fishing as the preferred means of managing fish and wildlife populations; and preserving the right of the state to regulate hunting, fishing, and wildlife management if necessary for sound scientific wildlife conservation and management, public safety, or to preserve the future of hunting and fishing opportunities for all species?\n\nOfficial ballot title (Initiative #302). Amendments need 55% to pass. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Amendment 84: Mail Ballot Voter Identification",
+      "summary": "Shall there be an amendment to the Colorado Constitution requiring a voter to sign and include the last four digits of their social security number or their Colorado driver’s license or identification card number on the outside of their mail ballot for any federal or state election, and, in connection therewith, allowing the voter to correct missing or incorrect information, including with alternative forms of identification; and prohibiting a county clerk and recorder from counting the mail ballot unless the problem is fixed?\n\nOfficial ballot title (Initiative #362). Amendments need 55% to pass. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Amendment 85: Plain Language Ballot Questions",
+      "summary": "Shall there be an amendment to the Colorado Constitution concerning ballot question language, and, in connection therewith, requiring all state and local ballot questions to be written in plain language and at no more than an 8th grade reading level and prohibiting a state statute from requiring language that conflicts with these requirements in ballot questions for citizen-initiated measures?\n\nOfficial ballot title (Initiative #234). Amendments need 55% to pass. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Amendment 86: Congressional Redistricting",
+      "summary": "Shall there be an amendment to the Colorado Constitution concerning congressional redistricting, and, in connection therewith, reenacting the current process for congressional redistricting in the Colorado Constitution and prohibiting modifications to a final map unless at least three public meetings are held, the modifications do not have the effect of dividing communities of interest or purposefully favoring one political party, and are approved by the congressional redistricting commission and the Colorado Supreme Court?\n\nOfficial ballot title (Initiative #256). Amendments need 55% to pass. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Amendment 87: Graduated Income Tax",
+      "summary": "SHALL STATE TAXES BE INCREASED $2.7 BILLION ANNUALLY, IN ORDER TO INCREASE OR IMPROVE LEVELS OF PUBLIC SERVICES, INCLUDING K-12 PUBLIC SCHOOL EDUCATION, HEALTH CARE, AND EARLY CHILD CARE AND EDUCATION SERVICES, BY AN AMENDMENT TO THE COLORADO CONSTITUTION AND A CHANGE TO THE COLORADO REVISED STATUTES REPEALING EXISTING LAW AND CREATING NEW LAW TO REPLACE THE UNIFORM STATE INCOME TAX RATE WITH A GRADUATED INCOME TAX STRUCTURE, AND, IN CONNECTION THEREWITH, AMENDING THE TAXPAYER’S BILL OF RIGHTS TO ELIMINATE THE CONSTITUTIONAL REQUIREMENT FOR ALL TAXABLE NET INCOME TO BE TAXED AT ONE RATE WITH NO ADDED TAX ON INCOME; ESTABLISHING VARIOUS INCOME TAX RATES BASED ON THE AMOUNT OF TAXABLE INCOME EARNED BY INDIVIDUALS, ESTATES, TRUSTS, AND CORPORATIONS, WHILE MAINTAINING THE CURRENT 4.4% TAX ON INCOME FROM THE SALE OF A PRINCIPAL RESIDENCE, WHICH WILL RESULT IN THE ESTIMATED CHANGE IN INCOME TAXES OWED BY INDIVIDUALS AS IDENTIFIED IN THE FOLLOWING TABLE; AND AUTHORIZING THE STATE TO RETAIN AND SPEND ANY INCREASED REVENUE FROM THE NEW TAX STRUCTURE, AS A VOTER-APPROVED REVENUE CHANGE, TO SUPPLEMENT CURRENT LEVELS OF FUNDING FOR K-12 PUBLIC SCHOOL EDUCATION, HEALTH CARE, AND EARLY CHILD CARE AND EDUCATION PROGRAMS?\n\n(The official title is followed by a table of estimated income-tax changes by income level; see the source.)\n\nOfficial ballot title (Initiative #195). Amendments need 55% to pass. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Proposition NN: State Public K-12 Education Funding",
+      "summary": "Shall state investment in K-12 public education increase two percent each year for the next ten years, with investments used to increase teacher pay, improve teacher retention, lower class sizes, and increase access to career and technical courses, without raising taxes but instead funded by raising the annual limit on state fiscal year spending only by the amount spent on public K-12 education as a voter-approved revenue change, and requiring an annual publicly released, independent audit to show how the new investments are spent?\n\nOfficial ballot title (Senate Bill 26-135). Propositions need a simple majority. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Proposition 132: Penalties for Fentanyl Crimes",
+      "summary": "Shall there be a change to the Colorado Revised Statutes concerning criminal penalties for fentanyl and certain synthetic opioids, and, in connection therewith, increasing the felony classifications of drug-related crimes for distribution, manufacturing, dispensing, sale, or possession of fentanyl and certain synthetic opioids; creating mandated treatment for certain drug felony violations based on possession amount; and changing sentencing provisions to narrow or eliminate exemptions for crimes related to fentanyl and certain synthetic opioids and drug-related deaths?\n\nOfficial ballot title (Initiative #85). Propositions need a simple majority. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Proposition 133: Penalties for Human Trafficking of a Minor",
+      "summary": "Shall there be a change to the Colorado Revised Statutes modifying existing law concerning human trafficking of a minor for sexual servitude, and, in connection therewith, creating new law expanding human trafficking of a minor for sexual servitude to include knowingly trading anything of monetary value to buy or sell sexual activity with a minor and increasing the penalty to be life in prison without parole or release?\n\nOfficial ballot title (Initiative #108). Propositions need a simple majority. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Proposition 134: Male and Female Participation in School Sports",
+      "summary": "Shall there be a change to the Colorado Revised Statutes creating new law restricting participation in all K-12 and collegiate school sports based on the participant’s sex as determined by certain aspects of their biological reproductive system, and, in connection therewith, requiring a school, institution of higher education, or athletic association to designate each school or intramural athletic team or sport as male, female, or coeducational; only allowing participants to compete on the team or sport of their designated sex or to compete on a coeducational team; creating an exception to allow a female to participate on a male-designated team or sport if there is no female team available; prohibiting a government entity, licensing or accrediting organization, or athletic association from entertaining a complaint, opening an investigation, or taking other adverse action against a school for maintaining separate teams or sports for females; and providing the commissioner of education with the authority to enforce the proposed initiative for K-12 school districts?\n\nOfficial ballot title (Initiative #109). Propositions need a simple majority. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Proposition 135: Prohibit Certain Surgeries on Minors",
+      "summary": "Shall there be a change to the Colorado Revised Statutes modifying existing law by prohibiting surgery on a minor for the purpose of altering the minor’s biological sex characteristics, and, in connection therewith, prohibiting any health-care professional or other person from knowingly performing, prescribing, administering, or providing any surgery to a minor for the purpose of altering the minor’s biological sex characteristics and prohibiting the use of state or federal funds, Medicaid reimbursement, or insurance coverage to pay for this type of surgery?\n\nOfficial ballot title (Initiative #110). Propositions need a simple majority. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Proposition 136: Income Tax Rate Cap",
+      "summary": "Shall there be a change to the Colorado Revised Statutes capping the state income tax rate at 4.4% of federal taxable income for individuals and corporations?\n\nOfficial ballot title (Initiative #232). Propositions need a simple majority. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Colorado Proposition 137: Designate Sporting Goods Sales Tax Revenue for Conservation",
+      "summary": "Shall there be a change to the Colorado Revised Statutes creating new law to increase water and land conservation funding without raising taxes, and, in connection therewith, through a voter-approved revenue change, allowing the state to keep and spend a portion of revenue from the state sales tax on sporting goods and equipment to conserve and protect Colorado’s water, land, and forests, prevent wildfires, support outdoor recreation training and activities, and reduce revenue spent on these conservation purposes if necessary to preserve funding for certain tax credits?\n\nOfficial ballot title (Initiative #308). Propositions need a simple majority. Source: https://www.coloradosos.gov/pubs/elections/Initiatives/ballot/contacts/2026.html",
+      "effectiveDate": "2026-12-31",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}

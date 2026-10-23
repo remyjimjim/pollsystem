@@ -1,0 +1,75 @@
+{
+  "_about": "2026-10-23: titles gain the '2026 Midterm · ' prefix; CD-N becomes D-N; measure titles name the state. Apply with create-polls.py --retitle.",
+  "renames": [
+    {
+      "type": "election",
+      "from": "Washington 2026: Supreme Court & statewide measures",
+      "to": "2026 Midterm · Washington: Supreme Court & statewide measures"
+    },
+    {
+      "type": "ballot-measure",
+      "from": "Initiative Measure No. IP26-645: state and local taxes",
+      "to": "2026 Midterm · Washington Initiative IP26-645: state and local taxes"
+    },
+    {
+      "type": "ballot-measure",
+      "from": "Initiative Measure No. IL26-001: parental rights in public schools",
+      "to": "2026 Midterm · Washington Initiative IL26-001: parental rights in public schools"
+    },
+    {
+      "type": "ballot-measure",
+      "from": "Initiative Measure No. IL26-638: K-12 school athletics",
+      "to": "2026 Midterm · Washington Initiative IL26-638: K-12 school athletics"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-1: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-1: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-2: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-2: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-3: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-3: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-4: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-4: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-5: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-5: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-6: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-6: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-7: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-7: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-8: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-8: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-9: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-9: U.S. House"
+    },
+    {
+      "type": "election",
+      "from": "Washington CD-10: U.S. House, Nov 3 2026",
+      "to": "2026 Midterm · Washington D-10: U.S. House"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "elections": [
     {
       "pollTypeId": 1,
-      "title": "Washington CD-1: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-1: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -25,7 +25,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-2: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-2: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -47,7 +47,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-3: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-3: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -69,7 +69,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-4: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-4: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -91,7 +91,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-5: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-5: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -113,7 +113,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-6: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-6: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -135,7 +135,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-7: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-7: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -157,7 +157,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-8: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-8: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -179,7 +179,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-9: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-9: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [
@@ -201,7 +201,7 @@
     },
     {
       "pollTypeId": 1,
-      "title": "Washington CD-10: U.S. House, Nov 3 2026",
+      "title": "2026 Midterm · Washington D-10: U.S. House",
       "date": "2026-11-03",
       "scopeLevel": "STATE",
       "regionIds": [

@@ -1,0 +1,1149 @@
+{
+  "_about": "California, Nov 3 2026: the 52 U.S. House races (top-two), one election per district, party preference as listed on the Secretary of State's certified list. Sources: docs/launch-content/california-2026-general.md.",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-1: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Mike McGuire",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "James Gallagher",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-2: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Jared Huffman",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Robin Littau",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-3: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Ami Bera",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Robb Tucker",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-4: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Eric Jones",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Mike Thompson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-5: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Michael Masuda",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Tom McClintock",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-6: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Richard Pan",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Kevin Kiley",
+          "affiliation": "No Party Preference",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-7: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Doris Matsui",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Mai Vang",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-8: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "John Garamendi",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Rudy Recile",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-9: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Josh Harder",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "John McBride",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-10: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Mark DeSaulnier",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Jeff Frese",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 10"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-11: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Connie Chan",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Scott Wiener",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 11"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-12: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Jamie Joyce",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Lateefah Simon",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 12"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-13: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Adam Gray",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Kevin Lincoln",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 13"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-14: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Melissa Hernandez",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 14"
+        },
+        {
+          "name": "Aisha Wahab",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 14"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-15: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Kevin Mullin",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Charles Hoelter",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 15"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-16: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Sam Liccardo",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 16"
+        },
+        {
+          "name": "Peter Sundin Soulé",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 16"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-17: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Ro Khanna",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 17"
+        },
+        {
+          "name": "Ritesh Tandon",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 17"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-18: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Zoe Lofgren",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 18"
+        },
+        {
+          "name": "Shane Lewis",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 18"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-19: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Jimmy Panetta",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 19"
+        },
+        {
+          "name": "Peter Coe Verbica",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 19"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-20: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Sandra Van Scotter",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 20"
+        },
+        {
+          "name": "Vince Fong",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 20"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-21: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Jim Costa",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 21"
+        },
+        {
+          "name": "Kyle Kirkland",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 21"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-22: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Randy Villegas",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 22"
+        },
+        {
+          "name": "David G. Valadao",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 22"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-23: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Tessa Lynn Hodge",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 23"
+        },
+        {
+          "name": "Jay Obernolte",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 23"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-24: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Salud Carbajal",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 24"
+        },
+        {
+          "name": "Bob Smith",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 24"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-25: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Raul Ruiz",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 25"
+        },
+        {
+          "name": "Joe Males",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 25"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-26: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Jacqui Irwin",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 26"
+        },
+        {
+          "name": "Sam Gallucci",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 26"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-27: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "George Whitesides",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 27"
+        },
+        {
+          "name": "Jason Gibbs",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 27"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-28: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Judy Chu",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 28"
+        },
+        {
+          "name": "April A. Verlato",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 28"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-29: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Angélica María Dueñas",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 29"
+        },
+        {
+          "name": "Luz Maria Rivas",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 29"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-30: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Laura Friedman",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 30"
+        },
+        {
+          "name": "Scott Alan Meyers",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 30"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-31: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Gil Cisneros",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 31"
+        },
+        {
+          "name": "Eric Ching",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 31"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-32: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Brad Sherman",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 32"
+        },
+        {
+          "name": "Larry Thompson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 32"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-33: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Pete Aguilar",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 33"
+        },
+        {
+          "name": "Stephanie M. Vargas",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 33"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-34: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Jimmy Gomez",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 34"
+        },
+        {
+          "name": "Angela Gonzales-Torres",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 34"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-35: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Norma J. Torres",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 35"
+        },
+        {
+          "name": "Mike Cargile",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 35"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-36: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Ted W. Lieu",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 36"
+        },
+        {
+          "name": "Houston Brignano",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 36"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-37: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Sydney Kamlager-Dove",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 37"
+        },
+        {
+          "name": "Samantha Mota",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 37"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-38: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Hilda Solis",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 38"
+        },
+        {
+          "name": "Pedro Antonio Casas",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 38"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-39: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Mark Takano",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 39"
+        },
+        {
+          "name": "Steve Manos",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 39"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-40: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Ken Calvert",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 40"
+        },
+        {
+          "name": "Young Kim",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 40"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-41: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Linda Sánchez",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 41"
+        },
+        {
+          "name": "Mitch Clemmons",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 41"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-42: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Robert Garcia",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 42"
+        },
+        {
+          "name": "Brian Burley",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 42"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-43: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Maxine Waters",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 43"
+        },
+        {
+          "name": "Cristian Morales",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 43"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-44: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Nanette Diaz Barragan",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 44"
+        },
+        {
+          "name": "Genevieve Angel",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 44"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-45: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Derek Tran",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 45"
+        },
+        {
+          "name": "Chuong V. Vo",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 45"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-46: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Lou Correa",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 46"
+        },
+        {
+          "name": "David Pan",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 46"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-47: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Dave Min",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 47"
+        },
+        {
+          "name": "Jenny Rae Le Roux",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 47"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-48: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Marni von Wilpert",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 48"
+        },
+        {
+          "name": "Jim Desmond",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 48"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-49: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Mike Levin",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 49"
+        },
+        {
+          "name": "Armen Kurdian",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 49"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-50: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Scott Peters",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 50"
+        },
+        {
+          "name": "Steve Cohen",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 50"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-51: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Sara Jacobs",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 51"
+        },
+        {
+          "name": "Ricardo Cabrera",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 51"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm · California D-52: U.S. House",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        5
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Juan Vargas",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 52"
+        },
+        {
+          "name": "Jeff Belle",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 52"
+        }
+      ]
+    }
+  ]
+}
