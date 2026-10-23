@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Nebraska on local
+
+**Changed:** NE: 6 statewide races. U.S. Senate has 5 candidates and no Democrat; Osborn is listed 'By Petition'. 4 measures: Initiatives 440 and 441 on online sports betting, 442 on school sports teams by biological sex, and LR19CA on legislative term limits. 3 district ballots. Everything comes from official Secretary of State sources: the final candidate list of Sep 11 and the voters' pamphlet. Nothing was cross-checked, because web search was used up (see `NE.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `6ab66c7`
+
+---
+
 ## 2026-10-23 — West Virginia on local
 
 **Changed:** WV: U.S. Senate (Capito, Anderson, Wilson), Amendment 1 (citizens-only voting), 2 district ballots. Candidates come from the Secretary of State's candidate list. Statewide courts were decided in May. The amendment wording comes from the legal notice printed in the Moorefield Examiner, because wvlegislature.gov returned 500 (see `WV.md`).
