@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-23 — Midterm content on staging, as drafts (verified)
+
+**Requested:**
+
+> token is saved
+
+**Changed:**
+
+- Staging super token (remyjimjim@proton.me, SUPER) checked without being
+  printed. The file was group- and world-readable, so it was set to 600.
+- `create-polls.py` ran against staging for Washington, California and
+  Colorado (statewide and House files).
+
+**Verified:**
+
+- Before: staging had 0 polls.
+- After: 73 "2026 Midterm" elections and 31 measures, all DRAFT.
+- The statewide elections are staging ids 1 (WA), 12 (CA) and 65 (CO).
+
+---
+
 ## 2026-10-23 — California & Colorado midterms drafted; "2026 Midterm" titles
 
 **Requested:**
