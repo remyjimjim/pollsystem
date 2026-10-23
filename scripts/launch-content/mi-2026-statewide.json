@@ -1,0 +1,351 @@
+{
+  "_about": "Michigan, Nov 3 2026, built by build-state.py from docs/launch-content/research/MI.json (sources and gaps in MI.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Michigan: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      23
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Abdul El-Sayed",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Mike Rogers",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Lydia Christensen",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Tim Long",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Douglas P. Marsh",
+        "affiliation": "Green",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Walter P. Kristy",
+        "affiliation": "Natural Law",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Jocelyn Benson / Winnie Brinks",
+        "affiliation": "Democratic",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "John James / Jay DeBoyer",
+        "affiliation": "Republican",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Anthony Hudson / Beau Parmenter",
+        "affiliation": "Libertarian",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Donna Brandenburg / Robert Donald Cowper II",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Douglas Campbell / Bobbie Clay",
+        "affiliation": "Green",
+        "officeName": "Governor and Lieutenant Governor"
+      },
+      {
+        "name": "Garlin Gilchrist II",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Anthony G. Forlini",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Christine Sloan",
+        "affiliation": "Libertarian",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Scott E. Aughney",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Eric Borregard",
+        "affiliation": "Green",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Eli Savit",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Doug Lloyd",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Jason Dye",
+        "affiliation": "Libertarian",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "John Perry Ludtke Jr.",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Jeff Polonowski",
+        "affiliation": "Green",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Doug Dern",
+        "affiliation": "Natural Law",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Judith Pritchett",
+        "affiliation": "Democratic",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Tiffany Tilley",
+        "affiliation": "Democratic",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Terence Collins",
+        "affiliation": "Republican",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Bree Moeggenberg",
+        "affiliation": "Republican",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Charles Essner",
+        "affiliation": "Libertarian",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "William Mohr II",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Christine C. Schwartz",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Wissam Charafeddine",
+        "affiliation": "Green",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Mary Anne Hering",
+        "affiliation": "Working Class",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Kelli Monroe",
+        "affiliation": "Natural Law",
+        "officeName": "Member of the State Board of Education (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Paul Brown",
+        "affiliation": "Democratic",
+        "officeName": "Regent of the University of Michigan (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Amir Makled",
+        "affiliation": "Democratic",
+        "officeName": "Regent of the University of Michigan (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Lena Epstein",
+        "affiliation": "Republican",
+        "officeName": "Regent of the University of Michigan (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Michael Schostak",
+        "affiliation": "Republican",
+        "officeName": "Regent of the University of Michigan (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Andrew Chadderdon",
+        "affiliation": "Libertarian",
+        "officeName": "Regent of the University of Michigan (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Kyle Maas",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Regent of the University of Michigan (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Brianna Scott",
+        "affiliation": "Democratic",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Kelly Tebay Zemke",
+        "affiliation": "Democratic",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Julie Maday",
+        "affiliation": "Republican",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Roger Victory",
+        "affiliation": "Republican",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Daniel R. Patterson",
+        "affiliation": "Libertarian",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Will Tyler White",
+        "affiliation": "Libertarian",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Janet Sanger",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "John Sanger",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "John Anthony La Pietra",
+        "affiliation": "Green",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Yaz Ozbek",
+        "affiliation": "Working Class",
+        "officeName": "Trustee of Michigan State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Shereef Akeel",
+        "affiliation": "Democratic",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Richard Mack",
+        "affiliation": "Democratic",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Andy Anuzis",
+        "affiliation": "Republican",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Christa Murphy",
+        "affiliation": "Republican",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Alex Avery",
+        "affiliation": "Libertarian",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Jami Van Alstine",
+        "affiliation": "Libertarian",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Jeff McDonald",
+        "affiliation": "U.S. Taxpayers",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Paul M. Ragan",
+        "affiliation": "Green",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Suzanne Roehrig",
+        "affiliation": "Working Class",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Kathleen Oakford",
+        "affiliation": "Natural Law",
+        "officeName": "Governor of Wayne State University (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Megan Kathleen Cavanagh",
+        "affiliation": "Nonpartisan",
+        "officeName": "Justice of the Supreme Court (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Noah P. Hood",
+        "affiliation": "Nonpartisan",
+        "officeName": "Justice of the Supreme Court (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Thomas W. Howe",
+        "affiliation": "Nonpartisan",
+        "officeName": "Justice of the Supreme Court (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Casandra Morse-Bills",
+        "affiliation": "Nonpartisan",
+        "officeName": "Justice of the Supreme Court (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Michael Warren",
+        "affiliation": "Nonpartisan",
+        "officeName": "Justice of the Supreme Court (vote for 2 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Jody White",
+        "affiliation": "Nonpartisan",
+        "officeName": "Justice of the Supreme Court (vote for 2 on the ballot; pick your top choice here)"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Michigan Proposal 26-1: Whether to call a constitutional convention",
+      "summary": "A proposal to convene a constitutional convention for the purpose of drafting a general revision of the state constitution\nShall a convention of elected delegates be convened in 2027 to draft a general revision of the State Constitution for presentation to the state's voters for their approval or rejection?\n\nIn short: Asks voters whether to elect delegates to a 2027 convention that would draft a general revision of the Michigan Constitution, which would then go back to voters for approval or rejection.\n\nOfficial ballot language. Source: https://www.clickondetroit.com/news/local/2026/10/13/what-proposals-are-on-wayne-countys-2026-general-election-ballot-heres-the-list/",
+      "effectiveDate": "2026-12-08",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Michigan Proposal 26-2: Campaign contributions from utilities and government contractors; political communications disclosure",
+      "summary": "A proposed initiated law to prohibit campaign contributions from certain regulated utilities and government contractors and apply campaign finance laws and regulations to additional types of political communications\nThe proposal would:\nProhibit regulated electric and gas utilities, contractors with over $250,000 annually in government contracts, and people and organizations with substantial connections to these utilities/contractors from making direct or indirect campaign contributions to those who run for or hold offices that impact them.\nExpand laws regulating spending on political communications, including those requiring disclosing donor information, to apply to communications clearly identifying candidates or ballot questions, even if they do not expressly advocate voting for/against them.\nExpressly apply the law requiring disclosure of who paid for political communications to internet political communications.\nShould this proposal be adopted?\n\nIn short: An initiated law that would bar campaign contributions from regulated electric and gas utilities, large government contractors and closely connected people and organizations, and extend campaign-finance and paid-for-by disclosure rules to more political communications, including online ones.\n\nOfficial ballot language. Source: https://www.clickondetroit.com/news/local/2026/10/13/what-proposals-are-on-wayne-countys-2026-general-election-ballot-heres-the-list/",
+      "effectiveDate": "2026-12-08",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}

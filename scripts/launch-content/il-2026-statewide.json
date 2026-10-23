@@ -1,0 +1,85 @@
+{
+  "_about": "Illinois, Nov 3 2026, built by build-state.py from docs/launch-content/research/IL.json (sources and gaps in IL.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Illinois: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      14
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Juliana Stratton",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Don Tracy",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Whitfield Harrington Jr",
+        "affiliation": "American Center Party",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "JB Pritzker / Christian Mitchell",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Darren Bailey / Aaron B. Del Mar",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Collin Corbett / Carolyn Schofield",
+        "affiliation": "Independent",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Kwame Raoul",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Robert W. Fioretti",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Alexi Giannoulias",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Diane M. Harris",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Margaret Croke",
+        "affiliation": "Democratic",
+        "officeName": "Comptroller"
+      },
+      {
+        "name": "Bryan Drew",
+        "affiliation": "Republican",
+        "officeName": "Comptroller"
+      },
+      {
+        "name": "Michael W. Frerichs",
+        "affiliation": "Democratic",
+        "officeName": "Treasurer"
+      },
+      {
+        "name": "Max Solomon",
+        "affiliation": "Republican",
+        "officeName": "Treasurer"
+      }
+    ]
+  }
+}

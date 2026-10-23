@@ -32,3 +32,4 @@ Researched 2026-10-23 onwards. There is one pair of files per state:
   the state on Nov 3. Daylight saving ends Nov 1.
 - **Candidates:** names and party labels are as printed on the ballot.
   Write-ins are left out.
+- A multi-seat race ("vote for 2") adds `"voteFor": 2` to its statewide entry. The app records one choice per office, so the builder labels the office "(vote for 2 on the ballot; pick your top choice here)".

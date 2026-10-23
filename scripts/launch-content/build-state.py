@@ -74,7 +74,9 @@ def build(abbr, ids):
     eff = r.get('measureEffective') or '2026-12-31'
     def election(title, cands):
         return {"pollTypeId": 1, "title": title, "date": DATE, "scopeLevel": "STATE", "regionIds": [sid], "closeDate": close, "candidates": cands}
-    statewide = [cand(c, s['office']) for s in r.get('statewide', []) for c in s['candidates']]
+    # The app takes one choice per office; a multi-seat race says so.
+    def office(s): return s['office'] + (f" (vote for {s['voteFor']} on the ballot; pick your top choice here)" if s.get('voteFor', 1) > 1 else "")
+    statewide = [cand(c, office(s)) for s in r.get('statewide', []) for c in s['candidates']]
     # A short designation ("Amendment 3") gets its subject; a descriptive one
     # (North Carolina's contest titles) stands alone.
     def mtitle(m): return f"{P}{state} {m['designation']}" + (f": {m['subject']}" if len(m['designation']) <= 30 else "")

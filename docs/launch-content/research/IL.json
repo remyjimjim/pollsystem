@@ -1,0 +1,353 @@
+{
+  "state": "Illinois",
+  "abbr": "IL",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        {
+          "name": "Juliana Stratton",
+          "party": "Democratic"
+        },
+        {
+          "name": "Don Tracy",
+          "party": "Republican"
+        },
+        {
+          "name": "Whitfield Harrington Jr",
+          "party": "American Center Party"
+        }
+      ]
+    },
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        {
+          "name": "JB Pritzker / Christian Mitchell",
+          "party": "Democratic"
+        },
+        {
+          "name": "Darren Bailey / Aaron B. Del Mar",
+          "party": "Republican"
+        },
+        {
+          "name": "Collin Corbett / Carolyn Schofield",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Kwame Raoul",
+          "party": "Democratic"
+        },
+        {
+          "name": "Robert W. Fioretti",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Alexi Giannoulias",
+          "party": "Democratic"
+        },
+        {
+          "name": "Diane M. Harris",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Comptroller",
+      "candidates": [
+        {
+          "name": "Margaret Croke",
+          "party": "Democratic"
+        },
+        {
+          "name": "Bryan Drew",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Treasurer",
+      "candidates": [
+        {
+          "name": "Michael W. Frerichs",
+          "party": "Democratic"
+        },
+        {
+          "name": "Max Solomon",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Jonathan L. Jackson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Christian Maxwell",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Donna Miller",
+          "party": "Democratic"
+        },
+        {
+          "name": "Michael Scott Noack",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Delia Ramirez",
+          "party": "Democratic"
+        },
+        {
+          "name": "Angel Oakley",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Patty Garcia",
+          "party": "Democratic"
+        },
+        {
+          "name": "Lupe Castillo",
+          "party": "Republican"
+        },
+        {
+          "name": "Ed Hershey",
+          "party": "Working Class Party"
+        },
+        {
+          "name": "Chris Getty",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Mike Quigley",
+          "party": "Democratic"
+        },
+        {
+          "name": "Tommy Hanson",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Sean Casten",
+          "party": "Democratic"
+        },
+        {
+          "name": "Niki Conforti",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "La Shawn K. Ford",
+          "party": "Democratic"
+        },
+        {
+          "name": "Chad Koppie",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Melissa L. Bean",
+          "party": "Democratic"
+        },
+        {
+          "name": "Jennifer Davis",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 9,
+      "candidates": [
+        {
+          "name": "Daniel Biss",
+          "party": "Democratic"
+        },
+        {
+          "name": "John Elleson",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 10,
+      "candidates": [
+        {
+          "name": "Brad Schneider",
+          "party": "Democratic"
+        },
+        {
+          "name": "Carl Lambrecht",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 11,
+      "candidates": [
+        {
+          "name": "Bill Foster",
+          "party": "Democratic"
+        },
+        {
+          "name": "Jeff Walter",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 12,
+      "candidates": [
+        {
+          "name": "Julie Fortier",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mike Bost",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 13,
+      "candidates": [
+        {
+          "name": "Nikki Budzinski",
+          "party": "Democratic"
+        },
+        {
+          "name": "Jeff Wilson",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 14,
+      "candidates": [
+        {
+          "name": "Lauren Underwood",
+          "party": "Democratic"
+        },
+        {
+          "name": "James T. \"Jim\" Marter",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 15,
+      "candidates": [
+        {
+          "name": "Jennifer Todd",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mary E. Miller",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 16,
+      "candidates": [
+        {
+          "name": "Paul Nolley",
+          "party": "Democratic"
+        },
+        {
+          "name": "Darin LaHood",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 17,
+      "candidates": [
+        {
+          "name": "Eric Sorensen",
+          "party": "Democratic"
+        },
+        {
+          "name": "Dillan S. Vancil",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "measures": [],
+  "measureEffective": "2026-11-03",
+  "measureEffectiveNote": "No statewide constitutional amendment or advisory question is on the November 3, 2026 Illinois ballot, so nothing takes effect. Rule for reference: under Ill. Const. art. XIV, sec. 2(b), a legislatively proposed amendment 'shall become effective as the amendment provides' if approved by three-fifths of those voting on the question or a majority of those voting in the election; the election date is used here as a representative date.",
+  "sources": [
+    "https://www.elections.il.gov/ElectionOperations/CandidateFilingSearch.aspx?ID=sejIrI%2bQmww%3d",
+    "https://www.elections.il.gov/ElectionOperations/ElectionInformation.aspx?ElectionID=sejIrI%2bQmww%3d",
+    "https://www.ilga.gov/legislation/ilcs/fulltext.asp?DocName=001000050K17-1",
+    "https://www.ilga.gov/commission/lrb/con14.htm",
+    "https://ballotpedia.org/Illinois_2026_ballot_measures",
+    "https://ballotpedia.org/United_States_Senate_election_in_Illinois,_2026",
+    "https://ballotpedia.org/Illinois_gubernatorial_and_lieutenant_gubernatorial_election,_2026",
+    "https://ballotpedia.org/United_States_House_of_Representatives_elections_in_Illinois,_2026",
+    "https://www.cpapracticeadvisor.com/2026/04/24/millionaire-tax-wont-be-on-november-ballot-as-illinois-democrats-cant-come-to-agreement/182179/"
+  ],
+  "notes": [
+    "Candidates are the 'Active' entries in the Illinois State Board of Elections Candidate Filing Search for the GENERAL ELECTION - 11/3/2026 (read 2026-10-23). The SBE lists names as 'Last, First' in upper/mixed case and parties in capitals (e.g. DEMOCRATIC); names are reordered First Last and parties title-cased here.",
+    "Governor and Lieutenant Governor are elected as a joint ticket; each ticket is one entry under 'Gov / Lt Gov', named 'Governor / Lieutenant Governor'.",
+    "Removed by the SBE before the ballot was set (not included): Tyrone F. Muhammad (Ind., U.S. Senate); Griselda Romero / Eyde Arndell (Green, Gov/Lt Gov); Gary Pierce / Alejandro Cabrera (Independence Party, Gov/Lt Gov); Richard Mayers (New, Gov); Jeffrey Schiefelbein (Green, SoS); Anna Schiefelbein (Green, Comptroller); Timothea Papas (Green, Treasurer); Mayra Macias and Byron Sigcho Lopez (Ind., IL-4).",
+    "Treasurer: Republican Max Solomon filed 4/23/2026, after the March 17 primary, i.e. as a filler of a vacancy in nomination.",
+    "Write-ins excluded (Ballotpedia lists e.g. Mike Vick / Gary Pierce and Romero / Arndell as write-ins for Governor, Christopher Krumpack in IL-8).",
+    "No statewide measures: a millionaire-tax amendment stalled in the House before the May 3 deadline, and a redistricting-commission amendment passed only the House; Ballotpedia shows zero certified statewide measures as of Oct 20, 2026. Many counties carry local/advisory questions, which are out of scope.",
+    "All of Illinois is on Central time; polls are open 6:00 a.m. to 7:00 p.m. (10 ILCS 5/17-1). 7:00 PM CST (UTC-6) = 01:00 UTC on Nov 4."
+  ],
+  "unconfirmed": [
+    "Exact ballot-face spelling of names and party labels was not checked against a printed sample ballot; e.g. the SBE shows 'Harrington Jr, Whitfield' (no comma/period before Jr) and 'Pritzker, JB'.",
+    "No official SBE page listing statewide referenda for 2026 was found; the absence of statewide measures rests on Ballotpedia and news reports; the SBE election page for 11/3/2026 links no referenda.",
+    "Name variants: Ballotpedia shows 'Daniel K. Biss' and 'Dillan Vancil'; the SBE list shows 'Biss, Daniel' and 'Vancil, Dillan S.' (SBE form used)."
+  ]
+}

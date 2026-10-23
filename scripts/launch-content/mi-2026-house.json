@@ -1,0 +1,472 @@
+{
+  "_about": "Michigan, Nov 3 2026, built by build-state.py from docs/launch-content/research/MI.json (sources and gaps in MI.md). One ballot per district, each including \"2026 Midterm · Michigan: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Callie Barr",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Jack Bergman",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Arnett Satterla",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Doc Kovaly",
+          "affiliation": "U.S. Taxpayers",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "LaVeta Davenport",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Liz Hakola",
+          "affiliation": "Working Class",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Zebulon Featherly",
+          "affiliation": "No Party Affiliation",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Ben Ambrose",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "John Moolenaar",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Charlotte Magoon",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Richard Sills",
+          "affiliation": "Natural Law",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Hillary Scholten",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Terri DeBoer",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Joe Jock",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Sean McCann",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Bill Huizenga",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Shafina Che Barnett",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Christian Vukasovich",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Tim Walberg",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Ronald A Muszynski",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Sharon Marie Renier",
+          "affiliation": "U.S. Taxpayers",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Jim Bronke",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Debbie Dingell",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Heather Smiley",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Timothy A. Teagan",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Mike Mickevicius",
+          "affiliation": "U.S. Taxpayers",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Clyde Shabazz",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Linda Rayburn",
+          "affiliation": "Working Class",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "William Lawrence",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Tom Barrett",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Shane Dedrick",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Kristen McDonald Rivet",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Thomas J. Smith",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "C. Mia Pettus",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Jim Casha",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Kathy Goodwin",
+          "affiliation": "Working Class",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 9",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Ray Pooley",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Lisa McClain",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Kevin Vayko",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "John Vlahos",
+          "affiliation": "U.S. Taxpayers",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Destiny Clayton",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Jim Walkowicz",
+          "affiliation": "Working Class",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 10",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Christina Bertrand Hines",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Michael Bouchard",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Mike Saliba",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Kwabena Nkromo",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Andrea L. Kirby",
+          "affiliation": "Working Class",
+          "officeName": "U.S. Representative, District 10"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 11",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Jeremy Moss",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Ethan Baker",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Farid Ishac",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Ryan Teasdale",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Anil Kumar",
+          "affiliation": "No Party Affiliation",
+          "officeName": "U.S. Representative, District 11"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 12",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Rashida Tlaib",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "James D. Hooper",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Marc Joseph Sosnowski",
+          "affiliation": "U.S. Taxpayers",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Brenda K. Sanders",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Gary Walkowicz",
+          "affiliation": "Working Class",
+          "officeName": "U.S. Representative, District 12"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Michigan District 13",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        23
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Donavan McKinney",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "T.P. Nykoriak",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Chris Dardzinski",
+          "affiliation": "U.S. Taxpayers",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Raelyn Light",
+          "affiliation": "Green",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Simone R. Coleman",
+          "affiliation": "Working Class",
+          "officeName": "U.S. Representative, District 13"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Michigan: statewide races & measures"
+}

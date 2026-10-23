@@ -1,0 +1,681 @@
+{
+ "state": "Michigan",
+ "abbr": "MI",
+ "pollCloseLocal": "8:00 PM CST (Central-time Upper Peninsula counties; 8:00 PM EST elsewhere)",
+ "pollCloseUtc": "2026-11-04T02:00:00Z",
+ "statewide": [
+  {
+   "office": "U.S. Senator",
+   "candidates": [
+    {
+     "name": "Abdul El-Sayed",
+     "party": "Democratic"
+    },
+    {
+     "name": "Mike Rogers",
+     "party": "Republican"
+    },
+    {
+     "name": "Lydia Christensen",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Tim Long",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Douglas P. Marsh",
+     "party": "Green"
+    },
+    {
+     "name": "Walter P. Kristy",
+     "party": "Natural Law"
+    }
+   ]
+  },
+  {
+   "office": "Governor and Lieutenant Governor",
+   "candidates": [
+    {
+     "name": "Jocelyn Benson / Winnie Brinks",
+     "party": "Democratic"
+    },
+    {
+     "name": "John James / Jay DeBoyer",
+     "party": "Republican"
+    },
+    {
+     "name": "Anthony Hudson / Beau Parmenter",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Donna Brandenburg / Robert Donald Cowper II",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Douglas Campbell / Bobbie Clay",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "office": "Secretary of State",
+   "candidates": [
+    {
+     "name": "Garlin Gilchrist II",
+     "party": "Democratic"
+    },
+    {
+     "name": "Anthony G. Forlini",
+     "party": "Republican"
+    },
+    {
+     "name": "Christine Sloan",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Scott E. Aughney",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Eric Borregard",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "office": "Attorney General",
+   "candidates": [
+    {
+     "name": "Eli Savit",
+     "party": "Democratic"
+    },
+    {
+     "name": "Doug Lloyd",
+     "party": "Republican"
+    },
+    {
+     "name": "Jason Dye",
+     "party": "Libertarian"
+    },
+    {
+     "name": "John Perry Ludtke Jr.",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Jeff Polonowski",
+     "party": "Green"
+    },
+    {
+     "name": "Doug Dern",
+     "party": "Natural Law"
+    }
+   ]
+  },
+  {
+   "office": "Member of the State Board of Education",
+   "candidates": [
+    {
+     "name": "Judith Pritchett",
+     "party": "Democratic"
+    },
+    {
+     "name": "Tiffany Tilley",
+     "party": "Democratic"
+    },
+    {
+     "name": "Terence Collins",
+     "party": "Republican"
+    },
+    {
+     "name": "Bree Moeggenberg",
+     "party": "Republican"
+    },
+    {
+     "name": "Charles Essner",
+     "party": "Libertarian"
+    },
+    {
+     "name": "William Mohr II",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Christine C. Schwartz",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Wissam Charafeddine",
+     "party": "Green"
+    },
+    {
+     "name": "Mary Anne Hering",
+     "party": "Working Class"
+    },
+    {
+     "name": "Kelli Monroe",
+     "party": "Natural Law"
+    }
+   ],
+   "voteFor": 2
+  },
+  {
+   "office": "Regent of the University of Michigan",
+   "candidates": [
+    {
+     "name": "Paul Brown",
+     "party": "Democratic"
+    },
+    {
+     "name": "Amir Makled",
+     "party": "Democratic"
+    },
+    {
+     "name": "Lena Epstein",
+     "party": "Republican"
+    },
+    {
+     "name": "Michael Schostak",
+     "party": "Republican"
+    },
+    {
+     "name": "Andrew Chadderdon",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Kyle Maas",
+     "party": "U.S. Taxpayers"
+    }
+   ],
+   "voteFor": 2
+  },
+  {
+   "office": "Trustee of Michigan State University",
+   "candidates": [
+    {
+     "name": "Brianna Scott",
+     "party": "Democratic"
+    },
+    {
+     "name": "Kelly Tebay Zemke",
+     "party": "Democratic"
+    },
+    {
+     "name": "Julie Maday",
+     "party": "Republican"
+    },
+    {
+     "name": "Roger Victory",
+     "party": "Republican"
+    },
+    {
+     "name": "Daniel R. Patterson",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Will Tyler White",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Janet Sanger",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "John Sanger",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "John Anthony La Pietra",
+     "party": "Green"
+    },
+    {
+     "name": "Yaz Ozbek",
+     "party": "Working Class"
+    }
+   ],
+   "voteFor": 2
+  },
+  {
+   "office": "Governor of Wayne State University",
+   "candidates": [
+    {
+     "name": "Shereef Akeel",
+     "party": "Democratic"
+    },
+    {
+     "name": "Richard Mack",
+     "party": "Democratic"
+    },
+    {
+     "name": "Andy Anuzis",
+     "party": "Republican"
+    },
+    {
+     "name": "Christa Murphy",
+     "party": "Republican"
+    },
+    {
+     "name": "Alex Avery",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Jami Van Alstine",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Jeff McDonald",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Paul M. Ragan",
+     "party": "Green"
+    },
+    {
+     "name": "Suzanne Roehrig",
+     "party": "Working Class"
+    },
+    {
+     "name": "Kathleen Oakford",
+     "party": "Natural Law"
+    }
+   ],
+   "voteFor": 2
+  },
+  {
+   "office": "Justice of the Supreme Court",
+   "candidates": [
+    {
+     "name": "Megan Kathleen Cavanagh",
+     "party": "Nonpartisan"
+    },
+    {
+     "name": "Noah P. Hood",
+     "party": "Nonpartisan"
+    },
+    {
+     "name": "Thomas W. Howe",
+     "party": "Nonpartisan"
+    },
+    {
+     "name": "Casandra Morse-Bills",
+     "party": "Nonpartisan"
+    },
+    {
+     "name": "Michael Warren",
+     "party": "Nonpartisan"
+    },
+    {
+     "name": "Jody White",
+     "party": "Nonpartisan"
+    }
+   ],
+   "voteFor": 2
+  }
+ ],
+ "house": [
+  {
+   "district": 1,
+   "candidates": [
+    {
+     "name": "Callie Barr",
+     "party": "Democratic"
+    },
+    {
+     "name": "Jack Bergman",
+     "party": "Republican"
+    },
+    {
+     "name": "Arnett Satterla",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Doc Kovaly",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "LaVeta Davenport",
+     "party": "Green"
+    },
+    {
+     "name": "Liz Hakola",
+     "party": "Working Class"
+    },
+    {
+     "name": "Zebulon Featherly",
+     "party": "No Party Affiliation"
+    }
+   ]
+  },
+  {
+   "district": 2,
+   "candidates": [
+    {
+     "name": "Ben Ambrose",
+     "party": "Democratic"
+    },
+    {
+     "name": "John Moolenaar",
+     "party": "Republican"
+    },
+    {
+     "name": "Charlotte Magoon",
+     "party": "Green"
+    },
+    {
+     "name": "Richard Sills",
+     "party": "Natural Law"
+    }
+   ]
+  },
+  {
+   "district": 3,
+   "candidates": [
+    {
+     "name": "Hillary Scholten",
+     "party": "Democratic"
+    },
+    {
+     "name": "Terri DeBoer",
+     "party": "Republican"
+    },
+    {
+     "name": "Joe Jock",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 4,
+   "candidates": [
+    {
+     "name": "Sean McCann",
+     "party": "Democratic"
+    },
+    {
+     "name": "Bill Huizenga",
+     "party": "Republican"
+    },
+    {
+     "name": "Shafina Che Barnett",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 5,
+   "candidates": [
+    {
+     "name": "Christian Vukasovich",
+     "party": "Democratic"
+    },
+    {
+     "name": "Tim Walberg",
+     "party": "Republican"
+    },
+    {
+     "name": "Ronald A Muszynski",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Sharon Marie Renier",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Jim Bronke",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 6,
+   "candidates": [
+    {
+     "name": "Debbie Dingell",
+     "party": "Democratic"
+    },
+    {
+     "name": "Heather Smiley",
+     "party": "Republican"
+    },
+    {
+     "name": "Timothy A. Teagan",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Mike Mickevicius",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Clyde Shabazz",
+     "party": "Green"
+    },
+    {
+     "name": "Linda Rayburn",
+     "party": "Working Class"
+    }
+   ]
+  },
+  {
+   "district": 7,
+   "candidates": [
+    {
+     "name": "William Lawrence",
+     "party": "Democratic"
+    },
+    {
+     "name": "Tom Barrett",
+     "party": "Republican"
+    },
+    {
+     "name": "Shane Dedrick",
+     "party": "Green"
+    }
+   ]
+  },
+  {
+   "district": 8,
+   "candidates": [
+    {
+     "name": "Kristen McDonald Rivet",
+     "party": "Democratic"
+    },
+    {
+     "name": "Thomas J. Smith",
+     "party": "Republican"
+    },
+    {
+     "name": "C. Mia Pettus",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Jim Casha",
+     "party": "Green"
+    },
+    {
+     "name": "Kathy Goodwin",
+     "party": "Working Class"
+    }
+   ]
+  },
+  {
+   "district": 9,
+   "candidates": [
+    {
+     "name": "Ray Pooley",
+     "party": "Democratic"
+    },
+    {
+     "name": "Lisa McClain",
+     "party": "Republican"
+    },
+    {
+     "name": "Kevin Vayko",
+     "party": "Libertarian"
+    },
+    {
+     "name": "John Vlahos",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Destiny Clayton",
+     "party": "Green"
+    },
+    {
+     "name": "Jim Walkowicz",
+     "party": "Working Class"
+    }
+   ]
+  },
+  {
+   "district": 10,
+   "candidates": [
+    {
+     "name": "Christina Bertrand Hines",
+     "party": "Democratic"
+    },
+    {
+     "name": "Michael Bouchard",
+     "party": "Republican"
+    },
+    {
+     "name": "Mike Saliba",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Kwabena Nkromo",
+     "party": "Green"
+    },
+    {
+     "name": "Andrea L. Kirby",
+     "party": "Working Class"
+    }
+   ]
+  },
+  {
+   "district": 11,
+   "candidates": [
+    {
+     "name": "Jeremy Moss",
+     "party": "Democratic"
+    },
+    {
+     "name": "Ethan Baker",
+     "party": "Republican"
+    },
+    {
+     "name": "Farid Ishac",
+     "party": "Libertarian"
+    },
+    {
+     "name": "Ryan Teasdale",
+     "party": "Green"
+    },
+    {
+     "name": "Anil Kumar",
+     "party": "No Party Affiliation"
+    }
+   ]
+  },
+  {
+   "district": 12,
+   "candidates": [
+    {
+     "name": "Rashida Tlaib",
+     "party": "Democratic"
+    },
+    {
+     "name": "James D. Hooper",
+     "party": "Republican"
+    },
+    {
+     "name": "Marc Joseph Sosnowski",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Brenda K. Sanders",
+     "party": "Green"
+    },
+    {
+     "name": "Gary Walkowicz",
+     "party": "Working Class"
+    }
+   ]
+  },
+  {
+   "district": 13,
+   "candidates": [
+    {
+     "name": "Donavan McKinney",
+     "party": "Democratic"
+    },
+    {
+     "name": "T.P. Nykoriak",
+     "party": "Republican"
+    },
+    {
+     "name": "Chris Dardzinski",
+     "party": "U.S. Taxpayers"
+    },
+    {
+     "name": "Raelyn Light",
+     "party": "Green"
+    },
+    {
+     "name": "Simone R. Coleman",
+     "party": "Working Class"
+    }
+   ]
+  }
+ ],
+ "measures": [
+  {
+   "designation": "Proposal 26-1",
+   "subject": "Whether to call a constitutional convention",
+   "ballotTitle": "A proposal to convene a constitutional convention for the purpose of drafting a general revision of the state constitution\nShall a convention of elected delegates be convened in 2027 to draft a general revision of the State Constitution for presentation to the state's voters for their approval or rejection?",
+   "summary": "Asks voters whether to elect delegates to a 2027 convention that would draft a general revision of the Michigan Constitution, which would then go back to voters for approval or rejection.",
+   "source": "https://www.clickondetroit.com/news/local/2026/10/13/what-proposals-are-on-wayne-countys-2026-general-election-ballot-heres-the-list/"
+  },
+  {
+   "designation": "Proposal 26-2",
+   "subject": "Campaign contributions from utilities and government contractors; political communications disclosure",
+   "ballotTitle": "A proposed initiated law to prohibit campaign contributions from certain regulated utilities and government contractors and apply campaign finance laws and regulations to additional types of political communications\nThe proposal would:\nProhibit regulated electric and gas utilities, contractors with over $250,000 annually in government contracts, and people and organizations with substantial connections to these utilities/contractors from making direct or indirect campaign contributions to those who run for or hold offices that impact them.\nExpand laws regulating spending on political communications, including those requiring disclosing donor information, to apply to communications clearly identifying candidates or ballot questions, even if they do not expressly advocate voting for/against them.\nExpressly apply the law requiring disclosure of who paid for political communications to internet political communications.\nShould this proposal be adopted?",
+   "summary": "An initiated law that would bar campaign contributions from regulated electric and gas utilities, large government contractors and closely connected people and organizations, and extend campaign-finance and paid-for-by disclosure rules to more political communications, including online ones.",
+   "source": "https://www.clickondetroit.com/news/local/2026/10/13/what-proposals-are-on-wayne-countys-2026-general-election-ballot-heres-the-list/"
+  }
+ ],
+ "measureEffective": "2026-12-08",
+ "measureEffectiveNote": "Proposal 26-2 is an initiated law: if approved it takes effect 10 days after the Board of State Canvassers' official declaration of the vote (Mich. Const. art. II, sec. 9). The 2026-12-08 date assumes certification around 2026-11-28 (the 2022 canvass was certified 2022-11-28); the actual date depends on when the Board certifies. Proposal 26-1 changes no law itself: a yes vote triggers delegate elections, with the convention to meet in October 2027 (CRC: 2027-10-05) and any revised constitution going back to voters.",
+ "sources": [
+  "https://mi-boe.entellitrak.com/etk-mi-boe-prod/page.request.do?page=page.miboePublicReport&electionType=GEN&electionYear=2026",
+  "https://www.michigan.gov/sos/elections/election-results-and-data",
+  "https://www.michigan.gov/sos/elections/bsc",
+  "https://www.michigan.gov/sos/-/media/Project/Websites/sos/BSC-Announcements/2026/20260817-Meeting-Agenda.pdf",
+  "https://www.michigan.gov/sos/-/media/Project/Websites/sos/BSC-Announcements/2026/20260824-Meeting-Agenda.pdf",
+  "https://www.clickondetroit.com/news/local/2026/10/13/what-proposals-are-on-wayne-countys-2026-general-election-ballot-heres-the-list/",
+  "https://www.clickondetroit.com/decision-2026/2026/10/14/what-proposals-are-on-oakland-countys-2026-general-election-ballot-heres-the-list/",
+  "https://www.fox2detroit.com/election/michigan-prop-1-ballot-state-constitution-con-con",
+  "https://www.fox2detroit.com/election/michigan-ballot-proposal-money-politics-dte-consumers",
+  "https://www.michiganpublic.org/politics-government/2026-09-04/michigans-november-2026-ballot-is-official-includes-two-questions-for-all-voters",
+  "https://www.michiganpublic.org/politics-government/2026-08-17/michiganders-for-money-out-of-politics-ballot-question-language-finalized",
+  "https://crcmich.org/?p=16166",
+  "https://crcmich.org/webinars/understanding-and-evaluating-proposal-26-2-money-out-of-politics",
+  "https://www.bridgemi.com/michigan-government/citizenship-voting-proposal-denied-ballot-access-by-us-michigan-supreme-courts/"
+ ],
+ "notes": [
+  "Candidates and parties come from the official Michigan Department of State 'Official Candidate Listing, General Election, Tuesday, November 3, 2026' (Bureau of Elections public report, '721 Candidates as of Fri Sep 04 08:48:42 EDT'). The listing gives names as 'Last, First'; they are reordered here as 'First Last', with suffixes (II, Jr.) kept.",
+  "Party labels shortened from the listing's 'Democratic Party', 'Republican Party', 'Libertarian Party', 'U.S. Taxpayers Party', 'Green Party', 'Natural Law Party', 'Working Class Party'; 'No Party Affiliation' kept as listed.",
+  "Candidates marked DISQ in the official listing are left out: MI-7 Felix Thibodeau (Working Class); MI-13 D. Etta Wilcoxon (Green), Shelby Campbell (No Party Affiliation), Maurice Morton (No Party Affiliation). No statewide candidate is marked DISQ or WITHD.",
+  "Member of the State Board of Education, Regent of the University of Michigan, Trustee of Michigan State University and Governor of Wayne State University: vote for 2 each (8-year terms, 2 positions).",
+  "Justice of the Supreme Court: vote for 2 (8-year terms). It is on the nonpartisan section of the ballot, so no party is printed; candidates are party-nominated at conventions. Megan Kathleen Cavanagh and Noah P. Hood are listed as INCUMBENT (they get the incumbency designation on the ballot).",
+  "Governor and Lieutenant Governor are elected jointly; one ticket entry per party. Michigan's lieutenant governor is not elected separately.",
+  "Poll hours are 7 AM to 8 PM local. Gogebic, Iron, Dickinson and Menominee counties are on Central time, so the last polls close at 8 PM CST = 02:00 UTC Nov 4 (DST ends Nov 1). Eastern-time polls close at 8 PM EST = 01:00 UTC.",
+  "Two statewide proposals only. The Americans for Citizen Voting proof-of-citizenship amendment was not certified (Board deadlocked 2-2; Michigan and U.S. Supreme Courts declined to order it onto the ballot).",
+  "Proposal 26-2 bullets and question match the official draft in the BSC 2026-08-17 agenda word for word; the caption on the ballot adds 'and government contractors', an amendment the Board made on 2026-08-17 (per Michigan Public, ClickOnDetroit and FOX 2, which agree)."
+ ],
+ "unconfirmed": [
+  "Official ballot wording for both proposals was taken from news outlets (ClickOnDetroit's county ballot lists; FOX 2 citing the Board of State Canvassers), which agree on every word. No official page with the final certified text could be found: michigan.gov has no 2026 proposal page and the Aug 17 BSC minutes are not posted. The Proposal 26-2 bullets and question match the official BSC draft; the caption change and all of Proposal 26-1's wording are not confirmed against an official source.",
+  "Proposal 26-1 capitalization: ClickOnDetroit prints 'State Constitution' in the question; FOX 2 prints 'state constitution'. The ClickOnDetroit form is used here.",
+  "Designation format: CRC and the BSC 2026-08-24 agenda use the 'Proposal 26-N' style; the BSC 2026-08-17 draft and ClickOnDetroit use 'Proposal 2026-N'. Which form is printed on the ballot is not confirmed.",
+  "The official candidate listing is as of 2026-09-04; any later changes (deaths, court-ordered additions or removals) were not checked against a newer official source. The live MVIC listing (mvic.sos.state.mi.us) is blocked by a bot check.",
+  "The exact certification date for the 2026 canvass, and therefore the measureEffective date, is an estimate."
+ ]
+}
