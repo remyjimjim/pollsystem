@@ -1,0 +1,225 @@
+{
+  "_about": "Washington, Nov 3 2026: the ten U.S. House races, one election per congressional district. Candidates in the order the Secretary of State lists them; party preference as Washington ballots print it. Research and sources: docs/launch-content/washington-2026-general.md.",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-1: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Suzan DelBene",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 1"
+        },
+        {
+          "name": "Mary Silva",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-2: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Rick Larsen",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 2"
+        },
+        {
+          "name": "Edwin H. Feller",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-3: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "John Braun",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 3"
+        },
+        {
+          "name": "Marie Gluesenkamp Perez",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-4: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Amanda McKinney",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 4"
+        },
+        {
+          "name": "John Duresky",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-5: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Michael Baumgartner",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 5"
+        },
+        {
+          "name": "Carmela Conroy",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-6: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Emily Randall",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 6"
+        },
+        {
+          "name": "Teresa Fox",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-7: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Pramila Jayapal",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 7"
+        },
+        {
+          "name": "Nirav Sheth",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-8: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Kim Schrier",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 8"
+        },
+        {
+          "name": "Spencer Meline",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-9: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Adam Smith",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 9"
+        },
+        {
+          "name": "Doug Basler",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "Washington CD-10: U.S. House, Nov 3 2026",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        48
+      ],
+      "closeDate": "2026-11-04T04:00:00Z",
+      "candidates": [
+        {
+          "name": "Marilyn Strickland",
+          "affiliation": "Prefers Democratic Party",
+          "officeName": "U.S. Representative, Congressional District 10"
+        },
+        {
+          "name": "Chris D. Chung",
+          "affiliation": "Prefers Republican Party",
+          "officeName": "U.S. Representative, Congressional District 10"
+        }
+      ]
+    }
+  ]
+}
