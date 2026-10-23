@@ -1,0 +1,261 @@
+{
+  "state": "New Jersey",
+  "abbr": "NJ",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Cory Booker",
+          "party": "Democratic"
+        },
+        {
+          "name": "Justin Murphy",
+          "party": "Republican"
+        },
+        {
+          "name": "Veronica Fernandez",
+          "party": "End the Corruption!"
+        },
+        {
+          "name": "Joanne Kuniansky",
+          "party": "Socialist Workers Party"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Donald Norcross",
+          "party": "Democratic"
+        },
+        {
+          "name": "Damon Galdo",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Jeff Van Drew",
+          "party": "Republican"
+        },
+        {
+          "name": "Zack Mullock",
+          "party": "Democratic"
+        },
+        {
+          "name": "Ramon Mora Jr.",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Herb Conaway",
+          "party": "Democratic"
+        },
+        {
+          "name": "Michael P. McGuire",
+          "party": "Republican"
+        },
+        {
+          "name": "Ryan Michael Kelly",
+          "party": "Affordability, Accountability, People"
+        },
+        {
+          "name": "Steven Welzer",
+          "party": "Green Party"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Christopher H. Smith",
+          "party": "Republican"
+        },
+        {
+          "name": "Rachel Peace",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Josh Gottheimer",
+          "party": "Democratic"
+        },
+        {
+          "name": "Sean Kirrane",
+          "party": "Republican"
+        },
+        {
+          "name": "Adam Rueda",
+          "party": "Humane Sustainable Future"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Frank Pallone Jr.",
+          "party": "Democratic"
+        },
+        {
+          "name": "Hillary Herzig",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Thomas H. Kean Jr.",
+          "party": "Republican"
+        },
+        {
+          "name": "Rebecca Bennett",
+          "party": "Democratic"
+        },
+        {
+          "name": "Seamus Patrick O'Toole",
+          "party": "Stop Israel's Genocide"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Rob Menendez",
+          "party": "Democratic"
+        },
+        {
+          "name": "Aristotle Eliopoulos",
+          "party": "Independent"
+        },
+        {
+          "name": "Craig Honts",
+          "party": "Socialist Workers Party"
+        },
+        {
+          "name": "Da'Shone Hughey",
+          "party": "We the People"
+        }
+      ]
+    },
+    {
+      "district": 9,
+      "candidates": [
+        {
+          "name": "Nelida Pou",
+          "party": "Democratic"
+        },
+        {
+          "name": "Rosie Pino",
+          "party": "Republican"
+        },
+        {
+          "name": "Terrisa Bukovinac",
+          "party": "Save Our Babies"
+        }
+      ]
+    },
+    {
+      "district": 10,
+      "candidates": [
+        {
+          "name": "LaMonica R. McIver",
+          "party": "Democratic"
+        },
+        {
+          "name": "Carmen Bucco",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 11,
+      "candidates": [
+        {
+          "name": "Analilia Mejia",
+          "party": "Democratic"
+        },
+        {
+          "name": "Joe Hathaway",
+          "party": "Republican"
+        },
+        {
+          "name": "Alan B. Bond",
+          "party": "Hope for Tomorrow"
+        }
+      ]
+    },
+    {
+      "district": 12,
+      "candidates": [
+        {
+          "name": "Adam Hamawy",
+          "party": "Democratic"
+        },
+        {
+          "name": "Gregg Mele",
+          "party": "Republican"
+        },
+        {
+          "name": "Andres Jinete",
+          "party": "Green Party"
+        },
+        {
+          "name": "Winston Jordan",
+          "party": "Get Money Out"
+        }
+      ]
+    }
+  ],
+  "measures": [],
+  "measureEffective": "2026-12-03",
+  "measureEffectiveNote": "No statewide public question is on the November 3, 2026 New Jersey ballot, so nothing takes effect. Rule for reference: under N.J. Const. Art. IX, para. 6, an approved constitutional amendment takes effect on the thirtieth day after the election unless the amendment provides otherwise; 30 days after Nov 3, 2026 is Dec 3, 2026.",
+  "sources": [
+    "https://www.nj.gov/state/elections/election-information-2026.shtml",
+    "https://nj.gov/state/elections/assets/pdf/election-results/2026/2026-official-general-candidates-us-senate.pdf",
+    "https://nj.gov/state/elections/assets/pdf/election-results/2026/2026-official-general-candidates-us-house-0904.pdf",
+    "https://nj.gov/state/elections/assets/pdf/election-results/2026/2026-certification-of-general-election-nominees_us-senate_us-house.pdf",
+    "https://nj.gov/state/elections/assets/pdf/election-results/2026/2026-certification-amended-7th-congressional-district-us-house.pdf",
+    "https://www.monmouthcountyvotes.gov/current-election-candidates-and-questions/",
+    "https://www.monmouthcountyvotes.gov/wp-content/uploads/2026/09/2026-11-03-General-Election-Candidates-Top-of-Ticket3.pdf",
+    "https://assets01.aws.connect.clarityelections.com/Assets/Connect/RootPublish/monmouth-nj.connect.clarityelections.com/Sample%20Ballots/SB-Avon-Boro.pdf",
+    "https://newjerseyglobe.com/congress/supreme-court-keeps-libertarian-off-nj-7-ballot/amp/",
+    "https://ivoterguide.com/voter-guide/eleck/1478"
+  ],
+  "notes": [
+    "Candidates are from the NJ Division of Elections 'Official List' for the 11/03/2026 general election: U.S. Senate (dated 07/27/2026, 4 candidates) and U.S. House (dated 09/04/2026, 35 candidates). The official lists are in all capitals; names are given in mixed case, matching the Monmouth County official list and sample ballot where those cover the race.",
+    "NJ prints a party name or, for petition candidates, a slogan of up to three words; the 'party' field holds that label. Democratic, Republican, Green Party and Socialist Workers Party are as printed on the official lists.",
+    "NJ-2 Ramon Mora Jr. and NJ-8 Aristotle Eliopoulos are listed as INDEPENDENT with a slogan that differs by county (Mora: 'Invest in People' in Atlantic, Cape May and Gloucester, 'Put People First' in Cumberland, Ocean and Salem; Eliopoulos: 'Results Not Rhetoric' in Essex, 'People Before Politics' in Hudson, 'Working Families Matter' in Union). 'Independent' is used here.",
+    "NJ-7: Libertarian Lana Leguía appears on the July 27 certification of nominees but was removed after an appellate ruling (July 31, 2026; the NJ Supreme Court declined review). The amended NJ-7 certification and the Sept 4 official list omit her, and she is left out here.",
+    "NJ-8 has no Republican nominee; NJ-12 is an open seat (no incumbent marked). NJ-11 incumbent Analilia Mejia won the 2026 special election.",
+    "Measures: the NJ Division of Elections 2026 page links no public questions (the public-question and 'certification of public questions' links are commented-out placeholders whose files return 404), and the Monmouth County (Avon) sample ballot has no question section. Ballotpedia has no 'New Jersey 2026 ballot measures' page.",
+    "Polls are open 6:00 AM to 8:00 PM (N.J.S.A. 19:15-2). The whole state is on Eastern time, so polls close at 8:00 PM EST (UTC-5) on Nov 3, 2026, which is 2026-11-04T01:00:00Z."
+  ],
+  "unconfirmed": [
+    "Letter case of petition slogans: only the Monmouth County ballot (Senate, NJ-3, NJ-4, NJ-6) was seen. Other slogans are title-cased from the all-capitals official list.",
+    "No statewide public question: the Division of Elections never states 'none', and the Monmouth County 'State Questions' PDF link returns 404. This conclusion rests on one sample ballot, the placeholder links and secondary sources finding nothing.",
+    "NJ-7: Leguía's federal-court challenge was still pending in late August per NJ Globe; its outcome was not found. Official lists as of Sept 4 exclude her.",
+    "Candidate changes after the Sept 4, 2026 official House list were not checked against later county sample ballots, apart from Monmouth's."
+  ]
+}
