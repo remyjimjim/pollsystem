@@ -1,0 +1,402 @@
+{
+  "state": "Tennessee",
+  "abbr": "TN",
+  "pollCloseLocal": "7:00 PM CST / 8:00 PM EST",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Bill Hagerty",
+          "party": "Republican"
+        },
+        {
+          "name": "Marquita Bradshaw",
+          "party": "Democratic"
+        },
+        {
+          "name": "Tharon Chandler",
+          "party": "Independent"
+        },
+        {
+          "name": "Andrew Gerena",
+          "party": "Independent"
+        },
+        {
+          "name": "Jeremy Dean Hearn",
+          "party": "Independent"
+        },
+        {
+          "name": "Robert Jones",
+          "party": "Independent"
+        },
+        {
+          "name": "James William Macon III",
+          "party": "Independent"
+        },
+        {
+          "name": "Yoshi D. Matthews",
+          "party": "Independent"
+        },
+        {
+          "name": "David Sutman, Jr.",
+          "party": "Independent"
+        },
+        {
+          "name": "Catherine Barcel \"Barcy\" Whitson",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Marsha Blackburn",
+          "party": "Republican"
+        },
+        {
+          "name": "Jerri Green",
+          "party": "Democratic"
+        },
+        {
+          "name": "Misam Abidi",
+          "party": "Independent"
+        },
+        {
+          "name": "Dean Brewer",
+          "party": "Independent"
+        },
+        {
+          "name": "Ray Brown",
+          "party": "Independent"
+        },
+        {
+          "name": "David Hatley",
+          "party": "Independent"
+        },
+        {
+          "name": "Wendell Jackson",
+          "party": "Independent"
+        },
+        {
+          "name": "Charles Van Morgan",
+          "party": "Independent"
+        },
+        {
+          "name": "Eddie Lee Murphy",
+          "party": "Independent"
+        },
+        {
+          "name": "Lauren Pinkston",
+          "party": "Independent"
+        },
+        {
+          "name": "Victor L. Scoggin",
+          "party": "Independent"
+        },
+        {
+          "name": "Dave Seeman",
+          "party": "Independent"
+        },
+        {
+          "name": "Karl Knox Smithson",
+          "party": "Independent"
+        },
+        {
+          "name": "L. Webb Taylor",
+          "party": "Independent"
+        },
+        {
+          "name": "Robert C. Vick",
+          "party": "Independent"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Diana Harshbarger",
+          "party": "Republican"
+        },
+        {
+          "name": "Kristi Burke",
+          "party": "Democratic"
+        },
+        {
+          "name": "Joshua Ray Ashburn",
+          "party": "Independent"
+        },
+        {
+          "name": "Richard G. Baker",
+          "party": "Independent"
+        },
+        {
+          "name": "Chris Campbell",
+          "party": "Independent"
+        },
+        {
+          "name": "Billy Cody",
+          "party": "Independent"
+        },
+        {
+          "name": "Tyler Brice Mitchell McClain",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Tim Burchett",
+          "party": "Republican"
+        },
+        {
+          "name": "Michaela Barnett",
+          "party": "Democratic"
+        },
+        {
+          "name": "Bruce Fine",
+          "party": "Independent"
+        },
+        {
+          "name": "Adam Heimerman",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Chuck Fleischmann",
+          "party": "Republican"
+        },
+        {
+          "name": "Anna Golladay",
+          "party": "Democratic"
+        },
+        {
+          "name": "Dean Arnold",
+          "party": "Independent"
+        },
+        {
+          "name": "Jean Howard-Hill",
+          "party": "Independent"
+        },
+        {
+          "name": "Rodney Joe King",
+          "party": "Independent"
+        },
+        {
+          "name": "Donnie Lynn Ownby",
+          "party": "Independent"
+        },
+        {
+          "name": "Edward John Roland",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Scott DesJarlais",
+          "party": "Republican"
+        },
+        {
+          "name": "Victoria Broderick",
+          "party": "Democratic"
+        },
+        {
+          "name": "Jacob Kristopher Anders",
+          "party": "Independent"
+        },
+        {
+          "name": "Clay Faircloth",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Charlie Hatcher",
+          "party": "Republican"
+        },
+        {
+          "name": "Chaz Molder",
+          "party": "Democratic"
+        },
+        {
+          "name": "James A. Johnson",
+          "party": "Independent"
+        },
+        {
+          "name": "Micheál (Me-Haul) O'Leary",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Johnny Garrett",
+          "party": "Republican"
+        },
+        {
+          "name": "Mike Croley",
+          "party": "Democratic"
+        },
+        {
+          "name": "Christopher B. Monday",
+          "party": "Independent"
+        },
+        {
+          "name": "Angus Purdy",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Matt Van Epps",
+          "party": "Republican"
+        },
+        {
+          "name": "Darden Copeland",
+          "party": "Democratic"
+        },
+        {
+          "name": "Andrew J. Koontz",
+          "party": "Independent"
+        },
+        {
+          "name": "Lowell Reynolds",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "David Kustoff",
+          "party": "Republican"
+        },
+        {
+          "name": "Heidi Kuhn",
+          "party": "Democratic"
+        },
+        {
+          "name": "Adam D. Austill",
+          "party": "Independent"
+        },
+        {
+          "name": "Wendell \"Wells\" Blankenship",
+          "party": "Independent"
+        },
+        {
+          "name": "Antonio Futch",
+          "party": "Independent"
+        },
+        {
+          "name": "Pamela Jeanine \"P.\" Moses",
+          "party": "Independent"
+        },
+        {
+          "name": "Horace Taylor",
+          "party": "Independent"
+        },
+        {
+          "name": "Henry J. Ward, III",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 9,
+      "candidates": [
+        {
+          "name": "Brent Taylor",
+          "party": "Republican"
+        },
+        {
+          "name": "Justin J. Pearson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Dennis Clark",
+          "party": "Independent"
+        },
+        {
+          "name": "Michelle Davis Head",
+          "party": "Independent"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Amendment 1",
+      "subject": "Bail exceptions for serious offenses",
+      "ballotTitle": "Shall Article I, Section 15 of the Constitution of Tennessee be amended by deleting the following:\nThat all prisoners shall be bailable by sufficient sureties, unless for capital offences, when the proof is evident, or the presumption great. And the privilege of the writ of Habeas Corpus shall not be suspended, unless when in case of rebellion or invasion, the General Assembly shall declare the public safety requires it.\nand substituting instead the following:\n(a) All prisoners shall be bailable by sufficient sureties unless for the following when the proof is evident or the presumption great:\n(1) A capital offense;\n(2) An act of terrorism;\n(3) Second degree murder;\n(4) Aggravated rape of a child;\n(5) Aggravated rape;\n(6) Grave torture; and\n(7) Any other offense for which, as of November 3, 2026, a defendant, if convicted, could not be released prior to the expiration of at least eighty-five percent of the entire sentence imposed.\n(b) In any case in which bail for an offense listed in subsection (a) is granted or denied before conviction, the judge or magistrate shall place in the record the judge's or magistrate's reasons for granting or denying bail.\n(c) The privilege of the writ of Habeas Corpus shall not be suspended, unless when in case of rebellion or invasion, the General Assembly shall declare the public safety requires it.",
+      "summary": "Would allow courts to deny pretrial bail, when the proof is evident or the presumption great, for terrorism, second degree murder, aggravated rape of a child, aggravated rape, grave torture, and offenses requiring service of at least 85% of a sentence, in addition to capital offenses, and would require judges to state their reasons for granting or denying bail in those cases on the record.",
+      "source": "https://sos.tn.gov/elections/announcements/2026-proposed-constitutional-amendments"
+    },
+    {
+      "designation": "Amendment 2",
+      "subject": "Prohibit a state property tax",
+      "ballotTitle": "Shall Article II, Section 28 of the Constitution of the State of Tennessee be amended by deleting the following language from the first sentence:\nIn accordance with the following provisions, all property real, personal or mixed shall be subject to taxation, but the Legislature\nand substituting instead the following:\nIn accordance with the following provisions, all property real, personal, or mixed shall be subject to taxation, but the Legislature shall not levy, authorize, or otherwise permit any state tax upon such property, and the Legislature",
+      "summary": "Would add language to the constitution barring the Legislature from levying, authorizing, or permitting any state tax on real, personal, or mixed property.",
+      "source": "https://sos.tn.gov/elections/announcements/2026-proposed-constitutional-amendments"
+    },
+    {
+      "designation": "Amendment 3",
+      "subject": "Rights of crime victims",
+      "ballotTitle": "Shall Article I, Section 35 of the Constitution of Tennessee be amended by deleting the section in its entirety and substituting the following:\nSection 35. That to preserve and protect the rights of victims of crime to justice and due process throughout the criminal and juvenile justice systems, a victim, as defined by law and which may be expanded by the General Assembly, shall have the following rights, which shall be protected:\n(1) The right to be treated with fairness for the victim's safety and dignity;\n(2) The right, upon request, to reasonable notice of all public criminal proceedings and all public juvenile delinquency proceedings involving the accused;\n(3) The right to be present at all public criminal proceedings and all public juvenile delinquency proceedings involving the accused;\n(4) The right upon request to be heard in any proceeding involving release, plea, sentencing, disposition, and parole, as well as any public proceeding when relevant during which a right of the victim is implicated;\n(5) The right to be heard and informed of all parole procedures, to participate in the parole process, to provide information to the parole authority to be considered before the parole of the offender, and to be notified, upon request, of the parole or other release of the offender;\n(6) The right to be free from harassment, intimidation, and abuse throughout the criminal justice system, including reasonable protection, as defined by the General Assembly, from the accused or any person acting on behalf of the accused;\n(7) The right, upon request, to reasonable notice of any release, transfer, or escape of the accused or convicted person;\n(8) The right to full and timely restitution from the offender;\n(9) The right to a speedy trial or disposition and a prompt and final conclusion of the case after the conviction or sentence;\n(10) The right to be informed of the minimum sentence the offender will serve in custody and the scheduled release date;\n(11) The right to have the safety of the victim, the victim's family, and the general public considered before any parole or other post-judgment release decision is made;\n(12) The right, upon request, to confer with the prosecution; and\n(13) The right to be fully informed of all rights afforded to crime victims.\nA victim may assert the rights enumerated in this section, not as a party, but in the manner further provided by the General Assembly protecting the victim's right to standing. The General Assembly has the authority to enact substantive and procedural laws to further define, implement, preserve, and protect the rights guaranteed to victims by this section. This section must be interpreted to preserve and protect the rights of all persons to due process. This section, or any law enacted under this section, does not create a basis for vacating a conviction. This section does not restrict the powers of the District Attorney General or the inherent authority of the court.\nOther than as provided in the preceding paragraph, this section does not create a cause of action or claim for damages against the state or a political subdivision of the state; an officer, employee, or agent of the state or of any of its political subdivisions; or an officer or employee of the court.",
+      "summary": "Would replace the constitution's crime victims' rights section with a revised list that restates existing rights and adds others, such as fair treatment, participation in the parole process, protection from harassment, and notice of the minimum sentence and release date.",
+      "source": "https://sos.tn.gov/elections/announcements/2026-proposed-constitutional-amendments"
+    }
+  ],
+  "measureEffective": "2026-12-07",
+  "measureEffectiveNote": "Under Tenn. Const. Art. XI, Sec. 3, an amendment approved by a majority of those voting on it whose yes votes also exceed half of all votes cast for governor 'shall become a part of this Constitution'; no separate effective date is set. The result is made official when state officials certify the statewide returns. No statutory certification date was confirmed; 2026-12-07 is a representative date modeled on the 2014 precedent (election Nov 4, certified Dec 8, 2014, per the Sixth Circuit's opinion in the Amendment 1 litigation).",
+  "sources": [
+    "https://sos.tn.gov/elections/2026-candidate-lists",
+    "https://sos-prod.tnsosgovfiles.com/s3fs-public/document/Governor_Nov2026.xlsx",
+    "https://sos-prod.tnsosgovfiles.com/s3fs-public/document/USSenate_Nov2026.xlsx",
+    "https://sos-prod.tnsosgovfiles.com/s3fs-public/document/USHouse_Nov2026.xlsx",
+    "https://sos.tn.gov/elections/announcements/2026-proposed-constitutional-amendments",
+    "https://sos.tn.gov/announcements/2026-congressional-redistricting",
+    "https://sos.tn.gov/newsroom/press-releases/everything-voters-need-to-know-for-the-august-6-election-this-thursday",
+    "https://www.270towin.com/content/local-poll-closing-times-november-2026-general-election",
+    "https://www.wsmv.com/2026/09/28/election-2026-heres-everything-you-need-know-about-tns-candidates-governor-congress/",
+    "https://caselaw.findlaw.com/us-6th-circuit/1885416.html"
+  ],
+  "notes": [
+    "Candidates, ballot names and party labels are from the Tennessee Secretary of State's November 2026 candidate-list Excel files (Governor, U.S. Senate, U.S. House), decoded with Python's standard library; Tennessee prints non-party candidates as 'Independent'.",
+    "Congressional districts are the revised map adopted in the May 2026 Second Extraordinary Session of the 114th General Assembly; a special congressional qualifying period ended May 15, 2026.",
+    "Governor is an open seat (Bill Lee term-limited); the Class 2 U.S. Senate seat (Hagerty) is up.",
+    "Amendment ballot language is the 'Question' text on the SOS amendments page, excluding the Yes/No boxes; the SOS says the amendments are printed directly after the candidates for governor. Summaries here are our own; the Attorney General's summaries are on the source page.",
+    "Amendments pass only with more yes than no votes AND yes votes exceeding half of all votes cast for governor.",
+    "Polls close simultaneously statewide: 8:00 PM EST in Eastern counties and 7:00 PM CST in Central counties, both 01:00 UTC on Nov 4 (DST ends Nov 1).",
+    "Cross-check: WSMV (Sep 28, 2026) agrees on the governor field and the major-party nominees; it omits several independents in Senate and House races, which reads as selective coverage rather than a conflict. Ballotpedia notes Dale Braden (TN-6, independent) is not on the general ballot and Billy Cody was disqualified from the GOP primary; both consistent with the SOS lists (Cody appears as Independent in TN-1)."
+  ],
+  "unconfirmed": [
+    "The SOS candidate-list files carry no 'as of' date; changes after their posting were checked only through news cross-checks.",
+    "Primary results (Aug 6, 2026) could not be downloaded from the SOS (HTTP 403 on the results files); nominees were not checked against official primary returns, only against news (e.g. Bradshaw's Senate primary win).",
+    "Exact printed ballot face (name order, any amendment heading text) was not checked against a sample ballot.",
+    "Amendment certification date: no statutory deadline confirmed; 2026-12-07 is representative, based on the 2014 Dec 8 certification.",
+    "Spelling 'Knoxvile' (TN-2 Democrat Michaela Barnett's city) is a typo in the SOS file; city is not used here. WSMV spells TN-6 independent 'Angus Perdy'; the SOS file says 'Angus Purdy' (used)."
+  ]
+}

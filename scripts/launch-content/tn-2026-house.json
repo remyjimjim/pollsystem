@@ -1,0 +1,344 @@
+{
+  "_about": "Tennessee, Nov 3 2026, built by build-state.py from docs/launch-content/research/TN.json (sources and gaps in TN.md). One ballot per district, each including \"2026 Midterm · Tennessee: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Diana Harshbarger",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Kristi Burke",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Joshua Ray Ashburn",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Richard G. Baker",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Chris Campbell",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Billy Cody",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Tyler Brice Mitchell McClain",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Tim Burchett",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Michaela Barnett",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Bruce Fine",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Adam Heimerman",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Chuck Fleischmann",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Anna Golladay",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Dean Arnold",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Jean Howard-Hill",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Rodney Joe King",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Donnie Lynn Ownby",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Edward John Roland",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Scott DesJarlais",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Victoria Broderick",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Jacob Kristopher Anders",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Clay Faircloth",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Charlie Hatcher",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Chaz Molder",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "James A. Johnson",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Micheál (Me-Haul) O'Leary",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Johnny Garrett",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Mike Croley",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Christopher B. Monday",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Angus Purdy",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Matt Van Epps",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Darden Copeland",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Andrew J. Koontz",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Lowell Reynolds",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "David Kustoff",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Heidi Kuhn",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Adam D. Austill",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Wendell \"Wells\" Blankenship",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Antonio Futch",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Pamela Jeanine \"P.\" Moses",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Horace Taylor",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Henry J. Ward, III",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Tennessee District 9",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        43
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Brent Taylor",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Justin J. Pearson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Dennis Clark",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Michelle Davis Head",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Tennessee: statewide races & measures"
+}
