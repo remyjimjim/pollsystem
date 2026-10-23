@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-23 — Washington launch content PUBLISHED on prod (verified)
+
+**Requested:**
+
+> Publish away!
+
+**Changed:**
+
+- `create-polls.py --publish-election 1 … 11` against prod.
+
+**Verified:**
+
+- Prod has 11 elections and 3 ballot measures, all PUBLISHED.
+- Public search on ballotbox.us.com returns the 11 elections ("Washington")
+  and the 3 measures ("Initiative"), each under the statewide election.
+- **IP26-645's wording:** on about 2026-09-03 the state Supreme Court
+  deadlocked 4-4 on the emergency motion to strike the budget statement, so
+  it stays on the ballot. The reported text matches what we published,
+  verbatim. Further review is possible later in the year, after this
+  election. Sources:
+  - https://washingtonstatestandard.com/2026/09/03/voters-will-see-statement-on-wa-income-tax-measures-budget-effects/
+  - https://www.opb.org/article/2026/09/04/income-tax-washington-ballot-statement-supreme-court/
+
+---
+
 ## 2026-10-23 — Washington launch content on prod, as drafts (verified)
 
 **Requested:**

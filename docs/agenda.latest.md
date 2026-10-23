@@ -112,7 +112,11 @@ means re-warming the email domain, redirects, and confused users.
 ## 3. Third (days 3–5): content and a final pass
 
 - **Launch content:** real creators and admins with real polls, so day one isn't
-  an empty site. Demo data (`scripts/demo/seed.bash`) must **not** go to prod.
+  an empty site.
+  - ✅ **Washington live, 2026-10-23:** the Supreme Court election with the 3
+    statewide measures, and the 10 U.S. House district elections. All close
+    8 pm Pacific on Nov 3. Content files are in `scripts/launch-content/`;
+    research is in `docs/launch-content/`. Demo data (`scripts/demo/seed.bash`) must **not** go to prod.
 - **A full walkthrough on a real phone against prod:** sign up → pay → vote →
   results → creator report.
 - **Feature freeze one day before launch,** fixes only.
