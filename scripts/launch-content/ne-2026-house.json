@@ -1,0 +1,102 @@
+{
+  "_about": "Nebraska, Nov 3 2026, built by build-state.py from docs/launch-content/research/NE.json (sources and gaps in NE.md). One ballot per district, each including \"2026 Midterm · Nebraska: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Nebraska District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        28
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Mike Flood",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Chris Backemeyer",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Nik Sandman",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Dan Hartong",
+          "affiliation": "America First",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Nebraska District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        28
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Brinker Harding",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Denise Powell",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Eric Michael Foreman",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Nebraska District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        28
+      ],
+      "closeDate": "2026-11-04T02:00:00Z",
+      "candidates": [
+        {
+          "name": "Adrian Smith",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Becky Kelly Stille",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "David J. Else",
+          "affiliation": "Legal Marijuana NOW",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Macey Budke",
+          "affiliation": "Nebraska Working People",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Mark Cohen",
+          "affiliation": "By Petition",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Nebraska: statewide races & measures"
+}

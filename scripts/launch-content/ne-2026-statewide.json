@@ -1,0 +1,140 @@
+{
+  "_about": "Nebraska, Nov 3 2026, built by build-state.py from docs/launch-content/research/NE.json (sources and gaps in NE.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Nebraska: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      28
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Pete Ricketts",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Mike Marvin",
+        "affiliation": "Legal Marijuana NOW",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Robin Richards",
+        "affiliation": "Nebraska Working People",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Chuck Conboy",
+        "affiliation": "America First",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Dan Osborn",
+        "affiliation": "By Petition",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Jim Pillen / Joe Kelly",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Lynne Walz / Ben Steffen",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Rick Beard / Keenya Barnes",
+        "affiliation": "Legal Marijuana NOW",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Brett Lindstrom / Michael Picard",
+        "affiliation": "America First",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Scott Petersen",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Sarah J. Slattery",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Paul Rumbaugh",
+        "affiliation": "Nebraska Working People",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Bob Krist",
+        "affiliation": "America First",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Joey Spellerberg",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Daniel Ebers",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Mike Hilgers",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Jocelyn Brasher",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Mike Foley",
+        "affiliation": "Republican",
+        "officeName": "Auditor of Public Accounts"
+      },
+      {
+        "name": "John Knight",
+        "affiliation": "America First",
+        "officeName": "Auditor of Public Accounts"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Nebraska Initiative Measure 440: Online sports wagering (constitutional amendment)",
+      "summary": "Shall the Nebraska Constitution be amended to authorize the enactment of laws allowing persons located within Nebraska to place sports wagers through an Internet-based platform when offered by an authorized gaming operator conducting games of chance within a licensed racetrack enclosure in Nebraska?\n\nIn short: Would amend the state constitution so that laws may allow people located in Nebraska to place sports wagers online through platforms offered by licensed racetrack gaming operators.\n\nOfficial ballot language. Source: https://sos.nebraska.gov/sites/default/files/doc/elections/2026/2026%20Ballot%20Measures%20Pamphlet.pdf",
+      "effectiveDate": "2026-11-30",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Nebraska Initiative Measure 441: Online sports wagering (statute)",
+      "summary": "Shall statutes be enacted that: (1) Allow persons located within Nebraska to place sports wagers through an Internet-based platform when offered by an authorized gaming operator conducting games of chance within a licensed racetrack enclosure in Nebraska or the operator’s platform provider; and (2) Regulate such sports wagers?\n\nIn short: Would amend the Nebraska Racetrack Gaming Act to allow and regulate online sports wagering by people located in Nebraska through licensed racetrack gaming operators or their platform providers, operative January 1, 2027.\n\nOfficial ballot language. Source: https://sos.nebraska.gov/sites/default/files/doc/elections/2026/2026%20Ballot%20Measures%20Pamphlet.pdf",
+      "effectiveDate": "2026-11-30",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Nebraska Initiative Measure 442: School athletic teams designated by biological sex",
+      "summary": "Shall the Nebraska Constitution be amended to provide: (1) Schools must expressly designate each athletic team or sport as one of the following based on biological sex: (a) Males, men, or boys; (b) females, women, or girls; or (c) coed or mixed; and (2) Athletic teams or sports designated for females, women, or girls shall not be open to students of the male sex? The amendment would apply to all athletic teams or sports sponsored by public schools or postsecondary educational institutions, and private schools or educational institutions whose athletic teams or sports compete against public schools or institutions.\n\nIn short: Would amend the state constitution to require schools to designate each athletic team as male, female, or coed by biological sex and to bar male students from teams designated for females.\n\nOfficial ballot language. Source: https://sos.nebraska.gov/sites/default/files/doc/elections/2026/2026%20Ballot%20Measures%20Pamphlet.pdf",
+      "effectiveDate": "2026-11-30",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Nebraska LR19CA (legislatively referred constitutional amendment)",
+      "summary": "A constitutional amendment to change the limit on legislative terms from two consecutive terms to three consecutive terms.\n\nIn short: Would amend Article III, section 12 of the state constitution to let state senators serve three consecutive terms, instead of two, before becoming ineligible for four years.\n\nOfficial ballot language. Source: https://nebraskalegislature.gov/FloorDocs/109/PDF/Slip/LR19CA.pdf",
+      "effectiveDate": "2026-11-30",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}
