@@ -1,0 +1,156 @@
+{
+  "_about": "Oklahoma, Nov 3 2026, built by build-state.py from docs/launch-content/research/OK.json (sources and gaps in OK.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Oklahoma: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      37
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Kevin Hern",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "N'Kiyla Jasmine Thomas",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Sevier White",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Ron Meinhardt",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Curtis Stinnett",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Mike Mazzei",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Cyndi Munson",
+        "affiliation": "Democratic",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Jerry Griffin",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Robert E Brooks Sr",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Orlando Lynn Bush",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      },
+      {
+        "name": "T. W. Shannon",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Kelly Forbes",
+        "affiliation": "Democratic",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Jon Echols",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Nick Coffey",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Cindy Byrd",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Kiefer Perry",
+        "affiliation": "Libertarian",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Robert Franklin",
+        "affiliation": "Republican",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Jennettie Marshall",
+        "affiliation": "Democratic",
+        "officeName": "Superintendent of Public Instruction"
+      },
+      {
+        "name": "Kevin West",
+        "affiliation": "Republican",
+        "officeName": "Commissioner of Labor"
+      },
+      {
+        "name": "Kevin Dawson",
+        "affiliation": "Democratic",
+        "officeName": "Commissioner of Labor"
+      },
+      {
+        "name": "Mike Hall",
+        "affiliation": "Libertarian",
+        "officeName": "Commissioner of Labor"
+      },
+      {
+        "name": "Bob Sullivan",
+        "affiliation": "Republican",
+        "officeName": "Insurance Commissioner"
+      },
+      {
+        "name": "Craig MacIntyre",
+        "affiliation": "Democratic",
+        "officeName": "Insurance Commissioner"
+      },
+      {
+        "name": "Brad Boles",
+        "affiliation": "Republican",
+        "officeName": "Corporation Commissioner"
+      },
+      {
+        "name": "Rhonda Eastman",
+        "affiliation": "Democratic",
+        "officeName": "Corporation Commissioner"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Oklahoma State Question 845: Judicial Nominating Commission makeup and appointments",
+      "summary": "This measure amends article 7-B, section 3 of the Oklahoma Constitution, changing the Judicial Nominating Commission’s structure. Currently appointments are based on congressional districts as constituted in 1967. If approved, appointments to the fifteen-member Commission will be as follows: 1) Governor appoints six members, including one from each congressional district as of the time of their appointment; 2) the Oklahoma Bar Association appoints six members, including one from each congressional district as of the date of selection; and 3) no less than eight members select three at-large members. The measure will permit any number of the commissioners to be licensed attorneys in Oklahoma or another state. The prohibition against immediate family members from practicing law will be removed. The measure changes terms so that at-large commissioners would serve a two-year term, and all other commissioners would serve a six-year term. Additionally, it removes restrictions on political party membership for members appointed by the Governor and at-large members. The measure also permits a commissioner to succeed himself or herself. Vacancies will be filled in the same manner as a commissioner is appointed or selected for the remainder of the relevant term. This measure will not have a fiscal impact. Shall the proposal be approved?\n\nIn short: Would restructure how the 15 members of the Judicial Nominating Commission are appointed, lift limits on how many may be lawyers and on party membership for some members, and change their terms.\n\nOfficial ballot language. Source: https://www.sos.ok.gov/documents/questions/845.pdf",
+      "effectiveDate": "2026-11-10",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Oklahoma State Question 847: Property valuation growth caps and the senior valuation freeze",
+      "summary": "This measure amends article 10, sections 8B and 8C of the Oklahoma Constitution. Currently, section 8B limits annual growth in fair cash value to 5% for most real property or 3% for homesteads and agricultural land. If approved, the measure would limit annual growth in fair cash value for tax year 2027 and after to 4% for most real property or 1.75% for homesteads and agricultural land. Currently, section 8C prohibits any increase in fair cash value of homestead property for persons age sixty-five (65) or older whose income does not exceed certain limits, sometimes referred to as the “senior freeze.” Instead of prohibiting any increase in fair cash value for these homesteads, there would be an annual limit of 1.75%. The measure eliminates the income cap on gross household income to qualify for the senior freeze. If approved, the annual limit on an increase in fair cash value would be tied to how much gross household income the homestead owner had in the preceding year. If a homeowner’s gross household income from the previous year was at or below the median income for their county or area (as determined by the U.S. Department of Housing and Urban Development’s estimated median income amount for the county or metropolitan statistical area), a homeowner’s homestead fair cash value cannot be increased. If the income amount was in excess of certain thresholds, the limit on increases in fair cash value for homesteads owned by persons age 65 or older could be 0.35% (income over 100% up to 120%); 0.7% (income over 120% up to 140%); 1.05% (income over 140% up to 160%); 1.4% (income over 160% up to 180%); or 1.75% (income over 180%). If passed, this measure would have a fiscal impact on the state, but the exact impact is unknown. Shall the proposal be approved?\n\nIn short: Would lower the annual caps on growth in assessed fair cash value of real property from tax year 2027 and replace the income-capped senior homestead freeze with an income-based schedule of annual limits.\n\nOfficial ballot language. Source: https://www.sos.ok.gov/documents/questions/847.pdf",
+      "effectiveDate": "2026-11-10",
+      "closeDate": "2026-11-04T01:00:00Z"
+    }
+  ]
+}

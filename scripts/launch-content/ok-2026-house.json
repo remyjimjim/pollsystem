@@ -1,0 +1,136 @@
+{
+  "_about": "Oklahoma, Nov 3 2026, built by build-state.py from docs/launch-content/research/OK.json (sources and gaps in OK.md). One ballot per district, each including \"2026 Midterm · Oklahoma: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Oklahoma District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        37
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Mark Tedford",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "John Croisant",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Oklahoma District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        37
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Josh Brecheen",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Brandon Wade",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "Ronnie Hopkins",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Oklahoma District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        37
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Frank D. Lucas",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Suzie Byrd",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Oklahoma District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        37
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Tom Cole",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Mitchell Jacob",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Rocco Bonacci",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Oklahoma District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        37
+      ],
+      "closeDate": "2026-11-04T01:00:00Z",
+      "candidates": [
+        {
+          "name": "Stephanie Bice",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Jena Nelson",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Robert P. Henri",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Austin Nieves",
+          "affiliation": "Independent",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Oklahoma: statewide races & measures"
+}

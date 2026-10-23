@@ -1,0 +1,294 @@
+{
+  "state": "Oklahoma",
+  "abbr": "OK",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        {
+          "name": "Kevin Hern",
+          "party": "Republican"
+        },
+        {
+          "name": "N'Kiyla Jasmine Thomas",
+          "party": "Democratic"
+        },
+        {
+          "name": "Sevier White",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Ron Meinhardt",
+          "party": "Independent"
+        },
+        {
+          "name": "Curtis Stinnett",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Mike Mazzei",
+          "party": "Republican"
+        },
+        {
+          "name": "Cyndi Munson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Jerry Griffin",
+          "party": "Independent"
+        },
+        {
+          "name": "Robert E Brooks Sr",
+          "party": "Independent"
+        },
+        {
+          "name": "Orlando Lynn Bush",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Lieutenant Governor",
+      "candidates": [
+        {
+          "name": "T. W. Shannon",
+          "party": "Republican"
+        },
+        {
+          "name": "Kelly Forbes",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Jon Echols",
+          "party": "Republican"
+        },
+        {
+          "name": "Nick Coffey",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {
+          "name": "Cindy Byrd",
+          "party": "Republican"
+        },
+        {
+          "name": "Kiefer Perry",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "office": "State Auditor and Inspector",
+      "candidates": []
+    },
+    {
+      "office": "Superintendent of Public Instruction",
+      "candidates": [
+        {
+          "name": "Robert Franklin",
+          "party": "Republican"
+        },
+        {
+          "name": "Jennettie Marshall",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Commissioner of Labor",
+      "candidates": [
+        {
+          "name": "Kevin West",
+          "party": "Republican"
+        },
+        {
+          "name": "Kevin Dawson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Mike Hall",
+          "party": "Libertarian"
+        }
+      ]
+    },
+    {
+      "office": "Insurance Commissioner",
+      "candidates": [
+        {
+          "name": "Bob Sullivan",
+          "party": "Republican"
+        },
+        {
+          "name": "Craig MacIntyre",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Corporation Commissioner",
+      "candidates": [
+        {
+          "name": "Brad Boles",
+          "party": "Republican"
+        },
+        {
+          "name": "Rhonda Eastman",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Mark Tedford",
+          "party": "Republican"
+        },
+        {
+          "name": "John Croisant",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Josh Brecheen",
+          "party": "Republican"
+        },
+        {
+          "name": "Brandon Wade",
+          "party": "Democratic"
+        },
+        {
+          "name": "Ronnie Hopkins",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Frank D. Lucas",
+          "party": "Republican"
+        },
+        {
+          "name": "Suzie Byrd",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Tom Cole",
+          "party": "Republican"
+        },
+        {
+          "name": "Mitchell Jacob",
+          "party": "Democratic"
+        },
+        {
+          "name": "Rocco Bonacci",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Stephanie Bice",
+          "party": "Republican"
+        },
+        {
+          "name": "Jena Nelson",
+          "party": "Democratic"
+        },
+        {
+          "name": "Robert P. Henri",
+          "party": "Independent"
+        },
+        {
+          "name": "Austin Nieves",
+          "party": "Independent"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "State Question 845",
+      "subject": "Judicial Nominating Commission makeup and appointments",
+      "ballotTitle": "This measure amends article 7-B, section 3 of the Oklahoma Constitution, changing the Judicial Nominating Commission’s structure. Currently appointments are based on congressional districts as constituted in 1967. If approved, appointments to the fifteen-member Commission will be as follows: 1) Governor appoints six members, including one from each congressional district as of the time of their appointment; 2) the Oklahoma Bar Association appoints six members, including one from each congressional district as of the date of selection; and 3) no less than eight members select three at-large members. The measure will permit any number of the commissioners to be licensed attorneys in Oklahoma or another state. The prohibition against immediate family members from practicing law will be removed. The measure changes terms so that at-large commissioners would serve a two-year term, and all other commissioners would serve a six-year term. Additionally, it removes restrictions on political party membership for members appointed by the Governor and at-large members. The measure also permits a commissioner to succeed himself or herself. Vacancies will be filled in the same manner as a commissioner is appointed or selected for the remainder of the relevant term. This measure will not have a fiscal impact. Shall the proposal be approved?",
+      "summary": "Would restructure how the 15 members of the Judicial Nominating Commission are appointed, lift limits on how many may be lawyers and on party membership for some members, and change their terms.",
+      "source": "https://www.sos.ok.gov/documents/questions/845.pdf"
+    },
+    {
+      "designation": "State Question 847",
+      "subject": "Property valuation growth caps and the senior valuation freeze",
+      "ballotTitle": "This measure amends article 10, sections 8B and 8C of the Oklahoma Constitution. Currently, section 8B limits annual growth in fair cash value to 5% for most real property or 3% for homesteads and agricultural land. If approved, the measure would limit annual growth in fair cash value for tax year 2027 and after to 4% for most real property or 1.75% for homesteads and agricultural land. Currently, section 8C prohibits any increase in fair cash value of homestead property for persons age sixty-five (65) or older whose income does not exceed certain limits, sometimes referred to as the “senior freeze.” Instead of prohibiting any increase in fair cash value for these homesteads, there would be an annual limit of 1.75%. The measure eliminates the income cap on gross household income to qualify for the senior freeze. If approved, the annual limit on an increase in fair cash value would be tied to how much gross household income the homestead owner had in the preceding year. If a homeowner’s gross household income from the previous year was at or below the median income for their county or area (as determined by the U.S. Department of Housing and Urban Development’s estimated median income amount for the county or metropolitan statistical area), a homeowner’s homestead fair cash value cannot be increased. If the income amount was in excess of certain thresholds, the limit on increases in fair cash value for homesteads owned by persons age 65 or older could be 0.35% (income over 100% up to 120%); 0.7% (income over 120% up to 140%); 1.05% (income over 140% up to 160%); 1.4% (income over 160% up to 180%); or 1.75% (income over 180%). If passed, this measure would have a fiscal impact on the state, but the exact impact is unknown. Shall the proposal be approved?",
+      "summary": "Would lower the annual caps on growth in assessed fair cash value of real property from tax year 2027 and replace the income-capped senior homestead freeze with an income-based schedule of annual limits.",
+      "source": "https://www.sos.ok.gov/documents/questions/847.pdf"
+    }
+  ],
+  "measureEffective": "2026-11-10",
+  "measureEffectiveNote": "Both are legislatively referred constitutional amendments (LR 379 / HJR 1024 and LR 381 / SJR 39). Under Okla. Const. art. 24, sec. 1 an amendment approved by a majority of those voting on it becomes part of the Constitution; the State Election Board's statewide certification, customarily the Tuesday after the election (2026-11-10), is used as the representative date. SQ 847's valuation limits apply from tax/assessment year 2027.",
+  "sources": [
+    "https://oklahoma.gov/elections/elections-results/state-question-info.html",
+    "https://www.sos.ok.gov/documents/questions/845.pdf",
+    "https://www.sos.ok.gov/documents/questions/847.pdf",
+    "https://oklahoma.gov/content/dam/ok/en/elections/candidate-filing-archives/2026-candidate-filing-archives/2026-candidate-list-book.pdf",
+    "https://oklahoma.gov/elections/candidates/2026-candidate-filing-information/2026-candidate-withdrawals.html",
+    "https://oklahoma.gov/elections/candidates/2026-candidate-filing-information/2026-contests-of-candidacy.html",
+    "https://oklahoma.gov/elections/elections-results/next-election.html",
+    "https://oklahoma.gov/elections/elections-results/general-elections.html",
+    "https://www.thegreenpapers.com/G26/OK",
+    "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Oklahoma",
+    "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Oklahoma",
+    "https://en.wikipedia.org/wiki/2026_Oklahoma_lieutenant_gubernatorial_election",
+    "https://www.news9.com/oklahoma-elections/oklahoma-governor-runoff-results-drummond-mazzei",
+    "https://www.news9.com/oklahoma-elections/oklahoma-treasurer-labor-insurance-corporation-races"
+  ],
+  "notes": [
+    "Candidate names are the Ballot Name lines from the State Election Board's 2026 Candidate List Book (April 1-3 filing), converted from capitals to mixed case; that book lists parties as Republican/Democrat/Libertarian/Independent, given here as Republican/Democratic/Libertarian/Independent for consistency with other states.",
+    "Nominees were chosen from the filing list using primary (June 16) and runoff (Aug 25) outcomes cross-checked in The Green Papers, Wikipedia and News9, because the official results site (results.okelections.us) and the filings site returned HTTP 403.",
+    "U.S. Senate: regular election for the Class 2 seat (term ends Jan 3, 2027). Markwayne Mullin resigned Mar 23, 2026 to become Homeland Security Secretary; appointed Sen. Alan Armstrong is not running. Thomas won the Democratic runoff over Jim Priest.",
+    "Governor: Mike Mazzei beat AG Gentner Drummond in the Aug 25 Republican runoff (about 50.3%).",
+    "State Auditor and Inspector: Melissa Capps (Republican) was the only filer and is deemed elected; under Oklahoma law unopposed candidates do not appear on the ballot.",
+    "Corporation Commissioner: one seat (the one held by term-limited Todd Hiett) is up.",
+    "CD1 (open; Kevin Hern ran for Senate): Jackson Lahmeyer, runoff qualifier, withdrew June 19, 2026, so Mark Tedford became the Republican nominee without a runoff.",
+    "SQ 845's ballot title is the Attorney General's corrected Final Ballot Title filed Aug 13, 2026 (fixing 'non-at-large' to 'at-large'), which replaced the May 29 version. The 'For the proposal - YES / Against the proposal - NO' response lines are omitted.",
+    "Judicial retention questions (Supreme Court, Court of Criminal Appeals, Court of Civil Appeals) appear on Oklahoma general election ballots; they are not listed here.",
+    "Polls are open 7 a.m. to 7 p.m. (State Election Board Next Election page). All of Oklahoma is on Central time; on Nov 3 that is CST (UTC-6), so 7:00 PM = 01:00 UTC on Nov 4."
+  ],
+  "unconfirmed": [
+    "Final general election ballot list: no official post-runoff candidate list could be read (filings.okelections.gov and results.okelections.us return 403); nominees rely on the April filing book plus secondary sources.",
+    "Party wording printed on the ballot face (the filing book uses 'Democrat'); not checked against a sample ballot.",
+    "Superintendent (Robert Franklin, R; Jennettie Marshall, D) and Attorney General (Jon Echols, R; Nick Coffey, D) nominees are confirmed by Green Papers and news summaries only, not by an official results page.",
+    "Statewide effective date: 2026-11-10 is the customary certification date; the enabling resolutions' own text (scanned images in the SOS PDFs) was not read for any separate effective-date clause.",
+    "Names of justices and judges facing retention were not researched.",
+    "Whether any further state question was added after the State Election Board page said two had qualified."
+  ]
+}
