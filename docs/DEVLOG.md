@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-10-23 — Tennessee on local
+
+**Changed:**
+
+- TN: 2 statewide races and 3 amendments.
+  - U.S. Senate has 10 candidates; Governor has 15.
+  - The amendments are on bail, a state property tax ban and victims' rights.
+- 9 district ballots on the map redrawn in May 2026.
+- Candidates and amendment wording come from the Secretary of State's own files.
+- The amendments' effective date (Dec 7) is a stand-in (see `TN.md`).
+
+**Verified:** built, loaded and published on local.
+
+**Commit:** `f0b9585`
+
+---
+
 ## 2026-10-23 — Georgia on local
 
 **Changed:** GA: 11 statewide races, Amendments 1–3, 14 district ballots.
