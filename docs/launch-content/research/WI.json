@@ -1,0 +1,239 @@
+{
+  "state": "Wisconsin",
+  "abbr": "WI",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T02:00:00Z",
+  "statewide": [
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        {
+          "name": "Tom Tiffany / David Varnam",
+          "party": "Republican"
+        },
+        {
+          "name": "David Crowley / Sarah Godlewski",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Eric Toney",
+          "party": "Republican"
+        },
+        {
+          "name": "Josh Kaul",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Jay Schroeder",
+          "party": "Republican"
+        },
+        {
+          "name": "JoCasta Zamarripa",
+          "party": "Democratic"
+        },
+        {
+          "name": "Pete Karas",
+          "party": "Wisconsin Green"
+        }
+      ]
+    },
+    {
+      "office": "State Treasurer",
+      "candidates": [
+        {
+          "name": "John S. Leiber",
+          "party": "Republican"
+        },
+        {
+          "name": "Yee Leng Xiong",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Bryan Steil",
+          "party": "Republican"
+        },
+        {
+          "name": "Mitchell Berman",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Mark Pocan",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Derrick Van Orden",
+          "party": "Republican"
+        },
+        {
+          "name": "Rebecca Cooke",
+          "party": "Democratic"
+        },
+        {
+          "name": "Alexander Valiensi Kent",
+          "party": "Independent"
+        },
+        {
+          "name": "Rustin Provance",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Tim Rogers",
+          "party": "Republican"
+        },
+        {
+          "name": "Gwen Moore",
+          "party": "Democratic"
+        },
+        {
+          "name": "Arthur Burks",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Scott Fitzgerald",
+          "party": "Republican"
+        },
+        {
+          "name": "Andrew Beck",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Glenn Grothman",
+          "party": "Republican"
+        },
+        {
+          "name": "Brad Smith",
+          "party": "Democratic"
+        },
+        {
+          "name": "Matthew Arndt",
+          "party": "Wisconsin Green"
+        },
+        {
+          "name": "Elizabeth Anne Fitzgibbon",
+          "party": "Independent"
+        },
+        {
+          "name": "Mike Thurow",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 7,
+      "candidates": [
+        {
+          "name": "Michael Alfonso",
+          "party": "Republican"
+        },
+        {
+          "name": "Fred Clark",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "district": 8,
+      "candidates": [
+        {
+          "name": "Tony Wied",
+          "party": "Republican"
+        },
+        {
+          "name": "Rick Crosson",
+          "party": "Democratic"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Question 1",
+      "subject": "Limit on the governor's partial veto for taxes and fees",
+      "ballotTitle": "Partial veto. Shall section 10 (1) (c) of article V of the constitution be amended to prohibit the governor, in exercising his or her partial veto authority, from creating or increasing or authorizing the creation or increase of any tax or fee?",
+      "summary": "Would bar the governor from using the partial veto on an appropriation bill to create or increase, or authorize the creation or increase of, any state or local tax or fee.",
+      "source": "https://wheatlandkenoshaco.gov/documents/763/TYPE_C_NOTICE_OF_REFERENDUM_2026.docx"
+    },
+    {
+      "designation": "Question 2",
+      "subject": "Places of worship during a state of emergency",
+      "ballotTitle": "Freedom to gather in places of worship during an emergency. Shall section 18 of article I of the constitution, which deals with religious liberty, be amended to prohibit the state or a political subdivision of the state from ordering the closure of, or forbidding gatherings in, places of worship in response to a state of emergency, including a public health emergency?",
+      "summary": "Would prohibit the state and local governments from closing places of worship or forbidding gatherings in them in response to a declared emergency, including a public health emergency.",
+      "source": "https://wheatlandkenoshaco.gov/documents/763/TYPE_C_NOTICE_OF_REFERENDUM_2026.docx"
+    },
+    {
+      "designation": "Question 3",
+      "subject": "Ban on government discrimination or preferential treatment",
+      "ballotTitle": "Governmental entity discrimination prohibited. Shall section 27 of article I of the constitution be created to prohibit governmental entities in the state from discriminating against, or granting preferential treatment to, any individual or group on the basis of race, sex, color, ethnicity, or national origin in public employment, public education, public contracting, or public administration?",
+      "summary": "Would add a constitutional provision barring state and local government bodies from discriminating against or giving preferential treatment to anyone based on race, sex, color, ethnicity, or national origin in public employment, education, contracting, or administration, with exceptions for federal-funding eligibility and bona fide sex-based qualifications.",
+      "source": "https://wheatlandkenoshaco.gov/documents/763/TYPE_C_NOTICE_OF_REFERENDUM_2026.docx"
+    }
+  ],
+  "measureEffective": "2026-12-01",
+  "measureEffectiveNote": "None of the three amendments states its own effective date, so under Wis. Stat. 7.70(3)(h) an approved amendment takes effect when the Elections Commission chairperson (or designee) certifies that it was approved. Under 7.70(3)(a) the state canvass for a general election must be completed on or before December 1, so 2026-12-01 is used as the representative (latest statutory) date; certification may come earlier.",
+  "sources": [
+    "https://townoffarmingtonlax.org/assets/files/2026/08/hc2-samp.pdf",
+    "https://wheatlandkenoshaco.gov/documents/763/TYPE_C_NOTICE_OF_REFERENDUM_2026.docx",
+    "https://cdn.wrn.com/wp-content/uploads/2026/06/Candidates-on-Ballot-By-Election_Post-June-9-2026-Ballot-Access-Meeting.pdf",
+    "https://docs.legis.wisconsin.gov/document/statutes/7.70(3)",
+    "https://ballotpedia.org/United_States_House_of_Representatives_elections_in_Wisconsin,_2026",
+    "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Wisconsin",
+    "https://www.wpr.org/news/what-to-know-wisconsin-november-2026-referendums"
+  ],
+  "notes": [
+    "No U.S. Senate seat is up in Wisconsin in 2026.",
+    "Statewide contests and the CD-3 field are taken from an official La Crosse County sample ballot (Official Ballot, Partisan Office and Referendum, November 3, 2026, 94th Assembly District). Party labels are as printed there: (Republican), (Democratic), (Wisconsin Green), (Independent).",
+    "Governor and Lieutenant Governor appear as one joint ticket per party ('Tom Tiffany / David Varnam'); no independent or third-party ticket is on the official ballot.",
+    "Other districts' ballot names and parties are from the WEC 'Candidates on Ballot by Election' report (printed June 9, 2026, after the ballot-access meeting), with the Aug 11, 2026 partisan-primary winners chosen using Ballotpedia and Wikipedia.",
+    "CD-2: no Republican filed; Mark Pocan is the only printed candidate.",
+    "CD-7 is open; Rep. Tom Tiffany is running for governor.",
+    "Measure wording is the official ballot question text from the Kenosha County Type C referendum notice (Aug 26, 2026). It matches the La Crosse County sample ballot, except that the last word of the Question 2 title ('emergency.') did not decode from the ballot PDF.",
+    "All of Wisconsin is on Central time. Polls are open 7:00 a.m. to 8:00 p.m., and 8:00 PM CST (UTC-6) on Nov 3 is 02:00 UTC on Nov 4."
+  ],
+  "unconfirmed": [
+    "Ballot names for CD-1, 2, 4, 5, 6, 7 and 8 come from the pre-primary WEC list (June 9) rather than a printed general-election ballot. Ballotpedia shows 'Bradley Smith' (CD-6), while WEC shows 'Brad Smith', and 'Elizabeth Fitzgibbon' where WEC shows 'Elizabeth Anne Fitzgibbon'. The WEC forms were used.",
+    "Primary winners for CD-1, CD-4, CD-6, CD-7 and CD-8 were checked only against secondary sources (Ballotpedia, Wikipedia), because the WEC canvass pages were unreadable (403).",
+    "The exact date the amendments take effect depends on when the state canvass is certified, which must happen on or before Dec 1, 2026."
+  ]
+}

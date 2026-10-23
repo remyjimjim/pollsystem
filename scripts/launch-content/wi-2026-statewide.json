@@ -1,0 +1,83 @@
+{
+  "_about": "Wisconsin, Nov 3 2026, built by build-state.py from docs/launch-content/research/WI.json (sources and gaps in WI.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Wisconsin: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      50
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Tom Tiffany / David Varnam",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "David Crowley / Sarah Godlewski",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Eric Toney",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Josh Kaul",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Jay Schroeder",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "JoCasta Zamarripa",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Pete Karas",
+        "affiliation": "Wisconsin Green",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "John S. Leiber",
+        "affiliation": "Republican",
+        "officeName": "State Treasurer"
+      },
+      {
+        "name": "Yee Leng Xiong",
+        "affiliation": "Democratic",
+        "officeName": "State Treasurer"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Wisconsin Question 1: Limit on the governor's partial veto for taxes and fees",
+      "summary": "Partial veto. Shall section 10 (1) (c) of article V of the constitution be amended to prohibit the governor, in exercising his or her partial veto authority, from creating or increasing or authorizing the creation or increase of any tax or fee?\n\nIn short: Would bar the governor from using the partial veto on an appropriation bill to create or increase, or authorize the creation or increase of, any state or local tax or fee.\n\nOfficial ballot language. Source: https://wheatlandkenoshaco.gov/documents/763/TYPE_C_NOTICE_OF_REFERENDUM_2026.docx",
+      "effectiveDate": "2026-12-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Wisconsin Question 2: Places of worship during a state of emergency",
+      "summary": "Freedom to gather in places of worship during an emergency. Shall section 18 of article I of the constitution, which deals with religious liberty, be amended to prohibit the state or a political subdivision of the state from ordering the closure of, or forbidding gatherings in, places of worship in response to a state of emergency, including a public health emergency?\n\nIn short: Would prohibit the state and local governments from closing places of worship or forbidding gatherings in them in response to a declared emergency, including a public health emergency.\n\nOfficial ballot language. Source: https://wheatlandkenoshaco.gov/documents/763/TYPE_C_NOTICE_OF_REFERENDUM_2026.docx",
+      "effectiveDate": "2026-12-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Wisconsin Question 3: Ban on government discrimination or preferential treatment",
+      "summary": "Governmental entity discrimination prohibited. Shall section 27 of article I of the constitution be created to prohibit governmental entities in the state from discriminating against, or granting preferential treatment to, any individual or group on the basis of race, sex, color, ethnicity, or national origin in public employment, public education, public contracting, or public administration?\n\nIn short: Would add a constitutional provision barring state and local government bodies from discriminating against or giving preferential treatment to anyone based on race, sex, color, ethnicity, or national origin in public employment, education, contracting, or administration, with exceptions for federal-funding eligibility and bona fide sex-based qualifications.\n\nOfficial ballot language. Source: https://wheatlandkenoshaco.gov/documents/763/TYPE_C_NOTICE_OF_REFERENDUM_2026.docx",
+      "effectiveDate": "2026-12-01",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}
