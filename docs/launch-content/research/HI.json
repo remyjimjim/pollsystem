@@ -1,0 +1,100 @@
+{
+  "state": "Hawaii",
+  "abbr": "HI",
+  "pollCloseLocal": "7:00 PM",
+  "pollCloseUtc": "2026-11-04T05:00:00Z",
+  "statewide": [
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        { "name": "Gary Cordery / Daniel Anthony", "party": "Republican" },
+        { "name": "Josh Green / Derek S.K. Kawakami", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "OHA Trustee At-Large",
+      "voteFor": 3,
+      "candidates": [
+        { "name": "Adrian (Kealii) Akina", "party": "Nonpartisan" },
+        { "name": "Ikaika Anderson", "party": "Nonpartisan" },
+        { "name": "Kanekoa (Koa) Crabbe", "party": "Nonpartisan" },
+        { "name": "Brickwood M. Galuteria", "party": "Nonpartisan" },
+        { "name": "Keoni Souza", "party": "Nonpartisan" },
+        { "name": "John Waihee IV", "party": "Nonpartisan" }
+      ]
+    },
+    {
+      "office": "OHA Trustee Maui Resident",
+      "candidates": [
+        { "name": "Ke'eaumoku Kapu", "party": "Nonpartisan" },
+        { "name": "Carmen Hulu Lindsey", "party": "Nonpartisan" }
+      ]
+    },
+    {
+      "office": "OHA Trustee Oahu Resident",
+      "candidates": [
+        { "name": "Kalei Akaka", "party": "Nonpartisan" },
+        { "name": "Hinaleimoana (Hina) Wong", "party": "Nonpartisan" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        { "name": "Nathan M. Berning", "party": "Nonpartisan" },
+        { "name": "Ed Case", "party": "Democratic" },
+        { "name": "Jordan S. Conley", "party": "Green" },
+        { "name": "Adriel C. Lam", "party": "Republican" }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        { "name": "Brenton Awa", "party": "Republican" },
+        { "name": "Jill N. Tokuda", "party": "Democratic" }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Question 1",
+      "subject": "Senate timeframe to act on judicial appointments",
+      "ballotTitle": "Shall the Constitution of the State of Hawaii be amended to allow the Senate more time to consider and act on the appointments of justices and judges, by increasing the timeframe from thirty days to sixty days for appointments made between April 1 and December 31 when the senate is not in regular session or is about to adjourn the regular session?",
+      "summary": "Would extend from 30 to 60 days the time the state Senate has to consider and act on judicial appointments made between April 1 and December 31 when it is not in regular session or is about to adjourn.",
+      "source": "https://elections.hawaii.gov/voting/2026-proposed-amendments-to-the-hawaii-state-constitution/"
+    },
+    {
+      "designation": "Question 2",
+      "subject": "County RISE bonds excluded from county debt limits",
+      "ballotTitle": "Shall the Hawaii State Constitution be amended to direct the legislature to authorize the counties to issue resilient infrastructure for shelter and equity bonds to fund public improvements in designated districts, repaid solely by future growth in property tax revenues within those districts, not by increasing real property tax rates, where such bonds are excluded from the counties’ debt limit and are subject to accountability and oversight requirements as may be provided by law?",
+      "summary": "Would direct the legislature to let counties issue \"resilient infrastructure for shelter and equity\" (RISE) bonds for public improvements in designated districts, repaid from growth in property tax revenue there and excluded from county debt limits.",
+      "source": "https://elections.hawaii.gov/voting/2026-proposed-amendments-to-the-hawaii-state-constitution/"
+    }
+  ],
+  "measureEffective": "2026-11-03",
+  "measureEffectiveNote": "A legislatively proposed amendment is effective only if approved at the general election by a majority of the votes tallied on the question that is also at least 50% of all votes cast in the election (blank and over votes count against it), per Haw. Const. art. XVII, sec. 3 and the Office of Elections' two-test explanation. An approved amendment takes effect upon ratification; the election date is used as the representative date, and formal ratification follows certification of the results later in November. Implementing law for Question 2 (SB 3218) takes effect only upon ratification.",
+  "sources": [
+    "https://olvr.hawaii.gov/Controls/CandidateFiling.aspx?elid=94",
+    "https://elections.hawaii.gov/wp-content/uploads/VoterGuide_2026_General_English.pdf",
+    "https://elections.hawaii.gov/voting/2026-proposed-amendments-to-the-hawaii-state-constitution/",
+    "https://elections.hawaii.gov/voting/contest-schedule/",
+    "https://lrb.hawaii.gov/constitution",
+    "https://ballotpedia.org/Hawaii_2026_ballot_measures",
+    "https://ballotpedia.org/Hawaii_Question_2,_Authorize_Resilient_Infrastructure_for_Shelter_and_Equity_(RISE)_Bonds_Amendment_(2026)"
+  ],
+  "notes": [
+    "Candidates are those with status 'In General' in the Office of Elections 2026 Candidate Report (CSV export dated 2026-10-22), and match the 2026 General Election Voter Guide (English) section by section.",
+    "Ballot names are printed 'LAST, First' (e.g. 'GREEN, Josh'); they are written here first-name-first. Party letters in the voter guide (D, R, G; none for nonpartisan) are spelled out.",
+    "No U.S. Senate seat is up in Hawaii in 2026 (next in 2028). Governor and Lieutenant Governor are elected jointly in the general election, so they are one ticket entry here.",
+    "Office of Hawaiian Affairs trustee races are nonpartisan and are on every voter's ballot statewide; the residency seats (Maui, Oahu) require the candidate, not the voter, to live on that island. The contest schedule lists 3 at-large seats for 2026.",
+    "HI-1: Nathan M. Berning is a nonpartisan candidate who advanced from the primary.",
+    "Ballotpedia was used only to cross-check the measure count (two certified) and the RISE bond implementing bill."
+  ],
+  "unconfirmed": [
+    "Ballot-face party wording and the exact printed form of the Gov / Lt Gov ticket were not checked against a sample ballot.",
+    "Okina and kahako in Hawaiian names (e.g. Kealii, Waihee) follow the CSV/voter-guide text, which drops some of them; the printed ballot may include them.",
+    "The date the Chief Election Officer certifies the general election results (formal ratification of the amendments) was not confirmed; capitol.hawaii.gov (bill texts SB121, SB3219) was blocked, so the bills' own effective-date sections were not read.",
+    "The statewide electorate for the OHA residency seats rests on long-standing practice (statewide OHA voting since 2000) and the voter guide, not a re-read of HRS ch. 13D, which was blocked."
+  ]
+}

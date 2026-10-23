@@ -1,0 +1,91 @@
+{
+  "_about": "Hawaii, Nov 3 2026, built by build-state.py from docs/launch-content/research/HI.json (sources and gaps in HI.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Hawaii: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      12
+    ],
+    "closeDate": "2026-11-04T05:00:00Z",
+    "candidates": [
+      {
+        "name": "Gary Cordery / Daniel Anthony",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Josh Green / Derek S.K. Kawakami",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Adrian (Kealii) Akina",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee At-Large (vote for 3 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Ikaika Anderson",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee At-Large (vote for 3 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Kanekoa (Koa) Crabbe",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee At-Large (vote for 3 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Brickwood M. Galuteria",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee At-Large (vote for 3 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Keoni Souza",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee At-Large (vote for 3 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "John Waihee IV",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee At-Large (vote for 3 on the ballot; pick your top choice here)"
+      },
+      {
+        "name": "Ke'eaumoku Kapu",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee Maui Resident"
+      },
+      {
+        "name": "Carmen Hulu Lindsey",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee Maui Resident"
+      },
+      {
+        "name": "Kalei Akaka",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee Oahu Resident"
+      },
+      {
+        "name": "Hinaleimoana (Hina) Wong",
+        "affiliation": "Nonpartisan",
+        "officeName": "OHA Trustee Oahu Resident"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Hawaii Question 1: Senate timeframe to act on judicial appointments",
+      "summary": "Shall the Constitution of the State of Hawaii be amended to allow the Senate more time to consider and act on the appointments of justices and judges, by increasing the timeframe from thirty days to sixty days for appointments made between April 1 and December 31 when the senate is not in regular session or is about to adjourn the regular session?\n\nIn short: Would extend from 30 to 60 days the time the state Senate has to consider and act on judicial appointments made between April 1 and December 31 when it is not in regular session or is about to adjourn.\n\nOfficial ballot language. Source: https://elections.hawaii.gov/voting/2026-proposed-amendments-to-the-hawaii-state-constitution/",
+      "effectiveDate": "2026-11-03",
+      "closeDate": "2026-11-04T05:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Hawaii Question 2: County RISE bonds excluded from county debt limits",
+      "summary": "Shall the Hawaii State Constitution be amended to direct the legislature to authorize the counties to issue resilient infrastructure for shelter and equity bonds to fund public improvements in designated districts, repaid solely by future growth in property tax revenues within those districts, not by increasing real property tax rates, where such bonds are excluded from the counties’ debt limit and are subject to accountability and oversight requirements as may be provided by law?\n\nIn short: Would direct the legislature to let counties issue \"resilient infrastructure for shelter and equity\" (RISE) bonds for public improvements in designated districts, repaid from growth in property tax revenue there and excluded from county debt limits.\n\nOfficial ballot language. Source: https://elections.hawaii.gov/voting/2026-proposed-amendments-to-the-hawaii-state-constitution/",
+      "effectiveDate": "2026-11-03",
+      "closeDate": "2026-11-04T05:00:00Z"
+    }
+  ]
+}
