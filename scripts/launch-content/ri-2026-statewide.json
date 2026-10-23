@@ -1,0 +1,127 @@
+{
+  "_about": "Rhode Island, Nov 3 2026, built by build-state.py from docs/launch-content/research/RI.json (sources and gaps in RI.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Rhode Island: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      40
+    ],
+    "closeDate": "2026-11-04T01:00:00Z",
+    "candidates": [
+      {
+        "name": "Jack Reed",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Raymond McKay",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Michael Bahry",
+        "affiliation": "Independent",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Helena Buonanno Foulkes",
+        "affiliation": "Democratic",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Aaron C. Guckian",
+        "affiliation": "Republican",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Kenneth Block",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Jasjit S. Gotra",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      },
+      {
+        "name": "C.D. Reynolds",
+        "affiliation": "Independent",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Sabina Matos",
+        "affiliation": "Democratic",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "John J. Loughlin Jr.",
+        "affiliation": "Republican",
+        "officeName": "Lieutenant Governor"
+      },
+      {
+        "name": "Gregg Amore",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Kimberly Ahern",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Alan Leonard Gordon",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "James Diossa",
+        "affiliation": "Democratic",
+        "officeName": "General Treasurer"
+      },
+      {
+        "name": "Micholas A. Credle",
+        "affiliation": "Republican",
+        "officeName": "General Treasurer"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Rhode Island Question 1: Higher education facilities bonds ($275 million)",
+      "summary": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 1. HIGHER EDUCATION FACILITIES - $275,000,000 For capital improvements to higher education facilities, to be allocated as follows: a. University of Rhode Island Integrated Health Building - $165,000,000 b. Rhode Island College Adams Library Renovations - $50,000,000 c. Community College of Rhode Island Workforce Innovation Center - $60,000,000\n\nIn short: Would authorize $275 million in state general obligation bonds for a URI Integrated Health Building, Rhode Island College Adams Library renovations, and a CCRI Workforce Innovation Center.\n\nOfficial ballot language. Source: https://ballotpedia.org/Rhode_Island_Question_1,_Higher_Education_Facilities_Bond_Measure_(2026)",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Rhode Island Question 2: Housing and homeownership bonds ($120 million)",
+      "summary": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 2. HOUSING AND HOMEOWNERSHIP - $120,000,000 To increase and preserve the availability of affordable and accessible housing to meet the needs of all Rhode Islanders and support community revitalization through the redevelopment of existing structures, new construction, property acquisition, and infrastructure improvements. Of this amount, at least twenty-five million dollars ($25,000,000) shall be allocated towards increasing production of housing intended for homeownership and up to ten million dollars ($10,000,000) may be used to support a program for public housing development.\n\nIn short: Would authorize $120 million in state general obligation bonds for affordable and accessible housing, with at least $25 million for homeownership production and up to $10 million for public housing development.\n\nOfficial ballot language. Source: https://ballotpedia.org/Rhode_Island_Question_2,_Housing_Development_Bond_Measure_(2026)",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Rhode Island Question 3: Economic development bonds ($100 million)",
+      "summary": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 3. ECONOMIC DEVELOPMENT - $100,000,000 To fund site development and growth industry infrastructure for economic development purposes, to be allocated as follows: A. Site development - $55,000,000 b. Growth Industry Infrastructure - $45,000,000\n\nIn short: Would authorize $100 million in state general obligation bonds for industrial site development ($55 million) and growth-industry infrastructure ($45 million).\n\nOfficial ballot language. Source: https://ballotpedia.org/Rhode_Island_Question_3,_Economic_and_Infrastructure_Development_Bond_Measure_(2026)",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Rhode Island Question 4: State History Center and preservation grants bonds ($50 million)",
+      "summary": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 4. CULTURAL ECONOMY - $50,000,000 To provide funding for cultural economy efforts, to be allocated as follows: a. State History Center - $45,000,000 b. State Preservation Grants Program - $5,000,000\n\nIn short: Would authorize $50 million in state general obligation bonds, $45 million for a new Rhode Island State History Center and $5 million for historic preservation matching grants.\n\nOfficial ballot language. Source: https://ballotpedia.org/Rhode_Island_Question_4,_Historical_Center_and_Cultural_Grants_Bond_Measure_(2026)",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    },
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Rhode Island Question 5: Environmental and recreation bonds ($55 million)",
+      "summary": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 5. GREEN ECONOMY BONDS - $55,000,000 For environmental and recreational purposes, to be allocated as follows: a. Brownfields Remediation and Economic Development - $3,000,000 b. Facility Improvements - $12,000,000 c. Local Recreation Projects - $1,000,000 d. Marine Infrastructure Development - $1,000,000 e. Resilient Rhody Infrastructure Fund - $25,000,000 f. Narragansett Bay Watershed Restoration - $7,000,000 g. Agricultural Land Preservation Commission - $3,000,000 h. Open Space Program - $3,000,000\n\nIn short: Would authorize $55 million in state general obligation bonds for environmental and recreational projects, including $25 million for the Resilient Rhody Infrastructure Fund and $7 million for Narragansett Bay watershed restoration.\n\nOfficial ballot language. Source: https://ballotpedia.org/Rhode_Island_Question_5,_Environment_and_Watershed_Protection_and_Development_Bond_Measure_(2026)",
+      "effectiveDate": "2026-11-24",
+      "closeDate": "2026-11-04T01:00:00Z"
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "state": "Rhode Island",
+  "abbr": "RI",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T01:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        {
+          "name": "Jack Reed",
+          "party": "Democratic"
+        },
+        {
+          "name": "Raymond McKay",
+          "party": "Republican"
+        },
+        {
+          "name": "Michael Bahry",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Helena Buonanno Foulkes",
+          "party": "Democratic"
+        },
+        {
+          "name": "Aaron C. Guckian",
+          "party": "Republican"
+        },
+        {
+          "name": "Kenneth Block",
+          "party": "Independent"
+        },
+        {
+          "name": "Jasjit S. Gotra",
+          "party": "Independent"
+        },
+        {
+          "name": "C.D. Reynolds",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "office": "Lieutenant Governor",
+      "candidates": [
+        {
+          "name": "Sabina Matos",
+          "party": "Democratic"
+        },
+        {
+          "name": "John J. Loughlin Jr.",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        {
+          "name": "Gregg Amore",
+          "party": "Democratic"
+        }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        {
+          "name": "Kimberly Ahern",
+          "party": "Democratic"
+        },
+        {
+          "name": "Alan Leonard Gordon",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "office": "General Treasurer",
+      "candidates": [
+        {
+          "name": "James Diossa",
+          "party": "Democratic"
+        },
+        {
+          "name": "Micholas A. Credle",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Gabe Amo",
+          "party": "Democratic"
+        },
+        {
+          "name": "Kellie Keenan",
+          "party": "Republican"
+        },
+        {
+          "name": "Pedro Soares de Souza",
+          "party": "Independent"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Seth Magaziner",
+          "party": "Democratic"
+        },
+        {
+          "name": "Victor Mellor",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Question 1",
+      "subject": "Higher education facilities bonds ($275 million)",
+      "ballotTitle": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 1. HIGHER EDUCATION FACILITIES - $275,000,000 For capital improvements to higher education facilities, to be allocated as follows: a. University of Rhode Island Integrated Health Building - $165,000,000 b. Rhode Island College Adams Library Renovations - $50,000,000 c. Community College of Rhode Island Workforce Innovation Center - $60,000,000",
+      "summary": "Would authorize $275 million in state general obligation bonds for a URI Integrated Health Building, Rhode Island College Adams Library renovations, and a CCRI Workforce Innovation Center.",
+      "source": "https://ballotpedia.org/Rhode_Island_Question_1,_Higher_Education_Facilities_Bond_Measure_(2026)"
+    },
+    {
+      "designation": "Question 2",
+      "subject": "Housing and homeownership bonds ($120 million)",
+      "ballotTitle": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 2. HOUSING AND HOMEOWNERSHIP - $120,000,000 To increase and preserve the availability of affordable and accessible housing to meet the needs of all Rhode Islanders and support community revitalization through the redevelopment of existing structures, new construction, property acquisition, and infrastructure improvements. Of this amount, at least twenty-five million dollars ($25,000,000) shall be allocated towards increasing production of housing intended for homeownership and up to ten million dollars ($10,000,000) may be used to support a program for public housing development.",
+      "summary": "Would authorize $120 million in state general obligation bonds for affordable and accessible housing, with at least $25 million for homeownership production and up to $10 million for public housing development.",
+      "source": "https://ballotpedia.org/Rhode_Island_Question_2,_Housing_Development_Bond_Measure_(2026)"
+    },
+    {
+      "designation": "Question 3",
+      "subject": "Economic development bonds ($100 million)",
+      "ballotTitle": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 3. ECONOMIC DEVELOPMENT - $100,000,000 To fund site development and growth industry infrastructure for economic development purposes, to be allocated as follows: A. Site development - $55,000,000 b. Growth Industry Infrastructure - $45,000,000",
+      "summary": "Would authorize $100 million in state general obligation bonds for industrial site development ($55 million) and growth-industry infrastructure ($45 million).",
+      "source": "https://ballotpedia.org/Rhode_Island_Question_3,_Economic_and_Infrastructure_Development_Bond_Measure_(2026)"
+    },
+    {
+      "designation": "Question 4",
+      "subject": "State History Center and preservation grants bonds ($50 million)",
+      "ballotTitle": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 4. CULTURAL ECONOMY - $50,000,000 To provide funding for cultural economy efforts, to be allocated as follows: a. State History Center - $45,000,000 b. State Preservation Grants Program - $5,000,000",
+      "summary": "Would authorize $50 million in state general obligation bonds, $45 million for a new Rhode Island State History Center and $5 million for historic preservation matching grants.",
+      "source": "https://ballotpedia.org/Rhode_Island_Question_4,_Historical_Center_and_Cultural_Grants_Bond_Measure_(2026)"
+    },
+    {
+      "designation": "Question 5",
+      "subject": "Environmental and recreation bonds ($55 million)",
+      "ballotTitle": "Shall the act passed by the General Assembly at the January 2026 session, allowing the State of Rhode Island to issue bonds, refunding bonds, and temporary notes to pay for the projects listed below, be approved, and the State be allowed to issue these bonds, refunding bonds, and temporary notes as outlined in the law? 5. GREEN ECONOMY BONDS - $55,000,000 For environmental and recreational purposes, to be allocated as follows: a. Brownfields Remediation and Economic Development - $3,000,000 b. Facility Improvements - $12,000,000 c. Local Recreation Projects - $1,000,000 d. Marine Infrastructure Development - $1,000,000 e. Resilient Rhody Infrastructure Fund - $25,000,000 f. Narragansett Bay Watershed Restoration - $7,000,000 g. Agricultural Land Preservation Commission - $3,000,000 h. Open Space Program - $3,000,000",
+      "summary": "Would authorize $55 million in state general obligation bonds for environmental and recreational projects, including $25 million for the Resilient Rhody Infrastructure Fund and $7 million for Narragansett Bay watershed restoration.",
+      "source": "https://ballotpedia.org/Rhode_Island_Question_5,_Environment_and_Watershed_Protection_and_Development_Bond_Measure_(2026)"
+    }
+  ],
+  "measureEffective": "2026-11-24",
+  "measureEffectiveNote": "Article 5 of the FY2027 budget (H 7127 Sub A as amended), Section 13: the bond-issuing sections take effect 'when and if the State Board of Elections shall certify to the Secretary of State' that a majority approved a project; each question is approved by a simple majority (Section 3). No fixed statutory certification date was found; 2026-11-24 (three weeks after Election Day) is a representative estimate only.",
+  "sources": [
+    "https://webserver.rilegislature.gov/BillText/BillText26/HouseText26/H7127Aaa.pdf",
+    "https://www.sos.ri.gov/article?articleno=51487",
+    "https://www.sos.ri.gov/article?articleno=50981",
+    "https://vote.sos.ri.gov/Candidates/CandidateSearchSummary?OfficeType=549&Election=18144",
+    "https://ballotpedia.org/Rhode_Island_2026_ballot_measures",
+    "https://ballotpedia.org/Rhode_Island_gubernatorial_election,_2026",
+    "https://ballotpedia.org/Rhode_Island_lieutenant_gubernatorial_election,_2026",
+    "https://ballotpedia.org/Rhode_Island_Secretary_of_State_election,_2026",
+    "https://ballotpedia.org/Rhode_Island_Attorney_General_election,_2026",
+    "https://ballotpedia.org/Rhode_Island_Treasurer_election,_2026",
+    "https://ballotpedia.org/United_States_Senate_election_in_Rhode_Island,_2026",
+    "https://ballotpedia.org/Rhode_Island%27s_1st_Congressional_District_election,_2026",
+    "https://ballotpedia.org/Rhode_Island%27s_2nd_Congressional_District_election,_2026",
+    "https://en.wikipedia.org/wiki/2026_Rhode_Island_gubernatorial_election",
+    "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Rhode_Island",
+    "https://ballotpedia.org/Rhode_Island_Question_1,_Higher_Education_Facilities_Bond_Measure_(2026)",
+    "https://ballotpedia.org/Rhode_Island_Question_2,_Housing_Development_Bond_Measure_(2026)",
+    "https://ballotpedia.org/Rhode_Island_Question_3,_Economic_and_Infrastructure_Development_Bond_Measure_(2026)",
+    "https://ballotpedia.org/Rhode_Island_Question_4,_Historical_Center_and_Cultural_Grants_Bond_Measure_(2026)",
+    "https://ballotpedia.org/Rhode_Island_Question_5,_Environment_and_Watershed_Protection_and_Development_Bond_Measure_(2026)"
+  ],
+  "notes": [
+    "Official election sites (vote.ri.gov / vote.sos.ri.gov, elections.ri.gov) sat behind a Cloudflare challenge (HTTP 403) for WebFetch and curl all session, so no official candidate list, sample ballot or Voter Information Handbook was read. Candidates come from Ballotpedia and Wikipedia; the two agree on every race's field.",
+    "Primary held Wednesday, September 9, 2026 (moved because of Labor Day). Primary results per Wikipedia: Foulkes beat Gov. McKee (D); Guckian beat Pelino (R, unchanged on recount); Matos won a five-way Democratic Lt. Gov. primary; Ahern won a four-way Democratic AG primary; Mellor beat Skoly (R, CD2).",
+    "Secretary of State Gregg Amore is unopposed on the general election ballot (no Republican or independent qualified, per both sources).",
+    "The Department of State's Sept 29, 2026 handbook release confirms five statewide bond questions. The enacted Article 5 numbers them (1)-(5) with the same projects and amounts as the Ballotpedia ballot text.",
+    "Article 5, Section 2: the Secretary of State prepares the ballot labels, so the printed wording is SOS plain language and differs from the statute's long-form proposition text.",
+    "Polls are open 7 a.m. to 8 p.m. statewide. Rhode Island is all Eastern time, and EST (UTC-5) applies after Nov 1, so 8:00 PM is 01:00 UTC on Nov 4."
+  ],
+  "unconfirmed": [
+    "Candidate names as printed: where they differ, the Wikipedia general-election boxes (which appear drawn from the SOS candidate list) are used. Ballotpedia variants: Helena Foulkes, Aaron Guckian, Ken Block, Jasjit Gotra, Christopher Reynolds (for C.D. Reynolds), John Loughlin, Kim Ahern, Alan Gordon, Micholas Credle. Wikipedia gives the CD1 independent as Pedro DeSouza; Ballotpedia's Pedro Soares de Souza is used.",
+    "Party labels as printed on the ballot face (e.g. 'Democrat' vs 'Democratic'; whether independents carry 'Independent' or another designation) were not checked against an official sample ballot.",
+    "Question ballot text is Ballotpedia's quoted ballot title (the SOS plain-language label). It could not be checked against the official sample ballot or handbook because both sites were blocked. Its project list and amounts match the enacted H 7127 Article 5.",
+    "Measure effective date: 2026-11-24 is an estimate, since certification depends on when the Board of Elections certifies.",
+    "Late candidate withdrawals or substitutions after Ballotpedia's and Wikipedia's last updates were not checked against an official list."
+  ]
+}
