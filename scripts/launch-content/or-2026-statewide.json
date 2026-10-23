@@ -1,0 +1,50 @@
+{
+  "_about": "Oregon, Nov 3 2026, built by build-state.py from docs/launch-content/research/OR.json (sources and gaps in OR.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Oregon: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      38
+    ],
+    "closeDate": "2026-11-04T04:00:00Z",
+    "candidates": [
+      {
+        "name": "David Brock Smith",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Jeff Merkley",
+        "affiliation": "Democratic, Working Families",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Gary Lyndon Dye",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Chris Henry",
+        "affiliation": "Progressive, Pacific Green",
+        "officeName": "U.S. Senator"
+      },
+      {
+        "name": "Brett Smith",
+        "affiliation": "Pacific Green",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Tina Kotek",
+        "affiliation": "Democratic, Working Families",
+        "officeName": "Governor"
+      },
+      {
+        "name": "Christine Drazan",
+        "affiliation": "Republican, Libertarian",
+        "officeName": "Governor"
+      }
+    ]
+  }
+}

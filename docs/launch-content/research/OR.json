@@ -1,0 +1,165 @@
+{
+  "state": "Oregon",
+  "abbr": "OR",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T04:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senator",
+      "candidates": [
+        {
+          "name": "David Brock Smith",
+          "party": "Republican"
+        },
+        {
+          "name": "Jeff Merkley",
+          "party": "Democratic, Working Families"
+        },
+        {
+          "name": "Gary Lyndon Dye",
+          "party": "Libertarian"
+        },
+        {
+          "name": "Chris Henry",
+          "party": "Progressive, Pacific Green"
+        }
+      ]
+    },
+    {
+      "office": "Governor",
+      "candidates": [
+        {
+          "name": "Brett Smith",
+          "party": "Pacific Green"
+        },
+        {
+          "name": "Tina Kotek",
+          "party": "Democratic, Working Families"
+        },
+        {
+          "name": "Christine Drazan",
+          "party": "Republican, Libertarian"
+        }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        {
+          "name": "Barbara J Kahl",
+          "party": "Republican"
+        },
+        {
+          "name": "Suzanne Bonamici",
+          "party": "Democratic, Working Families"
+        }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        {
+          "name": "Chris Beck",
+          "party": "Democratic, Independent"
+        },
+        {
+          "name": "Cliff Bentz",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        {
+          "name": "Maxine E Dexter",
+          "party": "Democratic"
+        },
+        {
+          "name": "Loran Ayles",
+          "party": "Republican"
+        }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        {
+          "name": "Monique DeSpain",
+          "party": "Republican, Libertarian"
+        },
+        {
+          "name": "Val Hoyle",
+          "party": "Democratic, Working Families"
+        },
+        {
+          "name": "Justin Filip",
+          "party": "Pacific Green, Progressive"
+        }
+      ]
+    },
+    {
+      "district": 5,
+      "candidates": [
+        {
+          "name": "Janelle S Bynum",
+          "party": "Democratic"
+        },
+        {
+          "name": "Andrea Townsend",
+          "party": "Pacific Green"
+        },
+        {
+          "name": "Patti Adair",
+          "party": "Republican, Libertarian"
+        }
+      ]
+    },
+    {
+      "district": 6,
+      "candidates": [
+        {
+          "name": "Andrea Salinas",
+          "party": "Democratic, Independent"
+        },
+        {
+          "name": "David Russ",
+          "party": "Republican"
+        }
+      ]
+    }
+  ],
+  "measures": [],
+  "measureEffective": "2026-12-03",
+  "measureEffectiveNote": "No statewide measure is on the November 3, 2026 Oregon ballot (the Secretary of State's Upcoming Elections page says so; Measure 120, the transportation-tax referendum, was moved to the May 19, 2026 primary by SB 1599 and failed), so nothing takes effect. Rule for reference: under Or. Const. art. IV, sec. 1(4)(d), an initiated or referred measure approved by the voters takes effect 30 days after the election unless it specifies otherwise; 30 days after Nov 3, 2026 is Dec 3, 2026.",
+  "sources": [
+    "https://sos.oregon.gov/voting/Pages/current-election.aspx",
+    "https://sos.oregon.gov/elections/Voters-Pamphlet/Pages/Voters-Pamphlet-English.aspx",
+    "https://sos.oregon.gov/elections/Voters-Pamphlet/Documents/VP_G26-Book13_web.pdf",
+    "https://sos.oregon.gov/elections/Voters-Pamphlet/Documents/VP_G26-Book19_web.pdf",
+    "https://sos.oregon.gov/elections/Voters-Pamphlet/Documents/VP_G26-Book4_web.pdf",
+    "https://sos.oregon.gov/elections/Voters-Pamphlet/Documents/VP_G26-Book1_web.pdf",
+    "https://sos.oregon.gov/elections/Voters-Pamphlet/Documents/VP_G26-Book8_web.pdf",
+    "https://sos.oregon.gov/elections/Voters-Pamphlet/Documents/VP_G26-Book10_web.pdf",
+    "https://sos.oregon.gov/elections/Voters-Pamphlet/Documents/VP_G26-Book17_web.pdf",
+    "https://www.thegreenpapers.com/G26/OR",
+    "https://en.wikipedia.org/wiki/2026_Oregon_Commissioner_of_Labor_election",
+    "https://en.wikipedia.org/wiki/2026_Oregon_elections"
+  ],
+  "notes": [
+    "Candidates, party labels and order are from the 'List of Candidates & Measures' in the official 2026 General Election State Voters' Pamphlet, which the Secretary of State describes as 'a complete listing of federal and state candidates filed for the November 3, 2026, General Election' and lists 'by position, in ballot order'. Seven county editions (Books 1, 4, 8, 10, 13, 17, 19) were read and cover all six districts; the statewide lists match across all seven.",
+    "Oregon allows fusion: each candidate's nominating parties are combined into one label in the order the pamphlet prints them. The pamphlet prints 'Democrat'; it is spelled 'Democratic' here to match other states. 'Independent' is the Independent Party of Oregon, as printed. Names are as printed (the pamphlet uses no periods after middle initials, e.g. 'Barbara J Kahl').",
+    "Labor Commissioner is not on the November ballot: the nonpartisan race was decided at the May 19, 2026 primary, which Christina Stephenson won with a majority (63.2%). No statewide judicial race (Supreme Court, Court of Appeals, Tax Court) appears in the pamphlet's November candidate lists either.",
+    "No statewide ballot measures: the Secretary of State's Upcoming Elections page says 'There are no statewide ballot measures on the ballot this election.'",
+    "Oregon votes by mail. Ballots must reach a drop box or county elections office by 8 p.m. on Nov 3 (mailed ballots postmarked by Election Day count if received within 7 days). Most of the state is Pacific (PST, UTC-8 after DST ends Nov 1), so 8 PM PST = 2026-11-04T04:00:00Z. The Mountain-time part of Malheur County closes at 8 PM MST = 03:00Z, an hour earlier.",
+    "WebFetch cannot read the pamphlet PDFs; their text was pulled locally by decompressing the streams with Python's standard library and decoding them through the fonts' ToUnicode maps. The output read cleanly."
+  ],
+  "unconfirmed": [
+    "Exact ballot-face party wording ('Democrat' vs 'Democratic') was not checked against a county sample ballot; the pamphlet prints 'Democrat'.",
+    "Ballot order: Oregon rotates candidate order by district, so the order given (pamphlet order) may not match every county's ballot.",
+    "The Labor Commissioner May result is from Wikipedia and The Green Papers; the official May 2026 results abstract was not read (the official November candidate lists are consistent with no November race).",
+    "Candidate changes after the pamphlet went to print (late September) were not checked against an official source. The Green Papers (FEC data to Oct 14) lists the same candidates and nominations, though its fuller names (e.g. 'Andrea Thorn Townsend', 'Patti J. Adair', 'Loran C. Ayles') differ from the pamphlet's."
+  ]
+}
