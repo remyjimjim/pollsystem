@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — South Dakota on local
+
+**Changed:** SD: one ballot for the whole state: U.S. Senate (Rounds vs Bengs; the Democratic nominee withdrew), Gov/Lt Gov, 6 other statewide offices, and the at-large House race. Amendments I, J, K and L, with the Attorney General's titles and explanations from the official pamphlet.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `b0441f5`
+
+---
+
 ## 2026-10-23 — North Dakota on local
 
 **Changed:** ND: one ballot for the whole state. 9 statewide contests (no Senate or Governor race) and the at-large House race (4 candidates). Constitutional Measure 1 (60% for amendments) and Initiated Measure 2 (free school meals). From official SoS lists and measure PDFs.
