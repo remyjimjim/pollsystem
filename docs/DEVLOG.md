@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Virginia on local
+
+**Changed:** VA: U.S. Senate (Warner, Mizusawa), Questions 1–3 (reproductive freedom, marriage, voting rights), 11 district ballots on the 2021 map. The 2026 redistricting amendment was nullified by the Supreme Court of Virginia. All of it comes from the Department of Elections' lists.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `751ed3f`
+
+---
+
 ## 2026-10-23 — Kentucky on local
 
 **Changed:** KY: U.S. Senate (open seat; Booker, Barr, Campbell), Constitutional Amendment 1 (no pardons near a governor's election), 6 district ballots, from the Secretary of State's filings. Judicial seats are elected by district, so none are listed. The effective date (Nov 23) is a stand-in (see `KY.md`).
