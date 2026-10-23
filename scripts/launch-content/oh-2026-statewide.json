@@ -1,0 +1,124 @@
+{
+  "_about": "Ohio, Nov 3 2026, built by build-state.py from docs/launch-content/research/OH.json (sources and gaps in OH.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Ohio: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      36
+    ],
+    "closeDate": "2026-11-04T00:30:00Z",
+    "candidates": [
+      {
+        "name": "Sherrod Brown",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate (special election, unexpired term ending 1/3/2029)"
+      },
+      {
+        "name": "Jon Husted",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate (special election, unexpired term ending 1/3/2029)"
+      },
+      {
+        "name": "William B. Redpath",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senate (special election, unexpired term ending 1/3/2029)"
+      },
+      {
+        "name": "Greg Levy",
+        "affiliation": "Other-party candidate",
+        "officeName": "U.S. Senate (special election, unexpired term ending 1/3/2029)"
+      },
+      {
+        "name": "Amy Acton / David Pepper",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Vivek Ramaswamy / Robert A. McColley",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Don Kissick / James L. Mills",
+        "affiliation": "Libertarian",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "John J. Kulewicz",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Keith Faber",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Allison Russo",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Robert Sprague",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Tom Pruss",
+        "affiliation": "Libertarian",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Annette Blackwell",
+        "affiliation": "Democratic",
+        "officeName": "Auditor of State"
+      },
+      {
+        "name": "Frank LaRose",
+        "affiliation": "Republican",
+        "officeName": "Auditor of State"
+      },
+      {
+        "name": "Seth Walsh",
+        "affiliation": "Democratic",
+        "officeName": "Treasurer of State"
+      },
+      {
+        "name": "Jay Edwards",
+        "affiliation": "Republican",
+        "officeName": "Treasurer of State"
+      },
+      {
+        "name": "Marilyn Zayas",
+        "affiliation": "Democratic",
+        "officeName": "Justice of the Supreme Court (term commencing 1/1/2027)"
+      },
+      {
+        "name": "Daniel R. Hawkins",
+        "affiliation": "Republican",
+        "officeName": "Justice of the Supreme Court (term commencing 1/1/2027)"
+      },
+      {
+        "name": "Jennifer Brunner",
+        "affiliation": "Democratic",
+        "officeName": "Justice of the Supreme Court (term commencing 1/2/2027)"
+      },
+      {
+        "name": "Colleen O'Donnell",
+        "affiliation": "Republican",
+        "officeName": "Justice of the Supreme Court (term commencing 1/2/2027)"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Ohio Issue 3: Photo identification requirement for voting",
+      "summary": "Proposed Constitutional Amendment\nProposed by Joint Resolution of the General Assembly\nTo enact Section 5 of Article V of the Constitution of the State of Ohio\nA majority yes vote is required for the adoption of Section 5.\nThis proposed amendment would:\n• Require voters to present an approved form of government-issued photo identification in order to vote.\n• Allow state law to provide for an alternative method of verifying a voter’s identity for a voter who has a sincere religious objection to being photographed and, therefore, does not possess an approved form of government-issued photo identification.\n• Require that voters who do not vote in person provide an approved form of government-issued photo identification, unless the law authorizes those persons to vote by providing a signature and at least one other specified unique identifier.\n• Define approved forms of government-issued photo identification as an unexpired Ohio driver license or state identification card; a United States passport or passport card; or a United States military identification card, Ohio National Guard identification card, or United States Department of Veterans Affairs identification card.\nIf approved, the amendment shall take effect immediately.\nA \"YES\" vote means approval of the amendment. A \"NO\" vote means disapproval of the amendment.\nSHALL THE AMENDMENT BE APPROVED?\n\nIn short: Would add a requirement to the Ohio Constitution that voters present an approved government-issued photo ID to vote, with a religious-objection alternative and a possible signature-plus-identifier option for voters who do not vote in person.\n\nOfficial ballot language. Source: https://www.ohiosos.gov/assets/certified-ballot-language-08-03-2026.pdf",
+      "effectiveDate": "2026-11-03",
+      "closeDate": "2026-11-04T00:30:00Z"
+    }
+  ]
+}

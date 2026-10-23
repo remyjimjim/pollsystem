@@ -1,0 +1,366 @@
+{
+  "_about": "Ohio, Nov 3 2026, built by build-state.py from docs/launch-content/research/OH.json (sources and gaps in OH.md). One ballot per district, each including \"2026 Midterm · Ohio: statewide races & measures\".",
+  "elections": [
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 1",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Greg Landsman",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Eric Conroy",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 1"
+        },
+        {
+          "name": "Nathan Weise",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 1"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 2",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Jen Mazzuckelli",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 2"
+        },
+        {
+          "name": "David Taylor",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 2"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 3",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Joyce Beatty",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 3"
+        },
+        {
+          "name": "Cleophus Dulaney",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 3"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 4",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Joshua Kolasinski",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Jim Jordan",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 4"
+        },
+        {
+          "name": "Tracey Tackett",
+          "affiliation": "No party listed",
+          "officeName": "U.S. Representative, District 4"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 5",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Brian A. Shaver",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Bob Latta",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 5"
+        },
+        {
+          "name": "Michael J. Veloff",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 5"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 6",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Elizabeth Kirtley",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 6"
+        },
+        {
+          "name": "Michael Rulli",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 6"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 7",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Brian Poindexter",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 7"
+        },
+        {
+          "name": "Max Miller",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 7"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 8",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Vanessa Enoch",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 8"
+        },
+        {
+          "name": "Warren Davidson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 8"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 9",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Marcy Kaptur",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 9"
+        },
+        {
+          "name": "Derek Merrin",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 9"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 10",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Kristina Knickerbocker",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Mike Turner",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 10"
+        },
+        {
+          "name": "Thomas McMasters",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 10"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 11",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Shontel Brown",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 11"
+        },
+        {
+          "name": "Mike Kirchner",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 11"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 12",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Jerrad Christian",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 12"
+        },
+        {
+          "name": "Troy Balderson",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 12"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 13",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Emilia Sykes",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Carey Coleman",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 13"
+        },
+        {
+          "name": "Sandeep Dixit",
+          "affiliation": "No party listed",
+          "officeName": "U.S. Representative, District 13"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 14",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Maria Jukic",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 14"
+        },
+        {
+          "name": "David P. Joyce",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 14"
+        }
+      ]
+    },
+    {
+      "pollTypeId": 1,
+      "title": "2026 Midterm Ohio District 15",
+      "date": "2026-11-03",
+      "scopeLevel": "STATE",
+      "regionIds": [
+        36
+      ],
+      "closeDate": "2026-11-04T00:30:00Z",
+      "candidates": [
+        {
+          "name": "Don Leonard",
+          "affiliation": "Democratic",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Mike Carey",
+          "affiliation": "Republican",
+          "officeName": "U.S. Representative, District 15"
+        },
+        {
+          "name": "Brennan Barrington",
+          "affiliation": "Libertarian",
+          "officeName": "U.S. Representative, District 15"
+        }
+      ]
+    }
+  ],
+  "includeElectionTitled": "2026 Midterm · Ohio: statewide races & measures"
+}
