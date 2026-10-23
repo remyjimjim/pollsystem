@@ -1,0 +1,99 @@
+{
+  "_about": "Iowa, Nov 3 2026, built by build-state.py from docs/launch-content/research/IA.json (sources and gaps in IA.md).",
+  "election": {
+    "pollTypeId": 1,
+    "title": "2026 Midterm · Iowa: statewide races & measures",
+    "date": "2026-11-03",
+    "scopeLevel": "STATE",
+    "regionIds": [
+      16
+    ],
+    "closeDate": "2026-11-04T02:00:00Z",
+    "candidates": [
+      {
+        "name": "Ashley Hinson",
+        "affiliation": "Republican",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Josh Turek",
+        "affiliation": "Democratic",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Thomas Laehn",
+        "affiliation": "Libertarian",
+        "officeName": "U.S. Senate"
+      },
+      {
+        "name": "Zach Lahn / Derek Wulf",
+        "affiliation": "Republican",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Rob Sand / Dave Muhlbauer",
+        "affiliation": "Democratic",
+        "officeName": "Gov / Lt Gov"
+      },
+      {
+        "name": "Paul D. Pate",
+        "affiliation": "Republican",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Ryan Peterman",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of State"
+      },
+      {
+        "name": "Chris Cournoyer",
+        "affiliation": "Republican",
+        "officeName": "Auditor of State"
+      },
+      {
+        "name": "Taylor Wettach",
+        "affiliation": "Democratic",
+        "officeName": "Auditor of State"
+      },
+      {
+        "name": "Roby Smith",
+        "affiliation": "Republican",
+        "officeName": "Treasurer of State"
+      },
+      {
+        "name": "John Norwood",
+        "affiliation": "Democratic",
+        "officeName": "Treasurer of State"
+      },
+      {
+        "name": "Mike Naig",
+        "affiliation": "Republican",
+        "officeName": "Secretary of Agriculture"
+      },
+      {
+        "name": "Chris Jones",
+        "affiliation": "Democratic",
+        "officeName": "Secretary of Agriculture"
+      },
+      {
+        "name": "Brenna Bird",
+        "affiliation": "Republican",
+        "officeName": "Attorney General"
+      },
+      {
+        "name": "Nate Willems",
+        "affiliation": "Democratic",
+        "officeName": "Attorney General"
+      }
+    ]
+  },
+  "ballotMeasures": [
+    {
+      "pollTypeId": 3,
+      "title": "2026 Midterm · Iowa Constitutional Amendment - Statewide Public Measure 1",
+      "summary": "Shall the following amendment to the Constitution be adopted? Summary: Provides that any bill to increase the individual income tax rate or the corporate income tax rate, or the rate of any other type of tax based upon income or legal and special reserves, shall require the affirmative votes of at least two-thirds of the members elected to each house of the legislature for passage. Further, the two-thirds majority vote requirement applies to the passage of a bill to establish a new tax on any type of income or legal and special reserves imposed by the state. The requirement excludes taxes imposed at the option of a local government. A lawsuit challenging the proper enactment of a bill under this section must be filed no later than one year following the enactment.\n\nIn short: Would add a new Article XIII to the Iowa Constitution requiring a two-thirds vote of the members elected to each legislative chamber to raise state income tax rates or create a new state income tax, excluding local-option taxes.\n\nOfficial ballot language. Source: https://gis.linncountyiowa.gov/web-data/elections/year/2026/20261103GE/sb/067.pdf",
+      "effectiveDate": "2026-11-30",
+      "closeDate": "2026-11-04T02:00:00Z"
+    }
+  ]
+}

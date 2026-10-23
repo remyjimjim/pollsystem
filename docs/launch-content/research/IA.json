@@ -1,0 +1,127 @@
+{
+  "state": "Iowa",
+  "abbr": "IA",
+  "pollCloseLocal": "8:00 PM",
+  "pollCloseUtc": "2026-11-04T02:00:00Z",
+  "statewide": [
+    {
+      "office": "U.S. Senate",
+      "candidates": [
+        { "name": "Ashley Hinson", "party": "Republican" },
+        { "name": "Josh Turek", "party": "Democratic" },
+        { "name": "Thomas Laehn", "party": "Libertarian" }
+      ]
+    },
+    {
+      "office": "Gov / Lt Gov",
+      "candidates": [
+        { "name": "Zach Lahn / Derek Wulf", "party": "Republican" },
+        { "name": "Rob Sand / Dave Muhlbauer", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Secretary of State",
+      "candidates": [
+        { "name": "Paul D. Pate", "party": "Republican" },
+        { "name": "Ryan Peterman", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Auditor of State",
+      "candidates": [
+        { "name": "Chris Cournoyer", "party": "Republican" },
+        { "name": "Taylor Wettach", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Treasurer of State",
+      "candidates": [
+        { "name": "Roby Smith", "party": "Republican" },
+        { "name": "John Norwood", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Secretary of Agriculture",
+      "candidates": [
+        { "name": "Mike Naig", "party": "Republican" },
+        { "name": "Chris Jones", "party": "Democratic" }
+      ]
+    },
+    {
+      "office": "Attorney General",
+      "candidates": [
+        { "name": "Brenna Bird", "party": "Republican" },
+        { "name": "Nate Willems", "party": "Democratic" }
+      ]
+    }
+  ],
+  "house": [
+    {
+      "district": 1,
+      "candidates": [
+        { "name": "Mariannette Miller-Meeks", "party": "Republican" },
+        { "name": "Christina Bohannan", "party": "Democratic" },
+        { "name": "Michael Bridgford", "party": "No Party" }
+      ]
+    },
+    {
+      "district": 2,
+      "candidates": [
+        { "name": "Joe Mitchell", "party": "Republican" },
+        { "name": "Lindsay James", "party": "Democratic" },
+        { "name": "Rick Stewart", "party": "Libertarian" },
+        { "name": "Dave Bushaw", "party": "No Party" }
+      ]
+    },
+    {
+      "district": 3,
+      "candidates": [
+        { "name": "Zach Nunn", "party": "Republican" },
+        { "name": "Sarah Trone Garriott", "party": "Democratic" }
+      ]
+    },
+    {
+      "district": 4,
+      "candidates": [
+        { "name": "Chris McGowan", "party": "Republican" },
+        { "name": "Dave Dawson", "party": "Democratic" }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "designation": "Constitutional Amendment - Statewide Public Measure 1",
+      "subject": "Two-thirds legislative vote to raise or create state income taxes",
+      "ballotTitle": "Shall the following amendment to the Constitution be adopted? Summary: Provides that any bill to increase the individual income tax rate or the corporate income tax rate, or the rate of any other type of tax based upon income or legal and special reserves, shall require the affirmative votes of at least two-thirds of the members elected to each house of the legislature for passage. Further, the two-thirds majority vote requirement applies to the passage of a bill to establish a new tax on any type of income or legal and special reserves imposed by the state. The requirement excludes taxes imposed at the option of a local government. A lawsuit challenging the proper enactment of a bill under this section must be filed no later than one year following the enactment.",
+      "summary": "Would add a new Article XIII to the Iowa Constitution requiring a two-thirds vote of the members elected to each legislative chamber to raise state income tax rates or create a new state income tax, excluding local-option taxes.",
+      "source": "https://gis.linncountyiowa.gov/web-data/elections/year/2026/20261103GE/sb/067.pdf"
+    }
+  ],
+  "measureEffective": "2026-11-30",
+  "measureEffectiveNote": "Under Iowa Const. Art. X, sec. 1, an amendment approved by a majority of electors voting on it becomes part of the constitution; Iowa Code 49A.8 has the board of state canvassers declare the result, and Iowa Code 50.38 requires the state canvass no later than 27 days after the election, i.e. by Monday, November 30, 2026, used here as the representative date.",
+  "sources": [
+    "https://web.archive.org/web/20261017130559/https://sos.iowa.gov/sites/default/files/2026-08/2026%20General%20-%20Candidate%20List%20Database%20-%20All%20Elections_0.pdf",
+    "https://sos.iowa.gov/sites/default/files/2026-08/2026%20General%20-%20Candidate%20List%20Database%20-%20All%20Elections_0.pdf",
+    "https://gis.linncountyiowa.gov/web-data/elections/year/2026/20261103GE/sb/067.pdf",
+    "https://cerrogordo.gov/files/candidate_list/2026_general_election_38511.pdf",
+    "https://www.legis.iowa.gov/docs/code/2026/50.38.pdf",
+    "https://www.legis.iowa.gov/docs/code/2026/49A.8.pdf",
+    "https://www.thegreenpapers.com/G26/IA",
+    "https://jaspercountyelections.iowa.gov/elections/info/november_3rd_general_election_2026_11_03/"
+  ],
+  "notes": [
+    "Candidates are from the Iowa Secretary of State 'Candidate List, November 3, 2026 General Election' (Last Updated 8/14/2026 12:25 PM). sos.iowa.gov sits behind a Cloudflare challenge, so the PDF was read from the Wayback Machine capture of 2026-10-17 and decoded with a Python standard-library extractor.",
+    "Statewide names and order were cross-checked against the official Linn County sample ballot (Ballot Style 67, IA-2) and the Cerro Gordo County Auditor list (revised 9/3/2026); all agree. The Green Papers agrees on every race, including IA-1, IA-3 and IA-4.",
+    "Party labels follow the SoS list; the ballot face prints them as 'Republican Party', 'Democratic Party', 'Libertarian Party'. Bridgford and Bushaw are 'No Party' on the SoS list; the Linn ballot prints no party line under Bushaw.",
+    "Iowa votes for Governor and Lieutenant Governor as one team ('Vote for no more than one team'); running mates Derek Wulf (R) and Dave Muhlbauer (D) were named after the primary.",
+    "The ballot also carries Court of Appeals retention questions (John M. Sandy, Julie A. Schumacher, Sharon Soorholtz Greer); these yes/no retentions are not included as races. No Supreme Court justice retention appeared on the sample ballot.",
+    "The amendment is printed under the heading 'Constitutional Amendment' as 'Statewide Public Measure 1'; ballotTitle is the question and official summary. The full text printed after it adds that a bill not challenged within one year is considered properly enacted, that each covered bill must say it is subject to the requirement, and that the General Assembly shall enact implementing laws.",
+    "Iowa is entirely in the Central time zone; polls are open 7 AM to 8 PM, so they close 8:00 PM CST (UTC-6) = 02:00 UTC on Nov 4, 2026."
+  ],
+  "unconfirmed": [
+    "No candidate changes after the SoS list's 8/14/2026 update were checked against the live SoS site (blocked); the Oct 2026 Linn sample ballot and 9/3 Cerro Gordo list match it for statewide and IA-2 only. IA-1, IA-3 and IA-4 rest on the SoS list plus The Green Papers, with no county sample ballot read for those districts.",
+    "Whether 'No Party' or nothing is printed for Bridgford (IA-1) on the ballot face was not seen; Bushaw's IA-2 ballot shows no label.",
+    "Iowa Const. Art. X, sec. 1 wording was not re-read from an official page this session (the legis.iowa.gov constitution URL tried returned 404); the effective-date rule is from Iowa Code 49A.8 and 50.38 plus the known constitutional text. Exact canvass date may be earlier than Nov 30.",
+    "Poll hours (7 AM to 8 PM) come from county election pages (Jasper, Crawford) and US Vote Foundation, not from sos.iowa.gov directly."
+  ]
+}

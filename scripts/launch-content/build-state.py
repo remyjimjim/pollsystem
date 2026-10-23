@@ -75,7 +75,9 @@ def build(abbr, ids):
     def election(title, cands):
         return {"pollTypeId": 1, "title": title, "date": DATE, "scopeLevel": "STATE", "regionIds": [sid], "closeDate": close, "candidates": cands}
     # The app takes one choice per office; a multi-seat race says so.
-    def office(s): return s['office'] + (f" (vote for {s['voteFor']} on the ballot; pick your top choice here)" if s.get('voteFor', 1) > 1 else "")
+    RCV = " (ranked-choice on the ballot; pick your first choice here)"
+    def office(s): return s['office'] + (f" (vote for {s['voteFor']} on the ballot; pick your top choice here)" if s.get('voteFor', 1) > 1 else "") + (RCV if s.get('rankedChoice') else "")
+    hrcv = RCV if r.get('houseRankedChoice') else ""
     statewide = [cand(c, office(s)) for s in r.get('statewide', []) for c in s['candidates']]
     # A short designation ("Amendment 3") gets its subject; a descriptive one
     # (North Carolina's contest titles) stands alone.
@@ -89,7 +91,7 @@ def build(abbr, ids):
         if os.path.exists(out + suffix): os.remove(out + suffix)
     if SEATS[abbr] == 1:
         h = r['house'][0]
-        house = [cand(c, "U.S. Representative, At-Large") for c in h['candidates']]
+        house = [cand(c, "U.S. Representative, At-Large" + hrcv) for c in h['candidates']]
         doc = {"_about": about + " One House seat, so one ballot for the whole state.",
                "election": election(f"2026 Midterm {state}", statewide + house)}
         if measures: doc["ballotMeasures"] = measures
@@ -104,7 +106,7 @@ def build(abbr, ids):
         json.dump(doc, open(out + 'statewide.json', 'w'), indent=2, ensure_ascii=False)
     hdoc = {"_about": about + " One ballot per district" + (f", each including \"{sw_title}\"." if sw_title else "."),
             "elections": [election(f"2026 Midterm {state} District {h['district']}",
-                                   [cand(c, f"U.S. Representative, District {h['district']}") for c in h['candidates']])
+                                   [cand(c, f"U.S. Representative, District {h['district']}" + hrcv) for c in h['candidates']])
                           for h in sorted(r['house'], key=lambda h: h['district']) if h['candidates'] or sw_title]}
     if sw_title: hdoc["includeElectionTitled"] = sw_title
     json.dump(hdoc, open(out + 'house.json', 'w'), indent=2, ensure_ascii=False)
