@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-23 — Michigan and Illinois on local
+
+**Changed:**
+
+- MI: 9 statewide races, 2 proposals, 13 district ballots.
+  - Candidates come from the official candidate listing.
+  - The proposals' wording comes only from news reports: no official page was
+    found (see `MI.md`).
+- IL: 6 statewide races, no measures, 17 district ballots.
+  - Data comes from the State Board of Elections' candidate search.
+- Research format: `voteFor` marks multi-seat races, such as Michigan's boards
+  and Supreme Court ("vote for 2"). The app records one choice per office, so
+  the office says "(vote for 2 on the ballot; pick your top choice here)".
+
+**Verified:** both states built (district counts checked), loaded and
+published on local.
+
+**Commit:** `691050b`
+
+---
+
 ## 2026-10-23 — All-states pipeline; first six states on local
 
 **Requested:**
