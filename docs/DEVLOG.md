@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Alaska on local
+
+**Changed:** AK: one ballot for the whole state ("2026 Midterm Alaska"): U.S. Senate (4), Gov/Lt Gov (4 tickets), the at-large House seat (4), and Ballot Measures 2 (repeal top-four and ranked-choice) and 3 (citizens-only voting). Ranked-choice is still in effect for Nov 3, so every race says so. All of it comes from elections.alaska.gov sample ballots and lists; nothing was cross-checked (see `AK.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `ba71bdc`
+
+---
+
 ## 2026-10-23 — Rhode Island on local
 
 **Changed:** RI: 6 statewide races, Questions 1–5 (bonds totalling $600M, matching the enacted FY2027 budget), 2 district ballots. Every RI election site returned 403, so the candidates and the question wording rest on Ballotpedia and Wikipedia, which agree (see `RI.md`).
