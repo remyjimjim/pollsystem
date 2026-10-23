@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-23 — Launch content: Washington's 10 House elections drafted
+
+**Requested:**
+
+> Looks real good, keep Dec 3, now do the 10 district elections
+
+**Changed:**
+
+- `06d1b52`: `wa-2026-house.json` (10 elections, official ballot order and
+  party-preference wording). `create-polls.py` now takes a list of elections
+  and several ids to publish.
+- The measures' Dec 3 effective date is kept, as the owner confirmed.
+
+**Verified:**
+
+- Created locally as drafts (elections 260–269).
+- All 10 listed on the creator dashboard as DRAFT, closing on election night.
+
+**Commits:** `06d1b52`
+
+---
+
 ## 2026-10-23 — Keep Python bytecode out of git
 
 **Requested:** (cleanup after the launch-content commit)
