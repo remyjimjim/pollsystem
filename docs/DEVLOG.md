@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-23 — "Please make a selection for" links to the office
+
+**Requested:**
+
+> In prod, when I vote yes on a ballot measure and click 'Submit votes' and
+> correctly get the error msg "Please make a selection for: Supreme Court
+> Justice Position 1", can we make that a link back to "Supreme Court Justice
+> Position 1"?  But can we make this change on local-docker first?
+
+**Changed:**
+
+- `82e9719`: the office in the message is now a link. It scrolls to the section,
+  focuses its first choice, and outlines the section in red until a choice
+  is made.
+- Also fixed: that message, and failed submissions, used to replace the
+  whole voting form, hiding everything already chosen. They now appear by
+  the Submit button.
+
+**Verified:**
+
+- Frontend 180/180.
+- Walked through on local-docker as demo-user-wash on the Supreme Court
+  election (local 259).
+- Not on prod yet.
+
+**Commits:** `82e9719`
+
+---
+
 ## 2026-10-23 — Washington launch content PUBLISHED on prod (verified)
 
 **Requested:**
