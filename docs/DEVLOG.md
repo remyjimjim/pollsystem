@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Missouri on local
+
+**Changed:** MO: State Auditor (no Senate race) and 5 measures: Amendments 3 (abortion and gender procedures for minors), 6, 7 and 8, and Proposition A (referendum on the 2025 congressional map). 8 district ballots on the 2022 map, which the state Supreme Court restored on Sep 3. Candidates come from the certified list (Aug 25). Measure titles come from Ballotpedia and St. Louis Public Radio, because the SoS measures page wouldn't load (see `MO.md`).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `1d0abb5`
+
+---
+
 ## 2026-10-23 — Alaska on local
 
 **Changed:** AK: one ballot for the whole state ("2026 Midterm Alaska"): U.S. Senate (4), Gov/Lt Gov (4 tickets), the at-large House seat (4), and Ballot Measures 2 (repeal top-four and ranked-choice) and 3 (citizens-only voting). Ranked-choice is still in effect for Nov 3, so every race says so. All of it comes from elections.alaska.gov sample ballots and lists; nothing was cross-checked (see `AK.md`).
