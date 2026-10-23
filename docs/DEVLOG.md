@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Utah on local
+
+**Changed:** UT: no statewide races in 2026, so the statewide election carries only Amendments A and B (the first measures-only election). 4 district ballots on the court-ordered map, 19 candidates. All of it comes from the Lieutenant Governor's Aug 28 certification.
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `b4eba56`
+
+---
+
 ## 2026-10-23 — Louisiana on local
 
 **Changed:** LA: Nov 3 is the U.S. Senate general (Davis vs Letlow; closed party primaries in May and June) but an open primary for the House, with a runoff on Dec 12. Each House office says so (new `houseOfficeNote`). Amendments 1–10. 6 district ballots on the Act 2 of 2026 map, 39 candidates. Candidates come from the Secretary of State's candidate lookup. I couldn't cross-check this myself: the session's web-search budget was used up (see `LA.md`).
