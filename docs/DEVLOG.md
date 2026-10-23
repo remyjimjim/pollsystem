@@ -61,6 +61,16 @@ logged.
 
 ---
 
+## 2026-10-23 — Oregon on local
+
+**Changed:** OR: U.S. Senate and Governor (fusion lines combined), no statewide measures (the Secretary of State says so), 6 district ballots, from the official Voters' Pamphlet. Labor Commissioner was decided in May. Ballots are due at 8 pm Pacific (04:00Z).
+
+**Verified:** built (district count checked), loaded and published on local.
+
+**Commit:** `a9428a7`
+
+---
+
 ## 2026-10-23 — Iowa on local
 
 **Changed:** IA: 7 statewide races and Statewide Public Measure 1 (a two-thirds vote to raise income tax). 4 district ballots. Candidates come from the Secretary of State's list (Wayback copy of Oct 17) and match the Linn County sample ballot. Also: build-state.py now labels ranked-choice races (`rankedChoice`, `houseRankedChoice`) for Maine and Alaska.
