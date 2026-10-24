@@ -21,6 +21,7 @@ app:
     expiration-ms: 3600000
   results:
     k-anonymity-threshold: 3  # lower threshold makes results tests easier
+    group-minimum: 3
   rate-limit:
     enabled: false  # RateLimitTest turns it on
   creator-requests:

@@ -35,7 +35,7 @@ interface QuestionnaireResultsDto {
   purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
   purviewAreas: string[]
   /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
-  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number; groupMinimum?: number }
   /** Respondents inside / outside the purview; null = withheld (a small group). */
   purviewCounts?: { inside: number | null; outside: number | null }
 }
@@ -65,7 +65,7 @@ interface ElectionResultsDto {
   purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
   purviewAreas: string[]
   /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
-  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number; groupMinimum?: number }
   /** Respondents inside / outside the purview; null = withheld (a small group). */
   purviewCounts?: { inside: number | null; outside: number | null }
   /** The rest of the ballot: included elections and every ballot measure on it. */
@@ -89,7 +89,7 @@ interface BallotMeasureResultsDto {
   purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
   purviewAreas: string[]
   /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
-  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number; groupMinimum?: number }
   /** Respondents inside / outside the purview; null = withheld (a small group). */
   purviewCounts?: { inside: number | null; outside: number | null }
 }
@@ -285,7 +285,7 @@ const data = computed<{
   purviewLevel: 'NATIONAL' | 'STATE' | 'COUNTY' | 'ZIP'
   purviewAreas: string[]
   /** Small-poll privacy: HIDDEN (< minimum respondents), STEPPED (public, every `step`), LIVE (super). */
-  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number }
+  visibility: { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number; minimum: number; step: number; groupMinimum?: number }
   /** Respondents inside / outside the purview; null = withheld (a small group). */
   purviewCounts?: { inside: number | null; outside: number | null }
 } | null>(() => {
@@ -524,9 +524,12 @@ function purviewCount(n: number | null): string {
 
       <!-- Small-poll privacy: a caption for everyone but supers; nothing until the minimum. -->
       <div v-if="data && !isLive" class="mb-4 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700" data-test="privacy-caption">
-        {{ type === 'questionnaire'
-          ? $t('results.privacyAnswered', { k: data.visibility.minimum, step: data.visibility.step })
-          : $t('results.privacyVoted', { k: data.visibility.minimum, step: data.visibility.step }) }}
+        <!-- A minimum of 1 (launch): results are live, only narrowed groups have a minimum. -->
+        {{ data.visibility.minimum <= 1
+          ? $t('results.privacyLive', { g: data.visibility.groupMinimum ?? 4 })
+          : type === 'questionnaire'
+            ? $t('results.privacyAnswered', { k: data.visibility.minimum, step: data.visibility.step })
+            : $t('results.privacyVoted', { k: data.visibility.minimum, step: data.visibility.step }) }}
       </div>
       <p v-if="data && isLive" class="mb-4 text-xs font-semibold text-violet-800" data-test="live-note">{{ $t('results.superLive') }}</p>
 

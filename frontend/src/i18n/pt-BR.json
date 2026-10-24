@@ -260,6 +260,7 @@
     "poll404": "Enquete não encontrada",
     "loadFailed": "Falha ao carregar os resultados",
     "privacyVoted": "Por privacidade, os resultados só aparecem depois que pelo menos {k} pessoas votarem. Os resultados são atualizados a cada {step} eleitores.",
+    "privacyLive": "Os resultados são atualizados conforme as pessoas respondem. Por privacidade, ao restringi-los a uma área, ou a quem está dentro ou fora da área da enquete, nada é mostrado para um grupo de menos de {g}.",
     "privacyAnswered": "Por privacidade, os resultados só aparecem depois que pelo menos {k} pessoas responderem. Os resultados são atualizados a cada {step} participantes.",
     "soFar": "Ninguém respondeu ainda. | Até agora 1 pessoa respondeu. | Até agora {n} pessoas responderam.",
     "superLive": "Visão de super: resultados ao vivo com números brutos.",

@@ -28,7 +28,7 @@ class PollParticipationService(
     private val purviews: PollPurviewService,
     private val privacy: ResultsPrivacy
 ) {
-    private val kThreshold: Int get() = privacy.k()
+    private val kThreshold: Int get() = privacy.groupMinimum()   // inside/outside groups (2026-10-24)
     @Transactional(readOnly = true)
     fun of(kind: PollKind, pollId: Long): Participation {
         // One zipcode per respondent (a respondent answers many questions or

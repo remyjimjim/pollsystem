@@ -68,7 +68,7 @@ class PollReportService(
     private val states: StateRepository,
     private val privacy: ResultsPrivacy
 ) {
-    private val k: Int get() = privacy.k()
+    private val k: Int get() = privacy.groupMinimum()   // the report is all groups: areas, days (2026-10-24)
     private data class Respondent(val zipcode: String?, val first: Instant, val changed: Boolean, val commented: Boolean)
 
     @Transactional(readOnly = true)

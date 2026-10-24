@@ -11,8 +11,13 @@ import java.time.Instant
 
 /**
  * The small-poll privacy threshold k: results hidden until k respondents,
- * public results in steps of k, groups under k withheld, the milestone email
- * at k. Normally app.results.k-anonymity-threshold (4; 3 in tests).
+ * public results in steps of k, the milestone email at k. Normally
+ * app.results.k-anonymity-threshold (1 since 2026-10-24: totals show from the
+ * first response; 3 in tests).
+ *
+ * A narrowed group (an area filter, or respondents inside/outside the poll's
+ * area) is withheld under [groupMinimum] (app.results.group-minimum, 4), so a
+ * lone respondent in a zipcode can't be picked out even when k is 1.
  *
  * Local development only (decided 2026-10-17): the Dev settings page can
  * override it, saved in app_flags so it survives rebuilds. The override is
@@ -22,6 +27,7 @@ import java.time.Instant
 @Component
 class ResultsPrivacy(
     @Value("\${app.results.k-anonymity-threshold:4}") val configured: Int,
+    @Value("\${app.results.group-minimum:4}") private val configuredGroupMinimum: Int,
     private val flags: AppFlagRepository,
     env: Environment
 ) {
@@ -32,6 +38,9 @@ class ResultsPrivacy(
     @Volatile private var override: Int? = null
 
     fun k(): Int = currentOverride() ?: configured
+
+    /** The smallest narrowed group shown: never below k. */
+    fun groupMinimum(): Int = maxOf(configuredGroupMinimum, k())
 
     /** The local override, or null (none set, or not local). */
     fun currentOverride(): Int? {

@@ -260,6 +260,7 @@
     "poll404": "Umfrage nicht gefunden",
     "loadFailed": "Ergebnisse konnten nicht geladen werden",
     "privacyVoted": "Aus Datenschutzgründen werden Ergebnisse erst angezeigt, wenn mindestens {k} Personen abgestimmt haben. Die Ergebnisse werden alle {step} Stimmen aktualisiert.",
+    "privacyLive": "Die Ergebnisse aktualisieren sich mit jeder Antwort. Aus Datenschutzgründen wird bei Eingrenzung auf ein Gebiet oder auf Personen inner- oder außerhalb des Umfragegebiets für eine Gruppe von weniger als {g} nichts angezeigt.",
     "privacyAnswered": "Aus Datenschutzgründen werden Ergebnisse erst angezeigt, wenn mindestens {k} Personen geantwortet haben. Die Ergebnisse werden alle {step} Antworten aktualisiert.",
     "soFar": "Noch hat niemand geantwortet. | Bisher hat 1 Person geantwortet. | Bisher haben {n} Personen geantwortet.",
     "superLive": "Super-Ansicht: Live-Ergebnisse mit Rohzahlen.",

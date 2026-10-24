@@ -299,6 +299,7 @@
     "poll404": "Poll not found",
     "loadFailed": "Failed to load results",
     "privacyVoted": "For privacy, results aren't shown until at least {k} people have voted. Results are updated every {step} voters.",
+    "privacyLive": "Results update as people respond. For privacy, narrowing them to an area, or to people inside or outside the poll's area, shows nothing for a group of fewer than {g}.",
     "privacyAnswered": "For privacy, results aren't shown until at least {k} people have answered. Results are updated every {step} respondents.",
     "soFar": "No one has responded yet. | 1 person has responded so far. | {n} people have responded so far.",
     "superLive": "Super view: live results with raw numbers.",

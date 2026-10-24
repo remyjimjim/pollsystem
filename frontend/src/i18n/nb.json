@@ -260,6 +260,7 @@
     "poll404": "Avstemning ikke funnet",
     "loadFailed": "Kunne ikke laste resultater",
     "privacyVoted": "Av personvernhensyn vises ikke resultatene før minst {k} personer har stemt. Resultatene oppdateres for hver {step} nye stemmer.",
+    "privacyLive": "Resultatene oppdateres etter hvert som folk svarer. Av personvernhensyn vises ingenting for en gruppe på færre enn {g} når du avgrenser til et område, eller til folk innenfor eller utenfor avstemningens område.",
     "privacyAnswered": "Av personvernhensyn vises ikke resultatene før minst {k} personer har svart. Resultatene oppdateres for hver {step} nye svar.",
     "soFar": "Ingen har svart ennå. | 1 person har svart så langt. | {n} personer har svart så langt.",
     "superLive": "Super-visning: sanntidsresultater med råtall.",

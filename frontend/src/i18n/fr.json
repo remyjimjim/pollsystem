@@ -260,6 +260,7 @@
     "poll404": "Sondage introuvable",
     "loadFailed": "Échec du chargement des résultats",
     "privacyVoted": "Pour la confidentialité, les résultats ne s'affichent qu'à partir de {k} votants. Ils sont mis à jour tous les {step} votants.",
+    "privacyLive": "Les résultats se mettent à jour au fil des réponses. Par confidentialité, les restreindre à une zone, ou aux personnes à l'intérieur ou à l'extérieur de la zone du sondage, n'affiche rien pour un groupe de moins de {g}.",
     "privacyAnswered": "Pour la confidentialité, les résultats ne s'affichent qu'à partir de {k} répondants. Ils sont mis à jour tous les {step} répondants.",
     "soFar": "Personne n'a encore répondu. | 1 personne a répondu jusqu'ici. | {n} personnes ont répondu jusqu'ici.",
     "superLive": "Vue super : résultats en direct avec les chiffres bruts.",

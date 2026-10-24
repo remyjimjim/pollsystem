@@ -37,7 +37,7 @@ test.describe(`viewer searches and views ballot-measure results (${STATE_INPUT.t
     const bm = await seedBallotMeasure({ zipcode: loc.zipcode })
     title = bm.title
     measureId = bm.id
-    await seedBallotResponses({ measureId, count: k - 1, zipcode: loc.zipcode })
+    if (k > 1) await seedBallotResponses({ measureId, count: k - 1, zipcode: loc.zipcode })
   })
 
   test('guest finds the measure; results stay hidden until k have voted, then show as percentages', async ({ page }) => {
@@ -60,9 +60,14 @@ test.describe(`viewer searches and views ballot-measure results (${STATE_INPUT.t
     await expect(page).toHaveURL(/\/polls\/ballot-measure\/\d+\/results/)
 
     // 4. k-1 votes: hidden. The caption says why, and how many have responded.
-    const caption = page.getByText(new RegExp(`For privacy, results aren't shown until at least ${k} people have voted`))
+    // At k = 1 (launch) results are live and the caption says so instead.
+    const caption = k <= 1
+      ? page.getByText(/Results update as people respond/)
+      : page.getByText(new RegExp(`For privacy, results aren't shown until at least ${k} people have voted`))
     await expect(caption).toBeVisible({ timeout: 15_000 })
-    await expect(page.getByText(new RegExp(`^${k - 1} (people have|person has) responded so far\\.`))).toBeVisible()
+    await expect(page.getByText(k > 1
+      ? new RegExp(`^${k - 1} (people have|person has) responded so far\\.`)
+      : /^No one has responded yet\./)).toBeVisible()
     await expect(page.getByText('%', { exact: false })).toHaveCount(0)
     await hold(page)
 

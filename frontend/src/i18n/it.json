@@ -260,6 +260,7 @@
     "poll404": "Sondaggio non trovato",
     "loadFailed": "Impossibile caricare i risultati",
     "privacyVoted": "Per la privacy, i risultati non vengono mostrati finché non hanno votato almeno {k} persone. I risultati si aggiornano ogni {step} votanti.",
+    "privacyLive": "I risultati si aggiornano man mano che le persone rispondono. Per la privacy, restringendoli a un'area, o a chi è dentro o fuori l'area del sondaggio, non viene mostrato nulla per un gruppo di meno di {g}.",
     "privacyAnswered": "Per la privacy, i risultati non vengono mostrati finché non hanno risposto almeno {k} persone. I risultati si aggiornano ogni {step} partecipanti.",
     "soFar": "Nessuno ha ancora risposto. | Finora ha risposto 1 persona. | Finora hanno risposto {n} persone.",
     "superLive": "Vista super: risultati in tempo reale con i numeri esatti.",

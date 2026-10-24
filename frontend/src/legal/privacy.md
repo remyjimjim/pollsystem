@@ -48,10 +48,12 @@ We don't sell your information.
 
 ## Who sees what
 
-- **The public** sees only **combined results**, as rounded percentages, and
-  only once a poll has a minimum number of respondents (currently 4). Results
-  then update in steps of that size. Groups smaller than that minimum are never
-  shown on their own.
+- **The public** sees only **combined results**, as rounded percentages,
+  updated as people respond. They never show who answered.
+- **Small groups are never shown.** Results can be narrowed to an area (a
+  state, county or zipcode), or to people inside or outside a poll's area.
+  A group of fewer than 4 respondents is then not shown, so no one's
+  answers can be picked out.
 - **Public comments** are shown without your name, under the same rules.
   Comments are private unless you make them public.
 - **Poll creators** see combined results and a report about their own polls:

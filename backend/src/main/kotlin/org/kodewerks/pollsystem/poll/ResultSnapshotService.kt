@@ -42,7 +42,9 @@ data class ResultsVisibility(
     /** Everyone who has responded so far (participation, not how they answered). */
     val respondentsSoFar: Int,
     val minimum: Int,
-    val step: Int
+    val step: Int,
+    /** The smallest area or purview group shown (a narrowed group under it is withheld). */
+    val groupMinimum: Int = minimum
 )
 
 internal fun pct(n: Int, of: Int): Int = if (of <= 0) 0 else (n * 100.0 / of).roundToInt()
@@ -170,9 +172,9 @@ class ResultsAccess(
         val base: List<Answer> = when {
             isSuper -> liveAnswers
             else -> snapshots.snapshot(kind, pollId)
-                ?: return PreparedResults(ResultsVisibility("HIDDEN", soFar, k, k), emptyList(), 0, false, filterMap)
+                ?: return PreparedResults(ResultsVisibility("HIDDEN", soFar, k, k, privacy.groupMinimum()), emptyList(), 0, false, filterMap)
         }
-        val visibility = ResultsVisibility(if (isSuper) "LIVE" else "STEPPED", soFar, k, k)
+        val visibility = ResultsVisibility(if (isSuper) "LIVE" else "STEPPED", soFar, k, k, privacy.groupMinimum())
         val purviewRows = purviews.purviewOf(kind, pollId)
         val split = purviewCounts(base, purviewRows, isSuper)
 
@@ -185,8 +187,9 @@ class ResultsAccess(
 
         val respondents = filtered.map { it.userId }.distinct().size
         val narrowed = geoZips != null || !(withinPurview && outsidePurview)
-        // Supers see raw numbers at all times; everyone else, no group under k.
-        if (!isSuper && narrowed && respondents < k) {
+        // Supers see raw numbers at all times; everyone else, no narrowed group
+        // under the group minimum (so one respondent in a zipcode isn't exposed).
+        if (!isSuper && narrowed && respondents < privacy.groupMinimum()) {
             return PreparedResults(visibility, emptyList(), 0, true, filterMap, split)
         }
         return PreparedResults(visibility, filtered, respondents, false, filterMap, split)
@@ -197,7 +200,8 @@ class ResultsAccess(
         val within = purviews.classifyZips(purviewRows, zipByUser.values)
         val inside = zipByUser.values.count { within[it] == true }
         val outside = zipByUser.size - inside
-        val safe = isSuper || ((inside == 0 || inside >= k) && (outside == 0 || outside >= k))
+        val g = privacy.groupMinimum()
+        val safe = isSuper || ((inside == 0 || inside >= g) && (outside == 0 || outside >= g))
         return if (safe) PurviewCounts(inside, outside) else PurviewCounts(null, null)
     }
 }
