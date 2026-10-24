@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-24 — Results threshold: 4 by default, 1 on local only
+
+**Requested:**
+
+> can we set the responses threshold to 1 for dev (local-docker) now then
+> figure out some stuff and set it back to 4 for all environments except dev
+> after the issues are worked out?
+
+**Changed:**
+
+- `app.results.k-anonymity-threshold` is back to **4**, so staging and prod
+  never change. `group-minimum: 4` stays: with k at 4 it changes nothing,
+  and it stays ready if totals go to 1 later.
+- The Privacy Policy and the viewer help page are back to the "at least 4,
+  in steps of 4" wording (restored from `09bf330^`).
+- Local is set to 1 through Dev settings (`PUT /api/dev/settings
+  {"resultsThreshold":1}`; 672 polls' results rebuilt).
+- Running the e2e suite locally clears that override; set it again
+  afterwards.
+
+**Commit:** `8841cd3`
+
+---
+
 ## 2026-10-24 — Results from the first vote; narrowed groups still need 4
 
 **Requested:**
