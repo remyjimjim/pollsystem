@@ -27,7 +27,17 @@ LANGUAGE sql IMMUTABLE STRICT AS $$
     SELECT CASE WHEN d = 'gmail.com' THEN replace(l, '.', '') ELSE l END || '@' || d FROM q
 $$;
 
-CREATE UNIQUE INDEX users_email_inbox_key ON users (email_key(email));
+-- As in V39: if some accounts are already aliases of one inbox, build a plain
+-- index and warn rather than stop the app from starting.
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM users GROUP BY email_key(email) HAVING count(*) > 1) THEN
+        RAISE WARNING 'V40: some accounts are aliases of one inbox; built a plain index, not a unique one';
+        CREATE INDEX users_email_inbox ON users (email_key(email));
+    ELSE
+        CREATE UNIQUE INDEX users_email_inbox_key ON users (email_key(email));
+    END IF;
+END $$;
 
 -- The card a member paid with (Stripe's card fingerprint), so accounts paid
 -- for with the same card can be flagged for review. Not unique: a household
