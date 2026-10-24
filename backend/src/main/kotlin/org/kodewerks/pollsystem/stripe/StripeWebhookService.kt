@@ -38,7 +38,8 @@ class StripeWebhookService(
     private val events: StripeEventRepository,
     private val magicLinks: MagicLinkService,
     private val emailer: MagicLinkEmailer,
-    private val stripe: StripePaymentProvider
+    private val stripe: StripePaymentProvider,
+    private val mail: org.kodewerks.pollsystem.email.EmailService
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -91,6 +92,10 @@ class StripeWebhookService(
         }
 
         val existing = users.findByEmail(email)
+        if (existing != null && subscriptionId != null && isDuplicate(existing, subscriptionId)) {
+            undoDuplicate(existing, subscriptionId, customerId)
+            return
+        }
         if (existing != null) {
             // A re-subscribing lapsed VIEWER comes back as USER (they re-apply
             // for any former creator/admin role); an active USER+ keeps its level.
@@ -140,6 +145,41 @@ class StripeWebhookService(
         val rawToken = magicLinks.issueToken(provisioned)
         emailer.send(provisioned, rawToken)
         log.info("Provisioned paid user {} from checkout and emailed a magic link", email)
+    }
+
+    /**
+     * A second membership payment for an account that already has a live
+     * subscription: two checkouts opened (a retried registration, an old tab)
+     * and both paid. Asks Stripe when it can; otherwise trusts paid_until.
+     */
+    private fun isDuplicate(user: User, newSubscriptionId: String): Boolean {
+        val current = user.stripeSubscriptionId?.takeIf { it.isNotBlank() } ?: return false
+        if (current == newSubscriptionId) return false
+        return stripe.subscriptionIsLive(current) ?: user.hasActiveSubscription
+    }
+
+    /** Keep the existing membership; cancel and refund the new one, tell the member, and alert. */
+    private fun undoDuplicate(user: User, subscriptionId: String, customerId: String?) {
+        val refunded = stripe.cancelAndRefund(subscriptionId, customerId)
+        if (refunded) {
+            log.warn("Duplicate membership payment by user={}: cancelled {} and refunded it", user.id, subscriptionId)
+        } else {
+            // ERROR so the alert digest emails the operator: refund it by hand.
+            log.error("Duplicate membership payment by user={}: subscription {} (customer {}) NOT refunded automatically; cancel and refund it in Stripe",
+                user.id, subscriptionId, customerId)
+        }
+        val until = user.paidUntil?.let { java.time.format.DateTimeFormatter.ofPattern("MMMM d, yyyy").withZone(java.time.ZoneOffset.UTC).format(it) }
+        mail.send(
+            user.email,
+            "You were already a BallotBox member",
+            buildString {
+                append("We received a second membership payment for ${user.email}, but your membership was already active")
+                append(if (until != null) " (paid through $until).\n\n" else ".\n\n")
+                append(if (refunded) "We've cancelled the second subscription and refunded that payment. The refund can take 5–10 days to show on your statement.\n\n"
+                       else "We'll cancel the second subscription and refund that payment shortly.\n\n")
+                append("Nothing else changes. Questions: support@ballotbox.us.com")
+            }
+        )
     }
 
     private fun handleSubscriptionRefresh(data: JsonNode, type: String) {

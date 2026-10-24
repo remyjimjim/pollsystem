@@ -159,6 +159,41 @@ class StripePaymentProvider(
         }
     }
 
+    /**
+     * Whether a subscription is still live in Stripe (active, trialing or
+     * past_due). Null when billing is unconfigured or the lookup fails.
+     */
+    fun subscriptionIsLive(subscriptionId: String): Boolean? {
+        if (props.apiKey.isBlank() || subscriptionId.isBlank()) return null
+        return try {
+            client().subscriptions().retrieve(subscriptionId).status in setOf("active", "trialing", "past_due")
+        } catch (e: StripeException) {
+            log.warn("Could not retrieve subscription {}: {}", subscriptionId, e.message)
+            null
+        }
+    }
+
+    /**
+     * Undo a duplicate membership payment: cancel [subscriptionId] now and
+     * refund the customer's latest charge (the payment that just started it).
+     * Returns false if billing is unconfigured or either step fails; the
+     * caller then alerts for a manual refund.
+     */
+    fun cancelAndRefund(subscriptionId: String, customerId: String?): Boolean {
+        if (props.apiKey.isBlank() || subscriptionId.isBlank()) return false
+        return try {
+            client().subscriptions().cancel(subscriptionId)
+            val charge = customerId?.let {
+                client().charges().list(com.stripe.param.ChargeListParams.builder().setCustomer(it).setLimit(1L).build()).data.firstOrNull()
+            } ?: return false
+            client().refunds().create(com.stripe.param.RefundCreateParams.builder().setCharge(charge.id).build())
+            true
+        } catch (e: StripeException) {
+            log.warn("Could not cancel/refund duplicate subscription {}: {}", subscriptionId, e.message)
+            false
+        }
+    }
+
     private fun subscriptionOf(user: User): String =
         user.stripeSubscriptionId?.takeIf { it.isNotBlank() }
             ?: throw ResponseStatusException(HttpStatus.CONFLICT, "No subscription")
