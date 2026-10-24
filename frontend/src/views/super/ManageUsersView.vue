@@ -3,9 +3,20 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import PurviewSetter from '@/components/PurviewSetter.vue'
+import ColumnChooser from '@/components/ColumnChooser.vue'
+import { useColumns } from '@/composables/useColumns'
 import { GRANT_LEVELS, ScopeLevel, type Purview } from '@/types'
 
 const { t } = useI18n()
+
+// ---------- Columns: choose which to show (Email always shows) ----------
+const COLUMN_KEYS = ['role', 'state', 'county', 'zipcode', 'pollsCreated', 'pollsCompleted', 'enable', 'msg'] as const
+type ColumnKey = (typeof COLUMN_KEYS)[number]
+const columns = useColumns<ColumnKey>('manageUsers.columns', COLUMN_KEYS, ['state', 'county', 'pollsCreated', 'pollsCompleted', 'msg'])
+const columnOptions = computed(() => ([
+  ['role', 'colRole'], ['state', 'colState'], ['county', 'colCounty'], ['zipcode', 'colZipcode'],
+  ['pollsCreated', 'colPollsCreated'], ['pollsCompleted', 'colPollsCompleted'], ['enable', 'colEnable'], ['msg', 'colMsg'],
+] as const).map(([key, label]) => ({ key, label: t(`super.manageUsers.${label}`) })))
 
 type Role = 'USER' | 'CREATOR' | 'ADMIN'
 interface MessageDto {
@@ -1121,7 +1132,9 @@ onBeforeUnmount(() => {
 
     <p v-if="!loading && results.length === 0" class="text-sm text-slate-500">{{ $t('super.manageUsers.none') }}</p>
 
-    <table v-if="results.length > 0" class="w-full border-collapse text-sm">
+    <ColumnChooser v-if="results.length > 0" v-model="columns" :options="columnOptions" />
+    <div v-if="results.length > 0" class="overflow-x-auto">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
           <th
@@ -1129,30 +1142,37 @@ onBeforeUnmount(() => {
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colEmail') }}{{ sortIndicator('email') }}</th>
           <th
+            v-if="columns.role"
             @click="toggleSort('access')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colRole') }}{{ sortIndicator('access') }}</th>
           <th
+            v-if="columns.state"
             @click="toggleSort('stateInitial')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colState') }}{{ sortIndicator('stateInitial') }}</th>
           <th
+            v-if="columns.county"
             @click="toggleSort('countyName')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colCounty') }}{{ sortIndicator('countyName') }}</th>
           <th
+            v-if="columns.zipcode"
             @click="toggleSort('zipcode')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colZipcode') }}{{ sortIndicator('zipcode') }}</th>
           <th
+            v-if="columns.pollsCreated"
             @click="toggleSort('pollsCreated')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colPollsCreated') }}{{ sortIndicator('pollsCreated') }}</th>
           <th
+            v-if="columns.pollsCompleted"
             @click="toggleSort('pollsCompleted')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colPollsCompleted') }}{{ sortIndicator('pollsCompleted') }}</th>
           <th
+            v-if="columns.enable"
             tabindex="0"
             @click="toggleSort('isEnabled')"
             @keydown="onEnableHeaderKeydown"
@@ -1160,6 +1180,7 @@ onBeforeUnmount(() => {
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-1 focus:ring-slate-400"
           >{{ $t('super.manageUsers.colEnable') }}{{ sortIndicator('isEnabled') }}</th>
           <th
+            v-if="columns.msg"
             @click="toggleSort('msg')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colMsg') }}{{ sortIndicator('msg') }}</th>
@@ -1176,7 +1197,7 @@ onBeforeUnmount(() => {
               data-test="shared-card"
             >{{ $t('super.manageUsers.sharedCard', { n: row.sharedCardWith.length }, row.sharedCardWith.length) }}</span>
           </td>
-          <td class="whitespace-nowrap border-b border-slate-100 p-2">
+          <td v-if="columns.role" class="whitespace-nowrap border-b border-slate-100 p-2">
             <span
               v-if="row.access === 'VIEWER'"
               :class="['rounded px-2 py-0.5 text-xs font-semibold', accessBadgeClasses(row.access)]"
@@ -1226,10 +1247,10 @@ onBeforeUnmount(() => {
               </div>
             </span>
           </td>
-          <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.stateInitial ?? '—' }}</button></td>
-          <td class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.countyName ?? '—' }}</button></td>
-          <td class="border-b border-slate-100 p-2 font-mono"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.zipcode }}</button></td>
-          <td class="border-b border-slate-100 p-2 text-right">
+          <td v-if="columns.state" class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.stateInitial ?? '—' }}</button></td>
+          <td v-if="columns.county" class="border-b border-slate-100 p-2"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.countyName ?? '—' }}</button></td>
+          <td v-if="columns.zipcode" class="border-b border-slate-100 p-2 font-mono"><button type="button" @click="openEdit(row)" class="text-slate-800 underline">{{ row.zipcode }}</button></td>
+          <td v-if="columns.pollsCreated" class="border-b border-slate-100 p-2 text-right">
             <button
               v-if="row.pollsCreatedCount > 0"
               type="button"
@@ -1238,7 +1259,7 @@ onBeforeUnmount(() => {
             >{{ row.pollsCreatedCount }}</button>
             <span v-else class="text-slate-400">0</span>
           </td>
-          <td class="border-b border-slate-100 p-2 text-right">
+          <td v-if="columns.pollsCompleted" class="border-b border-slate-100 p-2 text-right">
             <button
               v-if="row.pollsCompletedCount > 0"
               type="button"
@@ -1247,7 +1268,7 @@ onBeforeUnmount(() => {
             >{{ row.pollsCompletedCount }}</button>
             <span v-else class="text-slate-400">0</span>
           </td>
-          <td class="border-b border-slate-100 p-2">
+          <td v-if="columns.enable" class="border-b border-slate-100 p-2">
             <input
               type="checkbox"
               :checked="row.isEnabled"
@@ -1257,7 +1278,7 @@ onBeforeUnmount(() => {
               :aria-label="row.isEnabled ? $t('super.manageUsers.disableAria', { email: row.email }) : $t('super.manageUsers.enableAria', { email: row.email })"
             />
           </td>
-          <td class="border-b border-slate-100 p-2 text-xs">
+          <td v-if="columns.msg" class="border-b border-slate-100 p-2 text-xs">
             <template v-if="row.latestMessage">
               <button type="button" @click="openMessageModal(row, 'edit')" class="text-slate-800 underline">
                 {{ previewText(row.latestMessage.body) }}
@@ -1273,6 +1294,7 @@ onBeforeUnmount(() => {
         </tr>
       </tbody>
     </table>
+    </div>
     <p v-if="results.length > 0" class="mt-2 text-xs text-slate-500">{{ $t('super.manageUsers.enableHelp') }}</p>
 
     <!-- Delete account modal -->
