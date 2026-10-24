@@ -158,6 +158,7 @@ const filters = reactive({
   title: '',
   candidateName: '',
   type: '',
+  excludeNationwide: false,
   includeClosed: false
 })
 
@@ -426,6 +427,7 @@ async function search() {
     }
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
     if (filters.type) params.type = filters.type
+    if (filters.excludeNationwide) params.excludeNationwide = 'true'
     if (filters.includeClosed) params.includeClosed = 'true'
     const res = await axios.get<PollSearchResult[]>('/api/polls/search', { params })
     results.value = res.data
@@ -732,6 +734,15 @@ async function search() {
           <option value="Election">{{ $t('search.filters.typeElection') }}</option>
           <option value="BallotMeasure">{{ $t('search.filters.typeBallotMeasure') }}</option>
         </select>
+      </label>
+      <label class="flex items-center gap-2 text-xs font-semibold text-slate-700">
+        <input
+          v-model="filters.excludeNationwide"
+          type="checkbox"
+          class="h-4 w-4 rounded border-slate-300 text-slate-800 focus:ring-slate-500"
+          data-test="exclude-nationwide"
+        />
+        {{ $t('search.filters.excludeNationwide') }}
       </label>
       <label class="flex items-center gap-2 text-xs font-semibold text-slate-700">
         <input

@@ -139,6 +139,7 @@
     "guestIntroSignIn": "Entrar",
     "guestIntroAfter": "para votar.",
     "filters": {
+      "excludeNationwide": "Excluir enquetes nacionais",
       "titleContains": "O título contém",
       "zipcode": "CEP",
       "candidateName": "Nome do candidato (somente Eleição)",

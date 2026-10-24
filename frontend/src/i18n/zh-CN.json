@@ -139,6 +139,7 @@
     "guestIntroSignIn": "登录",
     "guestIntroAfter": "以参与投票。",
     "filters": {
+      "excludeNationwide": "排除全国性投票",
       "titleContains": "标题包含",
       "zipcode": "邮政编码",
       "candidateName": "候选人姓名（仅限选举）",

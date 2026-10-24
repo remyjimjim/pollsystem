@@ -171,6 +171,7 @@
       "typeQuestionnaire": "Questionnaire",
       "typeElection": "Election",
       "typeBallotMeasure": "Ballot Measure",
+      "excludeNationwide": "Exclude nationwide polls",
       "includeClosed": "See closed polls too"
     },
     "search": "Search",

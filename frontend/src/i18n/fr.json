@@ -139,6 +139,7 @@
     "guestIntroSignIn": "Se connecter",
     "guestIntroAfter": "pour voter.",
     "filters": {
+      "excludeNationwide": "Exclure les sondages nationaux",
       "titleContains": "Le titre contient",
       "zipcode": "Code postal",
       "candidateName": "Nom du candidat (Élection uniquement)",

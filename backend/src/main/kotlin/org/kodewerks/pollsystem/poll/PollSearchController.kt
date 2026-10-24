@@ -75,6 +75,8 @@ class PollSearchController(
         @RequestParam(required = false) candidateName: String?,
         @RequestParam(required = false) type: String?,
         @RequestParam(required = false, defaultValue = "false") includeClosed: Boolean,
+        // "Exclude nationwide": leave out polls whose area is the whole country.
+        @RequestParam(required = false, defaultValue = "false") excludeNationwide: Boolean = false,
         @org.springframework.security.core.annotation.AuthenticationPrincipal principal: org.kodewerks.pollsystem.security.AppUserDetails? = null
     ): List<PollSearchResult> {
         val now = Instant.now()
@@ -129,8 +131,12 @@ class PollSearchController(
             !countyIds.isNullOrEmpty() -> searchedMeta.filter { it.county.id in countyIds }.map { it.county.state.id }.toSet()
             else -> stateIds.orEmpty().toSet()
         }
-        val purviewByPoll = if (geoFilter == null) emptyMap()
+        val purviewByPoll = if (geoFilter == null && !excludeNationwide) emptyMap()
             else pollPurviews.findAll().groupBy { it.pollType to it.pollId }
+        fun isNationwide(kind: PollKind, pollId: Long): Boolean {
+            val rows = purviewByPoll[kind to pollId].orEmpty()
+            return rows.isEmpty() || rows.any { it.scopeLevel == ScopeLevel.NATIONAL }   // no declared purview = nationwide
+        }
         fun purviewIncludesSearch(kind: PollKind, pollId: Long): Boolean {
             val rows = purviewByPoll[kind to pollId].orEmpty()
             if (rows.isEmpty()) return true // no declared purview = nationwide
@@ -174,6 +180,7 @@ class PollSearchController(
                 if (!textMatch(titleHit = titleHit(q.title, titleQuery), candidateHit = false)) continue
                 if (!matches(q.creator.email, creatorEmail)) continue
                 if (geoFilter != null && !purviewIncludesSearch(PollKind.QUESTIONNAIRE, q.id)) continue
+                if (excludeNationwide && isNationwide(PollKind.QUESTIONNAIRE, q.id)) continue
                 val qRows = purviewService.purviewOf(PollKind.QUESTIONNAIRE, q.id)
                 val zipStates = purviewService.zipcodesOf(qRows)
                     .map { ZipState(it, lookupState(it)) }
@@ -207,6 +214,7 @@ class PollSearchController(
                 ) continue
                 if (!matches(e.creator.email, creatorEmail)) continue
                 if (geoFilter != null && !purviewIncludesSearch(PollKind.ELECTION, e.id)) continue
+                if (excludeNationwide && isNationwide(PollKind.ELECTION, e.id)) continue
                 results += PollSearchResult(
                     id = e.id,
                     type = "Election",
@@ -229,6 +237,7 @@ class PollSearchController(
                 val zip = bm.election.zipcode
                 // Ballot measures inherit their election's purview.
                 if (geoFilter != null && !purviewIncludesSearch(PollKind.ELECTION, bm.election.id)) continue
+                if (excludeNationwide && isNationwide(PollKind.ELECTION, bm.election.id)) continue
                 results += PollSearchResult(
                     id = bm.id,
                     type = "BallotMeasure",

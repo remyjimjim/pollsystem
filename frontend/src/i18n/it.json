@@ -139,6 +139,7 @@
     "guestIntroSignIn": "Accedi",
     "guestIntroAfter": "per votare.",
     "filters": {
+      "excludeNationwide": "Escludi i sondaggi nazionali",
       "titleContains": "Il titolo contiene",
       "zipcode": "CAP",
       "candidateName": "Nome del candidato (solo Elezione)",

@@ -139,6 +139,7 @@
     "guestIntroSignIn": "Anmelden",
     "guestIntroAfter": "zum Abstimmen.",
     "filters": {
+      "excludeNationwide": "Bundesweite Umfragen ausschließen",
       "titleContains": "Titel enthält",
       "zipcode": "Postleitzahl",
       "candidateName": "Kandidatenname (nur Wahl)",

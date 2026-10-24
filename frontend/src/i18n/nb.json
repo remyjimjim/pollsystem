@@ -139,6 +139,7 @@
     "guestIntroSignIn": "Logg inn",
     "guestIntroAfter": "for å stemme.",
     "filters": {
+      "excludeNationwide": "Utelat landsdekkende avstemninger",
       "titleContains": "Tittel inneholder",
       "zipcode": "Postnummer",
       "candidateName": "Kandidatnavn (kun Valg)",

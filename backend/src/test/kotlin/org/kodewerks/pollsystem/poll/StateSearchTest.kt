@@ -18,11 +18,12 @@ class StateSearchTest : AbstractIntegrationTest() {
 
     private val washington = 48L; private val idaho = 13L; private val oregon = 38L
 
-    private fun statePoll(title: String, stateId: Long): Long {
+    private fun statePoll(title: String, stateId: Long?): Long {
         val c = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "ss")
         val d = service.saveDraft(c, ElectionDraftRequest(
-            pollTypeId = 1L, title = title, date = LocalDate.now().plusDays(10), scopeLevel = ScopeLevel.STATE,
-            regionIds = listOf(stateId), candidates = listOf(CandidateInput("A", "Ind", "Governor"))
+            pollTypeId = 1L, title = title, date = LocalDate.now().plusDays(10),
+            scopeLevel = if (stateId == null) ScopeLevel.NATIONAL else ScopeLevel.STATE,
+            regionIds = listOfNotNull(stateId), candidates = listOf(CandidateInput("A", "Ind", "Governor"))
         ))
         service.publish(d.id, c, confirmed = true)
         return d.id
@@ -37,5 +38,19 @@ class StateSearchTest : AbstractIntegrationTest() {
         val found = search.search("StateSearch", null, null, listOf(washington), null, null, "Election", false).map { it.id }
 
         assertThat(found).containsExactly(wa)
+    }
+
+    @Test
+    fun `Exclude nationwide leaves out polls for the whole country`() {
+        val wa = statePoll("NationwideCheck WA", washington)
+        val usa = statePoll("NationwideCheck USA", null)
+
+        fun found(exclude: Boolean) =
+            search.search("NationwideCheck", null, null, listOf(washington), null, null, "Election", false, exclude).map { it.id }
+
+        assertThat(found(false)).containsExactlyInAnyOrder(wa, usa)
+        assertThat(found(true)).containsExactly(wa)
+        // Without a place picked too.
+        assertThat(search.search("NationwideCheck", null, null, null, null, null, "Election", false, true).map { it.id }).containsExactly(wa)
     }
 }

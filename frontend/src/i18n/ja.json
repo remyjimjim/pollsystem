@@ -139,6 +139,7 @@
     "guestIntroSignIn": "ログイン",
     "guestIntroAfter": "して投票してください。",
     "filters": {
+      "excludeNationwide": "全国対象の投票を除外",
       "titleContains": "タイトルに含まれる",
       "zipcode": "郵便番号",
       "candidateName": "候補者名（選挙のみ）",
