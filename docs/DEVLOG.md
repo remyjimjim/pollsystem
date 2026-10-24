@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-24 — Search: "Exclude nationwide polls"
+
+**Requested:**
+
+> I noticed on dev (local-docker) that when I went to /polls/search and set
+> state=Alaska it showed Alaska's poll plus 'Nationwide' polls. I think we
+> need a checkbox row above the "See closed polls too" checkbox row that says
+> 'Exclude Nationwide' and acts accordingly.
+
+**Changed:**
+
+- `PollSearchController` takes an `excludeNationwide` parameter. It skips
+  polls whose purview is NATIONAL or undeclared (undeclared counts as
+  nationwide), with or without a place filter. A ballot measure follows its
+  election.
+- `PollSearchView` has an "Exclude nationwide polls" checkbox above "See
+  closed polls too" (9 languages).
+
+**Verified:**
+
+- `StateSearchTest`: a Washington search returns the WA poll and the
+  nationwide one, and only the WA poll when excluded, with or without a
+  state picked.
+- The other search tests pass, and so do the frontend type check and unit
+  tests.
+- Local: Alaska with and without the option (counts reported to the user).
+
+**Commit:** `b79b882`
+
+---
+
 ## 2026-10-24 — Results threshold: 4 by default, 1 on local only
 
 **Requested:**
