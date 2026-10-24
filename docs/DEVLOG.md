@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-10-24 — Search: a state finds only that state; zipcode picker says "Any"
+
+**Requested:**
+
+> when I search for a poll (polls/search) and choose only the state of
+> Washington and click 'Search', I get results from … Idaho, Oregon and
+> Washington states. Also, the same search page shows 98001 for the zipcode
+> which should be set to 'Any'.
+
+**Cause:**
+
+- A state search was resolved to the state's zipcodes, and the "searched
+  states" were read back from those zipcodes.
+- A zipcode can sit in counties of two states: 99128 is in WA and ID, and
+  99362 in WA and OR. So Idaho's and Oregon's statewide-purview polls
+  matched too.
+- The zipcode picker's empty label was the first zipcode in its list.
+
+**Changed:**
+
+- `PollSearchController`: when a state is picked, the searched states are
+  exactly the picked ones, and the counties are those in them. When a
+  county is picked, the searched counties are exactly the picked ones. Only
+  a zipcode pick still works out counties and states from the zipcode.
+- `PollSearchView`: with nothing picked, the zipcode picker shows "Any
+  zipcode".
+
+**Verified:**
+
+- `StateSearchTest`: a Washington search returns the WA poll but not ID or
+  OR. The other search tests pass, and so do the frontend type check and
+  unit tests.
+- Local: Election plus Washington returns WA's 10 ballots, plus one local
+  nationwide test poll.
+
+**Commit:** `e85b2fc`
+
+---
+
 ## 2026-10-24 — Duplicate membership payments cancelled and refunded
 
 **Requested:**
