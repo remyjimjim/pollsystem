@@ -905,6 +905,7 @@
       "roleLapsed": "Lapsed",
       "roleLapsedTitle": "Cancelled or unpaid members. Shown only when ticked; they can't be edited here, only deleted.",
       "deleteAccount": "Delete account…",
+      "colDelete": "Delete",
       "sharedCard": "Same card as 1 other account | Same card as {n} other accounts",
       "deleteTitle": "Delete this account permanently?",
       "deleteIntro": "Only do this when {email} has asked for their account to be deleted.",

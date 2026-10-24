@@ -10,12 +10,12 @@ import { GRANT_LEVELS, ScopeLevel, type Purview } from '@/types'
 const { t } = useI18n()
 
 // ---------- Columns: choose which to show (Email always shows) ----------
-const COLUMN_KEYS = ['role', 'state', 'county', 'zipcode', 'pollsCreated', 'pollsCompleted', 'enable', 'msg'] as const
+const COLUMN_KEYS = ['role', 'state', 'county', 'zipcode', 'pollsCreated', 'pollsCompleted', 'enable', 'msg', 'delete'] as const
 type ColumnKey = (typeof COLUMN_KEYS)[number]
 const columns = useColumns<ColumnKey>('manageUsers.columns', COLUMN_KEYS, ['state', 'county', 'pollsCreated', 'pollsCompleted', 'msg'])
 const columnOptions = computed(() => ([
   ['role', 'colRole'], ['state', 'colState'], ['county', 'colCounty'], ['zipcode', 'colZipcode'],
-  ['pollsCreated', 'colPollsCreated'], ['pollsCompleted', 'colPollsCompleted'], ['enable', 'colEnable'], ['msg', 'colMsg'],
+  ['pollsCreated', 'colPollsCreated'], ['pollsCompleted', 'colPollsCompleted'], ['enable', 'colEnable'], ['msg', 'colMsg'], ['delete', 'colDelete'],
 ] as const).map(([key, label]) => ({ key, label: t(`super.manageUsers.${label}`) })))
 
 type Role = 'USER' | 'CREATOR' | 'ADMIN'
@@ -1184,6 +1184,7 @@ onBeforeUnmount(() => {
             @click="toggleSort('msg')"
             class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100"
           >{{ $t('super.manageUsers.colMsg') }}{{ sortIndicator('msg') }}</th>
+          <th v-if="columns.delete" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.manageUsers.colDelete') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -1211,7 +1212,7 @@ onBeforeUnmount(() => {
               :title="$t('super.manageUsers.editRoleTitle')"
             >{{ row.access }}</button>
             <span
-              v-if="row.access !== 'SUPER'"
+              v-if="row.access !== 'SUPER' && (promoteTarget(row) || demoteTarget(row))"
               data-role-menu
               class="relative ml-1 inline-block align-middle"
             >
@@ -1238,12 +1239,6 @@ onBeforeUnmount(() => {
                   @click="demote(row)"
                   class="block w-full px-3 py-1 text-left text-xs text-red-700 hover:bg-red-50"
                 >{{ $t('super.manageUsers.demoteTo', { level: demoteTarget(row) }) }}</button>
-                <button
-                  type="button"
-                  @click="openDelete(row)"
-                  class="block w-full border-t border-slate-100 px-3 py-1 text-left text-xs text-red-700 hover:bg-red-50"
-                  data-test="delete-account"
-                >{{ $t('super.manageUsers.deleteAccount') }}</button>
               </div>
             </span>
           </td>
@@ -1290,6 +1285,16 @@ onBeforeUnmount(() => {
                 {{ $t('super.manageUsers.msgNew') }}
               </button>
             </template>
+          </td>
+          <td v-if="columns.delete" class="border-b border-slate-100 p-2">
+            <button
+              v-if="row.access !== 'SUPER'"
+              type="button"
+              @click="openDelete(row)"
+              class="rounded border border-red-300 px-2 py-0.5 text-xs text-red-700 hover:bg-red-50"
+              data-test="delete-account"
+            >{{ $t('super.manageUsers.deleteAccount') }}</button>
+            <span v-else class="text-slate-400">—</span>
           </td>
         </tr>
       </tbody>
