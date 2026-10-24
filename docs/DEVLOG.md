@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-10-24 — Staging outage from V39; migrations made tolerant (fc323df)
+
+**Requested:**
+
+> push it and deploy to staging
+
+**What happened:** staging's backend wouldn't start after the deploy of
+`40610e1`. V39's unique index failed with `Key (…)=(3602207403) is
+duplicated`. Staging's super `remyjimjim@proton.me` stores the number as
+`1360…7403`, and the test account `waltripalex@gmail.com` as `360…7403`.
+Prod, local and the test database had been checked before the index went
+in; staging hadn't. Postgres rolled the migration back, so no data changed.
+Staging was down for about 10 minutes.
+
+**Changed (`fc323df`):**
+
+- V39 and V40 now check first. If duplicates (phones, or email aliases)
+  already exist, they build a plain index and `RAISE WARNING` rather than
+  fail. The app's own check still refuses new duplicates.
+- This also guards prod's launch-day deploy, in case someone registers a
+  reformatted duplicate before then.
+
+**Verified:**
+
+- On local, inside a rolled-back transaction with planted duplicates, both
+  migrations warned and built plain indexes.
+- Local, re-run clean, built both unique indexes.
+- The account tests pass.
+- Staging was redeployed and reports healthy. It now has the plain phone
+  index until the shared number is resolved.
+
+**Lesson:** check every environment's data (staging too) before adding a
+unique index.
+
+---
+
 ## 2026-10-24 — One account per inbox; accounts on one card flagged (V40)
 
 **Requested:**
