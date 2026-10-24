@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-24 — "New version available" reload banner
+
+**Requested:**
+
+> yes, add the new-version reload banner
+
+**Why:** on staging, the phone walkthrough kept showing two things already
+fixed: zipcode 98001, and results for only the House race. The open tab was
+still running the code it loaded before those deploys.
+
+**Changed:**
+
+- `vite.config.ts`: a build id (`CF_PAGES_COMMIT_SHA`, else a timestamp) is
+  compiled in as `__BUILD_ID__`. A build-only plugin writes `version.json`
+  with the same id.
+- `useNewVersion` fetches `/version.json` (no-store) when the tab becomes
+  visible, after each navigation, and every 5 minutes. It's off on the dev
+  server.
+- `App.vue` shows a sky-blue bar above the header, "A new version of
+  BallotBox is available." with a **Reload** button, in 9 languages.
+
+**Verified:**
+
+- The frontend type-checks and the unit tests pass (181).
+- `vite build` writes `version.json`, and the id is embedded in the bundle.
+- Serving the built site locally and swapping `version.json`: no banner
+  before, then the banner after the next navigation.
+
+**Commit:** `7c5a6ba`
+
+---
+
 ## 2026-10-24 — Search: a state finds only that state; zipcode picker says "Any"
 
 **Requested:**
