@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-24 — support@ballotbox.us.com works; staging deployed (verified)
+
+**Requested:**
+
+> I've created the address in proton and tested it and it works, from gmail
+> to proton and reply back to gmail all works as support@ballotbox.us.com.
+> Please deploy to staging
+
+**Changed:** Staging deployed from `066dbf8`, rebuilding the backend and the
+`staging` branch.
+
+**Verified:**
+
+- The user sent mail from Gmail to `support@ballotbox.us.com` and replied
+  from it; both arrived.
+- The staging backend reports healthy.
+- The staging site's legal pages show `support@ballotbox.us.com` (40 s after
+  the deploy).
+- Prod (ballotbox.us.com) already showed it after the push. Its Cloudflare
+  build and CI passed.
+
+---
+
 ## 2026-10-24 — Proton mail on ballotbox.us.com; legal contact support@ballotbox.us.com
 
 **Requested:**
