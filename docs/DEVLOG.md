@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-10-24 — Duplicate membership payments cancelled and refunded
+
+**Requested:**
+
+> yes, build the duplicate-payment fix
+
+**What happened (prod, phone walkthrough):** the sign-in link didn't open
+from the Gmail app, so the user registered again. Two checkouts completed,
+at 07:39 and 07:46 UTC. The second subscription replaced the first on the
+account, and the first stayed live in Stripe. The user deleted that Stripe
+customer, which cancelled its subscription. Deleting doesn't refund, so the
+user was told to refund it under Payments.
+
+**Changed:**
+
+- `StripePaymentProvider`:
+  - `subscriptionIsLive(id)` (active, trialing or past_due);
+  - `cancelAndRefund(subscriptionId, customerId)`: cancels the subscription
+    now and refunds the customer's latest charge.
+- `StripeWebhookService` `checkout.session.completed`: if the account
+  already has a different subscription that's still live (asked of Stripe,
+  otherwise judged by paid_until), it keeps that one.
+  - The new subscription is cancelled and refunded.
+  - The member gets "You were already a BallotBox member".
+  - If the refund can't be done, an ERROR is logged and the alert digest
+    tells the operator to refund by hand. `ALERT_EMAIL` is set on prod.
+- A lapsed member paying again is still a normal renewal.
+
+**Verified:** `DuplicatePaymentTest` (2) and `StripeWebhookControllerTest`
+(13) pass, and so does the full backend suite (384).
+
+**Commit:** `108c843`
+
+---
+
 ## 2026-10-24 — Visible Delete button on Manage users rows
 
 **Requested:**
