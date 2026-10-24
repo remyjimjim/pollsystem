@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-24 — Tagged release-0.5
+
+**Requested:**
+
+> Remember how we git tagged the repo at 0 I think it was? … let's increase
+> the tag to .5
+
+**Changed:** an annotated tag, `release-0.5`, on `e344545`, pushed to GitHub.
+It follows `release-0` (`3ccfc21`, 2026-10-15, "known-good fallback point").
+It covers:
+
+- all 50 states' midterm ballots, one per district;
+- the midterm voting rules and Cancel my votes;
+- whole-ballot results;
+- one account per phone and per inbox;
+- duplicate-payment refunds and the shared-card flag;
+- the state search fix and Exclude nationwide;
+- the new-version banner.
+
+Staging was verified at this commit. The prod backend deploy is still
+pending: the user deploys after the local and staging walkthrough.
+`docs/DEPLOYING-FLY.md` and `todo.md` had uncommitted local edits by the
+user, which aren't in the tag.
+
+---
+
 ## 2026-10-24 — See closed polls too updates the results as it's toggled
 
 **Requested:**
