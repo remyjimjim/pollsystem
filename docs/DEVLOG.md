@@ -61,6 +61,26 @@ logged.
 
 ---
 
+## 2026-10-24 — Visible Delete button on Manage users rows
+
+**Requested:**
+
+> make the delete button visible on each row
+
+**Changed:**
+
+- A new **Delete** column holds a red "Delete account…" button that opens
+  the same type-the-email confirmation. Supers show "—".
+- The column can be hidden under Show: like the others.
+- The ⋮ menu keeps promote and demote, and is hidden for a row with
+  neither.
+
+**Verified:** the frontend type-checks and the unit tests pass.
+
+**Commit:** `7836dd5`
+
+---
+
 ## 2026-10-24 — "Show:" columns on super Manage users
 
 **Requested:**
