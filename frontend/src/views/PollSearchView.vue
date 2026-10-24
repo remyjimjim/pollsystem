@@ -200,7 +200,7 @@ const zipPickerSummary = computed<string>(() => {
   if (zips.selected.value.length > 1) {
     return t('search.filters.zipcodeNSelected', { n: zips.selected.value.length })
   }
-  return zips.displayed.value[0]?.zipcode ?? ''
+  return t('search.filters.zipcodeAny')
 })
 
 // Shift-click range handlers — PollSearch-specific UX the composable

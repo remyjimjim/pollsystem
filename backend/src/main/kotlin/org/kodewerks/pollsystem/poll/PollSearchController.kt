@@ -113,11 +113,22 @@ class PollSearchController(
         // ∈ nation), read from poll_purviews — not when the poll's own stored zip
         // happens to equal the searched one. Resolve the searched zips to their
         // counties/states once; load purview rows only when a geo filter is set.
+        // A state or county pick searches exactly that place. Working the states
+        // out from its zipcodes would add neighbours: some zipcodes cross a
+        // state line (a Washington search turned up Idaho and Oregon polls).
         val searchedZips: Set<String> = geoFilter ?: emptySet()
         val searchedMeta = if (searchedZips.isEmpty()) emptyList()
             else countyZips.findByZipcodeIn(searchedZips.toList())
-        val searchedCounties = searchedMeta.map { it.county.id }.toSet()
-        val searchedStates = searchedMeta.map { it.county.state.id }.toSet()
+        val searchedCounties: Set<Long> = when {
+            !pickedZips.isNullOrEmpty() -> searchedMeta.map { it.county.id }.toSet()
+            !countyIds.isNullOrEmpty() -> countyIds.toSet()
+            else -> searchedMeta.filter { stateIds.orEmpty().contains(it.county.state.id) }.map { it.county.id }.toSet()
+        }
+        val searchedStates: Set<Long> = when {
+            !pickedZips.isNullOrEmpty() -> searchedMeta.map { it.county.state.id }.toSet()
+            !countyIds.isNullOrEmpty() -> searchedMeta.filter { it.county.id in countyIds }.map { it.county.state.id }.toSet()
+            else -> stateIds.orEmpty().toSet()
+        }
         val purviewByPoll = if (geoFilter == null) emptyMap()
             else pollPurviews.findAll().groupBy { it.pollType to it.pollId }
         fun purviewIncludesSearch(kind: PollKind, pollId: Long): Boolean {
