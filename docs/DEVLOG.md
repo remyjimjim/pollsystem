@@ -61,6 +61,22 @@ logged.
 
 ---
 
+## 2026-10-24 — See closed polls too updates the results as it's toggled
+
+**Requested:**
+
+> yes, do the same for closed polls
+
+**Changed:** "See closed polls too" also runs the search again on `@change`
+once a search has run, as "Exclude nationwide polls" does.
+
+**Verified:** headless, against local: 592 rows, 593 with the box ticked
+(the one closed poll), and 592 again unticked. The frontend type-checks.
+
+**Commit:** `1fd37c7`
+
+---
+
 ## 2026-10-24 — Exclude nationwide updates the results as it's toggled
 
 **Requested:**
