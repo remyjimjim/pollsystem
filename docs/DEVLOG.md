@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-24 — Proton mail on ballotbox.us.com; legal contact support@ballotbox.us.com
+
+**Requested:**
+
+> use support@ballotbox.us.com on the legal pages
+
+**Changed:**
+
+- The user added the domain to Proton, with its records in Cloudflare DNS.
+  Porkbun is only the registrar, and its offer to switch nameservers was
+  declined.
+- The records:
+  - MX: `mail.protonmail.ch` (10) and `mailsec.protonmail.ch` (20).
+  - SPF: `v=spf1 include:_spf.protonmail.ch ~all`, the only SPF record on `@`.
+  - DKIM: three `protonmail*._domainkey` CNAMEs, set to DNS only.
+  - DMARC: the existing record was edited, not duplicated, to
+    `v=DMARC1; p=quarantine; rua=mailto:remyjimjim@proton.me`.
+- Resend's records on `send.mail.` are untouched. Its DKIM key at
+  `resend._domainkey.mail.` keeps sign-in mail passing under quarantine.
+- Terms, Privacy and Refunds now show `support@ballotbox.us.com` (5 places).
+  The user's draft `.txt` files in the repo root were left as they were.
+
+**Verified:**
+
+- Public DNS (1.1.1.1) shows each record above.
+- Proton marks the domain verified.
+- The local `/legal/terms` page serves the new address.
+
+**Commit:** `1d9fc07`
+
+---
+
 ## 2026-10-23 — UptimeRobot monitors updated for ballotbox.us.com
 
 **Requested:**
