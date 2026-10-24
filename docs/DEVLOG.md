@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-10-24 — One account per phone number, however it's typed (V39)
+
+**Requested:**
+
+> yes, do the phone fix
+
+**Why:** phone uniqueness compared the text exactly as typed.
+"(360) 555-1234" and "360-555-1234" counted as different numbers, so a
+second account was easy to make. This came up while planning the
+real-phone walkthrough.
+
+**Changed:**
+
+- `UserRepository.existsByPhone` / `findByPhone` (native SQL) compare
+  `right(regexp_replace(phone, '[^0-9]', '', 'g'), 10)`: the last 10 digits,
+  ignoring formatting and a leading 1.
+- `V39__phone_digits_unique.sql` adds a unique index on the same
+  expression (where the phone isn't null).
+- The callers (registration checkout, complete profile, Stripe webhook
+  provisioning) are unchanged.
+- Email plus-addresses (`name+x@gmail.com`) are deliberately left distinct:
+  providers treat `+` differently.
+
+**Verified:**
+
+- Before adding the index: no collisions under this rule on prod (2 users,
+  read-only) or on local (72 users).
+- A new `RegistrationCheckoutTest` case gets 409 for four formats of an
+  existing number. The full backend suite passes (379).
+- Local: V39 applied. Registering with "(555) 838-5624", when
+  "+15558385624" exists, returns 409.
+
+**Commit:** `f81900a`
+
+---
+
 ## 2026-10-24 — support@ballotbox.us.com works; staging deployed (verified)
 
 **Requested:**
