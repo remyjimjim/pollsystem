@@ -27,6 +27,8 @@ interface UserRow {
   latestMessage: MessageDto | null
   pollsCreatedCount: number
   pollsCompletedCount: number
+  /** Other accounts paid for with the same card: a flag to review, not a block. */
+  sharedCardWith?: string[]
 }
 interface StateRow { id: number; name: string; initial: string }
 interface CountyRow { id: number; stateId: number; name: string }
@@ -1165,7 +1167,15 @@ onBeforeUnmount(() => {
       </thead>
       <tbody>
         <tr v-for="(row, idx) in sortedResults" :key="row.id">
-          <td class="border-b border-slate-100 p-2">{{ row.email }}</td>
+          <td class="border-b border-slate-100 p-2">
+            {{ row.email }}
+            <span
+              v-if="row.sharedCardWith?.length"
+              class="ml-1 inline-block rounded bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-900"
+              :title="row.sharedCardWith.join(', ')"
+              data-test="shared-card"
+            >{{ $t('super.manageUsers.sharedCard', { n: row.sharedCardWith.length }, row.sharedCardWith.length) }}</span>
+          </td>
           <td class="whitespace-nowrap border-b border-slate-100 p-2">
             <span
               v-if="row.access === 'VIEWER'"

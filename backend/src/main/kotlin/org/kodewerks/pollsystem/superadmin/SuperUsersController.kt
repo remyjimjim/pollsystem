@@ -58,7 +58,9 @@ data class SuperUserRow(
     /** Number of polls (across all 3 types) this user has authored. */
     val pollsCreatedCount: Int,
     /** Number of distinct polls (across all 3 types) this user has responded to. */
-    val pollsCompletedCount: Int
+    val pollsCompletedCount: Int,
+    /** Other accounts paid for with the same card (V40): flagged for review, not blocked. */
+    val sharedCardWith: List<String> = emptyList()
 )
 
 data class SuperUserMessageDto(
@@ -199,6 +201,7 @@ class SuperUsersController(
             .groupBy { it.userId }
             .mapValues { it.value.first() }
         val (createdByUser, completedByUser) = batchPollCounts(poolIds)
+        val byCard = pool.mapNotNull { it.cardFingerprint }.distinct().associateWith { users.findByCardFingerprint(it) }
 
         return pool.sortedBy { it.email }.map { u ->
             val county = u.zipcode?.let { zipToCounty[it] }
@@ -213,10 +216,14 @@ class SuperUsersController(
                 countyName = county?.name,
                 latestMessage = latestByUser[u.id]?.let(::toDto),
                 pollsCreatedCount = createdByUser[u.id] ?: 0,
-                pollsCompletedCount = completedByUser[u.id] ?: 0
+                pollsCompletedCount = completedByUser[u.id] ?: 0,
+                sharedCardWith = sharedCard(u, byCard[u.cardFingerprint])
             )
         }
     }
+
+    private fun sharedCard(u: User, sameCard: List<User>?): List<String> =
+        sameCard.orEmpty().filter { it.id != u.id }.map { it.email }.sorted()
 
     /**
      * Sums six batch COUNT queries (3 created tables × 3 response tables)
@@ -450,7 +457,8 @@ class SuperUsersController(
             countyName = county?.name,
             latestMessage = latest?.let(::toDto),
             pollsCreatedCount = createdMap[u.id] ?: 0,
-            pollsCompletedCount = completedMap[u.id] ?: 0
+            pollsCompletedCount = completedMap[u.id] ?: 0,
+            sharedCardWith = sharedCard(u, u.cardFingerprint?.let { users.findByCardFingerprint(it) })
         )
     }
 

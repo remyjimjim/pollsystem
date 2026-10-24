@@ -82,6 +82,13 @@ class StripeWebhookService(
         // and the account would never activate. Null if billing is unconfigured
         // or the lookup fails; the events then remain the fallback.
         val periodEnd = subscriptionId?.let { stripe.currentPeriodEnd(it) }
+        // The card paid with: another account on the same card is flagged for
+        // review (super Manage users), not refused, since a household may share one.
+        val card = subscriptionId?.let { stripe.cardFingerprint(it) }
+        if (card != null) {
+            val others = users.findByCardFingerprint(card).filter { !it.email.equals(email, ignoreCase = true) }
+            if (others.isNotEmpty()) log.warn("Checkout by {} uses a card already on {} other account(s)", email, others.size)
+        }
 
         val existing = users.findByEmail(email)
         if (existing != null) {
@@ -92,7 +99,8 @@ class StripeWebhookService(
                 stripeCustomerId = customerId ?: existing.stripeCustomerId,
                 stripeSubscriptionId = subscriptionId ?: existing.stripeSubscriptionId,
                 access = access,
-                paidUntil = periodEnd ?: existing.paidUntil
+                paidUntil = periodEnd ?: existing.paidUntil,
+                cardFingerprint = card ?: existing.cardFingerprint
             ))
             return
         }
@@ -125,7 +133,8 @@ class StripeWebhookService(
                 isEnabled = true,
                 stripeCustomerId = customerId,
                 stripeSubscriptionId = subscriptionId,
-                paidUntil = periodEnd
+                paidUntil = periodEnd,
+                cardFingerprint = card
             )
         )
         val rawToken = magicLinks.issueToken(provisioned)

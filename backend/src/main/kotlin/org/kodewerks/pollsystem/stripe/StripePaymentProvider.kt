@@ -172,6 +172,27 @@ class StripePaymentProvider(
      * events). Parses the raw API JSON so it's robust to the SDK's field shape
      * moving `current_period_end` onto subscription items in 2025 API versions.
      */
+    /**
+     * Stripe's fingerprint of the card paying for a subscription: the same card
+     * gives the same fingerprint on every account. Null if billing is
+     * unconfigured, the lookup fails, or it isn't a card.
+     */
+    fun cardFingerprint(subscriptionId: String): String? {
+        if (props.apiKey.isBlank() || subscriptionId.isBlank()) return null
+        return try {
+            val sub = client().subscriptions().retrieve(
+                subscriptionId,
+                com.stripe.param.SubscriptionRetrieveParams.builder().addExpand("default_payment_method").build()
+            )
+            val raw = sub.lastResponse?.body() ?: return null
+            objectMapper.readTree(raw).path("default_payment_method").path("card").path("fingerprint")
+                .asText("").takeIf { it.isNotBlank() }
+        } catch (e: StripeException) {
+            log.warn("Could not retrieve subscription {} for its card: {}", subscriptionId, e.message)
+            null
+        }
+    }
+
     fun currentPeriodEnd(subscriptionId: String): Instant? {
         if (props.apiKey.isBlank() || subscriptionId.isBlank()) return null
         return try {

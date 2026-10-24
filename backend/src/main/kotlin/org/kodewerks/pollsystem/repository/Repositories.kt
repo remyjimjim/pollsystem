@@ -9,14 +9,19 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository : JpaRepository<User, Long> {
-    fun findByEmail(email: String): User?
+    // Emails match by inbox: aliases of one mailbox (Gmail dots, +tags,
+    // protonmail.com vs proton.me…) are the same account (V40 email_key).
+    @Query(value = "SELECT * FROM users WHERE email_key(email) = email_key(:email) LIMIT 1", nativeQuery = true)
+    fun findByEmail(@Param("email") email: String): User?
     // Phones match by their last 10 digits, ignoring formatting (V39).
     @Query(
         value = "SELECT * FROM users WHERE right(regexp_replace(phone, '[^0-9]', '', 'g'), 10) = right(regexp_replace(:phone, '[^0-9]', '', 'g'), 10) LIMIT 1",
         nativeQuery = true
     )
     fun findByPhone(@Param("phone") phone: String): User?
-    fun existsByEmail(email: String): Boolean
+    @Query(value = "SELECT EXISTS (SELECT 1 FROM users WHERE email_key(email) = email_key(:email))", nativeQuery = true)
+    fun existsByEmail(@Param("email") email: String): Boolean
+    fun findByCardFingerprint(cardFingerprint: String): List<User>
     @Query(
         value = "SELECT EXISTS (SELECT 1 FROM users WHERE right(regexp_replace(phone, '[^0-9]', '', 'g'), 10) = right(regexp_replace(:phone, '[^0-9]', '', 'g'), 10))",
         nativeQuery = true

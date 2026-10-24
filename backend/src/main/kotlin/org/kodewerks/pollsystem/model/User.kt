@@ -43,7 +43,11 @@ data class User(
 
     /** The member cancelled: the membership ends at paidUntil and isn't renewed (V36). */
     @Column(name = "cancel_at_period_end", nullable = false)
-    val cancelAtPeriodEnd: Boolean = false
+    val cancelAtPeriodEnd: Boolean = false,
+
+    /** Stripe's fingerprint of the card the membership was paid with (V40): accounts sharing one are flagged. */
+    @Column(name = "card_fingerprint", length = 64)
+    val cardFingerprint: String? = null
 ) {
     /**
      * A payment-first user is provisioned with only an email; they may view
