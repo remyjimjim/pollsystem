@@ -53,6 +53,16 @@ class RegistrationCheckoutTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `the same phone typed differently is still the same phone (409)`() {
+        val existing = fixtures.createUser(emailPrefix = "phoneformat")
+        val d = existing.phone!!.filter { it.isDigit() }.takeLast(10)          // e.g. 5550001234
+        for (typed in listOf("(${d.take(3)}) ${d.substring(3, 6)}-${d.takeLast(4)}", d, "1-$d", "+1 ${d.take(3)} ${d.substring(3, 6)} ${d.takeLast(4)}")) {
+            register("formatted-${typed.filter { it.isDigit() }}@test.local", typed, "90001")
+                .andExpect(status().isConflict)
+        }
+    }
+
+    @Test
     fun `an unknown zipcode is rejected with 400`() {
         register("zipless@test.local", "+15557770003", "00000")
             .andExpect(status().isBadRequest)
