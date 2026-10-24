@@ -61,6 +61,55 @@ logged.
 
 ---
 
+## 2026-10-24 — One account per inbox; accounts on one card flagged (V40)
+
+**Requested:**
+
+> yes, do the email rule and the card flag
+
+**Context:** the user pointed out that `remyjimjim@proton.me` and
+`remyjimjim@protonmail.com` counted as different accounts. Discussed: phones
+aren't verified, so the real barrier is $10 a month per extra account.
+Decided: the email alias rule and a card flag before launch; SMS
+verification with VoIP blocking after launch, if abuse appears.
+
+**Changed:**
+
+- **V40 `email_key(email)` (SQL, IMMUTABLE):**
+  - googlemail.com becomes gmail.com; protonmail.com, protonmail.ch and
+    pm.me become proton.me; me.com and mac.com become icloud.com.
+  - `+tags` are dropped for gmail, proton, outlook, hotmail, live, icloud
+    and fastmail.
+  - Gmail dots are ignored.
+  - A unique index, `users_email_inbox_key`, enforces it. (`users_email_key`
+    was already Postgres's name for the email column's own constraint.)
+- `UserRepository.findByEmail` / `existsByEmail` match by `email_key`.
+  Registration, sign-in, account status, the Stripe and Substack webhooks,
+  and the JWT lookup all treat aliases as one account.
+- `users.card_fingerprint`:
+  - `StripePaymentProvider.cardFingerprint` reads the subscription's
+    `default_payment_method.card.fingerprint`; the checkout webhook stores it
+    and logs a warning on a shared card.
+  - Super Manage users shows "Same card as N other accounts". It's a flag,
+    not a block.
+  - Wallet payments (Apple/Google Pay) may carry their own fingerprint, so
+    this is a signal, not proof.
+
+**Verified:**
+
+- Before adding the index: no collisions among local (72) or prod (2)
+  emails.
+- `AccountUniquenessTest` (3): alias lookups for Gmail and Proton, dots
+  still mattering outside Gmail, alias registration refused with 409, alias
+  sign-in status, and the shared-card flag. The full backend suite passes
+  (382).
+- Local: V40 applied. `email_key('Jane.Doe+x@googlemail.com')` is
+  `janedoe@gmail.com`, and a logged-in request still works.
+
+**Commit:** `9b3293f`
+
+---
+
 ## 2026-10-24 — One account per phone number, however it's typed (V39)
 
 **Requested:**
