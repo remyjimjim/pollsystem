@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-24 — "Show:" columns on super Manage users
+
+**Requested:**
+
+> I think we need another Show: columns option like on polls/search, is
+> that possible?
+
+The user couldn't find "Delete account…", which sits in the ⋮ menu next to a
+row's role.
+
+**Changed:** `ManageUsersView` uses `useColumns` / `ColumnChooser`, as Manage
+creators does:
+
+- Email always shows.
+- Role, State, County, Zipcode, Polls created, Polls completed, Enable and
+  Msg can each be hidden, and the choice is remembered on this device.
+- On a narrow screen, State, County, both poll counts and Msg start hidden.
+- The table is wrapped in a sideways scroller.
+
+**Verified:** the frontend type-checks and the unit tests pass (181). No e2e
+tests cover this page.
+
+**Commit:** `5d39237`
+
+---
+
 ## 2026-10-24 — Staging outage from V39; migrations made tolerant (fc323df)
 
 **Requested:**
