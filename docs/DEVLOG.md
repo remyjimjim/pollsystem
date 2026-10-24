@@ -61,6 +61,48 @@ logged.
 
 ---
 
+## 2026-10-24 — Results from the first vote; narrowed groups still need 4
+
+**Requested:**
+
+> I think we need to set the responses threshold back to 1.
+
+**Decision:** the user chose "1 overall, 4 for filters" over "1 everywhere"
+and "keep 4". At 1 everywhere, filtering to a zipcode with one voter would
+show exactly how that person voted.
+
+**Changed:**
+
+- `app.results.k-anonymity-threshold: 1`: results show from the first
+  response and update with each one.
+- A new `app.results.group-minimum: 4` (`ResultsPrivacy.groupMinimum()`,
+  never below k) applies to:
+  - area filters;
+  - the inside/outside-purview split and its counts;
+  - participation counts;
+  - every group in the creator report.
+- `ResultsVisibility.groupMinimum` is sent to the page. At k = 1 the
+  results caption reads "Results update as people respond. For privacy,
+  narrowing them … shows nothing for a group of fewer than 4." (9 languages)
+- The Privacy Policy ("Who sees what") and the viewer help page describe
+  live results and the group minimum. The user should review the policy
+  wording.
+- The e2e viewer results test handles k = 1: no seeding at 0, and the live
+  caption.
+
+**Verified:**
+
+- `GroupMinimumTest`: at k=1 and minimum 4, one vote shows in the totals,
+  while a zipcode filter, the inside-only view and the inside/outside counts
+  are withheld.
+- The full backend suite passes (385, at test k = 3). The frontend
+  type-checks and its unit tests pass.
+- The e2e `viewer-searches-views-results` test passes against local (k=1).
+
+**Commit:** `09bf330`
+
+---
+
 ## 2026-10-24 — "New version available" reload banner
 
 **Requested:**
