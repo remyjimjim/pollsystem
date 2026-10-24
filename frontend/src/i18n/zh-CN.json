@@ -13,6 +13,8 @@
     "help": "帮助"
   },
   "common": {
+    "newVersion": "BallotBox 有新版本可用。",
+    "reload": "重新加载",
     "loading": "加载中…",
     "submitting": "提交中…",
     "yes": "是",

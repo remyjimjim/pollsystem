@@ -13,6 +13,8 @@
     "help": "ヘルプ"
   },
   "common": {
+    "newVersion": "BallotBox の新しいバージョンがあります。",
+    "reload": "再読み込み",
     "loading": "読み込み中…",
     "submitting": "送信中…",
     "yes": "はい",

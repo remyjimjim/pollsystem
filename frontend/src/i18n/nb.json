@@ -13,6 +13,8 @@
     "help": "Hjelp"
   },
   "common": {
+    "newVersion": "En ny versjon av BallotBox er tilgjengelig.",
+    "reload": "Last inn på nytt",
     "loading": "Laster…",
     "submitting": "Sender…",
     "yes": "Ja",

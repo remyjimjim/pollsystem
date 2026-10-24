@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { AccessLevel } from '@/types'
 import { SUPPORTED_LOCALES, setLocale, type LocaleCode } from '@/i18n'
+import { useNewVersion } from '@/composables/useNewVersion'
 
 const authStore = useAuthStore()
 // Local development only: null in a production build, so it isn't bundled.
@@ -13,6 +14,7 @@ const DevHeaderLink = import.meta.env.DEV
   ? defineAsyncComponent(() => import('@/components/DevHeaderLink.vue'))
   : null
 const router = useRouter()
+const newVersion = useNewVersion()
 const { locale } = useI18n()
 
 onMounted(async () => {
@@ -47,6 +49,15 @@ function onLocaleChange(e: Event) {
 
 <template>
   <div id="app" class="min-h-screen">
+    <div
+      v-if="newVersion.available.value"
+      class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-sky-700 px-4 py-2 text-sm text-white print:hidden"
+      role="status"
+      data-test="new-version"
+    >
+      <span>{{ $t('common.newVersion') }}</span>
+      <button type="button" @click="newVersion.reload" class="rounded bg-white px-3 py-1 text-sm font-semibold text-sky-800 hover:bg-sky-50">{{ $t('common.reload') }}</button>
+    </div>
     <!-- Hidden when printing (e.g. a creator's poll report). -->
     <header class="bg-slate-800 text-white px-4 sm:px-8 print:hidden">
       <nav class="mx-auto flex min-h-20 max-w-6xl flex-wrap items-center justify-between gap-y-2 py-2 sm:py-0">

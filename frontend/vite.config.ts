@@ -8,6 +8,11 @@ import { fileURLToPath } from 'node:url'
 // /docs/manual in the docker-compose frontend container (mounted there).
 const manualDir = fileURLToPath(new URL('../docs/manual', import.meta.url))
 
+// This build's id (the commit on Cloudflare Pages). It's compiled into the app
+// and written to /version.json; an open tab that finds a different id there is
+// running an old version and offers a reload (useNewVersion).
+const BUILD_ID = process.env.CF_PAGES_COMMIT_SHA || String(Date.now())
+
 export default defineConfig({
   plugins: [
     vue(),
@@ -16,7 +21,13 @@ export default defineConfig({
     // docs/manual after the dev server started never reached the help
     // library's import.meta.glob. Watch the manual folder too.
     { name: 'watch-manual', configureServer: server => { server.watcher.add(manualDir) } },
+    {
+      name: 'version-file',
+      apply: 'build',
+      generateBundle() { this.emitFile({ type: 'asset', fileName: 'version.json', source: JSON.stringify({ build: BUILD_ID }) }) }
+    },
   ],
+  define: { __BUILD_ID__: JSON.stringify(BUILD_ID) },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

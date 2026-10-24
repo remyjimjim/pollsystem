@@ -13,6 +13,8 @@
     "help": "Ayuda"
   },
   "common": {
+    "newVersion": "Hay una nueva versión de BallotBox disponible.",
+    "reload": "Recargar",
     "loading": "Cargando…",
     "submitting": "Enviando…",
     "yes": "Sí",
