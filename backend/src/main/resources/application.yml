@@ -72,7 +72,7 @@ app:
   proxy:
     secret: ${PROXY_SECRET:}
   results:
-    k-anonymity-threshold: 1  # results hidden until k respondents, steps of k (1 since 2026-10-24: totals from the first vote; was 4, and 10 until 2026-10-20)
+    k-anonymity-threshold: 4  # results hidden until k respondents, steps of k (was 10 until 2026-10-20). Local dev can override it (Dev settings).
     group-minimum: 4          # an area filter or inside/outside-purview group under this is withheld, so no one respondent can be picked out
   magic-link:
     ttl-minutes: 15

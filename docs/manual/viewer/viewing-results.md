@@ -29,20 +29,21 @@ Results are shown as bars with a **percentage**, rounded to a whole number.
 
 ## Results protect people's privacy
 
-- **Results update as people respond.** They show from the first response,
-  and they never say who answered.
-- **Small groups are never shown.** When you narrow the results to a place, or
-  to people inside or outside the poll's area, a group of **fewer than 4
-  people** isn't shown. In so small a group, the results could reveal how
+- **No results until 4 people have responded.** Until then the page says how
+  many have responded so far. With fewer people, a result could show how
   particular people voted.
+- **Results update in steps of 4.** The page shows the results as they were
+  when the 4th, 8th, 12th… person responded. A single new vote, or a single
+  changed answer, never changes what you see on its own.
 - **Percentages only.** Exact counts aren't shown.
 
 ## Comments
 
 Under a question, candidate or measure, **N public comments** opens the
 comments people chose to make public. They're anonymous, and follow the same
-rules as the results. If you narrow the results by place, only comments from
-people in that group show, and none from a group of fewer than 4.
+rules as the results: none until 4 people have responded, and new ones appear
+with each step of 4. If you narrow the results by place, only comments from
+people in that group show.
 
 ## Inside or outside the poll's area
 
@@ -58,8 +59,9 @@ Both are ticked to start with, so you see everyone. Untick one to see only the
 other group. Results update as soon as you click.
 
 The number in brackets after each is how many respondents are in that group,
-e.g. "(32)". If either group is too small to show without narrowing down
-who's in it, both say **"(fewer than 4)"**.
+e.g. "(32)". Like the results, it updates in steps, not with every vote. If
+either group is too small to show without narrowing down who's in it, both say
+**"(fewer than 4)"**.
 
 A ballot measure covers the same area as the election it belongs to.
 
@@ -84,7 +86,8 @@ few people in a group, the results could reveal how particular people voted.
 To see results again, widen your choice: pick a larger area, **Clear** the place
 filter, or tick both boxes.
 
-If the page says no one has responded yet, the poll has no responses so far.
+If the page says how many people have responded so far but shows no results,
+the poll hasn't reached 4 respondents yet.
 
 People who haven't entered a zipcode yet can't be placed, so they appear only in
 the full, unfiltered results.

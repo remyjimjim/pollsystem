@@ -12,8 +12,8 @@ import java.time.Instant
 /**
  * The small-poll privacy threshold k: results hidden until k respondents,
  * public results in steps of k, the milestone email at k. Normally
- * app.results.k-anonymity-threshold (1 since 2026-10-24: totals show from the
- * first response; 3 in tests).
+ * app.results.k-anonymity-threshold (4; 3 in tests). Local dev may set 1 in
+ * Dev settings, so totals show from the first response while testing.
  *
  * A narrowed group (an area filter, or respondents inside/outside the poll's
  * area) is withheld under [groupMinimum] (app.results.group-minimum, 4), so a
