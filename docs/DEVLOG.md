@@ -61,6 +61,24 @@ logged.
 
 ---
 
+## 2026-10-24 — Exclude nationwide updates the results as it's toggled
+
+**Requested:**
+
+> can we make it so that when the user clicks/toggles the 'Exclude
+> Nationwide' checkbox the results toggle with it?
+
+**Changed:** once a search has run, the checkbox's `@change` runs the search
+again. Before the first search it just sets the option.
+
+**Verified:** headless, against local: Search lists 592 rows, ticking the
+box gives 583 (the 9 nationwide polls gone), and unticking gives 592 again.
+The frontend type-checks.
+
+**Commit:** `cdb9ead`
+
+---
+
 ## 2026-10-24 — Search: "Exclude nationwide polls"
 
 **Requested:**
