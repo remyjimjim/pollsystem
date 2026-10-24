@@ -9,7 +9,7 @@ title: Terms of Service
 These terms are an agreement between you and World Wide Wakeup, LLC ("we",
 "us") about your use of BallotBox at ballotbox.us.com ("the service"). By
 creating an account or using the service, you agree to them. Questions:
-[wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me).
+[support@ballotbox.us.com](mailto:support@ballotbox.us.com).
 
 ## The service
 

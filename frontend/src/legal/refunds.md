@@ -31,4 +31,4 @@ membership ends until you renew.
 
 ## Questions
 
-Email [wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me).
+Email [support@ballotbox.us.com](mailto:support@ballotbox.us.com).

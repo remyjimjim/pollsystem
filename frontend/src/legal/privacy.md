@@ -8,7 +8,7 @@ title: Privacy Policy
 
 This policy explains what World Wide Wakeup, LLC ("we", "us") collects when you
 use BallotBox at ballotbox.us.com ("the service"), why, and who can see it.
-Questions: [wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me).
+Questions: [support@ballotbox.us.com](mailto:support@ballotbox.us.com).
 
 ## What we collect
 
@@ -83,7 +83,7 @@ We keep your information while your account exists. We delete your data within
 - **Cancelling** your membership keeps your account and answers, so you can
   renew later.
 - **Deleting your account:** to delete your account, email us at
-  [wwwakeup.us.com@proton.me](mailto:wwwakeup.us.com@proton.me) from your
+  [support@ballotbox.us.com](mailto:support@ballotbox.us.com) from your
   account's email address. We'll delete your account, answers and comments,
   cancel any subscription at once, and email your account's address to confirm
   it's done. Results of polls you answered
