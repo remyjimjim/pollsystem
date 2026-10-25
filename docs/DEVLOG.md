@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-25 — Vote-form messages match the Submit button (Dark)
+
+**Requested:**
+
+> When attempting to submit votes for a state that I don't live in I get the
+> error msg: You can only vote on midterms from your own state. Can we make the
+> messages text color the same as the 'Submit votes' button?
+
+**Changed:** in `ElectionResponseForm`, `submit-error` and `missing-choice`
+use `text-slate-800` in Dark. That's the theme color the button's background
+uses (lime by default). In Light they keep `text-red-700`; there the button
+is black, and a black message would lose its warning.
+
+**Verified (headless, local, demo-super in Washington, Oregon District 1):**
+in Dark the message is `rgb(133, 199, 66)`, the same as the button's
+background. In Light it stays red. The frontend type-checks and the unit
+tests pass.
+
+**Commit:** `bd4c655`
+
+---
+
 ## 2026-10-25 — DEPLOYING-FLY: the prod deploy commands written down
 
 **Requested:**
