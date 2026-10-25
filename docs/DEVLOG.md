@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-25 — "Why?" page reworded to match the site
+
+**Requested:**
+
+> draft the fixes for why.md … Nice wordsmithing, keep it, push it and deploy
+> to staging
+
+**Changed (`why.md`, the user's text, revised with their approval):**
+
+- A "Why BallotBox?" title line.
+- "Other members never see your email address or phone number". Staff can,
+  for support and moderation, with a link to the Privacy Policy.
+- Encrypted in transit, and at rest by the hosting providers.
+- "Speak your mind … we only hold back slurs and profanity."
+- Chat and "a record of your own opinions" are marked "(coming soon)".
+- The statistical-significance heading now has text.
+- Typos fixed ("paste" → "past", "Users emails").
+
+**Commit:** `8963b2b`
+
+---
+
 ## 2026-10-25 — Logo: Ballot + tower = BallotBox; "Why?" page in the footer
 
 **Requested:**
