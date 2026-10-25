@@ -135,13 +135,16 @@ class StripePaymentProvider(
 
     override fun setCancelAtPeriodEnd(user: User, cancel: Boolean) {
         val subscriptionId = subscriptionOf(user)
-        val params = SubscriptionUpdateParams.builder()
-            .setCancelAtPeriodEnd(cancel)
-            // Stripe's portal may cancel with a cancel_at date instead; keeping
-            // the membership has to clear that too.
-            .apply { if (!cancel) setCancelAt(EmptyParam.EMPTY) }
-            .build()
         try {
+            val params = if (cancel) {
+                SubscriptionUpdateParams.builder().setCancelAtPeriodEnd(true).build()
+            } else {
+                // Keeping the membership undoes whichever way it was set to end:
+                // our Cancel button sets cancel_at_period_end; Stripe's portal may
+                // set a cancel_at date instead. Stripe refuses both in one request.
+                val sub = client().subscriptions().retrieve(subscriptionId)
+                resumeParams(sub.cancelAtPeriodEnd == true, sub.cancelAt) ?: return
+            }
             client().subscriptions().update(subscriptionId, params)
         } catch (e: StripeException) {
             log.error("Stripe cancel_at_period_end={} failed for user={}", cancel, user.id, e)
@@ -243,4 +246,15 @@ class StripePaymentProvider(
             null
         }
     }
+}
+
+/**
+ * The update that undoes a subscription's scheduled end, or null when it isn't
+ * set to end. Only one of cancel_at_period_end / cancel_at per request: Stripe
+ * rejects a request that sends both.
+ */
+internal fun resumeParams(cancelAtPeriodEnd: Boolean, cancelAt: Long?): SubscriptionUpdateParams? = when {
+    cancelAtPeriodEnd -> SubscriptionUpdateParams.builder().setCancelAtPeriodEnd(false).build()
+    cancelAt != null -> SubscriptionUpdateParams.builder().setCancelAt(EmptyParam.EMPTY).build()
+    else -> null
 }
