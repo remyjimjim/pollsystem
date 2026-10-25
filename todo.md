@@ -127,7 +127,7 @@
    - Decided 2026-10-08: one copy of the text in docs/manual/{viewer,user,creator,admin,super}/<process>.md,
      rendered in the app at /help; topics shown by access level; hover/click help text in the i18n files
      under a `help.<view>.<element>` section.
-   - Done: No.
+   - Done: Some.
 
 -  Creator reports, in phases. Privacy guardrails apply to every phase:
    - Totals only, never one row per respondent. Every breakdown hides groups under 10 (app.results.k-anonymity-threshold).
@@ -231,3 +231,49 @@
    - If needed: keep a server-side list of logged-out tokens (or a per-user "logged out at" time that tokens issued
      earlier fail against), checked on every request; or shorter-lived tokens with refresh.
    - Done: No.
+
+- Add ability to attach a 'BallotMeasure' to more than one election.
+  - Done: No
+
+- Add some kind of chat facility.
+  - Done: No
+
+- Add a way to have a 'Partner Code' box in /register such that when entered the discount associated with that code is applied to the amount to be charged for the length of the discount window.
+ - Done: No
+
+- Add a "Settings" gear icon in the header top right corner that when clicked opens a box that drops down and has a "Theme" drawer that when expanded opens a drop down drawer containing a toggle switch with the text 'Dark' on the left of the switch and 'Light' on the right. When 'Dark' (the default) is selected a row appears with the text 'Text color:' then a color chooser set to bright lime green (rgb(133 199 66)) and the text in parentheses 'Default'  then another row is below that has text 'Background color:' and a color chooser set to rgba(22, 11, 44, 1), when the toggle is set to the right the "Light" theme is chosen and 2 rows appear below the switch, the first one with text 'Text color:' and a color chooser set to black and the next row has text 'Background color:' and a color chooser set to 'White'.  below the Dark/Light toggle switch and the constituent 'Text color:' and 'Background color:' rows a new row appears with a label of 'Text size:' and 3 radio buttons labelled 'Small', 'Medium' and 'Large' which when 'Small' is selected the default text size is multiplied by .7, when 'Medium' is selected the default text size is multiplied by 1.0 and if 'Large' is selected the default text size is multiplied by 1.4.  Leave the header background color the same as it is.  When one clicks outside the settings box the box disappears.  
+ - Done: Yes (2026-10-25, release-0.8). Changed since: Dark's default background is #4d3d85, and each color has a "Use Default" checkbox.
+
+- Add Arabic and Hebrew to languages.
+ - Done: No
+
+- Add 'Nickname' [optional] to profile settings
+ - Done: No
+
+- Regarding help movies modal windows:
+  - If a user clicks on a Help topic of interest and sees a link to an instructional video, that 
+    should pop out a modal window that is the width of the screen and at 1/3 of screen height and should stick to the bottom 1/3 of screen and should not disappear if the user starts scrolling in main window.
+    - Use case: 
+      - Let's say you've clicked in the Help doc on the 'Chat' topic and there's a paragraph titled 'Set up your nickname in chat', then under the title there'd be a link with the text 
+      'Go to app...' when clicked will take you to the place in the app where that setting is set.
+      Then under that link would be another link with text 'watch video' when clicked would pop out
+      the modal video window. 
+      - It'd look a bit like this:
+
+        Set up your nickname in chat:
+        - Go to app
+        - Watch video
+  - Done: No
+
+- After launch: let a signed-in member see every ballot and questionnaire they've answered.
+  - A "profile" icon (head and shoulders) beside the Settings gear, shown when signed in, drops down:
+    - the member's email;
+    - My votes: the 5 most recent, then "See all →";
+    - Membership: Manage subscription / Cancel (now only on the home page);
+    - Log out (moved from the menu, saving room on phones).
+  - A /my-votes page with the full list: title, type, date voted, Open/Closed; View results, and Change vote
+    while open; cards on phones; filter by Open/Closed and type.
+  - A midterm district ballot appears once (not again for its statewide races and measures).
+  - Only the member sees their own list. Needs a new "my answered polls" endpoint (the super version,
+    /api/super/users/{id}/polls-completed, has the logic). About an afternoon, 9 languages.
+  - Done: No
