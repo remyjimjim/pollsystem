@@ -61,6 +61,55 @@ logged.
 
 ---
 
+## 2026-10-25 — Bad-word check: plurals caught; major slurs added
+
+**Requested:**
+
+> The bad words replacer doesn't seem to be working, I can submit a vote with
+> bad words, see Washington District 3 Justice position 5
+
+then chose "Plurals auto + I add slurs" over "plurals only" and "keep as is".
+
+**Cause:** the check worked as designed, but the list didn't cover the
+comment.
+
+- Local comment #415 (a public comment on Supreme Court Justice Position 5)
+  held several slurs and profanity and was saved **public**.
+- `bad-words.json` had 21 entries and lacked most of those words.
+- Matching was exact whole-word, so the plurals of the two listed slurs
+  didn't match.
+
+**Changed:**
+
+- This partly reverses the Oct 14 "no automatic word forms" decision.
+  `BadWords` and the frontend `wordPattern` now also match a listed word
+  followed by `-s`, `-es` or `-'s`/`-’s`. `replaceBadWord` keeps that ending
+  ("darns" becomes "dangs").
+- `bad-words.json` gains 47 singular entries, now 68 in all, with neutral
+  replacements in the existing style ("black", "hispanic", "jew", "jerk",
+  "crap" and so on):
+  - ethnic and racial slurs;
+  - sexuality, gender and disability slurs;
+  - common profanity.
+  The user should review the list. Words that are also names ("Dick") or
+  ordinary words ("cock", "cracker") were left out.
+- Local: comment #415 set to private.
+
+**Verified:**
+
+- `BadWordsControllerTest`: plurals, possessives and capitals are caught,
+  "-ed"/"-ing" forms aren't unless listed, and a plural can't be public.
+- `PublicCommentsTest` passes, and so does the frontend spec's plural
+  replacement test.
+- Local `/api/moderation/check` on #415's text now finds 7 listed words.
+
+**Not checked:** prod's public comments. The read-only Neon connection was
+refused twice; prod has 2 accounts and a couple of test votes.
+
+**Commit:** `81ce961`
+
+---
+
 ## 2026-10-25 — Vote-form messages match the Submit button (Dark)
 
 **Requested:**
