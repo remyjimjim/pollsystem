@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-10-25 — Tinted notice boxes follow the Dark theme
+
+**Requested:**
+
+> The text 'You voted on 2026 Midterm Washington District 2. You can vote
+> on...' on this page http://localhost:3000/polls/election/260 uses a white
+> background color instead of the background color for the rest of the page.
+
+**Cause:** the notice used `bg-sky-50` and `border-sky-300`. Only the slate
+greys followed the theme, and the same was true of every tinted box: amber,
+red, green, orange and so on.
+
+**Changed (`main.css`, `useAppearance`):**
+
+- `html` gets `theme-dark` in Dark.
+- In Dark, for the 11 hues in use (red, orange, green, amber, sky, emerald,
+  rose, blue, yellow, indigo, violet):
+  - `--color-{h}-50/100/200/300` become mixes of `{h}-500` into the page
+    background (16, 24, 40 and 55%);
+  - `.text-{h}-700/800/900` become light tints of `{h}-400`.
+  The dark shades are restyled only as text classes, because `bg-red-700` and
+  similar are also solid buttons with white text.
+- Light is unchanged.
+
+**Verified (headless, local):** demo-super voted on District 2 through the
+API, then District 1's notice was checked. In Dark it's a blue tint of the
+purple page with lime text; in Light it's still pale sky with dark text. The
+vote was cancelled afterwards and the screenshot deleted. The frontend
+type-checks and the unit tests pass.
+
+**Commit:** `7f29459`
+
+---
+
 ## 2026-10-25 — "Why?" page reworded to match the site
 
 **Requested:**
