@@ -1,5 +1,18 @@
 {
   "brand": "BallotBox",
+  "settings": {
+    "title": "Innstillinger",
+    "theme": "Tema",
+    "dark": "Mørkt",
+    "light": "Lyst",
+    "textColor": "Tekstfarge:",
+    "backgroundColor": "Bakgrunnsfarge:",
+    "default": "Standard",
+    "textSize": "Tekststørrelse:",
+    "small": "Liten",
+    "medium": "Middels",
+    "large": "Stor"
+  },
   "nav": {
     "searchPolls": "Søk i avstemninger",
     "viewResults": "Se resultater",

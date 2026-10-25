@@ -1,5 +1,18 @@
 {
   "brand": "BallotBox",
+  "settings": {
+    "title": "設定",
+    "theme": "テーマ",
+    "dark": "ダーク",
+    "light": "ライト",
+    "textColor": "文字の色：",
+    "backgroundColor": "背景色：",
+    "default": "既定",
+    "textSize": "文字サイズ：",
+    "small": "小",
+    "medium": "中",
+    "large": "大"
+  },
   "nav": {
     "searchPolls": "投票を検索",
     "viewResults": "結果を表示",

@@ -13,3 +13,39 @@ body {
   color: #1a202c;
   background-color: #f5f5f5;
 }
+
+/* ---------- Appearance (header gear → Settings; useAppearance.ts) ----------
+   The page below the header takes the viewer's text and background colors.
+   The whole site is drawn in Tailwind's slate palette, so re-deriving that
+   palette from the two colors (as mixes between them) recolors text, borders,
+   panels and buttons together. The header keeps its own colors. */
+html.app-themed body,
+html.app-themed #app {
+  background-color: var(--app-bg);
+  color: var(--app-fg);
+}
+html.app-themed .app-content {
+  color: var(--app-fg);
+  --color-white: var(--app-bg);
+  --color-black: var(--app-fg);
+  --color-slate-50: color-mix(in srgb, var(--app-fg) 5%, var(--app-bg));
+  --color-slate-100: color-mix(in srgb, var(--app-fg) 10%, var(--app-bg));
+  --color-slate-200: color-mix(in srgb, var(--app-fg) 18%, var(--app-bg));
+  --color-slate-300: color-mix(in srgb, var(--app-fg) 30%, var(--app-bg));
+  --color-slate-400: color-mix(in srgb, var(--app-fg) 45%, var(--app-bg));
+  --color-slate-500: color-mix(in srgb, var(--app-fg) 62%, var(--app-bg));
+  --color-slate-600: color-mix(in srgb, var(--app-fg) 75%, var(--app-bg));
+  --color-slate-700: color-mix(in srgb, var(--app-fg) 88%, var(--app-bg));
+  --color-slate-800: var(--app-fg);
+  --color-slate-900: var(--app-fg);
+}
+/* Native form fields follow the theme too. */
+html.app-themed .app-content :is(input:not([type=checkbox]):not([type=radio]):not([type=color]), select, textarea) {
+  background-color: var(--app-bg);
+  color: var(--app-fg);
+}
+/* White text on a strong color (result bars, alerts) stays real white. */
+html.app-themed .app-content :is(.bg-red-600, .bg-red-700, .bg-red-800, .bg-green-700, .bg-green-800,
+  .bg-orange-500, .bg-emerald-500, .bg-emerald-600, .bg-sky-500) {
+  --color-white: #fff;
+}

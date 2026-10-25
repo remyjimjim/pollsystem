@@ -1,5 +1,18 @@
 {
   "brand": "BallotBox",
+  "settings": {
+    "title": "Configuración",
+    "theme": "Tema",
+    "dark": "Oscuro",
+    "light": "Claro",
+    "textColor": "Color del texto:",
+    "backgroundColor": "Color de fondo:",
+    "default": "Predeterminado",
+    "textSize": "Tamaño del texto:",
+    "small": "Pequeño",
+    "medium": "Mediano",
+    "large": "Grande"
+  },
   "nav": {
     "searchPolls": "Buscar Encuestas",
     "viewResults": "Ver Resultados",

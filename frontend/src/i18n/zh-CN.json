@@ -1,5 +1,18 @@
 {
   "brand": "BallotBox",
+  "settings": {
+    "title": "设置",
+    "theme": "主题",
+    "dark": "深色",
+    "light": "浅色",
+    "textColor": "文字颜色：",
+    "backgroundColor": "背景颜色：",
+    "default": "默认",
+    "textSize": "文字大小：",
+    "small": "小",
+    "medium": "中",
+    "large": "大"
+  },
   "nav": {
     "searchPolls": "搜索投票",
     "viewResults": "查看结果",
