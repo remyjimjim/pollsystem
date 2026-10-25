@@ -6,8 +6,13 @@ import { useI18n } from 'vue-i18n'
 import PublicCommentToggle from './PublicCommentToggle.vue'
 import ReplaceWordDialog from './ReplaceWordDialog.vue'
 import { useCommentModeration } from '../composables/useCommentModeration'
+import { useAppearance } from '@/composables/useAppearance'
 
 const { t } = useI18n()
+// In Dark, the form's messages take the Submit votes button's color (the theme
+// text color); in Light they stay red, so they still stand out from the text.
+const appearance = useAppearance()
+const messageColor = computed(() => appearance.theme === 'dark' ? 'text-slate-800' : 'text-red-700')
 const moderation = useCommentModeration()
 
 interface CandidateDto {
@@ -657,13 +662,13 @@ onMounted(load)
     </template>
 
     <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
-    <p v-if="missing" class="m-0 text-sm text-red-700" role="alert" data-test="missing-choice">
+    <p v-if="missing" class="m-0 text-sm" :class="messageColor" role="alert" data-test="missing-choice">
       <i18n-t :keypath="missing.kind === 'office' ? 'election.validation.selectionFor' : 'election.validation.yesNoFor'" tag="span">
         <template #office><a :href="`#${officeAnchor(missing.office)}`" class="font-semibold underline" @click.prevent="goToOffice(missing.office)">{{ missing.label }}</a></template>
         <template #name><a :href="`#${officeAnchor(missing.office)}`" class="font-semibold underline" @click.prevent="goToOffice(missing.office)">{{ missing.label }}</a></template>
       </i18n-t>
     </p>
-    <p v-if="submitError" class="m-0 text-sm text-red-700" role="alert" data-test="submit-error">
+    <p v-if="submitError" class="m-0 text-sm" :class="messageColor" role="alert" data-test="submit-error">
       {{ submitError }}
       <router-link v-if="otherBallot" :to="`/polls/election/${otherBallot.id}`" class="font-semibold underline">{{ $t('election.goToOtherBallot') }}</router-link>
     </p>
