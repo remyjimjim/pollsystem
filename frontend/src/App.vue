@@ -154,7 +154,7 @@ function onLocaleChange(e: Event) {
     <main class="app-content mx-auto my-8 max-w-6xl px-4 sm:px-8">
       <RouterView />
     </main>
-    <footer class="app-content mx-auto mb-8 flex max-w-6xl flex-wrap gap-x-4 gap-y-1 px-4 text-xs text-slate-500 sm:px-8 print:hidden" data-test="site-footer">
+    <footer class="app-content mx-auto mb-8 flex max-w-6xl flex-wrap justify-center gap-x-4 gap-y-1 px-4 text-xs text-slate-500 sm:px-8 print:hidden" data-test="site-footer">
       <RouterLink to="/legal/terms" class="hover:text-slate-800 hover:underline">{{ $t('legal.terms') }}</RouterLink>
       <RouterLink to="/legal/privacy" class="hover:text-slate-800 hover:underline">{{ $t('legal.privacy') }}</RouterLink>
       <RouterLink to="/legal/refunds" class="hover:text-slate-800 hover:underline">{{ $t('legal.refunds') }}</RouterLink>
