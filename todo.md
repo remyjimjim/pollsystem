@@ -277,3 +277,22 @@
   - Only the member sees their own list. Needs a new "my answered polls" endpoint (the super version,
     /api/super/users/{id}/polls-completed, has the logic). About an afternoon, 9 languages.
   - Done: No
+
+- After launch (start right away; aim to finish phases 1-2 by ~Nov 1): a midterms map.
+  - Phase 1 (~1 day): a US outline map (Census cartographic boundaries, public domain, drawn as SVG in the
+    browser). Radio buttons pick the race: Senate, Governor, Lt. Governor. Each state is colored by the leading
+    party in that race (a fusion label takes its first party's color; other parties get their own color; grey
+    when the state has too few votes, under the group minimum of 4). Clicking a state opens a state page with
+    its statewide totals and a list of its district ballots.
+    - New endpoint: per-state statewide summary (from each state's statewide election), respecting the
+      privacy minimums.
+    - A clear label: "BallotBox members' informal poll — not official results or a forecast".
+    - A list/table version beside the map (phones, accessibility).
+  - Phase 2 (~1-2 days): district maps on the state pages. Census 2024 congressional district lines where
+    still current; a grid of numbered district boxes for states that redrew for 2026 (e.g. TX, MO, UT, AL,
+    LA; see docs/launch-content/research/XX.md), or their new official map files where we can get them.
+    Clicking a district opens its existing results page.
+  - Phase 3 (~1 day): a House radio button coloring districts by their leading party.
+  - Expect the map to be mostly grey until enough people vote.
+  - Done: No
+
