@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-10-25 — Fix: "Keep my membership" always failed
+
+**Requested:**
+
+> I got an email from fly.io saying the staging app had an issue with stripe
+> … Stripe cancel_at_period_end=false failed for user=11 …
+> InvalidRequestException: Received both cancel_at_period_end and cancel_at
+> parameters. Please pass in only one.
+
+**Cause:** `StripePaymentProvider.setCancelAtPeriodEnd(false)` sent
+`cancel_at_period_end=false` together with an empty `cancel_at`, meant to
+clear a cancellation date set in Stripe's portal. Stripe rejects any request
+that has both, so "Keep my membership" failed every time, on staging and
+prod alike, showing "Billing isn't available". On local that message had
+been blamed on Stripe not being configured. That was wrong.
+
+**Changed:**
+
+- Resuming retrieves the subscription and sends only what's needed:
+  - `cancel_at_period_end=false` if it's set to end at the period end (our
+    Cancel button);
+  - an empty `cancel_at` if it's set to end on a date (Stripe's portal);
+  - nothing if neither.
+- That decision is the testable `resumeParams()`.
+- Cancelling is unchanged, sending only `cancel_at_period_end=true`.
+
+**Verified:** `ResumeParamsTest` (3) passes, and so do
+`MembershipCancelTest` and `BillingControllerTest`. To try on staging after
+the deploy: Cancel membership, then Keep my membership, as a test member.
+
+**Commit:** `4c9b2f7`
+
+---
+
 ## 2026-10-25 — Dark theme's default background: #2f1d72
 
 **Requested:**
