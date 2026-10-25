@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-25 — "Use Default" checkbox for the theme colors
+
+**Requested:**
+
+> Can we change the color choosers in the theme dropdown such that there's a
+> checkbox with label "Use Default". And we should set the current text and
+> background color values as the default color that comes up when the user
+> clicks the 'Use Default' checkbox.
+
+**Changed:** in `SettingsMenu`, each color row has a "Use Default" checkbox
+(9 languages) in place of the "(Default)" note.
+
+- It's ticked while the color equals the default.
+- Ticking it sets the default: Dark `#85c742` on `#4d3d85`, Light black on
+  white. These were already the current defaults.
+- Picking a color unticks it.
+- Unticking restores the last color picked during this visit.
+
+**Verified (headless, local):** started ticked at `rgb(77, 61, 133)`. Picking
+`#003300` unticked it and turned the page green. Ticking restored
+`rgb(77, 61, 133)`, and unticking brought back the green. A screenshot of
+the box was deleted after viewing. The frontend type-checks.
+
+**Commit:** `9e3a629`
+
+---
+
 ## 2026-10-25 — Dark theme's default background: #4d3d85
 
 **Requested:**
