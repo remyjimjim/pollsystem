@@ -61,6 +61,55 @@ logged.
 
 ---
 
+## 2026-10-25 — Settings gear: Dark/Light theme, colors, text size (local)
+
+**Requested (abridged):**
+
+> Add a "Settings" gear icon in the header top right corner that when clicked
+> opens a box that drops down and has a "Theme" drawer … a toggle switch with
+> the text 'Dark' on the left of the switch and 'Light' on the right. When
+> 'Dark' (the default) is selected … 'Text color:' … bright lime green
+> (rgb(133 199 66)) … 'Background color:' … rgba(22, 11, 44, 1) … "Light" …
+> black … White … 'Text size:' … 'Small', 'Medium' and 'Large' … .7 … 1.0 …
+> 1.4. Leave the header background color the same as it is. When one clicks
+> outside the settings box the box disappears.
+
+**Changed:**
+
+- `SettingsMenu.vue`: a gear after the language picker. The box has a
+  Theme drawer containing:
+  - the Dark/Light switch;
+  - text and background color choosers for the current theme, with
+    "(Default)" beside a default value;
+  - Text size radios.
+  The box closes on an outside click or Escape.
+- `useAppearance.ts`: settings remembered per device (`localStorage`).
+  - Dark is the default: `#85c742` text on a `#160b2c` background.
+  - Light is `#000000` on `#ffffff`.
+  - The text size sets the root font size (70% / 100% / 140%), so every
+    `rem`-based size scales, the header included.
+- `main.css`: `.app-content` (`<main>` and the footer) redefines Tailwind's
+  slate palette and white/black as mixes of the two colors, so the whole
+  page follows. The header is outside it and keeps its colors.
+  - Form fields follow the theme.
+  - White text on strong colors (result bars, alerts) stays white.
+- 9 languages.
+
+**Verified:**
+
+- The frontend type-checks and the unit tests pass.
+- Headless screenshots on local: dark search (box open), dark results and
+  light results. All are readable, and the bars keep white labels.
+- An outside click closes the box. The screenshots were deleted after
+  viewing.
+
+**Open:** "Dark by default" changes the look for every first-time visitor, so
+the user should decide before this goes to staging or prod.
+
+**Commit:** `feda2a3`
+
+---
+
 ## 2026-10-24 — Tagged release-0.5
 
 **Requested:**
