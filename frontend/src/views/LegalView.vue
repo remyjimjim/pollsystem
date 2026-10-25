@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { legalPage, renderLegal, placeholdersIn } from '@/legal/legal'
 
 const route = useRoute()
+// The policies are in English only (decided 2026-10-25): in any other language
+// the page says so, and that the English version is the one that applies.
+const { locale } = useI18n()
+const englishOnly = computed(() => !String(locale.value).startsWith('en'))
 const page = computed(() => legalPage(String(route.params.page)))
 const html = computed(() => (page.value ? renderLegal(page.value) : ''))
 const todo = computed(() => (page.value ? placeholdersIn(page.value).length : 0))
@@ -15,7 +20,10 @@ const todo = computed(() => (page.value ? placeholdersIn(page.value).length : 0)
       <p v-if="todo" class="mb-4 rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900" data-test="legal-draft">
         Draft: {{ todo }} highlighted item{{ todo === 1 ? '' : 's' }} still to fill in before launch.
       </p>
-      <article class="legal-page" data-test="legal-page" v-html="html" />
+      <p v-if="englishOnly" class="mb-4 rounded border border-sky-300 bg-sky-50 p-3 text-sm text-sky-900" data-test="legal-english-only">
+        {{ $t('legal.englishOnly') }}
+      </p>
+      <article class="legal-page" lang="en" data-test="legal-page" v-html="html" />
     </template>
     <p v-else class="text-sm text-slate-600">{{ $t('notFound.message') }}</p>
   </div>

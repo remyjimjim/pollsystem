@@ -772,6 +772,7 @@
     }
   },
   "legal": {
+    "englishOnly": "Queste condizioni sono disponibili solo in inglese. Si applica la versione inglese.",
     "terms": "Termini di servizio",
     "privacy": "Informativa sulla privacy",
     "refunds": "Disdetta e rimborsi"
