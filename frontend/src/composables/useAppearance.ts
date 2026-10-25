@@ -53,6 +53,7 @@ function apply() {
   const root = document.documentElement
   const c = state.colors[state.theme]
   root.classList.add('app-themed')
+  root.classList.toggle('theme-dark', state.theme === 'dark')
   root.style.setProperty('--app-fg', c.text)
   root.style.setProperty('--app-bg', c.background)
   root.style.colorScheme = state.theme

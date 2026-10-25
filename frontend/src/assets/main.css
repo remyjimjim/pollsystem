@@ -49,3 +49,88 @@ html.app-themed .app-content :is(.bg-red-600, .bg-red-700, .bg-red-800, .bg-gree
   .bg-orange-500, .bg-emerald-500, .bg-emerald-600, .bg-sky-500) {
   --color-white: #fff;
 }
+
+/* Dark theme: tinted notice boxes (pale -50/-100 fills, -200/-300 borders) are
+   re-mixed from each hue into the page background, and dark tinted text
+   (-700/-800/-900) becomes a light tint, so a "voted elsewhere" or warning box
+   matches the page instead of showing as a white block. Text only for the dark
+   shades: the same shades are solid button fills (e.g. red-700 with white text). */
+html.theme-dark .app-content {
+  --color-red-50: color-mix(in oklab, var(--color-red-500) 16%, var(--app-bg));
+  --color-red-100: color-mix(in oklab, var(--color-red-500) 24%, var(--app-bg));
+  --color-red-200: color-mix(in oklab, var(--color-red-500) 40%, var(--app-bg));
+  --color-red-300: color-mix(in oklab, var(--color-red-500) 55%, var(--app-bg));
+  --color-orange-50: color-mix(in oklab, var(--color-orange-500) 16%, var(--app-bg));
+  --color-orange-100: color-mix(in oklab, var(--color-orange-500) 24%, var(--app-bg));
+  --color-orange-200: color-mix(in oklab, var(--color-orange-500) 40%, var(--app-bg));
+  --color-orange-300: color-mix(in oklab, var(--color-orange-500) 55%, var(--app-bg));
+  --color-green-50: color-mix(in oklab, var(--color-green-500) 16%, var(--app-bg));
+  --color-green-100: color-mix(in oklab, var(--color-green-500) 24%, var(--app-bg));
+  --color-green-200: color-mix(in oklab, var(--color-green-500) 40%, var(--app-bg));
+  --color-green-300: color-mix(in oklab, var(--color-green-500) 55%, var(--app-bg));
+  --color-amber-50: color-mix(in oklab, var(--color-amber-500) 16%, var(--app-bg));
+  --color-amber-100: color-mix(in oklab, var(--color-amber-500) 24%, var(--app-bg));
+  --color-amber-200: color-mix(in oklab, var(--color-amber-500) 40%, var(--app-bg));
+  --color-amber-300: color-mix(in oklab, var(--color-amber-500) 55%, var(--app-bg));
+  --color-sky-50: color-mix(in oklab, var(--color-sky-500) 16%, var(--app-bg));
+  --color-sky-100: color-mix(in oklab, var(--color-sky-500) 24%, var(--app-bg));
+  --color-sky-200: color-mix(in oklab, var(--color-sky-500) 40%, var(--app-bg));
+  --color-sky-300: color-mix(in oklab, var(--color-sky-500) 55%, var(--app-bg));
+  --color-emerald-50: color-mix(in oklab, var(--color-emerald-500) 16%, var(--app-bg));
+  --color-emerald-100: color-mix(in oklab, var(--color-emerald-500) 24%, var(--app-bg));
+  --color-emerald-200: color-mix(in oklab, var(--color-emerald-500) 40%, var(--app-bg));
+  --color-emerald-300: color-mix(in oklab, var(--color-emerald-500) 55%, var(--app-bg));
+  --color-rose-50: color-mix(in oklab, var(--color-rose-500) 16%, var(--app-bg));
+  --color-rose-100: color-mix(in oklab, var(--color-rose-500) 24%, var(--app-bg));
+  --color-rose-200: color-mix(in oklab, var(--color-rose-500) 40%, var(--app-bg));
+  --color-rose-300: color-mix(in oklab, var(--color-rose-500) 55%, var(--app-bg));
+  --color-blue-50: color-mix(in oklab, var(--color-blue-500) 16%, var(--app-bg));
+  --color-blue-100: color-mix(in oklab, var(--color-blue-500) 24%, var(--app-bg));
+  --color-blue-200: color-mix(in oklab, var(--color-blue-500) 40%, var(--app-bg));
+  --color-blue-300: color-mix(in oklab, var(--color-blue-500) 55%, var(--app-bg));
+  --color-yellow-50: color-mix(in oklab, var(--color-yellow-500) 16%, var(--app-bg));
+  --color-yellow-100: color-mix(in oklab, var(--color-yellow-500) 24%, var(--app-bg));
+  --color-yellow-200: color-mix(in oklab, var(--color-yellow-500) 40%, var(--app-bg));
+  --color-yellow-300: color-mix(in oklab, var(--color-yellow-500) 55%, var(--app-bg));
+  --color-indigo-50: color-mix(in oklab, var(--color-indigo-500) 16%, var(--app-bg));
+  --color-indigo-100: color-mix(in oklab, var(--color-indigo-500) 24%, var(--app-bg));
+  --color-indigo-200: color-mix(in oklab, var(--color-indigo-500) 40%, var(--app-bg));
+  --color-indigo-300: color-mix(in oklab, var(--color-indigo-500) 55%, var(--app-bg));
+  --color-violet-50: color-mix(in oklab, var(--color-violet-500) 16%, var(--app-bg));
+  --color-violet-100: color-mix(in oklab, var(--color-violet-500) 24%, var(--app-bg));
+  --color-violet-200: color-mix(in oklab, var(--color-violet-500) 40%, var(--app-bg));
+  --color-violet-300: color-mix(in oklab, var(--color-violet-500) 55%, var(--app-bg));
+}
+html.theme-dark .app-content .text-red-700 { color: color-mix(in oklab, var(--color-red-400) 72%, white); }
+html.theme-dark .app-content .text-red-800 { color: color-mix(in oklab, var(--color-red-400) 58%, white); }
+html.theme-dark .app-content .text-red-900 { color: color-mix(in oklab, var(--color-red-400) 45%, white); }
+html.theme-dark .app-content .text-orange-700 { color: color-mix(in oklab, var(--color-orange-400) 72%, white); }
+html.theme-dark .app-content .text-orange-800 { color: color-mix(in oklab, var(--color-orange-400) 58%, white); }
+html.theme-dark .app-content .text-orange-900 { color: color-mix(in oklab, var(--color-orange-400) 45%, white); }
+html.theme-dark .app-content .text-green-700 { color: color-mix(in oklab, var(--color-green-400) 72%, white); }
+html.theme-dark .app-content .text-green-800 { color: color-mix(in oklab, var(--color-green-400) 58%, white); }
+html.theme-dark .app-content .text-green-900 { color: color-mix(in oklab, var(--color-green-400) 45%, white); }
+html.theme-dark .app-content .text-amber-700 { color: color-mix(in oklab, var(--color-amber-400) 72%, white); }
+html.theme-dark .app-content .text-amber-800 { color: color-mix(in oklab, var(--color-amber-400) 58%, white); }
+html.theme-dark .app-content .text-amber-900 { color: color-mix(in oklab, var(--color-amber-400) 45%, white); }
+html.theme-dark .app-content .text-sky-700 { color: color-mix(in oklab, var(--color-sky-400) 72%, white); }
+html.theme-dark .app-content .text-sky-800 { color: color-mix(in oklab, var(--color-sky-400) 58%, white); }
+html.theme-dark .app-content .text-sky-900 { color: color-mix(in oklab, var(--color-sky-400) 45%, white); }
+html.theme-dark .app-content .text-emerald-700 { color: color-mix(in oklab, var(--color-emerald-400) 72%, white); }
+html.theme-dark .app-content .text-emerald-800 { color: color-mix(in oklab, var(--color-emerald-400) 58%, white); }
+html.theme-dark .app-content .text-emerald-900 { color: color-mix(in oklab, var(--color-emerald-400) 45%, white); }
+html.theme-dark .app-content .text-rose-700 { color: color-mix(in oklab, var(--color-rose-400) 72%, white); }
+html.theme-dark .app-content .text-rose-800 { color: color-mix(in oklab, var(--color-rose-400) 58%, white); }
+html.theme-dark .app-content .text-rose-900 { color: color-mix(in oklab, var(--color-rose-400) 45%, white); }
+html.theme-dark .app-content .text-blue-700 { color: color-mix(in oklab, var(--color-blue-400) 72%, white); }
+html.theme-dark .app-content .text-blue-800 { color: color-mix(in oklab, var(--color-blue-400) 58%, white); }
+html.theme-dark .app-content .text-blue-900 { color: color-mix(in oklab, var(--color-blue-400) 45%, white); }
+html.theme-dark .app-content .text-yellow-700 { color: color-mix(in oklab, var(--color-yellow-400) 72%, white); }
+html.theme-dark .app-content .text-yellow-800 { color: color-mix(in oklab, var(--color-yellow-400) 58%, white); }
+html.theme-dark .app-content .text-yellow-900 { color: color-mix(in oklab, var(--color-yellow-400) 45%, white); }
+html.theme-dark .app-content .text-indigo-700 { color: color-mix(in oklab, var(--color-indigo-400) 72%, white); }
+html.theme-dark .app-content .text-indigo-800 { color: color-mix(in oklab, var(--color-indigo-400) 58%, white); }
+html.theme-dark .app-content .text-indigo-900 { color: color-mix(in oklab, var(--color-indigo-400) 45%, white); }
+html.theme-dark .app-content .text-violet-700 { color: color-mix(in oklab, var(--color-violet-400) 72%, white); }
+html.theme-dark .app-content .text-violet-800 { color: color-mix(in oklab, var(--color-violet-400) 58%, white); }
+html.theme-dark .app-content .text-violet-900 { color: color-mix(in oklab, var(--color-violet-400) 45%, white); }
