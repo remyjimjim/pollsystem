@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-25 — Billing message in the theme's text color (Dark)
+
+**Requested:**
+
+> The text color for the message that appears after clicking the 'Keep my
+> membership' button, namely "Billing isn’t available right now. Please try
+> again later." should be the same color as the theme's text-color.
+
+**Changed:** in `BillingBanner`, the billing error uses `text-slate-900`
+(the theme's text color) in Dark, and stays `text-red-700` in Light, the
+same rule as the vote form's messages. On local the message is expected
+because Stripe isn't configured there.
+
+**Verified:** the frontend type-checks and the unit tests pass (182). Not
+checked in a headless browser: showing the message needs a member partway
+through cancelling.
+
+**Commit:** `4f11751`
+
+---
+
 ## 2026-10-25 — Decision: a midterms map, right after launch
 
 **Requested (abridged):**
