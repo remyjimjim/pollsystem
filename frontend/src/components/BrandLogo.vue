@@ -5,7 +5,7 @@
   Decorative: the "BallotBox" name sits next to it, so screen readers skip it.
 -->
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 70" aria-hidden="true" focusable="false" class="block h-full w-auto">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145 70" aria-hidden="true" focusable="false" class="block h-full w-auto">
     <!-- Cartoon sketch: a ballot with a curled corner, a plus, and a radio tower broadcasting.
          Lines use currentColor, so the logo takes the text colour of wherever it sits. -->
     <defs>
@@ -39,6 +39,14 @@
       <!-- plus -->
       <path d="M63 28.5 L63.2 43.5 M55.5 36.2 L70.5 35.8" stroke-width="2.6"/>
 
+      <!-- equals: the plus's width, halfway between the tower and the "BallotBox"
+           word; its bottom bar's lower edge sits on the word's baseline (about 42:
+           41.8 at the desktop logo size, 43.8 on phones, where the logo is smaller) -->
+      <path d="M128.7 33.9 L142.7 33.6 M128.7 40.9 L142.7 40.6" stroke-width="2.6"/>
+
+      <!-- the tower, moved left by the plus's width (15), and scaled so its full
+           height (signal arcs 3.1 to base 64.5) matches the ballot page (8.6 to 63.5) -->
+      <g transform="translate(-15 0) translate(110 8.6) scale(0.8941) translate(-110 -3.1)">
       <!-- the tower: a tall three-legged tripod with cross-bracing -->
       <path d="M110 19 L91 64 M110 19 L129 64 M110 19 L113 64"/>
       <path d="M102.6 37 L117.6 37 M98.3 47 L121.8 47 M94.6 56 L125.6 56" stroke-width="1.5"/>
@@ -54,7 +62,8 @@
         <path d="M100.8 6.3 A12 12 0 0 0 100.8 21.7"/>
         <path d="M97 3.1 A17 17 0 0 0 97 24.9"/>
       </g>
+      </g>
     </g>
-    <circle cx="110" cy="13" r="3.6" fill="#f87171" stroke="currentColor" stroke-width="1.6" filter="url(#brand-logo-sketch)"/>
+    <circle cx="110" cy="13" r="3.6" fill="#f87171" stroke="currentColor" stroke-width="1.6" filter="url(#brand-logo-sketch)" transform="translate(-15 0) translate(110 8.6) scale(0.8941) translate(-110 -3.1)"/>
   </svg>
 </template>
