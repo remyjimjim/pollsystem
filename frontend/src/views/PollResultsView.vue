@@ -399,7 +399,7 @@ onBeforeUnmount(() => {
 
 /** A purview checkbox's count: the number, or "fewer than k" when withheld (a small group). */
 function purviewCount(n: number | null): string {
-  return n === null ? t('results.countWithheld', { n: data.value?.visibility.minimum ?? 4 }) : String(n)
+  return n === null ? t('results.countWithheld', { n: data.value?.visibility.groupMinimum ?? data.value?.visibility.minimum ?? 4 }) : String(n)
 }
 </script>
 
@@ -567,7 +567,7 @@ function purviewCount(n: number | null): string {
                   <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ answer }}</td>
                   <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
-                        class="rounded bg-sky-500 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        class="rounded bg-sky-500 px-2 py-0.5 text-xs text-[#000] whitespace-nowrap"
                         style="min-width: 2.5rem"
                         :style="{ width: `${percent}%` }"
                       >{{ barLabel(percent, q.byAnswer?.[answer]) }}</div>
@@ -589,7 +589,7 @@ function purviewCount(n: number | null): string {
                   <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.yes') }}</td>
                   <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
-                        class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        class="rounded bg-green-700 px-2 py-0.5 text-xs text-[#000] whitespace-nowrap"
                         style="min-width: 2.5rem"
                         :style="{ width: `${bData.yesPct}%` }"
                       >{{ barLabel(bData.yesPct, bData.yes) }}</div>
@@ -599,7 +599,7 @@ function purviewCount(n: number | null): string {
                   <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.no') }}</td>
                   <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
-                        class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        class="rounded bg-red-700 px-2 py-0.5 text-xs text-[#000] whitespace-nowrap"
                         style="min-width: 2.5rem"
                         :style="{ width: `${bData.noPct}%` }"
                       >{{ barLabel(bData.noPct, bData.no) }}</div>
@@ -635,7 +635,7 @@ function purviewCount(n: number | null): string {
                     <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.yes') }}</td>
                     <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
-                        class="rounded bg-green-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        class="rounded bg-green-700 px-2 py-0.5 text-xs text-[#000] whitespace-nowrap"
                         style="min-width: 2.5rem"
                         :style="{ width: `${c.yesPct}%` }"
                       >{{ barLabel(c.yesPct, c.yes) }}</div>
@@ -645,7 +645,7 @@ function purviewCount(n: number | null): string {
                     <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.no') }}</td>
                     <td class="rounded bg-slate-100 py-1 align-middle">
                       <div
-                        class="rounded bg-red-700 px-2 py-0.5 text-xs text-white whitespace-nowrap"
+                        class="rounded bg-red-700 px-2 py-0.5 text-xs text-[#000] whitespace-nowrap"
                         style="min-width: 2.5rem"
                         :style="{ width: `${c.noPct}%` }"
                       >{{ barLabel(c.noPct, c.no) }}</div>
