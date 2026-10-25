@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-25 — All result bars light blue with black text
+
+**Requested:**
+
+> Can we make the progress bars the same light blue background and black text
+> as they were for that other page, this page is looking a bit off...
+> http://localhost:3000/polls/election/280/results
+
+**Changed:** the election and ballot-measure Yes/No bars in `PollResultsView`
+and `BallotPartResults` (8 bars, green-700 or red-700) are now `bg-sky-500`
+with black text, like the questionnaire bars. The "Yes"/"No" labels beside
+each bar tell them apart.
+
+**Verified (headless, local):** a screenshot of election 280's results in
+Dark shows light-blue bars with black "100%" and "0%"; it was deleted after
+viewing. The frontend type-checks.
+
+**Commit:** `ef98b47`
+
+---
+
 ## 2026-10-25 — Legal and help pages follow the theme
 
 **Requested:**
