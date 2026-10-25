@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-10-25 — Legal and help pages follow the theme
+
+**Requested:**
+
+> I think the dark/light settings/colors should take effect for all pages,
+> some pages I've found that seem ignore the dark settings...
+> http://localhost:3000/legal/terms
+
+**Cause:** the scoped `<style>` blocks in `LegalView` and `HelpView` used
+fixed RGB values for slate 800, 700, 100 and 200.
+
+**Changed:**
+
+- Those values are now `var(--color-slate-800)` and so on, the palette the
+  theme redefines.
+- The yellow `mark.legal-todo` highlight gets `color: #000`.
+- A scan of every `.vue` and `.css` file found no other fixed or named
+  colors in styles. There are no teleported dialogs; the 12 full-screen
+  overlays render inside the themed `<main>`.
+
+**Verified (headless, local, Dark):** `/legal/terms` and `/help` paragraphs
+compute to the lime mix. A screenshot of Terms shows lime headings and text
+on purple; it was deleted after viewing. The frontend type-checks.
+
+**Commit:** `852b3d4`
+
+---
+
 ## 2026-10-25 — The Settings gear stays top right
 
 **Requested:**
