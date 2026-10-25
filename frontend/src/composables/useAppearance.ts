@@ -11,9 +11,16 @@ export type Theme = 'dark' | 'light'
 export type TextSize = 'small' | 'medium' | 'large'
 
 export const THEME_DEFAULTS: Record<Theme, { text: string; background: string }> = {
-  dark: { text: '#85c742', background: '#160b2c' },   // rgb(133 199 66) on rgba(22, 11, 44, 1)
+  dark: { text: '#85c742', background: '#4d3d85' },   // rgb(133 199 66) on #4d3d85 (was #160b2c until 2026-10-25)
   light: { text: '#000000', background: '#ffffff' },
 }
+// Former defaults: a saved color equal to one of these was never chosen by the
+// viewer, so it follows the current default instead.
+const FORMER_DEFAULTS: Record<Theme, { text: string[]; background: string[] }> = {
+  dark: { text: [], background: ['#160b2c'] },
+  light: { text: [], background: [] },
+}
+
 export const TEXT_SCALE: Record<TextSize, number> = { small: 0.7, medium: 1, large: 1.4 }
 
 const KEY = 'appearance'
@@ -29,7 +36,12 @@ function load() {
     if (saved && typeof saved === 'object') {
       if (saved.theme === 'dark' || saved.theme === 'light') base.theme = saved.theme
       if (saved.size in TEXT_SCALE) base.size = saved.size
-      for (const t of ['dark', 'light'] as Theme[]) Object.assign(base.colors[t], saved.colors?.[t] ?? {})
+      for (const t of ['dark', 'light'] as Theme[]) {
+        for (const which of ['text', 'background'] as const) {
+          const v = saved.colors?.[t]?.[which]
+          if (typeof v === 'string' && !FORMER_DEFAULTS[t][which].includes(v.toLowerCase())) base.colors[t][which] = v
+        }
+      }
     }
   } catch { /* storage unavailable: defaults */ }
   return base
