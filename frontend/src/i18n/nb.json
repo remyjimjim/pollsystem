@@ -8,6 +8,7 @@
     "textColor": "Tekstfarge:",
     "backgroundColor": "Bakgrunnsfarge:",
     "default": "Standard",
+    "useDefault": "Bruk standard",
     "textSize": "Tekststørrelse:",
     "small": "Liten",
     "medium": "Middels",

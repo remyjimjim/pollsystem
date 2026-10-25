@@ -8,6 +8,7 @@
     "textColor": "文字の色：",
     "backgroundColor": "背景色：",
     "default": "既定",
+    "useDefault": "既定を使用",
     "textSize": "文字サイズ：",
     "small": "小",
     "medium": "中",

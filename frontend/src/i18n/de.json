@@ -8,6 +8,7 @@
     "textColor": "Textfarbe:",
     "backgroundColor": "Hintergrundfarbe:",
     "default": "Standard",
+    "useDefault": "Standard verwenden",
     "textSize": "Textgröße:",
     "small": "Klein",
     "medium": "Mittel",

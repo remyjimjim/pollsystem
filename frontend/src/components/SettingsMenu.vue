@@ -11,8 +11,22 @@ const themeOpen = ref(true)
 const root = ref<HTMLElement | null>(null)
 
 function toggleTheme() { appearance.theme = appearance.theme === 'dark' ? 'light' : 'dark' }
-const isDefault = (t: Theme, which: 'text' | 'background') =>
+type Which = 'text' | 'background'
+const isDefault = (t: Theme, which: Which) =>
   appearance.colors[t][which].toLowerCase() === THEME_DEFAULTS[t][which]
+
+// "Use Default": ticking it resets the color; unticking brings back the last
+// color picked (kept for this visit), so the two can be compared.
+const lastPicked: Record<string, string> = {}
+function setUseDefault(t: Theme, which: Which, on: boolean) {
+  const key = `${t}.${which}`
+  if (on) {
+    if (!isDefault(t, which)) lastPicked[key] = appearance.colors[t][which]
+    appearance.colors[t][which] = THEME_DEFAULTS[t][which]
+  } else if (lastPicked[key]) {
+    appearance.colors[t][which] = lastPicked[key]
+  }
+}
 
 function onDocClick(e: MouseEvent) { if (open.value && root.value && !root.value.contains(e.target as Node)) open.value = false }
 function onKey(e: KeyboardEvent) { if (e.key === 'Escape') open.value = false }
@@ -75,16 +89,32 @@ onUnmounted(() => { document.removeEventListener('click', onDocClick); document.
           <span :class="appearance.theme === 'light' ? 'font-semibold' : 'text-slate-500'">{{ $t('settings.light') }}</span>
         </div>
 
-        <label class="flex items-center gap-2">
-          <span class="w-28">{{ $t('settings.textColor') }}</span>
-          <input type="color" v-model="appearance.colors[appearance.theme].text" class="h-7 w-10 cursor-pointer rounded border border-slate-300" />
-          <span v-if="isDefault(appearance.theme, 'text')" class="text-xs text-slate-500">({{ $t('settings.default') }})</span>
-        </label>
-        <label class="flex items-center gap-2">
-          <span class="w-28">{{ $t('settings.backgroundColor') }}</span>
-          <input type="color" v-model="appearance.colors[appearance.theme].background" class="h-7 w-10 cursor-pointer rounded border border-slate-300" />
-          <span v-if="isDefault(appearance.theme, 'background')" class="text-xs text-slate-500">({{ $t('settings.default') }})</span>
-        </label>
+        <div class="flex items-center gap-2">
+          <label :for="`color-text`" class="w-28">{{ $t('settings.textColor') }}</label>
+          <input :id="`color-text`" type="color" v-model="appearance.colors[appearance.theme].text" class="h-7 w-10 cursor-pointer rounded border border-slate-300" />
+          <label class="flex items-center gap-1 text-xs">
+            <input
+              type="checkbox"
+              :checked="isDefault(appearance.theme, 'text')"
+              @change="setUseDefault(appearance.theme, 'text', ($event.target as HTMLInputElement).checked)"
+              data-test="use-default-text"
+            />
+            {{ $t('settings.useDefault') }}
+          </label>
+        </div>
+        <div class="flex items-center gap-2">
+          <label :for="`color-background`" class="w-28">{{ $t('settings.backgroundColor') }}</label>
+          <input :id="`color-background`" type="color" v-model="appearance.colors[appearance.theme].background" class="h-7 w-10 cursor-pointer rounded border border-slate-300" />
+          <label class="flex items-center gap-1 text-xs">
+            <input
+              type="checkbox"
+              :checked="isDefault(appearance.theme, 'background')"
+              @change="setUseDefault(appearance.theme, 'background', ($event.target as HTMLInputElement).checked)"
+              data-test="use-default-background"
+            />
+            {{ $t('settings.useDefault') }}
+          </label>
+        </div>
 
         <fieldset class="flex flex-wrap items-center gap-x-3 gap-y-1">
           <legend class="mb-1 w-full">{{ $t('settings.textSize') }}</legend>
