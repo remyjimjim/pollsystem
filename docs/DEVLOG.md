@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-25 — Policies stay in English, with an "English only" banner
+
+**Requested:**
+
+> Should we translate the TOS, Privacy Policy and Cancellation policy pages?
+> … yes, add the English-only banner
+
+**Decision:** no translations of the legal pages for launch.
+
+- An AI or machine translation could change what's promised, and two
+  versions that disagree create doubt about which applies. (Not legal
+  advice.)
+- Courtesy translations may come after launch, Spanish first, with a header
+  saying the English version controls. Each would be reviewed by a fluent
+  speaker.
+
+**Changed:**
+
+- `LegalView`: when the site language isn't English, a banner says "These
+  policies are available in English only. The English version is the one
+  that applies." in that language (`legal.englishOnly`, 9 languages).
+- The policy text is marked `lang="en"`.
+
+**Verified (headless, local):** `/legal/terms` in Spanish shows "Estas
+políticas solo están disponibles en inglés. La versión en inglés es la que
+se aplica." In English there's no banner. The frontend type-checks, and the
+unit tests pass.
+
+**Commit:** `2625a72`
+
+---
+
 ## 2026-10-25 — Tagged release-0.8; staging deployed
 
 **Requested:**
