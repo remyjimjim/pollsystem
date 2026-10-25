@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-25 — Stacked search-result cards on phones (trial)
+
+**Requested:**
+
+> You can try the stacked cards but be ready fall back to how it is now.
+
+**Changed (`PollSearchView`):**
+
+- Below 640px (`sm:hidden`), results are a list of cards. Each has the title
+  (with the Closed badge), then label/value rows for the details ticked
+  under Show:, then View results and Vote links.
+  - The type, area or zipcode (first zipcode, plus a count of the rest),
+    creator, election, responses and close date each show only when ticked.
+- From 640px the table shows as before (`hidden sm:block`).
+- The cards use their own test ids, so the unit tests' `responses`,
+  `creator` and `for-election` lookups still find only table cells.
+- **Fallback:** `git revert c86c532` restores the sideways-scrolling
+  table on phones.
+
+**Verified:**
+
+- Headless Pixel 7 as demo-super: cards visible, table hidden, page width
+  412 of 412, so nothing runs off the screen. A screenshot was deleted after
+  viewing.
+- At 1280px the table shows and the cards don't.
+- The frontend type-checks and the unit tests pass.
+
+**Commit:** `c86c532`
+
+---
+
 ## 2026-10-25 — Space below the header menu
 
 **Requested:**
