@@ -61,6 +61,17 @@ logged.
 
 ---
 
+## 2026-10-25 — Decision: keep the phone result cards
+
+**Requested:**
+
+> I like it, excellent suggestion.
+
+**Decision:** the stacked search-result cards on phones (`c86c532`) stay. No
+fallback to the sideways-scrolling table.
+
+---
+
 ## 2026-10-25 — Stacked search-result cards on phones (trial)
 
 **Requested:**
