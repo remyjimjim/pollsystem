@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PublicCommentsList from '../components/PublicCommentsList.vue'
 import BallotPartResults, { type BallotPart } from '../components/BallotPartResults.vue'
+import { useAppearance } from '@/composables/useAppearance'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -11,6 +12,7 @@ interface CountyRow { id: number; stateId: number; name: string }
 interface CountyZipRow { id: number; countyId: number; zipcode: string }
 
 const { t } = useI18n()
+const appearance = useAppearance()
 
 interface QuestionResultDto {
   questionId: number
@@ -531,7 +533,7 @@ function purviewCount(n: number | null): string {
             ? $t('results.privacyAnswered', { k: data.visibility.minimum, step: data.visibility.step })
             : $t('results.privacyVoted', { k: data.visibility.minimum, step: data.visibility.step }) }}
       </div>
-      <p v-if="data && isLive" class="mb-4 text-xs font-semibold text-violet-800" data-test="live-note">{{ $t('results.superLive') }}</p>
+      <p v-if="data && isLive" class="mb-4 text-xs font-semibold" :class="appearance.theme === 'dark' ? 'text-fuchsia-400' : 'text-violet-800'" data-test="live-note">{{ $t('results.superLive') }}</p>
 
       <div v-if="data && mode === 'HIDDEN'" class="rounded-md border border-slate-200 p-4 text-sm text-slate-600" data-test="hidden">
         {{ $t('results.soFar', { n: data.visibility.respondentsSoFar }, data.visibility.respondentsSoFar) }}
