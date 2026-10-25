@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-25 — DEPLOYING-FLY: the prod deploy commands written down
+
+**Requested:**
+
+> Looks like I forgot to put the command to deploy to production fly... do you
+> remember it and if so can you add it to DEPLOYING-FLY.md?
+
+**Changed:** `docs/DEPLOYING-FLY.md` has a new section, "Production deploy
+(the everyday commands)". It started from the user's own uncommitted notes
+at the end of the file. It covers:
+
+- shipping code: `cd backend && flyctl deploy -a pollsystem-backend -c fly.toml`;
+- applying only a `fly.toml` change (`--image`, with the current image from
+  `flyctl releases --image`);
+- checking a deploy (health, `flyctl machines list`, logs), and rolling
+  back;
+- `min_machines_running`. The user's notes said 0; it has been 1 in
+  `fly.toml` since `b7b2cdb`.
+
+Part 2's "Deploy" step now uses the same full command.
+
+**Commit:** `9fd85a7`
+
+---
+
 ## 2026-10-25 — Tagged release-0.81; staging deployed
 
 **Requested:**
