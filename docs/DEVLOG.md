@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-25 — Footer links centered
+
+**Requested:**
+
+> The TOS, Privacy and Cancellation policies should be centered
+
+then:
+
+> I'm not talking about the TOS pages, I'm taking about their links at the
+> bottom of the page as on this page https://staging.pollsystem.pages.dev/
+
+**Changed:** the site footer (`App.vue`) gets `justify-center`, so the links
+to Terms of Service, Privacy Policy, and Cancellation and Refunds are
+centered on every page.
+
+**Verified (headless, local):** equal gaps either side of the links, 553px
+at 1440px wide and 39px on a Pixel 7.
+
+**Commit:** `b3f49ad`
+
+---
+
 ## 2026-10-25 — Billing message in the theme's text color (Dark)
 
 **Requested:**
