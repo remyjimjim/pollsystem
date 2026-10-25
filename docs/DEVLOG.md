@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-10-25 — Decision: a midterms map, right after launch
+
+**Requested (abridged):**
+
+> I really would like to get some kind of summary midterms map graph showing
+> certain stats depending on what radio button is selected … a US map … click
+> a state … district lines … cumulative totals for Senate, Governor, Lt.
+> Governor candidates with backgrounds color coded according to party. If a
+> district is clicked then the same results page that we already show
+> appears.
+
+then:
+
+> Sounds good, I like it! yes, add it to todo.md
+
+**Decision:** build it right after launch, in three phases. The aim is to
+finish phases 1 and 2 by about Nov 1, before election day.
+
+1. A US map colored by the leading party for the chosen race, with a state
+   page of totals and its district ballots.
+2. District maps on the state pages: Census 2024 lines where still current,
+   and a numbered-box grid for states that redrew for 2026.
+3. A House view.
+
+Other points agreed:
+
+- Public-domain Census map data, drawn as SVG; no paid map service.
+- The existing privacy minimums apply.
+- A clear "informal poll — not official results" label.
+- A list view alongside the map.
+- The map will be mostly grey at first.
+
+**Changed:** the plan is in `todo.md`.
+
+---
+
 ## 2026-10-25 — Decision: "My votes" waits until after launch
 
 **Requested:**
