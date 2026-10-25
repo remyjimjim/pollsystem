@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-25 — Space below the header menu
+
+**Requested:**
+
+> Can we have a bit more space between the bottom of the menu and bottom of
+> the header? Maybe like half the height of the word 'demo' in the username of
+> the logged in user?
+
+**Changed:** the header nav's padding changed from `py-2 sm:py-0` to
+`pt-2 pb-3.5 sm:pt-0 sm:pb-1.5 xl:pb-0`.
+
+- About half the 12px username text is 6px. The wrapped menu row gets that
+  below it.
+- Phones go from 8px to 14px.
+- The single-row layout from 1280px is unchanged.
+
+**Verified (headless, local, as demo-super):** 6px below the menu at 1024px
+and 14px at 390px. A screenshot was deleted after viewing.
+
+**Commit:** `e73c02a`
+
+---
+
 ## 2026-10-25 — Policies stay in English, with an "English only" banner
 
 **Requested:**
