@@ -49,4 +49,13 @@ class BadWordsControllerTest : AbstractIntegrationTest() {
         mockMvc.get("/api/moderation/bad-words") { with(user(me)) }
             .andExpect { status { is4xxClientError() } }
     }
+
+    @Test
+    fun `plurals and possessives of a listed word are caught, and such a comment can't be public`() {
+        val listed = badWords.list.first { !it.word.contains(' ') }.word
+        for (form in listOf(listed, "${listed}s", "${listed}es", "${listed}'s", "${listed.uppercase()}S"))
+            assert(badWords.foundIn("well, $form, then").isNotEmpty()) { "not caught: $form" }
+        assert(badWords.foundIn("${listed}ed ${listed}ing").isEmpty())       // other forms only if listed
+        assert(!badWords.publishable("you ${listed}s", wantsPublic = true))
+    }
 }

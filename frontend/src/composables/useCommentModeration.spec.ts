@@ -11,6 +11,9 @@ describe('replacing a word', () => {
   it('replaces every whole-word occurrence, keeping a leading capital', () => {
     expect(replaceBadWord('Darn, darn, darned', DARN)).toBe('Dang, dang, darned')
   })
+  it("replaces a plural or possessive too, keeping its ending", () => {
+    expect(replaceBadWord("Darns and darnes, the darn's end", DARN)).toBe("Dangs and danges, the dang's end")
+  })
 })
 
 describe('reviewing public comments before submit', () => {

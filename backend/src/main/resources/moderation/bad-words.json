@@ -1,23 +1,274 @@
 [
-  { "bad-word": "nigger",  "replace": "black" },
-  { "bad-word": "kike",  "replace": "jew" },
-  { "bad-word": "hymie",  "replace": "jew" },
-  { "bad-word": "hebe",  "replace": "jew" },
-  { "bad-word": "wap",  "replace": "italian" },
-  { "bad-word": "dego",  "replace": "italian" },
-  { "bad-word": "beaner",  "replace": "hispanic" },
-  { "bad-word": "wetback",  "replace": "hispanic" },
-  { "bad-word": "honky",  "replace": "white guy" },
-  { "bad-word": "asshole",  "replace": "arse" },
-  { "bad-word": "douche",  "replace": "moron" },
-  { "bad-word": "douchebag",  "replace": "moron" },
-  { "bad-word": "fuck",  "replace": "frick" },
-  { "bad-word": "fucker",  "replace": "moron" },
-  { "bad-word": "fucking",  "replace": "fricking" },
-  { "bad-word": "shit",  "replace": "crap" },
-  { "bad-word": "shitter",  "replace": "crapper" },
-  { "bad-word": "shitting",  "replace": "crapping" },
-  { "bad-word": "piss",  "replace": "leak" },
-  { "bad-word": "pisser",  "replace": "toilet" },
-  { "bad-word": "pissing",  "replace": "whizzing" }
+  {
+    "bad-word": "nigger",
+    "replace": "black"
+  },
+  {
+    "bad-word": "kike",
+    "replace": "jew"
+  },
+  {
+    "bad-word": "hymie",
+    "replace": "jew"
+  },
+  {
+    "bad-word": "hebe",
+    "replace": "jew"
+  },
+  {
+    "bad-word": "wap",
+    "replace": "italian"
+  },
+  {
+    "bad-word": "dego",
+    "replace": "italian"
+  },
+  {
+    "bad-word": "beaner",
+    "replace": "hispanic"
+  },
+  {
+    "bad-word": "wetback",
+    "replace": "hispanic"
+  },
+  {
+    "bad-word": "honky",
+    "replace": "white guy"
+  },
+  {
+    "bad-word": "asshole",
+    "replace": "arse"
+  },
+  {
+    "bad-word": "douche",
+    "replace": "moron"
+  },
+  {
+    "bad-word": "douchebag",
+    "replace": "moron"
+  },
+  {
+    "bad-word": "fuck",
+    "replace": "frick"
+  },
+  {
+    "bad-word": "fucker",
+    "replace": "moron"
+  },
+  {
+    "bad-word": "fucking",
+    "replace": "fricking"
+  },
+  {
+    "bad-word": "shit",
+    "replace": "crap"
+  },
+  {
+    "bad-word": "shitter",
+    "replace": "crapper"
+  },
+  {
+    "bad-word": "shitting",
+    "replace": "crapping"
+  },
+  {
+    "bad-word": "piss",
+    "replace": "leak"
+  },
+  {
+    "bad-word": "pisser",
+    "replace": "toilet"
+  },
+  {
+    "bad-word": "pissing",
+    "replace": "whizzing"
+  },
+  {
+    "bad-word": "nigga",
+    "replace": "black"
+  },
+  {
+    "bad-word": "negroid",
+    "replace": "black"
+  },
+  {
+    "bad-word": "coon",
+    "replace": "black"
+  },
+  {
+    "bad-word": "jigaboo",
+    "replace": "black"
+  },
+  {
+    "bad-word": "porch monkey",
+    "replace": "black"
+  },
+  {
+    "bad-word": "sambo",
+    "replace": "black"
+  },
+  {
+    "bad-word": "spic",
+    "replace": "hispanic"
+  },
+  {
+    "bad-word": "spick",
+    "replace": "hispanic"
+  },
+  {
+    "bad-word": "heeb",
+    "replace": "jew"
+  },
+  {
+    "bad-word": "yid",
+    "replace": "jew"
+  },
+  {
+    "bad-word": "chink",
+    "replace": "asian"
+  },
+  {
+    "bad-word": "gook",
+    "replace": "asian"
+  },
+  {
+    "bad-word": "slant",
+    "replace": "asian"
+  },
+  {
+    "bad-word": "jap",
+    "replace": "japanese"
+  },
+  {
+    "bad-word": "towelhead",
+    "replace": "arab"
+  },
+  {
+    "bad-word": "raghead",
+    "replace": "arab"
+  },
+  {
+    "bad-word": "sandnigger",
+    "replace": "arab"
+  },
+  {
+    "bad-word": "camel jockey",
+    "replace": "arab"
+  },
+  {
+    "bad-word": "dago",
+    "replace": "italian"
+  },
+  {
+    "bad-word": "wop",
+    "replace": "italian"
+  },
+  {
+    "bad-word": "kraut",
+    "replace": "german"
+  },
+  {
+    "bad-word": "polack",
+    "replace": "pole"
+  },
+  {
+    "bad-word": "mick",
+    "replace": "irish"
+  },
+  {
+    "bad-word": "redskin",
+    "replace": "native american"
+  },
+  {
+    "bad-word": "squaw",
+    "replace": "native american"
+  },
+  {
+    "bad-word": "gypsy",
+    "replace": "romani"
+  },
+  {
+    "bad-word": "faggot",
+    "replace": "gay"
+  },
+  {
+    "bad-word": "fag",
+    "replace": "gay"
+  },
+  {
+    "bad-word": "dyke",
+    "replace": "lesbian"
+  },
+  {
+    "bad-word": "tranny",
+    "replace": "trans"
+  },
+  {
+    "bad-word": "shemale",
+    "replace": "trans"
+  },
+  {
+    "bad-word": "retard",
+    "replace": "fool"
+  },
+  {
+    "bad-word": "retarded",
+    "replace": "foolish"
+  },
+  {
+    "bad-word": "spaz",
+    "replace": "klutz"
+  },
+  {
+    "bad-word": "motherfucker",
+    "replace": "jerk"
+  },
+  {
+    "bad-word": "bullshit",
+    "replace": "nonsense"
+  },
+  {
+    "bad-word": "ass",
+    "replace": "butt"
+  },
+  {
+    "bad-word": "bitch",
+    "replace": "jerk"
+  },
+  {
+    "bad-word": "bastard",
+    "replace": "jerk"
+  },
+  {
+    "bad-word": "cunt",
+    "replace": "jerk"
+  },
+  {
+    "bad-word": "twat",
+    "replace": "jerk"
+  },
+  {
+    "bad-word": "whore",
+    "replace": "jerk"
+  },
+  {
+    "bad-word": "slut",
+    "replace": "jerk"
+  },
+  {
+    "bad-word": "pissed",
+    "replace": "ticked"
+  },
+  {
+    "bad-word": "goddamn",
+    "replace": "darn"
+  },
+  {
+    "bad-word": "dumbass",
+    "replace": "fool"
+  },
+  {
+    "bad-word": "jackass",
+    "replace": "fool"
+  }
 ]

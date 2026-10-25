@@ -30,16 +30,23 @@ async function check(texts: string[]): Promise<BadWord[][]> {
 
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-/** Whole word, ignoring case (same rule as the server): "Darn" matches "darn", "darned" doesn't. */
+/**
+ * Whole word, ignoring case, plus a plural or possessive ending (-s, -es, -'s):
+ * the same rule as the server. "Darn" and "darns" match "darn"; "darned" doesn't.
+ */
 function wordPattern(word: string): RegExp {
-  return new RegExp(`(?<![\\p{L}\\p{N}])${escape(word.trim())}(?![\\p{L}\\p{N}])`, 'giu')
+  return new RegExp(`(?<![\\p{L}\\p{N}])(${escape(word.trim())})(s|es|['’]s)?(?![\\p{L}\\p{N}])`, 'giu')
 }
 
-/** Replaces every occurrence; a capitalised one ("Darn") gets a capitalised replacement ("Dang"). */
+/**
+ * Replaces every occurrence, keeping its ending ("darns" → "dangs"); a
+ * capitalised one ("Darn") gets a capitalised replacement ("Dang").
+ */
 export function replaceBadWord(text: string, b: BadWord): string {
-  return text.replace(wordPattern(b.word), found => {
-    const first = found.charAt(0)
-    return first !== first.toLowerCase() ? b.replace.charAt(0).toUpperCase() + b.replace.slice(1) : b.replace
+  return text.replace(wordPattern(b.word), (_found, word: string, ending?: string) => {
+    const first = word.charAt(0)
+    const swapped = first !== first.toLowerCase() ? b.replace.charAt(0).toUpperCase() + b.replace.slice(1) : b.replace
+    return swapped + (ending ?? '')
   })
 }
 

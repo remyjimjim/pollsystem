@@ -20,8 +20,9 @@ data class BadWord(
 
 /**
  * The words a public comment may not contain (moderation/bad-words.json).
- * Matching is whole-word and ignores case: "Darn" matches "darn", but
- * "darned" only if it's listed itself. The list never leaves the server: the
+ * Matching is whole-word and ignores case: "Darn" matches "darn". A plural
+ * or possessive ending (-s, -es, -'s) is caught too, so each word is listed
+ * once (decided 2026-10-25); other forms ("darned") only if listed themselves. The list never leaves the server: the
  * page sends its public comments to /api/moderation/check and gets back only
  * the words found. Saving rechecks, so a comment still containing one stays private.
  */
@@ -33,7 +34,7 @@ class BadWords(objectMapper: ObjectMapper) {
 
     private val patterns = list.map {
         it to Pattern.compile(
-            "(?<![\\p{L}\\p{N}])" + Pattern.quote(it.word.trim()) + "(?![\\p{L}\\p{N}])",
+            "(?<![\\p{L}\\p{N}])" + Pattern.quote(it.word.trim()) + "(?:s|es|['’]s)?(?![\\p{L}\\p{N}])",
             Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
         )
     }
