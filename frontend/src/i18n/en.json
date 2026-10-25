@@ -1095,6 +1095,7 @@
     }
   },
   "legal": {
+    "why": "Why?",
     "englishOnly": "These policies are available in English only. The English version is the one that applies.",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",

@@ -5,7 +5,7 @@ import { LEGAL_PAGES, legalPage, placeholdersIn, renderLegal } from './legal'
 
 describe('legal pages', () => {
   it('each page loads with its title; unknown pages are refused', () => {
-    expect(LEGAL_PAGES.map(s => legalPage(s)?.title)).toEqual(['Terms of Service', 'Privacy Policy', 'Cancellation and Refund Policy'])
+    expect(LEGAL_PAGES.map(s => legalPage(s)?.title)).toEqual(['Terms of Service', 'Privacy Policy', 'Cancellation and Refund Policy', 'Why BallotBox?'])
     expect(legalPage('nope')).toBeNull()
   })
 

@@ -825,6 +825,7 @@
     }
   },
   "legal": {
+    "why": "Hvorfor?",
     "englishOnly": "Disse vilkårene finnes bare på engelsk. Det er den engelske versjonen som gjelder.",
     "terms": "Vilkår for bruk",
     "privacy": "Personvernerklæring",

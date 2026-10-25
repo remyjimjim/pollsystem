@@ -772,6 +772,7 @@
     }
   },
   "legal": {
+    "why": "¿Por qué?",
     "englishOnly": "Estas políticas solo están disponibles en inglés. La versión en inglés es la que se aplica.",
     "terms": "Términos del servicio",
     "privacy": "Política de privacidad",

@@ -2,13 +2,14 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { legalPage, renderLegal, placeholdersIn } from '@/legal/legal'
+import { legalPage, renderLegal, placeholdersIn, POLICY_PAGES } from '@/legal/legal'
 
 const route = useRoute()
 // The policies are in English only (decided 2026-10-25): in any other language
 // the page says so, and that the English version is the one that applies.
 const { locale } = useI18n()
-const englishOnly = computed(() => !String(locale.value).startsWith('en'))
+const englishOnly = computed(() =>
+  !String(locale.value).startsWith('en') && !!page.value && POLICY_PAGES.includes(page.value.slug))
 const page = computed(() => legalPage(String(route.params.page)))
 const html = computed(() => (page.value ? renderLegal(page.value) : ''))
 const todo = computed(() => (page.value ? placeholdersIn(page.value).length : 0))

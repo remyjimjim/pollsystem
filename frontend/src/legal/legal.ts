@@ -2,13 +2,15 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 
 /**
- * The legal pages (Terms, Privacy, Refunds): Markdown in this folder, shown at
+ * The legal pages (Terms, Privacy, Refunds) and "Why?": Markdown in this folder, shown at
  * /legal/<slug>. English only for now. Anything still to be supplied by the
  * owner is written [[TO FILL: …]] and shown highlighted, so none can go live
  * unnoticed (see placeholdersIn).
  */
-export const LEGAL_PAGES = ['terms', 'privacy', 'refunds'] as const
+export const LEGAL_PAGES = ['terms', 'privacy', 'refunds', 'why'] as const
 export type LegalSlug = (typeof LEGAL_PAGES)[number]
+/** The policies: the "English only" banner applies to these, not to "Why?". */
+export const POLICY_PAGES: readonly LegalSlug[] = ['terms', 'privacy', 'refunds']
 
 const files = import.meta.glob<string>('./*.md', { query: '?raw', import: 'default', eager: true })
 

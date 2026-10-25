@@ -158,6 +158,7 @@ function onLocaleChange(e: Event) {
       <RouterLink to="/legal/terms" class="hover:text-slate-800 hover:underline">{{ $t('legal.terms') }}</RouterLink>
       <RouterLink to="/legal/privacy" class="hover:text-slate-800 hover:underline">{{ $t('legal.privacy') }}</RouterLink>
       <RouterLink to="/legal/refunds" class="hover:text-slate-800 hover:underline">{{ $t('legal.refunds') }}</RouterLink>
+      <RouterLink to="/legal/why" class="hover:text-slate-800 hover:underline" data-test="footer-why">{{ $t('legal.why') }}</RouterLink>
     </footer>
   </div>
 </template>
