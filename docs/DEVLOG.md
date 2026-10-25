@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-25 — Decision: "My votes" waits until after launch
+
+**Requested:**
+
+> if we had to provide the logged in user an option to view all their
+> completed ballots for all time, who would you do that? My idea is have a
+> "profile" icon … next to the "Settings" gear that would pop down a window
+> with a drawer full of links to past ballots/questionairres... thoughts
+
+then:
+
+> let's build it after launch, add it to todo.md
+
+**Decision:** build it after launch, keeping the feature freeze. Design
+agreed:
+
+- A profile icon beside the gear with the member's email, the 5 most recent
+  votes plus "See all →", membership links and Log out.
+- A `/my-votes` page with the full list rather than a long drawer.
+- A district ballot listed once.
+- Private to the member.
+
+**Changed:** `todo.md` has the item, and the Settings gear item is marked
+done. The commit also carries the user's own pending `todo.md` edits.
+
+---
+
 ## 2026-10-25 — Bad-word check: plurals caught; major slurs added
 
 **Requested:**
