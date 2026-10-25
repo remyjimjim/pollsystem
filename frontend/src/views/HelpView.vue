@@ -80,17 +80,17 @@ function onContentClick(e: MouseEvent) {
 </template>
 
 <style scoped>
-.manual :deep(h1) { margin: 0 0 1rem; font-size: 1.5rem; font-weight: 600; color: rgb(30 41 59); }
-.manual :deep(h2) { margin: 1.75rem 0 0.5rem; font-size: 1.15rem; font-weight: 600; color: rgb(51 65 85); }
-.manual :deep(h3) { margin: 1.25rem 0 0.5rem; font-weight: 600; color: rgb(51 65 85); }
-.manual :deep(p) { margin: 0 0 0.75rem; line-height: 1.6; color: rgb(51 65 85); }
-.manual :deep(ul), .manual :deep(ol) { margin: 0 0 0.75rem; padding-left: 1.5rem; line-height: 1.6; color: rgb(51 65 85); }
+.manual :deep(h1) { margin: 0 0 1rem; font-size: 1.5rem; font-weight: 600; color: var(--color-slate-800); }
+.manual :deep(h2) { margin: 1.75rem 0 0.5rem; font-size: 1.15rem; font-weight: 600; color: var(--color-slate-700); }
+.manual :deep(h3) { margin: 1.25rem 0 0.5rem; font-weight: 600; color: var(--color-slate-700); }
+.manual :deep(p) { margin: 0 0 0.75rem; line-height: 1.6; color: var(--color-slate-700); }
+.manual :deep(ul), .manual :deep(ol) { margin: 0 0 0.75rem; padding-left: 1.5rem; line-height: 1.6; color: var(--color-slate-700); }
 .manual :deep(ul) { list-style: disc; }
 .manual :deep(ol) { list-style: decimal; }
 .manual :deep(li) { margin: 0.25rem 0; }
-.manual :deep(a) { text-decoration: underline; color: rgb(30 41 59); }
-.manual :deep(code) { border-radius: 0.25rem; background: rgb(241 245 249); padding: 0.1rem 0.3rem; font-size: 0.9em; }
+.manual :deep(a) { text-decoration: underline; color: var(--color-slate-800); }
+.manual :deep(code) { border-radius: 0.25rem; background: var(--color-slate-100); padding: 0.1rem 0.3rem; font-size: 0.9em; }
 .manual :deep(table) { margin: 0 0 0.75rem; border-collapse: collapse; }
-.manual :deep(th), .manual :deep(td) { border: 1px solid rgb(226 232 240); padding: 0.35rem 0.6rem; text-align: left; }
-.manual :deep(img) { max-width: 100%; border: 1px solid rgb(226 232 240); border-radius: 0.375rem; }
+.manual :deep(th), .manual :deep(td) { border: 1px solid var(--color-slate-200); padding: 0.35rem 0.6rem; text-align: left; }
+.manual :deep(img) { max-width: 100%; border: 1px solid var(--color-slate-200); border-radius: 0.375rem; }
 </style>
