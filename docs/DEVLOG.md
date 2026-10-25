@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-25 — The Settings gear stays top right
+
+**Requested:**
+
+> can we make it so the gear icon that brings up the Theme switcher always
+> stays in the top right corner or if it can't stay in the top right corner on
+> small phones then can it stay to the right of the menu?
+
+**Changed:** in `App.vue` the gear is its own flex item, not the last menu
+link.
+
+- Up to 1280px it follows the brand on the top row (`order-2 ml-auto`), and
+  the menu takes a full-width row below.
+- From `xl` (1280px) the menu sits between them.
+- `lg` (1024px) wasn't enough: a logged-in super's menu still pushed the gear
+  to the second row there.
+
+**Verified (headless, local):** the gear is on the top row, about 16–32px
+from the right edge, at 360, 700, 1024 and 1200px as a guest, and at 360,
+1024 and 1280px as demo-super. The screenshots were deleted after viewing.
+The frontend type-checks.
+
+**Commit:** `fb9346f`
+
+---
+
 ## 2026-10-25 — Super's live-results note in fuchsia (Dark)
 
 **Requested:**
