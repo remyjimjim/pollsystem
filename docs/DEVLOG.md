@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-10-25 — Super's live-results note in fuchsia (Dark)
+
+**Requested:**
+
+> Can we change the color of the text that appears when a SUPER is logged in
+> looking at results namely "Super view: live results with raw numbers." and
+> change color to fuscia in dark mode?
+
+**Changed:** in `PollResultsView`, the live note uses `text-fuchsia-400` when
+the theme is Dark (`useAppearance`), and stays `text-violet-800` in Light.
+
+**Verified (headless, local, as demo-super, questionnaire 365):** the
+computed color is fuchsia `oklch(0.74 0.238 322.16)` in Dark and violet
+`oklch(0.432 0.232 292.759)` in Light. The frontend type-checks.
+
+**Commit:** `cf9548b`
+
+---
+
 ## 2026-10-25 — Black labels on result bars; "(fewer than 4)" fix
 
 **Requested:**
