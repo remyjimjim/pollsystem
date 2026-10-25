@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-25 — Tagged release-0.8; staging deployed
+
+**Requested:**
+
+> push it and deploy to staging and let's add .1 to the git tag, I think
+> we're at .7 right now so let's go with release-0.8
+
+**Changed:**
+
+- Pushed 17 commits. Staging is deployed and healthy.
+- Annotated tag `release-0.8` on `a214fee`, pushed. The previous tag was
+  `release-0.5`; there was no 0.6 or 0.7, and the user chose 0.8.
+- It covers:
+  - the Settings gear: Dark (default) and Light themes, color choosers with
+    "Use Default", and text size;
+  - the theme on the legal and help pages;
+  - light-blue result bars with black labels;
+  - the gear pinned top right;
+  - the fuchsia super live-results note in Dark;
+  - the instant Exclude nationwide / See closed polls toggles;
+  - the group-minimum wording;
+  - results threshold 4 by default (1 on local).
+
+The prod backend deploy is still pending.
+
+---
+
 ## 2026-10-25 — "Use Default" checkbox for the theme colors
 
 **Requested:**
