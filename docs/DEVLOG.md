@@ -61,6 +61,26 @@ logged.
 
 ---
 
+## 2026-10-25 — Tagged release-0.81; staging deployed
+
+**Requested:**
+
+> tag it at release.81 push it and deploy to staging
+
+**Changed:**
+
+- Pushed. Staging is deployed and healthy.
+- Annotated tag `release-0.81` on `85b37b9`, pushed. The name follows the
+  existing `release-0.x` scheme.
+- Since `release-0.8` it adds:
+  - the stacked search-result cards on phones;
+  - the English-only banner on the policies;
+  - the space below the header menu.
+
+The prod backend deploy is still pending.
+
+---
+
 ## 2026-10-25 — Decision: keep the phone result cards
 
 **Requested:**
