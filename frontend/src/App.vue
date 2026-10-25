@@ -61,7 +61,7 @@ function onLocaleChange(e: Event) {
     </div>
     <!-- Hidden when printing (e.g. a creator's poll report). -->
     <header class="bg-slate-800 text-white px-4 sm:px-8 print:hidden">
-      <nav class="mx-auto flex min-h-20 max-w-6xl flex-wrap items-center justify-between gap-y-2 py-2 sm:py-0">
+      <nav class="mx-auto flex min-h-20 max-w-6xl flex-wrap items-center justify-between gap-y-2 pt-2 pb-3.5 sm:pt-0 sm:pb-1.5 xl:pb-0">
         <div class="order-1 text-xl font-bold">
           <RouterLink to="/" class="flex items-center gap-3 text-white no-underline" data-test="brand">
             <span class="h-14 sm:h-[72px]"><BrandLogo /></span>
