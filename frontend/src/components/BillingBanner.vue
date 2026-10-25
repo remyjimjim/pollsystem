@@ -4,12 +4,15 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useBilling } from '@/composables/useBilling'
+import { useAppearance } from '@/composables/useAppearance'
 import { AccessLevel } from '@/types'
 
 const auth = useAuthStore()
 const route = useRoute()
 const { busy, error, startCheckout, openPortal, cancelMembership, keepMembership } = useBilling()
 const { locale } = useI18n()
+// As on the vote form: the theme's text color in Dark, red in Light.
+const appearance = useAppearance()
 
 // Cancelled: still a member until paidUntil, then lapsed (sign in, view, Renew).
 const ending = computed(() => !!auth.user?.cancelAtPeriodEnd)
@@ -136,6 +139,6 @@ const checkoutStatus = computed(() => {
       </button>
     </template>
 
-    <p v-if="error" class="mt-2 text-sm text-red-700">{{ $t('billing.unavailable') }}</p>
+    <p v-if="error" class="mt-2 text-sm" :class="appearance.theme === 'dark' ? 'text-slate-900' : 'text-red-700'" data-test="billing-error">{{ $t('billing.unavailable') }}</p>
   </div>
 </template>
