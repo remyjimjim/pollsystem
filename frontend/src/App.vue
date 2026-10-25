@@ -62,13 +62,18 @@ function onLocaleChange(e: Event) {
     <!-- Hidden when printing (e.g. a creator's poll report). -->
     <header class="bg-slate-800 text-white px-4 sm:px-8 print:hidden">
       <nav class="mx-auto flex min-h-20 max-w-6xl flex-wrap items-center justify-between gap-y-2 py-2 sm:py-0">
-        <div class="text-xl font-bold">
+        <div class="order-1 text-xl font-bold">
           <RouterLink to="/" class="flex items-center gap-3 text-white no-underline" data-test="brand">
             <span class="h-14 sm:h-[72px]"><BrandLogo /></span>
             {{ $t('brand') }}
           </RouterLink>
         </div>
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:gap-x-6">
+        <!-- The gear stays top right: beside the brand up to an extra-large screen
+             (the menu wraps to its own row below), after the menu from there. -->
+        <div class="order-2 ml-auto xl:order-3 xl:ml-6">
+          <SettingsMenu />
+        </div>
+        <div class="order-3 flex w-full flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:gap-x-6 xl:order-2 xl:ml-auto xl:w-auto">
           <RouterLink
             to="/polls/search"
             class="text-white/85 hover:text-white"
@@ -142,7 +147,6 @@ function onLocaleChange(e: Event) {
               {{ l.name }}
             </option>
           </select>
-          <SettingsMenu />
         </div>
       </nav>
     </header>
