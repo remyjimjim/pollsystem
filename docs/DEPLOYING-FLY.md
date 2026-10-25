@@ -140,8 +140,10 @@ flyctl secrets set \
 ### Deploy
 
 ```bash
-flyctl deploy -a pollsystem-backend
+cd backend && flyctl deploy -a pollsystem-backend -c fly.toml
 ```
+
+(For everyday deploys after the first, see **Production deploy** near the end.)
 
 First deploy takes ~5–8 minutes (image build + push + machine boot). On
 success:
@@ -367,3 +369,59 @@ Commands:
 
 Stripe is inert on staging until you add test-mode keys (`STRIPE_WEBHOOK_SECRET`);
 see `docs/STRIPE-TEST-RUNBOOK.md`.
+
+---
+
+## Production deploy (the everyday commands)
+
+Prod is the Fly app `pollsystem-backend`; the frontend (ballotbox.us.com) is
+built by Cloudflare Pages from `main`, so pushing is all it needs. Only you run
+prod deploys (Claude's permission rules block them): type them with `!` in
+Claude Code, or in any terminal at the repo root.
+
+**Ship new backend code** (builds an image from your working tree, so deploy
+from an up-to-date `main` with no stray local changes; database migrations run
+on startup):
+
+```bash
+cd backend && flyctl deploy -a pollsystem-backend -c fly.toml
+```
+
+**Apply only a `fly.toml` change** (no rebuild; prod keeps the code it runs):
+
+```bash
+flyctl releases -a pollsystem-backend --image          # the current image, top row
+cd backend && flyctl deploy -a pollsystem-backend -c fly.toml --image <that image>
+```
+
+**Check afterwards:**
+
+```bash
+curl https://pollsystem-backend.fly.dev/actuator/health   # {"status":"UP"}
+flyctl machines list -a pollsystem-backend                # with min_machines_running = 1, one stays started
+flyctl logs -a pollsystem-backend                         # migrations, errors
+```
+
+**Roll back:** `flyctl releases -a pollsystem-backend --image`, then the
+`--image` deploy above with the previous image.
+
+### How many machines stay on: `min_machines_running`
+
+Set in `backend/fly.toml` (`[http_service]`). It's **1** from launch (Oct 26,
+2026); it was 0 before.
+
+At 0:
+- When traffic stops, Fly stops every machine; no compute charge while stopped.
+- The first request after a quiet spell wakes one; the Java backend takes about
+  10–30 seconds to boot, so that visitor waits (or the page gives up).
+- The database (Neon) can sleep too. A running machine's health check every 15
+  seconds queries it and keeps it awake; letting both sleep saves roughly
+  $35–40 a month.
+
+At 1 (launch):
+- One machine always stays up, so visitors never hit a cold start; machines
+  beyond it still stop and start with traffic.
+- About $35–40 a month again, mostly the database staying awake.
+
+Changing it takes a deploy: either command above (the `--image` one if no code
+should ship).
