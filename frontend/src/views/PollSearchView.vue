@@ -779,9 +779,53 @@ async function search() {
       <label class="inline-flex items-center gap-1"><input v-model="columns.responses" type="checkbox" class="h-3.5 w-3.5" />{{ $t('search.table.responses') }}</label>
       <label class="inline-flex items-center gap-1"><input v-model="columns.closes" type="checkbox" class="h-3.5 w-3.5" />{{ $t('search.table.closes') }}</label>
     </fieldset>
-    <!-- On phones the table scrolls sideways on its own (not the whole page);
-         the zipcode list then opens inline, so the scroll area can't clip it. -->
-    <div v-if="results.length > 0" class="overflow-x-auto sm:overflow-visible" data-test="results-scroll">
+    <!-- Phones: one card per poll, so nothing is cut off at the right edge
+         (tried 2026-10-25; the sideways-scrolling table below is the fallback).
+         Show: still decides which details appear. -->
+    <ul v-if="results.length > 0" class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="result-cards">
+      <li
+        v-for="r in sortedResults"
+        :key="`card-${r.type}-${r.id}`"
+        class="rounded-md border border-slate-200 p-3 text-sm"
+        :class="isClosed(r) ? 'text-slate-500' : ''"
+      >
+        <div class="mb-1 font-semibold text-slate-800">
+          {{ r.title }}
+          <span v-if="isClosed(r)" class="ml-1 inline-block rounded bg-slate-200 px-1.5 py-0.5 text-xs font-semibold text-slate-700">{{ $t('search.closedBadge') }}</span>
+        </div>
+        <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-slate-600">
+          <template v-if="columns.type"><dt>{{ $t('search.table.type') }}</dt><dd class="m-0">{{ r.type }}</dd></template>
+          <template v-if="columns.zipcodes">
+            <dt>{{ $t('search.table.zipcodes') }}</dt>
+            <dd class="m-0">
+              <template v-if="r.zipcodes.length === 0">{{ r.regionLabel || '—' }}</template>
+              <template v-else>
+                <span class="font-mono">{{ r.zipcodes[0].code }}</span> ({{ r.zipcodes[0].state }})<template v-if="r.zipcodes.length > 1"> +{{ r.zipcodes.length - 1 }}</template>
+              </template>
+            </dd>
+          </template>
+          <template v-if="showCreator && columns.creator && r.creatorEmail">
+            <dt>{{ $t('search.table.creator') }}</dt>
+            <dd class="m-0 break-all">
+              <router-link :to="{ path: '/admin/manage-creators', query: { creator: r.creatorEmail } }" class="text-slate-800 underline">{{ r.creatorEmail }}</router-link>
+            </dd>
+          </template>
+          <template v-if="showElection && columns.election && r.electionTitle"><dt>{{ $t('search.table.forElection') }}</dt><dd class="m-0">{{ r.electionTitle }}</dd></template>
+          <template v-if="columns.responses"><dt>{{ $t('search.table.responses') }}</dt><dd class="m-0 tabular-nums">{{ r.respondents ?? 0 }}</dd></template>
+          <template v-if="columns.closes">
+            <dt>{{ $t('search.table.closes') }}</dt>
+            <dd class="m-0">{{ r.closeDate ? new Date(r.closeDate).toLocaleString() : $t('search.noCloseDate') }}</dd>
+          </template>
+        </dl>
+        <div class="mt-2 flex gap-4">
+          <router-link :to="`/polls/${routeMap(r.type)}/${r.id}/results`" class="font-semibold text-slate-800 underline">{{ $t('search.viewResults') }}</router-link>
+          <router-link v-if="auth.isAuthenticated && !isClosed(r)" :to="voteLink(r)" class="font-semibold text-slate-800 underline">{{ $t('search.vote') }}</router-link>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Wider screens: the table. -->
+    <div v-if="results.length > 0" class="hidden sm:block" data-test="results-scroll">
     <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
