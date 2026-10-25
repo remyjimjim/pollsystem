@@ -61,6 +61,19 @@ logged.
 
 ---
 
+## 2026-10-25 — Decision: Dark stays the default theme
+
+**Requested:**
+
+> keep Dark as the default
+
+**Decision:** first-time visitors get the Dark theme (`#85c742` on
+`#160b2c`) everywhere, staging and prod included. Light remains a choice
+under the header gear. No code change: `useAppearance.ts` already defaults to
+Dark.
+
+---
+
 ## 2026-10-25 — Settings gear: Dark/Light theme, colors, text size (local)
 
 **Requested (abridged):**
