@@ -11,13 +11,13 @@ export type Theme = 'dark' | 'light'
 export type TextSize = 'small' | 'medium' | 'large'
 
 export const THEME_DEFAULTS: Record<Theme, { text: string; background: string }> = {
-  dark: { text: '#85c742', background: '#4d3d85' },   // rgb(133 199 66) on #4d3d85 (was #160b2c until 2026-10-25)
+  dark: { text: '#85c742', background: '#2f1d72' },   // rgb(133 199 66) on #2f1d72 (earlier #160b2c, then #4d3d85, both 2026-10-25)
   light: { text: '#000000', background: '#ffffff' },
 }
 // Former defaults: a saved color equal to one of these was never chosen by the
 // viewer, so it follows the current default instead.
 const FORMER_DEFAULTS: Record<Theme, { text: string[]; background: string[] }> = {
-  dark: { text: [], background: ['#160b2c'] },
+  dark: { text: [], background: ['#160b2c', '#4d3d85'] },
   light: { text: [], background: [] },
 }
 
