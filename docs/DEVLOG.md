@@ -61,6 +61,55 @@ logged.
 
 ---
 
+## 2026-10-25 — Logo: Ballot + tower = BallotBox; "Why?" page in the footer
+
+**Requested:**
+
+> how it would look if we moved the telegraph transmitter to the left by the
+> width of the plus sign? … add an equal sign halfway between the tower and
+> BallotBox … raise the equal sign up so it's bottom is at the same level as
+> the bottom as the 'BallotBox' text … make the tower the exact same height
+> wise as the Ballot page … Great job on the logo, let's keep it. Can we add
+> pollsystem/frontend/src/legal/why.md to the footer with the link text of
+> 'Why?'?
+
+**Changed:**
+
+- **`a8d514b`, `BrandLogo.vue`:**
+  - The tower moves left by the plus sign's width (15 units).
+  - It's scaled to 0.894, so from its signal arcs to its base it matches
+    the ballot page (8.6 to 63.5). Both measure 12.8–69.3px in the header.
+  - A hand-drawn equals sign sits halfway between the tower and the word
+    (14.4px either side). Its bottom bar rests on the word's baseline,
+    measured from the font's metrics; a first attempt used a flex-item probe
+    and placed it too high.
+  - The viewBox goes from 140 to 145 wide.
+- **`c046e03`:**
+  - `why.md`, the user's own text, is shown at `/legal/why`.
+  - A "Why?" footer link (9 languages) follows the three policies.
+  - `POLICY_PAGES` keeps the "English only" banner off it.
+  - `legal.spec` expects the fourth title.
+
+**Content notes given to the user (not changed):**
+
+- "emails and phone numbers aren't shown ever" conflicts with the Privacy
+  Policy: supers can see account details.
+- "encrypted … in storage" is true only of the hosting provider's
+  encryption at rest.
+- Printing past ballots isn't built yet (My votes comes after launch), and
+  "paste" should be "past".
+- Chat and profile are "coming soon".
+- Comments are filtered, which sits awkwardly with "say what you feel".
+- The statistical-significance heading is empty.
+- There's no "# Why BallotBox?" title line, so the page opens with
+  "Anonymous".
+
+**Verified (headless, local):** clicking "Why?" opens `/legal/why`. In
+Spanish the link reads "¿Por qué?" and there's no banner. The frontend
+type-checks and the unit tests pass (182).
+
+---
+
 ## 2026-10-25 — Footer links centered
 
 **Requested:**
