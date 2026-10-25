@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-25 — Black labels on result bars; "(fewer than 4)" fix
+
+**Requested:**
+
+> Lets change the poll results progress bars text color to black, here's an
+> example of a page with the color bars...
+> http://localhost:3000/polls/questionnaire/365/results
+
+**Changed:**
+
+- The 9 result-bar labels in `PollResultsView` and `BallotPartResults` use
+  `text-[#000]`. A fixed value is needed because the theme remaps Tailwind's
+  `black` to the text color.
+- Found on the same page: the withheld inside/outside purview counts said
+  "(fewer than 1)" on local (k = 1). They now use
+  `visibility.groupMinimum`: "(fewer than 4)".
+
+**Verified (headless, local, questionnaire 365):** the bar label's computed
+color is `rgb(0, 0, 0)`, and the within-purview count reads "(fewer than 4)".
+The frontend type-checks.
+
+**Commit:** `9962d9a`
+
+---
+
 ## 2026-10-25 — Decision: Dark stays the default theme
 
 **Requested:**
