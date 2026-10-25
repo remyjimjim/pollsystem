@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-25 — Keep my membership verified on staging; Why? edits
+
+**Requested:**
+
+> The cancel membership/keep membership works perfectly, regarding the Why?
+> doc: a) I removed the "coming soon" since I didn't want to under sell our
+> app... b) Point taken regarding hubspot, I'll change it to Proton c) You
+> can make the adjustments I've detailed here or I can, no biggie.
+
+**Verified:** on staging, the user cancelled their test membership ("Yes,
+cancel") and then chose "Keep my membership". It worked, confirming the fix
+in `4c9b2f7`.
+
+**Changed (`why.md`):**
+
+- The user added a tip: use an email address with a pseudonym or a place.
+  HubSpot (not an email provider) is replaced with Proton, and the paragraph
+  is reflowed.
+- "A record of your own opinions" stays without "(coming soon)". Completed
+  polls can already be found and viewed; My votes will make that easier.
+
+**Commit:** `9df7390`
+
+---
+
 ## 2026-10-25 — Fix: "Keep my membership" always failed
 
 **Requested:**
