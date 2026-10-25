@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-25 — Dark theme's default background: #4d3d85
+
+**Requested:**
+
+> Can we make the default background-color this color #4d3d85?
+
+**Changed:** `THEME_DEFAULTS.dark.background` is now `#4d3d85` (was
+`#160b2c`). Settings are saved whole, so a browser that had loaded the site
+had stored the old default. `FORMER_DEFAULTS` treats a saved former default
+as never chosen, so those browsers pick up the new color. A background the
+viewer actually picked is kept.
+
+**Verified (headless, local):** the body background computes to
+`rgb(77, 61, 133)` for a fresh visitor and for one with the old default
+saved. A visitor with their own `#003300` keeps it. A home-page screenshot
+was readable, with the muted text a little lower in contrast; it was deleted
+after viewing. The frontend type-checks.
+
+**Commit:** `dc72ee6`
+
+---
+
 ## 2026-10-25 — All result bars light blue with black text
 
 **Requested:**
