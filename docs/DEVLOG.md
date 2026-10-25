@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-25 — Dark theme's default background: #2f1d72
+
+**Requested:**
+
+> Can we make #2f1d72 the 'Default' background color for the Themes color
+> switcher?
+
+**Changed:**
+
+- `THEME_DEFAULTS.dark.background` is now `#2f1d72`.
+- `#4d3d85` joins `#160b2c` in `FORMER_DEFAULTS`, so a browser that saved
+  either old default follows the new one.
+- "Use Default" now sets `#2f1d72`.
+
+**Verified (headless, local):**
+
+- A fresh visitor gets `rgb(47, 29, 114)`, and so does one with `#4d3d85`
+  saved.
+- A visitor with their own `#003300` keeps it.
+- In a home-page screenshot the lime text reads clearly; it was deleted
+  after viewing.
+- The frontend type-checks.
+
+**Commit:** `f39f1bd`
+
+---
+
 ## 2026-10-25 — Tinted notice boxes follow the Dark theme
 
 **Requested:**
