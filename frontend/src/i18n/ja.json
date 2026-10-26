@@ -191,6 +191,8 @@
     "backToSearch": "検索に戻る"
   },
   "election": {
+    "yourVote": "あなたの投票",
+    "notAnswered": "未回答",
     "dateLabel": "選挙日:",
     "zipcodeLabel": "郵便番号",
     "closesLabel": "締切",

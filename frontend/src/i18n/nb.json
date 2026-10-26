@@ -191,6 +191,8 @@
     "backToSearch": "Tilbake til søk"
   },
   "election": {
+    "yourVote": "Din stemme",
+    "notAnswered": "Ikke besvart",
     "dateLabel": "Valgdato:",
     "zipcodeLabel": "Postnummer",
     "closesLabel": "Stenger",

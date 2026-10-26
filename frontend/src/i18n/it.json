@@ -191,6 +191,8 @@
     "backToSearch": "Torna alla ricerca"
   },
   "election": {
+    "yourVote": "Il tuo voto",
+    "notAnswered": "Non risposto",
     "dateLabel": "Data dell'elezione:",
     "zipcodeLabel": "CAP",
     "closesLabel": "Chiude",

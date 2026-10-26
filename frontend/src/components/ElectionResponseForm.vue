@@ -277,6 +277,18 @@ function isSelected(office: string, candidateId: number): boolean {
   return selectionByOffice[office]?.has(candidateId) ?? false
 }
 
+// Reviewing a submitted ballot: disabled inputs barely show which one is
+// picked (especially in Dark), so the pick is highlighted with a badge and the
+// rest are faded; comments show as text, empty comment boxes are hidden.
+const reviewing = computed(() => mode.value === 'readonly')
+function votedFor(office: string, c: { id: number }): boolean {
+  return widget.value === 'legacy' ? answers[c.id]?.response === true : isSelected(office, c.id)
+}
+function reviewRow(office: string, c: { id: number }) {
+  if (!reviewing.value) return ''
+  return votedFor(office, c) ? 'rounded bg-slate-100 px-2 ring-1 ring-slate-400' : 'opacity-50'
+}
+
 function selectOnly(office: string, candidateId: number) {
   selectionByOffice[office] = new Set([candidateId])
 }
@@ -501,6 +513,7 @@ onMounted(load)
         v-for="c in group"
         :key="c.id"
         class="grid grid-cols-[auto_1fr] gap-2 border-b border-slate-100 py-2 last:border-b-0"
+        :class="reviewRow(officeName, c)"
       >
         <input
           :id="`candidate-${c.id}`"
@@ -514,15 +527,19 @@ onMounted(load)
           <label :for="`candidate-${c.id}`" class="flex cursor-pointer flex-col">
             <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
             <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+            <span v-if="reviewing && votedFor(officeName, c)" class="mt-1 self-start rounded bg-slate-800 px-2 py-0.5 text-xs font-semibold text-white" data-test="your-vote">✓ {{ $t('election.yourVote') }}</span>
           </label>
-          <input
-            :id="`comment-c-${c.id}`"
-            v-model="comments[c.id]"
-            type="text"
-            :placeholder="$t('common.comment')"
-            class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
-          />
-          <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+          <template v-if="!reviewing">
+            <input
+              :id="`comment-c-${c.id}`"
+              v-model="comments[c.id]"
+              type="text"
+              :placeholder="$t('common.comment')"
+              class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
+            />
+            <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+          </template>
+          <p v-else-if="comments[c.id]?.trim()" class="m-0 mt-1 text-sm italic text-slate-700">“{{ comments[c.id] }}”</p>
         </div>
       </div>
 
@@ -532,6 +549,7 @@ onMounted(load)
         v-for="c in group"
         :key="c.id"
         class="grid grid-cols-[auto_1fr] gap-2 border-b border-slate-100 py-2 last:border-b-0"
+        :class="reviewRow(officeName, c)"
       >
         <input
           :id="`candidate-${c.id}`"
@@ -544,15 +562,19 @@ onMounted(load)
           <label :for="`candidate-${c.id}`" class="flex cursor-pointer flex-col">
             <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
             <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+            <span v-if="reviewing && votedFor(officeName, c)" class="mt-1 self-start rounded bg-slate-800 px-2 py-0.5 text-xs font-semibold text-white" data-test="your-vote">✓ {{ $t('election.yourVote') }}</span>
           </label>
-          <input
-            :id="`comment-c-${c.id}`"
-            v-model="comments[c.id]"
-            type="text"
-            :placeholder="$t('common.comment')"
-            class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
-          />
-          <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+          <template v-if="!reviewing">
+            <input
+              :id="`comment-c-${c.id}`"
+              v-model="comments[c.id]"
+              type="text"
+              :placeholder="$t('common.comment')"
+              class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
+            />
+            <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+          </template>
+          <p v-else-if="comments[c.id]?.trim()" class="m-0 mt-1 text-sm italic text-slate-700">“{{ comments[c.id] }}”</p>
         </div>
       </div>
 
@@ -562,6 +584,7 @@ onMounted(load)
         v-for="c in group"
         :key="c.id"
         class="grid grid-cols-[auto_1fr] gap-2 border-b border-slate-100 py-2 last:border-b-0"
+        :class="reviewRow(officeName, c)"
       >
         <input
           :id="`candidate-${c.id}`"
@@ -574,15 +597,19 @@ onMounted(load)
           <label :for="`candidate-${c.id}`" class="flex cursor-pointer flex-col">
             <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
             <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+            <span v-if="reviewing && votedFor(officeName, c)" class="mt-1 self-start rounded bg-slate-800 px-2 py-0.5 text-xs font-semibold text-white" data-test="your-vote">✓ {{ $t('election.yourVote') }}</span>
           </label>
-          <input
-            :id="`comment-c-${c.id}`"
-            v-model="comments[c.id]"
-            type="text"
-            :placeholder="$t('common.comment')"
-            class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
-          />
-          <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+          <template v-if="!reviewing">
+            <input
+              :id="`comment-c-${c.id}`"
+              v-model="comments[c.id]"
+              type="text"
+              :placeholder="$t('common.comment')"
+              class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
+            />
+            <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+          </template>
+          <p v-else-if="comments[c.id]?.trim()" class="m-0 mt-1 text-sm italic text-slate-700">“{{ comments[c.id] }}”</p>
         </div>
       </div>
 
@@ -592,10 +619,12 @@ onMounted(load)
         v-for="c in group"
         :key="c.id"
         class="grid grid-cols-[2fr_1fr] gap-2 border-b border-slate-100 py-2 last:border-b-0"
+        :class="reviewRow(officeName, c)"
       >
         <div class="flex flex-col">
           <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
           <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+          <span v-if="reviewing && votedFor(officeName, c)" class="mt-1 self-start rounded bg-slate-800 px-2 py-0.5 text-xs font-semibold text-white" data-test="your-vote">✓ {{ $t('election.yourVote') }}</span>
         </div>
         <div class="flex gap-3">
           <label class="flex items-center gap-1 text-sm">
@@ -608,14 +637,17 @@ onMounted(load)
           </label>
         </div>
         <div class="col-span-2 flex flex-col">
-          <input
-            :id="`comment-c-${c.id}`"
-            v-model="answers[c.id].comment"
-            type="text"
-            :placeholder="$t('common.comment')"
-            class="rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
-          />
-          <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+          <template v-if="!reviewing">
+            <input
+              :id="`comment-c-${c.id}`"
+              v-model="answers[c.id].comment"
+              type="text"
+              :placeholder="$t('common.comment')"
+              class="rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
+            />
+            <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+          </template>
+          <p v-else-if="answers[c.id].comment?.trim()" class="m-0 text-sm italic text-slate-700">“{{ answers[c.id].comment }}”</p>
         </div>
       </div>
     </fieldset>
@@ -639,7 +671,11 @@ onMounted(load)
           <template v-if="m.closeDate">· {{ $t('ballotMeasure.closesLabel') }} {{ new Date(m.closeDate).toLocaleString() }}</template>
         </p>
         <p class="m-0 mb-3 whitespace-pre-wrap rounded-r bg-slate-50 p-3 text-sm text-slate-700 [border-left:3px_solid_#4299e1]">{{ m.summary }}</p>
-        <div class="mb-2 flex gap-4">
+        <p v-if="reviewing" class="m-0 mb-2 text-sm" data-test="measure-your-vote">
+          <span v-if="measureAnswers[m.id].response === null" class="text-slate-500">{{ $t('election.notAnswered') }}</span>
+          <span v-else class="rounded bg-slate-800 px-2 py-0.5 text-xs font-semibold text-white">✓ {{ $t('election.yourVote') }}: {{ measureAnswers[m.id].response ? $t('common.yes') : $t('common.no') }}</span>
+        </p>
+        <div v-else class="mb-2 flex gap-4">
           <label class="flex items-center gap-2 text-base text-slate-700">
             <input :id="`measure-${m.id}-yes`" type="radio" :name="`measure-${m.id}`" :value="true" v-model="measureAnswers[m.id].response" />
             {{ $t('common.yes') }}
@@ -649,15 +685,18 @@ onMounted(load)
             {{ $t('common.no') }}
           </label>
         </div>
-        <input
-          :id="`comment-m-${m.id}`"
-          v-model="measureAnswers[m.id].comment"
-          type="text"
-          :placeholder="$t('common.comment')"
-          :aria-label="`${$t('common.comment')}: ${m.title}`"
-          class="w-full rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
-        />
-        <PublicCommentToggle :id="`comment-public-m-${m.id}`" v-model="measureAnswers[m.id].commentPublic" />
+        <template v-if="!reviewing">
+          <input
+            :id="`comment-m-${m.id}`"
+            v-model="measureAnswers[m.id].comment"
+            type="text"
+            :placeholder="$t('common.comment')"
+            :aria-label="`${$t('common.comment')}: ${m.title}`"
+            class="w-full rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
+          />
+          <PublicCommentToggle :id="`comment-public-m-${m.id}`" v-model="measureAnswers[m.id].commentPublic" />
+        </template>
+        <p v-else-if="measureAnswers[m.id].comment?.trim()" class="m-0 text-sm italic text-slate-700">“{{ measureAnswers[m.id].comment }}”</p>
       </fieldset>
     </template>
 

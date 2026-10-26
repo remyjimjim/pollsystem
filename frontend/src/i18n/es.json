@@ -191,6 +191,8 @@
     "backToSearch": "Volver a la búsqueda"
   },
   "election": {
+    "yourVote": "Su voto",
+    "notAnswered": "Sin responder",
     "dateLabel": "Fecha de la elección:",
     "zipcodeLabel": "Código postal",
     "closesLabel": "Cierra",

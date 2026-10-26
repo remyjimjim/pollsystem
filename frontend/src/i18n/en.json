@@ -217,6 +217,8 @@
     "backToSearch": "Back to search"
   },
   "election": {
+    "yourVote": "Your vote",
+    "notAnswered": "Not answered",
     "dateLabel": "Election date:",
     "zipcodeLabel": "Zipcode",
     "closesLabel": "Closes",

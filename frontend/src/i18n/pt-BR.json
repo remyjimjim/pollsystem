@@ -191,6 +191,8 @@
     "backToSearch": "Voltar para a busca"
   },
   "election": {
+    "yourVote": "Seu voto",
+    "notAnswered": "Não respondido",
     "dateLabel": "Data da eleição:",
     "zipcodeLabel": "CEP",
     "closesLabel": "Encerra",

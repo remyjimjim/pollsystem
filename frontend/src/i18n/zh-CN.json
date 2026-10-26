@@ -191,6 +191,8 @@
     "backToSearch": "返回搜索"
   },
   "election": {
+    "yourVote": "您的投票",
+    "notAnswered": "未作答",
     "dateLabel": "选举日期：",
     "zipcodeLabel": "邮政编码",
     "closesLabel": "截止",
