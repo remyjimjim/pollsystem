@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-26 — Launch-day prod backend deploy (verified)
+
+**Changed:** the user deployed the prod backend from `main`
+(`cd backend && flyctl deploy -a pollsystem-backend -c fly.toml`). It ships
+everything since the Oct 23 prod deploy:
+
+- one account per phone (V39) and per inbox (V40), plus the shared-card
+  flag;
+- duplicate-payment refunds;
+- the state-search fix and Exclude nationwide;
+- the expanded bad-word list with plural matching;
+- the Keep-my-membership fix;
+- `min_machines_running = 1`.
+
+**Verified (prod):**
+
+- Health is UP.
+- Schema is at 40 (read-only Neon). `users_phone_digits_key` and
+  `users_email_inbox_key` are both **unique**, since prod had no duplicates.
+  `users.card_fingerprint` exists.
+- Election + Washington returns exactly WA's 10 ballots.
+- Exclude nationwide returns 579, the same as the total: prod has no
+  nationwide polls.
+- `flyctl machines list`: both machines started, checks 1/1.
+
+---
+
 ## 2026-10-26 — Decision: Substack paid plan stays separate at launch
 
 **Requested:**
