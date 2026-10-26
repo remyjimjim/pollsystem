@@ -61,6 +61,52 @@ logged.
 
 ---
 
+## 2026-10-26 — Search: queries per search cut from thousands to ~30
+
+**Requested:**
+
+> Issues: Production searches are pretty slow.
+
+**Measured (prod):** Election + Washington took 6.7 s; all elections 43.6 s;
+everything 52.2 s. Local took 0.14 s, because its database is on the same
+machine.
+
+**Cause:** `PollSearchController` ran queries for every result row:
+
+- the poll's purview (`purviewOf`);
+- its area label (`regionLabel`, a state lookup);
+- for each election, its included elections (`includes.of`), even without
+  a candidate search;
+- a respondent count through `PollParticipationService.of`, which loaded
+  every response, then each respondent, then classified their zipcodes.
+
+Local query counts (Postgres `log_statement=all`): 588 for WA elections,
+4,429 for all elections, 5,912 for everything. At about 10 ms per round trip
+to Neon, that matches prod.
+
+**Changed:**
+
+- All `poll_purviews` loaded once per search.
+- `respondentCounts()`: three grouped `count(distinct user_id)` queries, one
+  per kind.
+- `ElectionIncludes.all()`: one query, loaded lazily, only for a candidate
+  search.
+- State-purview labels built from one `states.findAll()`; other scopes use
+  the cached `regionLabel`.
+- Zipcode → state cached.
+
+**Verified:**
+
+- Before and after, local results are **identical** (JSON equal) for WA
+  elections, everything, a candidate search ("Murray") and include-closed.
+- Queries: 588 → **30**, 4,429 → **22**, 5,912 → **34**.
+- The full backend suite passes (391).
+- Prod gets it with the next backend deploy (the user runs it).
+
+**Commit:** `725220b`
+
+---
+
 ## 2026-10-26 — Launch-day prod backend deploy (verified)
 
 **Changed:** the user deployed the prod backend from `main`
