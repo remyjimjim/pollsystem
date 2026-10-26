@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-26 — Decision: Substack paid plan stays separate at launch
+
+**Requested:**
+
+> Part of the launch is announcing it on substack and adding a paid
+> subscription plan for subscribers to my substack. … Let's go with A for
+> launch
+
+**Decision:** at launch, a paid Substack subscription and BallotBox
+membership are separate (option A).
+
+- The Substack announcement links to `ballotbox.us.com/register`.
+- Substack's paid plan connects to a **new, separate Stripe account**. Stripe
+  Connect gives Substack the whole selected account, including payment
+  records, so connecting the BallotBox account would expose members' data.
+  Sharing with Substack isn't listed in the Privacy Policy either.
+- Option B, membership included through a Zapier/Make relay to
+  `/webhooks/substack`, is in `todo.md` for later in launch week.
+
+---
+
 ## 2026-10-25 — Keep my membership verified on staging; Why? edits
 
 **Requested:**

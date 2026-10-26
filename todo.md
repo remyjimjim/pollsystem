@@ -294,5 +294,24 @@
     Clicking a district opens its existing results page.
   - Phase 3 (~1 day): a House radio button coloring districts by their leading party.
   - Expect the map to be mostly grey until enough people vote.
+  - Add a 'Show archived polls too?.' option under 'See closed polls too?' option on polls/search.
+  - Change Theme settings such that instead of one 'Default' color per dark/light theme, make Background color a dropdown 
+    containing up to 3 different color choosers each set to one of the 3 best colors, same for the text color.  Maybe have
+    an API to add a color to the dropdown.  
+  - On polls/search page, after the search finds some polls, add a (un)select all checkbox as the final checkbox.
+  - Ask Claude how to setup a discount code box on my Stripe payment page.  So like I'll advertise "20% off with 
+    discount code "LEAH"... or some such, then the charge will be go down 20% for that user, so instead of $10 they pay $8. 
+  - Done: No
+
+  - On page http://localhost:3000/creator/dashboard, edit a poll and save changes then click 'Publish' and the list of
+    polls reappears with the poll set to reopen when it should have been published and 'reopen' should change to 'Edit'.
+
+- After launch (later in launch week, if wanted): a paid Substack subscription includes BallotBox membership.
+  - Launch itself (2026-10-26) keeps them separate: the Substack announcement links to ballotbox.us.com/register.
+  - Substack's paid plan uses its own, separate Stripe account (never the BallotBox one: Stripe Connect would let
+    Substack see every BallotBox member's payment records).
+  - To include membership: check Zapier/Make can see Substack paid subscribers; relay them to POST /webhooks/substack
+    (docs/SUBSTACK-INTEGRATION.md); set SUBSTACK_WEBHOOK_SECRET on prod (user runs flyctl); test on staging first;
+    update the Terms (membership is $10/month through BallotBox); decide what happens to someone paying both.
   - Done: No
 
