@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-26 — Reviewing your ballot shows your picks clearly
+
+**Requested:**
+
+> When I go to see how I voted on my ballot it doesn't show my ballot with who
+> I picked, it should be just like the ballot I filled out and submitted just
+> read only.
+
+**Cause:** "No, just review" rendered the same ballot with every input
+disabled. The picks were there (all 9 checked in a local reproduction), but
+a disabled radio is a faint dot, and in Dark the picked and unpicked looked
+the same. Every candidate also showed an empty comment box.
+
+**Changed (`ElectionResponseForm`, read-only mode):**
+
+- The chosen candidate is highlighted (`bg-slate-100`, ring) with a
+  "✓ Your vote" badge; the others are faded.
+- Each ballot measure shows "✓ Your vote: Yes/No", or "Not answered".
+- Comments show as italic text. Empty comment boxes and the "make public"
+  toggles are hidden.
+- This covers all four candidate widgets.
+- New keys `election.yourVote` and `election.notAnswered`, in 9 languages.
+
+**Verified (headless, local, demo-super, WA District 2):** voted through
+the form, reloaded, and chose "No, just review". There were 6 "Your vote"
+badges for the 6 races, 3 measure lines and no comment inputs. A
+screenshot showed each pick boxed with its badge; it was deleted after
+viewing. The frontend type-checks and all 182 unit tests pass.
+
+**Commit:** `6012021`
+
+---
+
 ## 2026-10-26 — Search: queries per search cut from thousands to ~30
 
 **Requested:**
