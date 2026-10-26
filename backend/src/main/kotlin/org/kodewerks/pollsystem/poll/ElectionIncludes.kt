@@ -15,6 +15,12 @@ class ElectionIncludes(private val jdbc: JdbcTemplate) {
     fun of(electionId: Long): List<Long> =
         jdbc.queryForList("select included_election_id from election_includes where election_id = ? order by position, included_election_id", Long::class.java, electionId)
 
+    /** Every ballot's included elections, by ballot: one query for a whole search. */
+    fun all(): Map<Long, List<Long>> =
+        jdbc.query("select election_id, included_election_id from election_includes order by position, included_election_id") { rs, _ ->
+            rs.getLong(1) to rs.getLong(2)
+        }.groupBy({ it.first }, { it.second })
+
     /** The elections that include [electionId]. */
     fun includedBy(electionId: Long): List<Long> =
         jdbc.queryForList("select election_id from election_includes where included_election_id = ? order by election_id", Long::class.java, electionId)

@@ -54,7 +54,8 @@ class PollSearchController(
     private val purviewService: PollPurviewService,
     private val blockService: PollBlockService,
     private val participation: PollParticipationService,
-    private val includes: ElectionIncludes
+    private val includes: ElectionIncludes,
+    private val states: org.kodewerks.pollsystem.repository.StateRepository
 ) {
 
     /** Maps the search-row `type` string back to the block-table enum. */
@@ -131,8 +132,23 @@ class PollSearchController(
             !countyIds.isNullOrEmpty() -> searchedMeta.filter { it.county.id in countyIds }.map { it.county.state.id }.toSet()
             else -> stateIds.orEmpty().toSet()
         }
-        val purviewByPoll = if (geoFilter == null && !excludeNationwide) emptyMap()
-            else pollPurviews.findAll().groupBy { it.pollType to it.pollId }
+        // Everything per poll is loaded once for the whole search, not per poll:
+        // on prod each query crosses the network, and one-per-poll took 6–50 s
+        // (2026-10-26).
+        val purviewByPoll = pollPurviews.findAll().groupBy { it.pollType to it.pollId }
+        fun rowsOf(kind: PollKind, pollId: Long) = purviewByPoll[kind to pollId].orEmpty()
+        val stateNames: Map<Long, String> by lazy { states.findAll().associate { it.id to it.name } }
+        val labelCache = HashMap<List<Any?>, String>()
+        fun labelOf(rows: List<org.kodewerks.pollsystem.model.PollPurview>) =
+            labelCache.getOrPut(rows.map { listOf(it.scopeLevel, it.stateId, it.countyId, it.zipcode) }.sortedBy { it.toString() }) {
+                // State purviews (all the midterms) from one list of names; others as before.
+                if (rows.isNotEmpty() && rows.all { it.scopeLevel == ScopeLevel.STATE })
+                    rows.mapNotNull { it.stateId?.let(stateNames::get) }.distinct().sorted().joinToString(", ")
+                else purviewService.regionLabel(rows)
+            }
+        val zipStateCache = HashMap<String, String>()
+        fun stateOfZip(zip: String) = zipStateCache.getOrPut(zip) { lookupState(zip) }
+        val includedBy: Map<Long, List<Long>> by lazy { includes.all() }   // only a candidate search needs it
         fun isNationwide(kind: PollKind, pollId: Long): Boolean {
             val rows = purviewByPoll[kind to pollId].orEmpty()
             return rows.isEmpty() || rows.any { it.scopeLevel == ScopeLevel.NATIONAL }   // no declared purview = nationwide
@@ -181,9 +197,9 @@ class PollSearchController(
                 if (!matches(q.creator.email, creatorEmail)) continue
                 if (geoFilter != null && !purviewIncludesSearch(PollKind.QUESTIONNAIRE, q.id)) continue
                 if (excludeNationwide && isNationwide(PollKind.QUESTIONNAIRE, q.id)) continue
-                val qRows = purviewService.purviewOf(PollKind.QUESTIONNAIRE, q.id)
+                val qRows = rowsOf(PollKind.QUESTIONNAIRE, q.id)
                 val zipStates = purviewService.zipcodesOf(qRows)
-                    .map { ZipState(it, lookupState(it)) }
+                    .map { ZipState(it, stateOfZip(it)) }
                     .sortedBy { it.code }
                 results += PollSearchResult(
                     id = q.id,
@@ -192,7 +208,7 @@ class PollSearchController(
                     creatorEmail = shownEmail(q.creator.email),
                     closeDate = q.closeDate,
                     zipcodes = zipStates,
-                    regionLabel = purviewService.regionLabel(qRows)
+                    regionLabel = labelOf(qRows)
                 )
             }
         }
@@ -208,8 +224,8 @@ class PollSearchController(
                 if (e.id in onBallots) continue
                 if (!textMatch(
                         titleHit = titleHit(e.title, titleQuery),
-                        candidateHit = e.id in electionsWithCandidate ||
-                            includes.of(e.id).any { it in electionsWithCandidate }
+                        candidateHit = e.id in electionsWithCandidate || (electionsWithCandidate.isNotEmpty() &&
+                            includedBy[e.id].orEmpty().any { it in electionsWithCandidate })
                     )
                 ) continue
                 if (!matches(e.creator.email, creatorEmail)) continue
@@ -221,8 +237,8 @@ class PollSearchController(
                     title = e.title,
                     creatorEmail = shownEmail(e.creator.email),
                     closeDate = e.closeDate,
-                    zipcodes = listOfNotNull(e.zipcode?.let { ZipState(it, lookupState(it)) }),
-                    regionLabel = purviewService.regionLabel(purviewService.purviewOf(PollKind.ELECTION, e.id))
+                    zipcodes = listOfNotNull(e.zipcode?.let { ZipState(it, stateOfZip(it)) }),
+                    regionLabel = labelOf(rowsOf(PollKind.ELECTION, e.id))
                 )
             }
         }
@@ -244,8 +260,8 @@ class PollSearchController(
                     title = bm.title,
                     creatorEmail = shownEmail(bm.creator.email),
                     closeDate = bm.closeDate,
-                    zipcodes = listOfNotNull(zip?.let { ZipState(it, lookupState(it)) }),
-                    regionLabel = purviewService.regionLabel(purviewService.purviewOf(PollKind.ELECTION, bm.election.id)),
+                    zipcodes = listOfNotNull(zip?.let { ZipState(it, stateOfZip(it)) }),
+                    regionLabel = labelOf(rowsOf(PollKind.ELECTION, bm.election.id)),
                     electionId = bm.election.id,
                     electionTitle = bm.election.title
                 )
@@ -263,7 +279,8 @@ class PollSearchController(
         // Active polls (no closeDate or future) first, sorted by closeDate
         // ascending; closed polls last, sorted by closeDate descending so the
         // most-recently-closed appears at the top of the closed section.
-        return visible.map { it.copy(respondents = participation.of(kindOf(it.type), it.id).respondents) }.sortedWith(
+        val respondentCounts = participation.respondentCounts()
+        return visible.map { it.copy(respondents = respondentCounts[kindOf(it.type) to it.id] ?: 0) }.sortedWith(
             compareBy<PollSearchResult>(
                 { if (it.closeDate != null && !it.closeDate.isAfter(now)) 1 else 0 },
                 { if (it.closeDate != null && !it.closeDate.isAfter(now)) -it.closeDate.toEpochMilli() else (it.closeDate?.toEpochMilli() ?: Long.MAX_VALUE) },
