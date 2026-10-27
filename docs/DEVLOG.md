@@ -61,6 +61,52 @@ logged.
 
 ---
 
+## 2026-10-27 — Search by place: polls inside the place, narrowing shrinks the list
+
+**Requested:**
+
+> If state is washington and county is whatcom then show polls associated
+> exactly with any zipcodes in whatcom county and polls associated exactly with
+> 'Whatcom' county as a whole; ... zipcode is 98225 then show only polls
+> associated with zipcode 98225; ... So polls associated with 'Washington'
+> state as a whole only show up when you select 'Washington' state in the state
+> filter; ... if I were to set state to Washington I'd a very large list of
+> polls, if I then set the county ... that list of polls would decrease
+> substantially and if I then set the zipcode to 98225 and 98226 then we get an
+> even smaller list of polls.
+
+**Changed (`PollSearchController`):** a place filter now matches the polls
+*inside* the place, not those *covering* it. The most specific pick wins:
+
+| Picked | Matches |
+|---|---|
+| Zipcodes (with or without state/county) | ZIP purviews for exactly those zipcodes |
+| County (with or without state) | COUNTY purview for it, ZIP purviews for its zipcodes |
+| State only | STATE purview for it, its counties', its zipcodes' |
+| Nothing | everything, nationwide included |
+
+- Nationwide polls never match a place, so "Exclude nationwide" only matters
+  with no place picked.
+- Trade-off, accepted: someone who types only their zipcode doesn't see their
+  state's midterm ballots; they pick the state.
+- `finding-polls.md` rewritten to match.
+- `admin-manages-creators` e2e: its poll is now scoped to one zipcode in each
+  state; a nationwide poll no longer shows up in a zipcode search.
+
+**Verified:**
+
+- A new test covers each example from the request: WA; WA + Whatcom; Whatcom
+  alone; WA + Whatcom + 98225; 98225 alone; 98225 + 98226; and no place.
+- `StateSearchTest` updated.
+- Backend suite: 390 tests pass.
+- E2E: 18 pass. The 2 failures are the interactive tools `register-users`
+  and `seed-users-debug`; both wait on a person to click Close, so headless
+  runs time out.
+
+**Commit:** `9ff064f`
+
+---
+
 ## 2026-10-26 — Reviewing your ballot shows your picks clearly
 
 **Requested:**
