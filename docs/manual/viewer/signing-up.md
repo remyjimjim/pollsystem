@@ -7,7 +7,7 @@ order: 3
 # Signing up and signing in
 
 You don't need an account to find polls or view results. To **vote and answer
-polls**, you need a membership: **$10 a month**.
+polls**, you need a membership: **$4.99 a month**.
 
 There are no passwords. You sign in with a one-time link sent to your email.
 

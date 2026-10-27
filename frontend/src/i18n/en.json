@@ -119,11 +119,11 @@
   },
   "register": {
     "heading": "Create an account",
-    "intro": "Membership is $10/mo and lets you participate in polls, questionnaires, and ballot measures in your area. Enter your details and continue to secure checkout; we'll email a one-time sign-in link once payment is complete.",
+    "intro": "Membership is $4.99/mo and lets you participate in polls, questionnaires, and ballot measures in your area. Enter your details and continue to secure checkout; we'll email a one-time sign-in link once payment is complete.",
     "emailLabel": "Email",
     "phoneLabel": "Phone",
     "zipcodeLabel": "Zipcode",
-    "submitButton": "Continue to payment — $10/mo",
+    "submitButton": "Continue to payment — $4.99/mo",
     "submittingButton": "Starting checkout…",
     "haveAccount": "Already have an account?",
     "signInLink": "Sign in",
@@ -1013,7 +1013,7 @@
   "billing": {
     "renewTitle": "Your membership has lapsed",
     "renewBlurb": "Renew to participate again — vote and respond in polls, questionnaires, and ballot measures in your area.",
-    "renewCta": "Renew — $10/mo",
+    "renewCta": "Renew — $4.99/mo",
     "manageTitle": "Your membership",
     "manageBlurb": "You’re subscribed. Manage your plan or payment method, or cancel anytime.",
     "manageCta": "Manage subscription",

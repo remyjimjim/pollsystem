@@ -136,7 +136,7 @@ test.describe('a visitor pays with Stripe test mode', () => {
     await page.getByRole('button', { name: 'Manage subscription' }).click()
     await page.waitForURL(/billing\.stripe\.com/, { timeout: 30_000 })
       .catch(() => { throw new Error('Manage subscription did not reach Stripe\'s portal. Is the test-mode Customer portal saved in the Stripe dashboard?') })
-    await expect(page.getByText(/\$10\.00/).first()).toBeVisible({ timeout: 30_000 })
+    await expect(page.getByText(/\$4\.99/).first()).toBeVisible({ timeout: 30_000 })
     await hold(page)
 
     // 2. End the subscription now, through Stripe's test API.

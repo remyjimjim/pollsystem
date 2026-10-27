@@ -30,7 +30,7 @@ Polls currently concern places in the United States.
 
 ## Membership and payment
 
-- Answering polls requires a paid membership: **$10 a month**, charged in
+- Answering polls requires a paid membership: **$4.99 a month**, charged in
   advance through our payment processor, Stripe. It **renews automatically each
   month** until you cancel.
 - Cancel anytime with **Cancel membership** on your home page; your membership
