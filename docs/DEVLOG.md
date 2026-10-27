@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-10-27 — Stripe: $4.99 prices recorded
+
+**Requested:**
+
+> Found it, here's the live price ID: price_1UV03sLEdI7bvvox8KDo3uBh now I'll
+> get the one for sandbox
+
+> here's the one for sandbox price_1UQZQGLEdI7bvvoxsM2qz3Bf
+
+**Verified (Stripe API, read-only, live key):** `price_1UV03sLEdI7bvvox8KDo3uBh`
+is live, active, 499 USD, monthly. It belongs to the new product "BallotBox"
+(`prod_VW28cHNQTjuV4m`). The old product "BallotBox Membership" is archived;
+its $10 price is still active, and the one paying prod subscription is on
+it. The app uses only the price ID, never the product. The sandbox price
+couldn't be read: no sandbox key on this machine.
+
+**Changed:**
+
+- `docs/STRIPE-LIVE.md`: the new product and price, the former ones, and
+  staging's sandbox price.
+- The local `.devcontainer/stripe-live-app.secrets.env` (git-ignored, 600):
+  `STRIPE_PRICE_ID` updated.
+
+**Pending (the user):** `flyctl secrets set STRIPE_PRICE_ID=…` on prod and
+staging. Setting secrets is blocked for the agent. After that, push the
+$4.99 text (`6c0c1d4`).
+
+**Commit:** `85ce514`
+
+---
+
 ## 2026-10-27 — Membership price shown as $4.99 a month
 
 **Requested:**
