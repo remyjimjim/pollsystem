@@ -139,15 +139,15 @@ const cards = computed<ActionCard[]>(() => {
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article class="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-5">
-          <h2 class="text-lg font-semibold text-slate-800">{{ $t('home.cards.guestResults.title') }}</h2>
+          <h2 class="text-lg font-semibold text-slate-800">{{ $t('home.cards.guestRegister.title') }}</h2>
           <p class="flex-1 text-sm text-slate-600">
-            {{ $t('home.cards.guestResults.description') }}
+            {{ $t('home.cards.guestRegister.description') }}
           </p>
           <router-link
-            to="/polls/search"
+            to="/register"
             class="self-start text-sm font-semibold text-slate-800 hover:underline"
           >
-            {{ $t('home.cards.guestResults.cta') }} →
+            {{ $t('home.cards.guestRegister.cta') }} →
           </router-link>
         </article>
         <article class="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-5">
@@ -163,15 +163,15 @@ const cards = computed<ActionCard[]>(() => {
           </router-link>
         </article>
         <article class="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-5">
-          <h2 class="text-lg font-semibold text-slate-800">{{ $t('home.cards.guestRegister.title') }}</h2>
+          <h2 class="text-lg font-semibold text-slate-800">{{ $t('home.cards.guestResults.title') }}</h2>
           <p class="flex-1 text-sm text-slate-600">
-            {{ $t('home.cards.guestRegister.description') }}
+            {{ $t('home.cards.guestResults.description') }}
           </p>
           <router-link
-            to="/register"
+            to="/polls/search"
             class="self-start text-sm font-semibold text-slate-800 hover:underline"
           >
-            {{ $t('home.cards.guestRegister.cta') }} →
+            {{ $t('home.cards.guestResults.cta') }} →
           </router-link>
         </article>
       </div>
