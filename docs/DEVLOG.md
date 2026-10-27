@@ -61,6 +61,52 @@ logged.
 
 ---
 
+## 2026-10-27 — History: Diff column with Before / Now
+
+**Requested:**
+
+> Can we have a 5th column named 'Diff' that when clicked shows a 2 column page
+> with the left half with a title 'Before' and the right half has 'Now' and then
+> the text of the question before the last change on the left and the text of
+> the question after the change on the right?
+
+**Changed:**
+
+- **History table:** a **Diff** column. It's the 5th with one poll picked, and
+  the 6th with all polls. An entry gets a Diff link when it has a snapshot
+  and an earlier entry of the same poll does too.
+- **Endpoint:** `GET /api/poll-history/{id}/diff` returns that entry's
+  snapshot (Now) and the previous one (Before). It has the same access rule as
+  History (super, the creator, or an admin over the area); otherwise 404.
+- **Snapshots:** every publish already kept one (V34). Admin and super
+  `EDITED` entries now keep one too, so their edits get a Diff. No migration
+  was needed.
+- **Diff page:** the new `HistoryDiffView` at `/history/diff/:id` shows two
+  columns, Before and Now:
+  - title, summary (not for elections), close date, area;
+  - the questions, or candidates for an election.
+  - Changed fields and questions not on the other side are highlighted.
+  - It has a "Back to history" link.
+- **Languages:** 9.
+- **Help:** the creator page's History section mentions Diff.
+
+**Verified:**
+
+- New backend test: a re-publish with a reworded question gets a Diff with
+  Before "Q?" and Now "Q, reworded?". A stranger gets 404, and so does the
+  first publish, which has nothing before it. The full suite passes (391).
+- Headless on local, as demo-super: published a poll, reopened it, reworded
+  question 1, and published again. History showed When / What happened / By /
+  Details / Diff. Diff opened Before and Now, with only question 1
+  highlighted on each side. Screenshot viewed, then deleted.
+- That test poll ("Diff check …", #501, zipcode 90001) stays on local.
+- Frontend type-check and unit tests pass, with the HistoryView test updated
+  for the column.
+
+**Commit:** `da0fc76`
+
+---
+
 ## 2026-10-27 — Search: a county without a state now filters
 
 **Requested:**
