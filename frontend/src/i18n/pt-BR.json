@@ -1,4 +1,12 @@
 {
+  "signInCode": {
+    "heading": "No celular? Digite o código do e-mail:",
+    "codeLabel": "Código de acesso",
+    "button": "Entrar",
+    "submitting": "Entrando…",
+    "wrong": "Esse código está errado ou expirou. Veja o e-mail mais recente ou peça um novo.",
+    "tooMany": "Tentativas demais. Aguarde alguns minutos ou peça um novo link."
+  },
   "brand": "BallotBox",
   "settings": {
     "title": "Configurações",

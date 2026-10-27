@@ -1,4 +1,12 @@
 {
+  "signInCode": {
+    "heading": "在手机上？请输入邮件中的验证码：",
+    "codeLabel": "登录验证码",
+    "button": "登录",
+    "submitting": "正在登录…",
+    "wrong": "验证码错误或已过期。请查看最新的邮件，或重新申请。",
+    "tooMany": "尝试次数过多。请等几分钟，或重新申请链接。"
+  },
   "brand": "BallotBox",
   "settings": {
     "title": "设置",

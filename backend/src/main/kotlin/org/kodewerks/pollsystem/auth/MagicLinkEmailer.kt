@@ -27,13 +27,14 @@ class MagicLinkEmailer(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun send(user: User, rawToken: String) {
+    fun send(user: User, signIn: IssuedSignIn) {
         val mail = mailProvider.ifAvailable
         if (mail == null) {
             log.warn("JavaMailSender not configured; magic-link email not sent for user {}", user.id)
             return
         }
-        val url = magicLinks.buildRedeemUrl(rawToken)
+        val url = magicLinks.buildRedeemUrl(signIn.token)
+        val code = "${signIn.code.take(3)} ${signIn.code.drop(3)}"
         // Build the MimeMessage explicitly. Resend's SMTP rejects the message
         // that JavaMailSenderImpl derives from a SimpleMailMessage ("550 ...
         // from field: undefined"), even though the From header looks correct;
@@ -43,13 +44,21 @@ class MagicLinkEmailer(
         MimeMessageHelper(mime, false, "UTF-8").apply {
             setFrom(from)
             setTo(user.email)
-            setSubject("Your BallotBox sign-in link")
+            setSubject("Your BallotBox sign-in code: $code")
             setText(
                 """
-                Click the link below to sign in to BallotBox. It expires in 15 minutes and can be used once.
+                Your BallotBox sign-in code is:
+
+                    $code
+
+                Type it on the BallotBox page where you asked to sign in. On a phone, this
+                is the easiest way: switch back to your browser and enter the code.
+
+                Or click this link to sign in:
 
                 $url
 
+                The code and the link expire in 15 minutes and can be used once.
                 If you didn't request this, you can ignore this email.
                 """.trimIndent()
             )

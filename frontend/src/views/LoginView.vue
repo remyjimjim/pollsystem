@@ -3,6 +3,7 @@ import { reactive, ref, onMounted, onUnmounted, defineAsyncComponent } from 'vue
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import SignInCodeForm from '@/components/SignInCodeForm.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -40,6 +41,9 @@ function onQuickSignIn() {
 async function onTokenFromOtherTab(e: StorageEvent) {
   if (e.key !== 'token' || !e.newValue || e.newValue === auth.token) return
   await auth.adoptToken(e.newValue)
+  continueSignedIn()
+}
+function continueSignedIn() {
   const redirect = destination()
   if (auth.user && !auth.user.profileComplete) {
     router.replace({ name: 'CompleteProfile', query: { redirect } })
@@ -103,6 +107,9 @@ async function onSubmit() {
       <p v-if="lapsed" class="mb-2 rounded bg-amber-50 px-3 py-2 text-amber-800">
         {{ $t('login.lapsedNote') }}
       </p>
+      <div class="my-3 rounded border border-green-300 bg-white/60 p-3">
+        <SignInCodeForm :email="sentTo" @signed-in="continueSignedIn" />
+      </div>
       <p class="mb-2 text-xs text-slate-500">{{ $t('login.autoContinue') }}</p>
       <p class="mt-3 text-center">
         {{ $t('login.wrongAddress') }}

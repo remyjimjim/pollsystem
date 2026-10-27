@@ -63,11 +63,14 @@ class RateLimiter(
     companion object {
         // Per IP (RateLimitFilter).
         val MAGIC_LINK_IP = Rule("magic-link-ip", 10, Duration.ofMinutes(15))
+        val CODE_IP = Rule("code-ip", 30, Duration.ofMinutes(15))
         val STATUS_IP = Rule("status-ip", 30, Duration.ofMinutes(1))
         val CHECKOUT_IP = Rule("checkout-ip", 10, Duration.ofHours(1))
         val SEARCH_IP = Rule("search-ip", 120, Duration.ofMinutes(1))
         // Per email address (AuthController).
         val MAGIC_LINK_EMAIL = Rule("magic-link-email", 3, Duration.ofMinutes(15))
+        /** Sign-in code guesses per address (each link's code also retires after 5 wrong). */
+        val CODE_EMAIL = Rule("code-email", 10, Duration.ofMinutes(15))
         val CHECKOUT_EMAIL = Rule("checkout-email", 5, Duration.ofHours(1))
     }
 }

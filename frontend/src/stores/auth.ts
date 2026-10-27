@@ -91,6 +91,16 @@ export const useAuthStore = defineStore('auth', () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
   }
 
+  /** Sign in with the 6-digit code from a sign-in email (for phones; 2026-10-27). */
+  async function redeemCode(email: string, code: string): Promise<void> {
+    const response = await axios.post<AuthResponse>('/api/auth/magic-link/code', { email, code })
+    token.value = response.data.token
+    user.value = response.data.user
+    rememberUser(response.data.user.id)
+    localStorage.setItem('token', response.data.token)
+    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
+  }
+
   /**
    * Adopt a JWT another tab wrote to localStorage (cross-tab sign-in). The
    * magic-link tab redeems and calls localStorage.setItem('token', …), which
@@ -204,6 +214,7 @@ export const useAuthStore = defineStore('auth', () => {
     accountStatus,
     registerCheckout,
     redeemMagicLink,
+    redeemCode,
     adoptToken,
     fetchUser,
     completeProfile,

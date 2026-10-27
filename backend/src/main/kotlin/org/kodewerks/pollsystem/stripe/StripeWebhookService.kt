@@ -142,8 +142,8 @@ class StripeWebhookService(
                 cardFingerprint = card
             )
         )
-        val rawToken = magicLinks.issueToken(provisioned)
-        emailer.send(provisioned, rawToken)
+        val signIn = magicLinks.issueToken(provisioned)
+        emailer.send(provisioned, signIn)
         log.info("Provisioned paid user {} from checkout and emailed a magic link", email)
     }
 

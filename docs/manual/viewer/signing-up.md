@@ -1,15 +1,16 @@
 ---
-title: Signing up and signing in
-summary: Become a member, sign in with an emailed link, and renew or manage your membership.
+title: Signing up
+summary: Become a member, and renew or manage your membership.
 order: 3
 ---
 
-# Signing up and signing in
+# Signing up
 
 You don't need an account to find polls or view results. To **vote and answer
 polls**, you need a membership: **$4.99 a month**.
 
-There are no passwords. You sign in with a one-time link sent to your email.
+There are no passwords. You sign in with a code or a link sent to your email
+(see [Signing in](signing-in.md)).
 
 ## Becoming a member
 
@@ -19,8 +20,9 @@ There are no passwords. You sign in with a one-time link sent to your email.
      inside or outside a poll's area (see [Viewing results](viewing-results.md)).
    - Each email and each phone number can belong to only one account.
 3. Click **Continue to payment** and pay on the secure checkout page.
-4. Back on BallotBox, you'll see "Payment received". Check your email for a
-   **sign-in link** and click it. You're signed in.
+4. Back on BallotBox, you'll see "Payment received". Check your email: type
+   the **6-digit code** from it on that page and tap **Sign in**, or click the
+   link in the email. You're signed in.
 
 Your account is created only once payment succeeds. If you cancel checkout,
 you aren't charged and nothing is saved, so you can start again with the same
@@ -28,20 +30,6 @@ email.
 
 If you're asked to **Complete your profile**, add your phone and zipcode and
 click **Save and continue**.
-
-## Signing in
-
-1. Click **Login** in the top bar.
-2. Enter your email and click **Email me a sign-in link**.
-3. Open the email and click the link.
-
-The link works **once** and **expires after 15 minutes**. If you click it in
-the same browser, in another tab, the sign-in page you left open signs you in
-by itself. If you open the link on a different device, such as your phone, that
-device is the one that gets signed in.
-
-If the link has expired or was already used, request a new one from the sign-in
-page.
 
 ## If your membership lapses
 
@@ -78,5 +66,5 @@ done.
   number can be used for one account only.
 - **"We don't have an account for that email."** Check the address for typos,
   or register first.
-- **No email arrived.** Check your spam folder, and wait a minute or two. On the
-  sign-in page, **Wrong address?** lets you try a different email.
+- **No email arrived, or the code doesn't work.** See
+  [Signing in](signing-in.md).

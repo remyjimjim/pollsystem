@@ -63,7 +63,7 @@ class AuthControllerTest : AbstractIntegrationTest() {
     @Test
     fun `redeem returns a JWT consumes the token and me echoes the principal`() {
         val user = saveUser("bob@test.local", "+15551234200")
-        val rawToken = magicLinks.issueToken(user)
+        val rawToken = magicLinks.issueToken(user).token
 
         val resp = mockMvc.perform(
             post("/api/auth/magic-link/redeem")
@@ -102,7 +102,7 @@ class AuthControllerTest : AbstractIntegrationTest() {
     fun `redeem rejects expired token`() {
         val user = saveUser("dave@test.local", "+15551234300")
         // Issue normally, then rewind expiry past now.
-        val rawToken = magicLinks.issueToken(user)
+        val rawToken = magicLinks.issueToken(user).token
         val record = tokens.findAll().last { it.userId == user.id }
         tokens.save(record.copy(expiresAt = Instant.now().minus(Duration.ofMinutes(1))))
 
@@ -111,6 +111,54 @@ class AuthControllerTest : AbstractIntegrationTest() {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.writeValueAsString(mapOf("token" to rawToken)))
         ).andExpect(status().isUnauthorized)
+    }
+
+    private fun postCode(email: String, code: String) = mockMvc.perform(
+        post("/api/auth/magic-link/code")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(json.writeValueAsString(mapOf("email" to email, "code" to code)))
+    )
+    private fun wrongCode(right: String) = "%06d".format((right.toInt() + 1) % 1_000_000)
+
+    @Test
+    fun `the emailed code signs in like the link, once, and uses up the link`() {
+        val user = saveUser("code-ok@test.local", "+15551234400")
+        val issued = magicLinks.issueToken(user)
+        val spaced = "${issued.code.take(3)} ${issued.code.drop(3)}"   // as the email shows it
+
+        postCode("Code-OK@test.local", spaced)
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.token").isNotEmpty)
+            .andExpect(jsonPath("$.user.email").value("code-ok@test.local"))
+        postCode("code-ok@test.local", issued.code).andExpect(status().isUnauthorized)   // once
+        mockMvc.perform(
+            post("/api/auth/magic-link/redeem")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(mapOf("token" to issued.token)))
+        ).andExpect(status().isUnauthorized)                                             // same link
+    }
+
+    @Test
+    fun `five wrong codes retire the code but the link still works`() {
+        val user = saveUser("code-wrong@test.local", "+15551234500")
+        val issued = magicLinks.issueToken(user)
+        repeat(5) { postCode("code-wrong@test.local", wrongCode(issued.code)).andExpect(status().isUnauthorized) }
+        postCode("code-wrong@test.local", issued.code).andExpect(status().isUnauthorized)
+        mockMvc.perform(
+            post("/api/auth/magic-link/redeem")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(mapOf("token" to issued.token)))
+        ).andExpect(status().isOk)
+    }
+
+    @Test
+    fun `an expired code, or an unknown email, gets the same 401`() {
+        val user = saveUser("code-old@test.local", "+15551234600")
+        val issued = magicLinks.issueToken(user)
+        val record = tokens.findAll().last { it.userId == user.id }
+        tokens.save(record.copy(expiresAt = Instant.now().minus(Duration.ofMinutes(1))))
+        postCode("code-old@test.local", issued.code).andExpect(status().isUnauthorized)
+        postCode("nobody-code@test.local", "123456").andExpect(status().isUnauthorized)
     }
 
     @Test

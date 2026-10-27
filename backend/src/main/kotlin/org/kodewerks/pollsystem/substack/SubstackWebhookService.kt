@@ -48,8 +48,8 @@ class SubstackWebhookService(
         val provisioned = users.save(
             User(email = normalized, access = AccessLevel.USER, isEnabled = true, paidUntil = until)
         )
-        val rawToken = magicLinks.issueToken(provisioned)
-        emailer.send(provisioned, rawToken)
+        val signIn = magicLinks.issueToken(provisioned)
+        emailer.send(provisioned, signIn)
         log.info("Provisioned Substack member {} and emailed a magic link", normalized)
     }
 

@@ -50,3 +50,24 @@ export async function waitForEmail(
   }
   throw new Error(`No "${subject}" email for ${recipient} after ${(attempts * delayMs) / 1000}s`)
 }
+
+/** The 6-digit code (digits only) in the newest sign-in email to [recipient]. */
+export async function fetchSignInCode(
+  recipient: string,
+  opts: { attempts?: number; delayMs?: number } = {}
+): Promise<string> {
+  const attempts = opts.attempts ?? 60
+  const delayMs  = opts.delayMs  ?? 500
+  for (let n = 0; n < attempts; n++) {
+    const data = await fetch(`${MAILPIT}/api/v1/search?query=${encodeURIComponent(`to:${recipient}`)}&limit=1`)
+      .then(r => r.json()) as { messages?: Array<{ ID: string }> }
+    if (data.messages && data.messages.length > 0) {
+      const full = await fetch(`${MAILPIT}/api/v1/message/${data.messages[0].ID}`)
+        .then(r => r.json()) as { Text?: string }
+      const match = (full.Text ?? '').match(/sign-in code is:\s+(\d{3}) (\d{3})/)
+      if (match) return match[1] + match[2]
+    }
+    await new Promise(r => setTimeout(r, delayMs))
+  }
+  throw new Error(`No sign-in code found for ${recipient} after ${(attempts * delayMs) / 1000}s`)
+}

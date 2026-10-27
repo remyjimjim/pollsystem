@@ -1,17 +1,24 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { AccessLevel } from '@/types'
 import BillingBanner from '@/components/BillingBanner.vue'
+import SignInCodeForm from '@/components/SignInCodeForm.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+const router = useRouter()
 const route = useRoute()
 
 // A pay-first registrant returns here from Stripe (logged out) as
 // ?checkout=success — payment landed, but they still need the emailed link.
+// Signed in with the emailed code after paying: finish the profile if needed.
+function afterCodeSignIn() {
+  if (auth.user && !auth.user.profileComplete) router.replace({ name: 'CompleteProfile', query: { redirect: '/' } })
+  else router.replace('/')
+}
 const guestCheckoutSuccess = computed(() => route.query.checkout === 'success')
 
 interface ActionCard {
@@ -120,12 +127,13 @@ const cards = computed<ActionCard[]>(() => {
     </template>
 
     <template v-else>
-      <p
+      <div
         v-if="guestCheckoutSuccess"
         class="mb-6 rounded-md border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900"
       >
-        {{ $t('home.checkoutSuccessGuest') }}
-      </p>
+        <p class="m-0 mb-3">{{ $t('home.checkoutSuccessGuest') }}</p>
+        <SignInCodeForm @signed-in="afterCodeSignIn" />
+      </div>
       <p class="mb-6 text-base text-slate-600">
         {{ $t('home.guestIntro') }}
       </p>

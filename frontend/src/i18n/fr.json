@@ -1,4 +1,12 @@
 {
+  "signInCode": {
+    "heading": "Sur un téléphone ? Saisissez le code de l'e-mail :",
+    "codeLabel": "Code de connexion",
+    "button": "Se connecter",
+    "submitting": "Connexion…",
+    "wrong": "Ce code est erroné ou a expiré. Vérifiez l'e-mail le plus récent ou demandez-en un nouveau.",
+    "tooMany": "Trop d'essais. Patientez quelques minutes ou demandez un nouveau lien."
+  },
   "brand": "BallotBox",
   "settings": {
     "title": "Paramètres",

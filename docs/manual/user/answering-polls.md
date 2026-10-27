@@ -7,7 +7,7 @@ order: 1
 # Answering polls
 
 To answer a poll you need to be signed in with an active membership (see
-[Signing up and signing in](../viewer/signing-up.md)), and your profile needs a
+[Signing up](../viewer/signing-up.md)), and your profile needs a
 phone and zipcode.
 
 Find the poll with [Finding polls](../viewer/finding-polls.md), then click

@@ -1,4 +1,12 @@
 {
+  "signInCode": {
+    "heading": "Am Handy? Geben Sie den Code aus der E-Mail ein:",
+    "codeLabel": "Anmeldecode",
+    "button": "Anmelden",
+    "submitting": "Anmeldung…",
+    "wrong": "Dieser Code ist falsch oder abgelaufen. Prüfen Sie die neueste E-Mail oder fordern Sie einen neuen an.",
+    "tooMany": "Zu viele Versuche. Warten Sie ein paar Minuten oder fordern Sie einen neuen Link an."
+  },
   "brand": "BallotBox",
   "settings": {
     "title": "Einstellungen",

@@ -1,4 +1,12 @@
 {
+  "signInCode": {
+    "heading": "¿En un teléfono? Escriba el código del correo:",
+    "codeLabel": "Código de acceso",
+    "button": "Entrar",
+    "submitting": "Entrando…",
+    "wrong": "Ese código es incorrecto o ha caducado. Revise el correo más reciente o pida uno nuevo.",
+    "tooMany": "Demasiados intentos. Espere unos minutos o pida un enlace nuevo."
+  },
   "brand": "BallotBox",
   "settings": {
     "title": "Configuración",

@@ -1,4 +1,12 @@
 {
+  "signInCode": {
+    "heading": "On a phone? Type the code from the email:",
+    "codeLabel": "Sign-in code",
+    "button": "Sign in",
+    "submitting": "Signing in…",
+    "wrong": "That code is wrong or has expired. Check the newest email, or ask for a new one.",
+    "tooMany": "Too many tries. Wait a few minutes, or ask for a new link."
+  },
   "brand": "BallotBox",
   "settings": {
     "title": "Settings",

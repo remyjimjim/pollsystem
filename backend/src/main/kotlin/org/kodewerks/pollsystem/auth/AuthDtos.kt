@@ -20,6 +20,12 @@ data class MagicLinkRequest(
     @field:Pattern(regexp = "^[0-9]{5}$") val zipcode: String? = null
 )
 
+/** Sign in with the 6-digit code from a sign-in email; spaces are ignored. */
+data class MagicLinkCodeRequest(
+    @field:NotBlank @field:jakarta.validation.constraints.Email val email: String,
+    @field:NotBlank @field:jakarta.validation.constraints.Size(max = 12) val code: String
+)
+
 data class MagicLinkRedeemRequest(
     @field:NotBlank val token: String
 )

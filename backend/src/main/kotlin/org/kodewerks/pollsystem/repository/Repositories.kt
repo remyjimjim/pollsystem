@@ -38,6 +38,7 @@ interface UserRepository : JpaRepository<User, Long> {
 @Repository
 interface MagicLinkTokenRepository : JpaRepository<MagicLinkToken, Long> {
     fun findByTokenHash(tokenHash: String): MagicLinkToken?
+    fun findByUserId(userId: Long): List<MagicLinkToken>
 }
 
 @Repository

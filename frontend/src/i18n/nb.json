@@ -1,4 +1,12 @@
 {
+  "signInCode": {
+    "heading": "På mobilen? Skriv inn koden fra e-posten:",
+    "codeLabel": "Innloggingskode",
+    "button": "Logg inn",
+    "submitting": "Logger inn…",
+    "wrong": "Koden er feil eller utløpt. Sjekk den nyeste e-posten, eller be om en ny.",
+    "tooMany": "For mange forsøk. Vent noen minutter, eller be om en ny lenke."
+  },
   "brand": "BallotBox",
   "settings": {
     "title": "Innstillinger",

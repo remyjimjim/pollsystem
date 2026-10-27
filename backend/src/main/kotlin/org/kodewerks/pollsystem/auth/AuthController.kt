@@ -58,8 +58,8 @@ class AuthController(
         val user = users.findByEmail(req.email.lowercase())
             ?: if ("local" in env.activeProfiles) provision(req)
                else throw ResponseStatusException(HttpStatus.NOT_FOUND, "No account for that email")
-        val rawToken = magicLinks.issueToken(user)
-        emailer.send(user, rawToken)
+        val signIn = magicLinks.issueToken(user)
+        emailer.send(user, signIn)
         return ResponseEntity.accepted().build()
     }
 
@@ -105,6 +105,23 @@ class AuthController(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown zipcode: ${req.zipcode}")
         }
         return mapOf("url" to billing.createGuestCheckoutSession(email, req.phone, req.zipcode))
+    }
+
+    /**
+     * Sign in with the 6-digit code from a sign-in email (decided 2026-10-27).
+     * Same answer as redeeming the link. A wrong or expired code, or an unknown
+     * email, gets the same 401, so the code box can't be used to probe accounts.
+     */
+    @PostMapping("/magic-link/code")
+    fun redeemCode(@Valid @RequestBody req: MagicLinkCodeRequest): AuthResponse {
+        val email = req.email.trim().lowercase()
+        rateLimiter.check(org.kodewerks.pollsystem.security.RateLimiter.CODE_EMAIL, email)
+        val wrong = ResponseStatusException(HttpStatus.UNAUTHORIZED, "That code is wrong or has expired")
+        val user = users.findByEmail(email) ?: throw wrong
+        if (!magicLinks.redeemCode(user.id, req.code)) throw wrong
+        if (!user.isEnabled) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Account disabled")
+        val token = tokenProvider.generateToken(user.id, user.email)
+        return AuthResponse(token, UserDto.from(user))
     }
 
     @PostMapping("/magic-link/redeem")

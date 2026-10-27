@@ -23,5 +23,12 @@ data class MagicLinkToken(
     val expiresAt: Instant,
 
     @Column(name = "used_at")
-    val usedAt: Instant? = null
+    val usedAt: Instant? = null,
+
+    /** SHA-256 of "code:tokenHash" for the 6-digit code in the same email (V41). */
+    @Column(name = "code_hash", length = 64)
+    val codeHash: String? = null,
+
+    @Column(name = "code_attempts", nullable = false)
+    val codeAttempts: Int = 0
 )
