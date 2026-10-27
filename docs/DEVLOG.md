@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-27 — Search: arrow row to jump to the end of the results and back
+
+**Requested:**
+
+> For polls/search can we have a row on the bottom with an arrow pointed down
+> when if clicked the app scrolls to the bottom of the results and when it gets
+> to the bottom the arrow turns to an upward arrow and if clicked goes to the
+> top of the results?
+
+**Changed (`PollSearchView`):**
+
+- A sticky row at the bottom of the screen, shown only when the results run
+  past the screen, with a round arrow button.
+- ↓ scrolls smoothly to the last result. At the end it turns ↑, which scrolls
+  back to the top of the results (the column chooser).
+- The direction updates on scroll, resize and re-render (new results, sorting,
+  columns).
+- The row is solid `bg-slate-50`, so it follows the theme. Its label
+  (`search.scrollToEnd` / `search.scrollToTop`) is in 9 languages.
+
+**Verified (headless, local, all results):**
+
+- Desktop 1200×900 and phone 390×800: ↓ reached the end and turned ↑, with
+  the last result fully visible above the row. ↑ returned to the top of the
+  results and turned ↓.
+- Screenshots were viewed, then deleted.
+- Type-check passes; `PollSearchView` unit tests pass (6).
+
+**Commit:** `3650ce9`
+
+---
+
 ## 2026-10-27 — Search by place: polls inside the place, narrowing shrinks the list
 
 **Requested:**
