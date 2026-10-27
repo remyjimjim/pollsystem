@@ -61,6 +61,91 @@ logged.
 
 ---
 
+## 2026-10-28 — Demo account: a shared address a super switches on for 12 hours
+
+**Requested:**
+
+> look into how we could have a test account in staging that I could have a
+> prospective customer use where it'd ask for an email at /login but would just
+> proceed to being logged as the test user then after 12 hours the user would
+> expire if I didn't delete the user earlier than 12 hours.
+
+> Let's make the demo account on staging.pollsystem.pages.dev and
+> ballotbox.us.com. Now for your questions: 1. B.
+> demo@staging.pollsystem.pages.dev and demo@ballotbox.us.com. 2. A. How would
+> I ask you to reinstate the demo account after it's expired and deleted? 3. B
+> 4. A
+
+**Decided:**
+
+| Question | Choice |
+|---|---|
+| Whose email | **One shared address per site** |
+| At expiry | **Votes and comments deleted** |
+| What it can do | **Member + creator** |
+| Where it lives | **A zipcode chosen at Start** (default 98225) |
+
+- **Reinstating:** the super presses **Start** again, which makes a fresh
+  account. No agent needed.
+- **On prod too, at the user's choice.** The trade-offs were stated before
+  building:
+  - anyone who knows the address can sign in while the demo is on;
+  - its votes count in real results until it ends;
+  - its published polls are visible to real members until it ends.
+- **Mitigations:** it's off unless started, it ends itself after 12 hours,
+  and End now ends it at once.
+- **Polls at the end:** archived and handed to the starting super, rather
+  than hard-deleted, so they're recoverable and the existing account deletion
+  works.
+
+**Changed:**
+
+- **V42:** `users.demo_until` and `demo_started_by`.
+- **`DemoAccountService`:**
+  - **Start:** creates a CREATOR with a placeholder +1555 phone, `paid_until`
+    = `demo_until`, and a STATE Creator grant for the zipcode's state.
+  - **+12 hours** extends it.
+  - **End:** archives its polls, records an ARCHIVED history entry ("The
+    demo account ended"), reassigns them to the starting super (or the first
+    super), then calls `AccountDeletion.deleteDemo`: no email, no Stripe.
+  - **Sweep:** runs every 5 minutes.
+- **`SuperDemoController`:** `/api/super/demo` with `start`, `extend` and
+  `end`.
+- **Sign-in:** `/api/auth/status` returns `DEMO` for the active demo address.
+  `POST /api/auth/demo-sign-in` is public and rate-limited like status; it
+  returns 401 when the demo is off.
+- **Address:** `app.demo.email` / `DEMO_EMAIL` in `fly.toml` and
+  `fly.staging.toml`; `demo@test.local` on local.
+- **Pages:**
+  - Login goes straight in for `DEMO`.
+  - An amber notice on every page shows when the demo ends.
+  - Home hides the billing banner for the demo.
+  - `DemoAccountCard` on the Super dashboard.
+  - 9 languages.
+  - Super help topic "Demo account".
+
+**Verified:**
+
+- **`DemoAccountTest` (4 tests):**
+  - off: the address is UNKNOWN and sign-in gets 401;
+  - start: DEMO status; sign-in works (any case) as CREATOR with a
+    Washington grant, paid and with a complete profile; a second start gets
+    409; +12 hours adds 12 hours;
+  - end: the poll is archived, owned by the super, with a history entry; the
+    user is gone; the old JWT's `/me` and sign-in get 401;
+  - expired: sign-in gets 401, the sweep deletes it, and Start works again.
+- **Full suite:** 398 pass.
+- **E2E `super-runs-demo-account`:** start from the card, the prospect is
+  straight in on a phone with the notice, +12 hours, End now, and the
+  prospect's next page shows Login.
+- **Screenshots:** the card and the prospect view were viewed, then deleted.
+- **Frontend:** type-check and 182 unit tests pass.
+- **Local:** the demo was left off.
+
+**Commit:** `afe2e46`
+
+---
+
 ## 2026-10-27 — Home: View poll results first
 
 **Requested:**
