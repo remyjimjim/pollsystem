@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-28 — Prod backend deploy: demo account (verified)
+
+**Requested:** the user ran
+`cd backend && flyctl deploy -a pollsystem-backend -c fly.toml` themselves,
+shipping `main` at `b1ee83e`: the demo account (`afe2e46`) with migration
+V42, and `DEMO_EMAIL` in `fly.toml`. Staging was deployed and checked first.
+
+**Deploy:** the image was built through Depot, with every step cached from
+the staging build. Rolling update; both machines were in a good state
+afterwards.
+
+**Verified (prod, read-only):**
+
+- `/actuator/health` returns 200.
+- The app config has `DEMO_EMAIL = demo@ballotbox.us.com`.
+- With the demo off, `/api/auth/status` for that address returns UNKNOWN, and
+  `/api/auth/demo-sign-in` returns 401.
+- Neon (role `claude`): the Flyway schema is at version 42, both new
+  `users` columns are present, and no `demo@` account exists. The demo stays
+  off until a super presses Start.
+
+---
+
 ## 2026-10-28 — Demo account: a shared address a super switches on for 12 hours
 
 **Requested:**
