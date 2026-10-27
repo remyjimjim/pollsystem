@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-10-27 — Home: View poll results first
+
+**Requested:**
+
+> Actually, my bad, I got the order wrong, can we make 'View poll results' the
+> first one on the left?
+
+**Changed:** the guest cards now run View poll results, Create an account,
+Sign in. This supersedes `ae4853f`, whose order wasn't pushed.
+
+**Verified (headless, local, signed out):** the order was the same at
+1200 px and at 390 px.
+
+**Commit:** `76760c3`
+
+---
+
 ## 2026-10-27 — Home: guest cards reordered
 
 **Requested:**
