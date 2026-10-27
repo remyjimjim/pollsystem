@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-27 — Prod backend deploy: sign-in code (verified)
+
+**Requested:** the user ran
+`cd backend && flyctl deploy -a pollsystem-backend -c fly.toml` themselves,
+shipping `main` at `b76f49e`: the sign-in code (`73a712e`) with migration
+V41.
+
+**Deploy:** the image was built through Depot, with every step cached from
+the staging build of the same source. Rolling update; both machines were in
+a good state afterwards.
+
+**Verified (prod, read-only):**
+
+- `/actuator/health` returns 200.
+- `POST /api/auth/magic-link/code` with an unknown email returns 401, so the
+  endpoint is live.
+- Neon (role `claude`): the Flyway schema is at version 41, and
+  `magic_link_tokens` has `code_hash` and `code_attempts`.
+
+---
+
 ## 2026-10-27 — Sign in with a 6-digit code from the email (for phones)
 
 **Requested:**
