@@ -56,6 +56,7 @@ class SecurityConfig(
                     // Pay-first registration + login routing are used before the
                     // visitor has any account or token, so they must be public.
                     "/api/auth/status",
+                    "/api/auth/demo-sign-in",
                     "/api/auth/register-checkout",
                     "/webhooks/stripe",
                     "/webhooks/substack",

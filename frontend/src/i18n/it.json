@@ -637,7 +637,21 @@
       "colStale": "Antiche (>48h)",
       "footnote": "⚠ segnala gli admin la cui quota in attesa supera {threshold} (configurabile tramite {key}).",
       "warnTitle": "La quota in attesa supera {threshold}",
-      "errorLoad": "Impossibile caricare il carico di lavoro"
+      "errorLoad": "Impossibile caricare il carico di lavoro",
+      "demo": {
+        "heading": "Account demo",
+        "blurb": "Un indirizzo condiviso per mostrare BallotBox: mentre è attivo, digitarlo in Accedi entra subito come membro e creatore, senza e-mail, codice o pagamento. Al termine, voti e commenti vengono eliminati e i suoi sondaggi archiviati e affidati a te. Riavvialo per un account nuovo.",
+        "address": "Indirizzo:",
+        "off": "Disattivato",
+        "onUntil": "Attivo fino a {time}, CAP {zipcode}",
+        "startedBy": "avviato da {email}",
+        "zipcode": "CAP",
+        "start": "Avvia (12 ore)",
+        "extend": "+12 ore",
+        "end": "Termina ora",
+        "confirmEnd": "Terminare la demo ora? Voti e commenti vengono eliminati, e i suoi sondaggi archiviati e affidati a te.",
+        "error": "Impossibile aggiornare l'account demo."
+      }
     },
     "adminRequests": {
       "heading": "Richieste Admin",
@@ -810,5 +824,8 @@
     "phoneInvalid": "Controlla il numero di telefono: usa cifre e, se vuoi, + ( ) - o spazi, ad es. (401) 992-4938.",
     "zipcodeInvalid": "Inserisci un CAP di 5 cifre, ad es. 98264.",
     "ageRequired": "Conferma di avere 13 anni o più."
+  },
+  "demo": {
+    "notice": "Stai usando l'account demo di BallotBox. Termina {time} e tutto ciò che vi è stato fatto viene allora eliminato."
   }
 }

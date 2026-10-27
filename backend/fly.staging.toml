@@ -20,6 +20,8 @@ primary_region = "iad"
   # to prod behavior. Nothing in the code keys off the literal name, so
   # "staging" reads clearly while behaving exactly like "prod".
   SPRING_PROFILES_ACTIVE = "staging"
+  # The demo account's shared address (V42): signs straight in while a super has it on.
+  DEMO_EMAIL = "demo@staging.pollsystem.pages.dev"
 
 [http_service]
   internal_port = 8080

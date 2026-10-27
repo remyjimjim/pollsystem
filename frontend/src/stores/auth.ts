@@ -5,7 +5,7 @@ import type { User, MagicLinkRequest, AuthResponse, CompleteProfileRequest } fro
 import { AccessLevel } from '@/types'
 
 /** Login routing decision from the backend; see AuthController.accountStatus. */
-export type AccountStatus = 'UNKNOWN' | 'LAPSED' | 'ACTIVE'
+export type AccountStatus = 'UNKNOWN' | 'LAPSED' | 'ACTIVE' | 'DEMO'
 
 /** Pay-first registration payload (all required; account created after payment). */
 export interface RegisterCheckoutRequest {
@@ -94,6 +94,16 @@ export const useAuthStore = defineStore('auth', () => {
   /** Sign in with the 6-digit code from a sign-in email (for phones; 2026-10-27). */
   async function redeemCode(email: string, code: string): Promise<void> {
     const response = await axios.post<AuthResponse>('/api/auth/magic-link/code', { email, code })
+    token.value = response.data.token
+    user.value = response.data.user
+    rememberUser(response.data.user.id)
+    localStorage.setItem('token', response.data.token)
+    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
+  }
+
+  /** The demo address while the demo is on: straight in, no email (V42). */
+  async function demoSignIn(email: string): Promise<void> {
+    const response = await axios.post<AuthResponse>('/api/auth/demo-sign-in', { email })
     token.value = response.data.token
     user.value = response.data.user
     rememberUser(response.data.user.id)
@@ -215,6 +225,7 @@ export const useAuthStore = defineStore('auth', () => {
     registerCheckout,
     redeemMagicLink,
     redeemCode,
+    demoSignIn,
     adoptToken,
     fetchUser,
     completeProfile,

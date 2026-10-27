@@ -48,7 +48,8 @@ data class AccountStatusRequest(
     @field:Email @field:NotBlank val email: String
 )
 
-enum class AccountStatus { UNKNOWN, LAPSED, ACTIVE }
+/** DEMO: the demo address while the demo is on; Sign in goes straight in (V42). */
+enum class AccountStatus { UNKNOWN, LAPSED, ACTIVE, DEMO }
 
 data class AccountStatusResponse(val status: AccountStatus)
 
@@ -72,7 +73,9 @@ data class UserDto(
     val paidUntil: Instant?,
     /** Cancelled: the membership ends at paidUntil and won't renew. */
     val cancelAtPeriodEnd: Boolean,
-    val profileComplete: Boolean
+    val profileComplete: Boolean,
+    /** The demo account: when it ends (null for everyone else). */
+    val demoUntil: Instant? = null
 ) {
     companion object {
         fun from(user: User) = UserDto(
@@ -84,7 +87,8 @@ data class UserDto(
             isEnabled = user.isEnabled,
             paidUntil = user.paidUntil,
             cancelAtPeriodEnd = user.cancelAtPeriodEnd,
-            profileComplete = user.profileComplete
+            profileComplete = user.profileComplete,
+            demoUntil = user.demoUntil
         )
     }
 }

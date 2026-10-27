@@ -23,6 +23,7 @@ class RateLimitFilter(
             request.method == "POST" && path == "/api/auth/magic-link/request" -> RateLimiter.MAGIC_LINK_IP
             request.method == "POST" && path == "/api/auth/magic-link/code" -> RateLimiter.CODE_IP
             request.method == "POST" && path == "/api/auth/status" -> RateLimiter.STATUS_IP
+            request.method == "POST" && path == "/api/auth/demo-sign-in" -> RateLimiter.STATUS_IP
             request.method == "POST" && path == "/api/auth/register-checkout" -> RateLimiter.CHECKOUT_IP
             request.method == "GET" && (path == "/api/polls/search" || path.startsWith("/api/polls/search/")) -> RateLimiter.SEARCH_IP
             else -> null

@@ -818,6 +818,20 @@
         "confirmDisable": "Disable ALL poll submissions now? No one can submit responses until you re-enable them. Viewing and results stay up.",
         "confirmEnable": "Re-enable poll submissions?",
         "error": "Failed to update submission availability"
+      },
+      "demo": {
+        "heading": "Demo account",
+        "blurb": "A shared address for showing BallotBox to someone: while it's on, typing it on Sign in signs straight in as a member and creator, with no email, code or payment. When it ends, its votes and comments are deleted and its polls are archived and handed to you. Start again for a fresh account.",
+        "address": "Address:",
+        "off": "Off",
+        "onUntil": "On until {time}, zipcode {zipcode}",
+        "startedBy": "started by {email}",
+        "zipcode": "Zipcode",
+        "start": "Start (12 hours)",
+        "extend": "+12 hours",
+        "end": "End now",
+        "confirmEnd": "End the demo now? Its votes and comments are deleted, and its polls are archived and handed to you.",
+        "error": "Couldn't update the demo account."
       }
     },
     "adminRequests": {
@@ -1133,5 +1147,8 @@
     "phoneInvalid": "Please check your phone number: use digits, and optionally + ( ) - or spaces, e.g. (401) 992-4938.",
     "zipcodeInvalid": "Please enter a 5-digit zipcode, e.g. 98264.",
     "ageRequired": "Please confirm you're 13 or older."
+  },
+  "demo": {
+    "notice": "You're using the BallotBox demo account. It ends {time}, and everything done in it is deleted then."
   }
 }

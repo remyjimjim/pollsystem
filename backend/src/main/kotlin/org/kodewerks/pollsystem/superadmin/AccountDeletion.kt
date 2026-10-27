@@ -80,6 +80,18 @@ class AccountDeletion(
         return AccountDeletionResult(user.email, recounted, hadSubscription)
     }
 
+    /**
+     * Deletes the demo account when it ends (V42): no email (the address has no
+     * inbox), no Stripe. [DemoAccountService] archives and hands over its polls
+     * first, so nothing blocks it.
+     */
+    fun deleteDemo(userId: Long): Int {
+        val recounted = tx.execute { removeEverything(userId) }!!
+        roleAuthCache.invalidateAuthorizations()
+        log.info("Deleted the demo account {}; {} polls recounted", userId, recounted)
+        return recounted
+    }
+
     private fun confirmationBody(hadSubscription: Boolean) = buildString {
         appendLine("Your account data from BallotBox.us.com has been deleted per your request.")
         if (hadSubscription) {

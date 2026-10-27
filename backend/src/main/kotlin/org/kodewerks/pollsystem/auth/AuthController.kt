@@ -39,7 +39,8 @@ class AuthController(
     private val countyZips: CountyZipsRepository,
     private val billing: PaymentProvider,
     private val env: Environment,
-    private val rateLimiter: org.kodewerks.pollsystem.security.RateLimiter
+    private val rateLimiter: org.kodewerks.pollsystem.security.RateLimiter,
+    private val demo: org.kodewerks.pollsystem.superadmin.DemoAccountService
 ) {
 
     /**
@@ -75,6 +76,7 @@ class AuthController(
         val user = users.findByEmail(req.email.lowercase())
         val status = when {
             user == null || !user.isEnabled -> AccountStatus.UNKNOWN
+            user.demoUntil != null -> if (demo.isDemoAddress(user.email)) AccountStatus.DEMO else AccountStatus.UNKNOWN
             // CREATOR+ are exempt from the subscription gate (granted via other
             // flows); anyone else needs a live paid_until to count as active.
             user.hasActiveSubscription || user.access.ordinal >= AccessLevel.CREATOR.ordinal ->
@@ -122,6 +124,17 @@ class AuthController(
         if (!user.isEnabled) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Account disabled")
         val token = tokenProvider.generateToken(user.id, user.email)
         return AuthResponse(token, UserDto.from(user))
+    }
+
+    /**
+     * The demo address signs straight in while the demo is on (V42): no email,
+     * code or payment. Off (or any other address): 401, as for a wrong code.
+     */
+    @PostMapping("/demo-sign-in")
+    fun demoSignIn(@Valid @RequestBody req: AccountStatusRequest): AuthResponse {
+        val user = demo.active()?.takeIf { demo.isDemoAddress(req.email.trim().lowercase()) }
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "The demo isn't on")
+        return AuthResponse(tokenProvider.generateToken(user.id, user.email), UserDto.from(user))
     }
 
     @PostMapping("/magic-link/redeem")

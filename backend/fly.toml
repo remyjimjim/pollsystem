@@ -16,6 +16,8 @@ primary_region = "iad"
   # JWT secret, Stripe, and email creds are injected as secrets (relaxed
   # binding: SPRING_DATASOURCE_URL -> spring.datasource.url, etc.).
   SPRING_PROFILES_ACTIVE = "prod"
+  # The demo account's shared address (V42): signs straight in while a super has it on.
+  DEMO_EMAIL = "demo@ballotbox.us.com"
 
 [http_service]
   internal_port = 8080

@@ -637,7 +637,21 @@
       "colStale": "超时（>48小时）",
       "footnote": "⚠ 标记其待处理占比超过 {threshold} 的管理员（可通过 {key} 配置）。",
       "warnTitle": "待处理占比超过 {threshold}",
-      "errorLoad": "加载管理员工作量失败"
+      "errorLoad": "加载管理员工作量失败",
+      "demo": {
+        "heading": "演示账户",
+        "blurb": "用于向他人展示 BallotBox 的共享地址：开启期间，在登录页输入它即可直接以会员和创建者身份登录，无需邮件、验证码或付款。结束时，其投票和评论会被删除，其创建的投票会被归档并移交给您。重新开始即可获得全新账户。",
+        "address": "地址：",
+        "off": "关闭",
+        "onUntil": "开启至 {time}，邮编 {zipcode}",
+        "startedBy": "由 {email} 开启",
+        "zipcode": "邮编",
+        "start": "开始（12 小时）",
+        "extend": "+12 小时",
+        "end": "立即结束",
+        "confirmEnd": "现在结束演示吗？其投票和评论会被删除，其创建的投票会被归档并移交给您。",
+        "error": "无法更新演示账户。"
+      }
     },
     "adminRequests": {
       "heading": "管理员申请",
@@ -810,5 +824,8 @@
     "phoneInvalid": "请检查电话号码：使用数字，可加 + ( ) - 或空格，例如 (401) 992-4938。",
     "zipcodeInvalid": "请输入 5 位邮编，例如 98264。",
     "ageRequired": "请确认你已年满 13 岁。"
+  },
+  "demo": {
+    "notice": "您正在使用 BallotBox 演示账户。它将于 {time} 结束，届时其中的所有操作都会被删除。"
   }
 }

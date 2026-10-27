@@ -637,7 +637,21 @@
       "colStale": "Antiguas (>48h)",
       "footnote": "⚠ marca a los admins cuya cuota pendiente supera {threshold} (configurable mediante {key}).",
       "warnTitle": "La cuota pendiente supera {threshold}",
-      "errorLoad": "Error al cargar la carga de trabajo"
+      "errorLoad": "Error al cargar la carga de trabajo",
+      "demo": {
+        "heading": "Cuenta de demostración",
+        "blurb": "Una dirección compartida para mostrar BallotBox: mientras está activa, escribirla en Iniciar sesión entra directamente como miembro y creador, sin correo, código ni pago. Al terminar, se borran sus votos y comentarios, y sus encuestas se archivan y pasan a usted. Inicie de nuevo para una cuenta nueva.",
+        "address": "Dirección:",
+        "off": "Desactivada",
+        "onUntil": "Activa hasta {time}, código postal {zipcode}",
+        "startedBy": "iniciada por {email}",
+        "zipcode": "Código postal",
+        "start": "Iniciar (12 horas)",
+        "extend": "+12 horas",
+        "end": "Terminar ahora",
+        "confirmEnd": "¿Terminar la demostración ahora? Se borran sus votos y comentarios, y sus encuestas se archivan y pasan a usted.",
+        "error": "No se pudo actualizar la cuenta de demostración."
+      }
     },
     "adminRequests": {
       "heading": "Solicitudes de Admin",
@@ -810,5 +824,8 @@
     "phoneInvalid": "Revisa tu número de teléfono: usa dígitos y, si quieres, + ( ) - o espacios, p. ej. (401) 992-4938.",
     "zipcodeInvalid": "Introduce un código postal de 5 dígitos, p. ej. 98264.",
     "ageRequired": "Confirma que tienes 13 años o más."
+  },
+  "demo": {
+    "notice": "Está usando la cuenta de demostración de BallotBox. Termina {time} y todo lo hecho en ella se borra entonces."
   }
 }

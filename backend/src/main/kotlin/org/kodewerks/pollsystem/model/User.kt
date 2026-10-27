@@ -47,7 +47,15 @@ data class User(
 
     /** Stripe's fingerprint of the card the membership was paid with (V40): accounts sharing one are flagged. */
     @Column(name = "card_fingerprint", length = 64)
-    val cardFingerprint: String? = null
+    val cardFingerprint: String? = null,
+
+    /** Set only on the demo account (V42): when it ends and is deleted. */
+    @Column(name = "demo_until")
+    val demoUntil: Instant? = null,
+
+    /** The super who started the demo; its polls go to them when it ends (V42). */
+    @Column(name = "demo_started_by")
+    val demoStartedBy: Long? = null
 ) {
     /**
      * A payment-first user is provisioned with only an email; they may view

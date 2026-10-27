@@ -106,7 +106,7 @@ const cards = computed<ActionCard[]>(() => {
         </span>
       </p>
 
-      <BillingBanner />
+      <BillingBanner v-if="!auth.user?.demoUntil" />
 
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article

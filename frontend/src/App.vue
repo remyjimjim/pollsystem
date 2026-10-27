@@ -59,6 +59,15 @@ function onLocaleChange(e: Event) {
       <span>{{ $t('common.newVersion') }}</span>
       <button type="button" @click="newVersion.reload" class="rounded bg-white px-3 py-1 text-sm font-semibold text-sky-800 hover:bg-sky-50">{{ $t('common.reload') }}</button>
     </div>
+    <!-- The demo account (V42): say so on every page, with when it all goes. -->
+    <div
+      v-if="authStore.user?.demoUntil"
+      class="bg-amber-500 px-4 py-2 text-center text-sm font-semibold text-slate-900 print:hidden"
+      role="status"
+      data-test="demo-notice"
+    >
+      {{ $t('demo.notice', { time: new Date(authStore.user.demoUntil).toLocaleString() }) }}
+    </div>
     <!-- Hidden when printing (e.g. a creator's poll report). -->
     <header class="bg-slate-800 text-white px-4 sm:px-8 print:hidden">
       <nav class="mx-auto flex min-h-20 max-w-6xl flex-wrap items-center justify-between gap-y-2 pt-2 pb-3.5 sm:pt-0 sm:pb-1.5 xl:pb-0">

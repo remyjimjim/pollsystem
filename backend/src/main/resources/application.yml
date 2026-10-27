@@ -74,6 +74,9 @@ app:
   results:
     k-anonymity-threshold: 4  # results hidden until k respondents, steps of k (was 10 until 2026-10-20). Local dev can override it (Dev settings).
     group-minimum: 4          # an area filter or inside/outside-purview group under this is withheld, so no one respondent can be picked out
+  # The demo account's shared address on this site (V42); a super switches it on.
+  demo:
+    email: ${DEMO_EMAIL:demo@test.local}
   magic-link:
     ttl-minutes: 15
     base-url: ${APP_BASE_URL:http://localhost:3000}

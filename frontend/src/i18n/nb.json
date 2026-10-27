@@ -682,7 +682,21 @@
       "colStale": "Gamle (>48t)",
       "footnote": "⚠ markerer admins hvis ventende andel overstiger {threshold} (konfigurerbar via {key}).",
       "warnTitle": "Ventende andel overstiger {threshold}",
-      "errorLoad": "Kunne ikke laste arbeidsmengden"
+      "errorLoad": "Kunne ikke laste arbeidsmengden",
+      "demo": {
+        "heading": "Demokonto",
+        "blurb": "En delt adresse for å vise frem BallotBox: mens den er på, logger det å skrive den inn på Logg inn rett inn som medlem og oppretter, uten e-post, kode eller betaling. Når den avsluttes, slettes stemmer og kommentarer, og avstemningene arkiveres og overføres til deg. Start på nytt for en ny konto.",
+        "address": "Adresse:",
+        "off": "Av",
+        "onUntil": "På til {time}, postnummer {zipcode}",
+        "startedBy": "startet av {email}",
+        "zipcode": "Postnummer",
+        "start": "Start (12 timer)",
+        "extend": "+12 timer",
+        "end": "Avslutt nå",
+        "confirmEnd": "Avslutte demoen nå? Stemmer og kommentarer slettes, og avstemningene arkiveres og overføres til deg.",
+        "error": "Kunne ikke oppdatere demokontoen."
+      }
     },
     "adminRequests": {
       "heading": "Admin-søknader",
@@ -863,5 +877,8 @@
     "phoneInvalid": "Sjekk telefonnummeret: bruk sifre, og eventuelt + ( ) - eller mellomrom, f.eks. (401) 992-4938.",
     "zipcodeInvalid": "Skriv inn et femsifret postnummer, f.eks. 98264.",
     "ageRequired": "Bekreft at du er 13 år eller eldre."
+  },
+  "demo": {
+    "notice": "Du bruker demokontoen til BallotBox. Den avsluttes {time}, og alt som er gjort i den slettes da."
   }
 }

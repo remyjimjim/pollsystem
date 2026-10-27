@@ -74,6 +74,11 @@ async function onSubmit() {
       error.value = t('login.errorNoAccount')
       return
     }
+    if (status === 'DEMO') {
+      await auth.demoSignIn(form.email)
+      continueSignedIn()
+      return
+    }
     lapsed.value = status === 'LAPSED'
     await auth.requestMagicLink({ email: form.email })
     sentTo.value = form.email

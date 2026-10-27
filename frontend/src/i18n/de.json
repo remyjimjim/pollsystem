@@ -637,7 +637,21 @@
       "colStale": "Alt (>48h)",
       "footnote": "⚠ markiert Admins, deren offener Anteil {threshold} überschreitet (konfigurierbar über {key}).",
       "warnTitle": "Offener Anteil überschreitet {threshold}",
-      "errorLoad": "Admin-Arbeitslast konnte nicht geladen werden"
+      "errorLoad": "Admin-Arbeitslast konnte nicht geladen werden",
+      "demo": {
+        "heading": "Demokonto",
+        "blurb": "Eine gemeinsame Adresse, um BallotBox vorzuführen: Solange es aktiv ist, meldet die Eingabe bei der Anmeldung direkt als Mitglied und Ersteller an, ohne E-Mail, Code oder Zahlung. Am Ende werden seine Stimmen und Kommentare gelöscht, und seine Umfragen werden archiviert und Ihnen übertragen. Neu starten für ein frisches Konto.",
+        "address": "Adresse:",
+        "off": "Aus",
+        "onUntil": "Aktiv bis {time}, Postleitzahl {zipcode}",
+        "startedBy": "gestartet von {email}",
+        "zipcode": "Postleitzahl",
+        "start": "Starten (12 Stunden)",
+        "extend": "+12 Stunden",
+        "end": "Jetzt beenden",
+        "confirmEnd": "Die Demo jetzt beenden? Ihre Stimmen und Kommentare werden gelöscht, und ihre Umfragen werden archiviert und Ihnen übertragen.",
+        "error": "Das Demokonto konnte nicht aktualisiert werden."
+      }
     },
     "adminRequests": {
       "heading": "Admin-Anfragen",
@@ -810,5 +824,8 @@
     "phoneInvalid": "Bitte prüfen Sie Ihre Telefonnummer: Ziffern, optional + ( ) - oder Leerzeichen, z. B. (401) 992-4938.",
     "zipcodeInvalid": "Bitte geben Sie eine 5-stellige Postleitzahl ein, z. B. 98264.",
     "ageRequired": "Bitte bestätigen Sie, dass Sie 13 Jahre oder älter sind."
+  },
+  "demo": {
+    "notice": "Sie verwenden das BallotBox-Demokonto. Es endet {time}, und alles darin Getane wird dann gelöscht."
   }
 }

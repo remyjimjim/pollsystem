@@ -682,7 +682,21 @@
       "colStale": "Anciennes (>48h)",
       "footnote": "⚠ signale les admins dont la part en attente dépasse {threshold} (configurable via {key}).",
       "warnTitle": "La part en attente dépasse {threshold}",
-      "errorLoad": "Échec du chargement de la charge de travail"
+      "errorLoad": "Échec du chargement de la charge de travail",
+      "demo": {
+        "heading": "Compte de démonstration",
+        "blurb": "Une adresse partagée pour présenter BallotBox : tant qu'il est actif, la saisir à la connexion connecte directement en tant que membre et créateur, sans e-mail, code ni paiement. À la fin, ses votes et commentaires sont supprimés, et ses sondages sont archivés et vous sont confiés. Redémarrez pour un compte neuf.",
+        "address": "Adresse :",
+        "off": "Désactivé",
+        "onUntil": "Actif jusqu'au {time}, code postal {zipcode}",
+        "startedBy": "lancé par {email}",
+        "zipcode": "Code postal",
+        "start": "Démarrer (12 heures)",
+        "extend": "+12 heures",
+        "end": "Terminer maintenant",
+        "confirmEnd": "Terminer la démonstration maintenant ? Ses votes et commentaires sont supprimés, et ses sondages sont archivés et vous sont confiés.",
+        "error": "Impossible de mettre à jour le compte de démonstration."
+      }
     },
     "adminRequests": {
       "heading": "Demandes d'Admin",
@@ -863,5 +877,8 @@
     "phoneInvalid": "Vérifiez votre numéro de téléphone : des chiffres, et éventuellement + ( ) - ou des espaces, p. ex. (401) 992-4938.",
     "zipcodeInvalid": "Saisissez un code postal à 5 chiffres, p. ex. 98264.",
     "ageRequired": "Veuillez confirmer que vous avez 13 ans ou plus."
+  },
+  "demo": {
+    "notice": "Vous utilisez le compte de démonstration BallotBox. Il prend fin {time}, et tout ce qui y est fait est alors supprimé."
   }
 }

@@ -637,7 +637,21 @@
       "colStale": "Antigas (>48h)",
       "footnote": "⚠ sinaliza admins cuja proporção pendente ultrapassa {threshold} (configurável via {key}).",
       "warnTitle": "A proporção pendente ultrapassa {threshold}",
-      "errorLoad": "Falha ao carregar a carga de trabalho"
+      "errorLoad": "Falha ao carregar a carga de trabalho",
+      "demo": {
+        "heading": "Conta de demonstração",
+        "blurb": "Um endereço compartilhado para mostrar o BallotBox: enquanto ativa, digitá-lo em Entrar entra direto como membro e criador, sem e-mail, código ou pagamento. Ao terminar, seus votos e comentários são apagados, e suas pesquisas são arquivadas e passadas a você. Inicie de novo para uma conta nova.",
+        "address": "Endereço:",
+        "off": "Desativada",
+        "onUntil": "Ativa até {time}, CEP {zipcode}",
+        "startedBy": "iniciada por {email}",
+        "zipcode": "CEP",
+        "start": "Iniciar (12 horas)",
+        "extend": "+12 horas",
+        "end": "Encerrar agora",
+        "confirmEnd": "Encerrar a demonstração agora? Seus votos e comentários são apagados, e suas pesquisas são arquivadas e passadas a você.",
+        "error": "Não foi possível atualizar a conta de demonstração."
+      }
     },
     "adminRequests": {
       "heading": "Solicitações de Admin",
@@ -810,5 +824,8 @@
     "phoneInvalid": "Verifique seu telefone: use dígitos e, se quiser, + ( ) - ou espaços, ex.: (401) 992-4938.",
     "zipcodeInvalid": "Digite um CEP de 5 dígitos, ex.: 98264.",
     "ageRequired": "Confirme que você tem 13 anos ou mais."
+  },
+  "demo": {
+    "notice": "Você está usando a conta de demonstração do BallotBox. Ela termina {time}, e tudo feito nela é apagado então."
   }
 }

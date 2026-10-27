@@ -51,6 +51,8 @@ export interface User {
   // Cancelled: the membership ends at paidUntil and won't renew.
   cancelAtPeriodEnd: boolean
   profileComplete: boolean
+  // The demo account (V42): when it ends and is deleted. Null for everyone else.
+  demoUntil?: string | null
 }
 
 export interface CompleteProfileRequest {
