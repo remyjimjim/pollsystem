@@ -435,19 +435,18 @@ async function search() {
   try {
     const params: Record<string, string> = {}
     if (filters.title.trim()) params.title = filters.title.trim()
-    if (states.selected.value.length === 0) {
-      // Typeahead mode: no state picked. The text the user typed is
-      // the single zipcode they're searching for.
-      const v = zips.filter.value.trim()
-      if (v) params.zipcode = v
-    } else if (zips.selected.value.length > 0) {
-      // States + explicit zip picks → those zips.
+    // The narrowest place picked counts: zipcodes, else counties, else states.
+    // A county works without a state too (picking "Whatcom" alone used to be
+    // dropped, so the search returned every poll).
+    const typedZip = zips.filter.value.trim()
+    if (zips.selected.value.length > 0) {
       params.zipcode = zips.selected.value.join(',')
+    } else if (states.selected.value.length === 0 && counties.selected.value.length === 0 && typedZip) {
+      // Typeahead mode: no state or county picked; the typed text is the zipcode.
+      params.zipcode = typedZip
     } else if (counties.selected.value.length > 0) {
-      // States + counties, no zip picks → any zip in those counties.
       params.countyId = counties.selected.value.join(',')
-    } else {
-      // States only, no picks → any zip in those states.
+    } else if (states.selected.value.length > 0) {
       params.stateId = states.selected.value.join(',')
     }
     if (filters.candidateName.trim()) params.candidateName = filters.candidateName.trim()
