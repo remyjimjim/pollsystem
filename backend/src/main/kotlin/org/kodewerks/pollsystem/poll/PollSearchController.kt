@@ -111,27 +111,23 @@ class PollSearchController(
             else -> null
         }
 
-        // Purview-aware geo match: a poll surfaces for a geo search when the
-        // SEARCHED location falls inside the poll's purview (zip ∈ county ∈ state
-        // ∈ nation), read from poll_purviews — not when the poll's own stored zip
-        // happens to equal the searched one. Resolve the searched zips to their
-        // counties/states once; load purview rows only when a geo filter is set.
-        // A state or county pick searches exactly that place. Working the states
-        // out from its zipcodes would add neighbours: some zipcodes cross a
-        // state line (a Washington search turned up Idaho and Oregon polls).
+        // A place filter finds the polls INSIDE the picked place, most specific
+        // pick wins (decided 2026-10-27), so each narrowing shrinks the list:
+        //   - zipcodes: polls for exactly those zipcodes;
+        //   - a county: its polls, and polls for zipcodes in it;
+        //   - a state: its statewide polls, its counties', and its zipcodes'.
+        // A poll covering a bigger area (a state's ballot for a zipcode search, a
+        // nationwide poll for any place) isn't listed: pick that bigger place.
         val searchedZips: Set<String> = geoFilter ?: emptySet()
-        val searchedMeta = if (searchedZips.isEmpty()) emptyList()
-            else countyZips.findByZipcodeIn(searchedZips.toList())
+        val zipPicked = !pickedZips.isNullOrEmpty()
+        val countyPicked = !zipPicked && !countyIds.isNullOrEmpty()
+        val statePicked = !zipPicked && !countyPicked && !stateIds.isNullOrEmpty()
         val searchedCounties: Set<Long> = when {
-            !pickedZips.isNullOrEmpty() -> searchedMeta.map { it.county.id }.toSet()
-            !countyIds.isNullOrEmpty() -> countyIds.toSet()
-            else -> searchedMeta.filter { stateIds.orEmpty().contains(it.county.state.id) }.map { it.county.id }.toSet()
+            countyPicked -> countyIds!!.toSet()
+            statePicked -> counties.findByStateIdIn(stateIds!!).map { it.id }.toSet()
+            else -> emptySet()
         }
-        val searchedStates: Set<Long> = when {
-            !pickedZips.isNullOrEmpty() -> searchedMeta.map { it.county.state.id }.toSet()
-            !countyIds.isNullOrEmpty() -> searchedMeta.filter { it.county.id in countyIds }.map { it.county.state.id }.toSet()
-            else -> stateIds.orEmpty().toSet()
-        }
+        val searchedStates: Set<Long> = if (statePicked) stateIds!!.toSet() else emptySet()
         // Everything per poll is loaded once for the whole search, not per poll:
         // on prod each query crosses the network, and one-per-poll took 6–50 s
         // (2026-10-26).
@@ -155,10 +151,9 @@ class PollSearchController(
         }
         fun purviewIncludesSearch(kind: PollKind, pollId: Long): Boolean {
             val rows = purviewByPoll[kind to pollId].orEmpty()
-            if (rows.isEmpty()) return true // no declared purview = nationwide
-            return rows.any { r ->
+            return rows.any { r ->   // no rows = nationwide: inside no single place
                 when (r.scopeLevel) {
-                    ScopeLevel.NATIONAL -> true
+                    ScopeLevel.NATIONAL -> false
                     ScopeLevel.ZIP -> r.zipcode in searchedZips
                     ScopeLevel.COUNTY -> r.countyId in searchedCounties
                     ScopeLevel.STATE -> r.stateId in searchedStates

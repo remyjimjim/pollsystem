@@ -18,21 +18,25 @@ Type part of the title in **Title contains**. Capitals don't matter:
 ## Search by place
 
 Polls cover an area: a zipcode, a county, a state, or the whole country. A
-search by place finds every poll whose area **includes** the place you picked.
-For example, a statewide poll for Colorado shows up when you search for any
-Colorado zipcode, and a nationwide poll shows up for every place.
+search by place finds the polls **inside** the place you picked, so each
+narrower choice gives a shorter list:
 
-You can narrow the place in three steps, from widest to narrowest:
-
-1. **State.** Pick one or more states. This alone finds every poll that covers
-   any part of those states, and fills in the county and zipcode lists.
-2. **County.** Optionally pick counties within those states. Type to find a
-   county by name.
-3. **Zipcodes.** Optionally pick zipcodes. If you haven't picked a state, you
-   can type a single zipcode here directly.
+1. **State.** Pick one or more states. This finds the statewide polls (such as
+   a state's midterm ballots), plus every poll for a county or zipcode in those
+   states, and fills in the county and zipcode lists.
+2. **County.** Optionally pick counties within those states. This finds the
+   polls for those counties and for zipcodes in them. Type to find a county by
+   name.
+3. **Zipcodes.** Optionally pick zipcodes. This finds only the polls for exactly
+   those zipcodes. If you haven't picked a state, you can type a single zipcode
+   here directly.
 
 The narrowest choice you make is the one that counts: picking zipcodes searches
 just those zipcodes, even if you also picked their county.
+
+A poll for a bigger area doesn't show up for a smaller one: a statewide ballot
+isn't listed when you search a zipcode, so pick the state to find it.
+Nationwide polls show up only when you don't pick a place.
 
 The state, county and zipcode lists let you select several at once:
 

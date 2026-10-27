@@ -35,7 +35,9 @@ test.describe(`admin manages creators (${STATE_INPUT.toLowerCase()})`, () => {
     away = await resolveLocation(home.stateName.toLowerCase() === 'new york' ? 'colorado' : 'new york')
     creatorEmail = (await seedUser({ access: 'CREATOR', zipcode: home.zipcode })).email
     adminEmail = (await seedUser({ access: 'ADMIN', zipcode: home.zipcode, adminStateId: home.stateId })).email
-    const poll = await createQuestionnaireAs(creatorEmail, title, { scopeLevel: 'NATIONAL' })
+    // Covers one zipcode in each state: a zipcode search lists only polls for that
+    // zipcode (2026-10-27), so a nationwide poll would never show up in one.
+    const poll = await createQuestionnaireAs(creatorEmail, title, { scopeLevel: 'ZIP', zipcodes: [home.zipcode, away.zipcode] })
     expect(poll.ok, `seed poll: ${poll.status} ${poll.message ?? ''}`).toBe(true)
   })
 

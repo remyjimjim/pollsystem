@@ -48,9 +48,11 @@ class StateSearchTest : AbstractIntegrationTest() {
         fun found(exclude: Boolean) =
             search.search("NationwideCheck", null, null, listOf(washington), null, null, "Election", false, exclude).map { it.id }
 
-        assertThat(found(false)).containsExactlyInAnyOrder(wa, usa)
+        // With a place picked, nationwide polls never match (2026-10-27): the box changes nothing.
+        assertThat(found(false)).containsExactly(wa)
         assertThat(found(true)).containsExactly(wa)
-        // Without a place picked too.
+        // It matters with no place picked.
+        assertThat(search.search("NationwideCheck", null, null, null, null, null, "Election", false, false).map { it.id }).containsExactlyInAnyOrder(wa, usa)
         assertThat(search.search("NationwideCheck", null, null, null, null, null, "Election", false, true).map { it.id }).containsExactly(wa)
     }
 }
