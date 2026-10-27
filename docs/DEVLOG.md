@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-27 — Staging: the right sandbox $4.99 price
+
+**Requested:**
+
+> staging still says 'Continue to payment -- $10/mo'... checkout.stripe.com
+> says $10
+
+**Cause:** the sandbox ID recorded first (`price_1UQZQG…`) was the sandbox's
+original $10 price; Stripe IDs sort by creation time, and it predated Oct 22.
+The sandbox had no $4.99 price.
+
+**Fix (the user, then the agent):**
+
+1. The user created a $4.99 monthly sandbox price,
+   `price_1UV1ERLEdI7bvvoxN2Yal3jX`.
+2. The first `flyctl secrets set` had a typo, `price_price_…`.
+3. The agent re-ran it with the right ID, at the user's explicit request,
+   after two attempts to run it with `!` arrived as plain messages.
+
+Staging then restarted and reports healthy (200). `docs/STRIPE-LIVE.md` is
+corrected.
+
+**Still to check (the user):** a fresh staging sign-up should show $4.99 on
+Checkout.
+
+**Commit:** `8b88e6f`
+
+---
+
 ## 2026-10-27 — Stripe: $4.99 prices recorded
 
 **Requested:**
