@@ -1,7 +1,7 @@
 # Stripe: live mode (prod)
 
 Set up 2026-10-22. Staging keeps using the Stripe **sandbox** (test mode).
-Staging's sandbox price since 2026-10-27: `price_1UQZQGLEdI7bvvoxsM2qz3Bf`, $4.99 / month.
+Staging's sandbox price since 2026-10-27: `price_1UV1ERLEdI7bvvoxN2Yal3jX`, $4.99 / month.
 Nothing here is secret; the keys and the webhook signing secret live only in
 Fly secrets and in git-ignored files under `.devcontainer/`.
 
