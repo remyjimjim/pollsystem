@@ -61,6 +61,25 @@ logged.
 
 ---
 
+## 2026-10-27 — Home: guest cards reordered
+
+**Requested:**
+
+> on the home page, can we change the order of the cards from 'View poll
+> results', 'Sign in', 'Create an account' to 'Create an account', 'Sign in'
+> and 'View poll results'?
+
+**Changed:** the three guest cards in `HomeView` now run Create an account,
+Sign in, View poll results. Only their order changed; the text is the same.
+
+**Verified (headless, local, signed out):** the order was the same at
+1200 px and at 390 px. Type-check passes. No unit or e2e test depends on the
+order.
+
+**Commit:** `ae4853f`
+
+---
+
 ## 2026-10-27 — Sign-in code confirmed on a real phone (verified)
 
 **Reported by the user:**
