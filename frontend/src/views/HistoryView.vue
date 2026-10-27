@@ -18,6 +18,7 @@ interface HistoryRow {
   by: string
   byEmail: string | null
   details: string | null
+  hasDiff?: boolean
 }
 
 const { t } = useI18n()
@@ -99,6 +100,7 @@ function by(r: HistoryRow): string {
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('history.colWhat') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('history.colBy') }}</th>
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('history.colDetails') }}</th>
+          <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('history.colDiff') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -111,6 +113,9 @@ function by(r: HistoryRow): string {
           <td class="border-b border-slate-100 p-2 align-top font-medium text-slate-800">{{ $t(`history.event.${r.event}`) }}</td>
           <td class="border-b border-slate-100 p-2 align-top text-slate-600">{{ by(r) }}</td>
           <td class="whitespace-pre-line border-b border-slate-100 p-2 align-top text-slate-600">{{ r.details ?? '' }}</td>
+          <td class="border-b border-slate-100 p-2 align-top">
+            <router-link v-if="r.hasDiff" :to="`/history/diff/${r.id}`" class="text-slate-800 underline" data-test="history-diff">{{ $t('history.diff.link') }}</router-link>
+          </td>
         </tr>
       </tbody>
     </table>

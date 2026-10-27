@@ -71,6 +71,28 @@ class PollHistoryTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `a re-publish has a Diff with the poll before and now, and only its viewers can open it`() {
+        val c = creator()
+        val id = publishedQuestionnaire(c)
+        creatorPolls.reopen(AppUserDetails(c), "questionnaire", id)
+        questionnaires.update(id, c, draft(title = "History poll v2").copy(questions = listOf(QuestionInput("Q, reworded?"))))
+        questionnaires.publish(id, c, confirmed = true)
+
+        val h = history(c, id)
+        assertThat(h.map { it.hasDiff }).containsExactly(true, false, false)   // newest first: the re-publish only
+        val d = historyApi.diff(AppUserDetails(c), h[0].id)
+        assertThat(d.before.title).isEqualTo("History poll")
+        assertThat(d.now.title).isEqualTo("History poll v2")
+        assertThat(d.before.items).containsExactly("Q?")
+        assertThat(d.now.items).containsExactly("Q, reworded?")
+
+        assertThatThrownBy { historyApi.diff(AppUserDetails(creator("ph-stranger")), h[0].id) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) { assertThat(it.statusCode.value()).isEqualTo(404) }
+        assertThatThrownBy { historyApi.diff(AppUserDetails(c), h[2].id) }   // the first publish: nothing before it
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) { assertThat(it.statusCode.value()).isEqualTo(404) }
+    }
+
+    @Test
     fun `only a published or closed poll of your own can be reopened`() {
         val c = creator()
         val d = questionnaires.saveDraft(c, draft())

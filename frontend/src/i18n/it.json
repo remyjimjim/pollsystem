@@ -738,6 +738,22 @@
     "publicCount": "{n} commento pubblico | {n} commenti pubblici"
   },
   "history": {
+    "colDiff": "Diff",
+    "diff": {
+      "link": "Diff",
+      "before": "Prima",
+      "now": "Ora",
+      "title": "Titolo",
+      "summary": "Riepilogo",
+      "closes": "Chiude",
+      "area": "Area",
+      "questions": "Domande",
+      "candidates": "Candidati",
+      "none": "Nessuna data di chiusura",
+      "back": "Torna alla cronologia",
+      "notFound": "Non c'è nulla di precedente da confrontare.",
+      "legend": "Evidenziato: ciò che è cambiato."
+    },
     "link": "Cronologia",
     "title": "Cronologia dei sondaggi",
     "intro": "Quando i sondaggi sono stati pubblicati, riaperti, chiusi, archiviati, ripristinati, disattivati o modificati, e da chi. I più recenti prima.",

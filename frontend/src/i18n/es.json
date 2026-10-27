@@ -738,6 +738,22 @@
     "publicCount": "{n} comentario público | {n} comentarios públicos"
   },
   "history": {
+    "colDiff": "Cambios",
+    "diff": {
+      "link": "Cambios",
+      "before": "Antes",
+      "now": "Ahora",
+      "title": "Título",
+      "summary": "Resumen",
+      "closes": "Cierra",
+      "area": "Área",
+      "questions": "Preguntas",
+      "candidates": "Candidatos",
+      "none": "Sin fecha de cierre",
+      "back": "Volver al historial",
+      "notFound": "No hay nada anterior con qué compararlo.",
+      "legend": "Resaltado: lo que cambió."
+    },
     "link": "Historial",
     "title": "Historial de encuestas",
     "intro": "Cuándo se publicaron, reabrieron, cerraron, archivaron, restauraron, desactivaron o editaron las encuestas, y quién. Lo más reciente primero.",

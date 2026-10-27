@@ -791,6 +791,22 @@
     "publicCount": "{n} commentaire public | {n} commentaires publics"
   },
   "history": {
+    "colDiff": "Écarts",
+    "diff": {
+      "link": "Écarts",
+      "before": "Avant",
+      "now": "Maintenant",
+      "title": "Titre",
+      "summary": "Résumé",
+      "closes": "Clôture",
+      "area": "Zone",
+      "questions": "Questions",
+      "candidates": "Candidats",
+      "none": "Pas de date de clôture",
+      "back": "Retour à l'historique",
+      "notFound": "Rien d'antérieur à comparer.",
+      "legend": "En surbrillance : ce qui a changé."
+    },
     "link": "Historique",
     "title": "Historique des sondages",
     "intro": "Quand les sondages ont été publiés, rouverts, fermés, archivés, restaurés, désactivés ou modifiés, et par qui. Les plus récents d’abord.",

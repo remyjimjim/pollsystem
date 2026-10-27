@@ -79,6 +79,11 @@ when, by whom, and details such as what changed when you published again (for
 example "Close date: 2026-11-03 18:00 UTC → 2026-11-10 18:00 UTC"). Pick a
 poll at the top to see just that poll.
 
+When a poll was published again or edited, its row has a **Diff** link. It
+opens the poll side by side: **Before** (as it was the previous time) on the
+left and **Now** on the right, with what changed highlighted, such as a
+reworded question.
+
 Polls that were already live before history was kept show **Published before
 history began**, with no date.
 

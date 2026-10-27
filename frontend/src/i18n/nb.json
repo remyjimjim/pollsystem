@@ -791,6 +791,22 @@
     "publicCount": "{n} offentlig kommentar | {n} offentlige kommentarer"
   },
   "history": {
+    "colDiff": "Diff",
+    "diff": {
+      "link": "Diff",
+      "before": "Før",
+      "now": "Nå",
+      "title": "Tittel",
+      "summary": "Sammendrag",
+      "closes": "Stenger",
+      "area": "Område",
+      "questions": "Spørsmål",
+      "candidates": "Kandidater",
+      "none": "Ingen sluttdato",
+      "back": "Tilbake til historikk",
+      "notFound": "Det finnes ikke noe tidligere å sammenligne med.",
+      "legend": "Uthevet: det som er endret."
+    },
     "link": "Historikk",
     "title": "Avstemningshistorikk",
     "intro": "Når avstemninger ble publisert, gjenåpnet, stengt, arkivert, gjenopprettet, slått av eller redigert, og av hvem. Nyeste først.",

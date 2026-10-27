@@ -10,7 +10,7 @@ vi.mock('axios')
 
 const ROWS = [
   { id: 3, type: 'questionnaire', pollId: 7, pollTitle: 'Vaccines', event: 'PUBLISHED', at: '2026-10-17T12:00:00Z',
-    by: 'you', byEmail: null, details: 'Close date: none → 2027-01-15 18:00 UTC' },
+    by: 'you', byEmail: null, details: 'Close date: none → 2027-01-15 18:00 UTC', hasDiff: true },
   { id: 2, type: 'election', pollId: 9, pollTitle: 'MidTerm', event: 'SWITCHED_OFF', at: '2026-10-16T12:00:00Z',
     by: 'ADMIN', byEmail: 'a@b.c', details: 'Everywhere' },
   { id: 1, type: 'questionnaire', pollId: 7, pollTitle: 'Vaccines', event: 'PUBLISHED_BEFORE_HISTORY', at: '2026-10-15T00:00:00Z',
@@ -19,7 +19,7 @@ const ROWS = [
 
 async function mountAt(path: string) {
   vi.mocked(axios.get).mockResolvedValue({ data: ROWS })
-  const router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/history', component: HistoryView }] })
+  const router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/history', component: HistoryView }, { path: '/history/diff/:id', component: HistoryView }] })
   await router.push(path)
   const i18n = createI18n({ legacy: false, locale: 'en', messages: { en } })
   const w = mount(HistoryView, { global: { plugins: [router, i18n] } })
@@ -34,7 +34,9 @@ describe('HistoryView', () => {
     const { w } = await mountAt('/history')
     expect(axios.get).toHaveBeenCalledWith('/api/poll-history', { params: {} })
     const rows = w.findAll('[data-test="history-row"]').map(r => r.findAll('td').map(td => td.text()))
-    expect(rows[0].slice(1)).toEqual(['Vaccines · Questionnaire', 'Published', 'You', 'Close date: none → 2027-01-15 18:00 UTC'])
+    expect(rows[0].slice(1)).toEqual(['Vaccines · Questionnaire', 'Published', 'You', 'Close date: none → 2027-01-15 18:00 UTC', 'Diff'])
+    expect(w.find('[data-test="history-diff"]').attributes('href')).toBe('/history/diff/3')
+    expect(rows[1][5]).toBe('')                                   // nothing earlier to compare with
     expect(rows[1].slice(1, 4)).toEqual(['MidTerm · Election', 'Switched off', 'An admin (a@b.c)'])
     expect(rows[2][0]).toBe('—')                                  // no invented date
     expect(rows[2][2]).toBe('Published before history began')

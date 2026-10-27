@@ -39,7 +39,17 @@ class PollHistoryService(
     fun record(kind: PollKind, pollId: Long, type: PollEventType, actor: User?, details: String? = null,
                at: Instant = Instant.now(), snapshot: String? = null): PollEvent =
         events.save(PollEvent(pollType = kind, pollId = pollId, event = type, actor = actor, at = at,
-            details = details?.takeIf { it.isNotBlank() }, snapshot = snapshot))
+            details = details?.takeIf { it.isNotBlank() },
+            // An edit keeps the poll as it is now, so the History page can show its Diff.
+            snapshot = snapshot ?: if (type == PollEventType.EDITED) snapshotOf(kind, pollId)?.let(objectMapper::writeValueAsString) else null))
+
+    /** Before and after for one entry: its snapshot and the previous one (null: nothing to compare). */
+    fun diff(event: PollEvent): Pair<Snapshot, Snapshot>? {
+        val now = event.snapshot ?: return null
+        val before = events.findByPollTypeAndPollIdOrderByIdDesc(event.pollType, event.pollId)
+            .firstOrNull { it.id < event.id && it.snapshot != null }?.snapshot ?: return null
+        return objectMapper.readValue(before, Snapshot::class.java) to objectMapper.readValue(now, Snapshot::class.java)
+    }
 
     /** Published (again): snapshot what voters see, and say what changed since the last publish. */
     @Transactional

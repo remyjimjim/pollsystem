@@ -738,6 +738,22 @@
     "publicCount": "{n} öffentlicher Kommentar | {n} öffentliche Kommentare"
   },
   "history": {
+    "colDiff": "Diff",
+    "diff": {
+      "link": "Diff",
+      "before": "Vorher",
+      "now": "Jetzt",
+      "title": "Titel",
+      "summary": "Zusammenfassung",
+      "closes": "Endet",
+      "area": "Gebiet",
+      "questions": "Fragen",
+      "candidates": "Kandidaten",
+      "none": "Kein Enddatum",
+      "back": "Zurück zum Verlauf",
+      "notFound": "Es gibt nichts Früheres zum Vergleichen.",
+      "legend": "Hervorgehoben: was sich geändert hat."
+    },
     "link": "Verlauf",
     "title": "Umfrageverlauf",
     "intro": "Wann Umfragen veröffentlicht, wieder geöffnet, geschlossen, archiviert, wiederhergestellt, abgeschaltet oder bearbeitet wurden, und von wem. Neueste zuerst.",

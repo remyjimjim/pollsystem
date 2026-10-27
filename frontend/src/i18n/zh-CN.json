@@ -738,6 +738,22 @@
     "publicCount": "{n} 条公开评论"
   },
   "history": {
+    "colDiff": "差异",
+    "diff": {
+      "link": "差异",
+      "before": "之前",
+      "now": "现在",
+      "title": "标题",
+      "summary": "摘要",
+      "closes": "截止",
+      "area": "地区",
+      "questions": "问题",
+      "candidates": "候选人",
+      "none": "无截止日期",
+      "back": "返回历史",
+      "notFound": "没有更早的记录可供比较。",
+      "legend": "高亮：有变化的内容。"
+    },
     "link": "历史",
     "title": "投票历史",
     "intro": "投票何时被发布、重新开放、结束、归档、恢复、停用或编辑，以及由谁操作。最新的在前。",

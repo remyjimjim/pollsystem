@@ -1061,6 +1061,22 @@
     "publicCount": "{n} public comment | {n} public comments"
   },
   "history": {
+    "colDiff": "Diff",
+    "diff": {
+      "link": "Diff",
+      "before": "Before",
+      "now": "Now",
+      "title": "Title",
+      "summary": "Summary",
+      "closes": "Closes",
+      "area": "Area",
+      "questions": "Questions",
+      "candidates": "Candidates",
+      "none": "No close date",
+      "back": "Back to history",
+      "notFound": "There's nothing earlier to compare this with.",
+      "legend": "Highlighted: what changed."
+    },
     "link": "History",
     "title": "Poll history",
     "intro": "When polls were published, reopened, closed, archived, restored, switched off or edited, and by whom. Newest first.",

@@ -738,6 +738,22 @@
     "publicCount": "{n} comentário público | {n} comentários públicos"
   },
   "history": {
+    "colDiff": "Diferenças",
+    "diff": {
+      "link": "Diferenças",
+      "before": "Antes",
+      "now": "Agora",
+      "title": "Título",
+      "summary": "Resumo",
+      "closes": "Encerra",
+      "area": "Área",
+      "questions": "Perguntas",
+      "candidates": "Candidatos",
+      "none": "Sem data de encerramento",
+      "back": "Voltar ao histórico",
+      "notFound": "Não há nada anterior para comparar.",
+      "legend": "Destacado: o que mudou."
+    },
     "link": "Histórico",
     "title": "Histórico das enquetes",
     "intro": "Quando as enquetes foram publicadas, reabertas, encerradas, arquivadas, restauradas, desativadas ou editadas, e por quem. Mais recentes primeiro.",

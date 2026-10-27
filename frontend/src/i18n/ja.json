@@ -791,6 +791,22 @@
     "publicCount": "公開コメント {n} 件"
   },
   "history": {
+    "colDiff": "差分",
+    "diff": {
+      "link": "差分",
+      "before": "変更前",
+      "now": "現在",
+      "title": "タイトル",
+      "summary": "概要",
+      "closes": "締切",
+      "area": "地域",
+      "questions": "質問",
+      "candidates": "候補者",
+      "none": "締切なし",
+      "back": "履歴に戻る",
+      "notFound": "比較できる以前の記録がありません。",
+      "legend": "強調表示：変更された箇所。"
+    },
     "link": "履歴",
     "title": "投票の履歴",
     "intro": "投票がいつ公開・再開・終了・アーカイブ・復元・停止・編集されたか、誰が行ったか。新しい順。",

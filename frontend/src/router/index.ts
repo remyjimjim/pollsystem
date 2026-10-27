@@ -147,6 +147,13 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, minAccess: AccessLevel.CREATOR }
   },
   {
+    // One History entry's Before / Now.
+    path: '/history/diff/:id',
+    name: 'HistoryDiff',
+    component: () => import('@/views/HistoryDiffView.vue'),
+    meta: { requiresAuth: true, minAccess: AccessLevel.CREATOR }
+  },
+  {
     path: '/admin/manage-creators',
     name: 'ManageCreators',
     component: () => import('@/views/admin/ManageCreatorsView.vue'),
