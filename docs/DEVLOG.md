@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-10-27 — Prod backend deploy: search speed-up, place search, History Diff (verified)
+
+**Requested:** the user ran
+`cd backend && flyctl deploy -a pollsystem-backend -c fly.toml` themselves.
+It shipped `main` at `4613c30`: the search speed-up (`725220b`), place
+search (`9ff064f`) and History Diff (`da0fc76`). The frontend parts reach
+prod from `main` through Cloudflare Pages.
+
+**Deploy:** the image was built through Depot, with every step cached from
+the staging build of the same source. Rolling update; both machines were
+in a good state afterwards (one started, one stopped, as before).
+
+**Verified (prod, read-only HTTP):**
+
+- `/actuator/health` returns 200.
+- Search times, measured from here with each call starting a new container
+  (includes TLS):
+
+  | Search | Before | Now |
+  |---|---|---|
+  | Election + Washington | 6.7 s | 1.2 s |
+  | All elections | 43.6 s | 0.87 s |
+  | Everything | 52.2 s | 0.88 s |
+  | Zipcode 98225 | — | 0.63 s |
+
+- Zipcode 98225 now returns 0 polls, where before it listed Washington's
+  statewide ballots. So the place rules are live.
+
+---
+
 ## 2026-10-27 — History: Diff column with Before / Now
 
 **Requested:**
