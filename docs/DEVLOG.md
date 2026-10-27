@@ -61,6 +61,48 @@ logged.
 
 ---
 
+## 2026-10-27 — Membership price shown as $4.99 a month
+
+**Requested:**
+
+> How do I change the monthly subscription from $10 to $4.99
+
+> I think it's in stripe
+
+**Where the price lives:** the app charges whatever Stripe price
+`STRIPE_PRICE_ID` names. It holds no amount of its own:
+
+- prod: the live price `price_1UTDAuLEdI7bvvoxNtjBC6XD`, $10.00/month;
+- staging: a sandbox price.
+
+The site only *shows* the amount, as text.
+
+**Changed (text only):**
+
+- `en.json` (3 strings): `register.intro`, `register.submitButton`,
+  `billing.renewCta`.
+- `terms.md`.
+- `docs/manual/viewer/signing-up.md`.
+- The Stripe test-mode e2e now expects $4.99 on Checkout.
+
+Other languages don't state an amount.
+
+**Not done yet (the user, in Stripe):**
+
+1. Create $4.99/month prices, live and sandbox.
+2. Point `STRIPE_PRICE_ID` at them on prod and staging.
+3. Move the one paying prod member, if wanted.
+4. Archive the $10 prices.
+
+Push this commit only after those prices are live, so the site never shows
+$4.99 while Checkout charges $10.
+
+**Verified:** frontend unit tests pass (182).
+
+**Commit:** `6c0c1d4`
+
+---
+
 ## 2026-10-27 — Prod backend deploy: search speed-up, place search, History Diff (verified)
 
 **Requested:** the user ran
