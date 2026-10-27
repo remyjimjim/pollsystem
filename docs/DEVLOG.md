@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-27 — Search: a county without a state now filters
+
+**Requested:**
+
+> with state set to 'any state' and county set to 'Whatcom' and zipcode set to
+> 'any' the search returns all polls.
+
+**Cause:** `PollSearchView.search()` handled "no state picked" as typeahead
+mode, sending only the typed zipcode. A county picked without a state was
+never sent. The backend already handles `countyId` on its own, as covered by
+the place-search test.
+
+**Changed:** the page sends the narrowest pick, whatever the state:
+
+1. picked zipcodes;
+2. otherwise the typed zipcode, when no state or county is picked;
+3. otherwise counties;
+4. otherwise states.
+
+**Verified (headless, local, no state picked):**
+
+- Whatcom sent `countyId=3006` and got 0 polls; local has no Whatcom polls.
+- Los Angeles sent `countyId=1` and got exactly its one zipcode poll (90001).
+- Type-check passes; `PollSearchView` unit tests pass.
+
+**Commit:** `25ea7fa`
+
+---
+
 ## 2026-10-27 — Search: arrow row to jump to the end of the results and back
 
 **Requested:**
