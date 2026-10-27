@@ -61,6 +61,78 @@ logged.
 
 ---
 
+## 2026-10-27 — Sign in with a 6-digit code from the email (for phones)
+
+**Requested:**
+
+> In staging I go to /login in my brave browser on my phone app and I fill out
+> my email and click send me a link and I wait for the link to show up in my
+> gmail app on my phone and I click it when it comes and the login window in
+> gmail goes away and I look the login page in my brave browser and it doesn't
+> change to being logged in ... I end up trying to sign in 4 or 5 times.
+
+> Let's go with A, the 6-digit code and can we get a little help topic in the
+> help docs named 'Signing in' with the nice concise directions you provided
+> above?
+
+**Cause:** the Gmail app opens links in its own built-in browser. The link
+redeemed there and signed *that* browser in, then `MagicLinkView` called
+`window.close()`, which is the window vanishing. Brave's Login page only
+listens for a `storage` event, which fires only within the same browser. The
+link is single-use, so tapping it again did nothing.
+
+**Decided:** Option A, an emailed 6-digit code, over "the starting browser
+polls and signs itself in". A works in any app or browser, and it doesn't
+let someone who types your email elsewhere get signed in if you tap a link
+you didn't ask for.
+
+**Changed:**
+
+- **V41** adds `magic_link_tokens.code_hash` and `code_attempts`. The column
+  adds are nullable or defaulted, so this is safe on existing rows.
+- **`MagicLinkService.issueToken`** returns `IssuedSignIn(token, code)`. The
+  code is stored as `sha256("code:tokenHash")`.
+- **`redeemCode`:**
+  - It matches any live link of that user's; using it uses up that link.
+  - A wrong code counts against all their live links, and each link's code
+    retires after 5 wrong tries (the link still works).
+- **`POST /api/auth/magic-link/code {email, code}`:**
+  - Spaces are ignored.
+  - Wrong, expired and unknown-email all get the same 401.
+  - Limits: `CODE_EMAIL` 10 and `CODE_IP` 30, per 15 minutes.
+- **The email:** the subject is "Your BallotBox sign-in code: 123 456"; the
+  code comes first in the body, then the link.
+- **`SignInCodeForm`** is shown on Login under "Check your email" (email
+  known) and on Home after a guest checkout ("Payment received"; it asks for
+  the email). It has `inputmode=numeric` and `autocomplete=one-time-code`.
+- **Languages:** 9.
+- **Help:** a new `viewer/signing-in.md` with the phone, computer,
+  just-paid and troubleshooting steps. The sign-in section moved out of
+  `signing-up.md`, which is now "Signing up". The link in
+  `answering-polls.md` was retitled.
+- **E2E:** a new `user-signs-in-with-code-on-phone` test, plus
+  `fetchSignInCode` in `mailpit.ts`.
+
+**Verified:**
+
+- **Backend:** 3 new `AuthControllerTest` tests:
+  - the right code (spaced, mixed-case email) signs in once and uses up the
+    link;
+  - 5 wrong codes retire the code, but the link still works;
+  - expired code and unknown email both get 401.
+  - The full suite passes (394).
+- **Local:** V41 migrated.
+- **E2E:** the new phone test passes (390×844, a wrong code refused, then
+  the emailed code signs in), and the 4 cross-tab sign-in tests still pass.
+- **Screens:** screenshots of the phone Login with the code box and of
+  Help → Signing in were viewed, then deleted. The email text was read from
+  Mailpit.
+- **Frontend:** type-check and 182 unit tests pass.
+
+**Commit:** `73a712e`
+
+---
+
 ## 2026-10-27 — Staging: the right sandbox $4.99 price
 
 **Requested:**
