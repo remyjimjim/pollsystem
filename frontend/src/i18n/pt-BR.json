@@ -147,6 +147,8 @@
     "requestNew": "Solicitar um novo link de acesso"
   },
   "search": {
+    "scrollToEnd": "Ir para o fim dos resultados",
+    "scrollToTop": "Voltar ao início dos resultados",
     "headingAuthed": "Encontrar uma Enquete",
     "headingGuest": "Navegar pelos Resultados das Enquetes",
     "guestIntroBefore": "Pesquise e veja os resultados de qualquer enquete publicada.",

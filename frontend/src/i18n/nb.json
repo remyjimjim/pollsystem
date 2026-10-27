@@ -147,6 +147,8 @@
     "requestNew": "Be om en ny innloggingslenke"
   },
   "search": {
+    "scrollToEnd": "Gå til slutten av resultatene",
+    "scrollToTop": "Tilbake til toppen av resultatene",
     "headingAuthed": "Finn en avstemning",
     "headingGuest": "Bla gjennom avstemningsresultater",
     "guestIntroBefore": "Søk og se resultater for enhver publisert avstemning.",

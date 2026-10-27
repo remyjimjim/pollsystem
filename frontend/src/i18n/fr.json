@@ -147,6 +147,8 @@
     "requestNew": "Demander un nouveau lien de connexion"
   },
   "search": {
+    "scrollToEnd": "Aller à la fin des résultats",
+    "scrollToTop": "Revenir en haut des résultats",
     "headingAuthed": "Trouver un Sondage",
     "headingGuest": "Parcourir les Résultats des Sondages",
     "guestIntroBefore": "Recherchez et consultez les résultats de tout sondage publié.",

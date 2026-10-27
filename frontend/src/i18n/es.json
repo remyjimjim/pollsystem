@@ -147,6 +147,8 @@
     "requestNew": "Solicitar un nuevo enlace de inicio de sesión"
   },
   "search": {
+    "scrollToEnd": "Ir al final de los resultados",
+    "scrollToTop": "Volver al inicio de los resultados",
     "headingAuthed": "Encontrar una Encuesta",
     "headingGuest": "Explorar Resultados de Encuestas",
     "guestIntroBefore": "Busque y vea los resultados de cualquier encuesta publicada.",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, onUpdated, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -144,15 +144,40 @@ watch(counties.selected, () => {
   lastClickedZipIndex.value = null
 }, { deep: true })
 
+// The arrow row under the results: ↓ jumps to the last result; once there it
+// turns ↑ and jumps back to the top of the results. Shown only when the
+// results run past the screen.
+const resultsBox = ref<HTMLElement | null>(null)
+const atResultsEnd = ref(false)
+const resultsOverflow = ref(false)
+function updateScrollArrow() {
+  const box = resultsBox.value
+  if (!box) { resultsOverflow.value = false; return }
+  const r = box.getBoundingClientRect()
+  resultsOverflow.value = r.height > window.innerHeight * 0.8 || r.bottom > window.innerHeight
+  atResultsEnd.value = r.bottom <= window.innerHeight + 8
+}
+function scrollResults() {
+  const box = resultsBox.value
+  if (!box) return
+  if (atResultsEnd.value) box.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  else window.scrollTo({ top: window.scrollY + box.getBoundingClientRect().bottom - window.innerHeight + 72, behavior: 'smooth' })
+}
+
 onMounted(() => {
   document.addEventListener('click', onDocClick)
   document.addEventListener('keydown', onEsc)
+  window.addEventListener('scroll', updateScrollArrow, { passive: true })
+  window.addEventListener('resize', updateScrollArrow)
   loadSuggestions()
 })
 onBeforeUnmount(() => {
   document.removeEventListener('click', onDocClick)
   document.removeEventListener('keydown', onEsc)
+  window.removeEventListener('scroll', updateScrollArrow)
+  window.removeEventListener('resize', updateScrollArrow)
 })
+onUpdated(updateScrollArrow)   // new results, sorting, columns
 
 const filters = reactive({
   title: '',
@@ -769,6 +794,7 @@ async function search() {
       {{ $t('search.noMatches') }}
     </p>
 
+    <div ref="resultsBox" class="scroll-mt-4">
     <fieldset v-if="results.length > 0" class="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-600" data-test="column-chooser">
       <legend class="sr-only">{{ $t('search.columns.legend') }}</legend>
       <span class="font-semibold">{{ $t('search.columns.show') }}</span>
@@ -953,6 +979,25 @@ async function search() {
         </tr>
       </tbody>
     </table>
+    </div>
+    </div>
+
+    <div
+      v-if="results.length > 0 && resultsOverflow"
+      class="sticky bottom-0 mt-2 flex justify-center border-t border-slate-200 bg-slate-50 py-2"
+      data-test="results-scroll-row"
+    >
+      <button
+        type="button"
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-xl leading-none text-white shadow hover:bg-slate-700"
+        :aria-label="atResultsEnd ? $t('search.scrollToTop') : $t('search.scrollToEnd')"
+        :title="atResultsEnd ? $t('search.scrollToTop') : $t('search.scrollToEnd')"
+        :data-direction="atResultsEnd ? 'up' : 'down'"
+        data-test="results-scroll-arrow"
+        @click="scrollResults"
+      >
+        <span aria-hidden="true">{{ atResultsEnd ? '↑' : '↓' }}</span>
+      </button>
     </div>
   </div>
 </template>

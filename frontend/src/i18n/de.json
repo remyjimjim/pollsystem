@@ -147,6 +147,8 @@
     "requestNew": "Neuen Anmeldelink anfordern"
   },
   "search": {
+    "scrollToEnd": "Zum Ende der Ergebnisse",
+    "scrollToTop": "Zurück zum Anfang der Ergebnisse",
     "headingAuthed": "Eine Umfrage finden",
     "headingGuest": "Umfrageergebnisse durchsuchen",
     "guestIntroBefore": "Suchen Sie und sehen Sie Ergebnisse aller veröffentlichten Umfragen.",

@@ -147,6 +147,8 @@
     "requestNew": "申请新的登录链接"
   },
   "search": {
+    "scrollToEnd": "跳到结果末尾",
+    "scrollToTop": "返回结果顶部",
     "headingAuthed": "查找投票",
     "headingGuest": "浏览投票结果",
     "guestIntroBefore": "搜索并查看任何已发布投票的结果。",

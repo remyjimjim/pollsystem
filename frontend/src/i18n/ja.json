@@ -147,6 +147,8 @@
     "requestNew": "新しいログインリンクをリクエスト"
   },
   "search": {
+    "scrollToEnd": "結果の最後へ",
+    "scrollToTop": "結果の先頭へ戻る",
     "headingAuthed": "投票を検索",
     "headingGuest": "投票結果を閲覧",
     "guestIntroBefore": "公開されているすべての投票を検索して結果を確認できます。",

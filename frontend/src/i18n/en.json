@@ -152,6 +152,8 @@
     "requestNew": "Request a new sign-in link"
   },
   "search": {
+    "scrollToEnd": "Go to the end of the results",
+    "scrollToTop": "Back to the top of the results",
     "headingAuthed": "Find a Poll",
     "headingGuest": "Browse Poll Results",
     "guestIntroBefore": "Search and view results for any published poll.",

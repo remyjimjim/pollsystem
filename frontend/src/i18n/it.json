@@ -147,6 +147,8 @@
     "requestNew": "Richiedi un nuovo link di accesso"
   },
   "search": {
+    "scrollToEnd": "Vai alla fine dei risultati",
+    "scrollToTop": "Torna all'inizio dei risultati",
     "headingAuthed": "Trova un Sondaggio",
     "headingGuest": "Sfoglia i Risultati dei Sondaggi",
     "guestIntroBefore": "Cerca e visualizza i risultati di qualsiasi sondaggio pubblicato.",
