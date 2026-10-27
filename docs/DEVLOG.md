@@ -61,6 +61,20 @@ logged.
 
 ---
 
+## 2026-10-27 — Sign-in code confirmed on a real phone (verified)
+
+**Reported by the user:**
+
+> The sign in code works on my phone now and it's alot better remembering a 6
+> digit code than clicking on a link and searching for the app to show up one
+> of the windows.
+
+**Verified:** the user signed in with the emailed code on their phone in
+Brave, with the email in the Gmail app. That's the case that failed with the
+link alone. Feature: `73a712e`.
+
+---
+
 ## 2026-10-27 — Prod backend deploy: sign-in code (verified)
 
 **Requested:** the user ran
