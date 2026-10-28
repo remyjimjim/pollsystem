@@ -61,6 +61,47 @@ logged.
 
 ---
 
+## 2026-10-28 — Nav: Vote, Create, and Admin / Super menus by role
+
+**Requested:**
+
+> - Change 'Search polls' to 'Vote'. Change 'Creator' to 'Create'.
+> - If the current user's role is 'USER' the nav bar should show 'Vote'
+> - ... 'CREATOR' ... 'Vote' followed by 'Create'
+> - ... 'ADMIN' ... 'Vote' followed by 'Admin' ... If 'Admin' is clicked a
+>   dropdown ... Admin, Create
+> - ... 'SUPER' ... 'Vote' followed by 'Super' ... dropdown ... Super, Admin,
+>   Create
+
+**Changed:**
+
+- **`RoleNav`** (new) replaces the header's four role links:
+
+  | Role | Nav |
+  |---|---|
+  | Member | Vote |
+  | Creator | Vote, Create |
+  | Admin | Vote, **Admin ▾** (Admin, Create) |
+  | Super | Vote, **Super ▾** (Super, Admin, Create) |
+
+- **The menu** opens on click and closes on a pick, an outside click, or
+  Escape. Its button is highlighted while you're on one of its pages.
+- **Signed out** is unchanged ("View Results"); the request didn't cover it.
+- **New keys** `nav.vote`, `nav.create` and `nav.super`, in 9 languages.
+- **Help:** 7 pages updated for the new names.
+
+**Verified (headless, local, one local user per role):** guest showed "View
+Results"; member "Vote"; creator "Vote Create"; admin "Vote Admin" with menu
+Admin | Create; super "Vote Super" with menu Super | Admin | Create. Escape
+closed the menu. Picking the last item went to `/creator/dashboard` and
+closed the menu. Screenshots of the Super menu at 1280 px and 390 px were
+viewed, then deleted. Type-check and 182 unit tests pass; no test used the old
+labels.
+
+**Commit:** `9651990`
+
+---
+
 ## 2026-10-28 — Prod backend deploy: demo account (verified)
 
 **Requested:** the user ran
