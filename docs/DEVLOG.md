@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-28 — History: stacked cards on phones
+
+**Requested:**
+
+> make the history page use stacked cards on phones
+
+**Changed (`HistoryView`):**
+
+- **Below `sm`, one card per entry:** what happened and when; the poll and
+  its type (only when listing all polls; tap to see just that poll); "By: …";
+  the details; Diff when there is one.
+- **From `sm` up,** the table shows as before. The cards come after the table
+  in the markup, so the existing tests keep reading the table.
+- **The poll picker** sized itself to the longest poll title (1170 px wide),
+  which made the page wider than the screen on phones and on a 1200 px
+  desktop. It's now full width on phones and at most `max-w-xl` from `sm`.
+
+**Verified:**
+
+- A new unit test: 3 entries give 3 cards, the first with "Published",
+  "Vaccines · Questionnaire", "By: You", its details and Diff to
+  `/history/diff/3`; the second has no Diff. All 189 unit tests pass;
+  type-check passes.
+- Headless, local, super (666 entries):
+  - at 390 px: 666 cards, no table, nothing wider than the screen once the
+    picker was capped;
+  - at 1200 px: the table, no cards.
+  - The phone screenshot was viewed, then deleted.
+
+**Commit:** `721cb9c`
+
+---
+
 ## 2026-10-28 — Manage Users: stacked cards on phones
 
 **Requested:**
