@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-28 — Prod backend deploy: Purview column, Create dashboard speed-up (verified)
+
+**Requested:** the user ran
+`cd backend && flyctl deploy -a pollsystem-backend -c fly.toml` themselves,
+shipping `main`:
+
+- the Create dashboard's Purview field (`b1b899f`);
+- the Create dashboard's bulk loading (`402908d`);
+- the earlier page-only changes, which were already live through Pages.
+
+No migration.
+
+**Deploy:** the image was built through Depot, with every step cached.
+Rolling update; both machines were in a good state afterwards.
+
+**Verified (prod, read-only):**
+
+- `/actuator/health` returns 200.
+- `flyctl image show`: prod runs digest `sha256:1bbae9a8a014…`, the same
+  image as staging. On staging the super's dashboard returned `purview` and
+  took 2.7–2.9 s, down from 19.1 s.
+
+---
+
 ## 2026-10-28 — Create dashboard: per-poll queries replaced (19 s on staging for a super)
 
 **Found while checking the Purview column on staging:** the super's Create
