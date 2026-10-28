@@ -85,6 +85,8 @@ crossing to Neon.
 
 **Verified:**
 
+- Staging, after deploying (super, 624 polls): **19.1 s → 2.7–2.9 s**. What
+  remains is the per-poll in-area count for polls with respondents.
 - Local super dashboard: 1.4 s → **0.27 s** on a warm request. 624 polls; the
   26 with respondents still carry their counts.
 - Creator-polls, history and block tests pass; the full suite passes (402).
