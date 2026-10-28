@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-10-28 — Results: thicker text in the result bars
+
+**Requested:**
+
+> For all the progress bars, can we get a thicker font for the text inside the
+> bar, like maybe 10% thicker?
+
+**Changed:** all 9 result bars now use `font-medium` (500) instead of normal
+(400):
+
+- 5 in `PollResultsView`: questionnaire answers, measure Yes/No, election
+  candidates;
+- 4 in `BallotPartResults`.
+
+**Why 500, not 440:** the site uses each device's system font (`-apple-system`,
+Segoe UI, Roboto). Most of those, such as Android's Roboto and Linux fonts,
+have no weight between 400 and 500, so "10% thicker" (440) would render the
+same as 400 there. 500 is the smallest step that shows on every device.
+
+**Verified (headless, local):** a questionnaire's results page had 6 bars, and
+their computed `font-weight` was 500. 191 unit tests pass.
+
+**Commit:** `fc48e3e`
+
+---
+
 ## 2026-10-28 — Admin dashboard: stacked cards on phones
 
 **Requested:**
