@@ -108,8 +108,13 @@ class CreatorPollsController(
                 purviews.regionLabel(rows)
             }
         }
+        // Loaded once, not per poll: a super's dashboard lists every midterm poll
+        // (624), and per-poll queries took 19 s on staging (2026-10-28). Only
+        // polls with respondents need the per-poll in-area count.
+        val blocksByPoll = blocks.findAll().groupBy { it.pollType to it.pollId }
+        val respondentCounts = participation.respondentCounts()
         return listed.map { p ->
-            val switchedOff = blocks.findByPollTypeAndPollId(kindOf(p.type), p.id)
+            val switchedOff = blocksByPoll[kindOf(p.type) to p.id].orEmpty()
             val enabled = when {
                 switchedOff.isEmpty() -> "YES"
                 switchedOff.any { it.scope == BlockScope.EVERYWHERE } -> "NO"
@@ -117,7 +122,7 @@ class CreatorPollsController(
             }
             val withEmails = p.copy(emails = (kindOf(p.type) to p.id) !in muted, enabled = enabled,
                 purview = areaOf(kindOf(p.type), p.id))
-            if (p.status == PollStatus.DRAFT) withEmails
+            if (p.status == PollStatus.DRAFT || (respondentCounts[kindOf(p.type) to p.id] ?: 0) == 0) withEmails
             else participation.of(kindOf(p.type), p.id).let { withEmails.copy(respondents = it.respondents, inArea = it.inArea) }
         }
     }
