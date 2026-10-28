@@ -61,6 +61,29 @@ logged.
 
 ---
 
+## 2026-10-28 — Manage Polls: top/bottom arrows
+
+**Requested:**
+
+> Admin → Manage Polls doesn't have the arrows yet, and its list is long (665
+> rows locally). Want them there too? Yes please.
+
+**Changed:** Manage Polls' list (column chooser + table) is wrapped in
+`ScrollEnds`.
+
+**Verified (headless, local, super, 665 rows; clicks from inside the page):**
+
+| Width | Start | After ↓ | After ↑ |
+|---|---|---|---|
+| 1300 px | ↓ | ↑ at y40416 | ↓ at y386 (the list's top) |
+| 390 px | ↓ | ↑ at y60528 | ↓ at y810 |
+
+Type-check and the admin unit tests (18) pass.
+
+**Commit:** `96ccb6b`
+
+---
+
 ## 2026-10-28 — Manage Creators: top/bottom arrows (and the arrow row fixed for short lists)
 
 **Requested:**
