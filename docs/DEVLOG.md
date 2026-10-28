@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-28 — Create dashboard: per-poll queries replaced (19 s on staging for a super)
+
+**Found while checking the Purview column on staging:** the super's Create
+dashboard API took **19.1 s** for 624 polls, 1.4 s locally. Purview had added
+one query.
+
+**Cause:** per poll, `CreatorPollsController.list` ran:
+- a switch-off (block) lookup;
+- for every published poll, `PollParticipationService.of`, which loads all
+  its responses and respondents.
+
+That's the same N+1 shape search had before `725220b`, with each query
+crossing to Neon.
+
+**Changed:**
+
+- Switch-offs: one `blocks.findAll()`, grouped by poll.
+- Respondent counts: `participation.respondentCounts()`, three grouped
+  queries.
+- Only polls with respondents call `of()` for the in-area figure. A poll with
+  none returns 0 / 0, the same as `of()` gives.
+
+**Verified:**
+
+- Local super dashboard: 1.4 s → **0.27 s** on a warm request. 624 polls; the
+  26 with respondents still carry their counts.
+- Creator-polls, history and block tests pass; the full suite passes (402).
+
+**Commit:** `402908d`
+
+---
+
 ## 2026-10-28 — Purview on the Create dashboard; "Purview:" on results; plain "State"
 
 **Requested:**
