@@ -61,6 +61,53 @@ logged.
 
 ---
 
+## 2026-10-28 — Purview on the Create dashboard; "Purview:" on results; plain "State"
+
+**Requested:**
+
+> Do the first three suggestions, then push it and deploy to staging
+
+(The three suggestions from the Purview-column follow-up.)
+
+**Changed:**
+
+1. **Create dashboard: a Purview column.**
+   - `CreatorPollSummary.purview` comes from one `pollPurviews.findAll()`
+     and a label cache per distinct area. A super's 624 midterm polls share
+     about 50 states.
+   - The column chooser gets **Purview** after Type, hidden by default on
+     narrow screens like the other wide columns. The phone cards get a Purview
+     line.
+   - `creator.dashboard.tablePurview` in 9 languages, each its own purview
+     word.
+2. **Results pages:** `results.purviewArea` is now "<purview label> {area}",
+   e.g. "Purview: Washington", "Ámbito: …", "対象地域：…", in all 9 languages.
+3. **Search:** the State filter reads "State"; it was "State (populates
+   zipcodes)". English only; the other languages had no own text.
+
+**Help:** `creator/drafts-and-publishing.md` mentions the Purview column.
+
+**Noted, not changed:** the super's dashboard API took 1.4 s locally for 624
+polls. Purview adds one query. The time is the existing per-poll
+switch-off and participation lookups, the same pattern search had before
+`725220b`; on prod that could be many seconds. Raised with the user.
+
+**Verified:**
+
+- **Backend:** a new test checks that a published poll and a draft both list
+  purview "90001". The full suite passes (402).
+- **Frontend:** 4 tests updated for the new header, column list and
+  "Purview:". 194 unit tests pass; type-check passes.
+- **Headless (local, super):**
+  - the dashboard showed Title | Type | Purview | For Election, with "90001"
+    first;
+  - election 261's results read "Purview: Washington";
+  - the search State label read "State".
+
+**Commit:** `b1b899f`
+
+---
+
 ## 2026-10-28 — Search: the Zipcodes column is now Purview
 
 **Requested:**
