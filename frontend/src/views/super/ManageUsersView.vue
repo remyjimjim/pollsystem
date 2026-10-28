@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import PurviewSetter from '@/components/PurviewSetter.vue'
 import ColumnChooser from '@/components/ColumnChooser.vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import { useColumns } from '@/composables/useColumns'
 import { GRANT_LEVELS, ScopeLevel, type Purview } from '@/types'
 
@@ -1132,8 +1133,9 @@ onBeforeUnmount(() => {
 
     <p v-if="!loading && results.length === 0" class="text-sm text-slate-500">{{ $t('super.manageUsers.none') }}</p>
 
-    <ColumnChooser v-if="results.length > 0" v-model="columns" :options="columnOptions" />
-    <div v-if="results.length > 0" class="overflow-x-auto">
+    <ScrollEnds v-if="results.length > 0">
+    <ColumnChooser v-model="columns" :options="columnOptions" />
+    <div class="overflow-x-auto">
     <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
@@ -1300,6 +1302,7 @@ onBeforeUnmount(() => {
       </tbody>
     </table>
     </div>
+    </ScrollEnds>
     <p v-if="results.length > 0" class="mt-2 text-xs text-slate-500">{{ $t('super.manageUsers.enableHelp') }}</p>
 
     <!-- Delete account modal -->
