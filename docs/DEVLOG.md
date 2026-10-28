@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-28 — Creator dashboard: top/bottom arrow row
+
+**Requested:**
+
+> Can we add the top/bottom arrows to creator/dashboard
+
+**Changed:**
+
+- The search page's arrow row (`3650ce9`) is now a shared `ScrollEnds`
+  component that wraps a list. It tracks the list's size with a
+  `ResizeObserver` rather than the page's `onUpdated`.
+- It's used by `PollSearchView`, which keeps its "results" labels, and by the
+  Creator dashboard's poll list, around its column chooser and table.
+- New keys `common.scrollToEnd` / `common.scrollToTop` ("…of the list"), in 9
+  languages.
+
+**Verified (headless, local, demo-super's hundreds of midterm polls):** on the
+search page (all results) and the Creator dashboard, at 1200 px and 390 px,
+the arrow started ↓, turned ↑ at the end, then took the list back to its top
+and turned ↓. The labels were "Go to the end of the results" on search and "…of
+the list" on the dashboard. A screenshot of the dashboard at 390 px was viewed,
+then deleted. Type-check and 182 unit tests pass.
+
+**Commit:** `2b4733b`
+
+---
+
 ## 2026-10-28 — Nav: Vote, Create, and Admin / Super menus by role
 
 **Requested:**
