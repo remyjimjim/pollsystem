@@ -850,6 +850,11 @@
     "closed": "已截止",
     "empty": "您还没有投过票。",
     "findPolls": "查找投票",
-    "loadFailed": "无法加载您的过往选票。"
+    "loadFailed": "无法加载您的过往选票。",
+    "colClosed": "已截止",
+    "colEnabled": "已启用？",
+    "enabledHint": "在您所在地区是否启用。否：管理员已在您的地区或所有地区停用此投票。",
+    "closes": "截止",
+    "noCloseDate": "无截止日期"
   }
 }

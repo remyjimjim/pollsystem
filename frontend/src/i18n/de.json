@@ -850,6 +850,11 @@
     "closed": "Beendet",
     "empty": "Sie haben noch nirgends abgestimmt.",
     "findPolls": "Umfragen finden",
-    "loadFailed": "Ihre früheren Stimmzettel konnten nicht geladen werden."
+    "loadFailed": "Ihre früheren Stimmzettel konnten nicht geladen werden.",
+    "colClosed": "Beendet",
+    "colEnabled": "Aktiv?",
+    "enabledHint": "Dort aktiv, wo Sie wohnen. Nein: Ein Admin hat diese Umfrage in Ihrem Gebiet oder überall abgeschaltet.",
+    "closes": "Endet",
+    "noCloseDate": "Kein Enddatum"
   }
 }

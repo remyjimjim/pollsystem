@@ -850,6 +850,11 @@
     "closed": "Chiuso",
     "empty": "Non hai ancora votato.",
     "findPolls": "Trova sondaggi",
-    "loadFailed": "Impossibile caricare le tue schede passate."
+    "loadFailed": "Impossibile caricare le tue schede passate.",
+    "colClosed": "Chiuso",
+    "colEnabled": "Attivo?",
+    "enabledHint": "Attivo dove vivi. No: un amministratore l'ha disattivato nella tua zona o ovunque.",
+    "closes": "Chiude",
+    "noCloseDate": "Nessuna data di chiusura"
   }
 }

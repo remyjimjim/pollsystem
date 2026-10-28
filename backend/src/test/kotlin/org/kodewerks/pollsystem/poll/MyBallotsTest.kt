@@ -32,6 +32,7 @@ class MyBallotsTest : AbstractIntegrationTest() {
     @Autowired private lateinit var questions: QuestionRepository
     @Autowired private lateinit var questionResponses: QuestionResponseRepository
     @Autowired private lateinit var fixtures: TestFixtures
+    @Autowired private lateinit var blocks: org.kodewerks.pollsystem.repository.PollTypeBlockRepository
 
     private fun election(c: User, title: String, candidate: String, office: String, includes: List<Long>? = null): Long {
         val d = elections.saveDraft(c, ElectionDraftRequest(
@@ -63,6 +64,12 @@ class MyBallotsTest : AbstractIntegrationTest() {
         val mine = controller.mine(AppUserDetails(me))
         assertThat(mine.map { it.type to it.title }).containsExactly("questionnaire" to "Mb park hours", "election" to "Mb District 1")
         assertThat(mine.all { it.open }).isTrue()
+        assertThat(mine.all { it.enabled }).isTrue()
+
+        // Switched off everywhere by an admin: listed, marked not enabled.
+        blocks.save(org.kodewerks.pollsystem.model.PollTypeBlock(pollType = org.kodewerks.pollsystem.model.PollKind.ELECTION,
+            pollId = district, scope = org.kodewerks.pollsystem.model.BlockScope.EVERYWHERE, createdBy = c.id))
+        assertThat(controller.mine(AppUserDetails(me)).single { it.id == district }.enabled).isFalse()
 
         // Closed polls stay listed, marked not open.
         electionRepo.save(electionRepo.findById(district).get().copy(status = PollStatus.CLOSED, closeDate = Instant.now().minusSeconds(60)))

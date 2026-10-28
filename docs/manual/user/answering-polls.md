@@ -97,8 +97,10 @@ when reviewing an account.
 
 **View past ballots** on your home page lists every ballot and questionnaire
 you've answered, newest vote first, with the date of your vote. A midterm ballot
-appears once, with its statewide races and measures. Polls that have closed are
-marked **Closed**.
+appears once, with its statewide races and measures. After **View**, two
+columns say whether each poll is **Closed** (hover for its close date) and
+**Enabled?**: **No** means an admin has switched it off in your area, or
+everywhere.
 
 Click **View** to see that ballot with your choices highlighted: **✓ Your vote**
 on each candidate you picked, your Yes or No on each measure and question, and

@@ -21,7 +21,10 @@ data class MyBallot(
     /** When they last voted on it (any of its races or measures). */
     val votedAt: Instant,
     /** Still open for changing the vote. */
-    val open: Boolean
+    val open: Boolean,
+    val closeDate: Instant? = null,
+    /** Switched on where the member lives (not switched off there by an admin). */
+    val enabled: Boolean = true
 )
 
 /**
@@ -37,12 +40,15 @@ class MyBallotsController(
     private val questionResponses: QuestionResponseRepository,
     private val candidateResponses: CandidateResponseRepository,
     private val ballotResponses: BallotResponseRepository,
-    private val includes: ElectionIncludes
+    private val includes: ElectionIncludes,
+    private val blocks: PollBlockService
 ) {
     @GetMapping
     @Transactional(readOnly = true)
     fun mine(@AuthenticationPrincipal principal: AppUserDetails): List<MyBallot> {
         val me = principal.user.id
+        val myZip = principal.user.zipcode
+        fun enabled(kind: org.kodewerks.pollsystem.model.PollKind, id: Long) = !blocks.isBlockedFor(kind, id, myZip)
         val now = Instant.now()
         fun isOpen(status: PollStatus, closeDate: Instant?) =
             status == PollStatus.PUBLISHED && (closeDate == null || closeDate.isAfter(now))
@@ -50,7 +56,8 @@ class MyBallotsController(
         val rows = mutableListOf<MyBallot>()
         questionResponses.findByUserId(me).groupBy { it.question.questionnaire.id }.values.forEach { group ->
             val q = group.first().question.questionnaire
-            rows += MyBallot("questionnaire", q.id, q.title, group.maxOf { it.dateSubmitted }, isOpen(q.status, q.closeDate))
+            rows += MyBallot("questionnaire", q.id, q.title, group.maxOf { it.dateSubmitted }, isOpen(q.status, q.closeDate),
+                q.closeDate, enabled(org.kodewerks.pollsystem.model.PollKind.QUESTIONNAIRE, q.id))
         }
 
         // Elections: votes on candidates, plus measures (voted with their election).
@@ -74,7 +81,8 @@ class MyBallotsController(
             }
         }
         byElection.values.filter { it.election.id !in folded }.forEach { b ->
-            rows += MyBallot("election", b.election.id, b.election.title, b.votedAt, isOpen(b.election.status, b.election.closeDate))
+            rows += MyBallot("election", b.election.id, b.election.title, b.votedAt, isOpen(b.election.status, b.election.closeDate),
+                b.election.closeDate, enabled(org.kodewerks.pollsystem.model.PollKind.ELECTION, b.election.id))
         }
         return rows.sortedByDescending { it.votedAt }
     }

@@ -850,6 +850,11 @@
     "closed": "Cerrada",
     "empty": "Aún no ha votado en nada.",
     "findPolls": "Buscar encuestas",
-    "loadFailed": "No se pudieron cargar sus boletas anteriores."
+    "loadFailed": "No se pudieron cargar sus boletas anteriores.",
+    "colClosed": "Cerrada",
+    "colEnabled": "¿Habilitada?",
+    "enabledHint": "Activada donde vive. No: un administrador la desactivó en su zona o en todas partes.",
+    "closes": "Cierra",
+    "noCloseDate": "Sin fecha de cierre"
   }
 }

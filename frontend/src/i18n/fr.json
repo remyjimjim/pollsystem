@@ -903,6 +903,11 @@
     "closed": "Clos",
     "empty": "Vous n'avez encore voté sur rien.",
     "findPolls": "Trouver des sondages",
-    "loadFailed": "Impossible de charger vos bulletins passés."
+    "loadFailed": "Impossible de charger vos bulletins passés.",
+    "colClosed": "Clos",
+    "colEnabled": "Activé ?",
+    "enabledHint": "Activé là où vous vivez. Non : un administrateur l'a désactivé dans votre zone ou partout.",
+    "closes": "Clôture",
+    "noCloseDate": "Pas de date de clôture"
   }
 }

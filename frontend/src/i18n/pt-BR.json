@@ -850,6 +850,11 @@
     "closed": "Encerrada",
     "empty": "Você ainda não votou em nada.",
     "findPolls": "Encontrar pesquisas",
-    "loadFailed": "Não foi possível carregar suas cédulas anteriores."
+    "loadFailed": "Não foi possível carregar suas cédulas anteriores.",
+    "colClosed": "Encerrada",
+    "colEnabled": "Ativa?",
+    "enabledHint": "Ativa onde você mora. Não: um administrador desativou esta pesquisa na sua área ou em todo lugar.",
+    "closes": "Encerra",
+    "noCloseDate": "Sem data de encerramento"
   }
 }

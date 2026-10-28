@@ -7,7 +7,12 @@ import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import ScrollEnds from '@/components/ScrollEnds.vue'
 
-interface MyBallot { type: 'questionnaire' | 'election'; id: number; title: string; votedAt: string; open: boolean }
+interface MyBallot {
+  type: 'questionnaire' | 'election'; id: number; title: string; votedAt: string; open: boolean
+  closeDate?: string | null
+  /** Switched on where you live (not switched off there by an admin). */
+  enabled?: boolean
+}
 
 const { t } = useI18n()
 const ballots = ref<MyBallot[]>([])
@@ -26,6 +31,9 @@ onMounted(async () => {
 
 const viewLink = (b: MyBallot) => ({ path: `/polls/${b.type}/${b.id}`, query: { review: '1' } })
 const date = (iso: string) => new Date(iso).toLocaleString()
+/** Hover text for the Closed column: when it closes / closed. */
+const closeHint = (b: MyBallot) => b.closeDate ? `${t('myBallots.closes')} ${date(b.closeDate)}` : t('myBallots.noCloseDate')
+const yesNoClass = (yes: boolean, good: boolean) => yes === good ? 'text-slate-700' : 'font-semibold text-orange-700'
 </script>
 
 <template>
@@ -46,19 +54,24 @@ const date = (iso: string) => new Date(iso).toLocaleString()
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('myBallots.colPoll') }}</th>
             <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('myBallots.colVoted') }}</th>
             <th class="border-b border-slate-200 p-2"></th>
+            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('myBallots.colClosed') }}</th>
+            <th class="border-b border-slate-200 p-2 font-semibold text-slate-700" :title="$t('myBallots.enabledHint')">{{ $t('myBallots.colEnabled') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="b in ballots" :key="`${b.type}-${b.id}`" data-test="my-ballot-row">
-            <td class="border-b border-slate-100 p-2">
-              {{ b.title }}
-              <span v-if="!b.open" class="ml-1 rounded bg-slate-200 px-1.5 py-0.5 text-xs font-semibold text-slate-700">{{ $t('myBallots.closed') }}</span>
-            </td>
+            <td class="border-b border-slate-100 p-2">{{ b.title }}</td>
             <td class="whitespace-nowrap border-b border-slate-100 p-2 text-slate-600">{{ date(b.votedAt) }}</td>
             <td class="border-b border-slate-100 p-2 text-right">
               <router-link :to="viewLink(b)" class="inline-block rounded bg-slate-800 px-3 py-1 text-xs font-semibold text-white no-underline hover:bg-slate-900" data-test="my-ballot-view">
                 {{ $t('myBallots.view') }}
               </router-link>
+            </td>
+            <td class="border-b border-slate-100 p-2" :class="yesNoClass(!b.open, false)" :title="closeHint(b)" data-test="col-closed">
+              {{ b.open ? $t('common.no') : $t('common.yes') }}
+            </td>
+            <td class="border-b border-slate-100 p-2" :class="yesNoClass(b.enabled !== false, true)" :title="$t('myBallots.enabledHint')" data-test="col-enabled">
+              {{ b.enabled === false ? $t('common.no') : $t('common.yes') }}
             </td>
           </tr>
         </tbody>
@@ -67,11 +80,12 @@ const date = (iso: string) => new Date(iso).toLocaleString()
       <ul class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="my-ballot-cards">
         <li v-for="b in ballots" :key="`card-${b.type}-${b.id}`" class="flex items-center justify-between gap-3 rounded-md border border-slate-200 p-3 text-sm">
           <div class="min-w-0">
-            <div class="font-semibold text-slate-800">
-              {{ b.title }}
-              <span v-if="!b.open" class="ml-1 rounded bg-slate-200 px-1.5 py-0.5 text-xs font-semibold text-slate-700">{{ $t('myBallots.closed') }}</span>
-            </div>
+            <div class="font-semibold text-slate-800">{{ b.title }}</div>
             <div class="text-xs text-slate-500">{{ $t('myBallots.colVoted') }}: {{ date(b.votedAt) }}</div>
+            <div class="text-xs text-slate-500">
+              {{ $t('myBallots.colClosed') }}: <span :class="yesNoClass(!b.open, false)">{{ b.open ? $t('common.no') : $t('common.yes') }}</span>
+              · {{ $t('myBallots.colEnabled') }} <span :class="yesNoClass(b.enabled !== false, true)">{{ b.enabled === false ? $t('common.no') : $t('common.yes') }}</span>
+            </div>
           </div>
           <router-link :to="viewLink(b)" class="shrink-0 rounded bg-slate-800 px-3 py-1.5 text-xs font-semibold text-white no-underline hover:bg-slate-900">
             {{ $t('myBallots.view') }}

@@ -903,6 +903,11 @@
     "closed": "Stengt",
     "empty": "Du har ikke stemt på noe ennå.",
     "findPolls": "Finn avstemninger",
-    "loadFailed": "Kunne ikke laste de tidligere stemmesedlene dine."
+    "loadFailed": "Kunne ikke laste de tidligere stemmesedlene dine.",
+    "colClosed": "Stengt",
+    "colEnabled": "Aktiv?",
+    "enabledHint": "Slått på der du bor. Nei: en administrator har slått av avstemningen i ditt område eller overalt.",
+    "closes": "Stenger",
+    "noCloseDate": "Ingen sluttdato"
   }
 }

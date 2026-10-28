@@ -903,6 +903,11 @@
     "closed": "締切済み",
     "empty": "まだ何も投票していません。",
     "findPolls": "投票を探す",
-    "loadFailed": "過去の投票を読み込めませんでした。"
+    "loadFailed": "過去の投票を読み込めませんでした。",
+    "colClosed": "締切済み",
+    "colEnabled": "有効？",
+    "enabledHint": "お住まいの地域で有効かどうか。いいえ：管理者があなたの地域または全域でこの投票を停止しています。",
+    "closes": "締切",
+    "noCloseDate": "締切なし"
   }
 }

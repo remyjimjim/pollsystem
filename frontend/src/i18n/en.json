@@ -1163,6 +1163,11 @@
     "closed": "Closed",
     "empty": "You haven't voted on anything yet.",
     "findPolls": "Find polls",
-    "loadFailed": "Couldn't load your past ballots."
+    "loadFailed": "Couldn't load your past ballots.",
+    "colClosed": "Closed",
+    "colEnabled": "Enabled?",
+    "enabledHint": "Switched on where you live. No: an admin has switched this poll off in your area, or everywhere.",
+    "closes": "Closes",
+    "noCloseDate": "No close date"
   }
 }
