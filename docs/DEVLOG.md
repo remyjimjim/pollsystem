@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-10-28 — Creator requests: stacked cards on phones
+
+**Requested:**
+
+> make the creator requests page use stacked cards on phones
+
+**Changed (`admin/CreatorRequestsView`):**
+
+- **Below `sm`, one card per request:** a checkbox and the member's email,
+  then area, submitted, status (with the Unassigned badge; card tinted), and
+  the reason in full.
+- **The checkboxes feed the same "Approve selected" / "Reject selected"
+  buttons.** A "Select all" box (new English label) stands in for the
+  table header's.
+- **The toolbar** (Refresh, Approve, Reject) now wraps on narrow screens.
+- **From `sm` up,** the table shows as before.
+
+**Verified:**
+
+- New `CreatorRequestsView.spec.ts`: two requests give two cards, only the
+  unassigned one with the badge; ticking the first card and pressing Approve
+  posts `batch-approve` with `requestIds: [61]`. 192 unit tests pass;
+  type-check passes.
+- Headless, local, 390 px: the page fits the screen. Local has no pending
+  requests, so the cards are covered by the unit test.
+
+**Commit:** `3af73d8`
+
+---
+
 ## 2026-10-28 — Results: bar text another ~10% thicker
 
 **Requested:**
