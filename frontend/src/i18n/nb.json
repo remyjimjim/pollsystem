@@ -185,7 +185,7 @@
     "table": {
       "title": "Tittel",
       "type": "Type",
-      "zipcodes": "Postnumre",
+      "zipcodes": "Område",
       "creator": "Oppretter",
       "forElection": "For valget",
       "responses": "Svar",

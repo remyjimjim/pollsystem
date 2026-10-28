@@ -185,7 +185,7 @@
     "table": {
       "title": "Titel",
       "type": "Typ",
-      "zipcodes": "Postleitzahlen",
+      "zipcodes": "Geltungsbereich",
       "creator": "Ersteller",
       "forElection": "Zur Wahl",
       "responses": "Antworten",

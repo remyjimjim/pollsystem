@@ -185,7 +185,7 @@
     "table": {
       "title": "Título",
       "type": "Tipo",
-      "zipcodes": "Códigos postales",
+      "zipcodes": "Ámbito",
       "creator": "Creador",
       "forElection": "De la elección",
       "responses": "Respuestas",

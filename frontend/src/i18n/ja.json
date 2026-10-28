@@ -185,7 +185,7 @@
     "table": {
       "title": "タイトル",
       "type": "種類",
-      "zipcodes": "郵便番号",
+      "zipcodes": "対象地域",
       "creator": "作成者",
       "forElection": "対象の選挙",
       "responses": "回答数",

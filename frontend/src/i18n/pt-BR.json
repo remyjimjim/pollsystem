@@ -185,7 +185,7 @@
     "table": {
       "title": "Título",
       "type": "Tipo",
-      "zipcodes": "CEPs",
+      "zipcodes": "Abrangência",
       "creator": "Criador",
       "forElection": "Da eleição",
       "responses": "Respostas",

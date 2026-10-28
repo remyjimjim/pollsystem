@@ -37,7 +37,7 @@ describe('PollSearchView: the Creator column', () => {
   it('admins and supers (emails sent) get a short link to Manage Creators', async () => {
     const w = await searchReturning([row(1, 'alexandra@test.local'), row(2, 'bo@x.io')])
     const headers = w.findAll('th').map(h => h.text())
-    expect(headers.findIndex(h => h.startsWith('Creator'))).toBe(headers.findIndex(h => h.startsWith('Zipcode')) + 1)
+    expect(headers.findIndex(h => h.startsWith('Creator'))).toBe(headers.findIndex(h => h.startsWith('Purview')) + 1)
 
     const links = w.findAll('[data-test="creator"]').map(c => c.findComponent(RouterLinkStub))
     expect(links.map(l => l.text())).toEqual(['alexa...', 'bo@x....'])
@@ -85,16 +85,16 @@ describe('PollSearchView: Responses column and the column chooser', () => {
 
   it('unticking a column hides it, and it stays hidden next time', async () => {
     const w = await searchReturning([row(1, null)])
-    expect(headers(w)).toContain('Zipcodes')
-    const box = w.find('[data-test="column-chooser"]').findAll('label').find(l => l.text() === 'Zipcodes')!.find('input')
+    expect(headers(w)).toContain('Purview')
+    const box = w.find('[data-test="column-chooser"]').findAll('label').find(l => l.text() === 'Purview')!.find('input')
     await box.setValue(false)
-    expect(headers(w)).not.toContain('Zipcodes')
+    expect(headers(w)).not.toContain('Purview')
     expect(headers(w)).toContain('Title')                     // always shown
     expect(JSON.parse(localStorage.getItem('pollSearch.columns')!).zipcodes).toBe(false)
     w.unmount()
 
     const again = await searchReturning([row(1, null)])
-    expect(headers(again)).not.toContain('Zipcodes')
+    expect(headers(again)).not.toContain('Purview')
     again.unmount()
   })
 
@@ -103,7 +103,7 @@ describe('PollSearchView: Responses column and the column chooser', () => {
     Object.defineProperty(window, 'innerWidth', { value: 390, configurable: true })
     try {
       const w = await searchReturning([row(1, 'a@b.c')])
-      expect(headers(w)).not.toContain('Zipcodes')
+      expect(headers(w)).not.toContain('Purview')
       expect(headers(w)).not.toContain('Creator')
       expect(headers(w)).toEqual(expect.arrayContaining(['Title', 'Type', 'Responses', 'Closes']))
       w.unmount()

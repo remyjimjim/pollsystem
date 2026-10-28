@@ -185,7 +185,7 @@
     "table": {
       "title": "标题",
       "type": "类型",
-      "zipcodes": "邮政编码",
+      "zipcodes": "覆盖范围",
       "creator": "创建者",
       "forElection": "所属选举",
       "responses": "回复数",

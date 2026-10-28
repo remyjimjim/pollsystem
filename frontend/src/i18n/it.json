@@ -185,7 +185,7 @@
     "table": {
       "title": "Titolo",
       "type": "Tipo",
-      "zipcodes": "CAP",
+      "zipcodes": "Ambito",
       "creator": "Creatore",
       "forElection": "Per l’elezione",
       "responses": "Risposte",

@@ -59,16 +59,17 @@ Opening **Vote** from the menu starts a new search.
 
 ## The results
 
-Each row shows the poll's title, type, zipcodes, **responses** (how many people
-have responded) and closing date. When a poll covers many zipcodes, the first
-few are shown with an **Additional zipcodes** link for the rest. Click a column
+Each row shows the poll's title, type, **Purview** (the area it covers: its
+zipcodes, a county, a state, or Nationwide), **responses** (how many people have
+responded) and closing date. When a poll covers many zipcodes, the first few are
+shown with an **Additional zipcodes** link for the rest. Click a column
 heading to sort by it.
 
 **Choosing columns:** the **Show:** checkboxes above the results hide or show
 columns, which helps on a narrow phone screen. The title and the **View
 results** / **Vote** links are always shown. Your choice is remembered on that
 device. The first time on a phone, the wider columns start hidden. On a phone,
-the table also scrolls sideways on its own if it's still too wide.
+each poll is shown as a card instead of a table row.
 
 - **For Election** (shown when the results include a ballot measure) names the
   election a measure belongs to; hover it for the full title.

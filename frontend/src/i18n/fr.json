@@ -185,7 +185,7 @@
     "table": {
       "title": "Titre",
       "type": "Type",
-      "zipcodes": "Codes postaux",
+      "zipcodes": "Périmètre",
       "creator": "Créateur",
       "forElection": "Pour l’élection",
       "responses": "Réponses",
