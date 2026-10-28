@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-28 — Prod backend deploy: Manage Polls changes (verified)
+
+**Requested:** the user ran
+`cd backend && flyctl deploy -a pollsystem-backend -c fly.toml` themselves,
+shipping `main` at `046a590`:
+
+- Manage Polls: Show nationwide, title and summary edit, the close date
+  carried to an election's measures, the notes dialog (`e17abc4`, `207032f`);
+- the Super Manage Polls page and `/api/super/polls` retired.
+
+No migration.
+
+**Deploy:** the image was built through Depot, with every step cached.
+Rolling update; both machines were in a good state afterwards.
+
+**Verified (prod, read-only):**
+
+- `/actuator/health` returns 200.
+- `flyctl image show`: prod runs image digest
+  `sha256:77f51bbb…b1e732`, the same image as staging. Staging was checked
+  with the staging super login: the admin list returns `summary` and
+  `nationwide`, and `/api/super/polls` returns 404.
+
+---
+
 ## 2026-10-28 — Manage Polls: Summary in Edit; the Super Manage Polls page retired
 
 **Requested:**
