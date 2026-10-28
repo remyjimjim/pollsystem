@@ -61,6 +61,33 @@ logged.
 
 ---
 
+## 2026-10-28 — Search: the Zipcodes column is now Purview
+
+**Requested:**
+
+> can we change "Zipcodes" to "Purview" on polls/search and suggest changes
+> elsewhere?
+
+**Changed:**
+
+- **`search.table.zipcodes`** (the results column, its Show: checkbox and the
+  card label) now reads **Purview**. It shows a poll's area: zipcodes, a
+  county, a state or "Nationwide".
+- **Languages:** each reuses its own word from `election.purviewLabel`, minus
+  the colon: Ámbito, Périmètre, Geltungsbereich, Ambito, Abrangência, Område,
+  対象地域, 覆盖范围.
+- **Kept:** the **Zipcodes filter** keeps its name, since it does pick
+  zipcodes.
+- **Help:** `finding-polls.md` "The results" names the Purview column. It also
+  now says phones show cards; it still said the table scrolls sideways.
+- `PollSearchView.spec.ts` header names updated.
+
+**Verified:** 194 unit tests pass; help tests pass.
+
+**Commit:** `e1e4637`
+
+---
+
 ## 2026-10-28 — Search: Back from a poll keeps the results
 
 **Requested:**
