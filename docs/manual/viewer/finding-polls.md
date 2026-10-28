@@ -44,6 +44,11 @@ The state, county and zipcode lists let you select several at once:
   them.
 - Press **Shift+\*** to select all, and **Shift+0** to clear the selection.
 
+
+After you open a poll's results or vote, your browser's **Back** button brings
+you back to the same results, with your filters and where you were in the list.
+Opening **Vote** from the menu starts a new search.
+
 ## Other filters
 
 - **Type**: only questionnaires, elections or ballot measures.

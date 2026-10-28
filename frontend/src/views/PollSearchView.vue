@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -432,12 +432,97 @@ async function search() {
     const res = await axios.get<PollSearchResult[]>('/api/polls/search', { params })
     results.value = res.data
     searched.value = true
+    saveSearch()
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('search.errorFailed')
   } finally {
     loading.value = false
   }
 }
+
+// ---------- Back keeps the search (2026-10-28) ----------
+// Opening a poll (View results / Vote) and pressing Back used to show an empty
+// search. The last search in this tab (filters, picks, results, sort, scroll)
+// is kept in sessionStorage and put back when the page is reached with Back;
+// then it's re-run quietly so counts are current. Arriving from a link (the
+// Vote menu) still starts fresh.
+const SAVED_KEY = 'pollSearch.last'
+interface SavedSearch {
+  filters: typeof filters
+  stateIds: number[]
+  countyIds: number[]
+  zipcodes: string[]
+  typedZip: string
+  results: PollSearchResult[]
+  sortKey: SortKey | null
+  sortDir: 'asc' | 'desc'
+  scrollY: number
+}
+function readSaved(): SavedSearch | null {
+  try { return JSON.parse(sessionStorage.getItem(SAVED_KEY) ?? 'null') } catch { return null }
+}
+function saveSearch(scrollY = 0) {
+  const saved: SavedSearch = {
+    filters: { ...filters },
+    stateIds: [...states.selected.value],
+    countyIds: [...counties.selected.value],
+    zipcodes: [...zips.selected.value],
+    typedZip: zips.filter.value,
+    results: results.value,
+    sortKey: sortKey.value,
+    sortDir: sortDir.value,
+    scrollY,
+  }
+  try { sessionStorage.setItem(SAVED_KEY, JSON.stringify(saved)) } catch { /* full or blocked: Back starts fresh */ }
+}
+// Leaving the page: remember where the list was scrolled to.
+onBeforeUnmount(() => {
+  const saved = readSaved()
+  if (saved && searched.value) saveSearch(window.scrollY)
+})
+
+/** Resolves once [done] is true (or after [ms], so a failed load can't hang the restore). */
+function until(done: () => boolean, ms = 8000): Promise<void> {
+  return new Promise(resolve => {
+    if (done()) return resolve()
+    const timer = setTimeout(() => { stop(); resolve() }, ms)
+    const stop = watch(done, v => { if (v) { clearTimeout(timer); stop(); resolve() } })
+  })
+}
+
+async function restoreSearch(saved: SavedSearch) {
+  Object.assign(filters, saved.filters)
+  sortKey.value = saved.sortKey
+  sortDir.value = saved.sortDir
+  results.value = saved.results
+  searched.value = true
+  await nextTick()
+  requestAnimationFrame(() => window.scrollTo(0, saved.scrollY))
+  // The pickers clear narrower picks when a wider one changes, so put them
+  // back widest first, letting each one's list load before the next.
+  if (saved.stateIds.length) {
+    states.selected.value = saved.stateIds
+    await nextTick()
+    await until(() => !counties.loading.value)
+  }
+  if (saved.countyIds.length) {
+    counties.selected.value = saved.countyIds
+    await nextTick()
+    await until(() => !zips.loading.value)
+  }
+  if (saved.zipcodes.length) zips.selected.value = saved.zipcodes
+  if (saved.typedZip) zips.filter.value = saved.typedZip
+  await nextTick()
+  const y = window.scrollY
+  await search()
+  window.scrollTo(0, y)
+}
+
+onMounted(() => {
+  const saved = readSaved()
+  const cameBack = !!(window.history.state as { forward?: unknown } | null)?.forward
+  if (saved && cameBack) restoreSearch(saved)
+})
 </script>
 
 <template>

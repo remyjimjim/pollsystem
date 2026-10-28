@@ -113,3 +113,41 @@ describe('PollSearchView: Responses column and the column chooser', () => {
   })
 })
 
+
+describe('PollSearchView: Back keeps the search (2026-10-28)', () => {
+  afterEach(() => { sessionStorage.clear(); window.history.replaceState(null, '') })
+  const mountFresh = async () => {
+    vi.mocked(axios.get).mockImplementation(async (url: string) => {
+      if (url === '/api/polls/search') return { data: [row(1, null), row(2, null), row(3, null)] }
+      if (url === '/api/polls/search/suggestions') return { data: { titles: [], candidateNames: [] } }
+      return { data: [] }
+    })
+    const w = mount(PollSearchView, {
+      attachTo: document.body,
+      global: { plugins: [createTestingPinia({ createSpy: vi.fn })], stubs: { 'router-link': RouterLinkStub } },
+    })
+    await flushPromises()
+    return w
+  }
+
+  it('a search is saved; coming back (history has a forward entry) shows it again, then refreshes it', async () => {
+    const w = await searchReturning([row(1, null), row(2, null)])
+    expect(JSON.parse(sessionStorage.getItem('pollSearch.last')!).results).toHaveLength(2)
+    w.unmount()
+
+    window.history.replaceState({ forward: '/polls/questionnaire/1/results' }, '')
+    vi.mocked(axios.get).mockClear()
+    const back = await mountFresh()
+    // Restored, then re-run quietly: the fresh search returned 3.
+    expect(back.findAll('[data-test="result-cards"] > li')).toHaveLength(3)
+    expect(vi.mocked(axios.get).mock.calls.filter(c => c[0] === '/api/polls/search')).toHaveLength(1)
+  })
+
+  it('arriving any other way starts empty', async () => {
+    const w = await searchReturning([row(1, null)])
+    w.unmount()
+    window.history.replaceState(null, '')
+    const fresh = await mountFresh()
+    expect(fresh.findAll('[data-test="result-cards"] > li')).toHaveLength(0)
+  })
+})
