@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-10-28 — Results: bar text another ~10% thicker
+
+**Requested:**
+
+> how about another 10%
+
+**Changed:** the result-bar outline went from 0.2 px to 0.3 px, in all 9
+bars. 0.35 px was tried first and looked like a bigger step than 10%, so 0.3
+was chosen.
+
+**Verified (headless, local):** election 261's 30 bars had a computed stroke
+width of 0.3 px. A 2× screenshot was viewed, then deleted.
+
+**Commit:** `47930e7`
+
+---
+
 ## 2026-10-28 — Results: bar text thickened with a 0.2 px outline
 
 **Requested:**
