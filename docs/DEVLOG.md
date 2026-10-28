@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-10-28 — Past ballots: Closed and Enabled? columns
+
+**Requested:**
+
+> On page http://localhost:3000/my-ballots can we add 2 columns after the
+> 'View' button, namely, 'Closed' and 'Enabled?'?
+
+**Changed:**
+
+- **Backend:** `MyBallot` gains `closeDate` and `enabled`. `enabled` is
+  `!PollBlockService.isBlockedFor(kind, id, member's zipcode)`, so it's false
+  when an admin has switched the poll off in the member's area or everywhere.
+- **The table,** after View:
+  - **Closed**: Yes / No, with the close date on hover. It replaces the
+    "Closed" badge by the title.
+  - **Enabled?**: Yes / No, with an explanation on hover.
+  - The unexpected value (Closed: Yes, Enabled?: No) is in orange.
+- **Phone cards** get a "Closed: … · Enabled? …" line.
+- **Labels** in 9 languages. **Help:** the Past ballots section explains the
+  two columns.
+
+**Verified:**
+
+- **Backend:** `MyBallotsTest` adds that every ballot starts enabled, and that
+  an EVERYWHERE switch-off on the district ballot makes it `enabled=false`.
+- **Frontend:** the spec checks the headers Poll | Date of vote | (View) |
+  Closed | Enabled?, and the cells No/Yes and Yes/No. 196 unit tests pass.
+- **Headless (local, demo-creator-wash):** the desktop headers were as above,
+  with the first row "View No Yes". The phone card read "Closed: No · Enabled?
+  Yes", nothing wider than the screen. Screenshots were deleted.
+
+**Commit:** `be51027`
+
+---
+
 ## 2026-10-28 — View past ballots
 
 **Requested:**
