@@ -61,6 +61,70 @@ logged.
 
 ---
 
+## 2026-10-28 — View past ballots
+
+**Requested:**
+
+> Can we add a card on the home page (http://localhost:3000/) a card that says
+> 'View past ballots' and when clicked the next screen shows a list of past
+> ballots by poll title, date of vote and a 'View' button that when clicked the
+> ballot is shown with selections highlighted?
+
+**Changed:**
+
+- **Backend:**
+  - `GET /api/my/ballots` (`MyBallotsController`), for the signed-in member
+    only: their answered questionnaires and elections, with `votedAt` (the
+    latest vote) and `open`, newest first.
+  - A district ballot appears once: included statewide elections fold in, and
+    measures count toward their election.
+  - `GET /api/polls/ballot-measures?electionId&review=true` also returns
+    measures the member answered, even closed ones, so a closed ballot's
+    measures show in review.
+- **Home:** a "View past ballots" card for members, after "Find polls".
+- **`/my-ballots`** (`MyBallotsView`): Poll (with a Closed badge),
+  Date of vote, and **View**. Cards on phones, `ScrollEnds` arrows, and an
+  empty state linking to Find polls.
+- **Review mode:** `View` → `/polls/{type}/{id}?review=1`. `PollDetailView`
+  passes `review` to the forms:
+  - both skip the "closed" stop when reviewing;
+  - the election form includes closed included parts and asks for answered
+    measures;
+  - both open straight in read-only. Elections already highlighted picks
+    (`6012021`).
+  - Questionnaires now do too: "✓ Your answer: Yes/No", or "Not answered",
+    with the comment as text.
+- **Languages:** 9.
+- **Help:** "Your past ballots" in `user/answering-polls.md`.
+- **todo.md:** "My votes" is partly done. The profile menu, Change vote and
+  filters remain.
+
+**Verified:**
+
+- **Backend:** `MyBallotsTest` checks:
+  - a district ballot is listed once, with the statewide race folded in;
+  - the questionnaire is listed first, being newer;
+  - another voter's votes aren't included;
+  - a closed election stays listed with `open=false`;
+  - a member with no votes gets an empty list.
+  - The full suite passes (403).
+- **Frontend:** `MyBallotsView.spec.ts` (2 tests): rows, the Closed badge, View
+  links with `review=1`, and the empty state. 196 unit tests pass;
+  type-check passes.
+- **Headless (local, demo-creator-wash):**
+  - home card → `/my-ballots` listed 3: WA District 2, "Test 1",
+    "Wash Questionnaire 3".
+  - View on the election opened `?review=1` with 6 "Your vote" badges and no
+    edit-or-review panel. The questionnaire had 3 "Your answer" badges.
+  - With "Test 1"'s close date set in the past (restored afterwards): the
+    phone card showed Closed; View still showed 3 answers; without
+    `?review` the page showed the closed note.
+  - Screenshots were viewed, then deleted.
+
+**Commit:** `f04608d`
+
+---
+
 ## 2026-10-28 — Prod backend deploy: Purview column, Create dashboard speed-up (verified)
 
 **Requested:** the user ran
