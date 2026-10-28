@@ -140,6 +140,13 @@ const routes: RouteRecordRaw[] = [
     ? [{ path: '/dev/settings', name: 'DevSettings', component: () => import('@/views/dev/DevSettingsView.vue') }]
     : []),
   {
+    // "View past ballots": every poll the signed-in member has answered.
+    path: '/my-ballots',
+    name: 'MyBallots',
+    component: () => import('@/views/MyBallotsView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     // A poll's history: creators (their own polls), admins (their area), supers.
     path: '/history',
     name: 'History',

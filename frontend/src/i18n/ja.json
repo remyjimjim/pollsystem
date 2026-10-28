@@ -109,6 +109,11 @@
         "title": "アカウントを作成",
         "description": "メール+電話+郵便番号だけで十分です。パスワードは不要です。",
         "cta": "新規登録"
+      },
+      "pastBallots": {
+        "title": "過去の投票を見る",
+        "description": "これまでに回答した投票とアンケートを、あなたの選択とともに表示します。",
+        "cta": "過去の投票を見る"
       }
     }
   },
@@ -252,7 +257,8 @@
     "submissionFailed": "送信に失敗しました",
     "validation": {
       "pleaseAnswer": "次に回答してください：「{text}」"
-    }
+    },
+    "yourAnswer": "あなたの回答"
   },
   "ballotMeasure": {
     "partOf": "属する:",
@@ -887,5 +893,16 @@
   },
   "demo": {
     "notice": "BallotBox のデモアカウントを使用しています。{time} に終了し、その際にこのアカウントで行ったすべてが削除されます。"
+  },
+  "myBallots": {
+    "title": "過去の投票",
+    "intro": "回答したすべての投票を新しい順に表示します。「表示」であなたの選択を確認できます。",
+    "colPoll": "投票",
+    "colVoted": "投票日",
+    "view": "表示",
+    "closed": "締切済み",
+    "empty": "まだ何も投票していません。",
+    "findPolls": "投票を探す",
+    "loadFailed": "過去の投票を読み込めませんでした。"
   }
 }

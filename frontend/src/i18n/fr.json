@@ -109,6 +109,11 @@
         "title": "Créer un compte",
         "description": "Un e-mail, un téléphone et un code postal suffisent. Pas de mot de passe.",
         "cta": "S'inscrire"
+      },
+      "pastBallots": {
+        "title": "Voir les bulletins passés",
+        "description": "Tous les bulletins et questionnaires auxquels vous avez répondu, avec vos choix.",
+        "cta": "Voir les bulletins passés"
       }
     }
   },
@@ -252,7 +257,8 @@
     "submissionFailed": "Échec de l'envoi",
     "validation": {
       "pleaseAnswer": "Veuillez répondre à : « {text} »"
-    }
+    },
+    "yourAnswer": "Votre réponse"
   },
   "ballotMeasure": {
     "partOf": "Partie de :",
@@ -887,5 +893,16 @@
   },
   "demo": {
     "notice": "Vous utilisez le compte de démonstration BallotBox. Il prend fin {time}, et tout ce qui y est fait est alors supprimé."
+  },
+  "myBallots": {
+    "title": "Bulletins passés",
+    "intro": "Tous les sondages auxquels vous avez répondu, le plus récent en premier. Voir affiche vos choix.",
+    "colPoll": "Sondage",
+    "colVoted": "Date du vote",
+    "view": "Voir",
+    "closed": "Clos",
+    "empty": "Vous n'avez encore voté sur rien.",
+    "findPolls": "Trouver des sondages",
+    "loadFailed": "Impossible de charger vos bulletins passés."
   }
 }

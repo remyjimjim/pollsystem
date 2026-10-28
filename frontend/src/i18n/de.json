@@ -109,6 +109,11 @@
         "title": "Konto erstellen",
         "description": "E-Mail + Telefon + Postleitzahl genügen. Keine Passwörter.",
         "cta": "Registrieren"
+      },
+      "pastBallots": {
+        "title": "Frühere Stimmzettel ansehen",
+        "description": "Alle Stimmzettel und Fragebögen, die Sie beantwortet haben, mit Ihrer Wahl.",
+        "cta": "Frühere Stimmzettel ansehen"
       }
     }
   },
@@ -252,7 +257,8 @@
     "submissionFailed": "Senden fehlgeschlagen",
     "validation": {
       "pleaseAnswer": "Bitte beantworten Sie: „{text}“"
-    }
+    },
+    "yourAnswer": "Ihre Antwort"
   },
   "ballotMeasure": {
     "partOf": "Teil von:",
@@ -834,5 +840,16 @@
   },
   "demo": {
     "notice": "Sie verwenden das BallotBox-Demokonto. Es endet {time}, und alles darin Getane wird dann gelöscht."
+  },
+  "myBallots": {
+    "title": "Frühere Stimmzettel",
+    "intro": "Alle Umfragen, die Sie beantwortet haben, die neueste zuerst. Ansehen zeigt Ihre Wahl.",
+    "colPoll": "Umfrage",
+    "colVoted": "Datum der Stimme",
+    "view": "Ansehen",
+    "closed": "Beendet",
+    "empty": "Sie haben noch nirgends abgestimmt.",
+    "findPolls": "Umfragen finden",
+    "loadFailed": "Ihre früheren Stimmzettel konnten nicht geladen werden."
   }
 }

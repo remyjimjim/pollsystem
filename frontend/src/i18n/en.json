@@ -112,6 +112,11 @@
         "title": "Create an account",
         "description": "Email + phone + zipcode is all it takes. No passwords.",
         "cta": "Register"
+      },
+      "pastBallots": {
+        "title": "View past ballots",
+        "description": "Every ballot and questionnaire you've answered, with your choices.",
+        "cta": "View past ballots"
       }
     }
   },
@@ -278,7 +283,8 @@
     "submissionFailed": "Submission failed",
     "validation": {
       "pleaseAnswer": "Please answer: \"{text}\""
-    }
+    },
+    "yourAnswer": "Your answer"
   },
   "ballotMeasure": {
     "partOf": "Part of:",
@@ -1147,5 +1153,16 @@
   },
   "demo": {
     "notice": "You're using the BallotBox demo account. It ends {time}, and everything done in it is deleted then."
+  },
+  "myBallots": {
+    "title": "Past ballots",
+    "intro": "Every poll you've answered, newest vote first. View shows your choices.",
+    "colPoll": "Poll",
+    "colVoted": "Date of vote",
+    "view": "View",
+    "closed": "Closed",
+    "empty": "You haven't voted on anything yet.",
+    "findPolls": "Find polls",
+    "loadFailed": "Couldn't load your past ballots."
   }
 }

@@ -109,6 +109,11 @@
         "title": "Crear una cuenta",
         "description": "Correo electrónico + teléfono + código postal es todo lo que necesita. Sin contraseñas.",
         "cta": "Registrarse"
+      },
+      "pastBallots": {
+        "title": "Ver boletas anteriores",
+        "description": "Todas las boletas y cuestionarios que ha respondido, con sus elecciones.",
+        "cta": "Ver boletas anteriores"
       }
     }
   },
@@ -252,7 +257,8 @@
     "submissionFailed": "Error al enviar",
     "validation": {
       "pleaseAnswer": "Por favor responda: «{text}»"
-    }
+    },
+    "yourAnswer": "Su respuesta"
   },
   "ballotMeasure": {
     "partOf": "Parte de:",
@@ -834,5 +840,16 @@
   },
   "demo": {
     "notice": "Está usando la cuenta de demostración de BallotBox. Termina {time} y todo lo hecho en ella se borra entonces."
+  },
+  "myBallots": {
+    "title": "Boletas anteriores",
+    "intro": "Todas las encuestas que ha respondido, la más reciente primero. Ver muestra sus elecciones.",
+    "colPoll": "Encuesta",
+    "colVoted": "Fecha del voto",
+    "view": "Ver",
+    "closed": "Cerrada",
+    "empty": "Aún no ha votado en nada.",
+    "findPolls": "Buscar encuestas",
+    "loadFailed": "No se pudieron cargar sus boletas anteriores."
   }
 }

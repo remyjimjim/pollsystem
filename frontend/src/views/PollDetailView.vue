@@ -10,6 +10,8 @@ const router = useRouter()
 const type = computed(() => String(route.params.type))
 const id = computed(() => Number(route.params.id))
 const focusMeasure = computed(() => Number(route.query.measure) || null)
+// ?review=1 ("View past ballots"): open your answers read-only, even once closed.
+const review = computed(() => route.query.review === '1')
 
 // A ballot measure is voted on with its election (decided 2026-10-15): its own
 // page sends you to the election's form, scrolled to the measure.
@@ -31,12 +33,14 @@ watch([type, id], async ([t, i]) => {
     <QuestionnaireResponseForm
       v-if="type === 'questionnaire'"
       :id="id"
+      :review="review"
     />
     <ElectionResponseForm
       v-else-if="type === 'election'"
       :id="id"
       :key="id"
       :focus-measure="focusMeasure"
+      :review="review"
     />
     <template v-else-if="type === 'ballot-measure'">
       <p v-if="measureError" class="text-sm text-red-700">{{ $t('ballotMeasure.loadFailed') }}</p>

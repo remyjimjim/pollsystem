@@ -38,6 +38,12 @@ const cards = computed<ActionCard[]>(() => {
     to: '/polls/search',
     cta: t('home.cards.findPolls.cta')
   })
+  out.push({
+    title: t('home.cards.pastBallots.title'),
+    description: t('home.cards.pastBallots.description'),
+    to: '/my-ballots',
+    cta: t('home.cards.pastBallots.cta')
+  })
 
   if (auth.hasAccess(AccessLevel.CREATOR)) {
     out.push({

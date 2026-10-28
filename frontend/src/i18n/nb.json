@@ -109,6 +109,11 @@
         "title": "Opprett en konto",
         "description": "E-post + telefon + postnummer er alt som trengs. Ingen passord.",
         "cta": "Registrer deg"
+      },
+      "pastBallots": {
+        "title": "Se tidligere stemmesedler",
+        "description": "Alle stemmesedler og spørreskjemaer du har svart på, med valgene dine.",
+        "cta": "Se tidligere stemmesedler"
       }
     }
   },
@@ -252,7 +257,8 @@
     "submissionFailed": "Sending mislyktes",
     "validation": {
       "pleaseAnswer": "Svar på: «{text}»"
-    }
+    },
+    "yourAnswer": "Svaret ditt"
   },
   "ballotMeasure": {
     "partOf": "Del av:",
@@ -887,5 +893,16 @@
   },
   "demo": {
     "notice": "Du bruker demokontoen til BallotBox. Den avsluttes {time}, og alt som er gjort i den slettes da."
+  },
+  "myBallots": {
+    "title": "Tidligere stemmesedler",
+    "intro": "Alle avstemninger du har svart på, nyeste først. Se viser valgene dine.",
+    "colPoll": "Avstemning",
+    "colVoted": "Stemmedato",
+    "view": "Se",
+    "closed": "Stengt",
+    "empty": "Du har ikke stemt på noe ennå.",
+    "findPolls": "Finn avstemninger",
+    "loadFailed": "Kunne ikke laste de tidligere stemmesedlene dine."
   }
 }

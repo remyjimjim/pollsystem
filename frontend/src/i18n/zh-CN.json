@@ -109,6 +109,11 @@
         "title": "创建账户",
         "description": "只需电子邮件 + 电话 + 邮政编码。无需密码。",
         "cta": "注册"
+      },
+      "pastBallots": {
+        "title": "查看过往选票",
+        "description": "您回答过的所有选票和问卷，以及您的选择。",
+        "cta": "查看过往选票"
       }
     }
   },
@@ -252,7 +257,8 @@
     "submissionFailed": "提交失败",
     "validation": {
       "pleaseAnswer": "请回答：“{text}”"
-    }
+    },
+    "yourAnswer": "您的回答"
   },
   "ballotMeasure": {
     "partOf": "属于：",
@@ -834,5 +840,16 @@
   },
   "demo": {
     "notice": "您正在使用 BallotBox 演示账户。它将于 {time} 结束，届时其中的所有操作都会被删除。"
+  },
+  "myBallots": {
+    "title": "过往选票",
+    "intro": "您回答过的所有投票，最新的在前。点击查看可看到您的选择。",
+    "colPoll": "投票",
+    "colVoted": "投票日期",
+    "view": "查看",
+    "closed": "已截止",
+    "empty": "您还没有投过票。",
+    "findPolls": "查找投票",
+    "loadFailed": "无法加载您的过往选票。"
   }
 }

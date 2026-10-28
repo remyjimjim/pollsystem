@@ -36,7 +36,7 @@ interface MyResponsesDto {
   responses: MyResponseDto[]
 }
 
-const props = defineProps<{ id: number }>()
+const props = defineProps<{ id: number; review?: boolean }>()
 const router = useRouter()
 
 const poll = ref<QuestionnaireDto | null>(null)
@@ -68,7 +68,8 @@ async function load() {
       `/api/polls/questionnaires/${props.id}`
     )
     poll.value = pollRes.data
-    if (isClosed.value) {
+    // Reviewing a past ballot ("View past ballots") works once it has closed too.
+    if (isClosed.value && !props.review) {
       closedReason.value = t('questionnaire.closedNote')
       return
     }
@@ -77,7 +78,7 @@ async function load() {
     )
     mine.value = mineRes.data
     seedAnswers()
-    mode.value = mine.value.hasResponses ? 'choosing' : 'fresh'
+    mode.value = props.review ? 'readonly' : mine.value.hasResponses ? 'choosing' : 'fresh'
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('questionnaire.loadFailed')
   } finally {
@@ -194,6 +195,17 @@ onMounted(load)
       class="rounded-md border border-slate-200 p-4 disabled:opacity-90"
     >
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ q.text }}</legend>
+      <!-- Reviewing: the answer as a badge, the comment as text (2026-10-28). -->
+      <template v-if="mode === 'readonly'">
+        <p class="m-0 mb-1" data-test="your-answer">
+          <span v-if="answers[q.id].response" class="rounded bg-slate-800 px-2 py-0.5 text-xs font-semibold text-white">
+            ✓ {{ $t('questionnaire.yourAnswer') }}: {{ answers[q.id].response === 'Yes' ? $t('common.yes') : answers[q.id].response === 'No' ? $t('common.no') : answers[q.id].response }}
+          </span>
+          <span v-else class="text-sm text-slate-500">{{ $t('election.notAnswered') }}</span>
+        </p>
+        <p v-if="answers[q.id].comment?.trim()" class="m-0 text-sm italic text-slate-700">“{{ answers[q.id].comment }}”</p>
+      </template>
+      <template v-else>
       <div class="mb-2 flex flex-col gap-1 text-sm text-slate-600">
         <span>{{ $t('questionnaire.answer') }}</span>
         <div class="flex gap-4">
@@ -229,6 +241,7 @@ onMounted(load)
         />
       </label>
       <PublicCommentToggle :id="`comment-public-q-${q.id}`" v-model="answers[q.id].commentPublic" />
+      </template>
     </fieldset>
 
     <p v-if="message" class="text-sm text-green-700">{{ message }}</p>

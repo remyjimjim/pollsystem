@@ -276,6 +276,9 @@
   - A midterm district ballot appears once (not again for its statewide races and measures).
   - Only the member sees their own list. Needs a new "my answered polls" endpoint (the super version,
     /api/super/users/{id}/polls-completed, has the logic). About an afternoon, 9 languages.
+  - Partly done 2026-10-28: "View past ballots" (home card -> /my-ballots: title, date of vote, View in
+    read-only review, also once closed; a midterm ballot once; cards on phones; GET /api/my/ballots).
+    Still to do: the profile menu, Change vote, filters.
   - Done: No
 
 - After launch (start right away; aim to finish phases 1-2 by ~Nov 1): a midterms map.

@@ -1,6 +1,6 @@
 ---
 title: Answering polls
-summary: Vote in elections and on ballot measures, answer questionnaires, and change your answers.
+summary: Vote in elections and on ballot measures, answer questionnaires, change your answers, and look back at your past ballots.
 order: 1
 ---
 
@@ -92,3 +92,15 @@ when reviewing an account.
   Answering is paused for everyone; try again later.
 - **"Please make a selection for…"** or **"Please answer…"**: a question or
   office still needs an answer.
+
+## Your past ballots
+
+**View past ballots** on your home page lists every ballot and questionnaire
+you've answered, newest vote first, with the date of your vote. A midterm ballot
+appears once, with its statewide races and measures. Polls that have closed are
+marked **Closed**.
+
+Click **View** to see that ballot with your choices highlighted: **✓ Your vote**
+on each candidate you picked, your Yes or No on each measure and question, and
+your comments. It's read-only, and works after the poll has closed too. To
+change a vote while the poll is open, open it from **Vote** instead.

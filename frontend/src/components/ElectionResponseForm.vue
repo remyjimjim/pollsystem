@@ -75,7 +75,7 @@ interface MyElectionResponsesDto {
 }
 
 // focusMeasure: arriving from a ballot measure's Vote link, scroll to it.
-const props = defineProps<{ id: number; focusMeasure?: number | null }>()
+const props = defineProps<{ id: number; focusMeasure?: number | null; review?: boolean }>()
 const router = useRouter()
 
 const election = ref<ElectionDto | null>(null)
@@ -154,7 +154,8 @@ async function load() {
   try {
     const res = await axios.get<ElectionDto>(`/api/polls/elections/${props.id}`)
     election.value = res.data
-    if (isClosed.value) {
+    // Reviewing a past ballot ("View past ballots") works once it has closed too.
+    if (isClosed.value && !props.review) {
       closedReason.value = t('election.closedNote')
       return
     }
@@ -163,7 +164,7 @@ async function load() {
     for (const id of res.data.includedElectionIds ?? []) {
       const inc = (await axios.get<ElectionDto>(`/api/polls/elections/${id}`)).data
       const open = inc.status === 'PUBLISHED' && (!inc.closeDate || new Date(inc.closeDate).getTime() > Date.now())
-      if (open) parts.push(inc)
+      if (open || props.review) parts.push(inc)
     }
     for (const part of parts) for (const c of part.candidates) electionOf[c.id] = part.id
     ballotIds.value = parts.map(p => p.id)
@@ -179,7 +180,7 @@ async function load() {
     }
     seedAnswers()
     await loadMeasures()
-    mode.value = mine.value.hasResponses || votedOnMeasure.value ? 'choosing' : 'fresh'
+    mode.value = props.review ? 'readonly' : mine.value.hasResponses || votedOnMeasure.value ? 'choosing' : 'fresh'
   } catch (e: any) {
     error.value = e?.response?.data?.message ?? t('election.loadFailed')
   } finally {
@@ -216,7 +217,7 @@ async function loadMeasures() {
   // from the statewide election it includes).
   const ids = ballotIds.value.length ? ballotIds.value : [props.id]
   measures.value = (await Promise.all(ids.map(id => axios.get<BallotMeasureDto[]>('/api/polls/ballot-measures', {
-    params: { electionId: id }
+    params: props.review ? { electionId: id, review: true } : { electionId: id }
   }).then(r => r.data ?? [])))).flat()
   const mineList = await Promise.all(measures.value.map(m =>
     axios.get<MyBallotResponseDto>(`/api/polls/ballot-measures/${m.id}/responses/me`).then(r => r.data)

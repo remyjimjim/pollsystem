@@ -109,6 +109,11 @@
         "title": "Crea un account",
         "description": "Bastano e-mail + telefono + CAP. Nessuna password.",
         "cta": "Registrati"
+      },
+      "pastBallots": {
+        "title": "Vedi le schede passate",
+        "description": "Tutte le schede e i questionari a cui hai risposto, con le tue scelte.",
+        "cta": "Vedi le schede passate"
       }
     }
   },
@@ -252,7 +257,8 @@
     "submissionFailed": "Invio non riuscito",
     "validation": {
       "pleaseAnswer": "Rispondi a: «{text}»"
-    }
+    },
+    "yourAnswer": "La tua risposta"
   },
   "ballotMeasure": {
     "partOf": "Parte di:",
@@ -834,5 +840,16 @@
   },
   "demo": {
     "notice": "Stai usando l'account demo di BallotBox. Termina {time} e tutto ciò che vi è stato fatto viene allora eliminato."
+  },
+  "myBallots": {
+    "title": "Schede passate",
+    "intro": "Tutti i sondaggi a cui hai risposto, il più recente per primo. Vedi mostra le tue scelte.",
+    "colPoll": "Sondaggio",
+    "colVoted": "Data del voto",
+    "view": "Vedi",
+    "closed": "Chiuso",
+    "empty": "Non hai ancora votato.",
+    "findPolls": "Trova sondaggi",
+    "loadFailed": "Impossibile caricare le tue schede passate."
   }
 }

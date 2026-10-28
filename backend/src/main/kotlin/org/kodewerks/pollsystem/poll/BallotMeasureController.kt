@@ -69,7 +69,8 @@ data class BallotMeasureDto(
 class BallotMeasureController(
     private val service: BallotMeasureService,
     private val measures: org.kodewerks.pollsystem.repository.BallotMeasureRepository,
-    private val blocks: PollBlockService
+    private val blocks: PollBlockService,
+    private val ballotResponses: org.kodewerks.pollsystem.repository.BallotResponseRepository
 ) {
 
     /**
@@ -81,12 +82,18 @@ class BallotMeasureController(
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     fun forElection(
         @AuthenticationPrincipal principal: AppUserDetails,
-        @RequestParam electionId: Long
+        @RequestParam electionId: Long,
+        // Reviewing a past ballot ("View past ballots"): also the measures you
+        // answered, open or not.
+        @RequestParam(required = false, defaultValue = "false") review: Boolean = false
     ): List<BallotMeasureDto> {
         val all = measures.findByElectionId(electionId).sortedBy { it.id }
         if (all.isNotEmpty() && all.first().election.creator.id == principal.user.id) return all.map(BallotMeasureDto::from)
         val now = Instant.now()
+        val answered = if (review) all.filter { ballotResponses.findByUserIdAndMeasureId(principal.user.id, it.id) != null }.map { it.id }.toSet()
+                       else emptySet()
         return all.filter {
+            it.id in answered ||
             it.status == PollStatus.PUBLISHED &&
                 (it.closeDate == null || it.closeDate.isAfter(now)) &&
                 !blocks.isBlockedFor(org.kodewerks.pollsystem.model.PollKind.BALLOT_MEASURE, it.id, principal.user.zipcode)

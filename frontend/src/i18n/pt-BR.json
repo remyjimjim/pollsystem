@@ -109,6 +109,11 @@
         "title": "Criar uma conta",
         "description": "E-mail + telefone + CEP é tudo o que você precisa. Sem senhas.",
         "cta": "Cadastrar-se"
+      },
+      "pastBallots": {
+        "title": "Ver cédulas anteriores",
+        "description": "Todas as cédulas e questionários que você respondeu, com suas escolhas.",
+        "cta": "Ver cédulas anteriores"
       }
     }
   },
@@ -252,7 +257,8 @@
     "submissionFailed": "Falha ao enviar",
     "validation": {
       "pleaseAnswer": "Responda: «{text}»"
-    }
+    },
+    "yourAnswer": "Sua resposta"
   },
   "ballotMeasure": {
     "partOf": "Parte de:",
@@ -834,5 +840,16 @@
   },
   "demo": {
     "notice": "Você está usando a conta de demonstração do BallotBox. Ela termina {time}, e tudo feito nela é apagado então."
+  },
+  "myBallots": {
+    "title": "Cédulas anteriores",
+    "intro": "Todas as pesquisas que você respondeu, a mais recente primeiro. Ver mostra suas escolhas.",
+    "colPoll": "Pesquisa",
+    "colVoted": "Data do voto",
+    "view": "Ver",
+    "closed": "Encerrada",
+    "empty": "Você ainda não votou em nada.",
+    "findPolls": "Encontrar pesquisas",
+    "loadFailed": "Não foi possível carregar suas cédulas anteriores."
   }
 }
