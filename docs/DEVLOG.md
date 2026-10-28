@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-28 — Manage Users: top/bottom arrows
+
+**Requested:**
+
+> http://localhost:3000/super/manage-users needs the top/bottom arrows.
+
+**Changed:** Manage Users' list (column chooser + table) is wrapped in
+`ScrollEnds`.
+
+**Verified (headless, local, super, 76 users; clicks from inside the page):**
+
+| Width | Start | After ↓ | After ↑ |
+|---|---|---|---|
+| 1300 px | ↓ | ↑ at y3897 | ↓ at y362 |
+| 390 px | ↓ | ↑ at y4651 | ↓ at y790 |
+
+Type-check and the Super unit tests (7) pass.
+
+**Commit:** `be7f45d`
+
+---
+
 ## 2026-10-28 — Manage Polls: top/bottom arrows
 
 **Requested:**
