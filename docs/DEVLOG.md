@@ -61,6 +61,71 @@ logged.
 
 ---
 
+## 2026-10-28 — Manage Polls: Show nationwide, title edit, close date carries, notes list
+
+**Requested:**
+
+> - http://localhost:3000/admin/manage-polls
+>   - Add 'Show nationwide' checkbox.
+>   - Remove 'State' and 'County' columns from filter results.
+>   - Add Title as editable field.
+>   - If close date is modified then all ballot measures attached to the
+>     election inherit the same close date.
+>   - If a note is added and the "Notes" column entry should update to the
+>     first 10 characters of the note followed by a ... elipses. If the Notes
+>     column entry is clicked it should show an 'Add note' button followed by a
+>     2000 character textarea ... with a 'Cancel' and 'Save' buttons under the
+>     textarea followed by a list of all notes sent for this poll type. If the
+>     note is saved then it goes to the top of the notes list.
+
+**Changed:**
+
+- **Show nationwide:** `AdminPollRow.nationwide` is true when the poll has no
+  purview rows or a NATIONAL one. Like "Show disabled", those rows are hidden
+  until the box is ticked, and `?showNationwide=1` deep-links it.
+- **Columns:** State and County are gone from the table and the Show: list.
+  Their filters stay, and Purview shows the area.
+- **Edit:** a Title field. `AdminPollEditRequest.title` takes 1–500 characters
+  after trimming and is sent only when changed. A change adds
+  `title → "…"` to the reason note and the History entry.
+- **Close date carries:** when an election's close date changes, every ballot
+  measure on it gets the same date, each with an EDITED History entry
+  ("Close date → … (from its election)"). The dialog says so, and the list
+  reloads after a save.
+- **Notes:**
+  - The cell shows the latest note's first 10 characters + "..." (full text
+    on hover), or "Add note".
+  - It opens a dialog: **Add note** shows the 2000-character box (with "Email a
+    copy to the creator", Cancel, Save) above every note on the poll, newest
+    first.
+  - A saved note goes to the top and the box closes. With no notes yet, the
+    box opens at once.
+  - "Poll type" in the request was read as this poll.
+  - The old step-through/edit dialog is gone; the PUT note endpoint stays.
+- **`common.cancel`:** added in 9 languages. The admin labels are English-only,
+  like the rest of Manage Polls.
+- **Help:** `admin/managing-polls.md` updated.
+
+**Verified:**
+
+- **Backend:** 2 new tests. Rename plus a new close date updates the election
+  and both its measures (including one with no close date); a blank title
+  gets 400. Nationwide flag false/true. The full suite passes (400).
+- **Frontend:** 3 tests updated or added:
+  - columns: no State or County;
+  - nationwide hidden until ticked;
+  - preview "Checked th...", the dialog lists the note, saving posts and
+    puts the new note first, and the cell becomes "Close date...".
+  - 185 unit tests pass; type-check passes.
+- **E2E:** `admin-manages-polls` passes.
+- **Headless (local, super):** 665 rows, and 668 with Show nationwide.
+  Headers: Title | Type | Creator | Purview | Closes | Enabled? | Notes |
+  Actions. A screenshot of the notes dialog was viewed, then deleted.
+
+**Commit:** `e17abc4`
+
+---
+
 ## 2026-10-28 — Creator dashboard: stacked cards on phones
 
 **Requested:**
