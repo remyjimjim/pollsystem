@@ -7,6 +7,7 @@ import { computed, ref, watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 
 interface HistoryRow {
   id: number
@@ -92,7 +93,7 @@ function by(r: HistoryRow): string {
     <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
     <p v-else-if="error" class="text-sm text-red-700">{{ error }}</p>
     <p v-else-if="!rows.length" class="text-sm text-slate-500">{{ $t('history.empty') }}</p>
-    <template v-else>
+    <ScrollEnds v-else>
     <table class="hidden w-full border-collapse text-sm sm:table" data-test="history-table">
       <thead>
         <tr class="bg-slate-50 text-left">
@@ -136,6 +137,6 @@ function by(r: HistoryRow): string {
         <router-link v-if="r.hasDiff" :to="`/history/diff/${r.id}`" class="mt-1 inline-block text-xs text-slate-800 underline" data-test="card-diff">{{ $t('history.diff.link') }}</router-link>
       </li>
     </ul>
-    </template>
+    </ScrollEnds>
   </div>
 </template>
