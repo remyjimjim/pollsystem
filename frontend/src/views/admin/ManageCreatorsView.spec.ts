@@ -257,3 +257,17 @@ describe('ManageCreatorsView: Show: columns', () => {
   })
 })
 
+
+describe('ManageCreatorsView: cards on phones (2026-10-28)', () => {
+  it('shows a card per creator, with Edit opening the editor', async () => {
+    const w = await mountView()
+    const cards = w.findAll('[data-test="creator-cards"] li')
+    expect(cards).toHaveLength(w.findAll('[data-test="creator-row"]').length)
+    expect(cards.map(c => c.text()).join(' ')).toContain('alice@test.local')
+    expect(w.find('[role="dialog"]').exists()).toBe(false)
+    await cards.find(c => c.text().includes('alice@test.local'))!.find('[data-test="card-edit"]').trigger('click')
+    await flushPromises()
+    expect(w.find('[role="dialog"]').text()).toContain('alice@test.local')
+    w.unmount()
+  })
+})

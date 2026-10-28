@@ -326,7 +326,70 @@ onMounted(() => {
 
     <ScrollEnds v-if="!loading && visibleRows.length > 0">
     <ColumnChooser v-model="columns" :options="columnOptions" />
-    <div class="overflow-x-auto">
+    <!-- Phones: one card per creator (2026-10-28), in the table's sort order; wider screens: the table. -->
+    <ul class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="creator-cards">
+      <li
+        v-for="r in visibleRows"
+        :key="`card-${r.userId}`"
+        class="rounded-md border border-slate-200 p-3 text-sm"
+        :class="isPinned(r) ? 'bg-amber-50' : ''"
+      >
+        <div class="mb-1 break-all font-semibold text-slate-800">
+          {{ r.email }}
+          <span v-if="r.isYou" class="ml-1 text-xs font-normal text-slate-500">{{ $t('admin.manageCreators.you') }}</span>
+        </div>
+        <dl class="m-0 grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1 text-xs text-slate-600">
+          <template v-if="columns.purview">
+            <dt>{{ $t('admin.manageCreators.colPurview') }}</dt>
+            <dd class="m-0">
+              <InfoPopover :label="$t('admin.manageCreators.purviewOf', { email: r.email })" icon="pin" width-class="w-72">
+                <template #trigger>
+                  <span class="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-0.5 text-slate-800">{{ purviewSummary(r) }}</span>
+                </template>
+                <div v-for="[heading, items] in purviewGroups(r)" :key="heading" class="mb-2 last:mb-0">
+                  <div class="mb-0.5 font-semibold text-slate-800">{{ heading }}</div>
+                  <ul class="max-h-40 overflow-y-auto">
+                    <li v-for="it in items" :key="it.text" :class="it.enabled ? '' : 'text-slate-400 line-through'">{{ it.text }}</li>
+                  </ul>
+                </div>
+              </InfoPopover>
+            </dd>
+          </template>
+          <template v-if="columns.polls">
+            <dt>{{ $t('admin.manageCreators.colPolls') }}</dt>
+            <dd class="m-0">
+              <router-link v-if="r.pollTotal > 0" :to="pollsLink(r)" class="text-blue-700 underline">{{ r.pollCount }}</router-link>
+              <span v-else class="text-slate-400">0</span>
+            </dd>
+          </template>
+          <template v-if="columns.lastEdit">
+            <dt>{{ $t('admin.manageCreators.colLastEdit') }}</dt>
+            <dd class="m-0">{{ formatDate(r.lastEditedAt) }}</dd>
+          </template>
+          <template v-if="columns.enabled">
+            <dt>{{ $t('admin.manageCreators.colEnabled') }}</dt>
+            <dd class="m-0">
+              <label class="inline-flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  class="h-4 w-4"
+                  data-test="card-enabled"
+                  :checked="r.enabled"
+                  :disabled="!r.canToggle || busyIds.has(r.userId)"
+                  :aria-label="$t('admin.manageCreators.enabledFor', { email: r.email })"
+                  @click.prevent="toggleEnabled(r)"
+                />
+                <span :class="r.canToggle ? 'text-slate-700' : 'text-slate-400'">{{ r.enabled ? $t('common.yes') : $t('common.no') }}</span>
+              </label>
+            </dd>
+          </template>
+        </dl>
+        <button type="button" class="mt-2 rounded border border-slate-300 px-3 py-1 text-xs hover:bg-slate-50" data-test="card-edit" @click="openEdit(r)">
+          {{ $t('admin.manageCreators.edit') }}
+        </button>
+      </li>
+    </ul>
+    <div class="hidden overflow-x-auto sm:block">
       <table class="w-full border-collapse text-sm">
         <thead>
           <tr class="bg-slate-50 text-left">
