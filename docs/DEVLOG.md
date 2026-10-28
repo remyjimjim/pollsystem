@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-28 — Super dashboard: Manage All Polls opens Admin → Manage Polls
+
+**Requested:**
+
+> Can we make the 'Manage All Polls' card point at
+> http://localhost:3000/admin/manage-polls instead of
+> http://localhost:3000/super/manage-polls?
+
+**Changed:**
+
+- The card links to `/admin/manage-polls`. For a super that page is
+  unrestricted: every poll, filters, switch-off, notes, and Edit for title,
+  status and close date.
+- `/super/manage-polls` keeps its route but has no link now. It's the only
+  page that edits a poll's **summary**; raised with the user.
+- **Card text:** "Every poll, everywhere: filter, switch off, edit the title,
+  status or close date, and leave notes." English only; the other languages
+  had no own text.
+- **Help:** `super/managing-all-polls.md` and
+  `super/dashboard-and-emergency-switch.md` describe the new destination.
+
+**Verified (headless, local, super):** clicking the card landed on
+`/admin/manage-polls` ("Manage Polls", 665 rows). Help and Super unit tests
+pass (14).
+
+**Commit:** `57b3e07`
+
+---
+
 ## 2026-10-28 — Manage Users: top/bottom arrows
 
 **Requested:**
