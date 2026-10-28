@@ -61,6 +61,44 @@ logged.
 
 ---
 
+## 2026-10-28 — Manage Polls: Summary in Edit; the Super Manage Polls page retired
+
+**Requested:**
+
+> I can add a Summary field to Manage Polls' Edit dialog, and then retire the
+> old page. Want that? Yes, that'd be great. Go ahead and push it and deploy to
+> staging when you're done.
+
+**Changed:**
+
+- **`AdminPollEditRequest.summary`:** questionnaires and ballot measures
+  only. Trimmed; blank gets 400, and so does an election. A change adds
+  "summary changed" to the reason note and History.
+  `AdminPollRow.summary` prefills it.
+- **Edit dialog:** a Summary box for non-elections, sent only when changed.
+- **Retired:**
+  - `/super/manage-polls` now redirects to `/admin/manage-polls`;
+  - `views/super/ManagePollsView.vue` and its English-only
+    `super.managePolls` labels are removed;
+  - `SuperPollsController` (`/api/super/polls`) is removed; nothing else
+    used it and it had no tests.
+- **Help:** the three Manage Polls / Super pages mention Summary.
+
+**Verified:**
+
+- **Backend:** a new test. A ballot measure's summary is changed and listed;
+  election and blank summaries are refused. The full suite passes (401).
+- **Frontend:** type-check and 185 unit tests pass.
+- **Headless (local, super):**
+  - `/super/manage-polls` landed on `/admin/manage-polls`.
+  - Editing "California Questionnaire 3"'s summary through the dialog saved
+    it, as the API confirmed, and a second edit restored it.
+  - A screenshot of the dialog was viewed, then deleted.
+
+**Commit:** `207032f`
+
+---
+
 ## 2026-10-28 — Super dashboard: Manage All Polls opens Admin → Manage Polls
 
 **Requested:**
