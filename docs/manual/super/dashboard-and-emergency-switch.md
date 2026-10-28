@@ -17,7 +17,7 @@ Supers don't need a paid membership.
 - [Manage Users](managing-users.md): find any account, switch it on or off,
   change roles, and send messages.
 - [Manage All Polls](managing-all-polls.md): opens Manage Polls for every poll,
-  everywhere: correct a title, status or close date, switch polls off, leave
+  everywhere: correct a title, summary, status or close date, switch polls off, leave
   notes.
 - [Poll Templates](poll-templates.md): how each poll type is set up, such as how
   voters choose in elections.

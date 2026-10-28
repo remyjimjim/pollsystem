@@ -197,12 +197,9 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/super/ManageUsersView.vue'),
     meta: { requiresAuth: true, minAccess: AccessLevel.SUPER }
   },
-  {
-    path: '/super/manage-polls',
-    name: 'SuperManagePolls',
-    component: () => import('@/views/super/ManagePollsView.vue'),
-    meta: { requiresAuth: true, minAccess: AccessLevel.SUPER }
-  },
+  // Retired 2026-10-28: Admin > Manage Polls edits title, summary, status and
+  // close date for supers too. Old links land there.
+  { path: '/super/manage-polls', redirect: '/admin/manage-polls' },
 
   // Catch-all
   {

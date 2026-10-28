@@ -307,6 +307,34 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `editPoll changes a ballot measure's summary, and refuses one for an election or a blank one`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "sum-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "sum-creator")
+        val e = newElection(creator, zipcode = "90001", title = "Summary election")
+        val measureType = pollTypes.findAll().first { it.name == "Referendum/Ballot Measure" }
+        val m = ballotMeasures.save(org.kodewerks.pollsystem.model.BallotMeasure(creator = creator, pollType = measureType,
+            title = "Prop S", summary = "Old text", election = e, effectiveDate = LocalDate.now(), status = PollStatus.PUBLISHED))
+        pollPurviews.save(org.kodewerks.pollsystem.model.PollPurview(pollType = PollKind.BALLOT_MEASURE, pollId = m.id,
+            scopeLevel = org.kodewerks.pollsystem.model.ScopeLevel.ZIP, zipcode = "90001"))
+
+        val note = controller.editPoll("BALLOT_MEASURE", m.id,
+            AdminPollEditRequest(summary = " New text ", reason = "Fixed the wording"), principalFor(admin))
+        assertThat(ballotMeasures.findById(m.id).get().summary).isEqualTo("New text")
+        assertThat(note.body).contains("summary changed")
+        assertThat(controller.list(principalFor(admin), listOf("BALLOT_MEASURE"), "Prop S", null, null, null, null, true)
+            .single { it.id == m.id }.summary).isEqualTo("New text")
+
+        for (bad in listOf(
+            "ELECTION" to AdminPollEditRequest(summary = "x", reason = "r"),
+            "BALLOT_MEASURE" to AdminPollEditRequest(summary = "  ", reason = "r"))) {
+            val id = if (bad.first == "ELECTION") e.id else m.id
+            assertThatThrownBy { controller.editPoll(bad.first, id, bad.second, principalFor(admin)) }
+                .isInstanceOf(ResponseStatusException::class.java)
+        }
+    }
+
+    @Test
     fun `list marks nationwide polls`() {
         val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "nat-super")
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "nat-creator")

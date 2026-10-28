@@ -1,6 +1,6 @@
 ---
 title: Managing all polls
-summary: Correct the title, status or close date of any poll.
+summary: Correct the title, summary, status or close date of any poll.
 order: 4
 ---
 
@@ -11,11 +11,12 @@ polls](../admin/managing-polls.md). For a super it lists every poll, everywhere,
 whoever made it and whatever its status. Click **Edit** to change its:
 
 - **Title**
+- **Summary** (questionnaires and ballot measures; elections have none)
 - **Status** (Published, Closed or Archived)
 - **Close date**: an election's new close date also goes to its ballot
   measures
 
-then **Save**. A title can't be blank, and a **Reason** is required (it's saved
+then **Save**. A title or summary can't be blank, and a **Reason** is required (it's saved
 as a note on the poll).
 
 Use it to fix a typo or a wrong date after a poll is published, when the creator

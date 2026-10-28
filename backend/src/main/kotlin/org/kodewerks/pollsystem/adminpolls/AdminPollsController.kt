@@ -55,7 +55,9 @@ data class AdminPollRow(
     val blocked: Boolean,
     val latestNote: NoteDto?,
     /** Covers the whole country (or declares no area): hidden unless "Show nationwide". */
-    val nationwide: Boolean = false
+    val nationwide: Boolean = false,
+    /** Questionnaires and ballot measures (elections have none): editable in Edit. */
+    val summary: String? = null
 )
 
 data class NoteDto(
@@ -86,6 +88,8 @@ data class EditNoteRequest(val body: String)
  */
 data class AdminPollEditRequest(
     val title: String? = null,
+    /** Questionnaires and ballot measures only (moved here from the retired Super page, 2026-10-28). */
+    val summary: String? = null,
     val status: PollStatus? = null,
     val closeDate: Instant? = null,
     val reason: String,
@@ -208,7 +212,8 @@ class AdminPollsController(
                     regionLabel = purviews.regionLabel(pollRows),
                     blocked = false,
                     latestNote = null,
-                    nationwide = isNationwide(pollRows)
+                    nationwide = isNationwide(pollRows),
+                    summary = q.summary
                 )
             }
         }
@@ -241,7 +246,7 @@ class AdminPollsController(
                 val cz = zip?.let { countyZips.findByZipcode(it).firstOrNull() }
                 rows += AdminPollRow(
                     id = bm.id, type = PollKind.BALLOT_MEASURE.name, title = bm.title, status = bm.status,
-                    creatorEmail = bm.creator.email, closeDate = bm.closeDate,
+                    creatorEmail = bm.creator.email, closeDate = bm.closeDate, summary = bm.summary,
                     zipcodes = listOfNotNull(zip),
                     stateInitial = cz?.county?.state?.initial,
                     countyName = cz?.county?.name,
@@ -456,18 +461,22 @@ class AdminPollsController(
         if (reason.isEmpty() || reason.length > 2000) throw bad("A reason (1–2000 chars) is required")
         val newTitle = body.title?.trim()
         if (newTitle != null && (newTitle.isEmpty() || newTitle.length > 500)) throw bad("A title must be 1–500 characters")
-        if (newTitle == null && body.status == null && body.closeDate == null) {
-            throw bad("Nothing to change: provide a title, status and/or close date")
+        val newSummary = body.summary?.trim()
+        if (newSummary != null && newSummary.isEmpty()) throw bad("A summary can't be blank")
+        if (newSummary != null && kind == PollKind.ELECTION) throw bad("Elections have no summary")
+        if (newTitle == null && newSummary == null && body.status == null && body.closeDate == null) {
+            throw bad("Nothing to change: provide a title, summary, status and/or close date")
         }
 
         // Apply the change (null = leave unchanged; Phase 1 doesn't clear closeDate).
         var oldTitle = ""
+        var oldSummary: String? = null
         var oldClose: Instant? = null
         when (kind) {
             PollKind.QUESTIONNAIRE -> {
                 val q = questionnaires.findById(id).orElseThrow { bad("Questionnaire not found") }
-                oldTitle = q.title; oldClose = q.closeDate
-                questionnaires.save(q.copy(title = newTitle ?: q.title, status = body.status ?: q.status, closeDate = body.closeDate ?: q.closeDate))
+                oldTitle = q.title; oldSummary = q.summary; oldClose = q.closeDate
+                questionnaires.save(q.copy(title = newTitle ?: q.title, summary = newSummary ?: q.summary, status = body.status ?: q.status, closeDate = body.closeDate ?: q.closeDate))
             }
             PollKind.ELECTION -> {
                 val e = elections.findById(id).orElseThrow { bad("Election not found") }
@@ -476,9 +485,10 @@ class AdminPollsController(
             }
             PollKind.BALLOT_MEASURE -> {
                 val bm = ballotMeasures.findById(id).orElseThrow { bad("Ballot measure not found") }
-                oldTitle = bm.title; oldClose = bm.closeDate
+                oldTitle = bm.title; oldSummary = bm.summary; oldClose = bm.closeDate
                 ballotMeasures.save(bm.copy(
                     title = newTitle ?: bm.title,
+                    summary = newSummary ?: bm.summary,
                     status = body.status ?: bm.status,
                     closeDate = body.closeDate ?: bm.closeDate,
                     lastUpdated = Instant.now()
@@ -500,6 +510,7 @@ class AdminPollsController(
         // so the creator sees the context — and optionally email the creator.
         val changes = buildList {
             if (newTitle != null && newTitle != oldTitle) add("title → \"$newTitle\"")
+            if (newSummary != null && newSummary != oldSummary) add("summary changed")
             body.status?.let { add("status → $it") }
             body.closeDate?.let { add("close date → $it") }
         }

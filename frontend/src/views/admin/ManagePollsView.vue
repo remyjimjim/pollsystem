@@ -46,6 +46,8 @@ interface PollRow {
   blocked: boolean
   latestNote: NoteDto | null
   nationwide?: boolean
+  // Questionnaires and ballot measures; elections have none.
+  summary?: string | null
 }
 interface StateOpt { id: number; name: string; initial: string }
 interface CountyOpt { id: number; stateId: number; name: string }
@@ -562,6 +564,7 @@ const EDITABLE_STATUSES = ['PUBLISHED', 'CLOSED', 'ARCHIVED'] as const
 const editModalOpen = ref(false)
 const editModalRow = ref<PollRow | null>(null)
 const editTitle = ref('')
+const editSummary = ref('')
 const editStatus = ref<string>('PUBLISHED')
 const editCloseDate = ref('')
 const editReason = ref('')
@@ -580,6 +583,7 @@ function toLocalInput(iso: string | null): string {
 function openEditModal(row: PollRow) {
   editModalRow.value = row
   editTitle.value = row.title
+  editSummary.value = row.summary ?? ''
   editStatus.value = (EDITABLE_STATUSES as readonly string[]).includes(row.status) ? row.status : 'PUBLISHED'
   editCloseDate.value = toLocalInput(row.closeDate)
   editReason.value = ''
@@ -605,9 +609,14 @@ async function saveEdit() {
     const closeDate = editCloseDate.value ? new Date(editCloseDate.value).toISOString() : null
     const title = editTitle.value.trim()
     if (!title) { editError.value = t('admin.managePolls.errorTitle'); return }
+    const hasSummary = editModalRow.value.type !== 'ELECTION'
+    const summary = editSummary.value.trim()
+    if (hasSummary && !summary) { editError.value = t('admin.managePolls.errorSummary'); return }
     await axios.put<NoteDto>(
       `/api/admin/polls/${editModalRow.value.type}/${editModalRow.value.id}`,
-      { title: title !== editModalRow.value.title ? title : null, status: editStatus.value, closeDate, reason, notifyCreator: editNotify.value }
+      { title: title !== editModalRow.value.title ? title : null,
+        summary: hasSummary && summary !== (editModalRow.value.summary ?? '').trim() ? summary : null,
+        status: editStatus.value, closeDate, reason, notifyCreator: editNotify.value }
     )
     message.value = t('admin.managePolls.editSaved')
     closeEditModal()
@@ -1012,6 +1021,12 @@ function historySlug(kind: Kind): string {
         <label class="mb-3 flex flex-col gap-1 text-sm font-semibold text-slate-700">
           {{ $t('admin.managePolls.editTitle') }}
           <input v-model="editTitle" type="text" maxlength="500" data-test="edit-title"
+            class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
+        </label>
+
+        <label v-if="editModalRow?.type !== 'ELECTION'" class="mb-3 flex flex-col gap-1 text-sm font-semibold text-slate-700">
+          {{ $t('admin.managePolls.editSummary') }}
+          <textarea v-model="editSummary" rows="4" data-test="edit-summary"
             class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
         </label>
 

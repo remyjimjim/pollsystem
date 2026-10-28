@@ -1,6 +1,6 @@
 ---
 title: Managing polls
-summary: Find the polls in your area, disable them where needed, leave notes, and change a poll's title, status or close date.
+summary: Find the polls in your area, disable them where needed, leave notes, and change a poll's title, summary, status or close date.
 order: 3
 ---
 
@@ -44,10 +44,11 @@ Click it to open the poll's notes:
 Below that are all the poll's notes, newest first. A note you save goes to the
 top.
 
-## Changing a poll's title, status or close date
+## Changing a poll's title, summary, status or close date
 
-**Edit** lets you change a poll's **Title**, its **Status** (Published, Closed
-or Archived) and its **Close date**. Changing an election's close date gives
+**Edit** lets you change a poll's **Title**, its **Summary** (questionnaires and
+ballot measures), its **Status** (Published, Closed or Archived) and its **Close
+date**. Changing an election's close date gives
 all its ballot measures the same close date. A **Reason** is required. It's saved as a note on the
 poll, and you can email it to the creator.
 
