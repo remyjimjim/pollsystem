@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-28 — Results: bar text thickened with a 0.2 px outline
+
+**Requested:**
+
+> Can you do it on this page http://localhost:3000/polls/election/261/results
+
+**Cause:** that page's 30 bars already had `font-medium` (`fc48e3e`). The
+user saw no change because their Linux desktop's system font, like headless
+Chromium's, has no weight-500 face, so the browser drew 400.
+
+**Compared on that page** (2× screenshot, one bar in each style):
+
+| Style | Looked |
+|---|---|
+| 400 | normal |
+| 500 | identical to 400 |
+| 500 + 0.2 px stroke | slightly heavier, the ~10% asked for |
+| 500 + 0.35 px stroke | clearly bold |
+| 600 | clearly bold |
+
+**Changed:** all 9 bars add `[-webkit-text-stroke:0.2px_currentColor]`. It
+outlines the black text in its own colour, so it thickens on any font and
+needs no font weights. `font-medium` stays, for fonts that have it.
+
+**Verified (headless, local):** election 261's results had 30 bars, each with
+a computed stroke width of 0.2 px. A screenshot showed the text slightly
+heavier; the screenshots were deleted. Type-check passes.
+
+**Commit:** `3218bcf`
+
+---
+
 ## 2026-10-28 — Results: thicker text in the result bars
 
 **Requested:**
