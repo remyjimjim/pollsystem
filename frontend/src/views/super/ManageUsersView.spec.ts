@@ -112,3 +112,16 @@ describe('ManageUsersView: deleting an account on request', () => {
     }
   })
 })
+
+describe('ManageUsersView: cards on phones (2026-10-28)', () => {
+  it('shows a card per account, and a card\'s Delete opens the same confirmation', async () => {
+    const w = await mountView()
+    const cards = w.findAll('[data-test="user-cards"] li')
+    expect(cards.length).toBeGreaterThan(0)
+    expect(cards.length).toBe(w.findAll('table tbody tr').length)
+    const pat = cards.find(c => c.text().includes('pat@test.local'))!
+    await pat.find('[data-test="card-delete"]').trigger('click')
+    await flushPromises()
+    expect(w.find('[data-test="delete-modal"]').text()).toContain('pat@test.local')
+  })
+})

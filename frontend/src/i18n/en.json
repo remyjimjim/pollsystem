@@ -868,6 +868,7 @@
       "errorLoad": "Failed to load requests"
     },
     "manageUsers": {
+      "cardArea": "Area",
       "heading": "Manage Users",
       "role": "Role",
       "roleUser": "User",

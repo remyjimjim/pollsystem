@@ -1135,7 +1135,7 @@ onBeforeUnmount(() => {
 
     <ScrollEnds v-if="results.length > 0">
     <ColumnChooser v-model="columns" :options="columnOptions" />
-    <div class="overflow-x-auto">
+    <div class="hidden overflow-x-auto sm:block">
     <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
@@ -1302,6 +1302,113 @@ onBeforeUnmount(() => {
       </tbody>
     </table>
     </div>
+    <!-- Phones: one card per account (2026-10-28), in the table's sort order. After the
+         table in the markup so tests that click the first matching button hit the table. -->
+    <ul class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="user-cards">
+      <li v-for="(row, idx) in sortedResults" :key="`card-${row.id}`" class="rounded-md border border-slate-200 p-3 text-sm">
+        <div class="mb-1 flex flex-wrap items-start justify-between gap-2">
+          <span class="break-all font-semibold text-slate-800">
+            {{ row.email }}
+            <span
+              v-if="row.sharedCardWith?.length"
+              class="ml-1 inline-block rounded bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-900"
+              :title="row.sharedCardWith.join(', ')"
+            >{{ $t('super.manageUsers.sharedCard', { n: row.sharedCardWith.length }, row.sharedCardWith.length) }}</span>
+          </span>
+          <span v-if="columns.role" class="whitespace-nowrap">
+            <span
+              v-if="row.access === 'VIEWER'"
+              :class="['rounded px-2 py-0.5 text-xs font-semibold', accessBadgeClasses(row.access)]"
+            >{{ $t('super.manageUsers.roleLapsed') }}</span>
+            <button
+              v-else
+              type="button"
+              @click="openEdit(row)"
+              :class="['rounded px-2 py-0.5 text-xs font-semibold', accessBadgeClasses(row.access)]"
+            >{{ row.access }}</button>
+            <span
+              v-if="row.access !== 'SUPER' && (promoteTarget(row) || demoteTarget(row))"
+              data-role-menu
+              class="relative ml-1 inline-block align-middle"
+            >
+              <button
+                type="button"
+                @click.stop="roleMenuOpenFor = roleMenuOpenFor === row.id ? null : row.id"
+                :aria-label="$t('super.manageUsers.roleActions')"
+                class="rounded px-1.5 leading-none text-slate-500 hover:bg-slate-100"
+              >⋮</button>
+              <div
+                v-if="roleMenuOpenFor === row.id"
+                class="absolute right-0 top-full z-30 mt-1 w-48 rounded border border-slate-300 bg-white py-1 shadow-lg"
+              >
+                <button v-if="promoteTarget(row)" type="button" @click="promote(row)"
+                  class="block w-full px-3 py-2 text-left text-xs hover:bg-slate-50"
+                >{{ $t('super.manageUsers.promoteTo', { level: promoteTarget(row) }) }}</button>
+                <button v-if="demoteTarget(row)" type="button" @click="demote(row)"
+                  class="block w-full px-3 py-2 text-left text-xs text-red-700 hover:bg-red-50"
+                >{{ $t('super.manageUsers.demoteTo', { level: demoteTarget(row) }) }}</button>
+              </div>
+            </span>
+          </span>
+        </div>
+        <dl class="m-0 grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1 text-xs text-slate-600">
+          <template v-if="columns.state || columns.county || columns.zipcode">
+            <dt>{{ $t('super.manageUsers.cardArea') }}</dt>
+            <dd class="m-0">
+              <button type="button" @click="openEdit(row)" class="text-left text-slate-800 underline">
+                {{ [columns.state ? row.stateInitial : null, columns.county ? row.countyName : null, columns.zipcode ? row.zipcode : null].filter(Boolean).join(' · ') || '—' }}
+              </button>
+            </dd>
+          </template>
+          <template v-if="columns.pollsCreated">
+            <dt>{{ $t('super.manageUsers.colPollsCreated') }}</dt>
+            <dd class="m-0">
+              <button v-if="row.pollsCreatedCount > 0" type="button" @click="openPolls(row, 'created')" class="text-slate-800 underline">{{ row.pollsCreatedCount }}</button>
+              <span v-else class="text-slate-400">0</span>
+            </dd>
+          </template>
+          <template v-if="columns.pollsCompleted">
+            <dt>{{ $t('super.manageUsers.colPollsCompleted') }}</dt>
+            <dd class="m-0">
+              <button v-if="row.pollsCompletedCount > 0" type="button" @click="openPolls(row, 'completed')" class="text-slate-800 underline">{{ row.pollsCompletedCount }}</button>
+              <span v-else class="text-slate-400">0</span>
+            </dd>
+          </template>
+          <template v-if="columns.enable">
+            <dt>{{ $t('super.manageUsers.colEnable') }}</dt>
+            <dd class="m-0">
+              <input
+                type="checkbox"
+                :checked="row.isEnabled"
+                :disabled="row.access === 'VIEWER'"
+                @click="onEnableClick($event, idx, row)"
+                class="h-4 w-4 align-middle"
+                data-test="card-enabled"
+                :aria-label="row.isEnabled ? $t('super.manageUsers.disableAria', { email: row.email }) : $t('super.manageUsers.enableAria', { email: row.email })"
+              />
+            </dd>
+          </template>
+          <template v-if="columns.msg">
+            <dt>{{ $t('super.manageUsers.colMsg') }}</dt>
+            <dd class="m-0">
+              <button v-if="row.latestMessage" type="button" @click="openMessageModal(row, 'edit')" class="text-left text-slate-800 underline">
+                {{ previewText(row.latestMessage.body) }}
+              </button>
+              <button v-else type="button" @click="openMessageModal(row, 'new')" class="text-slate-800 underline">
+                {{ $t('super.manageUsers.msgNew') }}
+              </button>
+            </dd>
+          </template>
+        </dl>
+        <button
+          v-if="columns.delete && row.access !== 'SUPER'"
+          type="button"
+          @click="openDelete(row)"
+          class="mt-2 rounded border border-red-300 px-3 py-1 text-xs text-red-700 hover:bg-red-50"
+          data-test="card-delete"
+        >{{ $t('super.manageUsers.deleteAccount') }}</button>
+      </li>
+    </ul>
     </ScrollEnds>
     <p v-if="results.length > 0" class="mt-2 text-xs text-slate-500">{{ $t('super.manageUsers.enableHelp') }}</p>
 
