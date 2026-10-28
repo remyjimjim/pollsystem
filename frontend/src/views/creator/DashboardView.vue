@@ -177,9 +177,9 @@ onMounted(load)
 
 <template>
   <div class="mx-auto max-w-5xl py-8">
-    <div class="mb-4 flex items-center justify-between">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
       <h1 class="m-0 text-2xl font-semibold text-slate-800">{{ $t('creator.dashboard.title') }}</h1>
-      <div class="flex gap-2">
+      <div class="flex flex-wrap gap-2">
         <!-- Widen access (more area or poll types): the home page's "Become a
              Creator" card is gone once someone is a creator. -->
         <router-link
@@ -225,6 +225,83 @@ onMounted(load)
 
     <ScrollEnds v-if="!loading && polls.length > 0">
     <ColumnChooser v-model="columns" :options="columnOptions" />
+    <!-- Phones: one card per poll (2026-10-28); wider screens: the table. -->
+    <ul class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="poll-cards">
+      <li v-for="p in polls" :key="`card-${p.type}-${p.id}`" class="rounded-md border border-slate-200 p-3 text-sm">
+        <div class="mb-1 flex flex-wrap items-start justify-between gap-2">
+          <span class="font-semibold text-slate-800">{{ p.title }}</span>
+          <span v-if="columns.status" :class="['inline-block rounded px-2 py-0.5 text-xs', statusClasses(p.status)]">{{ p.status }}</span>
+        </div>
+        <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-slate-600">
+          <template v-if="columns.type"><dt>{{ $t('creator.dashboard.tableType') }}</dt><dd class="m-0">{{ p.type }}</dd></template>
+          <template v-if="columns.election && p.electionId && p.electionTitle">
+            <dt>{{ $t('creator.dashboard.tableForElection') }}</dt>
+            <dd class="m-0"><router-link :to="`/polls/election/${p.electionId}`" class="text-slate-800 underline">{{ p.electionTitle }}</router-link></dd>
+          </template>
+          <template v-if="columns.enabled">
+            <dt>{{ $t('creator.dashboard.tableEnabled') }}</dt>
+            <dd class="m-0"><span :class="['inline-block rounded px-2 py-0.5', enabledClasses(p.enabled)]">{{ $t(`creator.dashboard.enabled${p.enabled}`) }}</span></dd>
+          </template>
+          <template v-if="columns.closeDate">
+            <dt>{{ $t('creator.dashboard.tableCloseDate') }}</dt>
+            <dd class="m-0" :class="closeDatePast(p.closeDate) ? 'text-orange-700' : ''">
+              {{ p.closeDate ? new Date(p.closeDate).toLocaleString() : '—' }}
+              <template v-if="daysToClose(p) !== null"> · {{ $t('creator.dashboard.closesIn', { n: daysToClose(p) }, daysToClose(p)!) }}</template>
+            </dd>
+          </template>
+          <template v-if="columns.responses">
+            <dt>{{ $t('creator.dashboard.tableResponses') }}</dt>
+            <dd class="m-0">
+              <template v-if="p.status === 'DRAFT'">—</template>
+              <template v-else>
+                {{ p.respondents }}
+                <template v-if="inAreaPct(p) !== null"> · {{ $t('creator.dashboard.inAreaShare', { pct: inAreaPct(p) }) }}</template>
+                <template v-else-if="p.respondents > 0"> · {{ $t('creator.dashboard.inAreaHidden') }}</template>
+              </template>
+            </dd>
+          </template>
+          <template v-if="columns.emails">
+            <dt>{{ $t('creator.dashboard.tableEmails') }}</dt>
+            <dd class="m-0">
+              <input
+                type="checkbox"
+                class="h-4 w-4 align-middle"
+                data-test="card-emails"
+                :checked="p.emails"
+                :aria-label="$t('creator.dashboard.emailsFor', { title: p.title })"
+                @change="setEmails(p, ($event.target as HTMLInputElement).checked)"
+              />
+            </dd>
+          </template>
+        </dl>
+        <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+          <router-link v-if="hasResults(p)" :to="`/polls/${editSlug(p.type)}/${p.id}/results`" class="text-slate-800 underline">{{ $t('creator.dashboard.results') }}</router-link>
+          <router-link v-if="hasResults(p)" :to="`/creator/polls/${editSlug(p.type)}/${p.id}/report`" class="text-slate-800 underline">{{ $t('creator.dashboard.report') }}</router-link>
+          <router-link :to="{ path: '/history', query: { type: editSlug(p.type), id: String(p.id) } }" class="text-slate-800 underline">{{ $t('history.link') }}</router-link>
+          <router-link v-if="p.status === 'DRAFT'" :to="`/creator/polls/${editSlug(p.type)}/${p.id}/edit`" class="text-slate-800 underline">{{ $t('creator.dashboard.edit') }}</router-link>
+          <button
+            v-else-if="p.status === 'PUBLISHED' || p.status === 'CLOSED'"
+            data-test="card-reopen"
+            :disabled="acting === p.id"
+            class="text-slate-800 underline disabled:opacity-50"
+            @click="reopen(p)"
+          >{{ $t('creator.dashboard.reopen') }}</button>
+          <button
+            v-if="p.status !== 'ARCHIVED'"
+            :disabled="acting === p.id"
+            class="text-slate-800 underline disabled:opacity-50"
+            @click="archive(p)"
+          >{{ acting === p.id ? $t('creator.dashboard.archiving') : $t('creator.dashboard.archive') }}</button>
+          <button
+            v-else
+            :disabled="acting === p.id"
+            class="text-slate-800 underline disabled:opacity-50"
+            @click="restore(p)"
+          >{{ acting === p.id ? $t('creator.dashboard.restoring') : $t('creator.dashboard.restore') }}</button>
+        </div>
+      </li>
+    </ul>
+    <div class="hidden sm:block">
     <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
@@ -345,6 +422,7 @@ onMounted(load)
         </tr>
       </tbody>
     </table>
+    </div>
     </ScrollEnds>
   </div>
 </template>

@@ -110,6 +110,20 @@ describe('Creator DashboardView', () => {
       confirm.mockRestore()
     })
 
+    it('on a phone each poll is a card, with the same actions (Reopen works from it)', async () => {
+      vi.mocked(axios.post).mockResolvedValue({ data: {} })
+      const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true)
+      const w = await mountAs(AccessLevel.CREATOR, [poll({}), poll({ id: 8, title: 'Parks', status: 'DRAFT' })])
+      const cards = w.findAll('[data-test="poll-cards"] li')
+      expect(cards.map(c => c.text())).toEqual([expect.stringContaining('Vaccines'), expect.stringContaining('Parks')])
+      expect(cards[0].text()).toContain('History')
+      expect(cards[1].text()).toContain('Edit')
+      await cards[0].find('[data-test="card-reopen"]').trigger('click')
+      await flushPromises()
+      expect(axios.post).toHaveBeenCalledWith('/api/creator/polls/questionnaire/7/reopen')
+      confirm.mockRestore()
+    })
+
     it('no Reopen on a draft; every poll links to its history', async () => {
       const w = await mountAs(AccessLevel.CREATOR, [poll({ status: 'DRAFT' })])
       expect(w.find('[data-test="reopen"]').exists()).toBe(false)
