@@ -61,6 +61,54 @@ logged.
 
 ---
 
+## 2026-10-28 — Search: Back from a poll keeps the results
+
+**Requested:**
+
+> is there a way we can have it so after a user does a poll search thru
+> polls/search which then displays let's say 100 results and the user then
+> finds the desired poll and clicks on either 'View results' or 'Vote' and then
+> clicks the back button the results from the polls/search remain instead of
+> seeing zero results?
+
+**Changed (`PollSearchView`):**
+
+- **Saved per tab:** every search saves `pollSearch.last` in sessionStorage:
+  - the filters;
+  - the state/county/zipcode picks and the typed zipcode;
+  - the results and the sort.
+  Leaving the page adds the scroll position.
+- **Restored only on Back:** when the page mounts with
+  `history.state.forward` set (vue-router sets it on back/forward):
+  1. the results show at once and the scroll position is put back;
+  2. the picks go back widest first, waiting for each list to load (a wider
+     pick clears the narrower ones);
+  3. the search re-runs quietly, keeping the scroll, so response counts are
+     current.
+- **Arriving any other way** (the Vote menu from another page, a reload with
+  no forward entry) starts empty, as before.
+- **Help:** `viewer/finding-polls.md` mentions Back.
+
+**Verified:**
+
+- **Unit tests (2 new):** a search is saved; with a forward entry it's
+  restored and re-run (one search call, now 3 results); without one, the page
+  starts empty. 194 unit tests pass; type-check passes.
+- **Headless (local, super), menu → search → open a poll's results → Back:**
+
+  | Search | Results | Scroll | Pickers |
+  |---|---|---|---|
+  | Washington, 1200 px | 16 → 16 | 543 → 543 | Washington |
+  | Washington, 390 px | 16 → 16 | 1633 → 1633 | Washington |
+  | California + Los Angeles | 2 → 2 | | California / Los Angeles |
+
+  Going home and opening Vote from the menu then showed 0 results and "Any
+  state".
+
+**Commit:** `93313eb`
+
+---
+
 ## 2026-10-28 — Creator requests: stacked cards on phones
 
 **Requested:**
