@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-28 — Admin dashboard: stacked cards on phones
+
+**Requested:**
+
+> make the admin dashboard use stacked cards on phones
+
+**Changed (`admin/DashboardView`):** below `sm`, both tables become cards.
+
+- **Pending Creator Requests:** #id (linked to the request), member, area,
+  poll types, when submitted with its Stale / Unassigned badges (stale cards
+  tinted), and Approve / Reject.
+- **Recent Decisions:** status badge, #id (linked), when, member and area.
+- **From `sm` up,** the tables show as before.
+
+**Verified:**
+
+- New `admin/DashboardView.spec.ts` (2 tests, mocked data): a stale,
+  unassigned request is a card with both badges and Approve posts
+  `batch-approve` for it; a decision is a card with APPROVED, #57 and the
+  member. 191 unit tests pass; type-check passes.
+- Headless, local: demo-super had 0 pending and 6 decisions. At 390 px, 6
+  decision cards, no table, nothing wider than the screen; at 1200 px, the
+  table. The phone screenshot was viewed, then deleted. Local has no pending
+  requests, so the pending cards are covered by the unit test.
+
+**Commit:** `87277d3`
+
+---
+
 ## 2026-10-28 — History: top/bottom arrows
 
 **Requested:**
