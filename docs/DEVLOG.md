@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-10-28 — Manage Users: stacked cards on phones
+
+**Requested:**
+
+> make manage users use stacked cards on phones
+
+**Changed (`super/ManageUsersView`):**
+
+- **Below `sm`, one card per account,** in the table's sort order:
+  - email, with the shared-card flag;
+  - the role badge (opens Edit) with its ⋮ promote/demote menu;
+  - **Area**: state · county · zipcode, as the column chooser allows; opens
+    Edit. New label `super.manageUsers.cardArea` (English, like the rest of
+    the page).
+  - Polls created and completed (open their lists), Enable/Disable, Msg;
+  - Delete account.
+- **From `sm` up,** the table shows as before.
+- **Markup order:** the cards come after the table, so the existing tests,
+  which click the first matching button, still drive the table.
+
+**Verified:**
+
+- A new unit test: one card per row, and a card's Delete opens the same
+  confirmation for that account. Manage Users tests pass (8); type-check
+  passes.
+- Headless, local, super (76 accounts):
+  - at 390 px: 76 cards, no table, nothing wider than the screen; a card's ⋮
+    menu showed "Promote to ADMIN / Demote to USER";
+  - at 1300 px: the table, no cards.
+  - The phone screenshot was viewed, then deleted.
+
+**Commit:** `5bd5565`
+
+---
+
 ## 2026-10-28 — Manage Creators: stacked cards on phones
 
 **Requested:**
