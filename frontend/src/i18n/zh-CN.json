@@ -23,6 +23,9 @@
     "large": "大"
   },
   "nav": {
+    "vote": "投票",
+    "create": "创建",
+    "super": "超级",
     "searchPolls": "搜索投票",
     "viewResults": "查看结果",
     "creator": "创建者",

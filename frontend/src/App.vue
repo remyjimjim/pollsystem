@@ -4,10 +4,10 @@ import BrandLogo from '@/components/BrandLogo.vue'
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
-import { AccessLevel } from '@/types'
 import { SUPPORTED_LOCALES, setLocale, type LocaleCode } from '@/i18n'
 import { useNewVersion } from '@/composables/useNewVersion'
 import SettingsMenu from '@/components/SettingsMenu.vue'
+import RoleNav from '@/components/RoleNav.vue'
 
 const authStore = useAuthStore()
 // Local development only: null in a production build, so it isn't bundled.
@@ -83,40 +83,7 @@ function onLocaleChange(e: Event) {
           <SettingsMenu />
         </div>
         <div class="order-3 flex w-full flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:gap-x-6 xl:order-2 xl:ml-auto xl:w-auto">
-          <RouterLink
-            to="/polls/search"
-            class="text-white/85 hover:text-white"
-            active-class="!text-white"
-          >
-            {{ authStore.isAuthenticated ? $t('nav.searchPolls') : $t('nav.viewResults') }}
-          </RouterLink>
-
-          <RouterLink
-            to="/creator/dashboard"
-            v-if="authStore.hasAccess(AccessLevel.CREATOR)"
-            class="text-white/85 hover:text-white"
-            active-class="!text-white"
-          >
-            {{ $t('nav.creator') }}
-          </RouterLink>
-
-          <RouterLink
-            to="/admin/dashboard"
-            v-if="authStore.hasAccess(AccessLevel.ADMIN)"
-            class="text-white/85 hover:text-white"
-            active-class="!text-white"
-          >
-            {{ $t('nav.admin') }}
-          </RouterLink>
-
-          <RouterLink
-            to="/super/dashboard"
-            v-if="authStore.hasAccess(AccessLevel.SUPER)"
-            class="text-white/85 hover:text-white"
-            active-class="!text-white"
-          >
-            {{ $t('nav.superAdmin') }}
-          </RouterLink>
+          <RoleNav />
 
           <RouterLink
             to="/help"

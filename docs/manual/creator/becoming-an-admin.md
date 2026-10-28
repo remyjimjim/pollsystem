@@ -22,7 +22,8 @@ A super reviews it, and you'll get an email: **"You are now an Admin!"** or
 
 ## Once you're an admin
 
-- **Admin** appears in the top bar, with your Admin dashboard. See [Reviewing
+- **Admin** replaces **Create** in the top bar. Click it for a menu with your
+  **Admin** dashboard and your **Create** dashboard. See [Reviewing
   creator requests](../admin/reviewing-creator-requests.md), [Managing
   creators](../admin/managing-creators.md) and [Managing
   polls](../admin/managing-polls.md).

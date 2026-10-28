@@ -23,6 +23,9 @@
     "large": "Grande"
   },
   "nav": {
+    "vote": "Vota",
+    "create": "Crea",
+    "super": "Super",
     "searchPolls": "Cerca Sondaggi",
     "viewResults": "Vedi Risultati",
     "creator": "Creatore",

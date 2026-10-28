@@ -36,7 +36,7 @@ You'll get an email confirming the request.
 - When it's decided, you get an email: **"You are now a Creator!"** or **"Your
   creator request was not approved"**.
 - Once approved, your home page shows **Creator dashboard** and **Start a new
-  poll**, and **Creator** appears in the top bar.
+  poll**, and **Create** appears in the top bar.
 
 ## What your access covers
 

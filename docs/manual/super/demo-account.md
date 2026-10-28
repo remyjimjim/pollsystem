@@ -14,7 +14,8 @@ page. It's for showing BallotBox to a prospective customer.
 
 ## Starting a demo
 
-1. Open **Super Admin**. The dashboard has a **Demo account** card.
+1. Open **Super** → **Super** in the top bar. The dashboard has a **Demo
+   account** card.
 2. Enter the **Zipcode** the demo should live in. It decides which polls and
    which midterm ballot are theirs, and which state it can create polls for.
 3. Click **Start (12 hours)**.

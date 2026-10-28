@@ -6,7 +6,8 @@ order: 1
 
 # Your Super dashboard and the emergency switch
 
-**Super Admin** in the top bar opens your dashboard. Supers oversee the whole
+**Super** in the top bar opens a menu: **Super** (your dashboard), **Admin** and
+**Create**. Supers oversee the whole
 system: you can do everything an admin can, everywhere, plus the tools below.
 Supers don't need a paid membership.
 

@@ -23,6 +23,9 @@
     "large": "Groß"
   },
   "nav": {
+    "vote": "Abstimmen",
+    "create": "Erstellen",
+    "super": "Super",
     "searchPolls": "Umfragen suchen",
     "viewResults": "Ergebnisse anzeigen",
     "creator": "Ersteller",

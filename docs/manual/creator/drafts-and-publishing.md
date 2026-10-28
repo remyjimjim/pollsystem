@@ -16,7 +16,8 @@ page), then choose its type:
 
 ## Your Creator dashboard
 
-**Creator** in the top bar opens your dashboard: every poll you've made, with
+**Create** in the top bar opens your dashboard (admins and supers find it in
+the **Admin** or **Super** menu): every poll you've made, with
 its **Type**, **Status** and **Close date**.
 
 | Status    | What it means                                             |

@@ -8,7 +8,7 @@ order: 1
 
 ## Your Admin dashboard
 
-**Admin** in the top bar opens your dashboard. **Reviewing requests for** names
+**Admin** in the top bar opens a menu; choose **Admin** for your dashboard (or **Create** for your Creator dashboard). **Reviewing requests for** names
 your area, for example "California".
 
 The figures across the top:

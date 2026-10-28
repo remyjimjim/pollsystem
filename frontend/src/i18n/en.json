@@ -23,6 +23,9 @@
     "large": "Large"
   },
   "nav": {
+    "vote": "Vote",
+    "create": "Create",
+    "super": "Super",
     "searchPolls": "Search Polls",
     "viewResults": "View Results",
     "creator": "Creator",

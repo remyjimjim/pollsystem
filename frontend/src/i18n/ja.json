@@ -23,6 +23,9 @@
     "large": "大"
   },
   "nav": {
+    "vote": "投票",
+    "create": "作成",
+    "super": "スーパー",
     "searchPolls": "投票を検索",
     "viewResults": "結果を表示",
     "creator": "作成者",

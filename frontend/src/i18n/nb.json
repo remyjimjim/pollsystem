@@ -23,6 +23,9 @@
     "large": "Stor"
   },
   "nav": {
+    "vote": "Stem",
+    "create": "Opprett",
+    "super": "Super",
     "searchPolls": "Søk i avstemninger",
     "viewResults": "Se resultater",
     "creator": "Oppretter",

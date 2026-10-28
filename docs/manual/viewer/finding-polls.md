@@ -6,8 +6,8 @@ order: 1
 
 # Finding polls
 
-Open **Search Polls** in the top bar (it's called **View Results** when you're
-not signed in). Fill in any of the filters, then press **Search**. Every filter
+Open **Vote** in the top bar (it's called **View Results** when you're not
+signed in). Fill in any of the filters, then press **Search**. Every filter
 is optional; filters you fill in all have to match.
 
 ## Search by title
