@@ -13,13 +13,22 @@ function update() {
   const el = box.value
   if (!el) { overflow.value = false; return }
   const r = el.getBoundingClientRect()
-  overflow.value = r.height > window.innerHeight * 0.8 || r.bottom > window.innerHeight
+  // Shown whenever the list runs past the page's first screen, wherever you've
+  // scrolled: a list only a little taller than the screen fits once you reach
+  // its end, and the row (with ↑) mustn't vanish then.
+  overflow.value = r.bottom + window.scrollY > window.innerHeight
   atEnd.value = r.bottom <= window.innerHeight + 8
 }
 function go() {
   const el = box.value
   if (!el) return
-  if (atEnd.value) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  if (atEnd.value) {
+    // Back to the list's top; a list shorter than the screen would still show
+    // its end there, so go to the page's top instead (where ↓ applies again).
+    const r = el.getBoundingClientRect()
+    if (r.height + 16 < window.innerHeight) window.scrollTo({ top: 0, behavior: 'smooth' })
+    else el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
   else window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().bottom - window.innerHeight + 72, behavior: 'smooth' })
 }
 // New rows, sorting or columns change the list's size.

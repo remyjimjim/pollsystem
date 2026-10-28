@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 import InfoPopover from '@/components/InfoPopover.vue'
 import PurviewSetter from '@/components/PurviewSetter.vue'
 import ColumnChooser from '@/components/ColumnChooser.vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import { useColumns } from '@/composables/useColumns'
 import { useAuthStore } from '@/stores/auth'
 import { AccessLevel, ScopeLevel, type PollType, type Purview, GRANT_LEVELS } from '@/types'
@@ -323,8 +324,9 @@ onMounted(() => {
     <p v-if="loading" class="text-sm text-slate-500">{{ $t('common.loading') }}</p>
     <p v-else-if="visibleRows.length === 0" class="text-sm text-slate-500">{{ $t('admin.manageCreators.none') }}</p>
 
-    <ColumnChooser v-if="!loading && visibleRows.length > 0" v-model="columns" :options="columnOptions" />
-    <div v-if="!loading && visibleRows.length > 0" class="overflow-x-auto">
+    <ScrollEnds v-if="!loading && visibleRows.length > 0">
+    <ColumnChooser v-model="columns" :options="columnOptions" />
+    <div class="overflow-x-auto">
       <table class="w-full border-collapse text-sm">
         <thead>
           <tr class="bg-slate-50 text-left">
@@ -408,6 +410,7 @@ onMounted(() => {
         </tbody>
       </table>
     </div>
+    </ScrollEnds>
 
     <!-- Edit modal -->
     <div v-if="editRow" role="dialog" aria-modal="true" class="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto bg-black/40 p-4" @click.self="closeEdit">
