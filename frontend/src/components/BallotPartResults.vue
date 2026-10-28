@@ -52,13 +52,13 @@ function label(percent: number, count: number | null | undefined) {
             <tr>
               <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.yes') }}</td>
               <td class="rounded bg-slate-100 py-1 align-middle">
-                <div class="rounded bg-sky-500 px-2 py-0.5 text-xs font-medium text-[#000] [-webkit-text-stroke:0.2px_currentColor] whitespace-nowrap" style="min-width: 2.5rem" :style="{ width: `${c.yesPct}%` }">{{ label(c.yesPct, c.yes) }}</div>
+                <div class="rounded bg-sky-500 px-2 py-0.5 text-xs font-medium text-[#000] [-webkit-text-stroke:0.3px_currentColor] whitespace-nowrap" style="min-width: 2.5rem" :style="{ width: `${c.yesPct}%` }">{{ label(c.yesPct, c.yes) }}</div>
               </td>
             </tr>
             <tr>
               <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.no') }}</td>
               <td class="rounded bg-slate-100 py-1 align-middle">
-                <div class="rounded bg-sky-500 px-2 py-0.5 text-xs font-medium text-[#000] [-webkit-text-stroke:0.2px_currentColor] whitespace-nowrap" style="min-width: 2.5rem" :style="{ width: `${c.noPct}%` }">{{ label(c.noPct, c.no) }}</div>
+                <div class="rounded bg-sky-500 px-2 py-0.5 text-xs font-medium text-[#000] [-webkit-text-stroke:0.3px_currentColor] whitespace-nowrap" style="min-width: 2.5rem" :style="{ width: `${c.noPct}%` }">{{ label(c.noPct, c.no) }}</div>
               </td>
             </tr>
           </tbody>
@@ -76,13 +76,13 @@ function label(percent: number, count: number | null | undefined) {
         <tr>
           <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.yes') }}</td>
           <td class="rounded bg-slate-100 py-1 align-middle">
-            <div class="rounded bg-sky-500 px-2 py-0.5 text-xs font-medium text-[#000] [-webkit-text-stroke:0.2px_currentColor] whitespace-nowrap" style="min-width: 2.5rem" :style="{ width: `${part.measure.yesPct}%` }">{{ label(part.measure.yesPct, part.measure.yes) }}</div>
+            <div class="rounded bg-sky-500 px-2 py-0.5 text-xs font-medium text-[#000] [-webkit-text-stroke:0.3px_currentColor] whitespace-nowrap" style="min-width: 2.5rem" :style="{ width: `${part.measure.yesPct}%` }">{{ label(part.measure.yesPct, part.measure.yes) }}</div>
           </td>
         </tr>
         <tr>
           <td class="py-1 pr-3 align-middle font-mono text-sm" style="width: 30%">{{ $t('common.no') }}</td>
           <td class="rounded bg-slate-100 py-1 align-middle">
-            <div class="rounded bg-sky-500 px-2 py-0.5 text-xs font-medium text-[#000] [-webkit-text-stroke:0.2px_currentColor] whitespace-nowrap" style="min-width: 2.5rem" :style="{ width: `${part.measure.noPct}%` }">{{ label(part.measure.noPct, part.measure.no) }}</div>
+            <div class="rounded bg-sky-500 px-2 py-0.5 text-xs font-medium text-[#000] [-webkit-text-stroke:0.3px_currentColor] whitespace-nowrap" style="min-width: 2.5rem" :style="{ width: `${part.measure.noPct}%` }">{{ label(part.measure.noPct, part.measure.no) }}</div>
           </td>
         </tr>
       </tbody>
