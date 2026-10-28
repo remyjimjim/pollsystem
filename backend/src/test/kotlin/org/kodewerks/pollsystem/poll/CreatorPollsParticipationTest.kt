@@ -55,6 +55,13 @@ class CreatorPollsParticipationTest : AbstractIntegrationTest() {
         creatorPolls.list(AppUserDetails(creator), showArchived = false).single { it.id == pollId }
 
     @Test
+    fun `each poll lists its purview, drafts too`() {
+        val creator = fixtures.createUser(access = org.kodewerks.pollsystem.model.AccessLevel.CREATOR, emailPrefix = "purview-col")
+        assertThat(row(creator, questionnaire(creator)).purview).isEqualTo("90001")
+        assertThat(row(creator, questionnaire(creator, draft = true)).purview).isEqualTo("90001")
+    }
+
+    @Test
     fun `counts each respondent once, and how many are in the poll's area`() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "creator")
         val pollId = questionnaire(creator)

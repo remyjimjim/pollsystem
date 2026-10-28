@@ -278,7 +278,7 @@
   "results": {
     "heading": "Risultati",
     "headingFor": "{title} — Risultati",
-    "purviewArea": "Area del sondaggio: {area}",
+    "purviewArea": "Ambito: {area}",
     "nationwide": "Tutto il paese",
     "moreAreas": "+{n} altre",
     "unsupportedPre": "I risultati per",
@@ -306,6 +306,7 @@
   },
   "creator": {
     "dashboard": {
+      "tablePurview": "Ambito",
       "title": "Pannello Creatore",
       "requestAdminAccess": "Richiedi l'accesso admin",
       "requestMoreAccess": "Richiedi più accesso creatore",

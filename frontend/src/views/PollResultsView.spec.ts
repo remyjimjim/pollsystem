@@ -24,15 +24,15 @@ afterEach(() => vi.resetAllMocks())
 
 describe('PollResultsView: where the poll is for', () => {
   it('says Nationwide, or names the places', async () => {
-    expect((await mountWith(measure())).find('[data-test="purview-area"]').text()).toBe('Purview area: Nationwide')
+    expect((await mountWith(measure())).find('[data-test="purview-area"]').text()).toBe('Purview: Nationwide')
     expect((await mountWith(measure({ purviewLevel: 'STATE', purviewAreas: ['Colorado', 'Utah'] })))
-      .find('[data-test="purview-area"]').text()).toBe('Purview area: Colorado, Utah')
+      .find('[data-test="purview-area"]').text()).toBe('Purview: Colorado, Utah')
   })
 
   it('shows the first five places and how many more', async () => {
     const counties = ['A (CO)', 'B (CO)', 'C (CO)', 'D (CO)', 'E (CO)', 'F (CO)', 'G (CO)']
     expect((await mountWith(measure({ purviewLevel: 'COUNTY', purviewAreas: counties })))
-      .find('[data-test="purview-area"]').text()).toBe('Purview area: A (CO), B (CO), C (CO), D (CO), E (CO) +2 more')
+      .find('[data-test="purview-area"]').text()).toBe('Purview: A (CO), B (CO), C (CO), D (CO), E (CO) +2 more')
   })
 })
 

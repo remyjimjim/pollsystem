@@ -18,7 +18,8 @@ page), then choose its type:
 
 **Create** in the top bar opens your dashboard (admins and supers find it in
 the **Admin** or **Super** menu): every poll you've made, with
-its **Type**, **Status** and **Close date**.
+its **Type**, **Purview** (the area it covers; tick it under **Show:**), **Status**
+and **Close date**.
 
 | Status    | What it means                                             |
 | --------- | --------------------------------------------------------- |

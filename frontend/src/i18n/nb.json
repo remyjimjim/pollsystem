@@ -278,7 +278,7 @@
   "results": {
     "heading": "Resultater",
     "headingFor": "{title} — Resultater",
-    "purviewArea": "Avstemningens område: {area}",
+    "purviewArea": "Område: {area}",
     "nationwide": "Hele landet",
     "moreAreas": "+{n} til",
     "unsupportedPre": "Resultater for",
@@ -306,6 +306,7 @@
   },
   "creator": {
     "dashboard": {
+      "tablePurview": "Område",
       "title": "Oppretter-panel",
       "requestAdminAccess": "Søk om admin-tilgang",
       "requestMoreAccess": "Søk om mer oppretter-tilgang",

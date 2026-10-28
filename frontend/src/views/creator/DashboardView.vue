@@ -14,11 +14,11 @@ const { t } = useI18n()
 const auth = useAuthStore()
 
 // ---------- Columns: choose which to show ----------
-const COLUMN_KEYS = ['title', 'type', 'election', 'enabled', 'status', 'closeDate', 'responses', 'emails'] as const
+const COLUMN_KEYS = ['title', 'type', 'purview', 'election', 'enabled', 'status', 'closeDate', 'responses', 'emails'] as const
 type ColumnKey = (typeof COLUMN_KEYS)[number]
-const columns = useColumns<ColumnKey>('creatorDashboard.columns', COLUMN_KEYS, ['election', 'enabled', 'emails'])
+const columns = useColumns<ColumnKey>('creatorDashboard.columns', COLUMN_KEYS, ['purview', 'election', 'enabled', 'emails'])
 const columnOptions = computed(() => ([
-  ['title', 'tableTitle'], ['type', 'tableType'], ['election', 'tableForElection'], ['enabled', 'tableEnabled'],
+  ['title', 'tableTitle'], ['type', 'tableType'], ['purview', 'tablePurview'], ['election', 'tableForElection'], ['enabled', 'tableEnabled'],
   ['status', 'tableStatus'], ['closeDate', 'tableCloseDate'], ['responses', 'tableResponses'], ['emails', 'tableEmails'],
 ] as const).map(([key, label]) => ({ key, label: t(`creator.dashboard.${label}`) })))
 
@@ -48,6 +48,8 @@ interface CreatorPollSummary {
   electionTitle: string | null
   /** Switched off by an admin: not at all, in some areas, or everywhere. */
   enabled: 'YES' | 'PARTLY' | 'NO'
+  /** The poll's area: zipcodes, counties, states or "Nationwide". */
+  purview?: string
 }
 
 const polls = ref<CreatorPollSummary[]>([])
@@ -234,6 +236,7 @@ onMounted(load)
         </div>
         <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-slate-600">
           <template v-if="columns.type"><dt>{{ $t('creator.dashboard.tableType') }}</dt><dd class="m-0">{{ p.type }}</dd></template>
+          <template v-if="columns.purview"><dt>{{ $t('creator.dashboard.tablePurview') }}</dt><dd class="m-0" data-test="card-purview">{{ p.purview || '—' }}</dd></template>
           <template v-if="columns.election && p.electionId && p.electionTitle">
             <dt>{{ $t('creator.dashboard.tableForElection') }}</dt>
             <dd class="m-0"><router-link :to="`/polls/election/${p.electionId}`" class="text-slate-800 underline">{{ p.electionTitle }}</router-link></dd>
@@ -307,6 +310,7 @@ onMounted(load)
         <tr class="bg-slate-50 text-left">
           <th v-if="columns.title" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableTitle') }}</th>
           <th v-if="columns.type" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableType') }}</th>
+          <th v-if="columns.purview" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tablePurview') }}</th>
           <th v-if="columns.election" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableForElection') }}</th>
           <th v-if="columns.enabled" class="border-b border-slate-200 p-2 font-semibold text-slate-700" :title="$t('creator.dashboard.enabledHint')">{{ $t('creator.dashboard.tableEnabled') }}</th>
           <th v-if="columns.status" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableStatus') }}</th>
@@ -322,6 +326,7 @@ onMounted(load)
         <tr v-for="p in polls" :key="`${p.type}-${p.id}`">
           <td v-if="columns.title" class="border-b border-slate-100 p-2">{{ p.title }}</td>
           <td v-if="columns.type" class="border-b border-slate-100 p-2">{{ p.type }}</td>
+          <td v-if="columns.purview" class="border-b border-slate-100 p-2" data-test="purview">{{ p.purview || '—' }}</td>
           <td v-if="columns.election" class="border-b border-slate-100 p-2" data-test="for-election">
             <router-link
               v-if="p.electionId && p.electionTitle"

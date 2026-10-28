@@ -44,7 +44,9 @@ data class CreatorPollSummary(
      * Whether an admin has switched the poll off: YES (not at all), PARTLY
      * (in some states, counties or zipcodes) or NO (everywhere).
      */
-    val enabled: String = "YES"
+    val enabled: String = "YES",
+    /** The poll's area: zipcodes, counties, states or "Nationwide" (2026-10-28). */
+    val purview: String = ""
 )
 
 /** Pause (false) or resume (true) a poll's milestone emails. */
@@ -60,7 +62,9 @@ class CreatorPollsController(
     private val reports: PollReportService,
     private val mutes: org.kodewerks.pollsystem.repository.PollEmailMuteRepository,
     private val history: PollHistoryService,
-    private val blocks: PollTypeBlockRepository
+    private val blocks: PollTypeBlockRepository,
+    private val pollPurviews: org.kodewerks.pollsystem.repository.PollPurviewRepository,
+    private val purviews: PollPurviewService
 ) {
     @GetMapping
     fun list(
@@ -94,6 +98,16 @@ class CreatorPollsController(
         val listed = if (showArchived) all else all.filterNot { it.status == PollStatus.ARCHIVED }
         // Drafts have no responses; count the rest (a creator has few polls).
         val muted = mutes.findAll().map { it.pollType to it.pollId }.toSet()
+        // Areas for the Purview column: one query for all purviews, and a label
+        // per distinct area (a super's hundreds of midterm polls share ~50 states).
+        val areaRows = pollPurviews.findAll().groupBy { it.pollType to it.pollId }
+        val labels = HashMap<List<Any?>, String>()
+        fun areaOf(kind: PollKind, pollId: Long): String {
+            val rows = areaRows[kind to pollId].orEmpty()
+            return labels.getOrPut(rows.map { listOf(it.scopeLevel, it.stateId, it.countyId, it.zipcode) }.sortedBy { it.toString() }) {
+                purviews.regionLabel(rows)
+            }
+        }
         return listed.map { p ->
             val switchedOff = blocks.findByPollTypeAndPollId(kindOf(p.type), p.id)
             val enabled = when {
@@ -101,7 +115,8 @@ class CreatorPollsController(
                 switchedOff.any { it.scope == BlockScope.EVERYWHERE } -> "NO"
                 else -> "PARTLY"
             }
-            val withEmails = p.copy(emails = (kindOf(p.type) to p.id) !in muted, enabled = enabled)
+            val withEmails = p.copy(emails = (kindOf(p.type) to p.id) !in muted, enabled = enabled,
+                purview = areaOf(kindOf(p.type), p.id))
             if (p.status == PollStatus.DRAFT) withEmails
             else participation.of(kindOf(p.type), p.id).let { withEmails.copy(respondents = it.respondents, inArea = it.inArea) }
         }

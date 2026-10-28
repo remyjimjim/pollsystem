@@ -278,7 +278,7 @@
   "results": {
     "heading": "结果",
     "headingFor": "{title} — 结果",
-    "purviewArea": "投票区域：{area}",
+    "purviewArea": "覆盖范围：{area}",
     "nationwide": "全国",
     "moreAreas": "另有 {n} 个",
     "unsupportedPre": "尚不支持",
@@ -306,6 +306,7 @@
   },
   "creator": {
     "dashboard": {
+      "tablePurview": "覆盖范围",
       "title": "创建者控制面板",
       "requestAdminAccess": "申请管理员权限",
       "requestMoreAccess": "申请更多创建者权限",

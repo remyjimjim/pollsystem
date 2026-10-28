@@ -175,7 +175,7 @@
     "guestIntroAfter": "to vote.",
     "filters": {
       "titleContains": "Title contains",
-      "state": "State (populates zipcodes)",
+      "state": "State",
       "stateAny": "Any state",
       "stateNSelected": "{n} states selected",
       "stateHelp": "Shift-* to select All..Shift-0 to de-select All, click on one state and shift click 5 states down to select a range",
@@ -304,7 +304,7 @@
   "results": {
     "heading": "Results",
     "headingFor": "{title} — Results",
-    "purviewArea": "Purview area: {area}",
+    "purviewArea": "Purview: {area}",
     "nationwide": "Nationwide",
     "moreAreas": "+{n} more",
     "unsupportedPre": "Results for",
@@ -345,6 +345,7 @@
   },
   "creator": {
     "dashboard": {
+      "tablePurview": "Purview",
       "title": "Creator Dashboard",
       "requestAdminAccess": "Request admin access",
       "requestMoreAccess": "Request more creator access",

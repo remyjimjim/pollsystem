@@ -278,7 +278,7 @@
   "results": {
     "heading": "Ergebnisse",
     "headingFor": "{title} — Ergebnisse",
-    "purviewArea": "Umfragegebiet: {area}",
+    "purviewArea": "Geltungsbereich: {area}",
     "nationwide": "Landesweit",
     "moreAreas": "+{n} weitere",
     "unsupportedPre": "Ergebnisse für",
@@ -306,6 +306,7 @@
   },
   "creator": {
     "dashboard": {
+      "tablePurview": "Geltungsbereich",
       "title": "Ersteller-Dashboard",
       "requestAdminAccess": "Admin-Zugang beantragen",
       "requestMoreAccess": "Mehr Ersteller-Zugang beantragen",

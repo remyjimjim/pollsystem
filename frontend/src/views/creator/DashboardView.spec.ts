@@ -142,7 +142,7 @@ describe('Creator DashboardView', () => {
 
     it('For Election and Enabled? follow Type, and a ballot measure links to its election', async () => {
       const w = await mountAs(AccessLevel.CREATOR, [poll({ enabled: 'PARTLY' })])
-      expect(headings(w).slice(0, 5)).toEqual(['Title', 'Type', 'For Election', 'Enabled?', 'Status'])
+      expect(headings(w).slice(0, 6)).toEqual(['Title', 'Type', 'Purview', 'For Election', 'Enabled?', 'Status'])
       const link = w.find('[data-test="for-election"] a')
       expect(link.attributes('href')).toBe('/polls/election/93')
       expect(link.text()).toBe('November Genera...')
@@ -158,7 +158,7 @@ describe('Creator DashboardView', () => {
     it('unticking a column in Show: hides it, and the choice is remembered', async () => {
       const w = await mountAs(AccessLevel.CREATOR, [poll({})])
       const options = w.find('[data-test="column-chooser"]').text()
-      expect(options).toBe('Columns to showShow:TitleTypeFor ElectionEnabled?StatusClose dateResponsesEmails')
+      expect(options).toBe('Columns to showShow:TitleTypePurviewFor ElectionEnabled?StatusClose dateResponsesEmails')
       await w.find('[data-test="show-election"]').setValue(false)
       expect(headings(w)).not.toContain('For Election')
       expect(w.find('[data-test="for-election"]').exists()).toBe(false)
