@@ -622,6 +622,7 @@
       "errorAction": "Action failed"
     },
     "creatorRequests": {
+      "selectAll": "Select all",
       "heading": "Creator Requests",
       "refresh": "Refresh",
       "approveSelected": "Approve selected ({n})",

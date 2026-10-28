@@ -82,7 +82,7 @@ onMounted(load)
   <div class="mx-auto max-w-6xl py-8">
     <h1 class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('admin.creatorRequests.heading') }}</h1>
 
-    <div class="mb-4 flex items-center gap-2">
+    <div class="mb-4 flex flex-wrap items-center gap-2">
       <button
         @click="load"
         :disabled="loading"
@@ -114,7 +114,8 @@ onMounted(load)
       {{ $t('admin.creatorRequests.noPending') }}
     </p>
 
-    <table v-else-if="requests.length > 0" class="w-full border-collapse text-sm">
+    <template v-else-if="requests.length > 0">
+    <table class="hidden w-full border-collapse text-sm sm:table">
       <thead>
         <tr class="bg-slate-50 text-left">
           <th class="border-b border-slate-200 p-2">
@@ -162,5 +163,36 @@ onMounted(load)
         </tr>
       </tbody>
     </table>
+    <!-- Phones: one card per request (2026-10-28); the checkboxes feed the same bulk actions. -->
+    <div class="sm:hidden" data-test="request-cards">
+      <label class="mb-2 flex items-center gap-2 text-sm text-slate-700">
+        <input type="checkbox" :checked="allChecked" @change="toggleAll" class="h-4 w-4" />
+        {{ $t('admin.creatorRequests.selectAll') }}
+      </label>
+      <ul class="m-0 flex list-none flex-col gap-3 p-0">
+        <li
+          v-for="r in requests"
+          :key="`card-${r.id}`"
+          class="rounded-md border border-slate-200 p-3 text-sm"
+          :class="r.assignedAdminId == null ? 'bg-orange-50' : ''"
+        >
+          <label class="mb-1 flex items-start gap-2">
+            <input type="checkbox" :checked="selected.has(r.id)" @change="toggle(r.id)" class="mt-0.5 h-4 w-4 shrink-0" data-test="card-select" />
+            <span class="break-all font-semibold text-slate-800">{{ r.userEmail }}</span>
+          </label>
+          <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-slate-600">
+            <dt>{{ $t('admin.creatorRequests.colArea') }}</dt><dd class="m-0">{{ r.regionLabel }}</dd>
+            <dt>{{ $t('admin.creatorRequests.colSubmitted') }}</dt><dd class="m-0">{{ new Date(r.submittedAt).toLocaleString() }}</dd>
+            <dt>{{ $t('admin.creatorRequests.colStatus') }}</dt>
+            <dd class="m-0">
+              {{ r.status }}
+              <span v-if="r.assignedAdminId == null" class="ml-1 rounded bg-orange-500 px-1.5 py-0.5 text-white">{{ $t('admin.creatorRequests.badgeUnassigned') }}</span>
+            </dd>
+          </dl>
+          <p v-if="r.reason" class="m-0 mt-1 whitespace-pre-wrap text-slate-700">{{ r.reason }}</p>
+        </li>
+      </ul>
+    </div>
+    </template>
   </div>
 </template>
