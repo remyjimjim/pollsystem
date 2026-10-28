@@ -1,19 +1,22 @@
 ---
 title: Managing all polls
-summary: Correct the title, summary or close date of any poll.
+summary: Correct the title, status or close date of any poll.
 order: 4
 ---
 
 # Managing all polls
 
-**Manage All Polls** lists every poll, whoever made it and whatever its status.
-Click **Edit** to change its:
+**Manage All Polls** on your dashboard opens [Managing
+polls](../admin/managing-polls.md). For a super it lists every poll, everywhere,
+whoever made it and whatever its status. Click **Edit** to change its:
 
 - **Title**
-- **Summary**
-- **Close date**
+- **Status** (Published, Closed or Archived)
+- **Close date**: an election's new close date also goes to its ballot
+  measures
 
-then **Save**. A title can't be blank.
+then **Save**. A title can't be blank, and a **Reason** is required (it's saved
+as a note on the poll).
 
 Use it to fix a typo or a wrong date after a poll is published, when the creator
 can't edit it any more.
@@ -27,5 +30,5 @@ archiving](../creator/drafts-and-publishing.md)).
 **History** on a poll's row shows everything that happened to it, with when,
 by whom and details. Your edits here appear there too.
 
-To switch a poll off in some places, or change its status, use [Managing
-polls](../admin/managing-polls.md), which works for you everywhere.
+The same page also switches a poll off in some places and keeps notes on it;
+see [Managing polls](../admin/managing-polls.md).

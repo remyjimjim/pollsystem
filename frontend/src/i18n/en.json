@@ -811,7 +811,7 @@
       "linksIpManagementTitle": "IP Allow / Deny",
       "linksIpManagementDesc": "Manage IP allow / deny lists.",
       "linksManagePollsTitle": "Manage All Polls",
-      "linksManagePollsDesc": "Edit title, summary, and close date on any poll, regardless of creator or status.",
+      "linksManagePollsDesc": "Every poll, everywhere: filter, switch off, edit the title, status or close date, and leave notes.",
       "workloadHeading": "Admin Workload",
       "refresh": "Refresh",
       "totalOutstanding": "Total outstanding creator requests:",

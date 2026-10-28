@@ -16,8 +16,9 @@ Supers don't need a paid membership.
 - [Admin Requests](admin-requests.md): approve people asking to become admins.
 - [Manage Users](managing-users.md): find any account, switch it on or off,
   change roles, and send messages.
-- [Manage All Polls](managing-all-polls.md): correct the title, summary or close
-  date of any poll.
+- [Manage All Polls](managing-all-polls.md): opens Manage Polls for every poll,
+  everywhere: correct a title, status or close date, switch polls off, leave
+  notes.
 - [Poll Templates](poll-templates.md): how each poll type is set up, such as how
   voters choose in elections.
 - [IP Allow / Deny](ip-rules.md): lists of addresses (not enforced yet).
