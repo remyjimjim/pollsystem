@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import ColumnChooser from '@/components/ColumnChooser.vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import { useColumns } from '@/composables/useColumns'
 
 const { t } = useI18n()
@@ -820,8 +821,9 @@ function historySlug(kind: Kind): string {
     <p v-if="loading" class="mb-2 text-xs text-slate-500">{{ $t('common.loading') }}</p>
     <p v-if="!loading && visibleResults.length === 0" class="text-sm text-slate-500">{{ $t('admin.managePolls.none') }}</p>
 
-    <ColumnChooser v-if="visibleResults.length > 0" v-model="columns" :options="columnOptions" />
-    <table v-if="visibleResults.length > 0" class="w-full border-collapse text-sm">
+    <ScrollEnds v-if="visibleResults.length > 0">
+    <ColumnChooser v-model="columns" :options="columnOptions" />
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
           <th v-if="columns.title" @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colTitle') }}{{ sortIndicator('title') }}</th>
@@ -879,6 +881,7 @@ function historySlug(kind: Kind): string {
         </tr>
       </tbody>
     </table>
+    </ScrollEnds>
 
     <!-- Block modal -->
     <div v-if="blockModalOpen" role="dialog" aria-modal="true"
