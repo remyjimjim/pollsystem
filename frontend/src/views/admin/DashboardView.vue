@@ -177,7 +177,8 @@ onBeforeUnmount(() => {
         >
           {{ $t('admin.dashboard.noPending') }}
         </p>
-        <table v-else class="w-full border-collapse text-sm">
+        <template v-else>
+        <table class="hidden w-full border-collapse text-sm sm:table">
           <thead>
             <tr class="bg-slate-50 text-left">
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colId') }}</th>
@@ -235,6 +236,43 @@ onBeforeUnmount(() => {
             </tr>
           </tbody>
         </table>
+        <!-- Phones: one card per request (2026-10-28). -->
+        <ul class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="pending-cards">
+          <li
+            v-for="r in [...data.pendingAssignedToMe, ...data.unassignedInScope]"
+            :key="`card-${r.id}`"
+            class="rounded-md border border-slate-200 p-3 text-sm"
+            :class="isStale(r.submittedAt) ? 'bg-orange-50' : ''"
+          >
+            <div class="mb-1 flex flex-wrap items-baseline gap-x-2">
+              <router-link :to="`/admin/creator-requests/${r.id}`" class="font-mono text-slate-800 underline">#{{ r.id }}</router-link>
+              <span class="break-all font-semibold text-slate-800">{{ r.userEmail }}</span>
+            </div>
+            <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-slate-600">
+              <dt>{{ $t('admin.dashboard.colArea') }}</dt><dd class="m-0">{{ r.regionLabel }}</dd>
+              <dt>{{ $t('admin.dashboard.colPollTypes') }}</dt><dd class="m-0">{{ r.pollTypeIds.join(', ') }}</dd>
+              <dt>{{ $t('admin.dashboard.colSubmitted') }}</dt>
+              <dd class="m-0">
+                {{ relative(r.submittedAt) }}
+                <span v-if="isStale(r.submittedAt)" class="ml-1 rounded bg-orange-500 px-1.5 py-0.5 text-white">{{ $t('admin.dashboard.badgeStale') }}</span>
+                <span v-if="r.assignedAdminId == null" class="ml-1 rounded bg-slate-200 px-1.5 py-0.5 text-slate-700">{{ $t('admin.dashboard.badgeUnassigned') }}</span>
+              </dd>
+            </dl>
+            <div class="mt-2 flex gap-2">
+              <button
+                @click="act(r.id, 'batch-approve')"
+                :disabled="acting === r.id"
+                class="rounded bg-green-700 px-3 py-1.5 text-xs text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
+              >{{ $t('admin.dashboard.approve') }}</button>
+              <button
+                @click="act(r.id, 'batch-reject')"
+                :disabled="acting === r.id"
+                class="rounded bg-red-700 px-3 py-1.5 text-xs text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+              >{{ $t('admin.dashboard.reject') }}</button>
+            </div>
+          </li>
+        </ul>
+        </template>
       </section>
 
       <!-- Recent decisions audit log -->
@@ -246,7 +284,8 @@ onBeforeUnmount(() => {
         <p v-if="data.recentDecisions.length === 0" class="text-sm text-slate-500">
           {{ $t('admin.dashboard.noDecisions') }}
         </p>
-        <table v-else class="w-full border-collapse text-sm">
+        <template v-else>
+        <table class="hidden w-full border-collapse text-sm sm:table">
           <thead>
             <tr class="bg-slate-50 text-left">
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('admin.dashboard.colWhen') }}</th>
@@ -280,6 +319,21 @@ onBeforeUnmount(() => {
             </tr>
           </tbody>
         </table>
+        <!-- Phones: one card per decision (2026-10-28). -->
+        <ul class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="decision-cards">
+          <li v-for="d in data.recentDecisions" :key="`card-${d.requestId}`" class="rounded-md border border-slate-200 p-3 text-sm">
+            <div class="mb-1 flex flex-wrap items-baseline justify-between gap-x-2">
+              <span>
+                <span :class="['rounded px-2 py-0.5 text-xs', d.status === 'APPROVED' ? 'bg-green-100 text-green-900' : 'bg-red-100 text-red-900']">{{ d.status }}</span>
+                <router-link :to="`/admin/creator-requests/${d.requestId}`" class="ml-2 font-mono text-slate-800 underline">#{{ d.requestId }}</router-link>
+              </span>
+              <span class="text-xs text-slate-500">{{ relative(d.processedAt) }}</span>
+            </div>
+            <p class="m-0 break-all text-slate-800">{{ d.userEmail }}</p>
+            <p class="m-0 text-xs text-slate-600">{{ d.regionLabel }}</p>
+          </li>
+        </ul>
+        </template>
       </section>
 
       <!-- Quick links -->
