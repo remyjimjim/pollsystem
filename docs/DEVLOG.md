@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-10-28 — tmp/ is git-ignored
+
+**Requested:**
+
+> add tmp/ to .gitignore
+
+**Changed:** `.gitignore` ignores `tmp/`, where the user saves screenshots
+(for example of the norfstar.substack Stripe pages) for the agent to read.
+They're deleted after reading, and now can't be committed even if one is left
+behind.
+
+**Verified:** `git check-ignore tmp/shots/x.png` matches.
+
+**Commit:** `dbeb37e`
+
+---
+
 ## 2026-10-28 — Past ballots: Closed and Enabled? columns
 
 **Requested:**
