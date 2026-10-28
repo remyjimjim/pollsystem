@@ -77,7 +77,7 @@ function by(r: HistoryRow): string {
       <select
         id="history-poll"
         :value="selected"
-        class="rounded border border-slate-300 px-2 py-1"
+        class="w-full min-w-0 max-w-full rounded border border-slate-300 px-2 py-1 sm:w-auto sm:max-w-xl"
         data-test="history-poll"
         @change="pick(($event.target as HTMLSelectElement).value)"
       >
@@ -92,7 +92,8 @@ function by(r: HistoryRow): string {
     <p v-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
     <p v-else-if="error" class="text-sm text-red-700">{{ error }}</p>
     <p v-else-if="!rows.length" class="text-sm text-slate-500">{{ $t('history.empty') }}</p>
-    <table v-else class="w-full border-collapse text-sm" data-test="history-table">
+    <template v-else>
+    <table class="hidden w-full border-collapse text-sm sm:table" data-test="history-table">
       <thead>
         <tr class="bg-slate-50 text-left">
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('history.colWhen') }}</th>
@@ -119,5 +120,22 @@ function by(r: HistoryRow): string {
         </tr>
       </tbody>
     </table>
+    <!-- Phones: one card per entry (2026-10-28); after the table so tests find its cells first. -->
+    <ul class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="history-cards">
+      <li v-for="r in rows" :key="`card-${r.id}`" class="rounded-md border border-slate-200 p-3 text-sm">
+        <div class="mb-1 flex flex-wrap items-baseline justify-between gap-x-3">
+          <span class="font-semibold text-slate-800">{{ $t(`history.event.${r.event}`) }}</span>
+          <span class="text-xs text-slate-500">{{ when(r) }}</span>
+        </div>
+        <p v-if="!oneSelected" class="m-0 mb-1">
+          <a href="#" class="text-slate-800 underline" @click.prevent="pick(`${r.type}:${r.pollId}`)">{{ r.pollTitle }}</a>
+          <span class="text-xs text-slate-500"> · {{ $t(`history.type.${r.type}`) }}</span>
+        </p>
+        <p class="m-0 text-xs text-slate-600">{{ $t('history.colBy') }}: {{ by(r) }}</p>
+        <p v-if="r.details" class="m-0 mt-1 whitespace-pre-line text-xs text-slate-600">{{ r.details }}</p>
+        <router-link v-if="r.hasDiff" :to="`/history/diff/${r.id}`" class="mt-1 inline-block text-xs text-slate-800 underline" data-test="card-diff">{{ $t('history.diff.link') }}</router-link>
+      </li>
+    </ul>
+    </template>
   </div>
 </template>

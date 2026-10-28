@@ -50,4 +50,16 @@ describe('HistoryView', () => {
     expect(axios.get).toHaveBeenLastCalledWith('/api/poll-history', { params: { type: 'questionnaire', id: 7 } })
     expect(w.findAll('th').map(t => t.text())).not.toContain('Poll')   // one poll: no Poll column
   })
+
+  it('on a phone each entry is a card, with its poll, who, details and Diff', async () => {
+    const { w } = await mountAt('/history')
+    const cards = w.findAll('[data-test="history-cards"] li')
+    expect(cards).toHaveLength(3)
+    expect(cards[0].text()).toContain('Published')
+    expect(cards[0].text()).toContain('Vaccines · Questionnaire')
+    expect(cards[0].text()).toContain('By: You')
+    expect(cards[0].text()).toContain('Close date: none → 2027-01-15 18:00 UTC')
+    expect(cards[0].find('[data-test="card-diff"]').attributes('href')).toBe('/history/diff/3')
+    expect(cards[1].find('[data-test="card-diff"]').exists()).toBe(false)
+  })
 })
