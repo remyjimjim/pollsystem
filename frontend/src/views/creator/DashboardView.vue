@@ -6,6 +6,7 @@ import type { PollStatus } from '@/types'
 import { AccessLevel } from '@/types'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import ColumnChooser from '@/components/ColumnChooser.vue'
 import { useColumns } from '@/composables/useColumns'
 
@@ -222,8 +223,9 @@ onMounted(load)
       {{ showArchived ? $t('creator.dashboard.emptyArchived') : $t('creator.dashboard.emptyDefault') }}
     </p>
 
-    <ColumnChooser v-if="!loading && polls.length > 0" v-model="columns" :options="columnOptions" />
-    <table v-if="!loading && polls.length > 0" class="w-full border-collapse text-sm">
+    <ScrollEnds v-if="!loading && polls.length > 0">
+    <ColumnChooser v-model="columns" :options="columnOptions" />
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
           <th v-if="columns.title" class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('creator.dashboard.tableTitle') }}</th>
@@ -343,5 +345,6 @@ onMounted(load)
         </tr>
       </tbody>
     </table>
+    </ScrollEnds>
   </div>
 </template>

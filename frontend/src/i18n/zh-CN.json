@@ -38,6 +38,8 @@
     "help": "帮助"
   },
   "common": {
+    "scrollToEnd": "跳到列表末尾",
+    "scrollToTop": "返回列表顶部",
     "newVersion": "BallotBox 有新版本可用。",
     "reload": "重新加载",
     "loading": "加载中…",

@@ -38,6 +38,8 @@
     "help": "Hilfe"
   },
   "common": {
+    "scrollToEnd": "Zum Ende der Liste",
+    "scrollToTop": "Zurück zum Anfang der Liste",
     "newVersion": "Eine neue Version von BallotBox ist verfügbar.",
     "reload": "Neu laden",
     "loading": "Lädt…",
