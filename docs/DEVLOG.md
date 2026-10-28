@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-10-28 — Manage Creators: top/bottom arrows (and the arrow row fixed for short lists)
+
+**Requested:**
+
+> http://localhost:3000/admin/manage-creators needs top/bottom arrows
+
+**Changed:**
+
+- **Manage Creators:** the list (column chooser + table) is wrapped in
+  `ScrollEnds`.
+- **`ScrollEnds` fixes,** found on this page, which has a list only a little
+  taller than the screen (16 creators locally):
+  - **The row vanished at the end:** it was shown only while part of the list
+    was off screen. Once ↓ reached the end the whole list fit, so the row
+    (and its ↑) disappeared. It now shows whenever the list runs past the
+    page's first screen (`bottom + scrollY > innerHeight`), wherever you've
+    scrolled.
+  - **↑ stuck on short lists:** ↑ scrolled the list's top to the screen's
+    top, where its end still showed, so the arrow stayed ↑. For a list
+    shorter than the screen, ↑ now scrolls to the page's top.
+- Search and the Create dashboard use the same component and still behave as
+  before.
+
+**Verified (headless, local, super; clicks from inside the page):**
+
+| Page | Width | ↓ | ↑ |
+|---|---|---|---|
+| Manage Creators | 1300 | ↓ at y0, then ↑ at y147 | ↓ at y0 |
+| Manage Creators | 390 | ↓ at y0, then ↑ at y603 | ↓ at y330 |
+| Search (all results) | 1200 | ↓, then ↑ | ↓ |
+| Create dashboard | 1200 | ↓, then ↑ | ↓ |
+
+A screenshot of Manage Creators was viewed, then deleted. Type-check and 185
+unit tests pass.
+
+**Commit:** `290e616`
+
+---
+
 ## 2026-10-28 — Manage Polls: Show nationwide, title edit, close date carries, notes list
 
 **Requested:**
