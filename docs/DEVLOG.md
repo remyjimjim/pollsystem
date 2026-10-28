@@ -61,6 +61,28 @@ logged.
 
 ---
 
+## 2026-10-28 — History: top/bottom arrows
+
+**Requested:**
+
+> yes add the arrows too, then push it and deploy to staging
+
+**Changed:** History's list (the table, and the cards on phones) is wrapped in
+`ScrollEnds`.
+
+**Verified (headless, local, super, 666 entries; clicks from inside the page):**
+
+| Width | Start | After ↓ | After ↑ |
+|---|---|---|---|
+| 1200 px | ↓ | ↑ at y31099 | ↓ at y272 |
+| 390 px | ↓ | ↑ at y73594 | ↓ at y368 |
+
+Type-check and the History unit tests (3) pass.
+
+**Commit:** `7f86a8d`
+
+---
+
 ## 2026-10-28 — History: stacked cards on phones
 
 **Requested:**
