@@ -56,3 +56,6 @@ assets/data-backups/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Scratch files and screenshots (e.g. tmp/shots/ of Stripe pages): never committed.
+tmp/
