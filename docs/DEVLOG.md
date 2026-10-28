@@ -61,6 +61,38 @@ logged.
 
 ---
 
+## 2026-10-28 — Manage Creators: stacked cards on phones
+
+**Requested:**
+
+> make manage creators use stacked cards on phones
+
+**Changed (`admin/ManageCreatorsView`):**
+
+- **Below `sm`, one card per creator,** in the table's sort order:
+  - email, with "(you)";
+  - Purview (tap for the full purview, disabled grants struck through), Polls
+    (linked to Manage Polls for that creator), Last edit, and the Enabled
+    switch (same reason dialog). Each follows the column chooser.
+  - Edit, which opens the same editor.
+- **From `sm` up,** the table shows as before.
+- **The cards' `data-test` names** are `card-…`, so the existing row-scoped
+  tests keep targeting the table.
+
+**Verified:**
+
+- A new unit test: as many cards as rows, and a card's Edit opens the editor
+  dialog for that creator. Manage Creators tests pass (12); type-check passes.
+- Headless, local, super (16 creators):
+  - at 390 px: 16 cards, no table, nothing wider than the screen; tapping a
+    card's "CA" opened its purview;
+  - at 1200 px: the table, no cards.
+  - The phone screenshot was viewed, then deleted.
+
+**Commit:** `4d082b1`
+
+---
+
 ## 2026-10-28 — Manage Polls: stacked cards on phones
 
 **Requested:**
