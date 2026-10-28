@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-10-28 — Creator dashboard: stacked cards on phones
+
+**Requested:**
+
+> make the creator dashboard use stacked cards on phones
+
+**Changed (`creator/DashboardView`):**
+
+- **Below `sm`, one card per poll**, as on the search page:
+  - title, and status as a badge;
+  - a details list of Type, For election (full title, linked), Enabled,
+    Close date (orange once past, plus "closes in N days"), Responses (with
+    the in-area share) and the Emails checkbox. Each follows the column
+    chooser.
+  - a wrapping row of actions: Results, Report, History, Edit or Reopen,
+    Archive or Restore.
+- **From `sm` up,** the table shows as before.
+- **The header's four buttons** now wrap; before, they ran off a phone
+  screen.
+- **The cards' `data-test` names** are `card-…`, so the existing tests still
+  target the table.
+
+**Verified:**
+
+- A new unit test: two polls give two cards, with History and Edit, and
+  Reopen from a card posts the reopen. The dashboard tests pass (14), and the
+  type-check passes.
+- Headless, local, demo-creator-cali (7 polls):
+  - at 390 px: 7 cards, no table, nothing wider than the screen;
+  - at 1100 px: the table, no cards.
+  - A phone screenshot was viewed, then deleted.
+
+**Commit:** `ed00448`
+
+---
+
 ## 2026-10-28 — Creator dashboard: top/bottom arrow row
 
 **Requested:**
