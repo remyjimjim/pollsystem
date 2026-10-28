@@ -35,6 +35,7 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
     @Autowired private lateinit var fixtures: TestFixtures
     @Autowired private lateinit var users: UserRepository
     @Autowired private lateinit var elections: ElectionRepository
+    @Autowired private lateinit var ballotMeasures: org.kodewerks.pollsystem.repository.BallotMeasureRepository
     @Autowired private lateinit var pollTypes: PollTypeRepository
     @Autowired private lateinit var blocks: PollTypeBlockRepository
     @Autowired private lateinit var pollPurviews: org.kodewerks.pollsystem.repository.PollPurviewRepository
@@ -275,6 +276,50 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         assertThat(note.emailed).isTrue()
         assertThat(recordedEmails.sent).hasSize(1)
         assertThat(recordedEmails.sent[0].to).isEqualTo(creator.email)
+    }
+
+    @Test
+    fun `editPoll renames a poll, and an election's new close date carries to its ballot measures`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "edit2-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "edit2-creator")
+        val e = newElection(creator, zipcode = "90001", title = "Old name")
+        val measureType = pollTypes.findAll().first { it.name == "Referendum/Ballot Measure" }
+        val m1 = ballotMeasures.save(org.kodewerks.pollsystem.model.BallotMeasure(creator = creator, pollType = measureType,
+            title = "Prop A", summary = "s", election = e, effectiveDate = LocalDate.now(), status = PollStatus.PUBLISHED, closeDate = e.closeDate))
+        val m2 = ballotMeasures.save(org.kodewerks.pollsystem.model.BallotMeasure(creator = creator, pollType = measureType,
+            title = "Prop B", summary = "s", election = e, effectiveDate = LocalDate.now(), status = PollStatus.PUBLISHED, closeDate = null))
+        val newClose = Instant.parse("2026-11-10T04:00:00Z")
+
+        val note = controller.editPoll("ELECTION", e.id,
+            AdminPollEditRequest(title = "  New name ", closeDate = newClose, reason = "Typo and extension"), principalFor(admin))
+
+        val saved = elections.findById(e.id).get()
+        assertThat(saved.title).isEqualTo("New name")
+        assertThat(saved.closeDate).isEqualTo(newClose)
+        assertThat(note.body).contains("title → \"New name\"").contains("Typo and extension")
+        assertThat(ballotMeasures.findById(m1.id).get().closeDate).isEqualTo(newClose)
+        assertThat(ballotMeasures.findById(m2.id).get().closeDate).isEqualTo(newClose)
+
+        assertThatThrownBy {
+            controller.editPoll("ELECTION", e.id, AdminPollEditRequest(title = "  ", reason = "blank"), principalFor(admin))
+        }.isInstanceOf(ResponseStatusException::class.java)
+    }
+
+    @Test
+    fun `list marks nationwide polls`() {
+        val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "nat-super")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "nat-creator")
+        val local = newElection(creator, zipcode = "90001", title = "Nat check local ${System.nanoTime()}")
+        val national = newElection(creator, zipcode = "90001", title = "Nat check national ${System.nanoTime()}")
+        pollPurviews.deleteAll(pollPurviews.findAll().filter { it.pollType == PollKind.ELECTION && it.pollId == national.id })
+        pollPurviews.save(org.kodewerks.pollsystem.model.PollPurview(pollType = PollKind.ELECTION, pollId = national.id,
+            scopeLevel = org.kodewerks.pollsystem.model.ScopeLevel.NATIONAL))
+
+        val rows = controller.list(principalFor(sup), listOf("ELECTION"), "Nat check", null, null, null, null, true)
+            .associate { it.id to it.nationwide }
+        assertThat(rows[local.id]).isFalse()
+        assertThat(rows[national.id]).isTrue()
     }
 
     @Test

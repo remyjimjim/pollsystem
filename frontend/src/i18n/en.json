@@ -38,6 +38,7 @@
     "help": "Help"
   },
   "common": {
+    "cancel": "Cancel",
     "scrollToEnd": "Go to the end of the list",
     "scrollToTop": "Back to the top of the list",
     "newVersion": "A new version of BallotBox is available.",
@@ -709,6 +710,15 @@
       "unpin": "Show the usual list"
     },
     "managePolls": {
+      "showNationwide": "Show nationwide",
+      "editTitle": "Title",
+      "errorTitle": "A title is required.",
+      "closeDateCarries": "This election's ballot measures get the same close date.",
+      "noteAdd": "Add note",
+      "notesModalTitle": "Notes: {title}",
+      "notesHeading": "All notes ({n})",
+      "notesEmpty": "No notes yet.",
+      "noteEmailed": "emailed to the creator",
       "heading": "Manage Polls",
       "body": "Moderate polls",
       "pollType": "Poll type",

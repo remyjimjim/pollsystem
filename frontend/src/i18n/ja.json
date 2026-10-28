@@ -38,6 +38,7 @@
     "help": "ヘルプ"
   },
   "common": {
+    "cancel": "キャンセル",
     "scrollToEnd": "リストの最後へ",
     "scrollToTop": "リストの先頭へ戻る",
     "newVersion": "BallotBox の新しいバージョンがあります。",

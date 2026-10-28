@@ -38,6 +38,7 @@
     "help": "Hjelp"
   },
   "common": {
+    "cancel": "Avbryt",
     "scrollToEnd": "Gå til slutten av listen",
     "scrollToTop": "Tilbake til toppen av listen",
     "newVersion": "En ny versjon av BallotBox er tilgjengelig.",

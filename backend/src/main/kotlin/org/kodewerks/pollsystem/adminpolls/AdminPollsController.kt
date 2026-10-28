@@ -53,7 +53,9 @@ data class AdminPollRow(
     /** Human-readable purview (e.g. "California", "Nationwide"); shown when a poll has no single zip. */
     val regionLabel: String,
     val blocked: Boolean,
-    val latestNote: NoteDto?
+    val latestNote: NoteDto?,
+    /** Covers the whole country (or declares no area): hidden unless "Show nationwide". */
+    val nationwide: Boolean = false
 )
 
 data class NoteDto(
@@ -83,6 +85,7 @@ data class EditNoteRequest(val body: String)
  * trail); `notifyCreator` emails the creator a copy of that note.
  */
 data class AdminPollEditRequest(
+    val title: String? = null,
     val status: PollStatus? = null,
     val closeDate: Instant? = null,
     val reason: String,
@@ -204,7 +207,8 @@ class AdminPollsController(
                     countyName = qZips.firstOrNull()?.let { meta[it]?.county?.name },
                     regionLabel = purviews.regionLabel(pollRows),
                     blocked = false,
-                    latestNote = null
+                    latestNote = null,
+                    nationwide = isNationwide(pollRows)
                 )
             }
         }
@@ -222,7 +226,8 @@ class AdminPollsController(
                     stateInitial = cz?.county?.state?.initial,
                     countyName = cz?.county?.name,
                     regionLabel = purviews.regionLabel(pollRows),
-                    blocked = false, latestNote = null
+                    blocked = false, latestNote = null,
+                    nationwide = isNationwide(pollRows)
                 )
             }
         }
@@ -241,7 +246,8 @@ class AdminPollsController(
                     stateInitial = cz?.county?.state?.initial,
                     countyName = cz?.county?.name,
                     regionLabel = purviews.regionLabel(pollRows),
-                    blocked = false, latestNote = null
+                    blocked = false, latestNote = null,
+                    nationwide = isNationwide(pollRows)
                 )
             }
         }
@@ -448,33 +454,52 @@ class AdminPollsController(
         }
         val reason = body.reason.trim()
         if (reason.isEmpty() || reason.length > 2000) throw bad("A reason (1–2000 chars) is required")
-        if (body.status == null && body.closeDate == null) {
-            throw bad("Nothing to change: provide a status and/or close date")
+        val newTitle = body.title?.trim()
+        if (newTitle != null && (newTitle.isEmpty() || newTitle.length > 500)) throw bad("A title must be 1–500 characters")
+        if (newTitle == null && body.status == null && body.closeDate == null) {
+            throw bad("Nothing to change: provide a title, status and/or close date")
         }
 
         // Apply the change (null = leave unchanged; Phase 1 doesn't clear closeDate).
+        var oldTitle = ""
+        var oldClose: Instant? = null
         when (kind) {
             PollKind.QUESTIONNAIRE -> {
                 val q = questionnaires.findById(id).orElseThrow { bad("Questionnaire not found") }
-                questionnaires.save(q.copy(status = body.status ?: q.status, closeDate = body.closeDate ?: q.closeDate))
+                oldTitle = q.title; oldClose = q.closeDate
+                questionnaires.save(q.copy(title = newTitle ?: q.title, status = body.status ?: q.status, closeDate = body.closeDate ?: q.closeDate))
             }
             PollKind.ELECTION -> {
                 val e = elections.findById(id).orElseThrow { bad("Election not found") }
-                elections.save(e.copy(status = body.status ?: e.status, closeDate = body.closeDate ?: e.closeDate))
+                oldTitle = e.title; oldClose = e.closeDate
+                elections.save(e.copy(title = newTitle ?: e.title, status = body.status ?: e.status, closeDate = body.closeDate ?: e.closeDate))
             }
             PollKind.BALLOT_MEASURE -> {
                 val bm = ballotMeasures.findById(id).orElseThrow { bad("Ballot measure not found") }
+                oldTitle = bm.title; oldClose = bm.closeDate
                 ballotMeasures.save(bm.copy(
+                    title = newTitle ?: bm.title,
                     status = body.status ?: bm.status,
                     closeDate = body.closeDate ?: bm.closeDate,
                     lastUpdated = Instant.now()
                 ))
             }
         }
+        // An election's new close date carries to its ballot measures
+        // (decided 2026-10-28): they close with it.
+        val closeChanged = body.closeDate != null && body.closeDate != oldClose
+        if (kind == PollKind.ELECTION && closeChanged) {
+            for (m in ballotMeasures.findByElectionId(id).filter { it.closeDate != body.closeDate }) {
+                ballotMeasures.save(m.copy(closeDate = body.closeDate, lastUpdated = Instant.now()))
+                history.record(PollKind.BALLOT_MEASURE, m.id, org.kodewerks.pollsystem.model.PollEventType.EDITED, principal.user,
+                    "Close date → ${body.closeDate} (from its election)")
+            }
+        }
 
         // Record the reason as a note (audit trail) — prefixed with what changed
         // so the creator sees the context — and optionally email the creator.
         val changes = buildList {
+            if (newTitle != null && newTitle != oldTitle) add("title → \"$newTitle\"")
             body.status?.let { add("status → $it") }
             body.closeDate?.let { add("close date → $it") }
         }
@@ -494,6 +519,9 @@ class AdminPollsController(
     }
 
     // ---------- internal helpers ----------
+
+    private fun isNationwide(rows: List<org.kodewerks.pollsystem.model.PollPurview>) =
+        rows.isEmpty() || rows.any { it.scopeLevel == ScopeLevel.NATIONAL }
 
     private data class Purview(val zipcodes: Set<String>, val countyIds: Set<Long>, val stateIds: Set<Long>) {
         fun isEmpty() = zipcodes.isEmpty() && countyIds.isEmpty() && stateIds.isEmpty()

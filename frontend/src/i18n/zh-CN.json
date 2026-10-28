@@ -38,6 +38,7 @@
     "help": "帮助"
   },
   "common": {
+    "cancel": "取消",
     "scrollToEnd": "跳到列表末尾",
     "scrollToTop": "返回列表顶部",
     "newVersion": "BallotBox 有新版本可用。",

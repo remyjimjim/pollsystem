@@ -38,6 +38,7 @@
     "help": "Ayuda"
   },
   "common": {
+    "cancel": "Cancelar",
     "scrollToEnd": "Ir al final de la lista",
     "scrollToTop": "Volver al inicio de la lista",
     "newVersion": "Hay una nueva versión de BallotBox disponible.",

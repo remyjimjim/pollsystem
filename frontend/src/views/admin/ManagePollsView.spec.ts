@@ -14,12 +14,12 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ replace: replaceMock })
 }))
 
-interface Row { id: number; type: string; title: string; blocked: boolean }
+interface Row { id: number; type: string; title: string; blocked: boolean; nationwide?: boolean; latestNote?: unknown }
 function pollRow(r: Row) {
   return {
     ...r, status: 'PUBLISHED', creatorEmail: 'c@test.local', closeDate: null,
     zipcodes: ['94110'], stateInitial: 'CA', countyName: 'San Francisco',
-    regionLabel: '', latestNote: null
+    regionLabel: '', latestNote: null, ...r
   }
 }
 
@@ -149,15 +149,59 @@ describe('ManagePollsView: deep link from Manage Creators', () => {
 
 describe('ManagePollsView: Show: columns', () => {
   afterEach(() => localStorage.clear())
-  it('the zipcode column is headed Purview, and unticking County hides it', async () => {
+  it('the zipcode column is headed Purview, there are no State or County columns, and unticking hides one', async () => {
     const w = await mountView()
     const headings = () => w.findAll('th').map(th => th.text().replace(/[▲▼]/g, '').trim())
     expect(headings()).toContain('Purview')
     expect(headings()).not.toContain('Zipcode')
-    expect(w.find('[data-test="column-chooser"]').text()).toBe('Columns to showShow:TitleTypeCreatorStateCountyPurviewClosesEnabled?')
-    await w.find('[data-test="show-county"]').setValue(false)
+    // State and County were dropped from the results (2026-10-28).
+    expect(w.find('[data-test="column-chooser"]').text()).toBe('Columns to showShow:TitleTypeCreatorPurviewClosesEnabled?')
+    expect(headings()).not.toContain('State')
     expect(headings()).not.toContain('County')
+    await w.find('[data-test="show-purview"]').setValue(false)
+    expect(headings()).not.toContain('Purview')
     expect(headings()).toContain('Notes')           // Notes and Actions always show
   })
 })
 
+
+describe('ManagePollsView: Show nationwide and notes (2026-10-28)', () => {
+  it('hides nationwide polls until "Show nationwide" is ticked', async () => {
+    serverRows = [
+      { id: 1, type: 'QUESTIONNAIRE', title: 'Local', blocked: false },
+      { id: 3, type: 'ELECTION', title: 'Everywhere', blocked: false, nationwide: true },
+    ]
+    const w = await mountView()
+    expect(titles(w)).toEqual(['Local'])
+    await w.find('[data-test="show-nationwide"]').setValue(true)
+    expect(titles(w)).toEqual(['Everywhere', 'Local'])
+  })
+
+  it('the Notes cell previews 10 characters; its modal adds a note to the top of the list', async () => {
+    const old = { id: 5, body: 'Checked the candidates list', emailed: false, createdAt: '2026-10-27T10:00:00Z', updatedAt: '2026-10-27T10:00:00Z' }
+    serverRows = [{ id: 1, type: 'QUESTIONNAIRE', title: 'Alpha', blocked: false, latestNote: old }]
+    const base = vi.mocked(axios.get).getMockImplementation()!
+    vi.mocked(axios.get).mockImplementation(async (url: string, cfg?: any) =>
+      url.endsWith('/notes') ? { data: [old] } : base(url, cfg))
+    const fresh = { id: 6, body: 'Close date moved', emailed: false, createdAt: '2026-10-28T10:00:00Z', updatedAt: '2026-10-28T10:00:00Z' }
+    vi.mocked(axios.post).mockResolvedValue({ data: fresh })
+
+    const w = await mountView()
+    expect(w.find('[data-test="notes-cell"]').text()).toBe('Checked th...')
+    await w.find('[data-test="notes-cell"]').trigger('click')
+    await flushPromises()
+    expect(w.findAll('[data-test="notes-list"] li').map(li => li.text())).toEqual([expect.stringContaining('Checked the candidates list')])
+
+    await w.find('[data-test="add-note"]').trigger('click')
+    await flushPromises()
+    await w.find('[data-test="note-body"]').setValue('Close date moved')
+    await w.find('[data-test="note-save"]').trigger('click')
+    await flushPromises()
+    expect(axios.post).toHaveBeenCalledWith('/api/admin/polls/QUESTIONNAIRE/1/notes', { body: 'Close date moved', sendEmail: false })
+    const list = w.findAll('[data-test="notes-list"] li').map(li => li.text())
+    expect(list[0]).toContain('Close date moved')
+    expect(list[1]).toContain('Checked the candidates list')
+    expect(w.find('[data-test="notes-cell"]').text()).toBe('Close date...')
+    expect(w.find('[data-test="add-note"]').exists()).toBe(true)   // the box closes after saving
+  })
+})
