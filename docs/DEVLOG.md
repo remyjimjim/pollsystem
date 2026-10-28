@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-28 — Manage Polls: stacked cards on phones
+
+**Requested:**
+
+> make the manage polls page use stacked cards on phones
+
+**Changed (`admin/ManagePollsView`):**
+
+- **Below `sm`, one card per poll,** in the table's current sort order:
+  - title and type badge;
+  - Creator, Purview (zipcode +N, or the area), Closes and the Enabled?
+    checkbox (same disable dialog), each following the column chooser;
+  - Notes (the 10-character preview, which opens the notes dialog);
+  - Edit and History.
+- **From `sm` up,** the table shows as before.
+- **The cards' `data-test` names** are `card-…`, so the existing tests keep
+  targeting the table.
+
+**Verified:**
+
+- A new unit test: one card for the visible poll (the disabled one hidden),
+  with Edit and History, and its Notes opens the dialog. Admin tests pass
+  (19); type-check passes.
+- Headless, local, super:
+  - at 390 px: 665 cards, no table, nothing wider than the screen; the
+    filters stack;
+  - at 1200 px: the table, no cards.
+  - Two phone screenshots were viewed, then deleted.
+
+**Commit:** `d324429`
+
+---
+
 ## 2026-10-28 — Prod backend deploy: Manage Polls changes (verified)
 
 **Requested:** the user ran
