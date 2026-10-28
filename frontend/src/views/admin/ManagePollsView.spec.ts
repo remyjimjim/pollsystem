@@ -205,3 +205,16 @@ describe('ManagePollsView: Show nationwide and notes (2026-10-28)', () => {
     expect(w.find('[data-test="add-note"]').exists()).toBe(true)   // the box closes after saving
   })
 })
+
+describe('ManagePollsView: cards on phones (2026-10-28)', () => {
+  it('shows a card per poll with Notes, Edit and History, and Notes opens the dialog', async () => {
+    const w = await mountView()
+    const cards = w.findAll('[data-test="poll-cards"] li')
+    expect(cards.map(c => c.text())).toEqual([expect.stringContaining('Alpha')])   // Bravo is disabled, hidden
+    expect(cards[0].text()).toContain('Edit')
+    expect(cards[0].text()).toContain('History')
+    await cards[0].find('[data-test="card-notes"]').trigger('click')
+    await flushPromises()
+    expect(w.find('[data-test="notes-modal"]').exists()).toBe(true)
+  })
+})

@@ -832,6 +832,62 @@ function historySlug(kind: Kind): string {
 
     <ScrollEnds v-if="visibleResults.length > 0">
     <ColumnChooser v-model="columns" :options="columnOptions" />
+    <!-- Phones: one card per poll (2026-10-28), in the table's sort order; wider screens: the table. -->
+    <ul class="m-0 flex list-none flex-col gap-3 p-0 sm:hidden" data-test="poll-cards">
+      <li v-for="row in sortedResults" :key="`card-${row.type}-${row.id}`" class="rounded-md border border-slate-200 p-3 text-sm">
+        <div class="mb-1 flex flex-wrap items-start justify-between gap-2">
+          <span class="font-semibold text-slate-800">{{ row.title }}</span>
+          <span v-if="columns.type" :class="['rounded px-2 py-0.5 text-xs font-semibold', kindBadgeClasses(row.type)]">{{ kindLabel(row.type) }}</span>
+        </div>
+        <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-slate-600">
+          <template v-if="columns.creator"><dt>{{ $t('admin.managePolls.colCreator') }}</dt><dd class="m-0 break-all">{{ row.creatorEmail }}</dd></template>
+          <template v-if="columns.purview">
+            <dt>{{ $t('admin.managePolls.colPurview') }}</dt>
+            <dd class="m-0">
+              <template v-if="row.zipcodes.length === 0">{{ row.regionLabel || '—' }}</template>
+              <template v-else>
+                <span class="font-mono">{{ row.zipcodes[0] }}</span>
+                <span v-if="row.zipcodes.length > 1" class="text-slate-500"> +{{ row.zipcodes.length - 1 }}</span>
+              </template>
+            </dd>
+          </template>
+          <template v-if="columns.closes">
+            <dt>{{ $t('admin.managePolls.colCloses') }}</dt>
+            <dd class="m-0">{{ row.closeDate ? new Date(row.closeDate).toLocaleString() : $t('admin.managePolls.closeNever') }}</dd>
+          </template>
+          <template v-if="columns.enabled">
+            <dt>{{ $t('admin.managePolls.colEnable') }}</dt>
+            <dd class="m-0">
+              <input
+                type="checkbox"
+                :checked="!row.blocked"
+                @click.prevent="onBlockCheckboxClick(row)"
+                :aria-label="row.blocked ? $t('admin.managePolls.statusDisabled') : $t('admin.managePolls.statusEnabled')"
+                class="h-4 w-4 align-middle"
+                data-test="card-enabled"
+              />
+            </dd>
+          </template>
+          <dt>{{ $t('admin.managePolls.colNote') }}</dt>
+          <dd class="m-0">
+            <button type="button" @click="openNoteModal(row)" class="text-slate-800 underline" data-test="card-notes">
+              {{ row.latestNote ? previewText(row.latestNote.body) : $t('admin.managePolls.noteAdd') }}
+            </button>
+          </dd>
+        </dl>
+        <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+          <button type="button" @click="openEditModal(row)" data-test="card-edit"
+            class="rounded border border-slate-300 px-3 py-1 text-xs hover:bg-slate-50">
+            {{ $t('admin.managePolls.editButton') }}
+          </button>
+          <router-link
+            :to="{ path: '/history', query: { type: historySlug(row.type), id: String(row.id) } }"
+            class="text-xs text-slate-800 underline"
+          >{{ $t('history.link') }}</router-link>
+        </div>
+      </li>
+    </ul>
+    <div class="hidden sm:block">
     <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
@@ -890,6 +946,7 @@ function historySlug(kind: Kind): string {
         </tr>
       </tbody>
     </table>
+    </div>
     </ScrollEnds>
 
     <!-- Block modal -->
