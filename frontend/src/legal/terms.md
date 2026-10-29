@@ -33,6 +33,10 @@ Polls currently concern places in the United States.
 - Answering polls requires a paid membership: **$4.99 a month**, charged in
   advance through our payment processor, Stripe. It **renews automatically each
   month** until you cancel.
+- A **paid subscription to the norfstar Substack** also includes a BallotBox
+  membership, for as long as that subscription is paid. It's billed by
+  Substack, not BallotBox: manage or cancel it on Substack. If you also pay
+  for BallotBox directly, cancelling one keeps the other.
 - Cancel anytime with **Cancel membership** on your home page; your membership
   runs to the end of the month you've paid for. See the
   [Cancellation and Refund Policy](/legal/refunds).
