@@ -61,6 +61,44 @@ logged.
 
 ---
 
+## 2026-10-29 — Substack via Stripe: end-to-end on staging (verified)
+
+**Setup (the user, in norfstar.substack Stripe, live mode):**
+
+- An event destination for "Your account", snapshot payloads, API
+  `2026-09-30.endive`, with events `invoice.paid`,
+  `customer.subscription.deleted` and `customer.subscription.updated`, sent to
+  `https://pollsystem-backend-staging.fly.dev/webhooks/stripe-substack`.
+- A restricted key with Customers and Subscriptions: Read. Stripe's
+  confirmation needed a passkey, done by scanning the QR code with the
+  phone.
+- Both saved in `.devcontainer/stripe-substack-staging.secrets.env`
+  (git-ignored; the agent set mode 600 and checked the format without
+  printing it), then imported with
+  `flyctl secrets import -a pollsystem-backend-staging < …`.
+
+**Verified (staging, the agent read `/api/super/substack` with the staging super token):**
+
+1. After the restart, the card showed webhook set, re-sync key set.
+2. **Re-sync, the scheduled one at 04:48:36Z:** checked 1 subscription (the
+   user's test, `remyjimjim+user@proton.me`, $5/month).
+   - It renewed **remyjimjim@proton.me**, paid until 2026-11-30T00:08:26Z,
+     the period end + 1 day.
+   - The `+user` alias matched the existing staging super account by inbox
+     (V40 `email_key`), as designed, so no new account and no sign-in email.
+   - The manual Re-sync then found nothing to change.
+3. **Webhook:** the user chose "Cancel with full refund" in Substack. At
+   05:21:15Z `webhook · ended · remyjimjim@proton.me` was recorded and
+   Members from Substack went 1 → 0. The super account kept SUPER, with
+   `paidUntil` set to the cancel time.
+
+**Not yet tested:** a brand-new member through `invoice.paid`, which needs a
+subscriber whose inbox has no staging account. **Prod:** a second
+destination aimed at the prod backend with its own secret, the same or a
+new restricted key, the prod import, and a prod backend deploy with V43.
+
+---
+
 ## 2026-10-29 — Substack members through the Substack Stripe account
 
 **Requested:**
