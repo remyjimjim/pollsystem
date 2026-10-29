@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-10-29 — Terms: Substack subscription includes membership
+
+**Requested:**
+
+> use it
+
+The draft Terms line for the Substack connection.
+
+**Changed:** `terms.md`, under Membership and payment, after the $4.99 line:
+a paid norfstar Substack subscription includes BallotBox membership while
+it's paid. It's billed by and cancelled on Substack, and someone paying
+both keeps the other membership when one ends, matching
+`SubstackMembership.ended`. English; the other languages show the English
+policies with the "English only" banner.
+
+**Verified:** the legal tests pass.
+
+**Commit:** `710f042`
+
+---
+
 ## 2026-10-29 — Substack via Stripe: end-to-end on staging (verified)
 
 **Setup (the user, in norfstar.substack Stripe, live mode):**
