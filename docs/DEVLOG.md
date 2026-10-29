@@ -61,6 +61,101 @@ logged.
 
 ---
 
+## 2026-10-29 — Substack members through the Substack Stripe account
+
+**Requested:**
+
+> Can we now add the Substack Zapier integration?
+
+Then, after Zapier turned out to have no Substack app:
+
+> Can we go with 'B' but have the process kicked off both manually and by cron
+> job ... error should say "source : (name of script/service that failed) :
+> timestamp(MM/DD/YYYY:H:MM:SS) : ERROR: (err message)
+
+> Is there a way to do it thru Stripe?
+
+> I've created a subscriber remyjimjim+user@proton.me. Go ahead and start
+> building for staging
+
+**Decided:**
+
+- **Rejected:** Zapier (no Substack app); the CSV and folder-watch idea
+  (overtaken); scraping Substack with a login cookie (likely against
+  Substack's terms; the account is the newsletter).
+- **Chosen:** Substack bills through the user's own Stripe account,
+  **norfstar.substack**. It's separate from BallotBox's, so the memory rule
+  "never connect the BallotBox Stripe account to Substack" holds. Its
+  webhook, plus a re-sync with a read-only key, drives membership.
+- **The user's checks:** norfstar.substack shows payment setups owned by
+  "Substack account". Substack Settings → Payments says the Stripe account is
+  connected, with $5/month, $40/year and an $80 founding plan. No
+  subscriptions existed until the user's test (`remyjimjim+user@…`).
+
+**Changed:**
+
+- **V43:** `users.substack_customer_id` (indexed); `substack_sync_log`.
+- **`substack/StripeSubstack.kt`:**
+  - `StripeSubstackProperties` (`app.stripe-substack.webhook-secret` /
+    `api-key`, from `STRIPE_SUBSTACK_WEBHOOK_SECRET` /
+    `STRIPE_SUBSTACK_API_KEY`).
+  - `SubstackSyncLog`: database entries, plus an ERROR log line
+    `source : stripe-substack : MM/dd/yyyy:H:mm:ss : ERROR: …` in Pacific
+    time.
+  - `SubstackMembership`:
+    - `paidThrough` creates (with a sign-in email) or renews, never
+      shortening;
+    - `ended` lapses to VIEWER, but someone with a BallotBox Stripe
+      subscription keeps membership and only the link is dropped.
+  - `StripeSubstackJson` reads period ends from both old and new Stripe API
+    layouts.
+  - `SubstackResync` lists all subscriptions over HTTP with Basic auth;
+    active, trialing and past-due are members. Runs from the button and
+    every 5 minutes once a key is set.
+- **`StripeSubstackWebhookController`** (`/webhooks/stripe-substack`, open in
+  `SecurityConfig`):
+  - checks the signature with that account's secret;
+  - `invoice.paid` / `invoice.payment_succeeded` → paid through the last
+    line's period end + 1 day;
+  - `customer.subscription.deleted`, or `.updated` to
+    canceled/unpaid/incomplete_expired → ended;
+  - other events → "ignored";
+  - a failure answers 500 so Stripe retries.
+- **`StripeSignatureVerifier.verify(raw, header, secret)`** overload.
+- **`SuperSubstackController`** (`/api/super/substack`, `/resync`) and the
+  **`SubstackMembersCard`** on the Super dashboard: settings set / not set,
+  member count, Re-sync now (result and error lines in red), recent activity.
+  English labels, like the rest of the Super pages.
+- **`docs/SUBSTACK-INTEGRATION.md`:** the new route with staging and prod
+  setup steps. The earlier relay route is kept below it.
+
+**Verified:**
+
+- **Tests:** `StripeSubstackWebhookTest` (5 tests, signed with a test
+  secret):
+  - first payment → USER, linked, paid until period end + 1 day, logged
+    "activated";
+  - deleted → VIEWER, lapsed, unlinked;
+  - a BallotBox payer (200 days ahead) isn't shortened and keeps
+    membership after Substack ends;
+  - a bad signature → 400 and a log entry matching the error format;
+  - other events → "ignored";
+  - old and new API period and customer fields read.
+  - The full suite passes (408); 196 unit tests pass.
+- **Local:** V43 migrated; the endpoint returned 503 with no secret. The card
+  showed "not set ×2, 0 members". Re-sync showed the formatted error on
+  screen, and the same line appeared in the backend container log at ERROR.
+  The screenshot was deleted.
+
+**Not done yet:** a push and staging deploy; the user setting up the
+norfstar.substack webhook destination, the signing secret and the restricted
+key, then importing them into staging; the end-to-end test with the user's
+test subscription; then prod.
+
+**Commit:** `6866edb`
+
+---
+
 ## 2026-10-28 — tmp/ is git-ignored
 
 **Requested:**
