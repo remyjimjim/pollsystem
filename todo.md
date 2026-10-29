@@ -316,5 +316,19 @@
   - To include membership: check Zapier/Make can see Substack paid subscribers; relay them to POST /webhooks/substack
     (docs/SUBSTACK-INTEGRATION.md); set SUBSTACK_WEBHOOK_SECRET on prod (user runs flyctl); test on staging first;
     update the Terms (membership is $10/month through BallotBox); decide what happens to someone paying both.
+X Current - Done: No
+
+- Mid-November 2026 (user, 2026-10-29: "I will be needing to add a 'discount code' in a couple of weeks"):
+  a discount code. Ask first: for BallotBox's $4.99 membership (a Stripe promotion code on the BallotBox
+  account, shown on Checkout) or for the Substack plan (set in Substack); how much, how long, how many uses.
   - Done: No
+
+- Add "hover help messages" on all headings.
+- Ask Claude regarding substack chat capabilities and the feasibility/Cost-vs-Return evaluation (would hosting a chat on Fly.io 
+  / Neondb drastically increase charges from either?)
+- Query Claude on suggestions for optimizing for:
+  - Speed
+  - SEO
+  - Portability, as in if one had to switch providers (Fly,Neon,Cloudflare,Stripe,Resend)
+  - Ability to converted to an android mobile app
 
