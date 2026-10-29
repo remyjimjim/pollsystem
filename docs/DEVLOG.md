@@ -61,6 +61,45 @@ logged.
 
 ---
 
+## 2026-10-29 — Ranked-choice voting: plan written
+
+**Requested:**
+
+> Do we know or can we find out what states use ranked-choice voting on their
+> midterms?
+
+> yes, sketch it out and write it to docs/VOTING-RANKED-CHOICE.md please...
+
+**Found (web search, FairVote / NCSL / The Maine Monitor):** only Alaska and
+Maine statewide.
+
+- **Alaska:** all general-election races; the ranked count is published Nov
+  18. Its Measure No. 2 would repeal ranked choice for future elections.
+- **Maine:** federal races with 3 or more candidates (U.S. Senate, House),
+  not governor.
+
+**In our data** (local and prod, read-only): Alaska has U.S. Senate, House
+At-Large and Gov/Lt Gov with 4 candidates each. Maine has U.S. Senator and
+House Districts 1 and 2 with 2 each, already labelled "(ranked-choice on
+the ballot; pick your first choice here)". There are 0 votes on any AK/ME
+race.
+
+**Written:** `docs/VOTING-RANKED-CHOICE.md`, a plan with nothing built:
+
+- voter UX (a rank dropdown per candidate, review, results by round);
+- instant-runoff rules (stop at 2; ties go to earlier rounds, then
+  alphabetical);
+- privacy per round (k and the group minimum; no transfer breakdown under
+  4);
+- V44 (`ranked_races(election_id, office_id)`, `candidate_responses.rank`)
+  and the API changes;
+- phases (~2.5–3 days) with an interim wording-only option, and 5 decisions
+  for the user.
+
+**Commit:** `dd9ef40`
+
+---
+
 ## 2026-10-29 — Decision: a discount code in mid-November (todo)
 
 **Requested:**
