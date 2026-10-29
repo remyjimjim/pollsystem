@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-10-29 — Substack via Stripe live on prod (verified)
+
+**Done (the user):**
+
+1. **Prod backend deploy** of `main`: the Substack-Stripe code with V43,
+   View past ballots and its columns.
+   - The first attempt failed with `missing third-party discharge token`:
+     the Fly login had expired. `flyctl auth login` needs an interactive
+     terminal, so the user ran it in a VS Code terminal in the same Dev
+     Container. `whoami` then gave waltripalex@gmail.com, and the deploy
+     succeeded.
+2. **Stripe:** a second norfstar.substack event destination with the same 3
+   events, aimed at `https://pollsystem-backend.fly.dev/webhooks/stripe-substack`,
+   with its own signing secret.
+3. **Secrets:** `.devcontainer/stripe-substack-prod.secrets.env`, with the
+   new prod `whsec_` and the same restricted key. The agent set mode 600 and
+   confirmed the webhook secret differs from staging's without printing
+   either.
+4. **Import:** `flyctl secrets import -a pollsystem-backend < …` (full path;
+   the session's working folder had been left in `.devcontainer`).
+
+**Verified (prod, read-only):**
+
+- **After the deploy:** health 200 in 0.35 s; one machine started, one
+  stopped as before; Flyway at 43 with `substack_sync_log` present;
+  `/webhooks/stripe-substack` returned 503 before the secret.
+- **After the import:** the first scheduled re-sync wrote nothing and logged
+  no errors. That's expected, since nothing changed: the only subscription,
+  the test one, is cancelled.
+- **The user's Super card on ballotbox.us.com:** webhook set, re-sync key
+  set, 0 members. Re-sync now gave "Checked 1 subscriptions: 0 new, 0
+  renewed, 0 ended". Neon showed the same row at 06:35:41Z, `ok=true`.
+
+**Remaining:** disable or delete the staging destination in Stripe, so real
+subscribers don't also become staging members. Optionally add "Includes a
+BallotBox.us.com membership" to Substack's paid benefits, and push the Terms
+line (`710f042`).
+
+---
+
 ## 2026-10-29 — Terms: Substack subscription includes membership
 
 **Requested:**
