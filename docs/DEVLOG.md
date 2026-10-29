@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-10-29 — Decision: a discount code in mid-November (todo)
+
+**Requested:**
+
+> Note to Claude: I will be needing to add a 'discount code' in a couple of
+> weeks, just saying.
+
+**Decided:** noted in `todo.md` for mid-November, not built now. To ask
+first: whether the code is for BallotBox's $4.99 membership (a Stripe
+promotion code on the BallotBox account, shown at Checkout) or for the
+Substack plan (set in Substack), plus the amount, duration and number of
+uses.
+
+**Commit:** `f5b3c98`
+
+---
+
 ## 2026-10-29 — Substack via Stripe live on prod (verified)
 
 **Done (the user):**
