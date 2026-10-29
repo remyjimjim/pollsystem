@@ -32,6 +32,8 @@ interface UserRepository : JpaRepository<User, Long> {
     fun findByEmailContainingIgnoreCaseOrderByEmail(fragment: String): List<User>
     fun findByEmailStartingWithIgnoreCaseOrderByEmail(prefix: String): List<User>
     fun findByStripeCustomerId(stripeCustomerId: String): User?
+    fun findBySubstackCustomerId(substackCustomerId: String): User?
+    fun findBySubstackCustomerIdIsNotNull(): List<User>
     fun findByStripeSubscriptionId(stripeSubscriptionId: String): User?
 }
 

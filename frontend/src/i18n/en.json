@@ -857,6 +857,21 @@
         "end": "End now",
         "confirmEnd": "End the demo now? Its votes and comments are deleted, and its polls are archived and handed to you.",
         "error": "Couldn't update the demo account."
+      },
+      "substack": {
+        "heading": "Substack members",
+        "blurb": "Paid subscribers to the Substack (through its own Stripe account, norfstar.substack) are BallotBox members while they pay. Stripe tells BallotBox when someone pays, renews or cancels; Re-sync checks everyone against Stripe (it also runs every 5 minutes).",
+        "webhook": "Stripe webhook",
+        "resyncKey": "Re-sync key",
+        "set": "set",
+        "notSet": "not set",
+        "members": "Members from Substack",
+        "resync": "Re-sync now",
+        "resyncing": "Re-syncing…",
+        "resultLine": "Checked {checked} subscriptions: {activated} new, {renewed} renewed, {ended} ended.",
+        "recent": "Recent activity",
+        "loadFailed": "Couldn't load the Substack status.",
+        "resyncFailed": "Re-sync failed."
       }
     },
     "adminRequests": {

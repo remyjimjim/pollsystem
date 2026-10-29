@@ -55,7 +55,11 @@ data class User(
 
     /** The super who started the demo; its polls go to them when it ends (V42). */
     @Column(name = "demo_started_by")
-    val demoStartedBy: Long? = null
+    val demoStartedBy: Long? = null,
+
+    /** The member's customer in the Substack Stripe account (V43): their membership comes from Substack. */
+    @Column(name = "substack_customer_id", length = 64)
+    val substackCustomerId: String? = null
 ) {
     /**
      * A payment-first user is provisioned with only an email; they may view

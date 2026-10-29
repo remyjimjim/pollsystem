@@ -14,8 +14,11 @@ import javax.crypto.spec.SecretKeySpec
 @Component
 class StripeSignatureVerifier(private val props: StripeProperties) {
 
-    fun verify(rawPayload: String, signatureHeader: String?): Boolean {
-        if (props.webhookSecret.isBlank() || signatureHeader.isNullOrBlank()) return false
+    fun verify(rawPayload: String, signatureHeader: String?): Boolean = verify(rawPayload, signatureHeader, props.webhookSecret)
+
+    /** The same check with another account's signing secret (the Substack Stripe account, V43). */
+    fun verify(rawPayload: String, signatureHeader: String?, secret: String): Boolean {
+        if (secret.isBlank() || signatureHeader.isNullOrBlank()) return false
 
         val parts = signatureHeader.split(',')
             .mapNotNull { part ->
@@ -30,7 +33,7 @@ class StripeSignatureVerifier(private val props: StripeProperties) {
         val now = Instant.now().epochSecond
         if (now - timestamp > props.toleranceSeconds) return false
 
-        val expected = hmacSha256Hex(props.webhookSecret, "$timestamp.$rawPayload")
+        val expected = hmacSha256Hex(secret, "$timestamp.$rawPayload")
         return v1Sigs.any { constantTimeEquals(it, expected) }
     }
 

@@ -1,4 +1,72 @@
-# Substack → pollsystem membership integration
+# Substack → BallotBox membership
+
+## Current route (2026-10-28): the Substack Stripe account's webhook
+
+Substack has no API or webhooks, and Zapier has no Substack app. But Substack
+bills through **your own Stripe account**, connected in Substack (Settings →
+Payments → "Your Stripe account is connected"). For BallotBox that's
+**norfstar.substack**, a separate account. Never connect the BallotBox Stripe
+account to Substack. Its webhook tells BallotBox when someone pays, renews or
+cancels.
+
+**Endpoint:** `POST /webhooks/stripe-substack`, signed with that account's
+webhook signing secret (`STRIPE_SUBSTACK_WEBHOOK_SECRET`). Blank: 503 (off).
+
+| Stripe event | BallotBox |
+|---|---|
+| `invoice.paid` (first payment, every renewal) | Creates or renews the member, paid until the period end + 1 day. A new email gets a sign-in email. Links `users.substack_customer_id`. Never shortens anyone. |
+| `customer.subscription.deleted`, or `.updated` to canceled / unpaid / incomplete_expired | Ends it: lapses to VIEWER, unless they also pay BallotBox directly (then only the link is dropped) |
+| anything else | Acknowledged, ignored |
+
+**Re-sync** (Super → Substack members → **Re-sync now**, and automatically every
+5 minutes) lists every subscription in that account with a **read-only key**
+(`STRIPE_SUBSTACK_API_KEY`). Active, trialing and past-due subscribers are
+members; linked members with no live subscription end. Without the key,
+re-sync reports that it isn't set up.
+
+**Errors** show on the Super card and go to the backend log, which
+`scripts/pollsystem.watchall.bash` follows locally (`flyctl logs` on staging and
+prod), as:
+
+    source : stripe-substack : 10/28/2026:17:24:04 : ERROR: <message>   (Pacific time)
+
+### Setting it up on staging
+
+In **norfstar.substack** (Stripe, live mode):
+
+1. **Developers → Webhooks → Add destination** (or "Add endpoint"):
+   - events from **your account**;
+   - events: `invoice.paid`, `customer.subscription.deleted`,
+     `customer.subscription.updated`;
+   - URL: `https://pollsystem-backend-staging.fly.dev/webhooks/stripe-substack`.
+2. Open the new destination and **reveal its signing secret** (`whsec_…`).
+3. **Developers → API keys → Create restricted key**, named "BallotBox re-sync",
+   with **Subscriptions: Read** and **Customers: Read** and nothing else
+   (`rk_live_…`).
+4. Put both in a git-ignored, mode-600 file:
+   `.devcontainer/stripe-substack-staging.secrets.env`
+
+       STRIPE_SUBSTACK_WEBHOOK_SECRET=whsec_…
+       STRIPE_SUBSTACK_API_KEY=rk_live_…
+
+5. Import them into staging:
+   `flyctl secrets import -a pollsystem-backend-staging < .devcontainer/stripe-substack-staging.secrets.env`
+6. Super → Substack members shows both **set**. **Re-sync now** picks up any
+   existing subscriber (such as a test subscription) right away.
+
+### Going to production
+
+Add a **second** destination in norfstar.substack pointing at
+`https://pollsystem-backend.fly.dev/webhooks/stripe-substack`, with its own
+signing secret. Put it, with the same or a new restricted key, in
+`.devcontainer/stripe-substack-prod.secrets.env`, and import that into
+`pollsystem-backend`. Then remove the staging destination, or leave it if
+staging should mirror prod's members.
+
+---
+
+## Earlier route (kept): the generic `/webhooks/substack` relay
+
 
 How a paid Substack subscriber becomes a paid pollsystem member. Substack has
 **no native "new subscriber → your webhook URL"** feature, so a **relay**

@@ -59,6 +59,7 @@ class SecurityConfig(
                     "/api/auth/demo-sign-in",
                     "/api/auth/register-checkout",
                     "/webhooks/stripe",
+                    "/webhooks/stripe-substack",
                     "/webhooks/substack",
                     "/api/states/**",
                     "/api/counties/**",

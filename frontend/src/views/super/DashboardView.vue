@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import DemoAccountCard from '@/components/DemoAccountCard.vue'
+import SubstackMembersCard from '@/components/SubstackMembersCard.vue'
 
 const { t } = useI18n()
 
@@ -163,6 +164,8 @@ onMounted(() => {
     </section>
 
     <DemoAccountCard />
+
+    <SubstackMembersCard />
 
     <section>
       <div class="mb-2 flex items-center justify-between">

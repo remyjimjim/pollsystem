@@ -94,6 +94,11 @@ app:
     # set, so it can't be driven by forged calls before Substack is wired up.
     webhook-secret: ${SUBSTACK_WEBHOOK_SECRET:}
     membership-days: 32
+  # The Substack Stripe account (norfstar.substack, V43): its webhook signing
+  # secret, and a read-only API key for re-sync. Blank: that part is off.
+  stripe-substack:
+    webhook-secret: ${STRIPE_SUBSTACK_WEBHOOK_SECRET:}
+    api-key: ${STRIPE_SUBSTACK_API_KEY:}
 
 # Spring Boot Actuator. We expose only the endpoints we use
 # explicitly — `health` (public, for orchestrators / load balancers)
