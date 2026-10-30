@@ -61,6 +61,58 @@ logged.
 
 ---
 
+## 2026-10-30 — Ranked choice: ballot, review and results screens
+
+**Requested:**
+
+> Yes please
+
+(to carrying on with the ranked-choice screens)
+
+**Changed:**
+
+- **Ballot:** each ranked race (the 3 Alaska races) shows a rank dropdown
+  per candidate (—, 1st, 2nd, 3rd, 4th) and a one-line explanation.
+  - Picking a rank that's already used moves it; the other candidate becomes
+    unranked.
+  - Submit refuses gaps with "Please rank without skipping (1st, 2nd, 3rd…)
+    in: <race>", linked to the race.
+  - The ranks are sent with the vote.
+- **Review** (View past ballots): each ranked candidate shows its rank and a
+  "✓ Your 2nd choice" badge; unranked ones are faded.
+- **Results:** a new `RankedRaceResults` draws each round as the light-blue
+  bars:
+  - "eliminated after this round" and "✓ Winner" marks;
+  - "No choices left: N% of ballots";
+  - a collapsed "How ranked choice is counted";
+  - raw counts for supers.
+  It's used on the election's own results and on a district ballot's other
+  parts. Ranked races skip the Yes/No bars.
+- Labels in 9 languages (English ordinals 1st/2nd; others use 1.º, 1., 第1…).
+  Help pages: Answering polls, Viewing results.
+- **Fix:** the backend wouldn't start with V44. Hibernate's schema check
+  expected `integer` for `choice_rank` (a `smallint`); the 416 tests don't
+  run that check. Now mapped with `@JdbcTypeCode(SqlTypes.SMALLINT)`. This
+  would have failed the staging and prod deploys.
+
+**Verified (local, headless Chrome):**
+
+- 8 API voters plus one through the ballot: 12 rank pickers and 3
+  explanations on the Alaska ballot; the gap message showed for 1st + 3rd;
+  giving "1st" to another candidate cleared it from the first; submit went
+  to the results.
+- Senate count, checked by hand: round 1 is 3/3/2/1, so Dan S. Sullivan is
+  out. The three-way tie at 3 removes Daniel J. Sullivan Jr. (fewest in
+  round 1). Mary Peltola then wins 63% to 38%, with 11% out of choices.
+  The page shows 3 ranked races, 5 rounds and 3 winners.
+- Review showed "Your 1st choice" and "Your 2nd choice". After a look at the
+  screenshots, tied candidates now list the eliminated one last.
+- vue-tsc clean; vitest 196 pass; the ranked backend tests pass.
+
+**Commit:** `576499e`
+
+---
+
 ## 2026-10-30 — Ranked choice: backend (phases 1–2)
 
 **Requested:**
