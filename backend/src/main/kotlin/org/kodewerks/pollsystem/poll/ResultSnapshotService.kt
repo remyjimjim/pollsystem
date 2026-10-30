@@ -28,7 +28,8 @@ import java.time.Instant
 import kotlin.math.roundToInt
 
 /** One answer, whichever the poll type: a question's text, or "true"/"false" for a candidate or measure. */
-data class Answer(val userId: Long, val zipcode: String?, val itemId: Long, val response: String)
+/** One answer as results see it; [rank] is set on ranked-choice votes (V44). */
+data class Answer(val userId: Long, val zipcode: String?, val itemId: Long, val response: String, val rank: Int? = null)
 
 /**
  * How results are shown (small-poll privacy, decided 2026-10-14):
@@ -72,7 +73,7 @@ class ResultSnapshotService(
         PollKind.QUESTIONNAIRE -> questionResponses.findByQuestionnaireId(pollId)
             .map { Answer(it.user.id, it.user.zipcode, it.question.id, it.response) }
         PollKind.ELECTION -> candidateResponses.findByElectionId(pollId)
-            .map { Answer(it.user.id, it.user.zipcode, it.candidate.id, it.response.toString()) }
+            .map { Answer(it.user.id, it.user.zipcode, it.candidate.id, it.response.toString(), it.rank) }
         PollKind.BALLOT_MEASURE -> ballotResponses.findByMeasureId(pollId)
             .map { Answer(it.user.id, it.user.zipcode, pollId, it.response.toString()) }
     }
@@ -96,7 +97,7 @@ class ResultSnapshotService(
         )
         snapshotAnswers.deleteBySnapshotId(snap.id)
         snapshotAnswers.saveAll(answers.map {
-            ResultSnapshotAnswer(snapshotId = snap.id, userId = it.userId, zipcode = it.zipcode, itemId = it.itemId, response = it.response)
+            ResultSnapshotAnswer(snapshotId = snap.id, userId = it.userId, zipcode = it.zipcode, itemId = it.itemId, response = it.response, rank = it.rank)
         })
         if (current == null && notify) milestones.resultsVisible(kind, pollId)
     }
@@ -117,7 +118,7 @@ class ResultSnapshotService(
 
     fun snapshot(kind: PollKind, pollId: Long): List<Answer>? =
         snapshots.findByPollTypeAndPollId(kind, pollId)?.let { s ->
-            snapshotAnswers.findBySnapshotId(s.id).map { Answer(it.userId, it.zipcode, it.itemId, it.response) }
+            snapshotAnswers.findBySnapshotId(s.id).map { Answer(it.userId, it.zipcode, it.itemId, it.response, it.rank) }
         }
 }
 

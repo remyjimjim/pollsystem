@@ -55,5 +55,9 @@ data class ResultSnapshotAnswer(
 
     /** The answer text, or "true"/"false". */
     @Column(nullable = false)
-    val response: String
+    val response: String,
+
+    /** A ranked-choice vote's rank (V44); null otherwise. */
+    @Column(name = "choice_rank")
+    val rank: Int? = null
 )

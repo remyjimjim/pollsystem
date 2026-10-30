@@ -27,7 +27,9 @@ data class CandidateAnswerInput(
     val response: Boolean,
     val comment: String? = null,
     /** "Make comment public (and anonymous)": stored only if the comment is clean. */
-    val commentPublic: Boolean = false
+    val commentPublic: Boolean = false,
+    /** In a ranked-choice race (V44): 1 = first choice, on candidates with response = true. */
+    val rank: Int? = null
 )
 
 data class SubmitElectionResponsesRequest(
@@ -40,7 +42,9 @@ data class MyCandidateResponseDto(
     val comment: String?,
     val commentPublic: Boolean = false,
     val dateSubmitted: Instant,
-    val lastModified: Instant?
+    val lastModified: Instant?,
+    /** In a ranked-choice race: 1 = first choice. */
+    val rank: Int? = null
 )
 
 data class MyElectionResponsesDto(
@@ -61,7 +65,8 @@ class ElectionResponseController(
     private val blocks: PollBlockService,
     private val snapshots: ResultSnapshotService,
     private val badWords: org.kodewerks.pollsystem.moderation.BadWords,
-    private val rules: BallotRules
+    private val rules: BallotRules,
+    private val rankedRaces: RankedRaces
 ) {
 
     @GetMapping("/me")
@@ -82,6 +87,7 @@ class ElectionResponseController(
                 MyCandidateResponseDto(
                     candidateId = it.candidate.id,
                     response = it.response,
+                    rank = it.rank,
                     comment = it.comment,
                     commentPublic = it.commentPublic,
                     dateSubmitted = it.dateSubmitted,
@@ -126,6 +132,24 @@ class ElectionResponseController(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing answers for candidates: $missing")
         }
 
+        // Ranked-choice races (V44): the ranked candidates (response = true) are
+        // numbered 1, 2, ... with no gaps or repeats, at least a 1st choice;
+        // nobody else carries a rank. Single-choice races ignore any rank.
+        val ranked = rankedRaces.of(id)
+        val rankOf = HashMap<Long, Int?>()
+        for ((officeId, group) in candidatesById.values.groupBy { it.office.id }) {
+            val answers = body.answers.filter { candidatesById.getValue(it.candidateId).office.id == officeId }
+            if (officeId !in ranked) { answers.forEach { rankOf[it.candidateId] = null }; continue }
+            val race = group.first().office.name
+            val picked = answers.filter { it.response }
+            if (answers.any { !it.response && it.rank != null }) bad("Only ranked candidates can have a rank in $race")
+            val ranks = picked.map { it.rank ?: bad("Give each ranked candidate a rank in $race") }
+            if (ranks.isEmpty()) bad("Rank at least your 1st choice in $race")
+            if (ranks.sorted() != (1..ranks.size).toList()) bad("Ranks in $race must run 1, 2, 3… with no gaps or repeats")
+            picked.forEach { rankOf[it.candidateId] = it.rank }
+            answers.filterNot { it.response }.forEach { rankOf[it.candidateId] = null }
+        }
+
         val now = Instant.now()
         val existingByCandidateId = responses
             .findByElectionIdAndUserId(id, principal.user.id)
@@ -137,6 +161,7 @@ class ElectionResponseController(
             if (existing != null) {
                 existing.copy(
                     response = ans.response,
+                    rank = rankOf[ans.candidateId],
                     comment = ans.comment?.trim(),
                     commentPublic = badWords.publishable(ans.comment, ans.commentPublic),
                     lastModified = now
@@ -146,6 +171,7 @@ class ElectionResponseController(
                     user = principal.user,
                     candidate = candidate,
                     response = ans.response,
+                    rank = rankOf[ans.candidateId],
                     comment = ans.comment?.trim(),
                     commentPublic = badWords.publishable(ans.comment, ans.commentPublic),
                     dateSubmitted = now
@@ -176,3 +202,5 @@ class ElectionResponseController(
         return mapOf("removed" to rules.cancel(id, principal.user))
     }
 }
+
+private fun bad(message: String): Nothing = throw ResponseStatusException(HttpStatus.BAD_REQUEST, message)

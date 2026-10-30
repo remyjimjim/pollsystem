@@ -132,5 +132,9 @@ data class CandidateResponse(
     val dateSubmitted: Instant = Instant.now(),
 
     @Column(name = "last_modified")
-    val lastModified: Instant? = null
+    val lastModified: Instant? = null,
+
+    /** In a ranked-choice race (V44): 1 = first choice. Null for single-choice races. */
+    @Column(name = "choice_rank")
+    val rank: Int? = null
 )

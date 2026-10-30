@@ -31,6 +31,32 @@ data class CandidateResultDto(
     val comments: List<String> = emptyList()
 )
 
+/** One round of a ranked-choice race's count (V44). */
+data class RankedRoundDto(
+    /** Percent of the ballots still counting, per candidate still in. */
+    val shares: Map<Long, Int>,
+    /** Ballots with no choice left, as a percent of all ranked ballots in the race. */
+    val exhaustedPct: Int,
+    /** Raw counts: supers only (null for everyone else). */
+    val votes: Map<Long, Int>?,
+    val exhausted: Int?,
+    val eliminated: Long?,
+    val winner: Long?
+)
+
+/** A ranked-choice race's instant-runoff result (decided 2026-10-30). */
+data class RankedRaceResultDto(
+    val officeId: Long,
+    val officeName: String,
+    /** The race's candidates (id, name, affiliation), in ballot order. */
+    val candidates: List<RankedCandidateDto>,
+    val rounds: List<RankedRoundDto>,
+    /** Ballots ranking anyone in this race: supers only. */
+    val ballots: Int?
+)
+
+data class RankedCandidateDto(val id: Long, val name: String, val affiliation: String)
+
 data class ElectionResultsDto(
     val electionId: Long,
     val title: String,
@@ -49,7 +75,9 @@ data class ElectionResultsDto(
     val purviewCounts: PurviewCounts = PurviewCounts(null, null),
     /** The rest of the ballot (V37), so its results page can show them all: included elections, and the published measures of this one and those. */
     val includedElectionIds: List<Long> = emptyList(),
-    val ballotMeasureIds: List<Long> = emptyList()
+    val ballotMeasureIds: List<Long> = emptyList(),
+    /** Ranked-choice races (V44): round by round. Their candidates' Yes / No above mean "ranked" / "not ranked". */
+    val rankedRaces: List<RankedRaceResultDto> = emptyList()
 )
 
 @RestController
@@ -62,7 +90,8 @@ class ElectionResultsController(
     private val access: ResultsAccess,
     private val publicComments: PublicComments,
     private val includes: ElectionIncludes,
-    private val measures: org.kodewerks.pollsystem.repository.BallotMeasureRepository
+    private val measures: org.kodewerks.pollsystem.repository.BallotMeasureRepository,
+    private val rankedRaces: RankedRaces
 ) {
 
     @GetMapping
@@ -98,6 +127,30 @@ class ElectionResultsController(
                 comments = comments[c.id].orEmpty()
             )
         }
+        // Ranked-choice races: each voter's ranking, counted round by round.
+        val rankedOffices = rankedRaces.of(id)
+        val ranked = if (rankedOffices.isEmpty() || (r.answers.isEmpty() && !r.live)) emptyList() else
+            candidates.findByElectionId(id).filter { it.office.id in rankedOffices }.groupBy { it.office.id }.map { (officeId, raceCandidates) ->
+                val ids = raceCandidates.map { it.id }.toSet()
+                val ballots = r.answers.filter { it.itemId in ids && it.response == "true" && it.rank != null }
+                    .groupBy { it.userId }.values.map { mine -> mine.sortedBy { it.rank }.map { it.itemId } }
+                val rounds = InstantRunoff.count(ballots, raceCandidates.map { InstantRunoff.Candidate(it.id, it.name) })
+                RankedRaceResultDto(
+                    officeId = officeId, officeName = raceCandidates.first().office.name,
+                    candidates = raceCandidates.sortedBy { it.id }.map { RankedCandidateDto(it.id, it.name, it.affiliation) },
+                    rounds = rounds.map { round ->
+                        val active = round.votes.values.sum()
+                        RankedRoundDto(
+                            shares = round.votes.mapValues { pct(it.value, active) },
+                            exhaustedPct = pct(round.exhausted, ballots.size),
+                            votes = if (r.live) round.votes else null,
+                            exhausted = if (r.live) round.exhausted else null,
+                            eliminated = round.eliminated, winner = round.winner
+                        )
+                    },
+                    ballots = if (r.live) ballots.size else null
+                )
+            }
         return ElectionResultsDto(
             electionId = id,
             title = election.title,
@@ -113,7 +166,8 @@ class ElectionResultsController(
             includedElectionIds = includes.of(id),
             ballotMeasureIds = (listOf(id) + includes.of(id)).flatMap { e ->
                 measures.findByElectionId(e).filter { it.status != org.kodewerks.pollsystem.model.PollStatus.DRAFT }.map { it.id }
-            }
+            },
+            rankedRaces = ranked
         )
     }
 }

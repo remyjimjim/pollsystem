@@ -34,7 +34,8 @@ class ElectionService(
     private val objectMapper: ObjectMapper,
     private val ballotMeasures: BallotMeasureService,
     private val includes: ElectionIncludes,
-    private val history: PollHistoryService
+    private val history: PollHistoryService,
+    private val rankedRaces: RankedRaces
 ) {
 
     @Transactional
@@ -189,7 +190,8 @@ class ElectionService(
             candidatesWidget = widget,
             candidatesGroupBy = groupBy,
             includedElectionIds = includes.of(e.id),
-            includedByElectionIds = includes.includedBy(e.id)
+            includedByElectionIds = includes.includedBy(e.id),
+            rankedOfficeIds = rankedRaces.of(e.id).sorted()
         )
     }
 

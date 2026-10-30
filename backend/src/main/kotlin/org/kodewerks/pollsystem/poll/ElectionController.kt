@@ -87,7 +87,9 @@ data class ElectionDto(
     val includedElectionIds: List<Long> = emptyList(),
     /** Ballots that include this election (its voters arrive through them). */
     val includedByElectionIds: List<Long> = emptyList(),
-    val residentsOnly: Boolean = false
+    val residentsOnly: Boolean = false,
+    /** Ranked-choice races (V44): the offices whose candidates are ranked 1st, 2nd, ... */
+    val rankedOfficeIds: List<Long> = emptyList()
 ) {
     companion object {
         fun from(
@@ -100,7 +102,8 @@ data class ElectionDto(
             candidatesWidget: String?,
             candidatesGroupBy: String?,
             includedElectionIds: List<Long> = emptyList(),
-            includedByElectionIds: List<Long> = emptyList()
+            includedByElectionIds: List<Long> = emptyList(),
+            rankedOfficeIds: List<Long> = emptyList()
         ) = ElectionDto(
             id = e.id,
             pollTypeId = e.pollType.id,
@@ -120,7 +123,8 @@ data class ElectionDto(
             candidatesGroupBy = candidatesGroupBy,
             includedElectionIds = includedElectionIds,
             includedByElectionIds = includedByElectionIds,
-            residentsOnly = e.residentsOnly
+            residentsOnly = e.residentsOnly,
+            rankedOfficeIds = rankedOfficeIds
         )
     }
 }
