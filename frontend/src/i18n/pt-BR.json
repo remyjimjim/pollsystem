@@ -235,11 +235,16 @@
     "submissionFailed": "Falha ao enviar",
     "validation": {
       "yesNoFor": "Responda Sim ou Não para: {name}",
-      "selectionFor": "Faça uma seleção para: {office}"
+      "selectionFor": "Faça uma seleção para: {office}",
+      "rankGapFor": "Classifique sem pular posições (1ª, 2ª, 3ª…) em: {office}"
     },
     "measuresHeading": "Medidas em votação",
     "measuresOptional": "Opcional: deixe uma medida em branco para pulá-la.",
-    "purviewLabel": "Abrangência:"
+    "purviewLabel": "Abrangência:",
+    "rankedHelp": "Classifique os candidatos por preferência: sua 1ª escolha, depois a 2ª e assim por diante. Classifique quantos quiser. Se ninguém tiver a maioria das primeiras escolhas, o último é eliminado e contam as próximas escolhas de seus eleitores.",
+    "rankFor": "Posição de {name}",
+    "rankOrdinal": "{n}ª",
+    "yourRank": "Sua {rank} escolha"
   },
   "questionnaire": {
     "closesLabel": "Encerra",
@@ -304,7 +309,17 @@
     "soFar": "Ninguém respondeu ainda. | Até agora 1 pessoa respondeu. | Até agora {n} pessoas responderam.",
     "superLive": "Visão de super: resultados ao vivo com números brutos.",
     "countWithheld": "menos de {n}",
-    "alsoOnBallot": "Também nesta cédula"
+    "alsoOnBallot": "Também nesta cédula",
+    "ranked": {
+      "round": "Rodada {n}",
+      "finalRound": "Rodada {n} (final)",
+      "winner": "Vencedor",
+      "eliminated": "eliminado após esta rodada",
+      "exhausted": "Sem escolhas restantes: {pct}% das cédulas",
+      "ballots": "{n} cédula classificada | {n} cédulas classificadas",
+      "howTitle": "Como o voto por classificação é contado",
+      "howText": "Cada cédula conta para o candidato mais bem classificado que ainda está na disputa. Se alguém tiver mais da metade das cédulas que ainda contam, vence. Caso contrário, o último é eliminado e suas cédulas contam para a próxima escolha de cada eleitor. Com dois restantes, vence quem tiver mais votos."
+    }
   },
   "notFound": {
     "heading": "Não encontrado",

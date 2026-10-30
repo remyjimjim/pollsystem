@@ -235,11 +235,16 @@
     "submissionFailed": "Error al enviar",
     "validation": {
       "yesNoFor": "Por favor responda Sí o No para: {name}",
-      "selectionFor": "Por favor haga una selección para: {office}"
+      "selectionFor": "Por favor haga una selección para: {office}",
+      "rankGapFor": "Ordene sin saltarse posiciones (1.º, 2.º, 3.º…) en: {office}"
     },
     "measuresHeading": "Medidas electorales",
     "measuresOptional": "Opcional: deja una medida en blanco para omitirla.",
-    "purviewLabel": "Ámbito:"
+    "purviewLabel": "Ámbito:",
+    "rankedHelp": "Ordene a los candidatos según su preferencia: su 1.ª opción, luego la 2.ª, etc. Ordene a tantos como quiera. Si nadie obtiene la mayoría de primeras opciones, se elimina al último y cuentan las siguientes opciones de sus votantes.",
+    "rankFor": "Posición para {name}",
+    "rankOrdinal": "{n}.º",
+    "yourRank": "Su opción {rank}"
   },
   "questionnaire": {
     "closesLabel": "Cierra",
@@ -304,7 +309,17 @@
     "soFar": "Nadie ha respondido todavía. | Hasta ahora ha respondido 1 persona. | Hasta ahora han respondido {n} personas.",
     "superLive": "Vista de super: resultados en vivo con cifras exactas.",
     "countWithheld": "menos de {n}",
-    "alsoOnBallot": "También en esta boleta"
+    "alsoOnBallot": "También en esta boleta",
+    "ranked": {
+      "round": "Ronda {n}",
+      "finalRound": "Ronda {n} (final)",
+      "winner": "Ganador",
+      "eliminated": "eliminado tras esta ronda",
+      "exhausted": "Sin opciones restantes: {pct}% de las boletas",
+      "ballots": "{n} boleta ordenada | {n} boletas ordenadas",
+      "howTitle": "Cómo se cuenta el voto por orden de preferencia",
+      "howText": "Cada boleta cuenta para su candidato mejor clasificado que siga en la contienda. Si alguien tiene más de la mitad de las boletas que siguen contando, gana. Si no, se elimina al último y sus boletas cuentan para la siguiente opción de cada votante. Con dos restantes, gana quien tenga más votos."
+    }
   },
   "notFound": {
     "heading": "No encontrado",

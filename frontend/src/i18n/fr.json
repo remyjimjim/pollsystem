@@ -235,11 +235,16 @@
     "submissionFailed": "Échec de l'envoi",
     "validation": {
       "yesNoFor": "Veuillez répondre Oui ou Non pour : {name}",
-      "selectionFor": "Veuillez faire une sélection pour : {office}"
+      "selectionFor": "Veuillez faire une sélection pour : {office}",
+      "rankGapFor": "Classez sans sauter de rang (1er, 2e, 3e…) dans : {office}"
     },
     "measuresHeading": "Mesures soumises au vote",
     "measuresOptional": "Facultatif : laissez une mesure vide pour l’ignorer.",
-    "purviewLabel": "Périmètre :"
+    "purviewLabel": "Périmètre :",
+    "rankedHelp": "Classez les candidats par ordre de préférence : votre 1er choix, puis le 2e, etc. Classez-en autant que vous voulez. Si personne n'obtient la majorité des premiers choix, le dernier est éliminé et les choix suivants de ses électeurs comptent.",
+    "rankFor": "Rang pour {name}",
+    "rankOrdinal": "{n}e",
+    "yourRank": "Votre choix {rank}"
   },
   "questionnaire": {
     "closesLabel": "Clôture",
@@ -304,7 +309,17 @@
     "soFar": "Personne n'a encore répondu. | 1 personne a répondu jusqu'ici. | {n} personnes ont répondu jusqu'ici.",
     "superLive": "Vue super : résultats en direct avec les chiffres bruts.",
     "countWithheld": "moins de {n}",
-    "alsoOnBallot": "Aussi sur ce bulletin"
+    "alsoOnBallot": "Aussi sur ce bulletin",
+    "ranked": {
+      "round": "Tour {n}",
+      "finalRound": "Tour {n} (final)",
+      "winner": "Gagnant",
+      "eliminated": "éliminé après ce tour",
+      "exhausted": "Plus aucun choix : {pct} % des bulletins",
+      "ballots": "{n} bulletin classé | {n} bulletins classés",
+      "howTitle": "Comment le vote par classement est compté",
+      "howText": "Chaque bulletin compte pour son candidat le mieux classé encore en lice. Si quelqu'un a plus de la moitié des bulletins encore comptés, il gagne. Sinon, le dernier est éliminé et ses bulletins comptent pour le choix suivant de chaque électeur. À deux, celui qui a le plus de voix gagne."
+    }
   },
   "notFound": {
     "heading": "Introuvable",

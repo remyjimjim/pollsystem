@@ -235,11 +235,16 @@
     "submissionFailed": "Senden fehlgeschlagen",
     "validation": {
       "yesNoFor": "Bitte antworten Sie mit Ja oder Nein für: {name}",
-      "selectionFor": "Bitte treffen Sie eine Auswahl für: {office}"
+      "selectionFor": "Bitte treffen Sie eine Auswahl für: {office}",
+      "rankGapFor": "Bitte ohne Lücken ordnen (1., 2., 3. …) bei: {office}"
     },
     "measuresHeading": "Abstimmungsvorlagen",
     "measuresOptional": "Optional: Lassen Sie eine Vorlage leer, um sie zu überspringen.",
-    "purviewLabel": "Geltungsbereich:"
+    "purviewLabel": "Geltungsbereich:",
+    "rankedHelp": "Ordnen Sie die Kandidaten nach Ihrer Präferenz: Ihre 1. Wahl, dann die 2. usw. Ordnen Sie so viele, wie Sie möchten. Hat niemand die Mehrheit der Erststimmen, scheidet der Letztplatzierte aus und die nächsten Wahlen seiner Wähler zählen.",
+    "rankFor": "Rang für {name}",
+    "rankOrdinal": "{n}.",
+    "yourRank": "Ihre {rank} Wahl"
   },
   "questionnaire": {
     "closesLabel": "Schließt",
@@ -304,7 +309,17 @@
     "soFar": "Noch hat niemand geantwortet. | Bisher hat 1 Person geantwortet. | Bisher haben {n} Personen geantwortet.",
     "superLive": "Super-Ansicht: Live-Ergebnisse mit Rohzahlen.",
     "countWithheld": "weniger als {n}",
-    "alsoOnBallot": "Ebenfalls auf diesem Stimmzettel"
+    "alsoOnBallot": "Ebenfalls auf diesem Stimmzettel",
+    "ranked": {
+      "round": "Runde {n}",
+      "finalRound": "Runde {n} (letzte)",
+      "winner": "Gewinner",
+      "eliminated": "nach dieser Runde ausgeschieden",
+      "exhausted": "Keine Wahl mehr übrig: {pct} % der Stimmzettel",
+      "ballots": "{n} Rangstimmzettel | {n} Rangstimmzettel",
+      "howTitle": "Wie die Rangwahl ausgezählt wird",
+      "howText": "Jeder Stimmzettel zählt für den bestplatzierten Kandidaten, der noch im Rennen ist. Hat jemand mehr als die Hälfte der noch zählenden Stimmzettel, gewinnt er. Sonst scheidet der Letztplatzierte aus, und seine Stimmzettel zählen für die nächste Wahl jedes Wählers. Bei zweien gewinnt, wer mehr Stimmen hat."
+    }
   },
   "notFound": {
     "heading": "Nicht gefunden",

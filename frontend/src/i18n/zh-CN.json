@@ -235,11 +235,16 @@
     "submissionFailed": "提交失败",
     "validation": {
       "yesNoFor": "请为以下选项回答“是”或“否”：{name}",
-      "selectionFor": "请为以下职位做出选择：{office}"
+      "selectionFor": "请为以下职位做出选择：{office}",
+      "rankGapFor": "请按顺序排名，不要跳过（第1、第2、第3…）：{office}"
     },
     "measuresHeading": "投票议案",
     "measuresOptional": "可选：留空即跳过该议案。",
-    "purviewLabel": "覆盖范围："
+    "purviewLabel": "覆盖范围：",
+    "rankedHelp": "按您的偏好为候选人排序：第1选择、第2选择，依此类推。可以为任意多位候选人排序。如果没有人获得过半数的第一选择，排名最后的候选人将被淘汰，其选民的下一选择将被计入。",
+    "rankFor": "{name} 的排名",
+    "rankOrdinal": "第{n}",
+    "yourRank": "您的{rank}选择"
   },
   "questionnaire": {
     "closesLabel": "截止",
@@ -304,7 +309,17 @@
     "soFar": "还没有人回复。 | 目前已有 1 人回复。 | 目前已有 {n} 人回复。",
     "superLive": "超级管理员视图：带原始数字的实时结果。",
     "countWithheld": "少于 {n}",
-    "alsoOnBallot": "本选票上的其他项目"
+    "alsoOnBallot": "本选票上的其他项目",
+    "ranked": {
+      "round": "第{n}轮",
+      "finalRound": "第{n}轮（最终）",
+      "winner": "胜出",
+      "eliminated": "本轮后被淘汰",
+      "exhausted": "已无剩余选择：{pct}% 的选票",
+      "ballots": "{n} 张排序选票",
+      "howTitle": "排序复选制如何计票",
+      "howText": "每张选票计入仍在角逐中排名最高的候选人。若有人获得仍在计数选票的过半数即胜出；否则淘汰排名最后的候选人，其选票计入各选民的下一选择。剩下两人时，得票多者胜出。"
+    }
   },
   "notFound": {
     "heading": "未找到",

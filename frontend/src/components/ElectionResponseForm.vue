@@ -8,7 +8,7 @@ import ReplaceWordDialog from './ReplaceWordDialog.vue'
 import { useCommentModeration } from '../composables/useCommentModeration'
 import { useAppearance } from '@/composables/useAppearance'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 // In Dark, the form's messages take the Submit votes button's color (the theme
 // text color); in Light they stay red, so they still stand out from the text.
 const appearance = useAppearance()
@@ -37,11 +37,15 @@ interface ElectionDto {
   candidatesGroupBy: string | null
   /** Elections shown on this one's ballot, e.g. a state's statewide races on a district ballot (V37). */
   includedElectionIds?: number[]
+  /** Ranked-choice races (V44): their candidates are ranked 1st, 2nd, ... */
+  rankedOfficeIds?: number[]
 }
 
 interface MyCandidateResponseDto {
   candidateId: number
   response: boolean
+  /** In a ranked-choice race: 1 = first choice. */
+  rank?: number | null
   comment: string | null
   commentPublic?: boolean
   dateSubmitted: string
@@ -89,7 +93,7 @@ const submitting = ref(false)
 const error = ref<string | null>(null)
 // Problems with a submission. Shown by the Submit button, with the form still
 // on screen: the office (or candidate) still to choose links to its section.
-const missing = ref<{ kind: 'office' | 'candidate'; office: string; label: string } | null>(null)
+const missing = ref<{ kind: 'office' | 'candidate' | 'rankGap'; office: string; label: string } | null>(null)
 const submitError = ref<string | null>(null)
 const closedReason = ref<string | null>(null)
 const message = ref<string | null>(null)
@@ -104,6 +108,10 @@ const answers = reactive<Record<number, { response: boolean | null; comment: str
 // candidate IDs selected within a given office. Size 0–1 for selectOne*,
 // size 0–N for selectManyCheckbox.
 const selectionByOffice = reactive<Record<string, Set<number>>>({})
+// Ranked-choice races (V44, decided 2026-10-30): which candidates are in one,
+// and each one's rank (1 = first choice; null = not ranked).
+const rankedCandidateIds = ref(new Set<number>())
+const rankOf = reactive<Record<number, number | null>>({})
 
 // Per-candidate comment used by all widget modes.
 const comments = reactive<Record<number, string>>({})
@@ -167,6 +175,7 @@ async function load() {
       if (open || props.review) parts.push(inc)
     }
     for (const part of parts) for (const c of part.candidates) electionOf[c.id] = part.id
+    rankedCandidateIds.value = new Set(parts.flatMap(p => p.candidates.filter(c => (p.rankedOfficeIds ?? []).includes(c.officeId)).map(c => c.id)))
     ballotIds.value = parts.map(p => p.id)
     election.value = { ...res.data, candidates: parts.flatMap(p => p.candidates) }
     const mineAll = await Promise.all(parts.map(p =>
@@ -200,6 +209,7 @@ function seedAnswers() {
     }
     comments[c.id] = p?.comment ?? ''
     commentPublic[c.id] = p?.commentPublic ?? false
+    rankOf[c.id] = p?.response ? (p.rank ?? null) : null
   }
 
   // Rebuild per-office selection sets from the prior responses so the new
@@ -254,7 +264,9 @@ function goToOffice(office: string) {
 watch([selectionByOffice, answers], () => {
   const m = missing.value
   if (!m) return
-  const done = m.kind === 'office'
+  const done = m.kind === 'rankGap'
+    ? rankGapIn(m.office) === null
+    : m.kind === 'office'
     ? (selectionByOffice[m.office]?.size ?? 0) > 0
     : (election.value?.candidates ?? []).filter(c => c.officeName === m.office).every(c => answers[c.id]?.response != null)
   if (done) missing.value = null
@@ -274,6 +286,32 @@ const groupedByOffice = computed<[string, CandidateDto[]][]>(() => {
   return Array.from(map.entries())
 })
 
+/** A ranked-choice race: its candidates get a rank picker instead of the usual widget. */
+function isRankedOffice(office: string): boolean {
+  return (groupedByOffice.value.find(([o]) => o === office)?.[1] ?? []).some(c => rankedCandidateIds.value.has(c.id))
+}
+/** Gives [candidateId] rank [rank] (null = unranked). Whoever held that rank becomes unranked, so ranks never repeat. */
+function setRank(office: string, candidateId: number, rank: number | null) {
+  const group = groupedByOffice.value.find(([o]) => o === office)?.[1] ?? []
+  if (rank !== null) for (const c of group) if (c.id !== candidateId && rankOf[c.id] === rank) rankOf[c.id] = null
+  rankOf[candidateId] = rank
+  selectionByOffice[office] = new Set(group.filter(c => rankOf[c.id] != null).map(c => c.id))
+}
+/** The first rank missing below a used one (e.g. 2 when 1st and 3rd are set), or null when ranks run 1, 2, 3… */
+function rankGapIn(office: string): number | null {
+  const group = groupedByOffice.value.find(([o]) => o === office)?.[1] ?? []
+  const used = new Set(group.map(c => rankOf[c.id]).filter((r): r is number => r != null))
+  const max = Math.max(0, ...used)
+  for (let r = 1; r <= max; r++) if (!used.has(r)) return r
+  return null
+}
+/** "1st", "2nd"… in English; other languages from election.rankOrdinal ("1.º", "1.", "第1"…). */
+function ordinal(n: number): string {
+  if (!String(locale.value).startsWith('en')) return t('election.rankOrdinal', { n })
+  const suffix: Record<string, string> = { one: 'st', two: 'nd', few: 'rd', other: 'th' }
+  return `${n}${suffix[new Intl.PluralRules('en', { type: 'ordinal' }).select(n)]}`
+}
+
 function isSelected(office: string, candidateId: number): boolean {
   return selectionByOffice[office]?.has(candidateId) ?? false
 }
@@ -283,6 +321,7 @@ function isSelected(office: string, candidateId: number): boolean {
 // rest are faded; comments show as text, empty comment boxes are hidden.
 const reviewing = computed(() => mode.value === 'readonly')
 function votedFor(office: string, c: { id: number }): boolean {
+  if (rankedCandidateIds.value.has(c.id)) return rankOf[c.id] != null
   return widget.value === 'legacy' ? answers[c.id]?.response === true : isSelected(office, c.id)
 }
 function reviewRow(office: string, c: { id: number }) {
@@ -326,6 +365,10 @@ async function submit() {
         missing.value = { kind: 'office', office, label: office }
         return
       }
+      if (isRankedOffice(office) && rankGapIn(office) !== null) {
+        missing.value = { kind: 'rankGap', office, label: office }
+        return
+      }
     }
   }
 
@@ -355,11 +398,13 @@ async function submit() {
       const commentText = widget.value === 'legacy'
         ? answers[c.id].comment
         : (comments[c.id] ?? '')
+      const ranked = rankedCandidateIds.value.has(c.id)
       return {
         candidateId: c.id,
-        response,
+        response: ranked ? rankOf[c.id] != null : response,
         comment: commentText.trim() || null,
-        commentPublic: commentPublic[c.id] ?? false
+        commentPublic: commentPublic[c.id] ?? false,
+        ...(ranked && rankOf[c.id] != null ? { rank: rankOf[c.id] } : {})
       }
     })
     // Each election on the ballot gets its own candidates' votes.
@@ -491,8 +536,52 @@ onMounted(load)
     >
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ officeName }}</legend>
 
+      <!-- Ranked choice (V44): a rank picker per candidate, in place of the usual widget. -->
+      <template v-if="isRankedOffice(officeName)">
+        <p class="m-0 mb-2 text-xs text-slate-600" data-test="ranked-help">{{ $t('election.rankedHelp') }}</p>
+        <div
+          v-for="c in group"
+          :key="c.id"
+          class="grid grid-cols-[auto_1fr] items-start gap-3 border-b border-slate-100 py-2 last:border-b-0"
+          :class="reviewRow(officeName, c)"
+          data-test="ranked-row"
+        >
+          <select
+            v-if="!reviewing"
+            :id="`rank-${c.id}`"
+            :value="rankOf[c.id] ?? ''"
+            :aria-label="$t('election.rankFor', { name: c.name })"
+            data-test="rank-picker"
+            class="mt-1 rounded border border-slate-300 p-1.5 text-sm focus:border-slate-500 focus:outline-none"
+            @change="setRank(officeName, c.id, ($event.target as HTMLSelectElement).value ? Number(($event.target as HTMLSelectElement).value) : null)"
+          >
+            <option value="">—</option>
+            <option v-for="n in group.length" :key="n" :value="n">{{ ordinal(n) }}</option>
+          </select>
+          <span v-else class="mt-1 w-12 text-sm font-semibold text-slate-700">{{ rankOf[c.id] ? ordinal(rankOf[c.id]!) : '—' }}</span>
+          <div class="flex flex-col">
+            <label :for="`rank-${c.id}`" class="flex flex-col">
+              <strong class="font-semibold text-slate-800">{{ c.name }}</strong>
+              <span class="text-sm text-slate-600">{{ c.affiliation }}</span>
+              <span v-if="reviewing && rankOf[c.id]" class="mt-1 self-start rounded bg-slate-800 px-2 py-0.5 text-xs font-semibold text-white" data-test="your-vote">✓ {{ $t('election.yourRank', { rank: ordinal(rankOf[c.id]!) }) }}</span>
+            </label>
+            <template v-if="!reviewing">
+              <input
+                :id="`comment-c-${c.id}`"
+                v-model="comments[c.id]"
+                type="text"
+                :placeholder="$t('common.comment')"
+                class="mt-1 rounded border border-slate-200 p-2 text-sm focus:border-slate-500 focus:outline-none"
+              />
+              <PublicCommentToggle :id="`comment-public-c-${c.id}`" v-model="commentPublic[c.id]" />
+            </template>
+            <p v-else-if="comments[c.id]?.trim()" class="m-0 mt-1 text-sm italic text-slate-700">“{{ comments[c.id] }}”</p>
+          </div>
+        </div>
+      </template>
+
       <!-- selectOneList: dropdown picker -->
-      <div v-if="widget === 'selectOneList'" class="mt-1">
+      <div v-else-if="widget === 'selectOneList'" class="mt-1">
         <select
           :value="Array.from(selectionByOffice[officeName] ?? [])[0] ?? ''"
           @change="onListChange(officeName, $event)"
@@ -703,7 +792,7 @@ onMounted(load)
 
     <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
     <p v-if="missing" class="m-0 text-sm" :class="messageColor" role="alert" data-test="missing-choice">
-      <i18n-t :keypath="missing.kind === 'office' ? 'election.validation.selectionFor' : 'election.validation.yesNoFor'" tag="span">
+      <i18n-t :keypath="missing.kind === 'rankGap' ? 'election.validation.rankGapFor' : missing.kind === 'office' ? 'election.validation.selectionFor' : 'election.validation.yesNoFor'" tag="span">
         <template #office><a :href="`#${officeAnchor(missing.office)}`" class="font-semibold underline" @click.prevent="goToOffice(missing.office)">{{ missing.label }}</a></template>
         <template #name><a :href="`#${officeAnchor(missing.office)}`" class="font-semibold underline" @click.prevent="goToOffice(missing.office)">{{ missing.label }}</a></template>
       </i18n-t>

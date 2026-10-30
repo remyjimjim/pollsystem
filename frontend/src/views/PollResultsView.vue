@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PublicCommentsList from '../components/PublicCommentsList.vue'
+import RankedRaceResults, { type RankedRace } from '@/components/RankedRaceResults.vue'
 import BallotPartResults, { type BallotPart } from '../components/BallotPartResults.vue'
 import { useAppearance } from '@/composables/useAppearance'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -73,6 +74,8 @@ interface ElectionResultsDto {
   /** The rest of the ballot: included elections and every ballot measure on it. */
   includedElectionIds?: number[]
   ballotMeasureIds?: number[]
+  /** Ranked-choice races (V44), round by round. */
+  rankedRaces?: RankedRace[]
 }
 
 interface BallotMeasureResultsDto {
@@ -108,7 +111,7 @@ async function loadBallotParts(own: ElectionResultsDto, params: Record<string, s
     const parts: BallotPart[] = []
     for (const i of own.includedElectionIds ?? []) {
       const r = (await axios.get<ElectionResultsDto>(`/api/polls/elections/${i}/results`, { params })).data
-      parts.push({ key: `e${i}`, title: r.title, visibility: r.visibility, suppressed: r.suppressed, suppressionMessage: r.suppressionMessage, perCandidate: r.perCandidate })
+      parts.push({ key: `e${i}`, title: r.title, visibility: r.visibility, suppressed: r.suppressed, suppressionMessage: r.suppressionMessage, perCandidate: r.perCandidate, rankedRaces: r.rankedRaces ?? [] })
     }
     for (const m of own.ballotMeasureIds ?? []) {
       const r = (await axios.get<BallotMeasureResultsDto>(`/api/polls/ballot-measures/${m}/results`, { params })).data
@@ -364,7 +367,9 @@ const hasGeoFilter = computed(() =>
 const groupedCandidates = computed(() => {
   if (!eData.value) return [] as Array<[string, CandidateResultDto[]]>
   const map = new Map<string, CandidateResultDto[]>()
-  for (const c of eData.value.perCandidate) {
+  // Ranked-choice races show their rounds instead (RankedRaceResults).
+  const ranked = new Set((eData.value.rankedRaces ?? []).map(r => r.officeName))
+  for (const c of eData.value.perCandidate.filter(c => !ranked.has(c.officeName))) {
     const list = map.get(c.officeName) ?? []
     list.push(c)
     map.set(c.officeName, list)
@@ -616,6 +621,12 @@ function purviewCount(n: number | null): string {
 
         <!-- Election results -->
         <template v-if="eData">
+          <RankedRaceResults
+            v-for="race in eData.rankedRaces ?? []"
+            :key="`ranked-${race.officeId}`"
+            :race="race"
+            :comments="Object.fromEntries(eData.perCandidate.map(c => [c.candidateId, c.comments ?? []]))"
+          />
           <section
             v-for="[officeName, group] in groupedCandidates"
             :key="officeName"

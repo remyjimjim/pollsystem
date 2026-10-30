@@ -1,5 +1,7 @@
 package org.kodewerks.pollsystem.model
 
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -58,6 +60,7 @@ data class ResultSnapshotAnswer(
     val response: String,
 
     /** A ranked-choice vote's rank (V44); null otherwise. */
+    @JdbcTypeCode(SqlTypes.SMALLINT)
     @Column(name = "choice_rank")
     val rank: Int? = null
 )

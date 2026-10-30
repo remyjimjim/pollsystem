@@ -4,6 +4,7 @@
 // own small-poll privacy: hidden until it has the minimum respondents.
 import { computed } from 'vue'
 import PublicCommentsList from './PublicCommentsList.vue'
+import RankedRaceResults, { type RankedRace } from './RankedRaceResults.vue'
 
 interface Visibility { mode: 'HIDDEN' | 'STEPPED' | 'LIVE'; respondentsSoFar: number }
 interface CandidateResult {
@@ -17,6 +18,8 @@ export interface BallotPart {
   suppressed?: boolean
   suppressionMessage?: string | null
   perCandidate?: CandidateResult[]
+  /** Ranked-choice races (V44): shown round by round instead of Yes / No. */
+  rankedRaces?: RankedRace[]
   measure?: { yes: number | null; no: number | null; yesPct: number; noPct: number; comments?: string[] }
 }
 
@@ -25,7 +28,8 @@ const props = defineProps<{ part: BallotPart }>()
 const live = computed(() => props.part.visibility.mode === 'LIVE')
 const offices = computed(() => {
   const map = new Map<string, CandidateResult[]>()
-  for (const c of props.part.perCandidate ?? []) map.set(c.officeName, [...(map.get(c.officeName) ?? []), c])
+  const ranked = new Set((props.part.rankedRaces ?? []).map(r => r.officeName))
+  for (const c of (props.part.perCandidate ?? []).filter(c => !ranked.has(c.officeName))) map.set(c.officeName, [...(map.get(c.officeName) ?? []), c])
   return Array.from(map.entries())
 })
 function label(percent: number, count: number | null | undefined) {
@@ -40,6 +44,12 @@ function label(percent: number, count: number | null | undefined) {
   </div>
 
   <template v-else-if="part.perCandidate">
+    <RankedRaceResults
+      v-for="race in part.rankedRaces ?? []"
+      :key="`ranked-${race.officeId}`"
+      :race="race"
+      :comments="Object.fromEntries((part.perCandidate ?? []).map(c => [c.candidateId, c.comments ?? []]))"
+    />
     <section v-for="[officeName, group] in offices" :key="officeName" class="mt-4 rounded-md border border-slate-200 p-4">
       <h3 class="mb-1 text-base font-semibold text-slate-700">{{ officeName }}</h3>
       <div v-for="c in group" :key="c.candidateId" class="border-b border-slate-100 py-3 last:border-b-0">

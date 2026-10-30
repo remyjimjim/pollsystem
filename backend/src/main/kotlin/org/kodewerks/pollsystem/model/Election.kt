@@ -135,6 +135,7 @@ data class CandidateResponse(
     val lastModified: Instant? = null,
 
     /** In a ranked-choice race (V44): 1 = first choice. Null for single-choice races. */
+    @JdbcTypeCode(SqlTypes.SMALLINT)
     @Column(name = "choice_rank")
     val rank: Int? = null
 )

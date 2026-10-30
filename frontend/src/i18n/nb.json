@@ -235,11 +235,16 @@
     "submissionFailed": "Sending mislyktes",
     "validation": {
       "yesNoFor": "Svar Ja eller Nei for: {name}",
-      "selectionFor": "Gjør et valg for: {office}"
+      "selectionFor": "Gjør et valg for: {office}",
+      "rankGapFor": "Ranger uten å hoppe over (1., 2., 3. …) i: {office}"
     },
     "measuresHeading": "Folkeavstemningssaker",
     "measuresOptional": "Valgfritt: la en sak stå tom for å hoppe over den.",
-    "purviewLabel": "Område:"
+    "purviewLabel": "Område:",
+    "rankedHelp": "Ranger kandidatene etter hvem du foretrekker: ditt 1. valg, så 2. og så videre. Ranger så mange du vil. Har ingen flertall av førstevalgene, slås den siste ut, og velgernes neste valg teller.",
+    "rankFor": "Rangering for {name}",
+    "rankOrdinal": "{n}.",
+    "yourRank": "Ditt {rank} valg"
   },
   "questionnaire": {
     "closesLabel": "Stenger",
@@ -304,7 +309,17 @@
     "soFar": "Ingen har svart ennå. | 1 person har svart så langt. | {n} personer har svart så langt.",
     "superLive": "Super-visning: sanntidsresultater med råtall.",
     "countWithheld": "færre enn {n}",
-    "alsoOnBallot": "Også på denne stemmeseddelen"
+    "alsoOnBallot": "Også på denne stemmeseddelen",
+    "ranked": {
+      "round": "Runde {n}",
+      "finalRound": "Runde {n} (siste)",
+      "winner": "Vinner",
+      "eliminated": "slått ut etter denne runden",
+      "exhausted": "Ingen valg igjen: {pct} % av stemmesedlene",
+      "ballots": "{n} rangert stemmeseddel | {n} rangerte stemmesedler",
+      "howTitle": "Slik telles rangert valg",
+      "howText": "Hver stemmeseddel teller for den høyest rangerte kandidaten som fortsatt er med. Har noen mer enn halvparten av stemmesedlene som fortsatt teller, vinner de. Ellers slås den siste ut, og stemmesedlene teller for hver velgers neste valg. Med to igjen vinner den med flest stemmer."
+    }
   },
   "notFound": {
     "heading": "Ikke funnet",

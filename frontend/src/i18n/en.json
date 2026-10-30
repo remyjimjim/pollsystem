@@ -261,11 +261,16 @@
     "submissionFailed": "Submission failed",
     "validation": {
       "yesNoFor": "Please answer Yes or No for: {name}",
-      "selectionFor": "Please make a selection for: {office}"
+      "selectionFor": "Please make a selection for: {office}",
+      "rankGapFor": "Please rank without skipping (1st, 2nd, 3rd…) in: {office}"
     },
     "measuresHeading": "Ballot measures",
     "measuresOptional": "Optional: leave a measure blank to skip it.",
-    "purviewLabel": "Purview:"
+    "purviewLabel": "Purview:",
+    "rankedHelp": "Rank the candidates in order of preference: your 1st choice, then 2nd, and so on. Rank as many as you like. If no one has a majority of 1st choices, the last-place candidate is eliminated and their voters' next choices count instead.",
+    "rankFor": "Rank for {name}",
+    "rankOrdinal": "{n}",
+    "yourRank": "Your {rank} choice"
   },
   "questionnaire": {
     "closesLabel": "Closes",
@@ -343,7 +348,17 @@
     "soFar": "No one has responded yet. | 1 person has responded so far. | {n} people have responded so far.",
     "superLive": "Super view: live results with raw numbers.",
     "countWithheld": "fewer than {n}",
-    "alsoOnBallot": "Also on this ballot"
+    "alsoOnBallot": "Also on this ballot",
+    "ranked": {
+      "round": "Round {n}",
+      "finalRound": "Round {n} (final)",
+      "winner": "Winner",
+      "eliminated": "eliminated after this round",
+      "exhausted": "No choices left: {pct}% of ballots",
+      "ballots": "{n} ranked ballot | {n} ranked ballots",
+      "howTitle": "How ranked choice is counted",
+      "howText": "Each ballot counts for its highest-ranked candidate still in the race. If someone has more than half of the ballots still counting, they win. Otherwise the last-place candidate is eliminated and their ballots count for each voter's next choice. With two left, the one with more votes wins."
+    }
   },
   "notFound": {
     "heading": "Not Found",

@@ -28,6 +28,20 @@ candidate's name to select them. Make a choice for every office, then click
 
 Each candidate has an optional **comment** box.
 
+### Ranked-choice races
+
+Some races are counted by **ranked choice**, as in Alaska. Their names end in
+"(ranked choice)". Instead of picking one candidate, you **rank** them: pick
+**1st**, **2nd**, **3rd**… from the dropdown beside each name.
+
+- Rank as many or as few as you like, but give at least a **1st** choice.
+- Ranks can't skip: a 3rd choice needs a 2nd.
+- Picking a rank someone else already has moves it to your new pick, and the
+  other candidate becomes unranked.
+
+When you review a past ballot, each ranked candidate shows **Your 1st choice**,
+**Your 2nd choice**, and so on.
+
 ## Ballot measures
 
 A ballot measure belongs to an election, and you vote on it **on the

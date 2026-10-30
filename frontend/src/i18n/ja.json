@@ -235,11 +235,16 @@
     "submissionFailed": "送信に失敗しました",
     "validation": {
       "yesNoFor": "{name} について「はい」か「いいえ」で回答してください",
-      "selectionFor": "{office} について選択してください"
+      "selectionFor": "{office} について選択してください",
+      "rankGapFor": "順位を飛ばさずに付けてください（第1、第2、第3…）：{office}"
     },
     "measuresHeading": "住民投票",
     "measuresOptional": "任意：空欄のままにするとスキップされます。",
-    "purviewLabel": "対象地域："
+    "purviewLabel": "対象地域：",
+    "rankedHelp": "候補者を希望順に順位付けしてください（第1希望、第2希望…）。何人でも順位付けできます。第1希望で過半数を得た人がいない場合、最下位の候補者が除外され、その投票者の次の希望が数えられます。",
+    "rankFor": "{name} の順位",
+    "rankOrdinal": "第{n}",
+    "yourRank": "あなたの{rank}希望"
   },
   "questionnaire": {
     "closesLabel": "締切",
@@ -304,7 +309,17 @@
     "soFar": "まだ回答はありません。 | これまでに1人が回答しました。 | これまでに{n}人が回答しました。",
     "superLive": "スーパー管理者表示：実数を含むリアルタイムの結果です。",
     "countWithheld": "{n}人未満",
-    "alsoOnBallot": "この投票用紙のその他の項目"
+    "alsoOnBallot": "この投票用紙のその他の項目",
+    "ranked": {
+      "round": "第{n}ラウンド",
+      "finalRound": "第{n}ラウンド（最終）",
+      "winner": "当選",
+      "eliminated": "このラウンド後に除外",
+      "exhausted": "希望が残っていない票：{pct}%",
+      "ballots": "順位付き投票 {n} 票",
+      "howTitle": "順位選択投票の集計方法",
+      "howText": "各票は、まだ残っている候補者のうち最も順位の高い候補者に数えられます。残っている票の過半数を得た人が当選します。いなければ最下位の候補者が除外され、その票は各投票者の次の希望に数えられます。2人になったら、票の多い方が当選します。"
+    }
   },
   "notFound": {
     "heading": "見つかりません",

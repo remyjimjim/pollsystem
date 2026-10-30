@@ -26,6 +26,13 @@ Results are shown as bars with a **percentage**, rounded to a whole number.
 - **Elections:** each office, and under it each candidate. **Yes** is the share
   of voters who chose that candidate. **No** is the share who voted for that
   office but chose someone else.
+- **Ranked-choice races:** the count **round by round**. Each round shows
+  every remaining candidate's share of the ballots still counting. If no one
+  has more than half, the last-place candidate is **eliminated**, and their
+  ballots count for each voter's next choice. With two left, the one ahead
+  is the **Winner**. Ballots with no choices left are listed under each
+  round. Ties for last place go to whoever did better in earlier rounds,
+  then alphabetical order.
 
 ## Results protect people's privacy
 

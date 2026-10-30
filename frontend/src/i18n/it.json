@@ -235,11 +235,16 @@
     "submissionFailed": "Invio non riuscito",
     "validation": {
       "yesNoFor": "Rispondi Sì o No per: {name}",
-      "selectionFor": "Effettua una selezione per: {office}"
+      "selectionFor": "Effettua una selezione per: {office}",
+      "rankGapFor": "Ordina senza saltare posizioni (1ª, 2ª, 3ª…) in: {office}"
     },
     "measuresHeading": "Quesiti referendari",
     "measuresOptional": "Facoltativo: lascia vuoto un quesito per saltarlo.",
-    "purviewLabel": "Ambito:"
+    "purviewLabel": "Ambito:",
+    "rankedHelp": "Ordina i candidati per preferenza: la tua 1ª scelta, poi la 2ª e così via. Ordinane quanti vuoi. Se nessuno ha la maggioranza delle prime scelte, l'ultimo viene eliminato e contano le scelte successive dei suoi elettori.",
+    "rankFor": "Posizione per {name}",
+    "rankOrdinal": "{n}ª",
+    "yourRank": "La tua {rank} scelta"
   },
   "questionnaire": {
     "closesLabel": "Chiude",
@@ -304,7 +309,17 @@
     "soFar": "Nessuno ha ancora risposto. | Finora ha risposto 1 persona. | Finora hanno risposto {n} persone.",
     "superLive": "Vista super: risultati in tempo reale con i numeri esatti.",
     "countWithheld": "meno di {n}",
-    "alsoOnBallot": "Anche su questa scheda"
+    "alsoOnBallot": "Anche su questa scheda",
+    "ranked": {
+      "round": "Turno {n}",
+      "finalRound": "Turno {n} (finale)",
+      "winner": "Vincitore",
+      "eliminated": "eliminato dopo questo turno",
+      "exhausted": "Nessuna scelta rimasta: {pct}% delle schede",
+      "ballots": "{n} scheda ordinata | {n} schede ordinate",
+      "howTitle": "Come si conta il voto per preferenze",
+      "howText": "Ogni scheda conta per il candidato meglio classificato ancora in gara. Se qualcuno ha più della metà delle schede ancora conteggiate, vince. Altrimenti l'ultimo viene eliminato e le sue schede contano per la scelta successiva di ogni elettore. Con due rimasti, vince chi ha più voti."
+    }
   },
   "notFound": {
     "heading": "Non trovato",
