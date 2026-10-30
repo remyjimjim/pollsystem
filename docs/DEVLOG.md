@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-10-30 — Alaska demo users for local sign-in
+
+**Requested:**
+
+> Can you add an Alaska section to the /login page with a creator-ak,
+> admin-ak, user-ak and respondent1-5ak in Dev?
+
+**Changed:** `scripts/demo/seed.bash` seeds a fourth state, **ak**, the same
+way as the others:
+- `demo-creator-ak` (creator for Alaska, with the usual demo drafts);
+- `demo-admin-ak` (admin and creator for Alaska);
+- `demo-user-ak`;
+- `demo-respondent1-ak` … `demo-respondent5-ak`, at Anchorage, Wasilla,
+  Fairbanks and Juneau zipcodes.
+
+The login page's Quick sign-in (local only) lists them under **AK**, with no
+change to the page itself.
+
+**Verified:** the seed ran on local; `/api/dev/demo-users` lists all 8 Alaska
+users.
+
+**Commit:** `8e7aac2`
+
+---
+
 ## 2026-10-30 — Ranked choice: ballot, review and results screens
 
 **Requested:**
