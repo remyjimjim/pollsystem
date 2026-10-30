@@ -11,7 +11,13 @@
 # --publish then publishes the state's draft midterm elections, statewide
 # first (its measures go live with it).
 #
-# Tokens (git-ignored): .devcontainer/{local-demo-super,staging-super,prod-super}-token.secrets.env
+# Tokens (git-ignored): .devcontainer/{local-content-super,staging-super,prod-super}-token.secrets.env
+# Local loads as content-super@test.local, not demo-super: scripts/demo/seed.bash
+# wipes the demo users and everything they made (2026-10-30, it took the
+# midterm ballots with it). Make the account and its token with:
+#   curl -X POST "$API/api/dev/seed-user?emailPrefix=content&access=SUPER&email=content-super@test.local"
+#   curl -X POST "$API/api/dev/token?email=content-super@test.local"   # → the token file
+# API=… overrides the address (e.g. local on another port).
 
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -20,9 +26,9 @@ ENV="${1:?local|staging|prod}"; shift
 PUBLISH=false; STATES=()
 for a in "$@"; do [[ "$a" == --publish ]] && PUBLISH=true || STATES+=("${a^^}"); done
 case "$ENV" in
-  local)   API=http://localhost:8080;                     TOKEN=.devcontainer/local-demo-super-token.secrets.env; NET=(--network host) ;;
-  staging) API=https://pollsystem-backend-staging.fly.dev; TOKEN=.devcontainer/staging-super-token.secrets.env;   NET=() ;;
-  prod)    API=https://pollsystem-backend.fly.dev;         TOKEN=.devcontainer/prod-super-token.secrets.env;      NET=() ;;
+  local)   API=${API:-http://localhost:8080};                     TOKEN=.devcontainer/local-content-super-token.secrets.env; NET=(--network host) ;;
+  staging) API=${API:-https://pollsystem-backend-staging.fly.dev}; TOKEN=.devcontainer/staging-super-token.secrets.env;   NET=() ;;
+  prod)    API=${API:-https://pollsystem-backend.fly.dev};         TOKEN=.devcontainer/prod-super-token.secrets.env;      NET=() ;;
   *) echo "unknown environment: $ENV" >&2; exit 2 ;;
 esac
 [[ -f "$TOKEN" ]] || { echo "missing $TOKEN" >&2; exit 1; }
@@ -40,8 +46,25 @@ for st in "${STATES[@]}"; do
   done
 done
 
+# Ranked-choice races (V44): V44 marked Alaska's when it ran; a ballot loaded
+# later isn't marked until the election form can (phase 3), so on local mark it
+# here. Staging and prod were loaded before V44.
+if [[ "$ENV" == local && " ${STATES[*]} " == *" AK "* ]]; then
+  docker exec -i pollsystem-db psql -U polladmin -d pollsystem -qtA <<'SQL' && echo "AK: ranked races marked"
+INSERT INTO ranked_races (election_id, office_id)
+SELECT DISTINCT e.id, c.office_id FROM elections e
+JOIN candidates c ON c.election_id = e.id JOIN offices o ON o.id = c.office_id
+WHERE e.title = '2026 Midterm Alaska' AND o.name LIKE '%(ranked choice)'
+ON CONFLICT DO NOTHING;
+SQL
+fi
+
 if $PUBLISH && (( ! fail )); then
-  names=$(for st in "${STATES[@]}"; do python3 -c "import json,sys; print(json.load(open('docs/launch-content/research/$st.json'))['state'])"; done)
+  # CA, CO and WA have no research file (they were built first, by hand).
+  names=$(for st in "${STATES[@]}"; do python3 -c "
+import json, os
+f = 'docs/launch-content/research/$st.json'
+print(json.load(open(f))['state'] if os.path.exists(f) else {'CA': 'California', 'CO': 'Colorado', 'WA': 'Washington'}['$st'])"; done)
   ids=$(py -c "
 import json, sys, urllib.request
 req = urllib.request.Request('$API/api/creator/polls', headers={'Authorization': 'Bearer ' + open('$TOKEN').read().strip()})
