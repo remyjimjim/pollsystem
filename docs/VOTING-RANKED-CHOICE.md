@@ -142,6 +142,55 @@ ALTER TABLE candidate_responses ADD COLUMN rank SMALLINT;   -- 1 = first choice;
   Maine ones. The suffix is in shared office names, so this is done per
   election, in the same pass.
 
+## Templates: no new poll type, one switch on the Election template
+
+**Considered:** a new poll type, "Ranked-choice election", with its own
+template, or a ranked picker set in the Election template's `widget`.
+**Rejected**, because:
+
+1. **Ranked choice is per race, not per ballot.** Maine's statewide ballot
+   has a single-choice **Governor** next to a ranked **U.S. Senator**. A
+   district ballot *includes* its statewide election, so one ballot page
+   mixes both kinds. A template applies to every poll of its type, so it
+   can't say "this race ranked, that one not". `ranked_races` can.
+2. **A new poll type has side effects.** Creator access is granted **per
+   poll type**: every creator would need a new grant to make ranked
+   elections. Search's **Type** filter, "Election" labels and counts, and
+   code that recognizes elections by type would all have to learn the new
+   type. Alaska's ballot would stop being an "Election" in search.
+3. **Everything else is the same:** candidates, races, purview, measures,
+   results, review. Only the picker and the counting differ.
+
+**Instead:** keep the one Election poll type, mark ranked races per race
+(`ranked_races`), and add one optional switch to the Election template,
+next to the existing picker setting:
+
+```json
+"candidates": {
+  "widget": "selectOneRadio",
+  "groupBy": "officeName",
+  "allowRankedChoice": true,
+  ...
+}
+```
+
+| `allowRankedChoice` | Effect |
+|---|---|
+| `true` | The election form shows a **"Ranked choice"** checkbox per race. Checked races use the rank picker and instant-runoff results; the others use `widget` as today. |
+| `false` or missing | No checkbox. Races already marked ranked **stay ranked**: voters and results don't change. Creators just can't mark new ones. |
+
+- **Set by a super** in Super → Poll Templates, like the rest of the
+  template. The default in the seeded Election template is `true`.
+- `widget` keeps choosing the **single-choice** picker (radio, checkbox,
+  dropdown). Ranked races always use the rank picker, whatever `widget`
+  says.
+- **Server side:** saving an election with a ranked race when the template
+  says `false` is refused (400 "Ranked choice isn't enabled for this poll
+  type"), unless the race was already ranked.
+- **Phase 3** (creator side) adds this: a few lines in
+  `ElectionService.readCandidatesHints`, the DTO, and the form. It also
+  goes in `docs/manual/super/poll-templates.md`.
+
 ## API changes
 
 | Endpoint | Change |
@@ -158,7 +207,7 @@ ALTER TABLE candidate_responses ADD COLUMN rank SMALLINT;   -- 1 = first choice;
 |---|---|---|
 | **1. Vote and review** | V44; DTO and validation; rank-picker widget; edit and review modes; mark the Alaska races; tests | ~1 day |
 | **2. Results** | `InstantRunoff` with tests (majority in round 1, several rounds, exhausted ballots, every tie rule); results DTO; rounds UI; privacy rules; snapshots | ~1–1.5 days |
-| **3. Creator side** | "Ranked choice" per race in the election form; help pages (Answering polls, Viewing results, Creating elections); 9 languages | ~½ day |
+| **3. Creator side** | "Ranked choice" per race in the election form, shown when the template's `allowRankedChoice` is on; help pages (Answering polls, Viewing results, Creating elections, Poll templates); 9 languages | ~½ day |
 
 About **2.5–3 days** in all. Phases 1 and 2 could land before Nov 3 if
 started right away. Otherwise, Alaska's own ranked count is on **Nov 18**,
@@ -181,3 +230,5 @@ race by ranked choice. Here, pick your **1st** choice." Results then show
    ordering (nicer on desktop, harder on phones and for accessibility)?
 5. **"Moved votes" detail** in results: show it when every group is 4 or
    more, or keep results to totals per round only?
+6. **Template switch default:** `allowRankedChoice: true` on the Election
+   template (recommended), or off until a super turns it on?
