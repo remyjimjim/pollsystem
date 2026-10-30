@@ -9,8 +9,9 @@
 #      test users (zzz…), with everything they made. Every other user (your
 #      own super, admin@local.test, …) is left alone.
 #   2. demo-super@test.local, who approves the requests below.
-#   3. Per state (Washington, Colorado, California): 10 respondents, a member,
-#      a creator and an admin, all paid members.
+#   3. Per state (Washington, Colorado, California, Alaska): respondents (10;
+#      Alaska 5, for trying its ranked-choice ballot), a member, a creator and
+#      an admin, all paid members.
 #   4. Per state, the creator: requests creator access for the state (approved),
 #      creates an election (then adds 4 candidates in 2 districts), attaches 3
 #      ballot measures, and creates 3 questionnaires. All DRAFTS.
@@ -101,17 +102,18 @@ declare -A RESPONDENT_ZIPS=(
     [wash]="98264 99156 98501 99201 98201 98201 98264 98264 98248 99156"
     [colo]="80204 80204 80204 80204 80211 80211 80211 80211 80211 80211"
     [cali]="90001 90011 90201 90301 90401 90501 90002 90003 90004 90004"
+    [ak]="99501 99503 99654 99701 99801"
 )
-declare -A MEMBER_ZIP=([wash]=98225 [colo]=80206 [cali]=90001)
-declare -A CREATOR_ZIP=([wash]=98264 [colo]=80210 [cali]=90002)
-declare -A ADMIN_ZIP=([wash]=98264 [colo]=80212 [cali]=90003)
-for st in wash colo cali; do
+declare -A MEMBER_ZIP=([wash]=98225 [colo]=80206 [cali]=90001 [ak]=99504)
+declare -A CREATOR_ZIP=([wash]=98264 [colo]=80210 [cali]=90002 [ak]=99507)
+declare -A ADMIN_ZIP=([wash]=98264 [colo]=80212 [cali]=90003 [ak]=99515)
+for st in wash colo cali ak; do
     i=0
     for z in ${RESPONDENT_ZIPS[$st]}; do i=$((i + 1)); seed "respondent$i-$st" "$z"; done
     seed "user-$st" "${MEMBER_ZIP[$st]}"
     seed "creator-$st" "${CREATOR_ZIP[$st]}"
     seed "admin-$st" "${ADMIN_ZIP[$st]}"
-    ok "$st: 10 respondents, user-$st, creator-$st, admin-$st"
+    ok "$st: $i respondents, user-$st, creator-$st, admin-$st"
 done
 
 # ── access ────────────────────────────────────────────────────────────────
@@ -193,16 +195,17 @@ seed_state() {  # KEY STATE_NAME MEASURE_LABEL QUESTIONNAIRE_LABEL
 seed_state wash Washington Wash Wash
 seed_state colo Colorado Colorado Colorado
 seed_state cali California CA California
+seed_state ak Alaska AK Alaska
 
 # ── summary ───────────────────────────────────────────────────────────────
 step "Done"
 cat <<EOF
   Approver:   ${SUPER} (SUPER)
-  Per state (wash / colo / cali), all ${PREFIX}…@test.local, paid members:
+  Per state (wash / colo / cali / ak), all ${PREFIX}…@test.local, paid members:
     ${PREFIX}creator-<st>        creator for the state: 1 election (4 candidates, 3 measures), 3 questionnaires
     ${PREFIX}admin-<st>          admin + creator for the state: 3 questionnaires
     ${PREFIX}user-<st>           member
-    ${PREFIX}respondent1..10-<st> members
+    ${PREFIX}respondent1..10-<st> members (ak: 1..5)
   All polls are drafts. Sign in at http://localhost:3000/login (links land in http://localhost:8025).
   ${D}Re-run any time: it wipes this demo (and the e2e zzz users) first.${N}
 EOF
