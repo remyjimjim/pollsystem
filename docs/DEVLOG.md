@@ -61,6 +61,39 @@ logged.
 
 ---
 
+## 2026-10-30 — Decision: ranked choice per race, plus a template switch, not a new poll type
+
+**Requested:**
+
+> Should we create a new template for ranked choice voting?
+
+then, on the recommendation:
+
+> yes that'd be awesome
+
+**Decided:** no new poll type or template.
+
+- **Ranked choice is per race:** Maine's statewide ballot mixes a
+  single-choice Governor with a ranked Senate, and district ballots include
+  statewide elections.
+- **A new poll type has side effects:** per-poll-type creator grants, search's
+  Type filter, labels and counts.
+
+Instead, one optional switch on the Election template,
+`fields.candidates.allowRankedChoice` (default `true`), next to the
+existing `widget`:
+
+- it shows the per-race "Ranked choice" checkbox to creators;
+- races already ranked stay ranked when it's off;
+- the server refuses a new ranked race when it's off.
+
+**Changed:** `docs/VOTING-RANKED-CHOICE.md` gains a "Templates" section,
+phase 3 mentions the switch, and decision 6 asks about its default.
+
+**Commit:** `1cacc28`
+
+---
+
 ## 2026-10-29 — Ranked-choice voting: plan written
 
 **Requested:**
