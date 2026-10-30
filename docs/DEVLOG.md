@@ -61,6 +61,55 @@ logged.
 
 ---
 
+## 2026-10-30 — Ranked choice: backend (phases 1–2)
+
+**Requested:**
+
+> Let's use your recommendation on options 2-6 but for the first decision I'd
+> like to go with 'Decision: When to build Options: Now, before Nov 3 (phases
+> 1–2 in ~2–2.5 days)'
+
+**Changed (backend; the frontend is next):**
+
+- **V44:**
+  - `ranked_races(election_id, office_id)`;
+  - `choice_rank` on `candidate_responses` and `result_snapshot_answers`;
+  - marks the 3 Alaska races ranked, matched by the ballot title "2026 Midterm
+    Alaska" and the office-name suffix, so it's a no-op where that ballot isn't
+    loaded;
+  - renames those offices' suffix to "(ranked choice)". Each was used by the
+    Alaska ballot only; checked on local; prod has the same ballot (id 74).
+  - Maine is untouched.
+- **`RankedRaces`; `ElectionDto.rankedOfficeIds`.**
+- **Submit:** in a ranked race the ranked candidates (Yes) carry ranks 1..n,
+  with no gaps or repeats and at least a 1st choice; the others carry none.
+  Errors are 400s naming the race. `responses/me` returns `rank`.
+- **`InstantRunoff`:** as in `docs/VOTING-RANKED-CHOICE.md`.
+- **Results:** `rankedRaces[]`, each with its candidates and rounds:
+  - shares of continuing ballots, exhausted % of the race's ballots,
+    eliminated, winner;
+  - raw counts and ballot totals for supers only;
+  - snapshots keep the rank, so public results still move in steps of k.
+
+**Verified:**
+
+- `InstantRunoffTest` (5 tests): majority in round 1; a 3-round transfer with
+  1 exhausted; a last-place tie decided alphabetically; a final-two tie;
+  empty ballots. A first draft of the alphabetical case was wrong (5-2-2 is
+  a majority) and was fixed to 4-2-2.
+- `RankedChoiceTest` (3 tests):
+  - the DTO flag, and ranks stored and read back;
+  - the 4 kinds of refusal;
+  - Ann 4 / Bob 3 / Cal→Bob 2 / Dee→Cal 1: Dee then Cal out, Bob wins 5–4
+    (56% / 44%, 10% exhausted). Public results have no raw counts, and the
+    single-choice race is unchanged.
+- The full backend suite passes (416), re-run after a disconnect interrupted
+  the first full run.
+
+**Commit:** `92a3b24`
+
+---
+
 ## 2026-10-30 — Decision: ranked choice, build now
 
 **Requested:**
