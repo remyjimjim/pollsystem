@@ -1,6 +1,15 @@
 # Ranked-choice voting — plan
 
-Status: **plan only** (written 2026-10-29). Nothing here is built yet.
+Status: **decided 2026-10-30, being built** (phases 1–2 before Nov 3).
+
+**Decisions (2026-10-30):**
+
+1. **Build now**, before Nov 3: phases 1–2 first.
+2. **Maine stays single-choice** (2 candidates per race).
+3. **Ties:** earlier rounds, then alphabetical.
+4. **Rank picker:** a dropdown per candidate.
+5. **Results:** totals per round only (no "moved votes" detail).
+6. **`allowRankedChoice`** on by default.
 
 ## Why
 
