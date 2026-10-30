@@ -61,6 +61,52 @@ logged.
 
 ---
 
+## 2026-10-30 — Midterm ballots back on local; loads survive the demo seed
+
+**Requested:**
+
+> How do we get the midterm elections back into Dev? Can we just migrate
+> from staging?
+
+**What happened:** re-running `scripts/demo/seed.bash` for the Alaska demo
+users (`8e7aac2`) deleted all 479 local midterm ballots. The seed wipes the
+demo users and everything they made, and `load-state.bash` had loaded the
+ballots on local as demo-super. I didn't check who owned them before
+running the seed.
+
+**Answer:** no migration from staging was needed. The loader rebuilds the
+ballots from the content files in the repo, as it did for staging and prod.
+
+**Changed** (`scripts/launch-content/load-state.bash`):
+
+- Local loads as a new **content-super@test.local**, which the seed doesn't
+  touch. Its token is in the git-ignored
+  `.devcontainer/local-content-super-token.secrets.env` (mode 600). The
+  script's header shows how to remake it.
+- `API=…` overrides the address. Local is on 18080 for now, because
+  something on the host holds 8080.
+- On local, loading AK marks its 3 races ranked: V44 marked only the ballot
+  that existed when it ran. `ak-2026-ballot.json` now uses the "(ranked
+  choice)" office names V44 set.
+- `--publish` failed to name CA, CO and WA, which have no research file, so
+  their 73 ballots stayed drafts. It now names them directly.
+
+**Done on local:**
+
+- All 50 states loaded; 479 midterm ballots published (406 by the loader,
+  then the 73 CA/CO/WA drafts).
+- The reloaded Alaska ballot (758) is pointed at the existing "(ranked
+  choice)" offices 176–178; the 3 duplicate offices are deleted; all 3 races
+  are ranked.
+- A rerun for AK and WA skipped everything already there and found nothing
+  left to publish.
+- The earlier ranked-choice test votes went with the old ballot, so its
+  results start at zero.
+
+**Commit:** `010bc46`
+
+---
+
 ## 2026-10-30 — Alaska demo users for local sign-in
 
 **Requested:**
