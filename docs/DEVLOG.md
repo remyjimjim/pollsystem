@@ -61,6 +61,30 @@ logged.
 
 ---
 
+## 2026-10-30 — Decision: ranked choice, build now
+
+**Requested:**
+
+> Let's use your recommendation on options 2-6 but for the first decision I'd
+> like to go with 'Decision: When to build Options: Now, before Nov 3 (phases
+> 1–2 in ~2–2.5 days)'
+
+**Decided:**
+
+1. Build phases 1 (vote and review) and 2 (results) before Nov 3.
+2. Maine stays single-choice.
+3. Ties for last place go to earlier rounds, then alphabetical.
+4. The rank picker is a dropdown per candidate.
+5. Results show totals per round only.
+6. The Election template's `allowRankedChoice` is on by default.
+
+**Changed:** the status and decisions at the top of
+`docs/VOTING-RANKED-CHOICE.md`.
+
+**Commit:** `961428a`
+
+---
+
 ## 2026-10-30 — Decision: ranked choice per race, plus a template switch, not a new poll type
 
 **Requested:**
