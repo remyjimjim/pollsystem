@@ -30,7 +30,7 @@ WORKDIR /app
 RUN useradd --system --uid 1001 spring \
  && mkdir -p /app/logs \
  && chown spring /app/logs
-COPY --from=build /app/build/libs/pollsystem-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/build/libs/pollsystem-1.0.0.jar app.jar
 USER spring
 EXPOSE 8080
 # MaxRAMPercentage lets the JVM use most of the Fly machine's memory_mb.

@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "org.kodewerks.pollsystem"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 
 // Override the Testcontainers version managed by the Spring Boot BOM
 // (Boot 3.3.5 pins 1.19.8). 1.19.x bundles a docker-java too old for
