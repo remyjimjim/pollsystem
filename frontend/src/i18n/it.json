@@ -61,7 +61,7 @@
     "guestIntro": "Sondaggi ed elezioni anonimi. Crea un account per votare sui sondaggi pubblicati; richiedi l'accesso Creatore per pubblicarne di tuoi.",
     "cards": {
       "findPolls": {
-        "title": "Trova sondaggi e visualizza i risultati",
+        "title": "Trova sondaggi e Vota",
         "description": "Cerca per titolo, creatore, CAP, candidato o tipo. Apri un sondaggio per votare o passa alla sua pagina dei risultati.",
         "cta": "Cerca sondaggi"
       },

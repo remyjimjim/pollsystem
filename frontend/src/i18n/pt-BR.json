@@ -61,7 +61,7 @@
     "guestIntro": "Enquetes e eleições anônimas. Crie uma conta para votar em enquetes publicadas; solicite acesso de Criador para publicar as suas.",
     "cards": {
       "findPolls": {
-        "title": "Encontre enquetes e veja os resultados",
+        "title": "Encontre enquetes e Vote",
         "description": "Busque por título, criador, CEP, candidato ou tipo. Abra uma enquete para votar ou vá para sua página de resultados.",
         "cta": "Buscar enquetes"
       },

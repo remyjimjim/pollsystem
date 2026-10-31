@@ -64,7 +64,7 @@
     "checkoutSuccessGuest": "Payment received — thank you! Check your email for a one-time sign-in link to finish setting up your account. It may take a moment to arrive.",
     "cards": {
       "findPolls": {
-        "title": "Find polls and view results",
+        "title": "Find polls and Vote",
         "description": "Search by title, creator, zipcode, candidate, or type. Open a poll to vote or jump to its results page.",
         "cta": "Search polls"
       },

@@ -61,7 +61,7 @@
     "guestIntro": "Encuestas y elecciones anónimas. Cree una cuenta para votar en encuestas publicadas; solicite acceso de Creador para publicar las suyas.",
     "cards": {
       "findPolls": {
-        "title": "Buscar encuestas y ver resultados",
+        "title": "Buscar encuestas y Votar",
         "description": "Busque por título, creador, código postal, candidato o tipo. Abra una encuesta para votar o vaya a su página de resultados.",
         "cta": "Buscar encuestas"
       },

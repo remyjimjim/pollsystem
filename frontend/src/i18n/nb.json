@@ -61,7 +61,7 @@
     "guestIntro": "Anonyme avstemninger og valg. Opprett en konto for å stemme på publiserte avstemninger; søk om Oppretter-tilgang for å publisere dine egne.",
     "cards": {
       "findPolls": {
-        "title": "Finn avstemninger og se resultater",
+        "title": "Finn avstemninger og Stem",
         "description": "Søk etter tittel, oppretter, postnummer, kandidat eller type. Åpne en avstemning for å stemme eller hopp til resultatsiden.",
         "cta": "Søk i avstemninger"
       },

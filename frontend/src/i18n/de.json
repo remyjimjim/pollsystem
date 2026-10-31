@@ -61,7 +61,7 @@
     "guestIntro": "Anonyme Umfragen und Wahlen. Erstellen Sie ein Konto, um an veröffentlichten Umfragen teilzunehmen; beantragen Sie Ersteller-Zugang, um eigene zu veröffentlichen.",
     "cards": {
       "findPolls": {
-        "title": "Umfragen finden und Ergebnisse anzeigen",
+        "title": "Umfragen finden und Abstimmen",
         "description": "Suchen Sie nach Titel, Ersteller, Postleitzahl, Kandidat oder Typ. Öffnen Sie eine Umfrage zum Abstimmen oder springen Sie zur Ergebnisseite.",
         "cta": "Umfragen suchen"
       },

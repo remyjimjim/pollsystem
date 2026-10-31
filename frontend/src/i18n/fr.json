@@ -61,7 +61,7 @@
     "guestIntro": "Sondages et élections anonymes. Créez un compte pour voter sur les sondages publiés ; demandez l'accès Créateur pour publier les vôtres.",
     "cards": {
       "findPolls": {
-        "title": "Trouver des sondages et voir les résultats",
+        "title": "Trouver des sondages et Voter",
         "description": "Recherchez par titre, créateur, code postal, candidat ou type. Ouvrez un sondage pour voter ou accéder à sa page de résultats.",
         "cta": "Rechercher des sondages"
       },
