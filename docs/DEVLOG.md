@@ -61,6 +61,23 @@ logged.
 
 ---
 
+## 2026-10-31 — Home card: "Find polls and Vote"
+
+**Requested:**
+
+> can we change the text for the card in the homepage where it says 'Find
+> polls and view results' and change it to "Find polls and Vote:'?
+
+**Changed:** the signed-in home page's search card title is now "Find polls
+and Vote", in all 9 languages. There's no colon, to match the other card
+titles, and the capital V matches the Vote menu.
+
+**Verified:** vitest 196 pass.
+
+**Commit:** `33edc35`
+
+---
+
 ## 2026-10-31 — Version 1.0.0 and release notes (not yet tagged)
 
 **Requested:**
