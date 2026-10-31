@@ -61,6 +61,35 @@ logged.
 
 ---
 
+## 2026-10-31 — Version 1.0.0 and release notes (not yet tagged)
+
+**Requested:**
+
+> yes, prepare the 1.0 bump and summary
+
+**Changed:**
+
+- The app version is now 1.0.0 in the frontend `package.json` and
+  `package-lock.json`, and in the backend `build.gradle.kts` (was
+  0.0.1 / 0.0.1-SNAPSHOT).
+- The backend `Dockerfile` copied the jar by its versioned name, so it now
+  copies `pollsystem-1.0.0.jar`. Without that, the next deploy would have
+  failed.
+- New `docs/RELEASES.md`: what 1.0 adds since 0.81, the steps before
+  tagging, and the earlier tags.
+- The tag message is drafted in the git-ignored
+  `tmp/release-1.0-tag.txt`.
+
+**Verified:** the backend Docker image builds with the new jar name.
+
+**Decision:** tag `release-1.0` only after (1) the user tries ranked choice
+on staging, (2) the prod backend deploy with V44, and (3) a phone
+walkthrough on prod. Aim for before election day, Nov 3.
+
+**Commit:** `3f0385d`
+
+---
+
 ## 2026-10-30 — Midterm ballots back on local; loads survive the demo seed
 
 **Requested:**
