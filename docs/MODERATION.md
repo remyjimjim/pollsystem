@@ -11,15 +11,27 @@ only the words found.
 only if they're listed themselves. To change the list, edit the file and
 deploy the backend.
 
-## Comments (since 2026-10-25)
+## Comments
 
-When an answer form is submitted, each listed word in a **public** comment
-asks "Can I replace X with Y?":
+**Public comments** (since 2026-10-25): when an answer form is submitted,
+each listed word asks "Can I replace X with Y?":
 - **Yes** replaces it.
 - **No** keeps that comment **private**; the answers are still submitted.
 
 The server rechecks, so a comment that still contains a listed word is
 stored private.
+
+**Private comments** (since 2026-11-01) follow the **text mode** below, like
+titles and reasons:
+- in block mode, No sends you back to reword it, and the vote isn't
+  submitted;
+- in warn mode, No submits it as typed.
+
+The page decides which comments are private before asking, so a public
+comment that No has just made private isn't asked about again. Unlike the
+other fields, the **server doesn't refuse** a private comment. It can't tell
+one from a public comment that No made private, and only its author and
+supers ever see it.
 
 ## Everything else people type (since 2026-11-01)
 
@@ -29,6 +41,7 @@ The same question is asked on **save** for:
 |---|---|
 | Public text | Poll titles, summaries, questions and office names, in the poll forms and in Admin > Manage Polls edits |
 | Private text (admins and supers see it) | Creator and admin request reasons, poll notes, disable reasons (a creator or a grant), IP rule notes, Manage Users messages |
+| Private comments (the author and supers see them) | Comments on ballots and questionnaires without "Make comment public" (checked on the page only) |
 
 What **No** does depends on the **text mode** (below).
 
@@ -60,7 +73,8 @@ fresh database.
 | `block` (current) | "No, I'll reword it" | Back to the field; the page shows "Please reword "X" first." and doesn't save | Refuses such a save with a 400: "Please reword "X" in the title" (or "in question 2", "in the reason"…) |
 | `warn` | "No, keep it as typed" | Saved as typed | Accepts it |
 
-Comments aren't affected by the mode: No always keeps them private.
+Public comments aren't affected by the mode: No always keeps them private.
+Private comments follow it.
 
 The page learns the mode from each check, and the server reads it on every
 check and save, so a switch takes effect at once. To change the default

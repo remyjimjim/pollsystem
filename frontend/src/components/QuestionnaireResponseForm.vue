@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import PublicCommentToggle from './PublicCommentToggle.vue'
 import ReplaceWordDialog from './ReplaceWordDialog.vue'
 import { useCommentModeration } from '../composables/useCommentModeration'
+import { reviewText } from '../composables/useTextModeration'
 
 const { t } = useI18n()
 const moderation = useCommentModeration()
@@ -114,13 +115,19 @@ async function submit() {
   error.value = null
   try {
     // Public comments: offer to replace any listed word; a "No" keeps that comment private.
-    await moderation.review(poll.value.questions.map(q => ({
+    const entries = poll.value.questions.map(q => ({
       inputId: `comment-q-${q.id}`,
       get: () => answers[q.id].comment,
       set: (text: string) => { answers[q.id].comment = text },
       isPublic: () => answers[q.id].commentPublic,
       makePrivate: () => { answers[q.id].commentPublic = false }
-    })))
+    }))
+    // Private comments follow the Super dashboard's Moderation setting; noted
+    // before the public check, whose No makes a comment private.
+    const privateOnes = entries.filter(e => !e.isPublic())
+    await moderation.review(entries)
+    const reword = await reviewText(privateOnes)
+    if (reword) { error.value = t('moderation.rewordFirst', { word: reword }); return }
     await axios.post(`/api/polls/questionnaires/${props.id}/responses`, {
       answers: poll.value.questions.map(q => ({
         questionId: q.id,

@@ -682,13 +682,13 @@
       },
       "moderation": {
         "heading": "Moderazione",
-        "blurb": "Quando qualcuno scrive una parola della lista in un titolo, riepilogo, domanda, carica, motivo, nota o messaggio, gli si chiede «Posso sostituire … con …?». Se risponde No:",
+        "blurb": "Quando qualcuno scrive una parola della lista in un titolo, riepilogo, domanda, carica, motivo, nota, messaggio o commento privato, gli si chiede «Posso sostituire … con …?». Se risponde No:",
         "block": "Blocca",
         "blockDesc": "Deve riformularla e il salvataggio viene rifiutato.",
         "warn": "Avvisa",
         "warnDesc": "Viene salvato così com'è.",
         "default": "(predefinito del server)",
-        "comments": "I commenti non cambiano: lì, No mantiene il commento privato. I nomi dei candidati non vengono mai controllati.",
+        "comments": "I commenti pubblici sono diversi: lì, No mantiene il commento privato. I nomi dei candidati non vengono mai controllati.",
         "saved": "Salvato: in vigore ora.",
         "error": "Impossibile cambiare la moderazione."
       }

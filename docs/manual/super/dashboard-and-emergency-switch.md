@@ -57,7 +57,7 @@ back on.
 ## Moderation: words that aren't allowed
 
 People typing a listed word in a title, summary, question, office name,
-reason, note or message are asked **"Can I replace *word* with *other
+reason, note, message or private comment are asked **"Can I replace *word* with *other
 word*?"**. The **Moderation** section sets what happens when they answer
 **No**:
 
@@ -67,5 +67,5 @@ word*?"**. The **Moderation** section sets what happens when they answer
 Click a choice, and it's in force straight away for everyone. "(server
 default)" marks the setting BallotBox starts with.
 
-Comments aren't affected: there, **No** keeps the comment private.
+Public comments are different: there, **No** keeps the comment private.
 Candidates' names are never checked.

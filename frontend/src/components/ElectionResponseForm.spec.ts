@@ -120,9 +120,11 @@ describe('ElectionResponseForm: ballot measures on the ballot', () => {
     await w.find('button').trigger('click')
     await flushPromises()
 
+    // The private comment is checked first (it follows the Super Moderation setting).
     const posts = vi.mocked(axios.post).mock.calls.map(c => c[0])
-    expect(posts).toEqual(['/api/polls/elections/7/responses', '/api/polls/ballot-measures/31/responses'])
-    expect(vi.mocked(axios.post).mock.calls[1][1]).toEqual({ response: true, comment: 'Yes please', commentPublic: false })
+    expect(posts).toEqual(['/api/moderation/check', '/api/polls/elections/7/responses', '/api/polls/ballot-measures/31/responses'])
+    expect(vi.mocked(axios.post).mock.calls[0][1]).toEqual({ texts: ['Yes please'] })
+    expect(vi.mocked(axios.post).mock.calls[2][1]).toEqual({ response: true, comment: 'Yes please', commentPublic: false })
     w.unmount()
   })
 

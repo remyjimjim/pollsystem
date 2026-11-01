@@ -727,13 +727,13 @@
       },
       "moderation": {
         "heading": "Moderering",
-        "blurb": "Når noen skriver et ord fra listen i en tittel, et sammendrag, spørsmål, verv, en begrunnelse, et notat eller en melding, blir de spurt «Kan jeg erstatte … med …?». Svarer de nei:",
+        "blurb": "Når noen skriver et ord fra listen i en tittel, et sammendrag, spørsmål, verv, en begrunnelse, et notat, en melding eller en privat kommentar, blir de spurt «Kan jeg erstatte … med …?». Svarer de nei:",
         "block": "Blokker",
         "blockDesc": "De må omformulere, og lagringen avvises.",
         "warn": "Advar",
         "warnDesc": "Det lagres slik de skrev det.",
         "default": "(serverens standard)",
-        "comments": "Kommentarer påvirkes ikke: der holder nei kommentaren privat. Kandidatnavn sjekkes aldri.",
+        "comments": "Offentlige kommentarer er annerledes: der holder nei kommentaren privat. Kandidatnavn sjekkes aldri.",
         "saved": "Lagret: gjelder nå.",
         "error": "Kunne ikke endre modereringen."
       }

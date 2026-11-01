@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import PublicCommentToggle from './PublicCommentToggle.vue'
 import ReplaceWordDialog from './ReplaceWordDialog.vue'
 import { useCommentModeration } from '../composables/useCommentModeration'
+import { reviewText } from '../composables/useTextModeration'
 import { useAppearance } from '@/composables/useAppearance'
 
 const { t, locale } = useI18n()
@@ -378,7 +379,7 @@ async function submit() {
   try {
     // Public comments: offer to replace any listed word; a "No" keeps that comment private.
     const legacy = widget.value === 'legacy'
-    await moderation.review(candidatesList.map(c => ({
+    const entries = candidatesList.map(c => ({
       inputId: `comment-c-${c.id}`,
       get: () => (legacy ? answers[c.id].comment : comments[c.id]) ?? '',
       set: (text: string) => { if (legacy) answers[c.id].comment = text; else comments[c.id] = text },
@@ -390,7 +391,13 @@ async function submit() {
       set: (text: string) => { measureAnswers[m.id].comment = text },
       isPublic: () => measureAnswers[m.id].commentPublic,
       makePrivate: () => { measureAnswers[m.id].commentPublic = false }
-    }))))
+    })))
+    // Private comments follow the Super dashboard's Moderation setting; noted
+    // before the public check, whose No makes a comment private.
+    const privateOnes = entries.filter(e => !e.isPublic())
+    await moderation.review(entries)
+    const reword = await reviewText(privateOnes)
+    if (reword) { submitError.value = t('moderation.rewordFirst', { word: reword }); return }
     const payload = candidatesList.map(c => {
       const response = widget.value === 'legacy'
         ? answers[c.id].response

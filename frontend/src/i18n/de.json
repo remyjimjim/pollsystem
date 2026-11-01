@@ -682,13 +682,13 @@
       },
       "moderation": {
         "heading": "Moderation",
-        "blurb": "Wenn jemand ein Wort von der Liste in Titel, Zusammenfassung, Frage, Amt, Begründung, Notiz oder Nachricht eingibt, wird gefragt: „Darf ich … durch … ersetzen?“. Bei Nein:",
+        "blurb": "Wenn jemand ein Wort von der Liste in Titel, Zusammenfassung, Frage, Amt, Begründung, Notiz, Nachricht oder privaten Kommentar eingibt, wird gefragt: „Darf ich … durch … ersetzen?“. Bei Nein:",
         "block": "Sperren",
         "blockDesc": "Es muss umformuliert werden; das Speichern wird abgelehnt.",
         "warn": "Warnen",
         "warnDesc": "Es wird so gespeichert, wie eingegeben.",
         "default": "(Server-Standard)",
-        "comments": "Kommentare sind nicht betroffen: Dort bleibt der Kommentar bei Nein privat. Kandidatennamen werden nie geprüft.",
+        "comments": "Öffentliche Kommentare sind anders: Dort bleibt der Kommentar bei Nein privat. Kandidatennamen werden nie geprüft.",
         "saved": "Gespeichert: gilt sofort.",
         "error": "Die Moderation konnte nicht geändert werden."
       }

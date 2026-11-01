@@ -890,13 +890,13 @@
       },
       "moderation": {
         "heading": "Moderation",
-        "blurb": "When someone types a listed word in a title, summary, question, office name, reason, note or message, they're asked “Can I replace … with …?”. If they answer No:",
+        "blurb": "When someone types a listed word in a title, summary, question, office name, reason, note, message or private comment, they're asked “Can I replace … with …?”. If they answer No:",
         "block": "Block",
         "blockDesc": "They're sent back to reword it, and the save is refused.",
         "warn": "Warn",
         "warnDesc": "It's saved as they typed it.",
         "default": "(server default)",
-        "comments": "Comments aren't affected: there, No keeps the comment private. Candidates' names are never checked.",
+        "comments": "Public comments are different: there, No keeps the comment private. Candidates' names are never checked.",
         "saved": "Saved: in force now.",
         "error": "Couldn't change the moderation setting."
       }

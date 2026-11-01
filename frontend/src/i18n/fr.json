@@ -727,13 +727,13 @@
       },
       "moderation": {
         "heading": "Modération",
-        "blurb": "Quand quelqu'un tape un mot de la liste dans un titre, résumé, question, fonction, motif, note ou message, on lui demande « Puis-je remplacer … par … ? ». S'il répond Non :",
+        "blurb": "Quand quelqu'un tape un mot de la liste dans un titre, résumé, question, fonction, motif, note, message ou commentaire privé, on lui demande « Puis-je remplacer … par … ? ». S'il répond Non :",
         "block": "Bloquer",
         "blockDesc": "Il doit le reformuler, et l'enregistrement est refusé.",
         "warn": "Avertir",
         "warnDesc": "C'est enregistré tel quel.",
         "default": "(par défaut du serveur)",
-        "comments": "Les commentaires ne changent pas : Non garde le commentaire privé. Les noms des candidats ne sont jamais vérifiés.",
+        "comments": "Les commentaires publics sont différents : Non garde le commentaire privé. Les noms des candidats ne sont jamais vérifiés.",
         "saved": "Enregistré : en vigueur.",
         "error": "Impossible de modifier la modération."
       }
