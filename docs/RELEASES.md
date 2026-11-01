@@ -27,6 +27,10 @@ what people use on election day, Tue Nov 3.
   topic.
 - **Demo account:** a shared demo address a super switches on for 12 hours.
 - **Navigation by role:** Vote, Create, and Admin ▾ / Super ▾ menus.
+- **Listed words checked everywhere people type:** titles, summaries,
+  questions, office names, reasons, notes and messages, not just comments.
+  Candidates' names are exempt. One setting switches block → warn
+  (`docs/MODERATION.md`).
 
 ### Search and results
 

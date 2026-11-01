@@ -310,6 +310,7 @@ Caveats:
 | Manually scale backend | `flyctl scale count 3 -a pollsystem-backend` |
 | Roll back a bad deploy | `flyctl releases -a pollsystem-backend` then `flyctl deploy --image <previous>` |
 | Rotate JWT secret | `flyctl secrets set -a pollsystem-backend JWT_SECRET="$(openssl rand -hex 32)"` (invalidates all sessions) |
+| Switch the listed-word mode (block ↔ warn) | See [Switch the word mode](#switch-the-word-mode-moderation_text_mode) |
 
 ---
 
@@ -404,6 +405,42 @@ flyctl logs -a pollsystem-backend                         # migrations, errors
 
 **Roll back:** `flyctl releases -a pollsystem-backend --image`, then the
 `--image` deploy above with the previous image.
+
+### Switch the word mode: `MODERATION_TEXT_MODE`
+
+Listed words in titles, summaries, questions, office names, reasons, notes and
+messages ([MODERATION.md](MODERATION.md)) work in one of two modes:
+
+- **`block`** (current): the page asks "Can I replace X with Y?". **No** sends
+  the person back to reword it, and the server refuses the save.
+- **`warn`**: the same question, but **No** saves it as typed.
+
+It's the `[env]` value `MODERATION_TEXT_MODE` in `backend/fly.toml` (prod) and
+`backend/fly.staging.toml`. The page reads the mode from the server on every
+check, so **no frontend change or Cloudflare build is needed**. Only the
+backend restarts with the new value.
+
+**To switch prod to warn:**
+
+1. In `backend/fly.toml`, set `MODERATION_TEXT_MODE = "warn"` and commit it.
+2. Apply it without shipping new code, using the `--image` deploy from
+   [above](#production-deploy-the-everyday-commands):
+
+   ```bash
+   flyctl releases -a pollsystem-backend --image          # the current image, top row
+   cd backend && flyctl deploy -a pollsystem-backend -c fly.toml --image <that image>
+   ```
+
+3. Check: open any poll form, type a listed word in the title and save. The
+   dialog's No button should now read **"No, keep it as typed"**.
+
+To go back, set it to `"block"` the same way. Staging is the same, with
+`-a pollsystem-backend-staging -c fly.staging.toml`. Try it there first.
+
+**In a hurry**, without a commit, use `flyctl secrets set -a pollsystem-backend
+MODERATION_TEXT_MODE=warn`. It restarts the machines straight away. Then
+remove it (`flyctl secrets unset …`) once `fly.toml` says the same, so there's
+one place to look.
 
 ### How many machines stay on: `min_machines_running`
 
