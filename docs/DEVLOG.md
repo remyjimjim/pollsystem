@@ -61,6 +61,72 @@ logged.
 
 ---
 
+## 2026-11-01 — Listed words checked in every text field
+
+**Requested:**
+
+> can we add 'bad-words' replacement for I guess every typeable input?
+
+then, choosing from the options laid out:
+
+> Go with A on public text, include private text too and with a design that
+> makes it easy to switch to 'C' in the future...
+
+**Decision:** A means the dialog asks "Can I replace X with Y?" on save.
+Yes replaces the word; No sends you back to reword it, and the server
+refuses the save. C, available later, means No saves the text as typed.
+These are left alone:
+- candidates' names and affiliations (real people);
+- zipcodes, sign-in codes, searches and filters, typed confirmations, poll
+  templates.
+
+**Changed:**
+
+- **Checked:**
+  - public text: poll titles, summaries, questions and office names, in the
+    poll forms and in Admin > Manage Polls edits;
+  - private text: creator and admin request reasons, poll notes, a
+    creator's or grant's disable reason, IP rule notes, Manage Users
+    messages.
+- **Ballot measure summaries** only ask: they're often official ballot
+  language, so No keeps them as typed.
+- **Switching to C:** one setting, `moderation.text-mode` (env
+  `MODERATION_TEXT_MODE`), set to `block` or `warn`. The check sends the
+  mode back, so the dialog's No label and hint follow it with no frontend
+  change.
+- **Server:** each save endpoint calls `BadWords.requireClean(...)`, which
+  returns a 400 like "Please reword “X” in the title" or "in question 2"
+  (nothing in warn mode).
+- **Page:** a shared `useTextModeration.reviewText()`, and one dialog in
+  `App.vue` that sits above every modal. In Manage Creators, the reason
+  dialog stays open on No.
+- **Check size:** the check now takes texts up to 20,000 characters (was
+  5,000), for long summaries.
+- **Help:** "Words that aren't allowed" in Drafts, publishing and archiving.
+
+**Checked first:** the list run over local's 3,639 existing texts (all 50
+states' content) hit only 3 candidates: "Chris Coons" (the plural rule) and
+two local test names. That confirmed skipping candidates. Titles, office
+names, questions and measure summaries had no hits.
+
+**Verified:**
+
+- `TextModerationTest` (6): questionnaire title, summary and question 2
+  refused, naming where; election title and office refused, a candidate's
+  name allowed; measure title refused, summary allowed; creator request
+  reason refused; warn mode refuses nothing; the check reports BLOCK.
+- `useTextModeration.spec` (4).
+- Backend 422 and frontend 200 pass.
+- Headless Chrome on local, new questionnaire:
+  - the dialog asked, with the title box focused and "No, I'll reword it";
+  - No showed "Please reword … first." and kept the title;
+  - Yes replaced it and went on to save;
+  - a direct API save was refused with "Please reword … in the title".
+
+**Commit:** `3f7e403`
+
+---
+
 ## 2026-10-31 — Home card: "Find polls and Vote"
 
 **Requested:**
