@@ -61,6 +61,55 @@ logged.
 
 ---
 
+## 2026-11-01 — Private comments follow the Moderation setting
+
+**Requested:**
+
+> The 'Warn' moderation setting doesn't seem to work. I was updating this
+> vote (https://staging.pollsystem.pages.dev/polls/election/3/results) and
+> could write bad words in the comments and was not warned when I submitted
+> or updated upon editing the submission.
+
+then, from the options laid out, **B**.
+
+**What it was:** not a bug. As designed, comments were checked only when
+marked public, and the Moderation setting didn't cover comments at all.
+The options:
+- **A:** leave it as is;
+- **B:** check private comments too, following the setting;
+- **C:** check every comment, with No always meaning private.
+
+**Changed:**
+
+- **Private comments** on ballots and questionnaires now ask "Can I replace
+  … with …?" too.
+  - In **Block**, No sends you back to reword it, and the vote isn't
+    submitted.
+  - In **Warn**, No submits it as typed.
+- **Public comments** keep their rule: No keeps the comment private.
+- The page notes which comments are private before the public check, so a
+  comment that No has just made private isn't asked about again.
+- **Page-only:** the server can't tell a private comment from a public one
+  that No made private, and only the author and supers see it.
+- **Wording:** the Super dashboard (9 languages), `MODERATION.md`, and the
+  Super and Answering polls help pages now say private comments follow the
+  setting.
+
+**Verified:**
+
+- Headless Chrome on local, as `demo-respondent1-ak` on the Alaska ballot,
+  with a private comment containing a listed word:
+  - In Block, the dialog said "No, I'll reword it". No showed "Please reword
+    … first." and stayed on the ballot.
+  - Switched to Warn as demo-super, it said "No, keep it as typed". No
+    submitted the vote, and the comment was stored as typed and private.
+- Vitest 200 pass. One test now expects the extra check call for its
+  private comment.
+
+**Commit:** `50300d8`
+
+---
+
 ## 2026-11-01 — Super dashboard: Moderation (Block / Warn)
 
 **Requested:**
