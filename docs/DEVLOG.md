@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-11-01 — Moderation doc; switching the word mode on Fly
+
+**Requested:**
+
+> can we make decent summary of this feature in the DEPLOYING-FLY.md doc I
+> think or whichever doc you feel the most appropriate.
+
+(along with the "Switching to C later" note quoted back)
+
+**Changed:**
+
+- **New `docs/MODERATION.md`:** the feature as a whole.
+  - the word list and how matching works;
+  - comments (No = private) versus other text;
+  - what's checked and what isn't (candidates, measure summaries);
+  - the block / warn table;
+  - where it lives in the code and tests.
+- **`DEPLOYING-FLY.md`:** "Switch the word mode: `MODERATION_TEXT_MODE`".
+  - Edit `fly.toml`, then apply it with the `--image` deploy (no new code).
+  - Check by looking for "No, keep it as typed".
+  - A `flyctl secrets set` shortcut for a hurry.
+  - A runbook row linking to the section.
+- **`backend/fly.toml` and `fly.staging.toml`:** `MODERATION_TEXT_MODE =
+  "block"` written out under `[env]`. That's already the default, so no
+  behaviour changes; switching becomes a one-word edit kept in git.
+- **`RELEASES.md`:** the feature is listed in 1.0.
+
+**Commit:** `87ef51e`
+
+---
+
 ## 2026-11-01 — Listed words checked in every text field
 
 **Requested:**
