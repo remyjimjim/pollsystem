@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import PurviewSetter from '@/components/PurviewSetter.vue'
@@ -110,6 +111,12 @@ function validate(): string | null {
 async function saveDraft() {
   const v = validate()
   if (v) { error.value = v; return }
+  const reword = await reviewText([
+    { inputId: 'poll-title', get: () => form.title, set: (x: string) => { form.title = x } },
+    { inputId: 'poll-summary', get: () => form.summary, set: (x: string) => { form.summary = x } },
+    ...form.questions.map((q, i) => ({ inputId: `question-${i}`, get: () => q.text, set: (x: string) => { q.text = x } }))
+  ])
+  if (reword) { error.value = t('moderation.rewordFirst', { word: reword }); return }
   error.value = null; message.value = null; closeWarning.value = null
   submitting.value = true
   try {
@@ -167,6 +174,7 @@ async function publish(confirmed = false) {
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.title') }}
       <input
+        id="poll-title"
         v-model="form.title"
         maxlength="500"
         required
@@ -177,6 +185,7 @@ async function publish(confirmed = false) {
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.summary') }}
       <textarea
+        id="poll-summary"
         v-model="form.summary"
         rows="3"
         required
@@ -201,6 +210,7 @@ async function publish(confirmed = false) {
         class="mb-2 flex gap-1"
       >
         <input
+          :id="`question-${i}`"
           v-model="q.text"
           :placeholder="t('form.questionPlaceholder', { n: i + 1 })"
           maxlength="1000"

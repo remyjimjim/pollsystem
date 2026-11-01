@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useI18n } from 'vue-i18n'
 import PurviewSetter from '@/components/PurviewSetter.vue'
 import { GRANT_LEVELS, ScopeLevel, type Purview } from '@/types'
@@ -28,6 +29,8 @@ async function onSubmit() {
     error.value = t('adminRequest.errorNoScope')
     return
   }
+  const reword = await reviewText([{ inputId: 'request-reason', get: () => reason.value, set: (x: string) => { reason.value = x } }])
+  if (reword) { error.value = t('moderation.rewordFirst', { word: reword }); return }
   submitting.value = true
   try {
     await axios.post('/api/admin-requests', {
@@ -74,6 +77,7 @@ async function onSubmit() {
       <fieldset class="rounded-md border border-slate-200 p-4">
         <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('adminRequest.reasonLabel') }}</legend>
         <textarea
+          id="request-reason"
           v-model="reason"
           rows="5"
           maxlength="2000"

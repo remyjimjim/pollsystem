@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import PurviewSetter from '@/components/PurviewSetter.vue'
@@ -207,6 +208,12 @@ function validate(): string | null {
 async function saveDraft() {
   const v = validate()
   if (v) { error.value = v; return }
+  // Listed words: the title and office names (not candidates' names: real people).
+  const reword = await reviewText([
+    { inputId: 'poll-title', get: () => form.title, set: (x: string) => { form.title = x } },
+    ...form.candidates.map((c, i) => ({ inputId: `office-${i}`, get: () => c.officeName, set: (x: string) => { c.officeName = x } }))
+  ])
+  if (reword) { error.value = t('moderation.rewordFirst', { word: reword }); return }
   error.value = null; message.value = null; closeWarning.value = null
   submitting.value = true
   try {
@@ -260,6 +267,7 @@ async function publish(confirmed = false) {
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.title') }}
       <input
+        id="poll-title"
         v-model="form.title"
         maxlength="500"
         required
@@ -313,6 +321,7 @@ async function publish(confirmed = false) {
           class="rounded border border-slate-300 p-2 text-base focus:border-slate-500 focus:outline-none"
         />
         <input
+          :id="`office-${i}`"
           v-model="c.officeName"
           :placeholder="$t('form.election.candidateOffice')"
           maxlength="255"

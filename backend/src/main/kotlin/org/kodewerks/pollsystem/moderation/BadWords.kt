@@ -3,7 +3,10 @@ package org.kodewerks.pollsystem.moderation
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ClassPathResource
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 import org.springframework.stereotype.Component
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Size
@@ -19,6 +22,17 @@ data class BadWord(
 )
 
 /**
+ * What a listed word does in the other text people type: titles, summaries,
+ * questions, office names, request reasons, notes and messages (decided
+ * 2026-11-01). Set by `moderation.text-mode`. Both modes first ask "Can I
+ * replace X with Y?"; the answer No differs:
+ * - BLOCK: No sends you back to reword it, and the server refuses the save.
+ * - WARN: No saves it as typed.
+ * Comments are separate: there, No keeps the comment private.
+ */
+enum class TextMode { BLOCK, WARN }
+
+/**
  * The words a public comment may not contain (moderation/bad-words.json).
  * Matching is whole-word and ignores case: "Darn" matches "darn". A plural
  * or possessive ending (-s, -es, -'s) is caught too, so each word is listed
@@ -27,7 +41,12 @@ data class BadWord(
  * the words found. Saving rechecks, so a comment still containing one stays private.
  */
 @Component
-class BadWords(objectMapper: ObjectMapper) {
+class BadWords(
+    objectMapper: ObjectMapper,
+    @Value("\${moderation.text-mode:block}") textMode: String = "block"
+) {
+    val textMode: TextMode = TextMode.valueOf(textMode.trim().uppercase())
+
     val list: List<BadWord> = ClassPathResource("moderation/bad-words.json").inputStream.use {
         objectMapper.readValue<List<BadWord>>(it)
     }.filter { it.word.isNotBlank() }
@@ -43,21 +62,34 @@ class BadWords(objectMapper: ObjectMapper) {
     fun foundIn(text: String?): List<BadWord> =
         if (text.isNullOrBlank()) emptyList() else patterns.filter { (_, p) -> p.matcher(text).find() }.map { it.first }
 
+    /**
+     * For text other than comments: in BLOCK mode, a 400 naming the first
+     * listed word found and where ("Please reword “darn” in the title"). In
+     * WARN mode, nothing: the page has already asked. Pairs are (where, text).
+     */
+    fun requireClean(vararg fields: Pair<String, String?>) {
+        if (textMode == TextMode.WARN) return
+        for ((where, text) in fields) {
+            val w = foundIn(text).firstOrNull() ?: continue
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Please reword “${w.word}” in $where")
+        }
+    }
+
     /** Whether a comment may be stored as public: asked for, not blank, and clean. */
     fun publishable(comment: String?, wantsPublic: Boolean): Boolean =
         wantsPublic && !comment.isNullOrBlank() && foundIn(comment).isEmpty()
 }
 
-/** Public comments to check, in the form's order. */
+/** Texts to check (public comments, or titles, reasons…), in the form's order. */
 data class CheckCommentsRequest(
-    @field:Size(max = 200) val texts: List<@Size(max = 5000) String>
+    @field:Size(max = 200) val texts: List<@Size(max = 20000) String>
 )
 
 /** One listed word found, with its replacement. */
 data class FoundWord(val word: String, val replace: String)
 
-/** Per text (same order), the listed words found in it. */
-data class CheckCommentsResponse(val found: List<List<FoundWord>>)
+/** Per text (same order), the listed words found in it, and what No does outside comments. */
+data class CheckCommentsResponse(val found: List<List<FoundWord>>, val textMode: TextMode = TextMode.BLOCK)
 
 /**
  * The answer forms' "Can I replace … with …?" check. Signed-in users only, and
@@ -67,5 +99,5 @@ data class CheckCommentsResponse(val found: List<List<FoundWord>>)
 class BadWordsController(private val badWords: BadWords) {
     @PostMapping("/api/moderation/check")
     fun check(@Valid @RequestBody body: CheckCommentsRequest): CheckCommentsResponse =
-        CheckCommentsResponse(body.texts.map { t -> badWords.foundIn(t).map { FoundWord(it.word, it.replace) } })
+        CheckCommentsResponse(body.texts.map { t -> badWords.foundIn(t).map { FoundWord(it.word, it.replace) } }, badWords.textMode)
 }

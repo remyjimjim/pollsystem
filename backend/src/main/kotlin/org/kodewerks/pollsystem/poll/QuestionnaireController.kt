@@ -16,13 +16,17 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/polls/questionnaires")
-class QuestionnaireController(private val service: QuestionnaireService) {
+class QuestionnaireController(
+    private val service: QuestionnaireService,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
+) {
 
     @PostMapping
     fun saveDraft(
         @AuthenticationPrincipal principal: AppUserDetails,
         @Valid @RequestBody body: QuestionnaireDraftRequest
     ): ResponseEntity<QuestionnaireDto> {
+        requireCleanText(body)
         val saved = service.saveDraft(principal.user, body)
         return ResponseEntity.status(HttpStatus.CREATED).body(service.toDto(saved))
     }
@@ -32,7 +36,16 @@ class QuestionnaireController(private val service: QuestionnaireService) {
         @AuthenticationPrincipal principal: AppUserDetails,
         @PathVariable id: Long,
         @Valid @RequestBody body: QuestionnaireDraftRequest
-    ): QuestionnaireDto = service.toDto(service.update(id, principal.user, body))
+    ): QuestionnaireDto {
+        requireCleanText(body)
+        return service.toDto(service.update(id, principal.user, body))
+    }
+
+    private fun requireCleanText(body: QuestionnaireDraftRequest) = badWords.requireClean(
+        "the title" to body.title,
+        "the summary" to body.summary,
+        *body.questions.mapIndexed { i, q -> "question ${i + 1}" to q.text }.toTypedArray()
+    )
 
     @PostMapping("/{id}/publish")
     fun publish(

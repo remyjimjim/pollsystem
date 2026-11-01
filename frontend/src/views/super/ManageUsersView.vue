@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useI18n } from 'vue-i18n'
 import PurviewSetter from '@/components/PurviewSetter.vue'
 import ColumnChooser from '@/components/ColumnChooser.vue'
@@ -663,6 +664,8 @@ async function saveModal() {
   if (body.length === 0 || body.length > 2000) {
     modalError.value = t('super.manageUsers.errorBodyLength'); return
   }
+  const reword = await reviewText([{ inputId: 'message-body', get: () => modalBody.value, set: (x: string) => { modalBody.value = x } }])
+  if (reword) { modalError.value = t('moderation.rewordFirst', { word: reword }); return }
   modalSaving.value = true
   modalError.value = null
   try {
@@ -1482,6 +1485,7 @@ onBeforeUnmount(() => {
           }) }}
         </p>
         <textarea
+          id="message-body"
           ref="textareaRef"
           v-model="modalBody"
           maxlength="2000"

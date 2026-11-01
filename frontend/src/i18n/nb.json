@@ -924,5 +924,12 @@
     "enabledHint": "Slått på der du bor. Nei: en administrator har slått av avstemningen i ditt område eller overalt.",
     "closes": "Stenger",
     "noCloseDate": "Ingen sluttdato"
+  },
+  "moderation": {
+    "hintReword": "Dette ordet er ikke tillatt her. Sier du nei, kan du omformulere det selv.",
+    "hintKeep": "Dette ordet står på listen vår. Sier du nei, blir det stående slik du skrev det.",
+    "noReword": "Nei, jeg omformulerer",
+    "noKeep": "Nei, behold det",
+    "rewordFirst": "Omformuler «{word}» først."
   }
 }

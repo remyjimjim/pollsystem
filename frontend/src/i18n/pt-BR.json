@@ -871,5 +871,12 @@
     "enabledHint": "Ativa onde você mora. Não: um administrador desativou esta pesquisa na sua área ou em todo lugar.",
     "closes": "Encerra",
     "noCloseDate": "Sem data de encerramento"
+  },
+  "moderation": {
+    "hintReword": "Esta palavra não é permitida aqui. Se disser não, você mesmo pode reescrevê-la.",
+    "hintKeep": "Esta palavra está na nossa lista. Se disser não, ela fica como você digitou.",
+    "noReword": "Não, vou reescrever",
+    "noKeep": "Não, deixar como está",
+    "rewordFirst": "Reescreva “{word}” primeiro."
   }
 }

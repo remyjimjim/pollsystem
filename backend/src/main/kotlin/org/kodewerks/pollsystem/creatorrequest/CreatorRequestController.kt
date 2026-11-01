@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/creator-requests")
-class CreatorRequestController(private val service: CreatorRequestService) {
+class CreatorRequestController(
+    private val service: CreatorRequestService,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
+) {
 
     @PostMapping
     fun submit(
         @AuthenticationPrincipal principal: AppUserDetails,
         @Valid @RequestBody body: SubmitCreatorRequest
     ): ResponseEntity<CreatorRequestDto> {
+        badWords.requireClean("the reason" to body.reason)
         val saved = service.submit(principal.user, body)
         return ResponseEntity.status(HttpStatus.CREATED).body(service.toDto(saved))
     }

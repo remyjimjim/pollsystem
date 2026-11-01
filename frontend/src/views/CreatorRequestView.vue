@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useI18n } from 'vue-i18n'
 import { GRANT_LEVELS, ScopeLevel, type PollType, type Purview } from '@/types'
 import PurviewSetter from '@/components/PurviewSetter.vue'
@@ -46,6 +47,8 @@ async function onSubmit() {
     error.value = t('creatorRequest.errorNoScope')
     return
   }
+  const reword = await reviewText([{ inputId: 'request-reason', get: () => reason.value, set: (x: string) => { reason.value = x } }])
+  if (reword) { error.value = t('moderation.rewordFirst', { word: reword }); return }
   submitting.value = true
   try {
     await axios.post('/api/creator-requests', {
@@ -105,6 +108,7 @@ async function onSubmit() {
       <fieldset class="rounded-md border border-slate-200 p-4">
         <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('creatorRequest.reasonLabel') }}</legend>
         <textarea
+          id="request-reason"
           v-model="reason"
           rows="5"
           maxlength="2000"

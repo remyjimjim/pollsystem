@@ -1199,5 +1199,12 @@
     "enabledHint": "Switched on where you live. No: an admin has switched this poll off in your area, or everywhere.",
     "closes": "Closes",
     "noCloseDate": "No close date"
+  },
+  "moderation": {
+    "hintReword": "This word isn't allowed here. If you say no, you can reword it yourself.",
+    "hintKeep": "This word is on our list. If you say no, it stays as you typed it.",
+    "noReword": "No, I'll reword it",
+    "noKeep": "No, keep it as typed",
+    "rewordFirst": "Please reword “{word}” first."
   }
 }

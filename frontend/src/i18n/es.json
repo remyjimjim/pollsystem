@@ -871,5 +871,12 @@
     "enabledHint": "Activada donde vive. No: un administrador la desactivó en su zona o en todas partes.",
     "closes": "Cierra",
     "noCloseDate": "Sin fecha de cierre"
+  },
+  "moderation": {
+    "hintReword": "Esta palabra no está permitida aquí. Si dice que no, puede reformularla usted.",
+    "hintKeep": "Esta palabra está en nuestra lista. Si dice que no, se queda como la escribió.",
+    "noReword": "No, la cambiaré yo",
+    "noKeep": "No, dejarla así",
+    "rewordFirst": "Primero cambie “{word}”."
   }
 }

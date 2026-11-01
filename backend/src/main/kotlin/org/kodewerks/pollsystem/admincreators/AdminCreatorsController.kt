@@ -146,6 +146,7 @@ class AdminCreatorsController(
     private val elections: ElectionRepository,
     private val ballotMeasures: BallotMeasureRepository,
     private val roleAuthCache: RoleAuthCache,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords,
     // The Manage Polls list + block endpoints, reused so the Polls count, the
     // page it links to, and the Enabled toggle all agree on "in your purview".
     private val adminPolls: AdminPollsController,
@@ -204,6 +205,7 @@ class AdminCreatorsController(
     ): CreatorRow {
         val me = principal.user
         if (userId == me.id) throw ResponseStatusException(HttpStatus.CONFLICT, "You can't disable yourself")
+        badWords.requireClean("the reason" to body.reason)
         if (!body.enabled) {
             val plan = tx.execute {
                 val creator = users.findById(userId).orElseThrow { notFound("User not found") }
@@ -270,6 +272,7 @@ class AdminCreatorsController(
         val reach = reachOf(principal.user)
         val g = manageableGrant(userId, grantId, reach)
         val reason = body.cleanReason()
+        badWords.requireClean("the reason" to reason)
         if (!body.enabled && userId == principal.user.id && reason == null) {
             throw bad("A reason is required when disabling your own access")
         }

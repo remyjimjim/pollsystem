@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import InfoPopover from '@/components/InfoPopover.vue'
@@ -188,13 +189,14 @@ function askReason(required: boolean): Promise<string | null> {
   reasonText.value = ''
   return new Promise(resolve => { reasonAsk.value = { required, resolve } })
 }
-function answerReason(ok: boolean) {
+async function answerReason(ok: boolean) {
   const ask = reasonAsk.value
   if (!ask) return
-  const text = reasonText.value.trim()
-  if (ok && ask.required && !text) return
+  if (ok && ask.required && !reasonText.value.trim()) return
+  // Listed words: a No (in BLOCK mode) keeps this box open to reword it.
+  if (ok && await reviewText([{ inputId: 'disable-reason', get: () => reasonText.value, set: (x: string) => { reasonText.value = x } }])) return
   reasonAsk.value = null
-  ask.resolve(ok ? text : null)
+  ask.resolve(ok ? reasonText.value.trim() : null)
 }
 /** "On vacation — by me@x on 10/8/2026" for a switched-off grant. */
 function disabledNote(g: Grant): string {
@@ -548,6 +550,7 @@ onMounted(() => {
           {{ reasonAsk.required ? $t('admin.manageCreators.reasonHintSelf') : $t('admin.manageCreators.reasonHintOther') }}
         </p>
         <textarea
+          id="disable-reason"
           v-model="reasonText"
           rows="3"
           maxlength="500"

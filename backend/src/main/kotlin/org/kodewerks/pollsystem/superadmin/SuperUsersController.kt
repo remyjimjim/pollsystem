@@ -132,6 +132,7 @@ class SuperUsersController(
     private val countyZips: CountyZipsRepository,
     private val roleAssignments: RoleAssignmentRepository,
     private val userMessages: UserMessageRepository,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords,
     private val emailService: EmailService,
     private val roleChanges: RoleChanges,
     private val questionnaires: QuestionnaireRepository,
@@ -403,6 +404,7 @@ class SuperUsersController(
         if (text.isEmpty() || text.length > 2000) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Message body must be 1-2000 chars")
         }
+        badWords.requireClean("the message" to text)
         var emailed = false
         if (body.sendEmail) {
             emailService.send(recipient.email, "A message from BallotBox", text)
@@ -432,6 +434,7 @@ class SuperUsersController(
         if (text.isEmpty() || text.length > 2000) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Message body must be 1-2000 chars")
         }
+        badWords.requireClean("the message" to text)
         val saved = userMessages.save(existing.copy(body = text, updatedAt = Instant.now()))
         return toDto(saved)
     }

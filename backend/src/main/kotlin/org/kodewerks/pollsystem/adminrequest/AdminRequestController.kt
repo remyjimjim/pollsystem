@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/admin-requests")
-class AdminRequestController(private val service: AdminRequestService) {
+class AdminRequestController(
+    private val service: AdminRequestService,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
+) {
 
     @PostMapping
     fun submit(
         @AuthenticationPrincipal principal: AppUserDetails,
         @Valid @RequestBody body: SubmitAdminRequest
     ): ResponseEntity<AdminRequestDto> {
+        badWords.requireClean("the reason" to body.reason)
         val saved = service.submit(principal.user, body)
         return ResponseEntity.status(HttpStatus.CREATED).body(service.toDto(saved))
     }

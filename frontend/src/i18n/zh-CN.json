@@ -871,5 +871,12 @@
     "enabledHint": "在您所在地区是否启用。否：管理员已在您的地区或所有地区停用此投票。",
     "closes": "截止",
     "noCloseDate": "无截止日期"
+  },
+  "moderation": {
+    "hintReword": "此处不允许使用这个词。如果选择否，您可以自行改写。",
+    "hintKeep": "这个词在我们的列表中。如果选择否，将保留您输入的内容。",
+    "noReword": "否，我自己改写",
+    "noKeep": "否，保持原样",
+    "rewordFirst": "请先改写“{word}”。"
   }
 }

@@ -924,5 +924,12 @@
     "enabledHint": "Activé là où vous vivez. Non : un administrateur l'a désactivé dans votre zone ou partout.",
     "closes": "Clôture",
     "noCloseDate": "Pas de date de clôture"
+  },
+  "moderation": {
+    "hintReword": "Ce mot n'est pas autorisé ici. Si vous dites non, vous pourrez le reformuler vous-même.",
+    "hintKeep": "Ce mot est sur notre liste. Si vous dites non, il reste tel que vous l'avez tapé.",
+    "noReword": "Non, je vais le reformuler",
+    "noKeep": "Non, le garder tel quel",
+    "rewordFirst": "Veuillez d'abord reformuler « {word} »."
   }
 }

@@ -70,7 +70,8 @@ class BallotMeasureController(
     private val service: BallotMeasureService,
     private val measures: org.kodewerks.pollsystem.repository.BallotMeasureRepository,
     private val blocks: PollBlockService,
-    private val ballotResponses: org.kodewerks.pollsystem.repository.BallotResponseRepository
+    private val ballotResponses: org.kodewerks.pollsystem.repository.BallotResponseRepository,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
 ) {
 
     /**
@@ -105,6 +106,8 @@ class BallotMeasureController(
         @AuthenticationPrincipal principal: AppUserDetails,
         @Valid @RequestBody body: BallotMeasureDraftRequest
     ): ResponseEntity<BallotMeasureDto> {
+        // The summary is often official ballot language: the page asks, the server doesn't refuse it.
+        badWords.requireClean("the title" to body.title)
         val saved = service.saveDraft(principal.user, body)
         return ResponseEntity.status(HttpStatus.CREATED).body(BallotMeasureDto.from(saved))
     }
@@ -114,7 +117,10 @@ class BallotMeasureController(
         @AuthenticationPrincipal principal: AppUserDetails,
         @PathVariable id: Long,
         @Valid @RequestBody body: BallotMeasureDraftRequest
-    ): BallotMeasureDto = BallotMeasureDto.from(service.update(id, principal.user, body))
+    ): BallotMeasureDto {
+        badWords.requireClean("the title" to body.title)
+        return BallotMeasureDto.from(service.update(id, principal.user, body))
+    }
 
     @PostMapping("/{id}/publish")
     fun publish(

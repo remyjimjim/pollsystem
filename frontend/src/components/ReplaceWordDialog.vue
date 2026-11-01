@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { BadWord } from '../composables/useCommentModeration'
 
-// "Can I replace X with Y?" for a public comment. Shown as a bar at the bottom,
-// so the comment box being asked about stays focused and visible.
-defineProps<{ asking: BadWord }>()
+// "Can I replace X with Y?" for a public comment, or (with [hint] and [noLabel])
+// for other text (useTextModeration). Shown as a bar at the bottom, so the box
+// being asked about stays focused and visible.
+defineProps<{ asking: BadWord; hint?: string; noLabel?: string }>()
 defineEmits<{ answer: [yes: boolean] }>()
 </script>
 
@@ -12,20 +13,20 @@ defineEmits<{ answer: [yes: boolean] }>()
     role="dialog"
     aria-labelledby="replace-word-title"
     data-test="replace-word-dialog"
-    class="fixed inset-x-0 bottom-0 z-50 flex justify-center p-4"
+    class="fixed inset-x-0 bottom-0 z-[70] flex justify-center p-4"
   >
     <div class="w-full max-w-md rounded border border-slate-300 bg-white p-4 shadow-xl">
       <h2 id="replace-word-title" class="mb-1 text-base font-semibold text-slate-800">
         {{ $t('comments.replaceQuestion', { word: asking.word, replace: asking.replace }) }}
       </h2>
-      <p class="mb-3 text-xs text-slate-500">{{ $t('comments.replaceHint') }}</p>
+      <p class="mb-3 text-xs text-slate-500">{{ hint ?? $t('comments.replaceHint') }}</p>
       <div class="flex justify-end gap-2">
         <button
           type="button"
           data-test="replace-no"
           class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50"
           @click="$emit('answer', false)"
-        >{{ $t('comments.replaceNo') }}</button>
+        >{{ noLabel ?? $t('comments.replaceNo') }}</button>
         <button
           type="button"
           data-test="replace-yes"

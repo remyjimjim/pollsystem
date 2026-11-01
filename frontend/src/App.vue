@@ -8,6 +8,8 @@ import { SUPPORTED_LOCALES, setLocale, type LocaleCode } from '@/i18n'
 import { useNewVersion } from '@/composables/useNewVersion'
 import SettingsMenu from '@/components/SettingsMenu.vue'
 import RoleNav from '@/components/RoleNav.vue'
+import ReplaceWordDialog from '@/components/ReplaceWordDialog.vue'
+import { textAsking, answerText } from '@/composables/useTextModeration'
 
 const authStore = useAuthStore()
 // Local development only: null in a production build, so it isn't bundled.
@@ -129,6 +131,14 @@ function onLocaleChange(e: Event) {
 
     <main class="app-content mx-auto my-8 max-w-6xl px-4 sm:px-8">
       <RouterView />
+      <!-- Listed words in titles, reasons, notes… (useTextModeration): one question for every page. -->
+      <ReplaceWordDialog
+        v-if="textAsking"
+        :asking="textAsking.word"
+        :hint="textAsking.keepOnNo ? $t('moderation.hintKeep') : $t('moderation.hintReword')"
+        :no-label="textAsking.keepOnNo ? $t('moderation.noKeep') : $t('moderation.noReword')"
+        @answer="answerText"
+      />
     </main>
     <footer class="app-content mx-auto mb-8 flex max-w-6xl flex-wrap justify-center gap-x-4 gap-y-1 px-4 text-xs text-slate-500 sm:px-8 print:hidden" data-test="site-footer">
       <RouterLink to="/legal/terms" class="hover:text-slate-800 hover:underline">{{ $t('legal.terms') }}</RouterLink>

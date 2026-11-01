@@ -33,6 +33,21 @@ While filling in a poll, click **Save draft** at any time. The poll stays a
 draft until you publish it, and you can come back to it with **Edit** on your
 dashboard. Only drafts can be edited.
 
+### Words that aren't allowed
+
+Titles, summaries, questions and office names can't contain certain words.
+When you save, each one found is highlighted, and you're asked **"Can I
+replace *word* with *other word*?"**:
+
+- **Yes** replaces it, and saving goes on.
+- **No** takes you back to that box to reword it yourself. The poll isn't
+  saved until you do.
+
+Candidates' names and affiliations aren't checked, since they're real people.
+A ballot measure's summary is often the official ballot language: **No**
+keeps it as typed. The same check applies to request reasons, admin notes,
+disable reasons and messages.
+
 ## Publishing
 
 Click **Publish**. The poll is saved and goes live, and you're taken back to

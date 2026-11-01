@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
@@ -97,6 +98,12 @@ function validate(): string | null {
 async function saveDraft() {
   const v = validate()
   if (v) { error.value = v; return }
+  // Listed words: the summary is often official ballot language, so No keeps it as typed.
+  const reword = await reviewText([
+    { inputId: 'poll-title', get: () => form.title, set: (x: string) => { form.title = x } },
+    { inputId: 'poll-summary', get: () => form.summary, set: (x: string) => { form.summary = x }, warnOnly: true }
+  ])
+  if (reword) { error.value = t('moderation.rewordFirst', { word: reword }); return }
   error.value = null; message.value = null; closeWarning.value = null
   submitting.value = true
   try {
@@ -171,6 +178,7 @@ onMounted(loadElections)
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.title') }}
       <input
+        id="poll-title"
         v-model="form.title"
         maxlength="500"
         required
@@ -181,6 +189,7 @@ onMounted(loadElections)
     <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
       {{ $t('form.summary') }}
       <textarea
+        id="poll-summary"
         v-model="form.summary"
         rows="4"
         required

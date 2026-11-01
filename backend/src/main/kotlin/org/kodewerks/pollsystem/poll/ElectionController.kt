@@ -137,7 +137,8 @@ data class CandidateSuggestionDto(val name: String, val affiliation: String, val
 class ElectionController(
     private val service: ElectionService,
     private val elections: org.kodewerks.pollsystem.repository.ElectionRepository,
-    private val candidates: org.kodewerks.pollsystem.repository.CandidateRepository
+    private val candidates: org.kodewerks.pollsystem.repository.CandidateRepository,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
 ) {
 
     /**
@@ -163,6 +164,7 @@ class ElectionController(
         @AuthenticationPrincipal principal: AppUserDetails,
         @Valid @RequestBody body: ElectionDraftRequest
     ): ResponseEntity<ElectionDto> {
+        requireCleanText(body)
         val saved = service.saveDraft(principal.user, body)
         return ResponseEntity.status(HttpStatus.CREATED).body(service.toDto(saved))
     }
@@ -172,7 +174,17 @@ class ElectionController(
         @AuthenticationPrincipal principal: AppUserDetails,
         @PathVariable id: Long,
         @Valid @RequestBody body: ElectionDraftRequest
-    ): ElectionDto = service.toDto(service.update(id, principal.user, body))
+    ): ElectionDto {
+        requireCleanText(body)
+        return service.toDto(service.update(id, principal.user, body))
+    }
+
+    // Candidates' names and affiliations aren't checked: they're real people
+    // (Chris Coons would trip the list).
+    private fun requireCleanText(body: ElectionDraftRequest) = badWords.requireClean(
+        "the title" to body.title,
+        *body.candidates.map { "the office “${it.officeName.trim()}”" to it.officeName }.toTypedArray()
+    )
 
     @PostMapping("/{id}/publish")
     fun publish(

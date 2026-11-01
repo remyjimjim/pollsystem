@@ -105,6 +105,15 @@ app:
 # and our custom `rolecache` (gated to SUPER role in SecurityConfig).
 # Adding new endpoints means listing them here AND deciding their
 # security posture in SecurityConfig.
+moderation:
+  # A listed word (moderation/bad-words.json) in a title, summary, question,
+  # office name, reason, note or message. The page first asks "Can I replace
+  # X with Y?"; on No:
+  #   block = back to the field to reword it; the server refuses the save
+  #   warn  = it's saved as typed
+  # (Comments are separate: No keeps the comment private.)
+  text-mode: ${MODERATION_TEXT_MODE:block}
+
 management:
   endpoints:
     web:

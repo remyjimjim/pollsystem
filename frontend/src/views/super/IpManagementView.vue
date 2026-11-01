@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -43,6 +44,8 @@ async function load() {
 async function add() {
   error.value = null
   message.value = null
+  const reword = await reviewText([{ inputId: 'ip-note', get: () => form.note, set: (x: string) => { form.note = x } }])
+  if (reword) { error.value = t('moderation.rewordFirst', { word: reword }); return }
   try {
     await axios.post('/api/super/ip-rules', {
       value: form.value.trim(),
@@ -119,6 +122,7 @@ onMounted(load)
       <label class="flex flex-col gap-1 text-xs font-semibold text-slate-700">
         {{ $t('super.ipManagement.noteLabel') }}
         <input
+          id="ip-note"
           v-model="form.note"
           type="text"
           :placeholder="$t('super.ipManagement.noteOptional')"

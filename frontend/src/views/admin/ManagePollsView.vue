@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
+import { reviewText } from '@/composables/useTextModeration'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import ColumnChooser from '@/components/ColumnChooser.vue'
@@ -540,6 +541,8 @@ async function saveNote() {
   if (body.length === 0 || body.length > 2000) {
     noteModalError.value = t('admin.managePolls.errorBodyLength'); return
   }
+  const reword = await reviewText([{ inputId: 'note-body', get: () => noteModalBody.value, set: (x: string) => { noteModalBody.value = x } }])
+  if (reword) { noteModalError.value = t('moderation.rewordFirst', { word: reword }); return }
   noteModalSaving.value = true
   noteModalError.value = null
   try {
@@ -601,6 +604,13 @@ async function saveEdit() {
   if (reason.length === 0 || reason.length > 2000) {
     editError.value = t('admin.managePolls.errorReasonLength'); return
   }
+  // Listed words; a ballot measure's summary is often official ballot language, so No keeps it.
+  const reword = await reviewText([
+    { inputId: 'edit-title', get: () => editTitle.value, set: (x: string) => { editTitle.value = x } },
+    { inputId: 'edit-summary', get: () => editModalRow.value?.type === 'ELECTION' ? '' : editSummary.value, set: (x: string) => { editSummary.value = x }, warnOnly: editModalRow.value.type === 'BALLOT_MEASURE' },
+    { inputId: 'edit-reason', get: () => editReason.value, set: (x: string) => { editReason.value = x } }
+  ])
+  if (reword) { editError.value = t('moderation.rewordFirst', { word: reword }); return }
   editSaving.value = true
   editError.value = null
   try {
@@ -1032,7 +1042,7 @@ function historySlug(kind: Kind): string {
           {{ $t('admin.managePolls.noteAdd') }}
         </button>
         <div v-else class="mb-3">
-          <textarea ref="noteTextarea" v-model="noteModalBody" maxlength="2000" rows="6" data-test="note-body"
+          <textarea id="note-body" ref="noteTextarea" v-model="noteModalBody" maxlength="2000" rows="6" data-test="note-body"
             class="mb-1 w-full rounded border border-slate-300 p-2 text-sm text-slate-900 focus:border-slate-500 focus:outline-none" />
           <p class="mb-2 text-right text-xs text-slate-500">{{ noteModalBody.length }}/2000</p>
           <label class="mb-2 flex items-center gap-2 text-xs text-slate-700">
@@ -1077,13 +1087,13 @@ function historySlug(kind: Kind): string {
 
         <label class="mb-3 flex flex-col gap-1 text-sm font-semibold text-slate-700">
           {{ $t('admin.managePolls.editTitle') }}
-          <input v-model="editTitle" type="text" maxlength="500" data-test="edit-title"
+          <input id="edit-title" v-model="editTitle" type="text" maxlength="500" data-test="edit-title"
             class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
         </label>
 
         <label v-if="editModalRow?.type !== 'ELECTION'" class="mb-3 flex flex-col gap-1 text-sm font-semibold text-slate-700">
           {{ $t('admin.managePolls.editSummary') }}
-          <textarea v-model="editSummary" rows="4" data-test="edit-summary"
+          <textarea id="edit-summary" v-model="editSummary" rows="4" data-test="edit-summary"
             class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
         </label>
 
@@ -1105,7 +1115,7 @@ function historySlug(kind: Kind): string {
 
         <label class="mb-1 flex flex-col gap-1 text-sm font-semibold text-slate-700">
           {{ $t('admin.managePolls.editReason') }}
-          <textarea v-model="editReason" maxlength="2000" rows="5"
+          <textarea id="edit-reason" v-model="editReason" maxlength="2000" rows="5"
             class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
         </label>
         <p class="mb-2 text-right text-xs text-slate-500">{{ editReason.length }}/2000</p>

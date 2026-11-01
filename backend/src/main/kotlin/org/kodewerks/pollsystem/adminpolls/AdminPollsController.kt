@@ -121,6 +121,7 @@ class AdminPollsController(
     private val roleAssignments: RoleAssignmentRepository,
     private val blocks: PollTypeBlockRepository,
     private val notes: PollNoteRepository,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords,
     private val emailService: org.kodewerks.pollsystem.email.EmailService,
     private val regions: org.kodewerks.pollsystem.geography.RegionService,
     private val history: org.kodewerks.pollsystem.poll.PollHistoryService
@@ -415,6 +416,7 @@ class AdminPollsController(
         val (kind, _) = locatePoll(type, id)
         val text = body.body.trim()
         if (text.isEmpty() || text.length > 2000) throw bad("Note must be 1–2000 chars")
+        badWords.requireClean("the note" to text)
         var emailed = false
         if (body.sendEmail) {
             val creatorEmail = creatorEmailFor(kind, id)
@@ -436,6 +438,7 @@ class AdminPollsController(
         }
         val text = body.body.trim()
         if (text.isEmpty() || text.length > 2000) throw bad("Note must be 1–2000 chars")
+        badWords.requireClean("the note" to text)
         val saved = notes.save(existing.copy(body = text, updatedAt = Instant.now()))
         return toDto(saved)
     }
@@ -464,6 +467,12 @@ class AdminPollsController(
         val newSummary = body.summary?.trim()
         if (newSummary != null && newSummary.isEmpty()) throw bad("A summary can't be blank")
         if (newSummary != null && kind == PollKind.ELECTION) throw bad("Elections have no summary")
+        // A ballot measure's summary is often official ballot language: the page asks, the server doesn't refuse it.
+        badWords.requireClean(
+            "the title" to newTitle,
+            "the summary" to newSummary?.takeIf { kind != PollKind.BALLOT_MEASURE },
+            "the reason" to reason
+        )
         if (newTitle == null && newSummary == null && body.status == null && body.closeDate == null) {
             throw bad("Nothing to change: provide a title, summary, status and/or close date")
         }

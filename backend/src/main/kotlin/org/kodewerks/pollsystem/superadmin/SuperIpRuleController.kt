@@ -53,7 +53,10 @@ data class IpRuleDto(
 
 @RestController
 @RequestMapping("/api/super/ip-rules")
-class SuperIpRuleController(private val rules: IpRuleRepository) {
+class SuperIpRuleController(
+    private val rules: IpRuleRepository,
+    private val badWords: org.kodewerks.pollsystem.moderation.BadWords
+) {
 
     @GetMapping
     @Transactional(readOnly = true)
@@ -67,6 +70,7 @@ class SuperIpRuleController(private val rules: IpRuleRepository) {
         @Valid @RequestBody body: IpRuleInput
     ): ResponseEntity<IpRuleDto> {
         validate(body.value)
+        badWords.requireClean("the note" to body.note)
         val saved = rules.save(
             IpRule(
                 value = body.value.trim(),
