@@ -27,5 +27,9 @@ data class AppFlag(
 
     /** Local development only (V35): the results privacy threshold override; null = configured. */
     @Column(name = "results_threshold")
-    val resultsThreshold: Int? = null
+    val resultsThreshold: Int? = null,
+
+    /** Moderation (V45): BLOCK or WARN for listed words outside comments; null = configured. */
+    @Column(name = "text_mode")
+    val textMode: String? = null
 )

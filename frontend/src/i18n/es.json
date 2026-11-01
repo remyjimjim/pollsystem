@@ -679,6 +679,18 @@
         "end": "Terminar ahora",
         "confirmEnd": "¿Terminar la demostración ahora? Se borran sus votos y comentarios, y sus encuestas se archivan y pasan a usted.",
         "error": "No se pudo actualizar la cuenta de demostración."
+      },
+      "moderation": {
+        "heading": "Moderación",
+        "blurb": "Cuando alguien escribe una palabra de la lista en un título, resumen, pregunta, cargo, motivo, nota o mensaje, se le pregunta «¿Puedo reemplazar … por …?». Si responde No:",
+        "block": "Bloquear",
+        "blockDesc": "Vuelve a reformularla y no se guarda.",
+        "warn": "Advertir",
+        "warnDesc": "Se guarda tal como lo escribió.",
+        "default": "(predeterminado del servidor)",
+        "comments": "Los comentarios no cambian: allí, No mantiene el comentario privado. Los nombres de los candidatos nunca se revisan.",
+        "saved": "Guardado: vigente ya.",
+        "error": "No se pudo cambiar la moderación."
       }
     },
     "adminRequests": {

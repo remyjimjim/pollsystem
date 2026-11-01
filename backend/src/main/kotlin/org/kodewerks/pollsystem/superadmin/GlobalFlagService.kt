@@ -23,4 +23,9 @@ class GlobalFlagService(private val flags: AppFlagRepository) {
     @Transactional
     fun setPollsDisabled(disabled: Boolean, byUserId: Long): AppFlag =
         flags.save(current().copy(pollsDisabled = disabled, updatedAt = Instant.now(), updatedBy = byUserId))
+
+    /** The Super dashboard's Moderation choice (V45): "BLOCK" or "WARN". */
+    @Transactional
+    fun setTextMode(mode: String, byUserId: Long): AppFlag =
+        flags.save(current().copy(textMode = mode, updatedAt = Instant.now(), updatedBy = byUserId))
 }

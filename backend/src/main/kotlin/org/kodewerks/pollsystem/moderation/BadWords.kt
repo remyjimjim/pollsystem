@@ -29,6 +29,8 @@ data class BadWord(
  * - BLOCK: No sends you back to reword it, and the server refuses the save.
  * - WARN: No saves it as typed.
  * Comments are separate: there, No keeps the comment private.
+ * A super picks it on the Super dashboard (Moderation, V45: app_flags.text_mode,
+ * effective at once); until then it's the configured default.
  */
 enum class TextMode { BLOCK, WARN }
 
@@ -43,9 +45,15 @@ enum class TextMode { BLOCK, WARN }
 @Component
 class BadWords(
     objectMapper: ObjectMapper,
-    @Value("\${moderation.text-mode:block}") textMode: String = "block"
+    @Value("\${moderation.text-mode:block}") textMode: String = "block",
+    private val flags: org.kodewerks.pollsystem.superadmin.GlobalFlagService? = null
 ) {
-    val textMode: TextMode = TextMode.valueOf(textMode.trim().uppercase())
+    /** The configured default (moderation.text-mode), used until a super picks one. */
+    val defaultTextMode: TextMode = TextMode.valueOf(textMode.trim().uppercase())
+
+    /** The mode in force: the Super dashboard's choice, else the configured default. */
+    fun textMode(): TextMode =
+        flags?.current()?.textMode?.let { runCatching { TextMode.valueOf(it) }.getOrNull() } ?: defaultTextMode
 
     val list: List<BadWord> = ClassPathResource("moderation/bad-words.json").inputStream.use {
         objectMapper.readValue<List<BadWord>>(it)
@@ -68,7 +76,7 @@ class BadWords(
      * WARN mode, nothing: the page has already asked. Pairs are (where, text).
      */
     fun requireClean(vararg fields: Pair<String, String?>) {
-        if (textMode == TextMode.WARN) return
+        if (textMode() == TextMode.WARN) return
         for ((where, text) in fields) {
             val w = foundIn(text).firstOrNull() ?: continue
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Please reword “${w.word}” in $where")
@@ -99,5 +107,5 @@ data class CheckCommentsResponse(val found: List<List<FoundWord>>, val textMode:
 class BadWordsController(private val badWords: BadWords) {
     @PostMapping("/api/moderation/check")
     fun check(@Valid @RequestBody body: CheckCommentsRequest): CheckCommentsResponse =
-        CheckCommentsResponse(body.texts.map { t -> badWords.foundIn(t).map { FoundWord(it.word, it.replace) } }, badWords.textMode)
+        CheckCommentsResponse(body.texts.map { t -> badWords.foundIn(t).map { FoundWord(it.word, it.replace) } }, badWords.textMode())
 }

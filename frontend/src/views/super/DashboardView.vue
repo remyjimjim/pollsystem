@@ -21,10 +21,14 @@ interface AdminWorkloadDto {
   rows: AdminWorkloadRow[]
 }
 
+type TextMode = 'BLOCK' | 'WARN'
 interface FlagsDto {
   pollsDisabled: boolean
   updatedAt: string
   updatedBy: number | null
+  /** Moderation: the mode in force, and the configured default (fly.toml). */
+  textMode: TextMode
+  textModeDefault: TextMode
 }
 
 const load = ref<AdminWorkloadDto | null>(null)
@@ -56,6 +60,24 @@ async function setPollsDisabled(disabled: boolean) {
     flagError.value = e?.response?.data?.message ?? t('super.dashboard.killSwitch.error')
   } finally {
     flagBusy.value = false
+  }
+}
+
+// Moderation (V45): what No does for a listed word outside comments. In force at once.
+const modeBusy = ref(false)
+const modeSaved = ref(false)
+const modeError = ref<string | null>(null)
+async function setTextMode(mode: TextMode) {
+  modeBusy.value = true
+  modeSaved.value = false
+  modeError.value = null
+  try {
+    flag.value = (await axios.put<FlagsDto>('/api/super/flags/text-mode', { mode })).data
+    modeSaved.value = true
+  } catch (e: any) {
+    modeError.value = e?.response?.data?.message ?? t('super.dashboard.moderation.error')
+  } finally {
+    modeBusy.value = false
   }
 }
 
@@ -161,6 +183,33 @@ onMounted(() => {
             : (flag.pollsDisabled ? $t('super.dashboard.killSwitch.enableButton') : $t('super.dashboard.killSwitch.disableButton')) }}
         </button>
       </div>
+    </section>
+
+    <section class="mb-8 rounded-lg border border-slate-200 bg-white p-5" data-test="moderation-card">
+      <h2 class="font-semibold text-slate-800">{{ $t('super.dashboard.moderation.heading') }}</h2>
+      <p class="m-0 mt-1 text-sm text-slate-600">{{ $t('super.dashboard.moderation.blurb') }}</p>
+      <fieldset v-if="flag" class="mt-3 flex flex-col gap-2 border-0 p-0" :disabled="modeBusy">
+        <legend class="sr-only">{{ $t('super.dashboard.moderation.heading') }}</legend>
+        <label v-for="m in (['BLOCK', 'WARN'] as const)" :key="m" class="flex cursor-pointer items-start gap-2 text-sm">
+          <input
+            type="radio"
+            name="text-mode"
+            :value="m"
+            :checked="flag.textMode === m"
+            :data-test="`text-mode-${m.toLowerCase()}`"
+            class="mt-1"
+            @change="setTextMode(m)"
+          />
+          <span>
+            <strong class="font-semibold text-slate-800">{{ $t(`super.dashboard.moderation.${m.toLowerCase()}`) }}</strong>
+            <span v-if="flag.textModeDefault === m" class="ml-1 text-xs text-slate-500">{{ $t('super.dashboard.moderation.default') }}</span>
+            <span class="block text-slate-600">{{ $t(`super.dashboard.moderation.${m.toLowerCase()}Desc`) }}</span>
+          </span>
+        </label>
+      </fieldset>
+      <p class="m-0 mt-2 text-xs text-slate-500">{{ $t('super.dashboard.moderation.comments') }}</p>
+      <p v-if="modeSaved" class="m-0 mt-1 text-xs text-green-700" data-test="text-mode-saved">{{ $t('super.dashboard.moderation.saved') }}</p>
+      <p v-if="modeError" class="m-0 mt-1 text-xs text-red-700">{{ modeError }}</p>
     </section>
 
     <DemoAccountCard />

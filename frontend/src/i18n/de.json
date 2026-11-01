@@ -679,6 +679,18 @@
         "end": "Jetzt beenden",
         "confirmEnd": "Die Demo jetzt beenden? Ihre Stimmen und Kommentare werden gelöscht, und ihre Umfragen werden archiviert und Ihnen übertragen.",
         "error": "Das Demokonto konnte nicht aktualisiert werden."
+      },
+      "moderation": {
+        "heading": "Moderation",
+        "blurb": "Wenn jemand ein Wort von der Liste in Titel, Zusammenfassung, Frage, Amt, Begründung, Notiz oder Nachricht eingibt, wird gefragt: „Darf ich … durch … ersetzen?“. Bei Nein:",
+        "block": "Sperren",
+        "blockDesc": "Es muss umformuliert werden; das Speichern wird abgelehnt.",
+        "warn": "Warnen",
+        "warnDesc": "Es wird so gespeichert, wie eingegeben.",
+        "default": "(Server-Standard)",
+        "comments": "Kommentare sind nicht betroffen: Dort bleibt der Kommentar bei Nein privat. Kandidatennamen werden nie geprüft.",
+        "saved": "Gespeichert: gilt sofort.",
+        "error": "Die Moderation konnte nicht geändert werden."
       }
     },
     "adminRequests": {

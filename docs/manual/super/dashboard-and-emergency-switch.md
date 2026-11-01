@@ -53,3 +53,19 @@ asked to confirm.
 While it's off, anyone trying to answer sees "Poll submissions are temporarily
 disabled by an administrator". Click **Re-enable submissions** to turn them
 back on.
+
+## Moderation: words that aren't allowed
+
+People typing a listed word in a title, summary, question, office name,
+reason, note or message are asked **"Can I replace *word* with *other
+word*?"**. The **Moderation** section sets what happens when they answer
+**No**:
+
+- **Block:** they're sent back to reword it, and the save is refused.
+- **Warn:** it's saved as they typed it.
+
+Click a choice, and it's in force straight away for everyone. "(server
+default)" marks the setting BallotBox starts with.
+
+Comments aren't affected: there, **No** keeps the comment private.
+Candidates' names are never checked.

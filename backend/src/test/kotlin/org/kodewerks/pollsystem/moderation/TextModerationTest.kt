@@ -15,6 +15,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 
 /**
  * Listed words in text other than comments (decided 2026-11-01): in BLOCK
@@ -48,7 +49,7 @@ class TextModerationTest : AbstractIntegrationTest() {
 
     @Test
     fun `the default mode is BLOCK, and the check says so`() {
-        assertThat(badWords.textMode).isEqualTo(TextMode.BLOCK)
+        assertThat(badWords.textMode()).isEqualTo(TextMode.BLOCK)
         send("/api/moderation/check", creator(), mapOf("texts" to listOf("x"))).andExpect {
             status { isOk() }
             jsonPath("$.textMode") { value("BLOCK") }
@@ -96,9 +97,33 @@ class TextModerationTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `a super switches the mode on the dashboard, in force at once, and only a super can`() {
+        val sup = AppUserDetails(fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "txtmodsup"))
+        val me = creator()
+        val q = mapOf("pollTypeId" to 2L, "title" to "A $word poll", "summary" to "s", "scopeLevel" to "NATIONAL",
+            "questions" to listOf(mapOf("text" to "q")))
+        mockMvc.put("/api/super/flags/text-mode") { with(user(me)); contentType = MediaType.APPLICATION_JSON; content = """{"mode":"WARN"}""" }
+            .andExpect { status { isForbidden() } }
+        try {
+            mockMvc.put("/api/super/flags/text-mode") { with(user(sup)); contentType = MediaType.APPLICATION_JSON; content = """{"mode":"WARN"}""" }
+                .andExpect {
+                    status { isOk() }
+                    jsonPath("$.textMode") { value("WARN") }
+                    jsonPath("$.textModeDefault") { value("BLOCK") }
+                }
+            send("/api/moderation/check", me, mapOf("texts" to listOf("x"))).andExpect { jsonPath("$.textMode") { value("WARN") } }
+            send("/api/polls/questionnaires", me, q).andExpect { status { isCreated() } }
+        } finally {
+            // The tests share one database: put it back.
+            mockMvc.put("/api/super/flags/text-mode") { with(user(sup)); contentType = MediaType.APPLICATION_JSON; content = """{"mode":"BLOCK"}""" }
+        }
+        send("/api/polls/questionnaires", me, q).refused("the title")
+    }
+
+    @Test
     fun `WARN mode refuses nothing`() {
         val warn = BadWords(json, "warn")
-        assertThat(warn.textMode).isEqualTo(TextMode.WARN)
+        assertThat(warn.textMode()).isEqualTo(TextMode.WARN)
         assertThatCode { warn.requireClean("the title" to "a $word") }.doesNotThrowAnyException()
     }
 }

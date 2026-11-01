@@ -44,9 +44,16 @@ often official ballot language. No keeps them as typed, in either mode.
 
 ## The text mode: block or warn
 
-Set by `moderation.text-mode` in `application.yml`. On Fly it comes from the
-environment variable `MODERATION_TEXT_MODE` (in `backend/fly.toml` and
-`backend/fly.staging.toml`, under `[env]`).
+**A super picks it** on the Super dashboard, under **Moderation**: two radio
+buttons, in force straight away for everyone, with no restart or deploy. The
+choice is stored in `app_flags.text_mode` (V45).
+
+Until a super picks one, the **configured default** applies:
+`moderation.text-mode` in `application.yml`, which on Fly is
+`MODERATION_TEXT_MODE` under `[env]` in `backend/fly.toml` and
+`backend/fly.staging.toml`. The dashboard marks it "(server default)". Once a
+super has picked, the dashboard's choice wins; the default only matters for a
+fresh database.
 
 | Mode | The dialog's No button | On No | The server |
 |---|---|---|---|
@@ -55,9 +62,10 @@ environment variable `MODERATION_TEXT_MODE` (in `backend/fly.toml` and
 
 Comments aren't affected by the mode: No always keeps them private.
 
-The page learns the mode from each check, so switching needs **no frontend
-change or deploy**, only a backend restart with the new value. How to
-switch: [DEPLOYING-FLY.md → Switch the word mode](DEPLOYING-FLY.md#switch-the-word-mode-moderation_text_mode).
+The page learns the mode from each check, and the server reads it on every
+check and save, so a switch takes effect at once. To change the default
+instead, see [DEPLOYING-FLY.md → Switch the word
+mode](DEPLOYING-FLY.md#switch-the-word-mode-moderation_text_mode).
 
 ## Where it lives in the code
 
@@ -65,7 +73,12 @@ switch: [DEPLOYING-FLY.md → Switch the word mode](DEPLOYING-FLY.md#switch-the-
   - `foundIn`;
   - `publishable` (comments);
   - `requireClean` (the other text; does nothing in warn mode);
-  - `TextMode`.
+  - `TextMode`;
+  - `textMode()`, which is the dashboard's choice, else `defaultTextMode`.
+- **The switch:** `PUT /api/super/flags/text-mode` (`SuperFlagsController`,
+  `GlobalFlagService.setTextMode`). `GET /api/super/flags` returns
+  `textMode` and `textModeDefault`. On the page it's the Moderation section
+  of `views/super/DashboardView.vue`.
   Each save endpoint calls `requireClean("the title" to …, …)`.
 - **Page:**
   - `composables/useCommentModeration.ts` for comments;

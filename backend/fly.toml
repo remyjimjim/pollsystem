@@ -20,6 +20,7 @@ primary_region = "iad"
   DEMO_EMAIL = "demo@ballotbox.us.com"
   # Listed words in titles, reasons, notes… (docs/MODERATION.md): "block" = No
   # sends you back to reword it (the save is refused); "warn" = No saves it as typed.
+  # Only the default: a super's choice on the Super dashboard (Moderation) wins.
   MODERATION_TEXT_MODE = "block"
 
 [http_service]

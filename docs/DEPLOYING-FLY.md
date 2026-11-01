@@ -310,7 +310,7 @@ Caveats:
 | Manually scale backend | `flyctl scale count 3 -a pollsystem-backend` |
 | Roll back a bad deploy | `flyctl releases -a pollsystem-backend` then `flyctl deploy --image <previous>` |
 | Rotate JWT secret | `flyctl secrets set -a pollsystem-backend JWT_SECRET="$(openssl rand -hex 32)"` (invalidates all sessions) |
-| Switch the listed-word mode (block ↔ warn) | See [Switch the word mode](#switch-the-word-mode-moderation_text_mode) |
+| Switch the listed-word mode (block ↔ warn) | Super dashboard → Moderation (at once). The `fly.toml` default: see [Switch the word mode](#switch-the-word-mode-moderation_text_mode) |
 
 ---
 
@@ -415,12 +415,17 @@ messages ([MODERATION.md](MODERATION.md)) work in one of two modes:
   the person back to reword it, and the server refuses the save.
 - **`warn`**: the same question, but **No** saves it as typed.
 
-It's the `[env]` value `MODERATION_TEXT_MODE` in `backend/fly.toml` (prod) and
-`backend/fly.staging.toml`. The page reads the mode from the server on every
-check, so **no frontend change or Cloudflare build is needed**. Only the
-backend restarts with the new value.
+**Normally: no deploy at all.** A super picks Block or Warn on the **Super
+dashboard → Moderation**, and it's in force straight away (stored in the
+database, V45).
 
-**To switch prod to warn:**
+The `[env]` value `MODERATION_TEXT_MODE` in `backend/fly.toml` (prod) and
+`backend/fly.staging.toml` is only the **default**. It applies until a super
+has picked, and the dashboard marks it "(server default)". Once a super has
+picked, changing it does nothing. The steps below are for changing that
+default.
+
+**To change prod's default to warn:**
 
 1. In `backend/fly.toml`, set `MODERATION_TEXT_MODE = "warn"` and commit it.
 2. Apply it without shipping new code, using the `--image` deploy from
@@ -431,8 +436,8 @@ backend restarts with the new value.
    cd backend && flyctl deploy -a pollsystem-backend -c fly.toml --image <that image>
    ```
 
-3. Check: open any poll form, type a listed word in the title and save. The
-   dialog's No button should now read **"No, keep it as typed"**.
+3. Check: the Super dashboard's Moderation section shows "(server default)"
+   next to Warn.
 
 To go back, set it to `"block"` the same way. Staging is the same, with
 `-a pollsystem-backend-staging -c fly.staging.toml`. Try it there first.

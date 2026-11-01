@@ -679,6 +679,18 @@
         "end": "Encerrar agora",
         "confirmEnd": "Encerrar a demonstração agora? Seus votos e comentários são apagados, e suas pesquisas são arquivadas e passadas a você.",
         "error": "Não foi possível atualizar a conta de demonstração."
+      },
+      "moderation": {
+        "heading": "Moderação",
+        "blurb": "Quando alguém digita uma palavra da lista em um título, resumo, pergunta, cargo, motivo, nota ou mensagem, perguntamos “Posso substituir … por …?”. Se responder Não:",
+        "block": "Bloquear",
+        "blockDesc": "A pessoa volta para reescrever, e o salvamento é recusado.",
+        "warn": "Avisar",
+        "warnDesc": "É salvo como foi digitado.",
+        "default": "(padrão do servidor)",
+        "comments": "Os comentários não mudam: neles, Não mantém o comentário privado. Nomes de candidatos nunca são verificados.",
+        "saved": "Salvo: já em vigor.",
+        "error": "Não foi possível alterar a moderação."
       }
     },
     "adminRequests": {
