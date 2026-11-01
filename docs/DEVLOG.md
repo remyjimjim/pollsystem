@@ -61,6 +61,47 @@ logged.
 
 ---
 
+## 2026-11-01 — Super dashboard: Moderation (Block / Warn)
+
+**Requested:**
+
+> Can we get a 'SUPER' admin page section called 'Moderation' where the
+> super can click a moderation radio button to the desired setting?
+
+**Changed:**
+
+- **Storage:** V45 adds `app_flags.text_mode` (BLOCK / WARN; empty means
+  the configured default), next to the emergency switch.
+- **Server:** `BadWords.textMode()` reads it on every check and save, so a
+  change is in force at once, with no restart or deploy. `fly.toml`'s
+  `MODERATION_TEXT_MODE` is now only the default until a super picks.
+- **Endpoints:** `PUT /api/super/flags/text-mode`, supers only.
+  `GET /api/super/flags` adds `textMode` and `textModeDefault`.
+- **Super dashboard:** a **Moderation** section after the emergency switch.
+  - Two radios: Block ("They're sent back to reword it, and the save is
+    refused.") and Warn ("It's saved as they typed it.").
+  - The default is marked "(server default)".
+  - A note that comments and candidates' names aren't affected.
+  - Choosing one saves at once: "Saved: in force now."
+  - Labels in 9 languages.
+- **Docs:** a section on the help page for the Super dashboard.
+  `MODERATION.md` and `DEPLOYING-FLY.md` now say the dashboard is the switch
+  and `fly.toml` only the default. `RELEASES.md` updated.
+
+**Verified:**
+
+- `TextModerationTest` (+1 test): a creator gets 403. A super's WARN shows
+  in the check, and a title with a listed word then saves. Back to BLOCK,
+  it's refused again.
+- Backend 423 and frontend 200 pass.
+- Headless Chrome on local: the section showed Block checked. Clicking Warn
+  showed "Saved: in force now." and the server reported WARN. Warn stayed
+  checked after a reload. Back to Block, the server reported BLOCK.
+
+**Commit:** `60684c9`
+
+---
+
 ## 2026-11-01 — Moderation doc; switching the word mode on Fly
 
 **Requested:**
