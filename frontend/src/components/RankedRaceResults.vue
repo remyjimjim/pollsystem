@@ -32,7 +32,10 @@ function rows(r: RankedRound) {
     .sort((a, b) => b.pct - a.pct || (nameOf.value[a.id] ?? '').localeCompare(nameOf.value[b.id] ?? ''))
 }
 const label = (pct: number, votes: number | null) => (votes != null ? `${votes} · ${pct}%` : `${pct}%`)
-const allComments = computed(() => props.race.candidates.flatMap(c => props.comments?.[c.id] ?? []))
+/** Public comments stay with their candidate: each one with any, under its name. */
+const commented = computed(() => props.race.candidates
+  .map(c => ({ ...c, comments: props.comments?.[c.id] ?? [] }))
+  .filter(c => c.comments.length))
 </script>
 
 <template>
@@ -72,6 +75,10 @@ const allComments = computed(() => props.race.candidates.flatMap(c => props.comm
       <summary class="cursor-pointer select-none">{{ $t('results.ranked.howTitle') }}</summary>
       <p class="m-0 mt-1">{{ $t('results.ranked.howText') }}</p>
     </details>
-    <PublicCommentsList :comments="allComments" />
+    <div v-for="c in commented" :key="c.id" class="mt-3 border-t border-slate-100 pt-2" data-test="ranked-candidate-comments">
+      <strong class="text-sm font-semibold text-slate-800">{{ c.name }}</strong>
+      <span v-if="c.affiliation" class="ml-1 text-sm text-slate-600">{{ c.affiliation }}</span>
+      <PublicCommentsList :comments="c.comments" />
+    </div>
   </section>
 </template>
