@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-11-02 — Public comments under their candidate (ranked races)
+
+**Requested:**
+
+> Can we have the public comments appear on the results page underneath the
+> candidate from whom it was meant?
+
+**Found:**
+
+- Single-choice races already show each public comment under its
+  candidate, folded as "N public comments".
+- On staging, election 3 and the statewide election 1 on its ballot
+  returned **0 public comments**, even to a super. The test comments were
+  private, or they held listed words: a public comment with a listed word
+  is stored private when the answer to the replace question is No.
+- Election 3 also has only 1 respondent, so for everyone but supers its
+  results and comments stay hidden until 4.
+
+**Changed:** ranked-choice races, from 2026-10-30, gathered all comments at
+the bottom of the race. Now each candidate with public comments gets their
+name, party and folded list, below the rounds.
+
+**Verified:** on local, two Alaska respondents voted through the API with
+public comments on different Senate candidates. As demo-super, the race
+listed "Best debate performance" under Daniel J. Sullivan Jr. and "Strong
+on fisheries" under Dan S. Sullivan. vue-tsc clean; vitest 200 pass.
+
+**Commit:** `d75c43c`
+
+---
+
 ## 2026-11-01 — Private comments follow the Moderation setting
 
 **Requested:**
