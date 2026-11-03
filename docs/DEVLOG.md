@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-11-03 — Oregon district map (/maps/OR)
+
+**Requested:**
+
+> make the Oregon district map too
+
+**Changed:**
+
+- `frontend/public/maps/OR.json` (43 KB), built by
+  `scripts/maps/build-state-map.py OR 41 …`: all counties, 6 districts,
+  using Census 2024 lines. Oregon didn't redraw for 2026.
+- Oregon is added to `frontend/src/stateMaps.ts`, so its midterm results
+  pages link to the map.
+- Help, RELEASES.md and todo.md mention it.
+- No backend change: the endpoint already works for any state whose
+  ballots use the standard titles.
+- Oregon has **no statewide measures** this November (Measure 120 moved to
+  May; `docs/launch-content/research/OR.md`), so the measure list is just
+  "None".
+
+**Verified** (local, headless Chrome):
+
+- 8 test voters, in District 3 (Portland) and District 5 (Bend).
+- The public map showed District 3 at "75% / 25%" in lime / yellow and
+  District 5 led by Pacific Green in white (another party). The other
+  districts showed "—".
+- District 3's results page linked to /maps/OR.
+- Party labels checked: fusion labels like "Democratic, Independent" count
+  as Dem, the first party named.
+- Vitest passes (+1 case).
+
+**Commit:** `4f0d96a`
+
+---
+
 ## 2026-11-03 — Washington district map (/maps/WA)
 
 **Requested** (abridged):
