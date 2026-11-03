@@ -953,6 +953,7 @@
     "dem": "民主",
     "rep": "共和",
     "ind": "無所属",
+    "other": "その他",
     "top2": "上位2人",
     "colorFor": "{party}の色",
     "district": "選挙区",

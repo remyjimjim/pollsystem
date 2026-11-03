@@ -900,6 +900,7 @@
     "dem": "民主党",
     "rep": "共和党",
     "ind": "独立",
+    "other": "其他",
     "top2": "前两名",
     "colorFor": "{party} 的颜色",
     "district": "选区",

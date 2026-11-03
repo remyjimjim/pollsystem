@@ -2,17 +2,20 @@
 // A state's district map (/maps/WA, decided 2026-11-03). The shapes come from
 // public/maps/XX.json (scripts/maps/build-state-map.py, Census boundaries);
 // the numbers from /api/polls/maps/XX/results, which follows the results pages'
-// privacy. Left: a radio, a color and a party per row (Dem, Rep, Ind, top 2);
-// below: a district and a ballot measure. Top 2 shows "X% / Y%" per district in
-// the leaders' party colors; a party shows its share; a measure shows Yes / No
-// among each district ballot's voters (the leading answer bold).
+// privacy. Left: a radio, a color and a party per row (Dem, Rep, Ind, Other,
+// top 2); below: a district and a ballot measure. Top 2 shows the two leading
+// parties (each party's candidates added up) as "X% / Y%" in their colors;
+// a party shows its share; a measure shows Yes / No among each district
+// ballot's voters (the leading answer bold).
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import axios from 'axios'
+import { topTwoParties, type Party } from '@/stateMaps'
 
-type Party = 'DEM' | 'REP' | 'IND' | 'OTHER'
-type Mode = 'DEM' | 'REP' | 'IND' | 'TOP2'
+type Mode = Party | 'TOP2'
+/** A color key: a party's, or TEXT (the top 2 row: the "/" and a measure's numbers). */
+type ColorKey = Party | 'TEXT'
 interface MapCandidate { name: string; affiliation: string; party: Party; pct: number | null; votes: number | null }
 interface MapDistrict { number: number; electionId: number; officeName: string | null; shown: boolean; candidates: MapCandidate[]; measure: { yesPct: number; noPct: number } | null }
 interface StateMapResults { state: string; stateName: string; live: boolean; measures: { id: number; title: string }[]; districts: MapDistrict[] }
@@ -33,17 +36,18 @@ const district = ref<number | 'ALL'>('ALL')
 const measureId = ref<number | null>(null)
 
 // Each viewer's colors, remembered in this browser (top to bottom: Dem, Rep, Ind, top 2 / others).
-const KEY = 'stateMap.colors'
-const DEFAULTS = { DEM: '#32cd32', REP: '#ffff00', IND: '#ff00ff', OTHER: '#ffffff' }
-const colors = reactive<Record<Party, string>>({ ...DEFAULTS })
+const KEY = 'stateMap.colors.v2'   // v2 (2026-11-03): Other turned orange; TEXT is the white
+const DEFAULTS = { DEM: '#32cd32', REP: '#ffff00', IND: '#ff00ff', OTHER: '#ff8c00', TEXT: '#ffffff' }
+const colors = reactive<Record<ColorKey, string>>({ ...DEFAULTS })
 try { Object.assign(colors, JSON.parse(localStorage.getItem(KEY) ?? '{}')) } catch { /* defaults */ }
 watch(colors, c => { try { localStorage.setItem(KEY, JSON.stringify(c)) } catch { /* not remembered */ } })
 
-const rows: { mode: Mode; party: Party; label: string }[] = [
+const rows: { mode: Mode; party: ColorKey; label: string }[] = [
   { mode: 'DEM', party: 'DEM', label: 'stateMap.dem' },
   { mode: 'REP', party: 'REP', label: 'stateMap.rep' },
   { mode: 'IND', party: 'IND', label: 'stateMap.ind' },
-  { mode: 'TOP2', party: 'OTHER', label: 'stateMap.top2' },
+  { mode: 'OTHER', party: 'OTHER', label: 'stateMap.other' },
+  { mode: 'TOP2', party: 'TEXT', label: 'stateMap.top2' },
 ]
 
 async function loadResults() {
@@ -94,18 +98,19 @@ function parts(d: MapDistrict | undefined): { text: string; color: string; bold?
     if (!d.measure) return dash
     const yesLeads = d.measure.yesPct >= d.measure.noPct
     return [
-      { text: `${d.measure.yesPct}%`, color: colors.OTHER, bold: yesLeads },
-      { text: ' / ', color: colors.OTHER },
-      { text: `${d.measure.noPct}%`, color: colors.OTHER, bold: !yesLeads },
+      { text: `${d.measure.yesPct}%`, color: colors.TEXT, bold: yesLeads },
+      { text: ' / ', color: colors.TEXT },
+      { text: `${d.measure.noPct}%`, color: colors.TEXT, bold: !yesLeads },
     ]
   }
   if (!d.shown) return dash
   if (mode.value === 'TOP2') {
-    const [a, b] = d.candidates
+    // The two leading parties: each party's candidates added up (two Democrats count as one Dem share).
+    const [a, b] = topTwoParties(d.candidates)
     if (!a) return dash
     return [
-      { text: `${a.pct}%`, color: colors[a.party], bold: true },
-      ...(b ? [{ text: ' / ', color: colors.OTHER }, { text: `${b.pct}%`, color: colors[b.party] }] : []),
+      { text: `${a[1]}%`, color: colors[a[0]], bold: true },
+      ...(b ? [{ text: ' / ', color: colors.TEXT }, { text: `${b[1]}%`, color: colors[b[0]] }] : []),
     ]
   }
   const mine = d.candidates.filter(c => c.party === mode.value)

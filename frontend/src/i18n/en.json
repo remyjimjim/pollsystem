@@ -1228,6 +1228,7 @@
     "dem": "Dem",
     "rep": "Rep",
     "ind": "Ind",
+    "other": "Other",
     "top2": "top 2",
     "colorFor": "Color for {party}",
     "district": "District",

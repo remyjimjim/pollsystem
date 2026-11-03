@@ -900,6 +900,7 @@
     "dem": "Dem",
     "rep": "Rep",
     "ind": "Ind",
+    "other": "Otros",
     "top2": "los 2 primeros",
     "colorFor": "Color para {party}",
     "district": "Distrito",

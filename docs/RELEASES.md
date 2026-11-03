@@ -29,7 +29,8 @@ what people use on election day, Tue Nov 3.
 - **Navigation by role:** Vote, Create, and Admin ▾ / Super ▾ menus.
 - **District maps for Washington and Oregon** (`/maps/WA`, `/maps/OR`),
   linked from each state's midterm results pages:
-  - Dem / Rep / Ind / top 2, with colours you pick;
+  - Dem / Rep / Ind / Other / top 2 (the two leading parties), with
+    colours you pick;
   - a district picker that zooms in;
   - a ballot measure split by district;
   - the results' privacy rules.

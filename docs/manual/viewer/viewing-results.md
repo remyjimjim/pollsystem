@@ -41,11 +41,13 @@ example **Washington district map** (`/maps/WA`) or **Oregon district map**
 (`/maps/OR`). Each congressional district
 shows its U.S. House race:
 
-- **top 2** (the default): first and second place, as *X% / Y%*, each in
-  its party's colour.
-- **Dem**, **Rep** or **Ind**: that party's share in each district. Ind
-  covers independents, "No party listed" and non-partisan candidates.
-  Every other party uses the fourth colour.
+- **top 2** (the default): the two **parties** with the most votes, as
+  *X% / Y%*, each in its party's colour. A party's candidates are added
+  together, so two Democrats count as one Democratic share.
+- **Dem**, **Rep**, **Ind** or **Other**: that party's share in each
+  district. Ind covers independents, "No party listed" and non-partisan
+  candidates. Other covers every other party, such as Pacific Green or
+  Libertarian, in orange.
 
 Change any colour with its colour box; your choices are remembered on this
 device. Pick a **District** to zoom in and see all its candidates, or tap a
