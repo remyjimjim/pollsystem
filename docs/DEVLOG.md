@@ -61,6 +61,54 @@ logged.
 
 ---
 
+## 2026-11-03 — Arrow row on every long list
+
+**Requested:**
+
+> Can we have the golden arrows (the arrows that when clicked scroll to the
+> bottom if at the top and scroll to the top if at the bottom) for all
+> displays that show lists of items that could conceivably extend past the
+> bottom of the screen?
+
+**Changed:** `ScrollEnds` (↓ to the end of the list, then ↑ back) already
+covered search, the Create dashboard, Manage Polls, Manage Creators, Manage
+Users, History and View past ballots. It now also wraps:
+
+- **Admin:**
+  - Creator requests (table and phone cards);
+  - the dashboard's pending requests and recent decisions.
+- **Super:**
+  - Admin requests;
+  - IP Allow / Deny;
+  - the dashboard's admin workload;
+  - Poll templates.
+- **Results pages:** every race and measure, plus "Also on this ballot".
+- **Answering:** the ballot (races and measures) and the questionnaire
+  form.
+- **Creators:**
+  - the poll report;
+  - the candidates list in the election form;
+  - the questions list in the questionnaire form.
+- **History › Diff.**
+
+Left without the arrows: pages with no list (home, help, sign-in, the
+creator-request form, the state maps).
+
+As before, the row only appears while the list runs past the screen.
+
+**Verified:**
+
+- vue-tsc clean; vitest 204 pass.
+- Headless Chrome on local:
+  - California's statewide ballot, as a voter: ↓ scrolled 8,454 px to the
+    end, turned ↑, and ↑ went back to the list's top.
+  - California's results, public: the same, over 1,228 px.
+  - The short IP rules list and an admin dashboard showed no arrow.
+
+**Commit:** `a5bda71`
+
+---
+
 ## 2026-11-03 — District maps: top 2 by party; orange for other parties
 
 **Requested:**
