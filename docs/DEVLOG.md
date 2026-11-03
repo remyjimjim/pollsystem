@@ -61,6 +61,84 @@ logged.
 
 ---
 
+## 2026-11-03 — Washington district map (/maps/WA)
+
+**Requested** (abridged):
+
+> Using washington-districts.svg as the base map, can we have an interactive
+> map where on the left is a vertical column of radio checkboxes … the colors
+> column … lime green, bright yellow, bright fuscia, white … parties column
+> … Dem, Rep, Ind, top 2 … a dropdown select listing all the districts where
+> the first option is 'All' … a dropdown select that lists the ballot measure
+> titles with the first option 'None' … the map renders the results in all
+> districts as X% / Y% …
+
+**Decided** (answers to my five questions):
+
+1. Each district shows its **U.S. House race**. Top 2 shows first / second
+   place in their party colours; Dem / Rep / Ind show that party's share.
+2. White is for **every other party**, plus the numbers and "/". **Ind**
+   covers "independent", "No party listed" and "Non-partisan".
+3. With a **ballot measure**: Yes% / No% among each district ballot's
+   voters, the leader in bold, and the party radios greyed out.
+4. Picking a **district** zooms to it, with a table of its candidates.
+5. **Privacy:** "—" under the minimum; supers see live numbers. **Colours**
+   are remembered in each browser.
+
+It lives at **/maps/WA**, linked from the state's results pages.
+
+**Changed:**
+
+- **Backend:** `GET /api/polls/maps/{state}/results[?measureId]`
+  (`StateMapController`), public like the results routes.
+  - It finds the district ballots by title.
+  - Each candidate's party is worked out from the affiliation (`partyOf`).
+  - Every number goes through `ResultsAccess`, so the map shows exactly
+    what each district's results page would. A measure's split is withheld
+    for a district group under the group minimum.
+  - A district with no votes yet shows "—", rather than "0% / 0%" in a
+    super's view.
+- **Map data:** `scripts/maps/build-state-map.py` builds
+  `frontend/public/maps/WA.json` (75 KB) from Census public-domain
+  boundaries: the outline without Island County (as chosen 2026-11-02),
+  district borders, each district's shape, box and label spot. Districts 7
+  and 9 are flagged as small.
+- **Page:** `StateMapView.vue`.
+  - The three columns (radio, colour, party) beside the map; the District
+    and Ballot measure selects below.
+  - Clicking a district on the map also zooms to it.
+  - There's a margin so the outline isn't clipped, and labels grow on
+    phones.
+  - The disclaimer: "BallotBox members' informal poll — not official
+    results or a forecast."
+  - Labels in 9 languages.
+- **Link:** `stateMaps.ts` lists states with a map. Washington's midterm
+  results pages link to "Washington district map".
+- **Docs:** Viewing results help (District maps); RELEASES.md 1.0; todo.md
+  (phase 2 started with WA).
+
+**Verified:**
+
+- `StateMapTest` (2):
+  - parties, including fusion labels;
+  - a North Dakota stand-in with 2 districts and a measure. Live: shares,
+    votes and splits. Public (k = 3): District 1 at its last step, District
+    2 hidden with its measure split withheld.
+- `stateMaps.spec` (2). Backend 425 and frontend 202 pass.
+- Headless Chrome on local, with 14 test voters in Districts 2, 5, 7 and 10:
+  - top 2 showed "75% / 25%" in lime / yellow;
+  - Dem showed the Dem share;
+  - the measure showed Yes / No with the leader in bold;
+  - District 2 zoomed in, with the candidate table;
+  - the results page linked to /maps/WA;
+  - at phone width the labels were readable, with no sideways scroll.
+- Local's privacy minimum is 1 (Dev setting), which is why District 7
+  showed with 2 voters there. Its results page does the same.
+
+**Commit:** `d198a11`
+
+---
+
 ## 2026-11-02 — Public comments under their candidate (ranked races)
 
 **Requested:**
