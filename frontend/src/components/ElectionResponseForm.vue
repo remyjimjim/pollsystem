@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -532,6 +533,8 @@ onMounted(load)
       {{ $t('election.readonlyNote') }}
     </div>
 
+    <ScrollEnds>
+    <div class="flex flex-col gap-4">
     <fieldset
       v-for="[officeName, group] in groupedByOffice"
       :id="officeAnchor(officeName)"
@@ -796,6 +799,8 @@ onMounted(load)
         <p v-else-if="measureAnswers[m.id].comment?.trim()" class="m-0 text-sm italic text-slate-700">“{{ measureAnswers[m.id].comment }}”</p>
       </fieldset>
     </template>
+    </div>
+    </ScrollEnds>
 
     <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>
     <p v-if="missing" class="m-0 text-sm" :class="messageColor" role="alert" data-test="missing-choice">

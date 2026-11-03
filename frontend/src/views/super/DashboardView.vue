@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import DemoAccountCard from '@/components/DemoAccountCard.vue'
@@ -239,7 +240,8 @@ onMounted(() => {
         <p v-if="load.rows.length === 0" class="text-sm text-slate-500">
           {{ $t('super.dashboard.noAssigned') }}
         </p>
-        <table v-else class="w-full border-collapse text-sm">
+        <ScrollEnds v-else>
+        <table class="w-full border-collapse text-sm">
           <thead>
             <tr class="bg-slate-50 text-left">
               <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.dashboard.colAdmin') }}</th>
@@ -270,6 +272,7 @@ onMounted(() => {
             </tr>
           </tbody>
         </table>
+        </ScrollEnds>
         <p class="mt-2 text-xs text-slate-500">
           {{ $t('super.dashboard.footnote', { threshold: pct(load.warnThreshold), key: 'app.super.workload-warn-threshold' }) }}
         </p>

@@ -3,6 +3,7 @@
 // (Before) beside the poll as of this entry (Now). Changed fields and the
 // questions or candidates that differ are highlighted.
 import { computed, ref, watch } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -67,6 +68,7 @@ const changedTint = 'rounded bg-amber-50 ring-1 ring-amber-300'
         {{ $t(`history.event.${diff.event}`) }} · {{ new Date(diff.at).toLocaleString() }}
       </p>
 
+      <ScrollEnds>
       <div class="grid grid-cols-2 gap-x-4 gap-y-3" data-test="history-diff-page">
         <h2 class="m-0 border-b-2 border-slate-300 pb-1 text-lg font-semibold text-slate-800">{{ $t('history.diff.before') }}</h2>
         <h2 class="m-0 border-b-2 border-slate-300 pb-1 text-lg font-semibold text-slate-800">{{ $t('history.diff.now') }}</h2>
@@ -97,6 +99,7 @@ const changedTint = 'rounded bg-amber-50 ring-1 ring-amber-300'
           </div>
         </template>
       </div>
+      </ScrollEnds>
       <p class="mt-4 text-xs text-slate-500">{{ $t('history.diff.legend') }}</p>
     </template>
   </div>

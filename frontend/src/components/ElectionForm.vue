@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { reviewText } from '@/composables/useTextModeration'
 import { useRouter } from 'vue-router'
@@ -300,6 +301,7 @@ async function publish(confirmed = false) {
       />
     </label>
 
+    <ScrollEnds>
     <fieldset class="rounded-md border border-slate-200 p-4">
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('form.election.candidates') }}</legend>
       <p class="mb-2 text-sm text-slate-500">{{ $t('form.election.candidatesHelp') }}</p>
@@ -374,6 +376,7 @@ async function publish(confirmed = false) {
         </template>
       </div>
     </fieldset>
+    </ScrollEnds>
 
     <section v-if="draftId != null" class="rounded-md border border-slate-200 p-4" data-test="election-measures">
       <h3 class="m-0 mb-1 text-sm font-semibold text-slate-700">{{ $t('form.election.measuresHeading') }}</h3>

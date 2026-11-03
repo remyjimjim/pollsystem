@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { stateMapFor } from '@/stateMaps'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import PublicCommentsList from '../components/PublicCommentsList.vue'
 import RankedRaceResults, { type RankedRace } from '@/components/RankedRaceResults.vue'
 import BallotPartResults, { type BallotPart } from '../components/BallotPartResults.vue'
@@ -546,6 +547,7 @@ function purviewCount(n: number | null): string {
       </div>
       <p v-if="data && isLive" class="mb-4 text-xs font-semibold" :class="appearance.theme === 'dark' ? 'text-fuchsia-400' : 'text-violet-800'" data-test="live-note">{{ $t('results.superLive') }}</p>
 
+      <ScrollEnds>
       <div v-if="data && mode === 'HIDDEN'" class="rounded-md border border-slate-200 p-4 text-sm text-slate-600" data-test="hidden">
         {{ $t('results.soFar', { n: data.visibility.respondentsSoFar }, data.visibility.respondentsSoFar) }}
       </div>
@@ -683,6 +685,7 @@ function purviewCount(n: number | null): string {
         <h2 class="mb-0 mt-8 text-lg font-semibold text-slate-800" data-test="also-on-ballot">{{ $t('results.alsoOnBallot') }}</h2>
         <BallotPartResults v-for="p in ballotParts" :key="p.key" :part="p" />
       </template>
+      </ScrollEnds>
     </template>
   </div>
 </template>

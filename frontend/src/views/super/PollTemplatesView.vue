@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 
@@ -80,6 +81,7 @@ onMounted(load)
       {{ $t('super.pollTemplates.intro') }}
     </p>
 
+    <ScrollEnds>
     <article
       v-for="pt in types"
       :key="pt.id"
@@ -123,5 +125,6 @@ onMounted(load)
 
       <p v-if="messages[pt.id]" class="mt-2 text-sm text-green-700">{{ messages[pt.id] }}</p>
     </article>
+    </ScrollEnds>
   </div>
 </template>

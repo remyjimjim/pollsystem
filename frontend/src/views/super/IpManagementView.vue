@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { reviewText } from '@/composables/useTextModeration'
 import { useI18n } from 'vue-i18n'
@@ -146,7 +147,8 @@ onMounted(load)
 
     <p v-if="!loading && rules.length === 0" class="text-sm text-slate-500">{{ $t('super.ipManagement.none') }}</p>
 
-    <table v-else-if="rules.length > 0" class="w-full border-collapse text-sm">
+    <ScrollEnds v-else-if="rules.length > 0">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="bg-slate-50 text-left">
           <th class="border-b border-slate-200 p-2 font-semibold text-slate-700">{{ $t('super.ipManagement.colValue') }}</th>
@@ -197,5 +199,6 @@ onMounted(load)
         </tr>
       </tbody>
     </table>
+    </ScrollEnds>
   </div>
 </template>

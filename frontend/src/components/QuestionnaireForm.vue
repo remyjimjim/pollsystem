@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { reviewText } from '@/composables/useTextModeration'
 import { useRouter } from 'vue-router'
@@ -202,6 +203,7 @@ async function publish(confirmed = false) {
       />
     </label>
 
+    <ScrollEnds>
     <fieldset class="rounded-md border border-slate-200 p-4">
       <legend class="px-2 text-sm font-semibold text-slate-700">{{ $t('form.questions') }}</legend>
       <div
@@ -230,6 +232,7 @@ async function publish(confirmed = false) {
         class="self-start rounded border border-dashed border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
       >{{ $t('form.addQuestion') }}</button>
     </fieldset>
+    </ScrollEnds>
 
     <p v-if="error" class="m-0 text-sm text-red-700">{{ error }}</p>
     <p v-if="message" class="m-0 text-sm text-green-700">{{ message }}</p>

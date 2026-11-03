@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import axios from 'axios'
@@ -223,7 +224,7 @@ const reachLevel = computed(() => {
     <p v-if="error" class="text-sm text-red-700">{{ error }}</p>
     <p v-else-if="loading" class="text-sm text-slate-600">{{ $t('common.loading') }}</p>
 
-    <template v-else-if="report">
+    <ScrollEnds v-else-if="report">
       <!-- At a glance -->
       <section class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4" data-test="summary">
         <div class="rounded border border-slate-200 p-3">
@@ -327,6 +328,6 @@ const reachLevel = computed(() => {
           </tbody>
         </table>
       </section>
-    </template>
+    </ScrollEnds>
   </div>
 </template>

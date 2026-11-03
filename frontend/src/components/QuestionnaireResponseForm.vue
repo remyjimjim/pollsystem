@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -195,6 +196,8 @@ onMounted(load)
       {{ $t('questionnaire.readonlyNote') }}
     </div>
 
+    <ScrollEnds>
+    <div class="flex flex-col gap-4">
     <fieldset
       v-for="q in poll.questions"
       :key="q.id"
@@ -250,6 +253,8 @@ onMounted(load)
       <PublicCommentToggle :id="`comment-public-q-${q.id}`" v-model="answers[q.id].commentPublic" />
       </template>
     </fieldset>
+    </div>
+    </ScrollEnds>
 
     <p v-if="message" class="text-sm text-green-700">{{ message }}</p>
 

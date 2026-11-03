@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -163,6 +164,7 @@ onBeforeUnmount(() => {
         </article>
       </div>
 
+      <ScrollEnds>
       <!-- Pending requests table -->
       <section class="mb-6">
         <div class="mb-2 flex items-center justify-between">
@@ -335,6 +337,8 @@ onBeforeUnmount(() => {
         </ul>
         </template>
       </section>
+
+      </ScrollEnds>
 
       <!-- Quick links -->
       <section>

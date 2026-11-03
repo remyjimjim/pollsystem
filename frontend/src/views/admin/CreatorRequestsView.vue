@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import ScrollEnds from '@/components/ScrollEnds.vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import type { RequestStatus } from '@/types'
@@ -114,7 +115,7 @@ onMounted(load)
       {{ $t('admin.creatorRequests.noPending') }}
     </p>
 
-    <template v-else-if="requests.length > 0">
+    <ScrollEnds v-else-if="requests.length > 0">
     <table class="hidden w-full border-collapse text-sm sm:table">
       <thead>
         <tr class="bg-slate-50 text-left">
@@ -193,6 +194,6 @@ onMounted(load)
         </li>
       </ul>
     </div>
-    </template>
+    </ScrollEnds>
   </div>
 </template>
