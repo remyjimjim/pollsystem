@@ -890,5 +890,30 @@
     "noReword": "Não, vou reescrever",
     "noKeep": "Não, deixar como está",
     "rewordFirst": "Reescreva “{word}” primeiro."
+  },
+  "stateMap": {
+    "title": "Mapa de distritos de {state}",
+    "disclaimer": "Pesquisa informal dos membros do BallotBox — não são resultados oficiais nem uma previsão.",
+    "noMap": "Ainda não há mapa de distritos para este estado.",
+    "loadFailed": "Não foi possível carregar os resultados do mapa.",
+    "show": "Mostrar",
+    "dem": "Dem",
+    "rep": "Rep",
+    "ind": "Ind",
+    "top2": "2 primeiros",
+    "colorFor": "Cor para {party}",
+    "district": "Distrito",
+    "all": "Todos",
+    "districtN": "Distrito {n}",
+    "measure": "Medida em votação",
+    "none": "Nenhuma",
+    "partyNote": "A disputa para a Câmara dos EUA de cada distrito.",
+    "measureNote": "Sim / Não entre os eleitores da cédula de cada distrito; a resposta à frente fica em negrito.",
+    "hiddenNote": "— significa poucas respostas até agora.",
+    "liveNote": "Contagens ao vivo (visão de super).",
+    "yes": "Sim",
+    "no": "Não",
+    "fullResults": "Resultados completos deste distrito",
+    "link": "Mapa de distritos de {state}"
   }
 }

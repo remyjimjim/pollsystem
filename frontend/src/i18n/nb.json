@@ -943,5 +943,30 @@
     "noReword": "Nei, jeg omformulerer",
     "noKeep": "Nei, behold det",
     "rewordFirst": "Omformuler «{word}» først."
+  },
+  "stateMap": {
+    "title": "Distriktskart for {state}",
+    "disclaimer": "BallotBox-medlemmenes uformelle avstemning – ikke offisielle resultater eller en prognose.",
+    "noMap": "Det finnes ikke noe distriktskart for denne delstaten ennå.",
+    "loadFailed": "Kunne ikke laste kartets resultater.",
+    "show": "Vis",
+    "dem": "Dem",
+    "rep": "Rep",
+    "ind": "Uavh.",
+    "top2": "topp 2",
+    "colorFor": "Farge for {party}",
+    "district": "Distrikt",
+    "all": "Alle",
+    "districtN": "Distrikt {n}",
+    "measure": "Avstemningssak",
+    "none": "Ingen",
+    "partyNote": "Hvert distrikts valg til USAs representanthus.",
+    "measureNote": "Ja / Nei blant velgerne på hvert distrikts stemmeseddel; svaret som leder er uthevet.",
+    "hiddenNote": "— betyr for få svar så langt.",
+    "liveNote": "Direkte tall (super-visning).",
+    "yes": "Ja",
+    "no": "Nei",
+    "fullResults": "Alle resultater for dette distriktet",
+    "link": "Distriktskart for {state}"
   }
 }

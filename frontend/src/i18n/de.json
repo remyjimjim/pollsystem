@@ -890,5 +890,30 @@
     "noReword": "Nein, ich formuliere es um",
     "noKeep": "Nein, so lassen",
     "rewordFirst": "Bitte zuerst „{word}“ umformulieren."
+  },
+  "stateMap": {
+    "title": "Wahlkreiskarte {state}",
+    "disclaimer": "Informelle Umfrage unter BallotBox-Mitgliedern – keine amtlichen Ergebnisse und keine Prognose.",
+    "noMap": "Für diesen Bundesstaat gibt es noch keine Wahlkreiskarte.",
+    "loadFailed": "Die Ergebnisse der Karte konnten nicht geladen werden.",
+    "show": "Anzeigen",
+    "dem": "Dem",
+    "rep": "Rep",
+    "ind": "Unabh.",
+    "top2": "Top 2",
+    "colorFor": "Farbe für {party}",
+    "district": "Wahlkreis",
+    "all": "Alle",
+    "districtN": "Wahlkreis {n}",
+    "measure": "Abstimmungsvorlage",
+    "none": "Keine",
+    "partyNote": "Die Wahl zum US-Repräsentantenhaus in jedem Wahlkreis.",
+    "measureNote": "Ja / Nein unter den Wählern jedes Wahlkreis-Stimmzettels; die führende Antwort ist fett.",
+    "hiddenNote": "— bedeutet bisher zu wenige Teilnehmer.",
+    "liveNote": "Live-Zahlen (Super-Ansicht).",
+    "yes": "Ja",
+    "no": "Nein",
+    "fullResults": "Alle Ergebnisse dieses Wahlkreises",
+    "link": "Wahlkreiskarte {state}"
   }
 }

@@ -943,5 +943,30 @@
     "noReword": "いいえ、自分で書き換えます",
     "noKeep": "いいえ、そのままにします",
     "rewordFirst": "先に「{word}」を書き換えてください。"
+  },
+  "stateMap": {
+    "title": "{state} 選挙区マップ",
+    "disclaimer": "BallotBox会員による非公式の投票です。公式結果や予測ではありません。",
+    "noMap": "この州の選挙区マップはまだありません。",
+    "loadFailed": "マップの結果を読み込めませんでした。",
+    "show": "表示",
+    "dem": "民主",
+    "rep": "共和",
+    "ind": "無所属",
+    "top2": "上位2人",
+    "colorFor": "{party}の色",
+    "district": "選挙区",
+    "all": "すべて",
+    "districtN": "第{n}区",
+    "measure": "住民投票",
+    "none": "なし",
+    "partyNote": "各選挙区の連邦下院選挙。",
+    "measureNote": "各選挙区の投票用紙の投票者の賛成／反対。リードしている方を太字で表示。",
+    "hiddenNote": "— はまだ回答が少ないことを示します。",
+    "liveNote": "リアルタイムの集計（スーパー表示）。",
+    "yes": "賛成",
+    "no": "反対",
+    "fullResults": "この選挙区の全結果",
+    "link": "{state} 選挙区マップ"
   }
 }

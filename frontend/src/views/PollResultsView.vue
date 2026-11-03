@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { stateMapFor } from '@/stateMaps'
 import PublicCommentsList from '../components/PublicCommentsList.vue'
 import RankedRaceResults, { type RankedRace } from '@/components/RankedRaceResults.vue'
 import BallotPartResults, { type BallotPart } from '../components/BallotPartResults.vue'
@@ -124,6 +125,8 @@ const id = computed(() => Number(route.params.id))
 
 const qData = ref<QuestionnaireResultsDto | null>(null)
 const eData = ref<ElectionResultsDto | null>(null)
+// A 2026 midterm ballot in a state with a district map links to it (/maps/WA).
+const stateMap = computed(() => stateMapFor(eData.value?.title))
 const bData = ref<BallotMeasureResultsDto | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
@@ -425,6 +428,9 @@ function purviewCount(n: number | null): string {
       </h1>
       <p v-if="data" class="mb-4 text-sm text-slate-600" data-test="purview-area">
         {{ $t('results.purviewArea', { area: purviewArea }) }}
+      </p>
+      <p v-if="stateMap" class="-mt-3 mb-4 text-sm">
+        <router-link :to="`/maps/${stateMap.code}`" class="underline" data-test="state-map-link">{{ $t('stateMap.link', { state: stateMap.name }) }}</router-link>
       </p>
       <h1 v-else class="mb-4 text-2xl font-semibold text-slate-800">{{ $t('results.heading') }}</h1>
 

@@ -943,5 +943,30 @@
     "noReword": "Non, je vais le reformuler",
     "noKeep": "Non, le garder tel quel",
     "rewordFirst": "Veuillez d'abord reformuler « {word} »."
+  },
+  "stateMap": {
+    "title": "Carte des circonscriptions — {state}",
+    "disclaimer": "Sondage informel des membres de BallotBox — ni résultats officiels ni prévision.",
+    "noMap": "Pas encore de carte des circonscriptions pour cet État.",
+    "loadFailed": "Impossible de charger les résultats de la carte.",
+    "show": "Afficher",
+    "dem": "Dém",
+    "rep": "Rép",
+    "ind": "Ind",
+    "top2": "les 2 premiers",
+    "colorFor": "Couleur pour {party}",
+    "district": "Circonscription",
+    "all": "Toutes",
+    "districtN": "Circonscription {n}",
+    "measure": "Mesure soumise au vote",
+    "none": "Aucune",
+    "partyNote": "L'élection à la Chambre des États-Unis de chaque circonscription.",
+    "measureNote": "Oui / Non parmi les votants du bulletin de chaque circonscription ; la réponse en tête est en gras.",
+    "hiddenNote": "— signifie trop peu de réponses pour l'instant.",
+    "liveNote": "Décomptes en direct (vue super).",
+    "yes": "Oui",
+    "no": "Non",
+    "fullResults": "Résultats complets de cette circonscription",
+    "link": "Carte des circonscriptions — {state}"
   }
 }

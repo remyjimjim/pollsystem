@@ -27,6 +27,13 @@ what people use on election day, Tue Nov 3.
   topic.
 - **Demo account:** a shared demo address a super switches on for 12 hours.
 - **Navigation by role:** Vote, Create, and Admin ▾ / Super ▾ menus.
+- **Washington district map** (`/maps/WA`), linked from Washington's
+  midterm results pages:
+  - Dem / Rep / Ind / top 2, with colours you pick;
+  - a district picker that zooms in;
+  - a ballot measure split by district;
+  - the results' privacy rules.
+  Other states follow with `scripts/maps/build-state-map.py`.
 - **Listed words checked everywhere people type:** titles, summaries,
   questions, office names, reasons, notes and messages, not just comments.
   Candidates' names are exempt. A super switches Block / Warn on the Super

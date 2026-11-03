@@ -890,5 +890,30 @@
     "noReword": "No, la riformulo io",
     "noKeep": "No, lasciala così",
     "rewordFirst": "Riformula prima “{word}”."
+  },
+  "stateMap": {
+    "title": "Mappa dei distretti — {state}",
+    "disclaimer": "Sondaggio informale dei membri di BallotBox: non sono risultati ufficiali né una previsione.",
+    "noMap": "Non c'è ancora una mappa dei distretti per questo stato.",
+    "loadFailed": "Impossibile caricare i risultati della mappa.",
+    "show": "Mostra",
+    "dem": "Dem",
+    "rep": "Rep",
+    "ind": "Ind",
+    "top2": "primi 2",
+    "colorFor": "Colore per {party}",
+    "district": "Distretto",
+    "all": "Tutti",
+    "districtN": "Distretto {n}",
+    "measure": "Quesito",
+    "none": "Nessuno",
+    "partyNote": "La corsa alla Camera USA di ogni distretto.",
+    "measureNote": "Sì / No tra gli elettori della scheda di ogni distretto; la risposta in testa è in grassetto.",
+    "hiddenNote": "— indica ancora troppo poche risposte.",
+    "liveNote": "Conteggi in tempo reale (vista super).",
+    "yes": "Sì",
+    "no": "No",
+    "fullResults": "Risultati completi di questo distretto",
+    "link": "Mappa dei distretti — {state}"
   }
 }

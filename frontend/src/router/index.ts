@@ -40,6 +40,12 @@ const routes: RouteRecordRaw[] = [
     name: 'PollResults',
     component: () => import('@/views/PollResultsView.vue')
   },
+  // A state's district map (public, like results), linked from its midterm results pages.
+  {
+    path: '/maps/:state',
+    name: 'StateMap',
+    component: () => import('@/views/StateMapView.vue')
+  },
 
   // Poll search is public — anonymous users see results-only links per row;
   // signed-in users also get a "Vote / Open" link into the detail page.

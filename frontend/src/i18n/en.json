@@ -1218,5 +1218,30 @@
     "noReword": "No, I'll reword it",
     "noKeep": "No, keep it as typed",
     "rewordFirst": "Please reword “{word}” first."
+  },
+  "stateMap": {
+    "title": "{state} district map",
+    "disclaimer": "BallotBox members' informal poll — not official results or a forecast.",
+    "noMap": "There's no district map for this state yet.",
+    "loadFailed": "Couldn't load the map's results.",
+    "show": "Show",
+    "dem": "Dem",
+    "rep": "Rep",
+    "ind": "Ind",
+    "top2": "top 2",
+    "colorFor": "Color for {party}",
+    "district": "District",
+    "all": "All",
+    "districtN": "District {n}",
+    "measure": "Ballot measure",
+    "none": "None",
+    "partyNote": "Each district's U.S. House race.",
+    "measureNote": "Yes / No among each district ballot's voters; the leading answer is bold.",
+    "hiddenNote": "— means too few respondents so far.",
+    "liveNote": "Live counts (super view).",
+    "yes": "Yes",
+    "no": "No",
+    "fullResults": "Full results for this district",
+    "link": "{state} district map"
   }
 }

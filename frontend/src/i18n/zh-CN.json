@@ -890,5 +890,30 @@
     "noReword": "否，我自己改写",
     "noKeep": "否，保持原样",
     "rewordFirst": "请先改写“{word}”。"
+  },
+  "stateMap": {
+    "title": "{state} 选区地图",
+    "disclaimer": "BallotBox 会员的非正式投票——不是官方结果，也不是预测。",
+    "noMap": "该州暂无选区地图。",
+    "loadFailed": "无法加载地图结果。",
+    "show": "显示",
+    "dem": "民主党",
+    "rep": "共和党",
+    "ind": "独立",
+    "top2": "前两名",
+    "colorFor": "{party} 的颜色",
+    "district": "选区",
+    "all": "全部",
+    "districtN": "第 {n} 选区",
+    "measure": "投票提案",
+    "none": "无",
+    "partyNote": "各选区的美国众议院选举。",
+    "measureNote": "各选区选票投票者中的赞成／反对；领先的答案以粗体显示。",
+    "hiddenNote": "— 表示目前回答人数太少。",
+    "liveNote": "实时计数（超级管理员视图）。",
+    "yes": "赞成",
+    "no": "反对",
+    "fullResults": "该选区的完整结果",
+    "link": "{state} 选区地图"
   }
 }

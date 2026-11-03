@@ -34,6 +34,27 @@ Results are shown as bars with a **percentage**, rounded to a whole number.
   round. Ties for last place go to whoever did better in earlier rounds,
   then alphabetical order.
 
+## District maps
+
+A state's 2026 midterm results pages link to its **district map**, for
+example **Washington district map** (`/maps/WA`). Each congressional district
+shows its U.S. House race:
+
+- **top 2** (the default): first and second place, as *X% / Y%*, each in
+  its party's colour.
+- **Dem**, **Rep** or **Ind**: that party's share in each district. Ind
+  covers independents, "No party listed" and non-partisan candidates.
+  Every other party uses the fourth colour.
+
+Change any colour with its colour box; your choices are remembered on this
+device. Pick a **District** to zoom in and see all its candidates, or tap a
+district on the map. Pick a **Ballot measure** to see Yes / No among each
+district ballot's voters, with the leading answer in bold.
+
+The map follows the same privacy rules as results: **—** means too few
+people have answered there so far. It's an informal poll of BallotBox
+members, not official results or a forecast.
+
 ## Results protect people's privacy
 
 - **No results until 4 people have responded.** Until then the page says how
