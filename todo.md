@@ -293,6 +293,7 @@
     - A list/table version beside the map (phones, accessibility).
   - Started 2026-11-03 with Washington: /maps/WA (district lines, Dem / Rep / Ind / top 2 with colour choosers,
     a district picker, a ballot measure split by district; scripts/maps/build-state-map.py; docs/RELEASES.md 1.0).
+    Oregon added 2026-11-03 (/maps/OR; no statewide measures this year).
     Next: more states (add each to frontend/src/stateMaps.ts), and the US-wide phase 1 map.
   - Phase 2 (~1-2 days): district maps on the state pages. Census 2024 congressional district lines where
     still current; a grid of numbered district boxes for states that redrew for 2026 (e.g. TX, MO, UT, AL,

@@ -37,7 +37,8 @@ Results are shown as bars with a **percentage**, rounded to a whole number.
 ## District maps
 
 A state's 2026 midterm results pages link to its **district map**, for
-example **Washington district map** (`/maps/WA`). Each congressional district
+example **Washington district map** (`/maps/WA`) or **Oregon district map**
+(`/maps/OR`). Each congressional district
 shows its U.S. House race:
 
 - **top 2** (the default): first and second place, as *X% / Y%*, each in

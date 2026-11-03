@@ -4,6 +4,7 @@
  */
 export const STATE_MAPS: Record<string, string> = {
   Washington: 'WA',
+  Oregon: 'OR',
 }
 
 /** The map for a 2026 midterm ballot's state, from its title ("2026 Midterm Washington District 2"). */
