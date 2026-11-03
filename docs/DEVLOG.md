@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-11-03 — District maps: top 2 by party; orange for other parties
+
+**Requested:**
+
+> if 'top 2' is chosen it means 'show the results for the top 2 leading
+> parties with the most votes'. … let's use a bright orange for 'other',
+> sound good?
+
+**Changed:**
+
+- **Top 2 is now the two leading parties,** not the top two candidates.
+  - Each party's candidates are added together, so two Democrats count as
+    one Democratic share. A district where only one party ran shows one
+    number.
+  - Ties keep the order Dem, Rep, Ind, Other.
+  - The logic is in `topTwoParties()` (`stateMaps.ts`).
+- **An Other row:** radio, a bright orange chooser (`#ff8c00`) and "Other",
+  in 9 languages. Its radio shows other parties' share per district. The
+  top 2 row keeps white, for the "/" and a measure's numbers.
+- **Saved colours** move to a new key, `stateMap.colors.v2`, so a browser
+  that saved the old white for other parties gets the orange.
+- **Help and RELEASES.md** describe it.
+
+**Verified:**
+
+- `stateMaps.spec` (+2): two Democrats plus a Republican shows Dem 65 /
+  Rep 30; a one-party race shows one entry; ties.
+- Vitest 204 pass; vue-tsc clean.
+- Headless Chrome on local, `/maps/OR`:
+  - rows Dem / Rep / Ind / Other / top 2;
+  - District 5's Pacific Green lead in orange (`#ff8c00`) and Democrats in
+    lime;
+  - Other mode showed District 5 at 75% and "—" where no other party ran.
+- No 2026 House race in WA or OR has two candidates of one party, so that
+  case is covered by the unit test.
+
+**Commit:** `67e9aa7`
+
+---
+
 ## 2026-11-03 — Oregon district map (/maps/OR)
 
 **Requested:**
