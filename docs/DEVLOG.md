@@ -61,6 +61,32 @@ logged.
 
 ---
 
+## 2026-11-04 — Florida on its official 2026 map
+
+**Requested:** (continuing) "start replacing the grids with official maps"
+
+**Source checked:**
+
+- **The plan:** HB 1-D (2026 special session D), enacted as Chapter
+  2026-229 and signed May 4, 2026. It's plan **EOGPCRP2026**.
+- **Legal status:** a Leon County judge denied a preliminary injunction on
+  May 26; the Florida Supreme Court let it stand on June 10. So it's in
+  effect for 2026, with challenges pending on the merits.
+  Sources: Wikipedia "2026 Florida redistricting", WUSF, WLRN, Roll Call.
+- **The file:** `EOGPCRP2026.zip` from the Legislature's Office of Economic
+  and Demographic Research (`edr.state.fl.us`, "2026 Congressional
+  Districts"): 28 districts in the `DISTRICT` field, WGS84.
+
+**Changed:** `FL.json` is rebuilt from EOGPCRP2026; Florida's grid is gone.
+Help and todo updated.
+
+**Verified** (local, headless Chrome): `/maps/FL` draws 28 districts, with
+no grid note and no errors.
+
+**Commit:** `0fa50a3`
+
+---
+
 ## 2026-11-04 — California on its official 2026 map
 
 **Requested:** (continuing) "start replacing the grids with official maps"
