@@ -61,6 +61,59 @@ logged.
 
 ---
 
+## 2026-11-04 — Results threshold 1 while getting started (until 100 voters)
+
+**Requested:**
+
+> Can we set results threshold to 1 for local, staging and prod until we
+> have at least 100 total voters?
+
+then, after I raised three points, "yes, go ahead with all three
+recommendations".
+
+**Decided:**
+
+1. **Privacy Policy:** update the promise of "currently 4" to "1 while
+   getting started, 4 once 100 people have voted", with a new effective
+   date. The help pages are updated to match.
+2. **Narrowed groups stay at 4:** area filters and the inside / outside
+   groups, so filtering a small zipcode can't point to one person.
+3. **"100 voters"** means 100 different people who've answered anything,
+   counted live. At the 100th, every poll switches to 4, and polls under 4
+   respondents hide again.
+
+**Changed:**
+
+- **The threshold:** `ResultsPrivacy.k()` is 1
+  (`app.results.launch-threshold`) until `app.results.launch-until-voters`
+  (100, env `RESULTS_LAUNCH_UNTIL_VOTERS`) is reached, then the configured
+  4, for good.
+  - The count is distinct users across `candidate_responses`,
+    `question_responses` and `ballot_responses`, read at most every 30 s.
+  - Local's Dev setting still overrides it.
+- **Groups and reports:** `groupMinimum()` was already never below its own
+  setting of 4, so narrowed groups and the creator report stay at 4.
+- **The switch-over:** `LaunchPhaseWatcher` runs every minute. When the
+  phase ends in a running server, it rebuilds every poll's frozen results,
+  the same way as the Dev setting change, with no emails. Otherwise the
+  frozen copies made at 1 would keep showing small polls.
+- **Docs:** Privacy Policy (effective November 4, 2026); help for Answering
+  polls, Viewing results, Super dashboard, and How your polls are doing.
+
+**Verified:**
+
+- `LaunchPhaseTest` (2):
+  - k is 1 below the target and 4 once it's reached; the group minimum is
+    4 throughout; the rebuild signal fires once;
+  - a server starting past the target, or with the phase off, uses 4 and
+    rebuilds nothing.
+- The test config turns the phase off, so the other tests keep k = 3.
+- Backend 427 and frontend 204 pass.
+
+**Commit:** `441895a`
+
+---
+
 ## 2026-11-03 — Arrow row on every long list
 
 **Requested:**
