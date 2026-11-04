@@ -61,6 +61,40 @@ logged.
 
 ---
 
+## 2026-11-04 — Card outlines in the text colour
+
+**Requested:**
+
+> What color are using for the card borders? Is it the same color as the
+> text color?
+
+then
+
+> Can we have the borders sync with the text colour?
+
+**Answer, then the change:** card borders were `slate-200`, which the theme
+mixes as 18% text colour into the background: about `#3e3c69` in Dark and
+`#d1d1d1` in Light.
+
+Now full outlines in that colour (`border` or `border-2` plus
+`border-slate-200`: cards, panels, boxes, 82 of the 187 uses) are the text
+colour itself, `var(--app-fg)`. They follow Dark / Light and any colour
+picked in Settings. Left as they were:
+- the 104 one-sided lines (`border-b` / `-t`: table headers, dividers),
+  still the faint mix;
+- row dividers (`slate-100`) and inputs (`slate-300`);
+- `bg-slate-200` backgrounds.
+
+**Verified** (headless Chrome, local): the card border's computed colour
+equals the body text colour:
+- Super dashboard, Dark: `rgb(133, 199, 66)` both;
+- home, Dark: the same;
+- home, Light: `rgb(0, 0, 0)` both.
+
+**Commit:** `06c289e`
+
+---
+
 ## 2026-11-04 — Results threshold 1 while getting started (until 100 voters)
 
 **Requested:**
