@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-11-04 — Ohio on its official 2026 map (from its block assignment file)
+
+**Requested:** (continuing) "start replacing the grids with official maps"
+
+**Source checked:**
+
+- **The plan:** the Ohio Redistricting Commission unanimously adopted a
+  congressional plan on Oct 31, 2025, for 2026 through 2030. The Secretary
+  of State's Directive 2025-55 told county boards to use it.
+  Sources: Axios, Bricker Graydon, Democracy Docket, the Ohio SOS.
+- **The file:** the commission's site, `redistricting.ohio.gov`, is a
+  JavaScript app. Its public API lists map **430**: "Staff, Ohio
+  Redistricting Commission", Oct 31, 2025, `isAdopted: true`, type
+  congressional. Its download has a PDF map, stats, and a **block
+  assignment file** (Excel). There's no shapefile.
+
+**Changed:**
+
+- **Script:** `build-state-map.py --baf PLAN --blocks
+  tl_2020_SS_tabblock20.zip`.
+  - It reads the block assignment file (xlsx, csv or pipe text, zipped or
+    not), matches each block to the Census 2020 block shapes (public
+    domain, from TIGER2020), and merges them per district.
+  - The merge uses Shapely's coverage union, since blocks tile the state.
+  - The 280 MB block file is unpacked to a temp folder rather than read
+    into memory.
+- **`OH.json`** is rebuilt this way. All 276,428 blocks matched; 15
+  districts; it took 47 s. Ohio's grid is gone.
+
+**Verified** (local, headless Chrome): `/maps/OH` draws 15 districts, with
+no grid note and no errors. The shapes match the 2025 plan.
+
+**Commit:** `8d098b0`
+
+---
+
 ## 2026-11-04 — North Carolina on its official 2026 map
 
 **Requested:** (continuing) "start replacing the grids with official maps"
