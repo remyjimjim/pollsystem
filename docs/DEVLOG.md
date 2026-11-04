@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-11-04 — Utah on its official 2026 map; Tennessee still a grid
+
+**Requested:** (continuing) "start replacing the grids with official maps"
+
+**Utah, source checked:**
+- **The map:** on Nov 10, 2025, Third District Judge Dianna Gibson rejected
+  the Legislature's Map C and ordered the plaintiffs' **Map 1** (League of
+  Women Voters of Utah and Mormon Women for Ethical Government) for 2026.
+  Sources: Utah News Dispatch, KUTV.
+- **The file:** the state GIS office (UGRC) publishes it as "Utah US
+  Congress Districts 2026 to 2032". That's Map 1A, after clarifications the
+  state requested, used for elections from Jan 1, 2026. Downloaded from
+  `opendata.gis.utah.gov` (item `d3388c1f…`): 4 districts in `DISTRICT`,
+  NAD83 UTM 12N.
+- `docs/launch-content/research/UT.md` agrees: the races use the
+  court-ordered map.
+
+**Changed:** `UT.json` is rebuilt from it; Utah's grid is gone.
+
+**Tennessee, not found yet:**
+- The 2026 map is **HB 7003**, signed May 7, 2026, used from the August
+  2026 primary. The NAACP sued.
+- No shapefile or block assignment file turned up, from the General
+  Assembly's redistricting page, the bill page, the Comptroller, or
+  searches. The fiscal memo only says shapefiles will be needed.
+- So it stays a grid. Building it from the bill text's district
+  descriptions is the fallback. todo.md notes this.
+
+**Verified** (local, headless Chrome): `/maps/UT` draws 4 districts, with
+District 1 a compact Salt Lake County seat, no grid note and no errors.
+
+**Commit:** `32b20df`
+
+---
+
 ## 2026-11-04 — Missouri back on Census lines (its 2022 map is in effect)
 
 **Requested:** (continuing) "start replacing the grids with official maps"
