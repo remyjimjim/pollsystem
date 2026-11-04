@@ -225,3 +225,6 @@ print(f'{code}: {len(districts)} districts, {W:.0f}x{H}, small: {[n for n, v in 
 #   OH  Ohio Redistricting Commission, congressional plan adopted 2025-10-31 (block assignment file; map 430 at
 #       redistricting.ohio.gov/api/public/districtmaps/430/download)
 #       ... OH 39 counties.json cd.zip OH.json --baf adopted-430.zip --blocks tl_2020_39_tabblock20.zip
+#   UT  Utah Geospatial Resource Center, "Utah US Congress Districts 2026 to 2032" (court-ordered Map 1A, Third
+#       District Court, 2025-11-10), opendata.gis.utah.gov item d3388c1f7d894ab789247f6442855d66
+#       ... UT 49 counties.json cd.zip UT.json --districts ut-2026.zip --field DISTRICT
