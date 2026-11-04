@@ -61,6 +61,68 @@ logged.
 
 ---
 
+## 2026-11-04 — District maps for every state
+
+**Requested:**
+
+> let's do the rest of the maps
+
+then, on my two questions:
+
+> Go with both recommendations using a grid of numbered districts when a map
+> is not available regarding #1.
+
+**Decided:**
+
+1. **Redrawn states** use their official 2026 map files where available,
+   and a grid of numbered boxes until then. Built as grids for now, to be
+   replaced one state at a time.
+2. **At-large states** are one-district maps.
+
+**Survey** (`docs/launch-content/research/*.md` and the local ballots):
+- 44 states have district ballots, 6 are at-large, and DC has none.
+- Redrawn for 2026:
+  - in the notes: AL (back to the 2023 plan), FL, LA (Act 2 of 2026), MO,
+    TN, UT (court map);
+  - 2025 redraws treated as redrawn to be safe: TX, CA (Prop 50), NC, OH.
+- IN, KS and VA keep their lines, since their redraws failed or were
+  nullified.
+
+**Changed:**
+
+- **34 states from Census lines:** built in one run with the standard FIPS
+  codes.
+  - The states table's ids are not FIPS: Arkansas is 04 there, which is
+    Arizona's FIPS. That was caught before anything was built.
+  - Every map's district count matches the local ballots.
+  - Alaska's Aleutians crossed the 180th meridian (1000 × 117), so the
+    script now wraps them (1000 × 728).
+- **At-large states** (AK, DE, ND, SD, VT, WY): `StateMapController` uses
+  the state's one ballot as district 1, with its measures. A ranked race
+  (Alaska) counts only 1st choices.
+- **Grids** (AL, CA, FL, LA, MO, NC, OH, TN, TX, UT):
+  `build-state-map.py --grid N` draws numbered boxes, drawn by the same
+  page, with a note in 9 languages.
+- **Links:** `stateMaps.ts` lists all 50 states.
+- **Docs:** help, RELEASES ("Since 1.0") and todo.
+
+**Verified:**
+
+- `StateMapTest` (+1): Vermont at-large, ranked, 75 / 25 on 1st choices,
+  with its measure.
+- `stateMaps.spec` (+4): Alaska, New York, and West Virginia vs Virginia.
+- Backend 428 and frontend 204 pass. The full suite was re-run after a
+  restart interrupted the first run.
+- Headless Chrome on local: all 50 `/maps/XX` pages load without errors,
+  each drawing as many districts as the API reports. Looked at:
+  - Alaska: the whole state as one district;
+  - New York: 26 districts;
+  - California: a 52-box grid; Texas: 38 boxes.
+
+**Commit:** `2fd41df`
+
+---
+
 ## 2026-11-04 — release-1.0 tagged
 
 **Requested:**
