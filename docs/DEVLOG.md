@@ -79,8 +79,8 @@ logged.
   `DISTRICT`, with population fields.
 - **Cross-check:** District 2's Black population is 286,609 of 717,755
   (40%), as in the 2023 plan. The court map had made it close to a
-  majority. The shapes match the Secretary of State's "2023 Congressional
-  Plan" PDF (June 3, 2026).
+  majority. The Secretary of State also posts a "2023 Congressional Plan"
+  PDF map (June 3, 2026); I didn't compare the shapes against it.
 
 **Changed:** `AL.json` is rebuilt from it; Alabama's grid is gone.
 
