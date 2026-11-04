@@ -172,3 +172,6 @@ print(f'{code}: {len(districts)} districts, {W:.0f}x{H}, small: {[n for n, v in 
 #   FL  Florida Legislature (EDR), plan EOGPCRP2026 (HB 1-D, Chapter 2026-229; kept for 2026 by the Florida
 #       Supreme Court, 2026-06-10), edr.state.fl.us/Content/redistricting/2026redistricting/
 #       ... FL 12 counties.json cd.zip FL.json --districts EOGPCRP2026.zip --field DISTRICT
+#   NC  North Carolina General Assembly, SB 249 / Session Law 2025-95 (federal panel denied an injunction,
+#       2025-11-26), ncleg.gov/redistricting
+#       ... NC 37 counties.json cd.zip NC.json --districts sl2025-95.zip --field DISTRICT
