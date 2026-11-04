@@ -5,9 +5,9 @@ of the notes below. `docs/DEVLOG.md` has the change-by-change detail.
 
 ## 1.0 — the election-week release
 
-Tagged after the prod backend deploy with V44 and a phone walkthrough on
-prod. BallotBox launched publicly on Mon 2026-10-26 (from 0.81); 1.0 is
-what people use on election day, Tue Nov 3.
+**Tagged 2026-11-04,** after the prod backend deploy (Fly v33: V44 ranked
+choice, V45 moderation mode) and a phone walkthrough on prod. BallotBox
+launched publicly on Mon 2026-10-26 (from 0.81).
 
 ### New since 0.81
 
@@ -38,8 +38,12 @@ what people use on election day, Tue Nov 3.
   Other states follow with `scripts/maps/build-state-map.py`.
 - **Listed words checked everywhere people type:** titles, summaries,
   questions, office names, reasons, notes and messages, not just comments.
-  Candidates' names are exempt. A super switches Block / Warn on the Super
-  dashboard, in force at once (`docs/MODERATION.md`).
+  Candidates' names are exempt. Private comments follow the setting too.
+  A super switches Block / Warn on the Super dashboard, in force at once
+  (`docs/MODERATION.md`).
+- **Results from the first vote while getting started:** the results
+  minimum is 1 until 100 people have voted, then 4 for good (narrowed groups
+  always 4). The Privacy Policy says so (effective November 4, 2026).
 
 ### Search and results
 
@@ -50,6 +54,7 @@ what people use on election day, Tue Nov 3.
 - "Purview" replaces "Zipcodes", in search, on the Create dashboard and on
   results.
 - Result bars have thicker, easier-to-read text.
+- Public comments on ranked-choice races sit under their candidate.
 - Reviewing a submitted ballot highlights each pick.
 
 ### Phones
@@ -57,7 +62,9 @@ what people use on election day, Tue Nov 3.
 - Cards instead of tables on the Create dashboard, Manage Polls, Manage
   Creators, Manage Users, History, the Admin dashboard and Creator
   requests.
-- ↓ / ↑ arrows to jump to the end of long lists and back to the top.
+- ↓ / ↑ arrows to jump to the end of long lists and back to the top, on
+  every list that can run past the screen (ballots, results, admin and
+  super pages, creator forms and reports).
 
 ### Admin and Super
 
@@ -75,11 +82,12 @@ what people use on election day, Tue Nov 3.
 - Membership is $4.99 a month, live and in the sandbox.
 - A "Why?" page in the footer; a Terms line about Substack.
 - Moderation catches plurals and more slurs.
-- Dark theme refinements.
+- Dark theme refinements; card and panel outlines are the text colour.
+- The home page's search card reads "Find polls and Vote".
 - App version 1.0.0 (frontend `package.json`, backend `build.gradle.kts`;
   the Dockerfile's jar name follows).
 
-### Before tagging
+### Before tagging (done)
 
 1. The user tries ranked choice on staging from a phone.
 2. The user runs the prod backend deploy (V44 runs; the Alaska races become
