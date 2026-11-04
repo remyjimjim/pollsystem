@@ -27,7 +27,8 @@ what people use on election day, Tue Nov 3.
   topic.
 - **Demo account:** a shared demo address a super switches on for 12 hours.
 - **Navigation by role:** Vote, Create, and Admin ▾ / Super ▾ menus.
-- **District maps for Washington and Oregon** (`/maps/WA`, `/maps/OR`),
+- **District maps for Washington, Oregon and Idaho** (`/maps/WA`, `/maps/OR`,
+  `/maps/ID`),
   linked from each state's midterm results pages:
   - Dem / Rep / Ind / Other / top 2 (the two leading parties), with
     colours you pick;

@@ -6,6 +6,7 @@ describe('which results pages link to a state map', () => {
     expect(stateMapFor('2026 Midterm Washington District 2')).toEqual({ name: 'Washington', code: 'WA' })
     expect(stateMapFor('2026 Midterm · Washington: Supreme Court & statewide measures')).toEqual({ name: 'Washington', code: 'WA' })
     expect(stateMapFor('2026 Midterm Oregon District 4')).toEqual({ name: 'Oregon', code: 'OR' })
+    expect(stateMapFor('2026 Midterm · Idaho: statewide races & measures')).toEqual({ name: 'Idaho', code: 'ID' })
   })
   it("others don't: other states, other polls, a look-alike name", () => {
     expect(stateMapFor('2026 Midterm Colorado District 1')).toBeNull()

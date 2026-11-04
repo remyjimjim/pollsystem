@@ -125,11 +125,19 @@ let resize: ResizeObserver | null = null
 watch(svgEl, el => {
   resize?.disconnect()
   if (!el || typeof ResizeObserver === 'undefined') return
-  resize = new ResizeObserver(([e]) => { shownWidth.value = e.contentRect.width || 1000 })
+  // A tall state (Idaho) is capped at 78% of the screen height and centred, so
+  // the map's real width on screen can be less than the box's.
+  resize = new ResizeObserver(([e]) => {
+    const s = shapes.value
+    const { width, height } = e.contentRect
+    shownWidth.value = (s && height ? Math.min(width, height * (s.width / s.height)) : width) || 1000
+  })
   resize.observe(el)
 })
 onUnmounted(() => resize?.disconnect())
 const textScale = computed(() => view.value.scale * Math.min(2.2, Math.max(1, 800 / shownWidth.value)))
+/** Lines keep about the same thickness on screen, however small the map is drawn. */
+const lineScale = computed(() => view.value.scale * Math.max(1, 1000 / shownWidth.value))
 
 function pick(n: number) { district.value = district.value === n ? 'ALL' : n }
 const districtNumbers = computed(() => Object.keys(shapes.value?.districts ?? {}).map(Number).sort((a, b) => a - b))
@@ -171,7 +179,7 @@ const districtNumbers = computed(() => Object.keys(shapes.value?.districts ?? {}
             ref="svgEl"
             :viewBox="view.box"
             class="block w-full rounded-md"
-            style="background: #0b2a5b; aspect-ratio: auto"
+            style="background: #0b2a5b; max-height: 78vh"
             role="img"
             :aria-label="$t('stateMap.title', { state: data?.stateName ?? code })"
             data-test="state-map"
@@ -184,8 +192,8 @@ const districtNumbers = computed(() => Object.keys(shapes.value?.districts ?? {}
               class="cursor-pointer"
               @click="pick(n)"
             />
-            <path :d="shapes.borders" fill="none" stroke="#fff" stroke-opacity="0.7" :stroke-width="1.2 * view.scale" stroke-linejoin="round" pointer-events="none" />
-            <path :d="shapes.outline" fill="none" stroke="#fff" :stroke-width="2.2 * view.scale" stroke-linejoin="round" pointer-events="none" />
+            <path :d="shapes.borders" fill="none" stroke="#fff" stroke-opacity="0.7" :stroke-width="1.2 * lineScale" stroke-linejoin="round" pointer-events="none" />
+            <path :d="shapes.outline" fill="none" stroke="#fff" :stroke-width="2.2 * lineScale" stroke-linejoin="round" pointer-events="none" />
             <g
               v-for="n in districtNumbers"
               :key="`l${n}`"
