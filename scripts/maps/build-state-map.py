@@ -25,6 +25,12 @@ projection, read from its .prj):
   ... STATE_CODE STATE_FIPS COUNTIES_JSON CD_ZIP OUT_JSON \
       --districts OFFICIAL.zip --field DISTRICT_FIELD --source "Who published it, plan name, date"
   (CD_ZIP is then unused; the state outline still comes from COUNTIES_JSON.)
+
+A state that publishes only a block assignment file (each 2020 census block's
+district; needs openpyxl for .xlsx) is built from the Census 2020 blocks:
+  ... STATE_CODE STATE_FIPS COUNTIES_JSON CD_ZIP OUT_JSON \
+      --baf PLAN.(zip|xlsx|csv|txt) --blocks tl_2020_SS_tabblock20.zip --source "..."
+  (blocks: https://www2.census.gov/geo/tiger/TIGER2020/TABBLOCK20/)
 """
 import io, json, math, sys, zipfile
 
@@ -66,7 +72,48 @@ def arg(name, default=None):
 
 dists = {}
 source = 'US Census Bureau cartographic boundaries (public domain): counties; congressional districts, 119th Congress (2024)'
-if '--districts' in sys.argv:
+if '--baf' in sys.argv:
+    # Block GEOID -> district, from the first two columns of a CSV / text / Excel sheet.
+    import csv, os, tempfile
+    path = arg('--baf')
+    raw = None
+    if path.lower().endswith('.zip'):
+        zb = zipfile.ZipFile(path)
+        inner = next(n for n in zb.namelist() if n.lower().endswith(('.xlsx', '.csv', '.txt')) and '__MACOSX' not in n)
+        raw, kind = zb.read(inner), inner.lower().rsplit('.', 1)[1]
+    else:
+        raw, kind = open(path, 'rb').read(), path.lower().rsplit('.', 1)[1]
+    if kind == 'xlsx':
+        import openpyxl
+        rows = openpyxl.load_workbook(io.BytesIO(raw), read_only=True).worksheets[0].iter_rows(values_only=True)
+    else:
+        text = raw.decode('utf-8-sig')
+        rows = csv.reader(io.StringIO(text), delimiter='|' if '|' in text.split('\n', 1)[0] else ',')
+    district_of = {}
+    for row in rows:
+        geoid, d = (str(row[0]).strip() if row[0] is not None else ''), (str(row[1]).strip() if len(row) > 1 and row[1] is not None else '')
+        if geoid.isdigit() and d.isdigit():
+            district_of[geoid.zfill(15)] = int(d)
+    # The Census 2020 blocks (too big to read in memory: unpacked to a temp folder).
+    tmp = tempfile.mkdtemp()
+    zipfile.ZipFile(arg('--blocks')).extractall(tmp)
+    shp = next(os.path.join(tmp, n) for n in os.listdir(tmp) if n.endswith('.shp'))
+    r = shapefile.Reader(shp)
+    gi = [f[0] for f in r.fields[1:]].index('GEOID20')
+    groups = {}
+    for sr in r.iterShapeRecords():
+        d = district_of.get(sr.record[gi])
+        if d is not None:
+            groups.setdefault(d, []).append(shape(sr.shape.__geo_interface__))
+    import shapely
+    for d, gs in groups.items():
+        try:
+            dists[d] = shapely.coverage_union_all(gs).buffer(0)     # blocks tile the state: fast
+        except Exception:
+            dists[d] = unary_union(gs).buffer(0)
+    source = 'US Census Bureau counties and 2020 blocks (public domain); districts: ' + arg('--source', path.split('/')[-1])
+    print(f'{len(district_of)} blocks assigned, {sum(map(len, groups.values()))} matched, {len(dists)} districts')
+elif '--districts' in sys.argv:
     # The state's own 2026 plan: one shape per district, numbered in --field.
     z = zipfile.ZipFile(arg('--districts'))
     files = [n for n in z.namelist() if '__MACOSX' not in n and not n.split('/')[-1].startswith('._')]   # skip macOS metadata copies
@@ -175,3 +222,6 @@ print(f'{code}: {len(districts)} districts, {W:.0f}x{H}, small: {[n for n, v in 
 #   NC  North Carolina General Assembly, SB 249 / Session Law 2025-95 (federal panel denied an injunction,
 #       2025-11-26), ncleg.gov/redistricting
 #       ... NC 37 counties.json cd.zip NC.json --districts sl2025-95.zip --field DISTRICT
+#   OH  Ohio Redistricting Commission, congressional plan adopted 2025-10-31 (block assignment file; map 430 at
+#       redistricting.ohio.gov/api/public/districtmaps/430/download)
+#       ... OH 39 counties.json cd.zip OH.json --baf adopted-430.zip --blocks tl_2020_39_tabblock20.zip
