@@ -61,6 +61,49 @@ logged.
 
 ---
 
+## 2026-11-04 — Texas on its official 2026 map
+
+**Requested:**
+
+> start replacing the grids with official maps
+
+**Source checked:**
+
+- Texas's 2025 map, **PLANC2333** (HB 4), is the one in effect for 2026:
+  - a three-judge panel blocked it in November 2025;
+  - the Supreme Court stayed that, then summarily reversed it on April 27,
+    2026 (Abbott v. LULAC);
+  - the March 3 primaries ran on it.
+  Sources: Democracy Docket case timeline, the Loyola (Levitt) redistricting
+  guide, and wire reports.
+- The file is the Texas Legislative Council's shapefile, from the Capitol
+  Data Portal (`data.capitol.texas.gov/dataset/planc2333`): 38 districts,
+  in the `District` field, in a Lambert Conformal Conic projection.
+- The portal lists no licence; it's a state agency's public record.
+
+**Changed:**
+
+- **Script:** `build-state-map.py` gains `--districts ZIP --field F
+  --source TEXT`.
+  - It reads the plan's shapes in whatever projection its `.prj` gives,
+    converting to longitude / latitude with pyproj.
+  - The outline still comes from the Census counties.
+  - The source line is stored in the map file.
+- **`TX.json`** is rebuilt from PLANC2333; Texas's grid and its note are
+  gone.
+- **Docs:** the help page lists Texas as on its official map. todo.md has a
+  running list of states with official maps (TX) and those still on grids.
+
+**Verified** (local, headless Chrome):
+- `/maps/TX` draws 38 districts with no grid note and no errors.
+- The new lines are visible, for example District 35 east of San Antonio
+  and District 9 in east Houston.
+- Picking District 18 zooms to its Houston shape.
+
+**Commit:** `47a35ec`
+
+---
+
 ## 2026-11-04 — District maps for every state
 
 **Requested:**
