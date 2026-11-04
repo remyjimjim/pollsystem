@@ -61,6 +61,48 @@ logged.
 
 ---
 
+## 2026-11-04 — Louisiana on its 2026 map (Act 2); only Tennessee left as a grid
+
+**Requested:** (continuing) "start replacing the grids with official maps"
+
+**Source checked:**
+
+- **Background:** on April 29, 2026 the Supreme Court struck down the
+  previous map (*Louisiana v. Callais*).
+- **The plan:** **Act 2 of 2026** (SB 121), passed May 28–29 and signed May
+  29. It has 6 districts and drops the second majority-Black district.
+- **The file:** "Shapefile - Act_2_(2026_RS).zip" from the Legislature's
+  redistricting site (`redist.legis.la.gov/2026_Files/2026CONGRESSACT2`);
+  districts in `DISTRICT_I`.
+- **Court status not confirmed:** a federal three-judge panel heard
+  challenges on June 17. A May 20 report said the panel wouldn't force the
+  old map for 2026, but searches didn't confirm the outcome after the
+  hearing, and one headline suggested a block.
+- **Why Act 2 anyway:** BallotBox's Louisiana ballots were built on it
+  (`research/LA.md`: 6 districts, an open primary on Nov 3, districts 5 and
+  6 open), so the map matches what people vote on.
+
+**Changed:**
+
+- **`LA.json`** is rebuilt from Act 2; Louisiana's grid is gone.
+- **Help text** rewritten: 8 states on official maps (AL, CA, FL, LA, NC,
+  OH, TX, UT), with Tennessee the only grid.
+- **todo.md** records the open Louisiana question and Tennessee's missing
+  file.
+
+**Where the 10 grids ended up:**
+- 8 official maps: TX, CA, FL, NC, OH (built from its block file), UT, AL
+  and LA;
+- MO back on Census lines (its 2022 map is in effect);
+- TN still a grid.
+
+**Verified** (local, headless Chrome): `/maps/LA` draws 6 districts, with
+no grid note and no errors.
+
+**Commit:** `674ac9b`
+
+---
+
 ## 2026-11-04 — Alabama on its 2026 map (the Legislature's 2023 plan)
 
 **Requested:** (continuing) "start replacing the grids with official maps"
