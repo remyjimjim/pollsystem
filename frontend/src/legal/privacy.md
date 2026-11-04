@@ -4,7 +4,7 @@ title: Privacy Policy
 
 # Privacy Policy
 
-**Effective date:** November 1, 2026
+**Effective date:** November 4, 2026
 
 This policy explains what World Wide Wakeup, LLC ("we", "us") collects when you
 use BallotBox at ballotbox.us.com ("the service"), why, and who can see it.
@@ -49,9 +49,12 @@ We don't sell your information.
 ## Who sees what
 
 - **The public** sees only **combined results**, as rounded percentages, and
-  only once a poll has a minimum number of respondents (currently 4). Results
-  then update in steps of that size. Groups smaller than that minimum are never
-  shown on their own.
+  only once a poll has a minimum number of respondents. While BallotBox is
+  getting started that minimum is **1**, so results show from the first
+  response; once **100 people** have voted it becomes **4**, and stays there.
+  Results update in steps of that size. A narrowed group (one area, or the
+  people inside or outside a poll's area) is never shown on its own when
+  smaller than **4**, whatever the minimum.
 - **Public comments** are shown without your name, under the same rules.
   Comments are private unless you make them public.
 - **Poll creators** see combined results and a report about their own polls:

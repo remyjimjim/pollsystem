@@ -24,8 +24,10 @@ Supers don't need a paid membership.
 - [IP Allow / Deny](ip-rules.md): lists of addresses (not enforced yet).
 
 **Results:** you see every poll's results **live, with exact counts**, at any
-size (a note on the results page says so). Everyone else sees results only from
-4 respondents, updated in steps of 4, as rounded percentages.
+size (a note on the results page says so). Everyone else sees rounded
+percentages from the poll's minimum number of respondents, in steps of that
+size: **1** while BallotBox is getting started, **4** once 100 people have
+voted (it switches by itself). Narrowed groups always need 4.
 
 The admin pages work for you too, across the whole country: see [Managing
 creators](../admin/managing-creators.md) and [Managing

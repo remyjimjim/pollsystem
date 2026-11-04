@@ -78,8 +78,9 @@ results, and the poll's creator doesn't see them.
 
 A **public** comment is shown on the results page under that question,
 candidate or measure, **without your name**. It follows the same privacy rules
-as the results: nothing shows until 4 people have responded, and new comments
-appear with the next step of 4.
+as the results: nothing shows until the poll has its minimum number of
+respondents, and new comments appear with each step. (The minimum is 1 while
+BallotBox is getting started, and 4 once 100 people have voted.)
 
 Public comments can't contain certain words. When you submit, each one found is
 highlighted in its comment box, and you're asked **"Can I replace *word* with

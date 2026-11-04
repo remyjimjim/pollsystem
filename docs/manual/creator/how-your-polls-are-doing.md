@@ -92,7 +92,8 @@ What you can't see:
   Comments a respondent made public appear, anonymously, on the results page
   like everyone sees them.
 - **Small groups.** Narrowed results for fewer than 4 people are hidden.
-- **Early or exact results.** Like everyone, you see results only once 4
-  people have responded. They update in steps of 4 and show as percentages,
-  never exact counts. See [Viewing results](../viewer/viewing-results.md).
+- **Early or exact results.** Like everyone, you see results only once the
+  poll has its minimum number of respondents: 1 while BallotBox is getting
+  started, 4 once 100 people have voted. They update in steps of that size and
+  show as percentages, never exact counts. See [Viewing results](../viewer/viewing-results.md).
 

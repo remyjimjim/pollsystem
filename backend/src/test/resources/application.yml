@@ -22,6 +22,7 @@ app:
   results:
     k-anonymity-threshold: 3  # lower threshold makes results tests easier
     group-minimum: 3
+    launch-until-voters: 0  # no launch phase in tests (k stays 3); LaunchPhaseTest turns it on
   rate-limit:
     enabled: false  # RateLimitTest turns it on
   creator-requests:

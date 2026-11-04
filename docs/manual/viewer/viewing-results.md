@@ -60,20 +60,24 @@ members, not official results or a forecast.
 
 ## Results protect people's privacy
 
-- **No results until 4 people have responded.** Until then the page says how
-  many have responded so far. With fewer people, a result could show how
-  particular people voted.
-- **Results update in steps of 4.** The page shows the results as they were
-  when the 4th, 8th, 12th… person responded. A single new vote, or a single
-  changed answer, never changes what you see on its own.
+- **No results until a poll has its minimum number of respondents.** While
+  BallotBox is getting started the minimum is **1**, so results show from the
+  first response. Once **100 people** have voted it becomes **4**: until a poll
+  has 4, the page says how many have responded so far, because with fewer
+  people a result could show how particular people voted.
+- **Results update in steps of that minimum.** At 4, the page shows the
+  results as they were when the 4th, 8th, 12th… person responded, so a single
+  new vote, or a single changed answer, never changes what you see on its own.
+  At 1, while BallotBox is getting started, every response shows straight
+  away.
 - **Percentages only.** Exact counts aren't shown.
 
 ## Comments
 
 Under a question, candidate or measure, **N public comments** opens the
 comments people chose to make public. They're anonymous, and follow the same
-rules as the results: none until 4 people have responded, and new ones appear
-with each step of 4. If you narrow the results by place, only comments from
+rules as the results: none until the poll has its minimum number of
+respondents, and new ones appear with each step. If you narrow the results by place, only comments from
 people in that group show.
 
 ## Inside or outside the poll's area
@@ -118,7 +122,7 @@ To see results again, widen your choice: pick a larger area, **Clear** the place
 filter, or tick both boxes.
 
 If the page says how many people have responded so far but shows no results,
-the poll hasn't reached 4 respondents yet.
+the poll hasn't reached the minimum yet (4, once BallotBox has 100 voters).
 
 People who haven't entered a zipcode yet can't be placed, so they appear only in
 the full, unfiltered results.
