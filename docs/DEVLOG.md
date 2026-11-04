@@ -61,6 +61,43 @@ logged.
 
 ---
 
+## 2026-11-04 — Idaho district map (/maps/ID); tall maps fit the screen
+
+**Requested:**
+
+> make the Idaho district map too
+
+**Changed:**
+
+- **Idaho's map:** `frontend/public/maps/ID.json` (32 KB), built by
+  `build-state-map.py ID 16 …`: 2 districts, all counties, Census 2024
+  lines (current for 2026).
+  - Idaho is added to `stateMaps.ts`, so its midterm results pages link to
+    the map.
+  - Its 3 statewide measures (HJR 4, HJR 6, Proposition 1) are in the list.
+- **Tall states:** Idaho is 1000 × 1621, so at full width the map was about
+  1,450 px tall.
+  - It's now capped at 78% of the screen height and centred.
+  - Labels and lines are sized to the map's real on-screen width, so they
+    don't shrink when the map is narrower than its box. The lines were
+    hairline-thin until then.
+  - Washington and Oregon look the same as before.
+
+**Verified** (local, headless Chrome, 8 test voters in Coeur d'Alene and
+Boise):
+- the map was drawn at 902 × 702 in a 1280 × 900 window;
+- top 2 showed District 1 Rep 50% (yellow) / Dem 25% (lime), and District 2
+  Dem 50% / Rep 25%;
+- Other showed 25% in orange (the Constitution and Libertarian voters);
+- Proposition 1 showed Yes / No per district, with the leader in bold.
+
+Washington's map re-checked against local counts (District 10 3–2 = 60 /
+40). vue-tsc clean; vitest 204 pass.
+
+**Commit:** `7f3a8ea`
+
+---
+
 ## 2026-11-04 — Card outlines in the text colour
 
 **Requested:**
