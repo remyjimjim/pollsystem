@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-11-04 — California on its official 2026 map
+
+**Requested:** (continuing) "start replacing the grids with official maps"
+
+**Source checked:**
+
+- **Proposition 50** (Nov 2025) adopted the Legislature's **AB 604** plan
+  (Chapter 96, Statutes of 2025) for 2026–2030.
+- **Legal status:** a federal three-judge panel denied the injunction
+  (Jan 14, 2026) and a stay (Jan 16); the Supreme Court denied an emergency
+  application (Feb 4). So the map is in effect for 2026. The case continues
+  (a motion-to-dismiss hearing on Aug 19).
+  Sources: LAist, GPB/NPR, Democracy Docket, Elias Law Group.
+- **The file:** "AB 604 District Shapefile (ZIP)" from the Senate Elections
+  and Constitutional Amendments Committee (`selc.senate.ca.gov/node/1171`):
+  52 districts in the `DISTRICT` field, Web Mercator.
+
+**Changed:**
+
+- **`CA.json`** is rebuilt from AB 604; California's grid is gone.
+- **Script:** `build-state-map.py` skips the `__MACOSX` copies Mac zips
+  include, so it can't pick a metadata file instead of the shapefile.
+- **Docs:** help and todo now list CA as done.
+
+**Verified** (local, headless Chrome): `/maps/CA` draws 52 districts, with
+no grid note and no errors.
+
+**Commit:** `3a17c55`
+
+---
+
 ## 2026-11-04 — Texas on its official 2026 map
 
 **Requested:**
