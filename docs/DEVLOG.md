@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-11-04 — Missouri back on Census lines (its 2022 map is in effect)
+
+**Requested:** (continuing) "start replacing the grids with official maps"
+
+**Found** (`docs/launch-content/research/MO.md`):
+- Missouri's 2025 map (HB 1) was used in the Aug 4 primaries.
+- On Sep 3 the Missouri Supreme Court held the referendum valid, which
+  suspended HB 1. The U.S. Supreme Court declined to intervene on Sep 26.
+- So **November uses the 2022 map**. Proposition A asks voters whether to
+  approve HB 1 from 2028.
+
+I'd put Missouri on the redrawn list too early; it wasn't redrawn for
+November.
+
+**Changed:** `MO.json` is rebuilt from the Census 119th-Congress
+boundaries (the 2022 map); the grid is gone. todo updated.
+
+**Commit:** `f8155af`
+
+---
+
 ## 2026-11-04 — Ohio on its official 2026 map (from its block assignment file)
 
 **Requested:** (continuing) "start replacing the grids with official maps"
