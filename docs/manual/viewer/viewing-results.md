@@ -41,7 +41,7 @@ example **Washington district map** (`/maps/WA`). States with one House seat
 (Alaska, Delaware, North Dakota, South Dakota, Vermont, Wyoming) show the
 whole state as one district; in Alaska's ranked-choice race the map counts
 1st choices. States that redrew their districts for 2026 use their new
-official maps (Texas and California so far); the others (Alabama, Florida,
+official maps (Texas, California and Florida so far); the others (Alabama,
 Louisiana, Missouri, North Carolina, Ohio, Tennessee, Utah) show **numbered
 boxes** in place of the map until theirs is added. Each congressional district
 shows its U.S. House race:
