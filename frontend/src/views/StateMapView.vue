@@ -20,7 +20,7 @@ interface MapCandidate { name: string; affiliation: string; party: Party; pct: n
 interface MapDistrict { number: number; electionId: number; officeName: string | null; shown: boolean; candidates: MapCandidate[]; measure: { yesPct: number; noPct: number } | null }
 interface StateMapResults { state: string; stateName: string; live: boolean; measures: { id: number; title: string }[]; districts: MapDistrict[] }
 interface Shape { path: string; label: [number, number]; box: [number, number, number, number]; small: boolean }
-interface MapShapes { width: number; height: number; outline: string; borders: string; districts: Record<string, Shape> }
+interface MapShapes { width: number; height: number; outline: string; borders: string; districts: Record<string, Shape>; grid?: boolean }
 
 const { t } = useI18n()
 const route = useRoute()
@@ -219,6 +219,7 @@ const districtNumbers = computed(() => Object.keys(shapes.value?.districts ?? {}
               ><tspan v-for="(p, i) in parts(byNumber.get(n))" :key="i" :fill="p.color" :font-weight="p.bold ? 700 : 400">{{ p.text }}</tspan></text>
             </g>
           </svg>
+          <p v-if="shapes.grid" class="m-0 mt-1 text-xs text-slate-500" data-test="grid-note">{{ $t('stateMap.gridNote', { state: data?.stateName ?? code }) }}</p>
           <p class="m-0 mt-1 text-xs text-slate-500">
             {{ measureId ? $t('stateMap.measureNote') : $t('stateMap.partyNote') }}
             {{ $t('stateMap.hiddenNote') }}

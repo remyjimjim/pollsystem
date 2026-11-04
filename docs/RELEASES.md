@@ -3,6 +3,16 @@
 Each release is a git tag (`release-X.Y`). Its message is the short version
 of the notes below. `docs/DEVLOG.md` has the change-by-change detail.
 
+## Since 1.0 (not yet tagged)
+
+- **District maps for every state** (`/maps/XX`), linked from each state's
+  midterm results pages:
+  - 34 states drawn from the Census lines;
+  - the 6 at-large states as one district (Alaska's ranked race counts 1st
+    choices);
+  - numbered boxes for the 10 states that redrew for 2026, until their
+    official maps are added.
+
 ## 1.0 — the election-week release
 
 **Tagged 2026-11-04,** after the prod backend deploy (Fly v33: V44 ranked

@@ -968,6 +968,7 @@
     "yes": "Ja",
     "no": "Nei",
     "fullResults": "Alle resultater for dette distriktet",
-    "link": "Distriktskart for {state}"
+    "link": "Distriktskart for {state}",
+    "gridNote": "{state} tegnet om distriktene sine for 2026, så nummererte bokser står i stedet for kartet til det nye offisielle kartet er lagt inn."
   }
 }

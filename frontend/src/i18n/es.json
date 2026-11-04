@@ -915,6 +915,7 @@
     "yes": "Sí",
     "no": "No",
     "fullResults": "Resultados completos de este distrito",
-    "link": "Mapa de distritos de {state}"
+    "link": "Mapa de distritos de {state}",
+    "gridNote": "{state} redibujó sus distritos para 2026; unas casillas numeradas sustituyen al mapa hasta que se añada el nuevo mapa oficial."
   }
 }

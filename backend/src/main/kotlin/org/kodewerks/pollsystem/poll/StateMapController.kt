@@ -62,6 +62,9 @@ data class StateMapDto(
 /**
  * A state's district map (/maps/WA, decided 2026-11-03): each district's U.S.
  * House race, from its district ballot ("2026 Midterm Washington District 2"),
+ * or, in an at-large state (one House seat, decided 2026-11-04), from its one
+ * ballot ("2026 Midterm Alaska") as district 1. In a ranked race only 1st
+ * choices count.
  * and optionally one of the state's ballot measures split by the voters of
  * each district ballot. Every number comes from [ResultsAccess], so it follows
  * the results pages' privacy: hidden under the minimum, stepped for the
@@ -91,9 +94,11 @@ class StateMapController(
         // The launch-content title shapes (scripts/launch-content/load-state.bash).
         val districtTitle = Regex("^2026 Midterm ${Regex.escape(st.name)} District (\\d+)$")
         val shown = elections.findAll().filter { it.status in visible }
+        val atLarge = shown.firstOrNull { it.title == "2026 Midterm ${st.name}" }
         val districts = shown.mapNotNull { e -> districtTitle.find(e.title)?.let { it.groupValues[1].toInt() to e } }
             .sortedBy { it.first }
-        val stateMeasures = shown.filter { it.title.startsWith("2026 Midterm · ${st.name}:") }
+            .ifEmpty { listOfNotNull(atLarge?.let { 1 to it }) }
+        val stateMeasures = shown.filter { it.title.startsWith("2026 Midterm · ${st.name}:") || it.id == atLarge?.id }
             .flatMap { measures.findByElectionId(it.id) }
             .filter { it.status in visible }
             .sortedBy { it.id }
@@ -114,7 +119,7 @@ class StateMapController(
             // No votes yet shows "—" (a super's live view would otherwise read 0% / 0%).
             val ok = r.visibility.mode != "HIDDEN" && !r.suppressed && voters > 0
             val list = race.map { c ->
-                val yes = r.answers.count { it.itemId == c.id && it.response == "true" }
+                val yes = r.answers.count { it.itemId == c.id && it.response == "true" && (it.rank == null || it.rank == 1) }
                 MapCandidateDto(c.name, c.affiliation, partyOf(c.affiliation), if (ok) pct(yes, voters) else null, if (r.live) yes else null)
             }.sortedWith(compareByDescending<MapCandidateDto> { it.pct ?: -1 }.thenBy { it.name })
 

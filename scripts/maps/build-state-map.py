@@ -15,11 +15,38 @@ Usage (needs shapely and pyshp; e.g. in python:3.12-slim with pip install shapel
   python build-state-map.py STATE_CODE STATE_FIPS COUNTIES_JSON CD_ZIP OUT_JSON [--exclude-counties FIPS,...]
   e.g. WA 53 tmp/maps/counties.json tmp/maps/cd.zip frontend/public/maps/WA.json --exclude-counties 53029
        (Washington without Island County, as chosen 2026-11-02)
+
+A state that redrew its districts for 2026 (the Census file has the old lines)
+gets numbered boxes instead until its official map is added (decided
+2026-11-04): python build-state-map.py STATE_CODE --grid N OUT_JSON
 """
 import io, json, math, sys, zipfile
+
+if len(sys.argv) > 2 and sys.argv[2] == '--grid':
+    # Numbered boxes, laid out roughly 8:5, drawn by the same page as a map.
+    code, n, out = sys.argv[1], int(sys.argv[3]), sys.argv[4]
+    cols = max(1, math.ceil(math.sqrt(n * 1.6)))
+    rows = math.ceil(n / cols)
+    W, gap = 1000.0, 14.0
+    w = (W - (cols + 1) * gap) / cols
+    h = min(w * 0.62, 160.0)
+    H = round(rows * h + (rows + 1) * gap)
+    districts, rects = {}, []
+    for i in range(n):
+        x, y = gap + (i % cols) * (w + gap), gap + (i // cols) * (h + gap)
+        r = f'M{x:.1f},{y:.1f}h{w:.1f}v{h:.1f}h{-w:.1f}Z'
+        rects.append(r)
+        districts[str(i + 1)] = {'path': r, 'label': [round(x + w / 2, 1), round(y + h / 2 + 6, 1)],
+                                 'box': [round(x, 1), round(y, 1), round(w, 1), round(h, 1)], 'small': w < 90}
+    json.dump({'state': code, 'width': W, 'height': H, 'grid': True,
+               'source': f'Numbered boxes: {code} redrew its congressional districts for 2026; its official map is not added yet',
+               'outline': ''.join(rects), 'borders': '', 'districts': districts}, open(out, 'w'), separators=(',', ':'))
+    print(f'{code}: grid of {n} districts, {cols} columns, {W:.0f}x{H}')
+    sys.exit(0)
+
 import shapefile
 from shapely.geometry import shape
-from shapely.ops import unary_union, linemerge, polylabel
+from shapely.ops import unary_union, linemerge, polylabel, transform
 
 code, fips, counties_path, cd_path, out = sys.argv[1:6]
 exclude = set(sys.argv[sys.argv.index('--exclude-counties') + 1].split(',')) if '--exclude-counties' in sys.argv else set()
@@ -36,6 +63,13 @@ for sr in r.iterShapeRecords():
     rec = dict(zip(names, sr.record))
     if rec['STATEFP'] == fips:
         dists[int(rec['CD119FP']) or 1] = shape(sr.shape.__geo_interface__).buffer(0)   # "00" = at-large
+
+# Alaska's Aleutians cross the 180th meridian: move east-of-180 pieces next to
+# the rest (longitude - 360), or the state would span the globe.
+if outline.bounds[2] - outline.bounds[0] > 180:
+    west = lambda g: transform(lambda x, y, z=None: (tuple(v - 360 if v > 0 else v for v in x), y), g)
+    outline = west(outline).buffer(0)
+    dists = {n: west(g).buffer(0) for n, g in dists.items()}
 
 TOL = 0.002   # degrees (~150 m): small file, no visible loss at page size
 outline = outline.simplify(TOL)

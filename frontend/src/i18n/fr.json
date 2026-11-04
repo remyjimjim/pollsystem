@@ -968,6 +968,7 @@
     "yes": "Oui",
     "no": "Non",
     "fullResults": "Résultats complets de cette circonscription",
-    "link": "Carte des circonscriptions — {state}"
+    "link": "Carte des circonscriptions — {state}",
+    "gridNote": "{state} a redessiné ses circonscriptions pour 2026 : des cases numérotées remplacent la carte en attendant la nouvelle carte officielle."
   }
 }

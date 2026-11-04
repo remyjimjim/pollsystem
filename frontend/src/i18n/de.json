@@ -915,6 +915,7 @@
     "yes": "Ja",
     "no": "Nein",
     "fullResults": "Alle Ergebnisse dieses Wahlkreises",
-    "link": "Wahlkreiskarte {state}"
+    "link": "Wahlkreiskarte {state}",
+    "gridNote": "{state} hat seine Wahlkreise für 2026 neu zugeschnitten; nummerierte Kästen ersetzen die Karte, bis die neue amtliche Karte ergänzt ist."
   }
 }

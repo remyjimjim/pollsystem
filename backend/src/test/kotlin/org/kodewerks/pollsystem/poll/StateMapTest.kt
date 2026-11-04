@@ -22,6 +22,7 @@ class StateMapTest : AbstractIntegrationTest() {
     @Autowired private lateinit var candidates: CandidateRepository
     @Autowired private lateinit var map: StateMapController
     @Autowired private lateinit var fixtures: TestFixtures
+    @Autowired private lateinit var rankedRaces: RankedRaces
 
     @Test
     fun `parties come from the affiliation, the first one named for a fusion label`() {
@@ -87,5 +88,30 @@ class StateMapTest : AbstractIntegrationTest() {
         assertThat(pub.districts[1].shown).isFalse()
         assertThat(pub.districts[1].candidates.map { it.pct }).containsOnlyNulls()
         assertThat(pub.districts[1].measure).isNull()
+    }
+
+    @Test
+    fun `an at-large state is one district from its one ballot, and a ranked race counts 1st choices`() {
+        val c = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "map-atlarge")
+        val id = election(c, "2026 Midterm Vermont", listOf("Ann" to "Democratic", "Bob" to "Republican", "Cy" to "Independent"), "U.S. Representative, Map At-Large")
+        rankedRaces.set(id, listOf(candidates.findByElectionId(id).first().office.id))
+        val m = measures.saveDraft(c, BallotMeasureDraftRequest(3L, id, "VT Measure 1", "s", LocalDate.now().plusDays(30))).id
+        measures.publish(m, c, confirmed = true)
+        // Ann 1st on 3 ballots (Bob 2nd on each), Bob 1st on 1: 1st choices 75 / 25.
+        fun ranked(first: String, second: String) {
+            val u = fixtures.createUser(emailPrefix = "map-vt")
+            votes.submit(AppUserDetails(u), id, SubmitElectionResponsesRequest(candidates.findByElectionId(id).map {
+                val rank = when (it.name) { first -> 1; second -> 2; else -> null }
+                CandidateAnswerInput(it.id, rank != null, rank = rank)
+            }))
+        }
+        repeat(3) { ranked("Ann", "Bob") }
+        ranked("Bob", "Ann")
+
+        val sup = AppUserDetails(fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "map-vt-super"))
+        val vt = map.results("VT", null, sup)
+        assertThat(vt.districts.map { it.number to it.electionId }).containsExactly(1 to id)
+        assertThat(vt.districts[0].candidates.map { it.name to it.pct }).containsExactly("Ann" to 75, "Bob" to 25, "Cy" to 0)
+        assertThat(vt.measures.map { it.title }).containsExactly("VT Measure 1")
     }
 }

@@ -1243,6 +1243,7 @@
     "yes": "Yes",
     "no": "No",
     "fullResults": "Full results for this district",
-    "link": "{state} district map"
+    "link": "{state} district map",
+    "gridNote": "{state} redrew its congressional districts for 2026, so numbered boxes stand in for the map until the new official map is added."
   }
 }

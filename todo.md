@@ -294,7 +294,10 @@
   - Started 2026-11-03 with Washington: /maps/WA (district lines, Dem / Rep / Ind / top 2 with colour choosers,
     a district picker, a ballot measure split by district; scripts/maps/build-state-map.py; docs/RELEASES.md 1.0).
     Oregon added 2026-11-03 (/maps/OR; no statewide measures this year). Idaho 2026-11-04 (/maps/ID).
-    Next: more states (add each to frontend/src/stateMaps.ts), and the US-wide phase 1 map.
+    All 50 states 2026-11-04: 34 on Census lines, 6 at-large, and numbered-box grids for the 10 that redrew
+    for 2026 (AL CA FL LA MO NC OH TN TX UT).
+    Next: replace each grid with the state's official 2026 map files, one state at a time (check against
+    docs/launch-content/research/XX.md); then the US-wide phase 1 map.
   - Phase 2 (~1-2 days): district maps on the state pages. Census 2024 congressional district lines where
     still current; a grid of numbered district boxes for states that redrew for 2026 (e.g. TX, MO, UT, AL,
     LA; see docs/launch-content/research/XX.md), or their new official map files where we can get them.

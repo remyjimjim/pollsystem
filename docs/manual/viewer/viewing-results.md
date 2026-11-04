@@ -36,9 +36,14 @@ Results are shown as bars with a **percentage**, rounded to a whole number.
 
 ## District maps
 
-A state's 2026 midterm results pages link to its **district map**, for
-example **Washington district map** (`/maps/WA`), **Oregon district map**
-(`/maps/OR`) or **Idaho district map** (`/maps/ID`). Each congressional district
+Every state's 2026 midterm results pages link to its **district map**, for
+example **Washington district map** (`/maps/WA`). States with one House seat
+(Alaska, Delaware, North Dakota, South Dakota, Vermont, Wyoming) show the
+whole state as one district; in Alaska's ranked-choice race the map counts
+1st choices. States that redrew their districts for 2026 (Alabama,
+California, Florida, Louisiana, Missouri, North Carolina, Ohio, Tennessee,
+Texas, Utah) show **numbered boxes** in place of the map until the new
+official map is added. Each congressional district
 shows its U.S. House race:
 
 - **top 2** (the default): the two **parties** with the most votes, as
