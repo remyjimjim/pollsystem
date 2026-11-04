@@ -298,7 +298,8 @@
     for 2026 (AL CA FL LA MO NC OH TN TX UT).
     Next: replace each grid with the state's official 2026 map files, one state at a time (check against
     docs/launch-content/research/XX.md); then the US-wide phase 1 map.
-    Official maps in: TX CA FL NC OH (2026-11-04). Still grids: AL LA MO TN UT.
+    Official maps in: TX CA FL NC OH (2026-11-04). MO back on Census lines (its 2022 map is in effect: the 2025
+    map is suspended by referendum). Still grids: AL LA TN UT.
   - Phase 2 (~1-2 days): district maps on the state pages. Census 2024 congressional district lines where
     still current; a grid of numbered district boxes for states that redrew for 2026 (e.g. TX, MO, UT, AL,
     LA; see docs/launch-content/research/XX.md), or their new official map files where we can get them.
