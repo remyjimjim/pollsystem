@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-11-04 — North Carolina on its official 2026 map
+
+**Requested:** (continuing) "start replacing the grids with official maps"
+
+**Source checked:**
+
+- **The plan:** SB 249, enacted Oct 22, 2025 as **Session Law 2025-95**.
+- **Legal status:** a three-judge federal panel unanimously denied an
+  injunction on Nov 26, 2025, so the map is used for 2026. The March 3
+  primaries ran on it. Sources: NBC News, Carolina Journal, Carolina Public
+  Press, AP.
+- **The file:** the Session Law shapefile from the General Assembly's
+  redistricting page (`ncleg.gov/redistricting`): 14 districts in the
+  `DISTRICT` field, in NC State Plane (converted).
+
+**Changed:** `NC.json` is rebuilt from SL 2025-95; North Carolina's grid is
+gone. Help and todo updated.
+
+**Verified** (local, headless Chrome): `/maps/NC` draws 14 districts, with
+no grid note and no errors.
+
+**Commit:** `a487bf3`
+
+---
+
 ## 2026-11-04 — Florida on its official 2026 map
 
 **Requested:** (continuing) "start replacing the grids with official maps"
