@@ -231,3 +231,5 @@ print(f'{code}: {len(districts)} districts, {W:.0f}x{H}, small: {[n for n, v in 
 #   AL  ALGeoHub "2023 Alabama Congressional Plan" (Act 2023-563, the Legislature's plan; back in effect for 2026
 #       after the Supreme Court's 2026-06-02 stay), alabamaredistrictingplans-algeohub.hub.arcgis.com item cf6612d1...
 #       ... AL 01 counties.json cd.zip AL.json --districts al-2023.zip --field DISTRICT
+#   LA  Louisiana Legislature, Act 2 of 2026 (SB 121, signed 2026-05-29), redist.legis.la.gov/2026_Files/2026CONGRESSACT2
+#       ... LA 22 counties.json cd.zip LA.json --districts act2.zip --field DISTRICT_I
