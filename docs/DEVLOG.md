@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-11-04 — Alabama on its 2026 map (the Legislature's 2023 plan)
+
+**Requested:** (continuing) "start replacing the grids with official maps"
+
+**Source checked:**
+
+- **The plan in effect** (`docs/launch-content/research/AL.md`, SCOTUSblog,
+  NPR): on June 2, 2026 the Supreme Court stayed the court-ordered remedial
+  map, so 2026 uses the **Legislature's 2023 plan** (Act 2023-563, 2nd
+  Special Session). Districts 1, 2, 6 and 7 held special primaries on Aug
+  11. The Census 119th-Congress file has the 2024 court map, which is why
+  Alabama wasn't on Census lines.
+- **The file:** the state's ALGeoHub, "Alabama Redistricting Plans" →
+  "2023 Alabama Congressional Plan", service `2023_CONG_LEGISLATIVE_PLAN`,
+  published May 2026 by the ALGeoHub organization. 7 districts in
+  `DISTRICT`, with population fields.
+- **Cross-check:** District 2's Black population is 286,609 of 717,755
+  (40%), as in the 2023 plan. The court map had made it close to a
+  majority. The shapes match the Secretary of State's "2023 Congressional
+  Plan" PDF (June 3, 2026).
+
+**Changed:** `AL.json` is rebuilt from it; Alabama's grid is gone.
+
+**Verified** (local, headless Chrome): `/maps/AL` draws 7 districts, with
+no grid note and no errors.
+
+**Commit:** `046e220`
+
+---
+
 ## 2026-11-04 — Utah on its official 2026 map; Tennessee still a grid
 
 **Requested:** (continuing) "start replacing the grids with official maps"
