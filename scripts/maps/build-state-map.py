@@ -19,6 +19,12 @@ Usage (needs shapely and pyshp; e.g. in python:3.12-slim with pip install shapel
 A state that redrew its districts for 2026 (the Census file has the old lines)
 gets numbered boxes instead until its official map is added (decided
 2026-11-04): python build-state-map.py STATE_CODE --grid N OUT_JSON
+
+Its official map, once found (needs pyproj too; the file can be in any
+projection, read from its .prj):
+  ... STATE_CODE STATE_FIPS COUNTIES_JSON CD_ZIP OUT_JSON \
+      --districts OFFICIAL.zip --field DISTRICT_FIELD --source "Who published it, plan name, date"
+  (CD_ZIP is then unused; the state outline still comes from COUNTIES_JSON.)
 """
 import io, json, math, sys, zipfile
 
@@ -55,14 +61,36 @@ d = json.load(open(counties_path))
 outline = unary_union([shape(f['geometry']).buffer(0) for f in d['features']
                        if f['id'].startswith(fips) and f['id'] not in exclude]).buffer(0.0005).buffer(-0.0005)
 
-z = zipfile.ZipFile(cd_path); base = 'cb_2024_us_cd119_500k'
-r = shapefile.Reader(shp=io.BytesIO(z.read(base + '.shp')), shx=io.BytesIO(z.read(base + '.shx')), dbf=io.BytesIO(z.read(base + '.dbf')))
-names = [f[0] for f in r.fields[1:]]
+def arg(name, default=None):
+    return sys.argv[sys.argv.index(name) + 1] if name in sys.argv else default
+
 dists = {}
-for sr in r.iterShapeRecords():
-    rec = dict(zip(names, sr.record))
-    if rec['STATEFP'] == fips:
-        dists[int(rec['CD119FP']) or 1] = shape(sr.shape.__geo_interface__).buffer(0)   # "00" = at-large
+source = 'US Census Bureau cartographic boundaries (public domain): counties; congressional districts, 119th Congress (2024)'
+if '--districts' in sys.argv:
+    # The state's own 2026 plan: one shape per district, numbered in --field.
+    z = zipfile.ZipFile(arg('--districts'))
+    base = next(n[:-4] for n in z.namelist() if n.lower().endswith('.shp'))
+    r = shapefile.Reader(shp=io.BytesIO(z.read(base + '.shp')), shx=io.BytesIO(z.read(base + '.shx')), dbf=io.BytesIO(z.read(base + '.dbf')))
+    prj = next((n for n in z.namelist() if n.lower().endswith('.prj')), None)
+    wkt = z.read(prj).decode(errors='replace') if prj else ''
+    project = None
+    if 'PROJCS' in wkt:   # metres in some projection: back to longitude / latitude
+        from pyproj import CRS, Transformer
+        t = Transformer.from_crs(CRS.from_wkt(wkt), 'EPSG:4326', always_xy=True)
+        project = lambda g: transform(t.transform, g)
+    field = arg('--field', 'District')
+    for sr in r.iterShapeRecords():
+        g = shape(sr.shape.__geo_interface__)
+        dists[int(sr.record.as_dict()[field])] = (project(g) if project else g).buffer(0)
+    source = 'US Census Bureau counties (public domain), outline; districts: ' + arg('--source', base.split('/')[-1])
+else:
+    z = zipfile.ZipFile(cd_path); base = 'cb_2024_us_cd119_500k'
+    r = shapefile.Reader(shp=io.BytesIO(z.read(base + '.shp')), shx=io.BytesIO(z.read(base + '.shx')), dbf=io.BytesIO(z.read(base + '.dbf')))
+    names = [f[0] for f in r.fields[1:]]
+    for sr in r.iterShapeRecords():
+        rec = dict(zip(names, sr.record))
+        if rec['STATEFP'] == fips:
+            dists[int(rec['CD119FP']) or 1] = shape(sr.shape.__geo_interface__).buffer(0)   # "00" = at-large
 
 # Alaska's Aleutians cross the 180th meridian: move east-of-180 pieces next to
 # the rest (longitude - 360), or the state would span the globe.
@@ -126,10 +154,14 @@ for n, g in dists.items():
 
 json.dump({
     'state': code, 'width': W, 'height': H,
-    'source': 'US Census Bureau cartographic boundaries (public domain): counties; congressional districts, 119th Congress (2024)',
+    'source': source,
     'excludedCounties': sorted(exclude),
     'outline': path(rings(outline), True),
     'borders': ''.join(path(lines(b), False) for b in borders),
     'districts': districts,
 }, open(out, 'w'), separators=(',', ':'))
 print(f'{code}: {len(districts)} districts, {W:.0f}x{H}, small: {[n for n, v in districts.items() if v["small"]]}')
+
+# Official 2026 maps used so far (each replaces its state's grid; sources in docs/DEVLOG.md):
+#   TX  Texas Legislative Council, PLANC2333 (HB 4, 2025), data.capitol.texas.gov/dataset/planc2333
+#       ... TX 48 counties.json cd.zip TX.json --districts planc2333.zip --field District
