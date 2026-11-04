@@ -69,9 +69,10 @@ source = 'US Census Bureau cartographic boundaries (public domain): counties; co
 if '--districts' in sys.argv:
     # The state's own 2026 plan: one shape per district, numbered in --field.
     z = zipfile.ZipFile(arg('--districts'))
-    base = next(n[:-4] for n in z.namelist() if n.lower().endswith('.shp'))
+    files = [n for n in z.namelist() if '__MACOSX' not in n and not n.split('/')[-1].startswith('._')]   # skip macOS metadata copies
+    base = next(n[:-4] for n in files if n.lower().endswith('.shp'))
     r = shapefile.Reader(shp=io.BytesIO(z.read(base + '.shp')), shx=io.BytesIO(z.read(base + '.shx')), dbf=io.BytesIO(z.read(base + '.dbf')))
-    prj = next((n for n in z.namelist() if n.lower().endswith('.prj')), None)
+    prj = next((n for n in files if n.lower().endswith('.prj')), None)
     wkt = z.read(prj).decode(errors='replace') if prj else ''
     project = None
     if 'PROJCS' in wkt:   # metres in some projection: back to longitude / latitude
@@ -165,3 +166,6 @@ print(f'{code}: {len(districts)} districts, {W:.0f}x{H}, small: {[n for n, v in 
 # Official 2026 maps used so far (each replaces its state's grid; sources in docs/DEVLOG.md):
 #   TX  Texas Legislative Council, PLANC2333 (HB 4, 2025), data.capitol.texas.gov/dataset/planc2333
 #       ... TX 48 counties.json cd.zip TX.json --districts planc2333.zip --field District
+#   CA  California Senate Elections & Constitutional Amendments Committee, AB 604 (Chapter 96, Statutes of
+#       2025; adopted by Prop 50 for 2026-2030), selc.senate.ca.gov/node/1171
+#       ... CA 06 counties.json cd.zip CA.json --districts ab604.zip --field DISTRICT
