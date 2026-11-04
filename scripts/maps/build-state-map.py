@@ -228,3 +228,6 @@ print(f'{code}: {len(districts)} districts, {W:.0f}x{H}, small: {[n for n, v in 
 #   UT  Utah Geospatial Resource Center, "Utah US Congress Districts 2026 to 2032" (court-ordered Map 1A, Third
 #       District Court, 2025-11-10), opendata.gis.utah.gov item d3388c1f7d894ab789247f6442855d66
 #       ... UT 49 counties.json cd.zip UT.json --districts ut-2026.zip --field DISTRICT
+#   AL  ALGeoHub "2023 Alabama Congressional Plan" (Act 2023-563, the Legislature's plan; back in effect for 2026
+#       after the Supreme Court's 2026-06-02 stay), alabamaredistrictingplans-algeohub.hub.arcgis.com item cf6612d1...
+#       ... AL 01 counties.json cd.zip AL.json --districts al-2023.zip --field DISTRICT
