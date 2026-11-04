@@ -61,6 +61,41 @@ logged.
 
 ---
 
+## 2026-11-04 — release-1.0 tagged
+
+**Requested:**
+
+> I'll do 1-2 above then you can do 3 and then let's do the rest of the
+> maps, sound good?
+
+then
+
+> I finished part 1 and 2.
+
+(1 = the prod backend deploy, 2 = a phone walkthrough on prod, 3 = the tag)
+
+**Checked first:**
+- Prod is healthy, on Fly release v33, deployed by the user.
+- The map endpoint answers on prod (Washington, 10 districts), so V44 and
+  V45 are in.
+
+**Changed:**
+- **`docs/RELEASES.md`:** the 1.0 notes are final. They're marked tagged
+  2026-11-04 (v33), and now include what landed after the first draft:
+  - private-comment moderation;
+  - the launch-phase results minimum and the Privacy Policy update;
+  - ranked-race comments under their candidate;
+  - the arrow row on every long list;
+  - card outlines in the text colour;
+  - the "Find polls and Vote" card.
+- **`release-1.0`:** an annotated tag on `4e33d06`, pushed. Its code
+  is identical to the deployed `69c6dca`; the diff is docs only. The
+  message is the short summary.
+
+**Commit:** `4e33d06` (tag `release-1.0`)
+
+---
+
 ## 2026-11-04 — Idaho district map (/maps/ID); tall maps fit the screen
 
 **Requested:**
