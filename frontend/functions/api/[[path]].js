@@ -25,6 +25,20 @@ export async function onRequest(context) {
   const url = new URL(request.url)
   // TEMPORARY (2026-11-05, staging only): what PROXY_SECRET looks like here,
   // never its value. To be removed once the per-IP check passes.
+  if (url.pathname === '/api/__proxy-diag' && url.searchParams.get('probe') === '2') {
+    // This request, copied exactly as the proxy copies it, sent to prod's status check.
+    const p2 = new Request('https://pollsystem-backend.fly.dev/api/auth/status', request)
+    p2.headers.delete('X-Client-IP')
+    p2.headers.delete('X-Proxy-Secret')
+    const ip = request.headers.get('CF-Connecting-IP')
+    if (env.PROXY_SECRET && ip) {
+      p2.headers.set('X-Client-IP', ip)
+      p2.headers.set('X-Proxy-Secret', env.PROXY_SECRET)
+    }
+    p2.headers.delete('Origin')
+    const r = await fetch(p2, { redirect: 'manual' })
+    return new Response(null, { status: r.status, headers: { 'X-Probe-Has-Secret-Header': String(p2.headers.has('X-Proxy-Secret')) } })
+  }
   if (url.pathname === '/api/__proxy-diag' && url.searchParams.get('probe') === '1') {
     // 40 signed status checks from here, as one made-up visitor (a documentation address).
     const counts = {}
