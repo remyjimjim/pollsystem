@@ -23,6 +23,19 @@ export async function onRequest(context) {
   }
 
   const url = new URL(request.url)
+  // TEMPORARY (2026-11-05, staging only): what PROXY_SECRET looks like here,
+  // never its value. To be removed once the per-IP check passes.
+  if (url.pathname === '/api/__proxy-diag') {
+    const v = env.PROXY_SECRET ?? ''
+    return Response.json({
+      secretSet: v.length > 0,
+      length: v.length,
+      exactly64Hex: /^[0-9a-f]{64}$/.test(v),
+      trimmedLength: v.trim().length,
+      clientIpSeen: Boolean(request.headers.get('CF-Connecting-IP')),
+      backend: backend,
+    })
+  }
   const target = backend.replace(/\/+$/, '') + url.pathname + url.search
 
   // Preserve method, headers (incl. Authorization: Bearer <jwt>), and body.
