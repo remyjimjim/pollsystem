@@ -25,6 +25,19 @@ export async function onRequest(context) {
   const url = new URL(request.url)
   // TEMPORARY (2026-11-05, staging only): what PROXY_SECRET looks like here,
   // never its value. To be removed once the per-IP check passes.
+  if (url.pathname === '/api/__proxy-diag' && url.searchParams.get('probe') === '1') {
+    // 40 signed status checks from here, as one made-up visitor (a documentation address).
+    const counts = {}
+    for (let i = 0; i < 40; i++) {
+      const r = await fetch(backend.replace(/\/+$/, '') + '/api/auth/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Client-IP': '203.0.113.99', 'X-Proxy-Secret': env.PROXY_SECRET ?? '' },
+        body: JSON.stringify({ email: `proxy-probe-${i}@example.test` }),
+      })
+      counts[r.status] = (counts[r.status] ?? 0) + 1
+    }
+    return Response.json({ probe: counts })
+  }
   if (url.pathname === '/api/__proxy-diag') {
     const v = env.PROXY_SECRET ?? ''
     return Response.json({
