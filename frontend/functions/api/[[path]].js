@@ -62,7 +62,7 @@ export async function onRequest(context) {
       const base = url.searchParams.get('target') === 'prod' ? 'https://pollsystem-backend.fly.dev' : backend.replace(/\/+$/, '')
       const r = await fetch(base + '/api/auth/status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Client-IP': '203.0.113.99', 'X-Proxy-Secret': env.PROXY_SECRET ?? '' },
+        headers: { 'Content-Type': 'application/json', 'X-Client-IP': url.searchParams.get('ip') === 'real' ? (request.headers.get('CF-Connecting-IP') ?? '') : '203.0.113.99', 'X-Proxy-Secret': env.PROXY_SECRET ?? '' },
         body: JSON.stringify({ email: `proxy-probe-${i}@example.test` }),
       })
       counts[r.status] = (counts[r.status] ?? 0) + 1
