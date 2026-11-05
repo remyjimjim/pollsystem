@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-11-05 — Decision: resilient-chat is a separate project
+
+**Requested:**
+
+> Let's called the proposed project 'resilient-chat', should be talk about
+> it as an addition to this project (pollsystem) or should we start a
+> totally different project in a totally different directory?
+
+> yes, create it at ~/Dev/Projects/resilient-chat
+
+**Decision:** the fault-tolerant chat (Matrix federation, end-to-end
+encryption, DDoS edges and onion addresses, a P2P fallback) is **not part
+of pollsystem**. It's its own repo at `~/Dev/Projects/resilient-chat`,
+owned by the same LLC.
+
+- **Why:** different technology, a separate security bar (BallotBox's
+  payment keys and voter data stay apart from it), separate releases, and
+  a clean history for each.
+- **A possible later link:** BallotBox could use it for per-poll discussion
+  through Matrix's client API, with nothing shared in code.
+- **How it was set up:** it was built in this repo's git-ignored `tmp/`,
+  since the Dev Container shares only the pollsystem folder with the host.
+  It holds its own git repo (2 commits), a `CLAUDE.md` with these working
+  conventions, `docs/DESIGN.md` and its own DEVLOG. The user moves it to
+  `~/Dev/Projects/resilient-chat`.
+
+**Commit:** none — decision only
+
+---
+
 ## 2026-11-04 — Louisiana on its 2026 map (Act 2); only Tennessee left as a grid
 
 **Requested:** (continuing) "start replacing the grids with official maps"
