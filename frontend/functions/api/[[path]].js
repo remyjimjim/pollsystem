@@ -29,7 +29,8 @@ export async function onRequest(context) {
     // 40 signed status checks from here, as one made-up visitor (a documentation address).
     const counts = {}
     for (let i = 0; i < 40; i++) {
-      const r = await fetch(backend.replace(/\/+$/, '') + '/api/auth/status', {
+      const base = url.searchParams.get('target') === 'prod' ? 'https://pollsystem-backend.fly.dev' : backend.replace(/\/+$/, '')
+      const r = await fetch(base + '/api/auth/status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Client-IP': '203.0.113.99', 'X-Proxy-Secret': env.PROXY_SECRET ?? '' },
         body: JSON.stringify({ email: `proxy-probe-${i}@example.test` }),
