@@ -32,6 +32,9 @@ export async function onRequest(context) {
       length: v.length,
       exactly64Hex: /^[0-9a-f]{64}$/.test(v),
       trimmedLength: v.trim().length,
+      // The first 8 hex of its SHA-256: tells which value it is, not what it is.
+      fingerprint: [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v)))]
+        .map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 8),
       clientIpSeen: Boolean(request.headers.get('CF-Connecting-IP')),
       backend: backend,
     })
