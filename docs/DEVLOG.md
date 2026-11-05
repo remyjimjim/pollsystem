@@ -61,6 +61,77 @@ logged.
 
 ---
 
+## 2026-11-05 — Repo moved to the LLC's GitHub organization; new Pages project `ballotbox`
+
+**Requested:**
+
+> How would I make World Wide Wakeup, LLC the repo owner for GitHub repo
+> remyjimjim/pollsystem and later on remyjimjim/resilient-chat?
+
+then the steps that followed: the organization `worldwidewakeup` created,
+the repo transferred, Cloudflare checked, and option B (a new Pages project)
+chosen.
+
+**What happened:**
+
+1. **The transfer:** the user created the GitHub organization
+   **`worldwidewakeup`** ("belongs to a business": World Wide Wakeup, LLC)
+   and transferred the repo. The local clone now points at
+   `git@github.com:worldwidewakeup/pollsystem.git`; `main`, `staging` and
+   `release-1.0` were all there.
+2. **The Cloudflare Pages project `pollsystem` lost its build connection:**
+   - it still showed `remyjimjim/pollsystem` and "an internal issue with
+     your Cloudflare Workers & Pages Git installation";
+   - its Manage link 404'd;
+   - a test staging deploy (`badb0f8` pushed to the org repo) didn't build
+     within 15 minutes.
+   GitHub's side was correct throughout: the app was on the organization,
+   with `pollsystem` selected.
+3. **Reinstalling the app:** uninstalling the GitHub app from the
+   organization and reinstalling it from Cloudflare's "Connect GitHub" let
+   Cloudflare see `worldwidewakeup/pollsystem` again.
+4. **A new Pages project, `ballotbox`** (option B; the old one is kept for
+   now).
+   - Build settings: `npm run build`, `dist`, root `frontend`, branch
+     `main`; compatibility date 2026-08-04.
+   - Variables: Production `BACKEND_ORIGIN = https://pollsystem-backend.fly.dev`;
+     Preview the staging backend; `PROXY_SECRET` as a Secret in both. The
+     two `BACKEND_ORIGIN`s were briefly reversed in the settings and
+     swapped back before any further build.
+   - Its first build, of `main` `59fbfef`, worked on `ballotbox.pages.dev`:
+     the home page, a page route and a map file loaded, and
+     `/api/polls/maps/WA/results` worked through its proxy.
+   - That build talks to **prod**: Alaska's ballot id is 74, as on prod
+     and ballotbox.us.com. Staging's is 75.
+5. **The secret:** `PROXY_SECRET` was pasted into the chat, so it's to be
+   rotated after the domains move. Not before, or the old project, still
+   serving the live site, would stop matching and every visitor would share
+   one rate limit.
+
+**Changed** (`1756813`):
+- `STAGING_FRONTEND_URL` is now `https://staging.ballotbox.pages.dev`. It
+  also feeds staging's `APP_BASE_URL` via `test-secrets`, which has to be
+  re-imported.
+- `proxy-secret.bash` now checks `staging.ballotbox.pages.dev` and
+  `ballotbox.pages.dev`.
+- Docs updated: a "Current setup" note in `DEPLOYING-CLOUDFLARE-PAGES.md`,
+  plus the staging address in ENVIRONMENTS, MONITORING, DEPLOYING-FLY and
+  todo.
+- The staging demo email `demo@staging.pollsystem.pages.dev` is kept: it's
+  the demo account's name, not a web address.
+
+**Still to do:**
+1. Deploy staging, which gives the new project its first staging build;
+   check it talks to staging.
+2. Re-import staging's `APP_BASE_URL` (`test-secrets`; the user runs it).
+3. Push `main`, then move `ballotbox.us.com` and `www` to the new project.
+4. Rotate `PROXY_SECRET`.
+5. Delete the old Pages project after a day or two.
+
+**Commit:** `1756813`
+
+---
+
 ## 2026-11-05 — Decision: resilient-chat is a separate project
 
 **Requested:**
