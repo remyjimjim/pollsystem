@@ -61,6 +61,44 @@ logged.
 
 ---
 
+## 2026-11-05 — Live domain moved to the new Pages project
+
+**Requested** (the steps of the move):
+
+> push it
+
+> I ran test-secrets, sign-in works on staging
+
+> I did 1 and 2 but did not wait 5 minutes, the status says 'verifying'
+
+**Verified:**
+
+- **The backends:** the Preview and Production `BACKEND_ORIGIN`s on the
+  new project had been reversed in the dashboard. The user fixed them. Then:
+  - `staging.ballotbox.pages.dev` used staging (Alaska ballot 75);
+  - `ballotbox.pages.dev` used prod (74).
+- **Staging sign-in:** after the user re-imported staging's secrets
+  (`test-secrets`), sign-in on staging worked from the new address.
+- **`main` pushed:** `fef8507` reached `worldwidewakeup/pollsystem`. The new
+  project built it (Texas's official map), and CI passed. The live domain
+  still served the old project's grid until the move.
+- **The domains moved:** the user removed `ballotbox.us.com` and `www` from
+  the old project and added them to `ballotbox`. Both were served by the
+  new project within minutes, with:
+  - the home page, `/maps/WA` and the map data at 200;
+  - the prod backend (Alaska 74);
+  - `/api/auth/status` answering 200 through the proxy, as it does on the
+    backend directly.
+  A first sign-in check had used a wrong path and got a 404; the real one
+  is `/api/auth/magic-link/request`.
+
+**Next:** rotate `PROXY_SECRET`; delete the old `pollsystem` Pages project
+after a day or two.
+
+**Commit:** none — verification only
+
+---
+
 ## 2026-11-05 — Repo moved to the LLC's GitHub organization; new Pages project `ballotbox`
 
 **Requested:**
