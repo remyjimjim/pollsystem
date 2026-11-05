@@ -23,66 +23,6 @@ export async function onRequest(context) {
   }
 
   const url = new URL(request.url)
-  // TEMPORARY (2026-11-05, staging only): what PROXY_SECRET looks like here,
-  // never its value. To be removed once the per-IP check passes.
-  if (url.pathname === '/api/__proxy-diag' && url.searchParams.get('probe') === '3') {
-    // Like probe 2, but drop every incoming header except those named in ?keep=a,b
-    // (or all but those in ?drop=a,b), to find the one that gets in the way.
-    const p3 = new Request('https://pollsystem-backend.fly.dev/api/auth/status', request)
-    const keep = (url.searchParams.get('keep') ?? '').toLowerCase().split(',').filter(Boolean)
-    const drop = (url.searchParams.get('drop') ?? '').toLowerCase().split(',').filter(Boolean)
-    for (const name of [...p3.headers.keys()]) {
-      if ((keep.length && !keep.includes(name)) || drop.includes(name)) p3.headers.delete(name)
-    }
-    const ip = request.headers.get('CF-Connecting-IP')
-    p3.headers.set('Content-Type', 'application/json')
-    p3.headers.set('X-Client-IP', ip ?? '')
-    p3.headers.set('X-Proxy-Secret', env.PROXY_SECRET ?? '')
-    const r = await fetch(p3, { redirect: 'manual' })
-    return new Response(null, { status: r.status, headers: { 'X-Probe-Sent': [...p3.headers.keys()].join(',') } })
-  }
-  if (url.pathname === '/api/__proxy-diag' && url.searchParams.get('probe') === '2') {
-    // This request, copied exactly as the proxy copies it, sent to prod's status check.
-    const p2 = new Request('https://pollsystem-backend.fly.dev/api/auth/status', request)
-    p2.headers.delete('X-Client-IP')
-    p2.headers.delete('X-Proxy-Secret')
-    const ip = request.headers.get('CF-Connecting-IP')
-    if (env.PROXY_SECRET && ip) {
-      p2.headers.set('X-Client-IP', ip)
-      p2.headers.set('X-Proxy-Secret', env.PROXY_SECRET)
-    }
-    p2.headers.delete('Origin')
-    const r = await fetch(p2, { redirect: 'manual' })
-    return new Response(null, { status: r.status, headers: { 'X-Probe-Has-Secret-Header': String(p2.headers.has('X-Proxy-Secret')) } })
-  }
-  if (url.pathname === '/api/__proxy-diag' && url.searchParams.get('probe') === '1') {
-    // 40 signed status checks from here, as one made-up visitor (a documentation address).
-    const counts = {}
-    for (let i = 0; i < 40; i++) {
-      const base = url.searchParams.get('target') === 'prod' ? 'https://pollsystem-backend.fly.dev' : backend.replace(/\/+$/, '')
-      const r = await fetch(base + '/api/auth/status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Client-IP': url.searchParams.get('ip') === 'real' ? (request.headers.get('CF-Connecting-IP') ?? '') : '203.0.113.99', 'X-Proxy-Secret': env.PROXY_SECRET ?? '' },
-        body: JSON.stringify({ email: `proxy-probe-${i}@example.test` }),
-      })
-      counts[r.status] = (counts[r.status] ?? 0) + 1
-    }
-    return Response.json({ probe: counts })
-  }
-  if (url.pathname === '/api/__proxy-diag') {
-    const v = env.PROXY_SECRET ?? ''
-    return Response.json({
-      secretSet: v.length > 0,
-      length: v.length,
-      exactly64Hex: /^[0-9a-f]{64}$/.test(v),
-      trimmedLength: v.trim().length,
-      // The first 8 hex of its SHA-256: tells which value it is, not what it is.
-      fingerprint: [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v)))]
-        .map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 8),
-      clientIpSeen: Boolean(request.headers.get('CF-Connecting-IP')),
-      backend: backend,
-    })
-  }
   const target = backend.replace(/\/+$/, '') + url.pathname + url.search
 
   // Preserve method, headers (incl. Authorization: Bearer <jwt>), and body.
