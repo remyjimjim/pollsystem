@@ -61,6 +61,66 @@ logged.
 
 ---
 
+## 2026-11-05 — PROXY_SECRET rotated; per-IP check unreliable with two machines
+
+**Requested:**
+
+> yes, do step 1 of the rotation
+
+> done with steps 2,3 and 4, run the checks...
+
+then several rounds of re-saving and redeploying the Cloudflare value.
+
+**Rotation (done):**
+- **The new secret:** `proxy-secret.bash generate` made a new
+  `PROXY_SECRET` in `.devcontainer/proxy.secrets.env` (64 hex, mode 600,
+  never printed). The old value was kept aside, git-ignored, until checked,
+  then deleted.
+- **Where it went:** the user put it in the new Pages project, `ballotbox`
+  (Production and Preview), redeployed, and ran `proxy-secret.bash set
+  prod|staging`.
+
+**Verified, the secret is right everywhere:**
+- **Both Fly backends** accept it when called directly with a signed
+  made-up IP:
+  - prod refused after 29 of 40;
+  - staging (2 machines) refused 37 of 80.
+- **Cloudflare (staging):** a temporary `/api/__proxy-diag` on the proxy
+  reported the secret's fingerprint: 64 hex characters, SHA-256 starting
+  `ac902b16`. That's the new file's fingerprint; the old one's was
+  `258aecdd`.
+- **From inside Cloudflare:** 40 signed requests to prod were refused after
+  exactly 30, while one machine was serving.
+
+**Not reliable, the end-to-end check** (`proxy-secret.bash check`): it kept
+reporting "nothing refused", even after the secret was confirmed. The
+reason:
+- Each Fly app has **two machines**, and Fly starts the second one under
+  load, which these tests created.
+- The rate limiter counts **in memory, per machine**, so a burst split
+  across two machines never reaches 30 on either.
+- The same probe gave "refused after 30" and then "nothing refused" ten
+  minutes apart, with no change in between. Prod showed one machine started
+  and one stopped afterwards.
+- On Oct 20 it passed, with one machine.
+
+**Consequence:** the per-IP limits still work, but each machine counts
+separately, so their real strength depends on how many machines are up.
+The per-email limits are unaffected.
+
+**Follow-up suggested:** keep the counts in Postgres (or a shared store), so
+the limits hold across machines and the check becomes reliable.
+
+**Cleanup:** the diagnostic probes were removed (`0b8e687`); the proxy
+is byte-for-byte as at `fef8507`, and pushed to staging. Main still has the
+probe commits and their removal, with no net change; they ship with the
+next "push it".
+
+**Commit:** `0b8e687` (removal); probes were `c4fcd89`…the five
+commits before it.
+
+---
+
 ## 2026-11-05 — Live domain moved to the new Pages project
 
 **Requested** (the steps of the move):
