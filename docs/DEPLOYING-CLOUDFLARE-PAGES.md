@@ -1,5 +1,27 @@
 # Deploying the frontend to Cloudflare Pages
 
+> **Current setup (2026-11-05):** the Pages project is **`ballotbox`**,
+> connected to the GitHub repo **`worldwidewakeup/pollsystem`** (the
+> organization owned by World Wide Wakeup, LLC).
+>
+> | | |
+> |---|---|
+> | Production | branch `main`, `https://ballotbox.pages.dev`, custom domains `ballotbox.us.com` and `www` |
+> | Preview / staging | branch `staging`, `https://staging.ballotbox.pages.dev` |
+> | Build | `npm run build`, output `dist`, root directory `frontend` |
+> | Compatibility date | 2026-08-04 |
+>
+> **Variables** (per environment):
+> - Production: `BACKEND_ORIGIN = https://pollsystem-backend.fly.dev`;
+> - Preview: `BACKEND_ORIGIN = https://pollsystem-backend-staging.fly.dev`;
+> - both: `PROXY_SECRET` as a Secret.
+>
+> The original project, `pollsystem`, was linked to `remyjimjim/pollsystem`.
+> When the repo moved to the organization, Cloudflare's Git link didn't
+> follow, so a new project replaced it (`docs/DEVLOG.md`, 2026-11-05).
+> Older examples below (surveysays.buzz, pollsystem.pages.dev) are from
+> before that.
+
 The Vue SPA is served as a static build from **Cloudflare Pages** (free, global
 CDN). API calls stay same-origin: a Pages **Function** proxies `/api/*` to the
 Fly backend, so there's no CORS and no build-time API URL to manage.

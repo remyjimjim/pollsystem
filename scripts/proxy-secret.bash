@@ -44,8 +44,8 @@ fail() { echo "${R}✗${N} $*" >&2; exit 1; }
 
 env_for() {
   case "${1:-}" in
-    staging) FLY_APP=pollsystem-backend-staging; SITE=https://staging.pollsystem.pages.dev ;;
-    prod)    FLY_APP=pollsystem-backend;         SITE=https://pollsystem.pages.dev ;;
+    staging) FLY_APP=pollsystem-backend-staging; SITE=https://staging.ballotbox.pages.dev ;;
+    prod)    FLY_APP=pollsystem-backend;         SITE=https://ballotbox.pages.dev ;;
     *) fail "say which environment: staging or prod" ;;
   esac
   BACKEND="https://$FLY_APP.fly.dev"

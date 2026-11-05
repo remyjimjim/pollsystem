@@ -35,7 +35,7 @@ Monitors 2 and 3 wake the prod backend every 5 minutes, so it never sleeps.
 From launch (Oct 26, 2026) that's moot: `min_machines_running = 1` keeps a
 machine up anyway.
 
-Optionally, the same three for staging (`staging.pollsystem.pages.dev`,
+Optionally, the same three for staging (`staging.ballotbox.pages.dev`,
 `pollsystem-backend-staging.fly.dev`), so a broken staging is noticed before a
 prod deploy.
 

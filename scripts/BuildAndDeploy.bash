@@ -14,7 +14,7 @@
 #   deploys to the staging environment:
 #     - Backend  → Fly app `pollsystem-backend-staging` (Docker build, Neon branch DB)
 #     - Frontend → pushes the `staging` git branch; Cloudflare Pages auto-builds it
-#       and serves https://staging.pollsystem.pages.dev
+#       and serves https://staging.ballotbox.pages.dev
 #   Secrets are set once via `test-secrets` (imported from the OS keychain).
 #
 # Usage:
@@ -48,7 +48,7 @@ STAGING_FLY_CONFIG="fly.staging.toml"          # relative to backend/
 STAGING_BRANCH="staging"
 STAGING_KEYCHAIN_SERVICE="pollsystem-fly-staging"
 STAGING_BACKEND_URL="https://pollsystem-backend-staging.fly.dev"
-STAGING_FRONTEND_URL="https://staging.pollsystem.pages.dev"
+STAGING_FRONTEND_URL="https://staging.ballotbox.pages.dev"
 # Secrets pulled from the OS keychain (service=$STAGING_KEYCHAIN_SERVICE) and
 # imported into Fly by `test-secrets`. Non-secret env (MAIL_FROM, APP_BASE_URL)
 # is appended inline there.

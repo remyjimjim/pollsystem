@@ -55,7 +55,7 @@ environment. The exact steps are `docs/STRIPE-TEST-RUNBOOK.md` (Part B).
 > `scripts/BuildAndDeploy.bash test` deploys the backend (Fly app
 > `pollsystem-backend-staging`, config `backend/fly.staging.toml`, Neon `staging`
 > branch) and pushes the `staging` git branch, which Cloudflare Pages serves at
-> `https://staging.pollsystem.pages.dev`. Setup, secrets, and the first-deploy
+> `https://staging.ballotbox.pages.dev`. Setup, secrets, and the first-deploy
 > IP-allocation gotcha are documented in `docs/DEPLOYING-FLY.md` → "The
 > implemented staging deploy". It uses the free `*.pages.dev` subdomain, not
 > `staging.surveysays.buzz` (that custom subdomain remains optional).

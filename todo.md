@@ -17,7 +17,7 @@
   - Notes: `./scripts/BuildAndDeploy.bash test` deploys to staging — backend to
     Fly app `pollsystem-backend-staging` (`backend/fly.staging.toml`, Neon
     `staging` branch), frontend by pushing the `staging` git branch (Cloudflare
-    Pages serves `https://staging.pollsystem.pages.dev`; a Preview-scoped
+    Pages serves `https://staging.ballotbox.pages.dev`; a Preview-scoped
     `BACKEND_ORIGIN` points its `/api` proxy at the staging backend).
     `test-secrets` imports staging secrets from the OS keychain
     (`service=pollsystem-fly-staging`) into Fly. Details + the first-deploy

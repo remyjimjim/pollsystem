@@ -126,14 +126,14 @@ flyctl secrets set \
   JWT_SECRET="$(openssl rand -hex 32)" \
   RESEND_API_KEY="$RESEND_API_KEY" \
   MAIL_FROM="login@contact.surveysays.buzz" \
-  APP_BASE_URL="https://pollsystem.pages.dev"
+  APP_BASE_URL="https://ballotbox.pages.dev"
 ```
 
 - **`SPRING_DATASOURCE_URL` must be a JDBC URL** — `jdbc:postgresql://<host>/<db>?sslmode=require`,
   not the raw `postgresql://…` Neon gives you. Use the **direct** host (no `-pooler`) and
   drop the inline `user:pass@` (they go in the USERNAME/PASSWORD secrets).
 - **`APP_BASE_URL`** is where magic-link emails point — set it to the live frontend
-  (`https://pollsystem.pages.dev` now; the custom domain once attached).
+  (`https://ballotbox.pages.dev` now; the custom domain once attached).
 - **No Stripe secret.** The integration is webhook-only (no Stripe SDK, no API key read).
   Only when you enable paid onboarding do you set `STRIPE_WEBHOOK_SECRET` — see Part 3.
 
@@ -341,7 +341,7 @@ An always-on staging environment is wired up and driven by
   `min_machines_running = 0` so it sleeps when idle), against a **Neon `staging`
   branch** DB.
 - **Frontend** → the **`staging`** git branch; Cloudflare Pages auto-builds it and
-  serves **`https://staging.pollsystem.pages.dev`**. A **Preview**-scoped
+  serves **`https://staging.ballotbox.pages.dev`**. A **Preview**-scoped
   `BACKEND_ORIGIN = https://pollsystem-backend-staging.fly.dev` in the Pages
   project points the staging SPA's `/api` proxy at the staging backend.
 
