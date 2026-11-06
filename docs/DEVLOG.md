@@ -61,6 +61,49 @@ logged.
 
 ---
 
+## 2026-11-06 — "Remove close dates" in bulk (20+ s → under a second)
+
+**Requested:**
+
+> done, all 624 reopened on staging, it took kinda a long time, over 20
+> seconds...
+
+then
+
+> yes, go ahead and speed it up
+
+**Cause:**
+
+- The removal handled one poll at a time: read it, save it, write its
+  History row, and for each election look up its measures.
+- That's about 2,400 round trips from Fly to Neon for 624 polls.
+
+**Changed:**
+
+- The listed polls, and the listed elections' measures (a new
+  `findByElectionIdIn`), are read in a few queries.
+- The dates are cleared with one `UPDATE … WHERE id IN (…)` per poll
+  type.
+- The History rows are written as one JDBC batch.
+- The rules and the History text are unchanged.
+- The confirm button reads **Removing…** while it works (9 languages).
+
+**Verified:**
+
+- Backend: AdminPollsControllerTest 18 pass, including reopen vs edit,
+  measures following, re-running clearing 0, and super-only.
+  PollHistoryTest 7 pass.
+- Frontend: vue-tsc clean; admin tests 30 pass.
+- Locally, all 624 closed midterm polls: **0.21 s**, 624 Reopened entries,
+  none left closed.
+- Local had been reopened by the user beforehand, so the Nov 4 dates were
+  put back for the run. Afterwards local was returned to its earlier state,
+  with the test's History removed.
+
+**Commit:** `ffe7f95`
+
+---
+
 ## 2026-11-06 — Manage Polls: Edit with no change records nothing
 
 **Requested:**
