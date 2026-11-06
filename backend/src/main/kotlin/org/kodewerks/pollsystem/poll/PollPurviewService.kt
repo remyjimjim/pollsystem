@@ -194,6 +194,21 @@ class PollPurviewService(
         ScopeLevel.ZIP -> rows.mapNotNull { it.zipcode }.distinct().sorted()
     }
 
+    /**
+     * [regionLabel] with the names supplied by the caller, for lists that load
+     * them in bulk (Manage Polls, 2026-11-06). Same text as [regionLabel].
+     */
+    fun regionLabel(rows: List<PollPurview>, stateName: (Long) -> String?, countyLabel: (Long) -> String?): String =
+        when (scopeLevelOf(rows)) {
+            ScopeLevel.NATIONAL -> "Nationwide"
+            ScopeLevel.STATE -> rows.mapNotNull { it.stateId }.mapNotNull(stateName).distinct().sorted().joinToString(", ")
+            ScopeLevel.COUNTY -> rows.mapNotNull { it.countyId }.mapNotNull(countyLabel).distinct().sorted().joinToString(", ")
+            ScopeLevel.ZIP -> {
+                val zips = rows.mapNotNull { it.zipcode }.distinct().sorted()
+                if (zips.size <= 8) zips.joinToString(", ") else "${zips.size} zipcodes"
+            }
+        }
+
     /** Human-readable purview, e.g. "Nationwide", "California", "Los Angeles (CA)", or a zip list. */
     @Transactional(readOnly = true)
     fun regionLabel(rows: List<PollPurview>): String = when (scopeLevelOf(rows)) {

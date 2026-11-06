@@ -134,7 +134,9 @@ class AdminPollsController(
     private val badWords: org.kodewerks.pollsystem.moderation.BadWords,
     private val emailService: org.kodewerks.pollsystem.email.EmailService,
     private val regions: org.kodewerks.pollsystem.geography.RegionService,
-    private val history: org.kodewerks.pollsystem.poll.PollHistoryService
+    private val history: org.kodewerks.pollsystem.poll.PollHistoryService,
+    private val pollPurviews: org.kodewerks.pollsystem.repository.PollPurviewRepository,
+    private val em: jakarta.persistence.EntityManager
 ) {
 
     @GetMapping("/purview")
@@ -197,83 +199,100 @@ class AdminPollsController(
 
         val needle = title?.trim()?.takeIf { it.isNotEmpty() }
         val rows = mutableListOf<AdminPollRow>()
-        val zipMetaFor = { zips: Collection<String> ->
-            if (zips.isEmpty()) emptyMap()
-            else countyZips.findByZipcodeIn(zips.toList()).associateBy { it.zipcode }
+
+        // Everything the rows need, loaded in a few bulk queries (2026-11-06).
+        // It used to be several queries per poll (area, blocks, area names, and
+        // one per zipcode for the state filter): ~2,000 per list, 5-10 s on
+        // staging where every query crosses from Fly to Neon.
+        val purviewsByPoll = pollPurviews.findAll().groupBy { it.pollType to it.pollId }
+        fun purviewRowsOf(kind: PollKind, id: Long) = purviewsByPoll[kind to id].orEmpty()
+        val electionPool = if (PollKind.ELECTION in parsedKinds || PollKind.BALLOT_MEASURE in parsedKinds) elections.findAll() else emptyList()
+        val electionsById = electionPool.associateBy { it.id }
+        val measurePool = if (PollKind.BALLOT_MEASURE in parsedKinds) ballotMeasures.findAll() else emptyList()
+        val neededZips = buildSet {
+            purviewsByPoll.values.forEach { r -> r.forEach { it.zipcode?.let(::add) } }
+            electionPool.forEach { it.zipcode?.let(::add) }
+            explicitZipFilter?.let(::addAll)
+        }
+        val geo = loadGeo(neededZips)
+        val explicitArea = explicitZipFilter?.let { zs ->
+            val known = zs.mapNotNull { geo.zipCounty[it] }
+            ExplicitArea(zs, known.toSet(), known.mapNotNull { geo.countyState[it] }.toSet())
+        }
+        val label = { r: List<PollPurview> -> purviews.regionLabel(r, { geo.stateName[it] }, { geo.countyLabel[it] }) }
+        val zipState = { z: String? -> z?.let { geo.zipCounty[it] }?.let { geo.countyState[it] }?.let { geo.stateInitial[it] } }
+        val zipCountyName = { z: String? -> z?.let { geo.zipCounty[it] }?.let { geo.countyName[it] } }
+        val matches = { r: List<PollPurview> ->
+            (purview == null || overlapsPurview(r, purview, geo)) && (explicitArea == null || explicitArea.covers(r))
         }
 
         if (PollKind.QUESTIONNAIRE in parsedKinds) {
-            val qPool = questionnaires.findAll()
-            for (q in qPool) {
+            for (q in questionnaires.findAll()) {
                 if (needle != null && !q.title.contains(needle, ignoreCase = true)) continue
-                val pollRows = purviews.purviewOf(PollKind.QUESTIONNAIRE, q.id)
-                if (!matchesAdminGeo(pollRows, purview, explicitZipFilter)) continue
+                val pollRows = purviewRowsOf(PollKind.QUESTIONNAIRE, q.id)
+                if (!matches(pollRows)) continue
                 val qZips = purviews.zipcodesOf(pollRows)
-                val meta = zipMetaFor(qZips)
                 rows += AdminPollRow(
-                    id = q.id,
-                    type = PollKind.QUESTIONNAIRE.name,
-                    title = q.title,
-                    status = q.status,
-                    creatorEmail = q.creator.email,
-                    closeDate = q.closeDate,
+                    id = q.id, type = PollKind.QUESTIONNAIRE.name, title = q.title, status = q.status,
+                    creatorEmail = q.creator.email, closeDate = q.closeDate,
                     zipcodes = qZips,
-                    stateInitial = qZips.firstOrNull()?.let { meta[it]?.county?.state?.initial },
-                    countyName = qZips.firstOrNull()?.let { meta[it]?.county?.name },
-                    regionLabel = purviews.regionLabel(pollRows),
-                    blocked = false,
-                    latestNote = null,
+                    stateInitial = zipState(qZips.firstOrNull()),
+                    countyName = zipCountyName(qZips.firstOrNull()),
+                    regionLabel = label(pollRows),
+                    blocked = false, latestNote = null,
                     nationwide = isNationwide(pollRows),
                     summary = q.summary
                 )
             }
         }
         if (PollKind.ELECTION in parsedKinds) {
-            val pool = elections.findAll()
-            for (e in pool) {
+            for (e in electionPool) {
                 if (needle != null && !e.title.contains(needle, ignoreCase = true)) continue
-                val pollRows = purviews.purviewOf(PollKind.ELECTION, e.id)
-                if (!matchesAdminGeo(pollRows, purview, explicitZipFilter)) continue
-                val cz = e.zipcode?.let { countyZips.findByZipcode(it).firstOrNull() }
+                val pollRows = purviewRowsOf(PollKind.ELECTION, e.id)
+                if (!matches(pollRows)) continue
                 rows += AdminPollRow(
                     id = e.id, type = PollKind.ELECTION.name, title = e.title, status = e.status,
                     creatorEmail = e.creator.email, closeDate = e.closeDate,
                     zipcodes = listOfNotNull(e.zipcode),
-                    stateInitial = cz?.county?.state?.initial,
-                    countyName = cz?.county?.name,
-                    regionLabel = purviews.regionLabel(pollRows),
+                    stateInitial = zipState(e.zipcode),
+                    countyName = zipCountyName(e.zipcode),
+                    regionLabel = label(pollRows),
                     blocked = false, latestNote = null,
                     nationwide = isNationwide(pollRows)
                 )
             }
         }
         if (PollKind.BALLOT_MEASURE in parsedKinds) {
-            val pool = ballotMeasures.findAll()
-            for (bm in pool) {
+            for (bm in measurePool) {
                 if (needle != null && !bm.title.contains(needle, ignoreCase = true)) continue
-                val pollRows = purviews.purviewOf(PollKind.BALLOT_MEASURE, bm.id)
-                if (!matchesAdminGeo(pollRows, purview, explicitZipFilter)) continue
-                val zip = bm.election.zipcode
-                val cz = zip?.let { countyZips.findByZipcode(it).firstOrNull() }
+                // A measure's area is its election's (as in PollPurviewService.purviewOf).
+                val electionId = bm.election.id
+                val pollRows = purviewRowsOf(PollKind.ELECTION, electionId)
+                if (!matches(pollRows)) continue
+                val zip = electionsById[electionId]?.zipcode
                 rows += AdminPollRow(
                     id = bm.id, type = PollKind.BALLOT_MEASURE.name, title = bm.title, status = bm.status,
                     creatorEmail = bm.creator.email, closeDate = bm.closeDate, summary = bm.summary,
                     zipcodes = listOfNotNull(zip),
-                    stateInitial = cz?.county?.state?.initial,
-                    countyName = cz?.county?.name,
-                    regionLabel = purviews.regionLabel(pollRows),
+                    stateInitial = zipState(zip),
+                    countyName = zipCountyName(zip),
+                    regionLabel = label(pollRows),
                     blocked = false, latestNote = null,
                     nationwide = isNationwide(pollRows)
                 )
             }
         }
 
-        // Compute blocked + latestNote in one pass per kind. "Blocked" means a
-        // block touches the caller's own purview (blocks are area-aware).
+        // "Blocked" means a block touches the caller's own purview (blocks are
+        // area-aware). All blocks in one query; there are few of them.
         val mine = regions.adminRegions(principal.user)
+        val blocksByPoll = blocks.findAll().groupBy { it.pollType to it.pollId }
         val withBlocks = rows.map { r ->
             val kind = PollKind.valueOf(r.type)
-            r.copy(blocked = isBlockedFor(kind, r.id, mine))
+            r.copy(blocked = blocksByPoll[kind to r.id].orEmpty().any { b ->
+                val area = regions.ofBlock(b) ?: return@any false
+                mine.any { it.overlaps(area) }
+            })
         }
         val byKind = withBlocks.groupBy { PollKind.valueOf(it.type) }
         val latestByKey = mutableMapOf<Pair<PollKind, Long>, PollNote>()
@@ -651,6 +670,73 @@ class AdminPollsController(
     /** Convenience: load [kind]/[pollId]'s purview rows, then [matchesAdminGeo]. */
     private fun matchesAdminGeo(kind: PollKind, pollId: Long, purview: Purview?, explicit: Set<String>?): Boolean =
         matchesAdminGeo(purviews.purviewOf(kind, pollId), purview, explicit)
+
+    /** Place names and relations the list needs, loaded in bulk (see [list]). */
+    private class Geo(
+        val stateName: Map<Long, String>,
+        val stateInitial: Map<Long, String>,
+        val countyState: Map<Long, Long>,
+        val countyName: Map<Long, String>,
+        val countyLabel: Map<Long, String>,
+        val zipCounty: Map<String, Long>
+    )
+
+    private fun loadGeo(zips: Set<String>): Geo {
+        val st = states.findAll()
+        val initial = st.associate { it.id to it.initial }
+        val cRows = em.createQuery("select c.id, c.name, c.state.id from County c", Array<Any>::class.java).resultList
+        val countyState = cRows.associate { (it[0] as Long) to (it[2] as Long) }
+        val countyName = cRows.associate { (it[0] as Long) to (it[1] as String) }
+        val zipCounty = HashMap<String, Long>()
+        zips.chunked(5000).forEach { chunk ->
+            em.createQuery("select cz.zipcode, cz.county.id from CountyZips cz where cz.zipcode in :z", Array<Any>::class.java)
+                .setParameter("z", chunk).resultList
+                .forEach { zipCounty.putIfAbsent(it[0] as String, it[1] as Long) }
+        }
+        return Geo(
+            stateName = st.associate { it.id to it.name },
+            stateInitial = initial,
+            countyState = countyState,
+            countyName = countyName,
+            countyLabel = countyName.mapValues { (id, name) -> "$name (${initial[countyState[id]] ?: ""})" },
+            zipCounty = zipCounty
+        )
+    }
+
+    /**
+     * The State / County / Zipcode filter as an area: its zipcodes and the
+     * counties and states they lie in. A poll matches when its purview includes
+     * any of those zipcodes, as [PollPurviewService.includesZip] would decide
+     * zip by zip, without a query per zip.
+     */
+    private class ExplicitArea(val zips: Set<String>, val countyIds: Set<Long>, val stateIds: Set<Long>) {
+        fun covers(rows: List<PollPurview>): Boolean {
+            if (zips.isEmpty()) return false
+            if (rows.isEmpty()) return true
+            return rows.any {
+                when (it.scopeLevel) {
+                    ScopeLevel.NATIONAL -> true
+                    ScopeLevel.ZIP -> it.zipcode in zips
+                    ScopeLevel.COUNTY -> it.countyId in countyIds
+                    ScopeLevel.STATE -> it.stateId in stateIds
+                }
+            }
+        }
+    }
+
+    /** [overlapsPurview] using preloaded geography (no queries). */
+    private fun overlapsPurview(pollRows: List<PollPurview>, admin: Purview, geo: Geo): Boolean {
+        if (pollRows.isEmpty()) return true
+        return pollRows.any { r ->
+            when (r.scopeLevel) {
+                ScopeLevel.NATIONAL -> true
+                ScopeLevel.STATE -> r.stateId in admin.stateIds
+                ScopeLevel.COUNTY -> r.countyId in admin.countyIds || geo.countyState[r.countyId] in admin.stateIds
+                ScopeLevel.ZIP -> r.zipcode in admin.zipcodes ||
+                    geo.zipCounty[r.zipcode]?.let { c -> c in admin.countyIds || geo.countyState[c] in admin.stateIds } == true
+            }
+        }
+    }
 
     /** Does a poll's purview overlap the admin's reach? No purview rows = nationwide = visible to all. */
     private fun overlapsPurview(pollRows: List<PollPurview>, admin: Purview): Boolean {
