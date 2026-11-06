@@ -61,6 +61,84 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: "Remove close dates" (super only); optional edit reason
+
+**Requested:**
+
+> RE: 1. Yes. It should re-open as in delete the close date for the search
+> results which apply to the filter, so if the filter says State = Alabama
+> and Title contains 'midterm' and the only 'Status' checkbox checked is
+> 'Closed' then the only polls that would result from that search would be
+> polls from closed polls from alabama and if the 'Remove close dates'
+> button is pushed then all 'midterm' Alabama polls would be have the close
+> date set to null or whatnot. Also, the 'History' page should add a line
+> for the 'What happened = Re-opened' event of the poll. Also, the 'Edit'
+> modal should show no close date, remove 'Closed' from the Status dropdown
+> and remove the requirement of having to enter anything in the 'Reason'
+> textarea.
+
+**Changed:**
+
+- **Backend:** `POST /api/admin/polls/remove-close-dates`, SUPER only.
+  - The page sends exactly the listed polls, so the filters decide.
+  - A poll that had closed (passed date or CLOSED status) becomes
+    PUBLISHED with no close date. Its History gets **Reopened**, with
+    "Close date removed (was 2026-11-04 01:00 UTC)".
+  - A poll not yet closed gets an **Edited** entry with the same text.
+  - An election's ballot measures follow it ("…, with its election"), as
+    an edited close date already did (decided 2026-10-28).
+  - Drafts and archived polls are skipped.
+  - So the History keeps every poll's past close dates.
+- **`closedIfNew`:** a Reopened entry starts a new live stretch, so if a
+  later close date passes, the closing is recorded again.
+- **Manage Polls:**
+  - Supers see **Remove close dates (N)** above the table. It's disabled
+    while a search is loading.
+  - Its confirmation says how many polls will reopen and asks for N to be
+    typed.
+  - The rows update at once, before the reload.
+- **Out-of-order searches (a bug found while testing):** an older, slower
+  list request could answer last and replace newer rows. The list then
+  disagreed with the filters, and after a removal the old dates came back
+  on screen; an Edit save then wrote one back. Now only the newest
+  request's answer is used.
+- **Edit modal:**
+  - No "Closed" status: polls close by their date.
+  - The Reason is optional, in the backend too. The note and History leave
+    an empty reason out.
+- Labels in 9 languages.
+
+**Decided without asking:**
+
+- **No "Restore close dates" button.** The old dates are in each poll's
+  History.
+- **Measures follow their election,** as with an edited close date.
+
+**Verified:**
+
+- Backend: AdminPollsControllerTest 17 tests, PollHistoryTest 7, all
+  passing. They include super-only, reopen vs edit, measures following,
+  and re-running clearing nothing.
+- Frontend: vue-tsc clean, all 207 + new tests passing. New tests: hidden
+  from an admin; typed-count confirm sends only the listed polls; the
+  older answer is ignored.
+- Headless Chrome on local, as demo-super, with your example (Alabama,
+  "midterm", Status = Closed only):
+  - 12 listed (8 elections, 4 measures), "Remove close dates (12)";
+  - "Removed 12 close dates; 12 polls reopened for voting.";
+  - the Closed-only list emptied at once;
+  - 12 Reopened entries in History;
+  - Edit showed no close date and offered Published / Archived;
+  - Edit saved with an empty reason.
+- The trace showed a stale request arriving after the removal and being
+  ignored.
+- Local data was saved first and restored after each run: close dates,
+  statuses, and the test's History entries and notes.
+
+**Commit:** `6cd837f`
+
+---
+
 ## 2026-11-06 — Manage Polls: Poll type and Status dropdowns
 
 **Requested:**
