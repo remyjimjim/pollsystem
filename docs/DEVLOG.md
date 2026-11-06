@@ -61,6 +61,62 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: "Set close date" (super only)
+
+**Requested:**
+
+> Alright, now what if we create another button for super where after you
+> did a search on admin/manage-polls you could hit this button labeled 'Set
+> Close Date' where every poll listed in the list get's set to a close date,
+> even if they already have a close date, and add an entery to history?
+
+**Changed:**
+
+- **Backend:** `POST /api/admin/polls/set-close-date`, SUPER only.
+  - Every listed poll gets the same date, replacing any it had.
+  - Each poll whose date changes gets a History entry, "Close date: 2026-11-04
+    01:00 UTC → 2026-12-02 04:00 UTC". It's **Reopened** when the poll had
+    closed and the new date is ahead (a CLOSED status becomes PUBLISHED),
+    otherwise **Edited**.
+- **Choices I made:**
+  - A date that has already passed closes open polls at once; the usual
+    closing job then records "Closed".
+  - An election's ballot measures follow it, as with every close-date
+    change.
+  - Drafts get the date and stay drafts.
+  - Archived polls are left alone.
+  - A poll that already has exactly this date is unchanged and gets no
+    entry, matching the "no change, no History" rule.
+- **Shared code:** it uses the same bulk routine as "Remove close dates"
+  (a few reads, one UPDATE per poll type and outcome, History as one
+  batch), now shared by both.
+- **Page:**
+  - **Set close date (N)** sits next to Remove.
+  - Its dialog has the new date in the super's own time zone, says how many
+    polls will reopen, or warns how many will close now if the date has
+    passed, and asks for N to be typed.
+  - The listed rows show the new date at once.
+  - 9 languages.
+
+**Verified:**
+
+- Backend: AdminPollsControllerTest 19 pass. The new test covers
+  super-only, reopen vs edit, "none →" for a poll without a date, measures
+  following, an identical date unchanged, and a passed date counted as
+  closing.
+- Frontend: vue-tsc clean; admin tests 32 pass, 2 of them new.
+- Headless Chrome on local (Pacific time), Alabama + "midterm":
+  - 12 listed; Dec 1, 8:00 PM set on all 12 in 153 ms;
+  - "Set 12 close dates; 1 polls reopened, 0 closed.";
+  - District 2's History: "Reopened · Close date: 2026-11-04 01:00 UTC →
+    2026-12-02 04:00 UTC";
+  - 11 Edited entries for the polls that had no date.
+- Local was restored afterwards: dates, statuses, and the test's History.
+
+**Commit:** `44a8fcd`
+
+---
+
 ## 2026-11-06 — "Remove close dates" in bulk (20+ s → under a second)
 
 **Requested:**
