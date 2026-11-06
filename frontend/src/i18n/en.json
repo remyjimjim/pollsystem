@@ -820,7 +820,12 @@
       "clearCreator": "Clear creator filter",
       "colPurview": "Purview",
       "editSummary": "Summary",
-      "errorSummary": "A summary is required."
+      "errorSummary": "A summary is required.",
+      "statusFilter": "Status",
+      "statusDraft": "Draft",
+      "statusNationwide": "Nationwide",
+      "statusGroupStage": "Show polls that are:",
+      "statusGroupAlso": "Also show:"
     }
   },
   "super": {
@@ -1245,5 +1250,10 @@
     "fullResults": "Full results for this district",
     "link": "{state} district map",
     "gridNote": "{state} redrew its congressional districts for 2026, so numbered boxes stand in for the map until the new official map is added."
+  },
+  "multiSelect": {
+    "all": "All",
+    "none": "None",
+    "count": "{n} selected"
   }
 }

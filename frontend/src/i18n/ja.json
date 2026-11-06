@@ -685,7 +685,12 @@
       "body": "投票をモデレート",
       "creatorFilter": "作成者: {email}",
       "clearCreator": "作成者の絞り込みを解除",
-      "colPurview": "対象地域"
+      "colPurview": "対象地域",
+      "statusFilter": "状態",
+      "statusDraft": "下書き",
+      "statusNationwide": "全国",
+      "statusGroupStage": "表示する投票：",
+      "statusGroupAlso": "あわせて表示："
     }
   },
   "super": {
@@ -970,5 +975,10 @@
     "fullResults": "この選挙区の全結果",
     "link": "{state} 選挙区マップ",
     "gridNote": "{state} は2026年に向けて選挙区を再編したため、新しい公式地図が追加されるまで番号付きの枠で表示しています。"
+  },
+  "multiSelect": {
+    "all": "すべて",
+    "none": "なし",
+    "count": "{n}件選択"
   }
 }

@@ -7,6 +7,7 @@ import { useRoute, useRouter } from 'vue-router'
 import ColumnChooser from '@/components/ColumnChooser.vue'
 import ScrollEnds from '@/components/ScrollEnds.vue'
 import { useColumns } from '@/composables/useColumns'
+import MultiSelectDropdown from '@/components/MultiSelectDropdown.vue'
 
 const { t } = useI18n()
 
@@ -21,6 +22,7 @@ const columnOptions = computed(() => ([
 ] as const).map(([key, label]) => ({ key, label: t(`admin.managePolls.${label}`) })))
 // Deep-link support, e.g. the Polls link on /admin/manage-creators:
 // ?creator=<email>&sort=closeDate&dir=desc&showDisabled=1
+// (showDisabled=1 / showNationwide=1 still work: they tick those Status options.)
 const route = useRoute()
 const router = useRouter()
 const q = (k: string): string => {
@@ -67,9 +69,46 @@ interface BlockDto {
 
 // ---------- filters ----------
 const kindFilter = ref<Record<Kind, boolean>>({ ELECTION: true, QUESTIONNAIRE: true, BALLOT_MEASURE: true })
-const showDisabled = ref(q('showDisabled') === '1')
-/** Nationwide polls are hidden unless this is on (2026-10-28). */
-const showNationwide = ref(q('showNationwide') === '1')
+/** The Poll type dropdown's ticked kinds. */
+const selectedKinds = computed<string[]>({
+  get: () => (Object.keys(kindFilter.value) as Kind[]).filter(k => kindFilter.value[k]),
+  set: v => { kindFilter.value = { ELECTION: v.includes('ELECTION'), QUESTIONNAIRE: v.includes('QUESTIONNAIRE'), BALLOT_MEASURE: v.includes('BALLOT_MEASURE') } },
+})
+/**
+ * The Status dropdown (2026-11-06; it replaced "Show disabled" and "Show
+ * nationwide"). Two kinds of option: a poll shows when its stage is ticked
+ * (Published, Draft or Closed; Closed includes a close date that has passed),
+ * and disabled or nationwide polls show only when those are ticked too.
+ */
+type StatusOpt = 'PUBLISHED' | 'DRAFT' | 'CLOSED' | 'DISABLED' | 'NATIONWIDE'
+const statusFilter = ref<string[]>([
+  'PUBLISHED', 'DRAFT', 'CLOSED',
+  ...(q('showDisabled') === '1' ? ['DISABLED'] : []),
+  ...(q('showNationwide') === '1' ? ['NATIONWIDE'] : []),
+])
+const showDisabled = computed(() => statusFilter.value.includes('DISABLED'))
+const showNationwide = computed(() => statusFilter.value.includes('NATIONWIDE'))
+/** A row's stage for the Status filter (ARCHIVED stays ARCHIVED, which no option shows). */
+function stageOf(r: PollRow): string {
+  if (r.status === 'PUBLISHED' && r.closeDate && new Date(r.closeDate).getTime() <= Date.now()) return 'CLOSED'
+  return r.status
+}
+const statusGroups = computed(() => [
+  { title: t('admin.managePolls.statusGroupStage'), options: [
+    { value: 'PUBLISHED', label: t('admin.managePolls.statusPublished') },
+    { value: 'DRAFT', label: t('admin.managePolls.statusDraft') },
+    { value: 'CLOSED', label: t('admin.managePolls.statusClosed') },
+  ] },
+  { title: t('admin.managePolls.statusGroupAlso'), options: [
+    { value: 'DISABLED', label: t('admin.managePolls.statusDisabled') },
+    { value: 'NATIONWIDE', label: t('admin.managePolls.statusNationwide') },
+  ] },
+] satisfies { title: string; options: { value: StatusOpt; label: string }[] }[])
+const kindGroups = computed(() => [{ options: [
+  { value: 'ELECTION', label: t('admin.managePolls.kindElection') },
+  { value: 'QUESTIONNAIRE', label: t('admin.managePolls.kindQuestionnaire') },
+  { value: 'BALLOT_MEASURE', label: t('admin.managePolls.kindBallotMeasure') },
+] }])
 /** Exact creator email the list is narrowed to (from ?creator=). */
 const creatorFilter = ref(q('creator'))
 function clearCreatorFilter() {
@@ -104,6 +143,7 @@ const stickyKeys = ref(new Set<string>())
 function rowKey(r: { type: Kind; id: number }): string { return `${r.type}-${r.id}` }
 const visibleResults = computed<PollRow[]>(() =>
   results.value.filter(r =>
+    statusFilter.value.includes(stageOf(r)) &&
     (showDisabled.value || !r.blocked || stickyKeys.value.has(rowKey(r))) &&
     (showNationwide.value || !r.nationwide))
 )
@@ -233,7 +273,7 @@ async function fetchPolls() {
 
 watch(kindFilter, scheduleFetch, { deep: true })
 // Disabled rows are already fetched; toggling only re-filters (and ends stickiness).
-watch(showDisabled, () => { stickyKeys.value = new Set() })
+watch(statusFilter, () => { stickyKeys.value = new Set() })
 let titleTimer: ReturnType<typeof setTimeout> | null = null
 watch(titleFilter, () => {
   if (titleTimer) clearTimeout(titleTimer)
@@ -711,34 +751,11 @@ function historySlug(kind: Kind): string {
       @submit.prevent="searchNow"
       class="mb-4 grid grid-cols-1 items-start gap-3 rounded-md bg-slate-50 p-4 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
     >
-      <!-- Poll type -->
-      <fieldset class="flex flex-col gap-1 text-sm font-semibold text-slate-700 sm:col-span-2">
-        <legend>{{ $t('admin.managePolls.pollType') }}</legend>
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 font-normal">
-          <label class="flex items-center gap-1">
-            <input v-model="kindFilter.ELECTION" type="checkbox" class="h-4 w-4" />
-            {{ $t('admin.managePolls.kindElection') }}
-          </label>
-          <label class="flex items-center gap-1">
-            <input v-model="kindFilter.QUESTIONNAIRE" type="checkbox" class="h-4 w-4" />
-            {{ $t('admin.managePolls.kindQuestionnaire') }}
-          </label>
-          <label class="flex items-center gap-1">
-            <input v-model="kindFilter.BALLOT_MEASURE" type="checkbox" class="h-4 w-4" />
-            {{ $t('admin.managePolls.kindBallotMeasure') }}
-          </label>
-        </div>
-        <!-- Show disabled on its own line so it sits directly under the
-             Election checkbox above. -->
-        <label class="flex items-center gap-1 font-normal">
-          <input v-model="showDisabled" type="checkbox" class="h-4 w-4" />
-          {{ $t('admin.managePolls.showDisabled') }}
-        </label>
-        <label class="flex items-center gap-1 font-normal">
-          <input v-model="showNationwide" type="checkbox" class="h-4 w-4" data-test="show-nationwide" />
-          {{ $t('admin.managePolls.showNationwide') }}
-        </label>
-      </fieldset>
+      <!-- Poll type and Status (2026-11-06: dropdowns of checkboxes) -->
+      <div class="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:flex-wrap">
+        <MultiSelectDropdown v-model="selectedKinds" :label="$t('admin.managePolls.pollType')" :groups="kindGroups" test-id="type-filter" />
+        <MultiSelectDropdown v-model="statusFilter" :label="$t('admin.managePolls.statusFilter')" :groups="statusGroups" test-id="status-filter" />
+      </div>
 
       <!-- Title contains -->
       <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">

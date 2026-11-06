@@ -685,7 +685,12 @@
       "body": "Moderer avstemninger",
       "creatorFilter": "Oppretter: {email}",
       "clearCreator": "Fjern oppretterfilter",
-      "colPurview": "Område"
+      "colPurview": "Område",
+      "statusFilter": "Status",
+      "statusDraft": "Utkast",
+      "statusNationwide": "Landsdekkende",
+      "statusGroupStage": "Vis avstemninger som er:",
+      "statusGroupAlso": "Vis også:"
     }
   },
   "super": {
@@ -970,5 +975,10 @@
     "fullResults": "Alle resultater for dette distriktet",
     "link": "Distriktskart for {state}",
     "gridNote": "{state} tegnet om distriktene sine for 2026, så nummererte bokser står i stedet for kartet til det nye offisielle kartet er lagt inn."
+  },
+  "multiSelect": {
+    "all": "Alle",
+    "none": "Ingen",
+    "count": "{n} valgt"
   }
 }

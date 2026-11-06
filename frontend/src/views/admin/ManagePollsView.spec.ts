@@ -114,8 +114,8 @@ describe('ManagePollsView: disabled rows', () => {
     await flushPromises()
     expect(titles(w)).toEqual(['Alpha'])
 
-    // Toggling "Show disabled" on and off ends stickiness: Alpha is now hidden.
-    const showDisabled = w.findAll('label').find(l => l.text().includes('disabled'))!.find('input')
+    // Ticking Status → Disabled on and off ends stickiness: Alpha is now hidden.
+    const showDisabled = w.find('[data-test="status-filter-disabled"]')
     await showDisabled.setValue(true)
     expect(titles(w).sort()).toEqual(['Alpha', 'Bravo'])
     await showDisabled.setValue(false)
@@ -166,15 +166,32 @@ describe('ManagePollsView: Show: columns', () => {
 
 
 describe('ManagePollsView: Show nationwide and notes (2026-10-28)', () => {
-  it('hides nationwide polls until "Show nationwide" is ticked', async () => {
+  it('hides nationwide polls until Status → Nationwide is ticked', async () => {
     serverRows = [
       { id: 1, type: 'QUESTIONNAIRE', title: 'Local', blocked: false },
       { id: 3, type: 'ELECTION', title: 'Everywhere', blocked: false, nationwide: true },
     ]
     const w = await mountView()
     expect(titles(w)).toEqual(['Local'])
-    await w.find('[data-test="show-nationwide"]').setValue(true)
+    await w.find('[data-test="status-filter-nationwide"]').setValue(true)
     expect(titles(w)).toEqual(['Everywhere', 'Local'])
+  })
+
+  it('Status shows polls by stage: a passed close date counts as Closed; unticking a stage hides it', async () => {
+    serverRows = [
+      { id: 1, type: 'QUESTIONNAIRE', title: 'Open', blocked: false, status: 'PUBLISHED', closeDate: null },
+      { id: 2, type: 'ELECTION', title: 'Past', blocked: false, status: 'PUBLISHED', closeDate: '2026-11-03T20:00:00Z' },
+      { id: 3, type: 'QUESTIONNAIRE', title: 'Sketch', blocked: false, status: 'DRAFT', closeDate: null },
+    ]
+    const w = await mountView()
+    expect(titles(w).sort()).toEqual(['Open', 'Past', 'Sketch'])
+    await w.find('[data-test="status-filter-closed"]').setValue(false)
+    expect(titles(w).sort()).toEqual(['Open', 'Sketch'])
+    await w.find('[data-test="status-filter-draft"]').setValue(false)
+    expect(titles(w)).toEqual(['Open'])
+    await w.find('[data-test="status-filter-published"]').setValue(false)
+    await w.find('[data-test="status-filter-closed"]').setValue(true)
+    expect(titles(w)).toEqual(['Past'])
   })
 
   it('the Notes cell previews 10 characters; its modal adds a note to the top of the list', async () => {

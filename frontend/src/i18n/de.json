@@ -640,7 +640,12 @@
     "managePolls": {
       "heading": "Umfragen verwalten",
       "body": "Umfragen moderieren",
-      "colPurview": "Geltungsbereich"
+      "colPurview": "Geltungsbereich",
+      "statusFilter": "Status",
+      "statusDraft": "Entwurf",
+      "statusNationwide": "Landesweit",
+      "statusGroupStage": "Umfragen anzeigen, die sind:",
+      "statusGroupAlso": "Auch anzeigen:"
     }
   },
   "super": {
@@ -917,5 +922,10 @@
     "fullResults": "Alle Ergebnisse dieses Wahlkreises",
     "link": "Wahlkreiskarte {state}",
     "gridNote": "{state} hat seine Wahlkreise für 2026 neu zugeschnitten; nummerierte Kästen ersetzen die Karte, bis die neue amtliche Karte ergänzt ist."
+  },
+  "multiSelect": {
+    "all": "Alle",
+    "none": "Keine",
+    "count": "{n} ausgewählt"
   }
 }

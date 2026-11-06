@@ -41,11 +41,18 @@ test.describe(`admin manages polls (${STATE_INPUT.toLowerCase()})`, () => {
     test.setTimeout(180_000)
     await clearMailpit()
 
-    // 1. Find the poll on Manage Polls ("Show disabled" is off by default).
+    // 1. Find the poll on Manage Polls (Status → Disabled is off by default).
     await signInSeededUser(page, adminEmail)
     await page.goto(`${BASE}/admin/manage-polls`)
     await expect(page.getByRole('heading', { name: 'Manage Polls' })).toBeVisible({ timeout: 15_000 })
-    const showDisabled = page.getByLabel('Show disabled')
+    // Status → Disabled (2026-11-06: it replaced the "Show disabled" checkbox),
+    // inside the Status dropdown: open it, set the box, close it.
+    const showDisabled = page.locator('[data-test="status-filter-disabled"]')
+    const setShowDisabled = async (on: boolean) => {
+      await page.locator('[data-test="status-filter-button"]').click()
+      if (on) await showDisabled.check(); else await showDisabled.uncheck()
+      await page.keyboard.press('Escape')
+    }
     await expect(showDisabled).not.toBeChecked()
     await page.getByLabel('Title contains').fill(title)
     await page.getByRole('button', { name: 'Search' }).click()
@@ -75,16 +82,16 @@ test.describe(`admin manages polls (${STATE_INPUT.toLowerCase()})`, () => {
     expect(await searchTitlesFrom(zipA, title)).not.toContain(title)
     expect(await searchTitlesFrom(zipB, title)).toContain(title)
 
-    // 5. Changing a filter ends the stickiness: toggling "Show disabled" on and
-    //    off hides the disabled row as normal.
-    await showDisabled.check()
+    // 5. Changing a filter ends the stickiness: toggling Status → Disabled on
+    //    and off hides the disabled row as normal.
+    await setShowDisabled(true)
     await expect(row).toBeVisible({ timeout: 15_000 })
-    await showDisabled.uncheck()
+    await setShowDisabled(false)
     await expect(row).toBeHidden({ timeout: 15_000 })
     await hold(page)
 
     // 6. Show disabled again and re-enable the poll.
-    await showDisabled.check()
+    await setShowDisabled(true)
     await row.getByRole('checkbox', { name: 'Disabled' }).click()
     await expect(row.getByRole('checkbox', { name: 'Enabled' })).toBeChecked({ timeout: 15_000 })
     expect(await searchTitlesFrom(zipA, title)).toContain(title)

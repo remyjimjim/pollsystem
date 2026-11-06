@@ -685,7 +685,12 @@
       "body": "Modérer les sondages",
       "creatorFilter": "Créateur : {email}",
       "clearCreator": "Retirer le filtre créateur",
-      "colPurview": "Périmètre"
+      "colPurview": "Périmètre",
+      "statusFilter": "Statut",
+      "statusDraft": "Brouillon",
+      "statusNationwide": "National",
+      "statusGroupStage": "Afficher les sondages :",
+      "statusGroupAlso": "Afficher aussi :"
     }
   },
   "super": {
@@ -970,5 +975,10 @@
     "fullResults": "Résultats complets de cette circonscription",
     "link": "Carte des circonscriptions — {state}",
     "gridNote": "{state} a redessiné ses circonscriptions pour 2026 : des cases numérotées remplacent la carte en attendant la nouvelle carte officielle."
+  },
+  "multiSelect": {
+    "all": "Tous",
+    "none": "Aucun",
+    "count": "{n} sélectionnés"
   }
 }

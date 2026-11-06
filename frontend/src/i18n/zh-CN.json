@@ -640,7 +640,12 @@
     "managePolls": {
       "heading": "管理投票",
       "body": "审核投票",
-      "colPurview": "覆盖范围"
+      "colPurview": "覆盖范围",
+      "statusFilter": "状态",
+      "statusDraft": "草稿",
+      "statusNationwide": "全国",
+      "statusGroupStage": "显示以下状态的投票：",
+      "statusGroupAlso": "同时显示："
     }
   },
   "super": {
@@ -917,5 +922,10 @@
     "fullResults": "该选区的完整结果",
     "link": "{state} 选区地图",
     "gridNote": "{state} 为 2026 年重新划分了选区，在添加新的官方地图之前以编号方框代替地图。"
+  },
+  "multiSelect": {
+    "all": "全部",
+    "none": "无",
+    "count": "已选 {n} 项"
   }
 }

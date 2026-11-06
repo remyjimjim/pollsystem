@@ -640,7 +640,12 @@
     "managePolls": {
       "heading": "Gestisci Sondaggi",
       "body": "Modera i sondaggi",
-      "colPurview": "Ambito"
+      "colPurview": "Ambito",
+      "statusFilter": "Stato",
+      "statusDraft": "Bozza",
+      "statusNationwide": "Nazionale",
+      "statusGroupStage": "Mostra sondaggi:",
+      "statusGroupAlso": "Mostra anche:"
     }
   },
   "super": {
@@ -917,5 +922,10 @@
     "fullResults": "Risultati completi di questo distretto",
     "link": "Mappa dei distretti — {state}",
     "gridNote": "{state} ha ridisegnato i distretti per il 2026: riquadri numerati sostituiscono la mappa finché non verrà aggiunta quella ufficiale."
+  },
+  "multiSelect": {
+    "all": "Tutti",
+    "none": "Nessuno",
+    "count": "{n} selezionati"
   }
 }

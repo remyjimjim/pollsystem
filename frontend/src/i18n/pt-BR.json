@@ -640,7 +640,12 @@
     "managePolls": {
       "heading": "Gerenciar Enquetes",
       "body": "Moderar enquetes",
-      "colPurview": "Abrangência"
+      "colPurview": "Abrangência",
+      "statusFilter": "Status",
+      "statusDraft": "Rascunho",
+      "statusNationwide": "Nacional",
+      "statusGroupStage": "Mostrar enquetes que estejam:",
+      "statusGroupAlso": "Mostrar também:"
     }
   },
   "super": {
@@ -917,5 +922,10 @@
     "fullResults": "Resultados completos deste distrito",
     "link": "Mapa de distritos de {state}",
     "gridNote": "{state} redesenhou seus distritos para 2026; caixas numeradas substituem o mapa até que o novo mapa oficial seja adicionado."
+  },
+  "multiSelect": {
+    "all": "Todos",
+    "none": "Nenhum",
+    "count": "{n} selecionados"
   }
 }
