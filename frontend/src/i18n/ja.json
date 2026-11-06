@@ -701,7 +701,18 @@
       "errorRemoveCloseDates": "締切日を削除できませんでした",
       "editNothingChanged": "変更がないため、保存されませんでした。",
       "editNothingChangedReason": "変更がないため保存するものはありません。変更なしでメモを残すには「メモ」を使ってください。",
-      "removeCloseDatesWorking": "削除中…"
+      "removeCloseDatesWorking": "削除中…",
+      "setCloseDate": "締切日を設定（{n}）",
+      "setCloseDateTitle": "締切日を設定",
+      "setCloseDateLabel": "新しい締切日（あなたの時刻）",
+      "setCloseDateBody": "一覧の{n}件の投票の締切日を{date}に設定しますか？",
+      "setCloseDateReopens": "うち{m}件は締切済みで、投票が再開されます。",
+      "setCloseDateCloses": "この日時は過ぎています：開いている{m}件の投票は今すぐ締め切られます。",
+      "setCloseDateNote": "各投票の履歴に以前と新しい締切日が記録されます。選挙の住民投票項目も選挙に従います。すでにこの日時のものは変更されません。",
+      "setCloseDateConfirm": "締切日を設定",
+      "setCloseDateWorking": "設定中…",
+      "setCloseDateDone": "{updated}件の締切日を設定しました（再開{reopened}件、締切{closed}件）。",
+      "errorSetCloseDate": "締切日を設定できませんでした"
     }
   },
   "super": {

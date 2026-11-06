@@ -655,6 +655,50 @@ async function confirmRemoveCloseDates() {
   }
 }
 
+// ---------- Set close date (2026-11-06, SUPER only) ----------
+// Gives every listed poll the same close date, replacing any it had. The
+// server records each change in the poll's History ("Close date: old → new";
+// "Reopened" when a closed poll's new date is ahead); elections' measures
+// follow; archived polls are left alone and an identical date is no change.
+const setTargets = computed(() => visibleResults.value.filter(r => r.status !== 'ARCHIVED'))
+const setOpen = ref(false)
+const setDate = ref('')
+const setTyped = ref('')
+const setSaving = ref(false)
+const setError = ref<string | null>(null)
+const setDateIso = computed(() => (setDate.value ? new Date(setDate.value).toISOString() : null))
+const setDateAhead = computed(() => !!setDateIso.value && new Date(setDateIso.value).getTime() > Date.now())
+/** Listed polls that are closed now and would open again with the chosen (future) date. */
+const setReopens = computed(() => setDateAhead.value
+  ? setTargets.value.filter(r => r.status === 'CLOSED' || (r.status === 'PUBLISHED' && isPast(r))).length : 0)
+/** Listed open polls that a date already passed would close at once. */
+const setCloses = computed(() => setDateIso.value && !setDateAhead.value
+  ? setTargets.value.filter(r => r.status === 'PUBLISHED' && !isPast(r)).length : 0)
+function openSetCloseDate() { setDate.value = ''; setTyped.value = ''; setError.value = null; setOpen.value = true }
+async function confirmSetCloseDate() {
+  if (!setDateIso.value || setTyped.value.trim() !== String(setTargets.value.length)) return
+  setSaving.value = true
+  setError.value = null
+  try {
+    const listed = setTargets.value
+    const res = await axios.post<{ updated: number; reopened: number; closed: number }>('/api/admin/polls/set-close-date',
+      { polls: listed.map(r => ({ type: r.type, id: r.id })), closeDate: setDateIso.value })
+    message.value = t('admin.managePolls.setCloseDateDone', res.data)
+    setOpen.value = false
+    // Show the new date at once; the reload (a few seconds) follows.
+    const keys = new Set(listed.map(rowKey))
+    const iso = setDateIso.value
+    const ahead = setDateAhead.value
+    results.value = results.value.map(r => keys.has(rowKey(r))
+      ? { ...r, closeDate: iso, status: r.status === 'CLOSED' && ahead ? 'PUBLISHED' : r.status } : r)
+    await fetchPolls()
+  } catch (e: any) {
+    setError.value = e?.response?.data?.message ?? t('admin.managePolls.errorSetCloseDate')
+  } finally {
+    setSaving.value = false
+  }
+}
+
 // Closed is no longer offered (2026-11-06): a poll closes by its close date.
 const EDITABLE_STATUSES = ['PUBLISHED', 'ARCHIVED'] as const
 const editModalOpen = ref(false)
@@ -928,7 +972,11 @@ function historySlug(kind: Kind): string {
 
     <p v-if="error" class="mb-2 text-sm text-red-700">{{ error }}</p>
     <p v-if="message" class="mb-2 text-sm text-green-700">{{ message }}</p>
-    <div v-if="isSuper" class="mb-2 flex justify-end">
+    <div v-if="isSuper" class="mb-2 flex flex-wrap justify-end gap-2">
+      <button type="button" data-test="set-close-date" :disabled="loading || setTargets.length === 0" @click="openSetCloseDate"
+        class="rounded border border-slate-400 px-3 py-1 text-sm text-slate-800 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50">
+        {{ $t('admin.managePolls.setCloseDate', { n: setTargets.length }) }}
+      </button>
       <button type="button" data-test="remove-close-dates" :disabled="loading || closeDateTargets.length === 0" @click="openRemoveCloseDates"
         class="rounded border border-red-300 px-3 py-1 text-sm text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50">
         {{ $t('admin.managePolls.removeCloseDates', { n: closeDateTargets.length }) }}
@@ -1191,6 +1239,39 @@ function historySlug(kind: Kind): string {
             :disabled="removeSaving || removeTyped.trim() !== String(closeDateTargets.length)"
             class="rounded bg-red-700 px-4 py-1.5 text-sm text-white hover:bg-red-800 disabled:opacity-50">
             {{ removeSaving ? $t('admin.managePolls.removeCloseDatesWorking') : $t('admin.managePolls.removeCloseDatesConfirm') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="setOpen" role="dialog" aria-modal="true" data-test="set-close-date-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" @click.self="setOpen = false">
+      <div class="w-full max-w-lg rounded-md bg-white p-4 shadow-lg">
+        <strong class="mb-2 block text-sm text-slate-800">{{ $t('admin.managePolls.setCloseDateTitle') }}</strong>
+        <label class="mb-2 flex flex-col gap-1 text-sm font-semibold text-slate-700">
+          {{ $t('admin.managePolls.setCloseDateLabel') }}
+          <input v-model="setDate" type="datetime-local" data-test="set-close-date-input"
+            class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
+        </label>
+        <template v-if="setDateIso">
+          <p class="mb-1 text-sm text-slate-700">{{ $t('admin.managePolls.setCloseDateBody', { n: setTargets.length, date: new Date(setDateIso).toLocaleString() }) }}</p>
+          <p v-if="setReopens > 0" class="mb-1 text-sm text-slate-700">{{ $t('admin.managePolls.setCloseDateReopens', { m: setReopens }) }}</p>
+          <p v-if="setCloses > 0" class="mb-1 text-sm font-semibold text-red-700">{{ $t('admin.managePolls.setCloseDateCloses', { m: setCloses }) }}</p>
+        </template>
+        <p class="mb-2 text-xs text-slate-500">{{ $t('admin.managePolls.setCloseDateNote') }}</p>
+        <label class="mb-2 flex flex-col gap-1 text-sm font-semibold text-slate-700">
+          {{ $t('admin.managePolls.removeCloseDatesType', { n: setTargets.length }) }}
+          <input v-model="setTyped" type="text" inputmode="numeric" data-test="set-close-date-typed"
+            class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
+        </label>
+        <p v-if="setError" class="mb-2 text-xs text-red-700">{{ setError }}</p>
+        <div class="flex justify-end gap-2">
+          <button type="button" @click="setOpen = false"
+            class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50">{{ $t('common.cancel') }}</button>
+          <button type="button" data-test="set-close-date-confirm" @click="confirmSetCloseDate"
+            :disabled="setSaving || !setDateIso || setTyped.trim() !== String(setTargets.length)"
+            class="rounded bg-slate-800 px-4 py-1.5 text-sm text-white hover:bg-slate-900 disabled:opacity-50">
+            {{ setSaving ? $t('admin.managePolls.setCloseDateWorking') : $t('admin.managePolls.setCloseDateConfirm') }}
           </button>
         </div>
       </div>

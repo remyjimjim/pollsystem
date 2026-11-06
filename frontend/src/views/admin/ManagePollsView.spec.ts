@@ -251,6 +251,7 @@ describe('ManagePollsView: Remove close dates (2026-11-06)', () => {
     serverRows = rows
     const w = await mountView()
     expect(w.find('[data-test="remove-close-dates"]').exists()).toBe(false)
+    expect(w.find('[data-test="set-close-date"]').exists()).toBe(false)
     w.unmount()
   })
 
@@ -332,6 +333,46 @@ describe('ManagePollsView: Edit saves only what changed (2026-11-06)', () => {
     await save(w); await flushPromises()
     expect(vi.mocked(axios.put)).toHaveBeenCalledWith('/api/admin/polls/ELECTION/4',
       { title: null, summary: null, status: 'ARCHIVED', closeDate: null, reason: null, notifyCreator: false })
+    w.unmount()
+  })
+})
+
+describe('ManagePollsView: Set close date (2026-11-06)', () => {
+  const rows = [
+    { id: 1, type: 'ELECTION', title: 'Past', blocked: false, status: 'PUBLISHED', closeDate: '2026-11-03T20:00:00Z' },
+    { id: 2, type: 'QUESTIONNAIRE', title: 'Open', blocked: false, status: 'PUBLISHED', closeDate: null },
+  ]
+
+  it('a super sets one date on every listed poll after picking it and typing the count', async () => {
+    useAuthStore().user = { access: 'SUPER' } as any
+    serverRows = rows
+    const w = await mountView()
+    const button = w.find('[data-test="set-close-date"]')
+    expect(button.text()).toContain('(2)')
+    await button.trigger('click')
+    const confirm = w.find('[data-test="set-close-date-confirm"]')
+    await w.find('[data-test="set-close-date-typed"]').setValue('2')
+    expect((confirm.element as HTMLButtonElement).disabled).toBe(true) // no date yet
+    await w.find('[data-test="set-close-date-input"]').setValue('2099-12-01T05:00')
+    expect(w.find('[data-test="set-close-date-modal"]').text()).toContain('1 of them have closed and will reopen')
+    vi.mocked(axios.post).mockResolvedValue({ data: { updated: 2, reopened: 1, closed: 0 } })
+    await confirm.trigger('click')
+    await flushPromises()
+    expect(vi.mocked(axios.post)).toHaveBeenCalledWith('/api/admin/polls/set-close-date', {
+      polls: [{ type: 'ELECTION', id: 1 }, { type: 'QUESTIONNAIRE', id: 2 }],
+      closeDate: new Date('2099-12-01T05:00').toISOString(),
+    })
+    expect(w.text()).toContain('Set 2 close dates; 1 polls reopened, 0 closed.')
+    w.unmount()
+  })
+
+  it('warns when the date has already passed', async () => {
+    useAuthStore().user = { access: 'SUPER' } as any
+    serverRows = rows
+    const w = await mountView()
+    await w.find('[data-test="set-close-date"]').trigger('click')
+    await w.find('[data-test="set-close-date-input"]').setValue('2020-01-01T00:00')
+    expect(w.find('[data-test="set-close-date-modal"]').text()).toContain('This date has passed: 1 open polls will close now.')
     w.unmount()
   })
 })

@@ -836,7 +836,18 @@
       "errorRemoveCloseDates": "Couldn't remove the close dates",
       "editNothingChanged": "No changes, so nothing was saved.",
       "editNothingChangedReason": "Nothing has changed, so there's nothing to save. To leave a note without a change, use Notes.",
-      "removeCloseDatesWorking": "Removing…"
+      "removeCloseDatesWorking": "Removing…",
+      "setCloseDate": "Set close date ({n})",
+      "setCloseDateTitle": "Set close date",
+      "setCloseDateLabel": "New close date (your time)",
+      "setCloseDateBody": "Set the close date of the {n} listed polls to {date}?",
+      "setCloseDateReopens": "{m} of them have closed and will reopen for voting.",
+      "setCloseDateCloses": "This date has passed: {m} open polls will close now.",
+      "setCloseDateNote": "Each poll's History records its old and new date. An election's ballot measures follow it. Polls that already have this date are unchanged.",
+      "setCloseDateConfirm": "Set close date",
+      "setCloseDateWorking": "Setting…",
+      "setCloseDateDone": "Set {updated} close dates; {reopened} polls reopened, {closed} closed.",
+      "errorSetCloseDate": "Couldn't set the close dates"
     }
   },
   "super": {

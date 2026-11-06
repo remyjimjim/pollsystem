@@ -656,7 +656,18 @@
       "errorRemoveCloseDates": "No se pudieron quitar las fechas de cierre",
       "editNothingChanged": "Sin cambios: no se guardó nada.",
       "editNothingChangedReason": "No ha cambiado nada, así que no hay nada que guardar. Para dejar una nota sin cambios, usa Notas.",
-      "removeCloseDatesWorking": "Quitando…"
+      "removeCloseDatesWorking": "Quitando…",
+      "setCloseDate": "Fijar fecha de cierre ({n})",
+      "setCloseDateTitle": "Fijar fecha de cierre",
+      "setCloseDateLabel": "Nueva fecha de cierre (tu hora)",
+      "setCloseDateBody": "¿Fijar la fecha de cierre de las {n} encuestas listadas en {date}?",
+      "setCloseDateReopens": "{m} de ellas ya cerraron y se reabrirán para votar.",
+      "setCloseDateCloses": "Esta fecha ya pasó: {m} encuestas abiertas se cerrarán ahora.",
+      "setCloseDateNote": "El Historial de cada encuesta registra la fecha anterior y la nueva. Las medidas de una elección la siguen. Las que ya tienen esta fecha no cambian.",
+      "setCloseDateConfirm": "Fijar fecha de cierre",
+      "setCloseDateWorking": "Fijando…",
+      "setCloseDateDone": "Se fijaron {updated} fechas; {reopened} reabiertas, {closed} cerradas.",
+      "errorSetCloseDate": "No se pudieron fijar las fechas de cierre"
     }
   },
   "super": {

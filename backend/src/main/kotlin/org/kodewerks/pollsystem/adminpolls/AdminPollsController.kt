@@ -2,6 +2,7 @@ package org.kodewerks.pollsystem.adminpolls
 
 import org.kodewerks.pollsystem.model.AccessLevel
 import org.kodewerks.pollsystem.model.BlockScope
+import org.kodewerks.pollsystem.model.PollEventType
 import org.kodewerks.pollsystem.model.PollKind
 import org.kodewerks.pollsystem.model.PollNote
 import org.kodewerks.pollsystem.model.PollPurview
@@ -105,6 +106,12 @@ data class RemoveCloseDatesRequest(val polls: List<PollRef>)
 
 /** How many close dates were removed; how many of those polls had closed and are open again. */
 data class RemoveCloseDatesResult(val cleared: Int, val reopened: Int)
+
+/** "Set close date": the listed polls and the date to give them all. */
+data class SetCloseDateRequest(val polls: List<PollRef>, val closeDate: Instant)
+
+/** How many polls got the new date; how many reopened (closed before, date now ahead); how many closed (date now passed). */
+data class SetCloseDateResult(val updated: Int, val reopened: Int, val closed: Int)
 
 data class BlockDto(
     val id: Long,
@@ -598,66 +605,127 @@ class AdminPollsController(
         @RequestBody body: RemoveCloseDatesRequest,
         @AuthenticationPrincipal principal: AppUserDetails
     ): RemoveCloseDatesResult {
-        if (principal.user.access < AccessLevel.SUPER) {
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Only a super can remove close dates")
-        }
-        if (body.polls.size > 10_000) throw bad("Too many polls at once")
-        // In bulk (2026-11-06): one poll at a time took 20+ s for 624 polls on
-        // staging (~2,400 round trips to Neon). Now a few reads, one UPDATE per
-        // poll type, and one batch of History rows.
+        requireSuper(principal, "remove close dates")
         val now = Instant.now()
-        val stamp = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm 'UTC'").withZone(java.time.ZoneOffset.UTC)
-        val byKind = body.polls.groupBy({ parseKind(it.type) }, { it.id })
-        val qs = questionnaires.findAllById(byKind[PollKind.QUESTIONNAIRE].orEmpty().distinct())
-        val es = elections.findAllById(byKind[PollKind.ELECTION].orEmpty().distinct())
-        val listedMeasures = ballotMeasures.findAllById(byKind[PollKind.BALLOT_MEASURE].orEmpty().distinct())
-        // An election's measures follow it, as with an edited close date.
-        val electionIds = es.map { it.id }.toSet()
-        val followers = if (electionIds.isEmpty()) emptyList() else ballotMeasures.findByElectionIdIn(electionIds)
-
-        data class Clear(val kind: PollKind, val id: Long, val wasClosed: Boolean, val details: String)
-        val todo = LinkedHashMap<Pair<PollKind, Long>, Clear>()
-        fun consider(kind: PollKind, id: Long, status: PollStatus, old: Instant?, why: String? = null) {
-            if ((kind to id) in todo) return
-            if (status != PollStatus.PUBLISHED && status != PollStatus.CLOSED) return
-            if (old == null && status != PollStatus.CLOSED) return
-            val wasClosed = status == PollStatus.CLOSED || !old!!.isAfter(now)
-            todo[kind to id] = Clear(kind, id, wasClosed,
-                "Close date removed (was ${old?.let { stamp.format(it) } ?: "none"})" + (why?.let { ", $it" } ?: ""))
+        val changes = planBulk(body.polls) { p ->
+            if (p.status != PollStatus.PUBLISHED && p.status != PollStatus.CLOSED) return@planBulk null
+            if (p.old == null && p.status != PollStatus.CLOSED) return@planBulk null
+            val wasClosed = p.status == PollStatus.CLOSED || !p.old!!.isAfter(now)
+            BulkChange(p.kind, p.id, null, PollStatus.PUBLISHED,
+                if (wasClosed) PollEventType.REOPENED else PollEventType.EDITED,
+                "Close date removed (was ${fmtUtc(p.old)})" + p.whySuffix, reopened = wasClosed)
         }
-        qs.forEach { consider(PollKind.QUESTIONNAIRE, it.id, it.status, it.closeDate) }
-        es.forEach { consider(PollKind.ELECTION, it.id, it.status, it.closeDate) }
-        listedMeasures.forEach { consider(PollKind.BALLOT_MEASURE, it.id, it.status, it.closeDate) }
-        followers.forEach { consider(PollKind.BALLOT_MEASURE, it.id, it.status, it.closeDate, "with its election") }
+        applyBulk(changes, principal, now)
+        return RemoveCloseDatesResult(changes.size, changes.count { it.reopened })
+    }
 
+    /**
+     * "Set close date" (2026-11-06, SUPER only): give every listed poll the same
+     * close date, replacing any it had. Each poll whose date changes gets a
+     * History entry, "Close date: <old> → <new>": "Reopened" when it had closed
+     * and the new date is ahead (a CLOSED status becomes PUBLISHED), else
+     * "Edited". A date already passed closes open polls at once (the usual
+     * closing job records "Closed"). An election's ballot measures follow it.
+     * Drafts get the date too (they stay drafts); archived polls are left alone;
+     * a poll that already has this exact date is unchanged and gets no entry.
+     */
+    @PostMapping("/set-close-date")
+    @Transactional
+    fun setCloseDate(
+        @RequestBody body: SetCloseDateRequest,
+        @AuthenticationPrincipal principal: AppUserDetails
+    ): SetCloseDateResult {
+        requireSuper(principal, "set close dates")
+        val now = Instant.now()
+        val date = body.closeDate
+        val ahead = date.isAfter(now)
+        var closing = 0
+        val changes = planBulk(body.polls) { p ->
+            if (p.status == PollStatus.ARCHIVED) return@planBulk null
+            if (p.old == date) return@planBulk null
+            val wasClosed = p.status == PollStatus.CLOSED || (p.status == PollStatus.PUBLISHED && p.old != null && !p.old.isAfter(now))
+            val reopens = wasClosed && ahead
+            if (!ahead && !wasClosed && p.status == PollStatus.PUBLISHED) closing++
+            BulkChange(p.kind, p.id, date, if (reopens) PollStatus.PUBLISHED else p.status,
+                if (reopens) PollEventType.REOPENED else PollEventType.EDITED,
+                "Close date: ${fmtUtc(p.old)} → ${fmtUtc(date)}" + p.whySuffix, reopened = reopens)
+        }
+        applyBulk(changes, principal, now)
+        return SetCloseDateResult(changes.size, changes.count { it.reopened }, closing)
+    }
+
+    // ---------- bulk close-date changes (shared by the two actions above) ----------
+
+    private fun requireSuper(principal: AppUserDetails, what: String) {
+        if (principal.user.access < AccessLevel.SUPER) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Only a super can $what")
+        }
+    }
+
+    private val utcStamp = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm 'UTC'").withZone(java.time.ZoneOffset.UTC)
+    private fun fmtUtc(i: Instant?) = i?.let { utcStamp.format(it) } ?: "none"
+
+    /** One poll as the planner sees it; [whySuffix] is ", with its election" for a measure that follows. */
+    private class BulkPoll(val kind: PollKind, val id: Long, val status: PollStatus, val old: Instant?, val whySuffix: String)
+
+    private class BulkChange(
+        val kind: PollKind, val id: Long, val closeDate: Instant?, val status: PollStatus,
+        val event: PollEventType, val details: String, val reopened: Boolean
+    )
+
+    /**
+     * Loads the listed polls (and the listed elections' ballot measures, which
+     * follow their election) in a few queries, and asks [decide] what to do
+     * with each, at most once per poll. Before 2026-11-06 this was one poll at a
+     * time: 20+ s for 624 polls on staging.
+     */
+    private fun planBulk(refs: List<PollRef>, decide: (BulkPoll) -> BulkChange?): List<BulkChange> {
+        if (refs.size > 10_000) throw bad("Too many polls at once")
+        val byKind = refs.groupBy({ parseKind(it.type) }, { it.id })
+        val polls = mutableListOf<BulkPoll>()
+        questionnaires.findAllById(byKind[PollKind.QUESTIONNAIRE].orEmpty().distinct())
+            .forEach { polls += BulkPoll(PollKind.QUESTIONNAIRE, it.id, it.status, it.closeDate, "") }
+        val es = elections.findAllById(byKind[PollKind.ELECTION].orEmpty().distinct())
+        es.forEach { polls += BulkPoll(PollKind.ELECTION, it.id, it.status, it.closeDate, "") }
+        ballotMeasures.findAllById(byKind[PollKind.BALLOT_MEASURE].orEmpty().distinct())
+            .forEach { polls += BulkPoll(PollKind.BALLOT_MEASURE, it.id, it.status, it.closeDate, "") }
+        if (es.isNotEmpty()) ballotMeasures.findByElectionIdIn(es.map { it.id })
+            .forEach { polls += BulkPoll(PollKind.BALLOT_MEASURE, it.id, it.status, it.closeDate, ", with its election") }
+        val seen = mutableSetOf<Pair<PollKind, Long>>()
+        return polls.filter { seen.add(it.kind to it.id) }.mapNotNull(decide)
+    }
+
+    /** One UPDATE per poll type and outcome, then every History row in one batch. */
+    private fun applyBulk(changes: List<BulkChange>, principal: AppUserDetails, now: Instant) {
+        if (changes.isEmpty()) return
         val tables = mapOf(
             PollKind.QUESTIONNAIRE to "questionnaires",
             PollKind.ELECTION to "elections",
             PollKind.BALLOT_MEASURE to "ballot_measures"
         )
-        for ((kind, table) in tables) {
-            val ids = todo.values.filter { it.kind == kind }.map { it.id }
+        val ts = java.sql.Timestamp.from(now)
+        for ((key, group) in changes.groupBy { Triple(it.kind, it.status, it.closeDate) }) {
+            val (kind, status, date) = key
             val extra = if (kind == PollKind.BALLOT_MEASURE) ", last_updated = :now" else ""
-            ids.chunked(5000).forEach { chunk ->
-                jdbc.update("UPDATE $table SET close_date = NULL, status = 'PUBLISHED'$extra WHERE id IN (:ids)",
-                    mapOf("ids" to chunk, "now" to java.sql.Timestamp.from(now)))
+            group.map { it.id }.chunked(5000).forEach { ids ->
+                jdbc.update(
+                    "UPDATE ${tables.getValue(kind)} SET close_date = :date, status = CAST(:status AS poll_status)$extra WHERE id IN (:ids)",
+                    org.springframework.jdbc.core.namedparam.MapSqlParameterSource()
+                        .addValue("date", date?.atOffset(java.time.ZoneOffset.UTC), java.sql.Types.TIMESTAMP_WITH_TIMEZONE)
+                        .addValue("status", status.name).addValue("now", ts).addValue("ids", ids)
+                )
             }
         }
         jdbc.batchUpdate(
             "INSERT INTO poll_events (poll_type, poll_id, event, actor_id, at, details) VALUES (:type, :id, :event, :actor, :at, :details)",
-            todo.values.map { c ->
+            changes.map { c ->
                 org.springframework.jdbc.core.namedparam.MapSqlParameterSource()
-                    .addValue("type", c.kind.name).addValue("id", c.id)
-                    .addValue("event", if (c.wasClosed) "REOPENED" else "EDITED")
-                    .addValue("actor", principal.user.id).addValue("at", java.sql.Timestamp.from(now))
-                    .addValue("details", c.details)
+                    .addValue("type", c.kind.name).addValue("id", c.id).addValue("event", c.event.name)
+                    .addValue("actor", principal.user.id).addValue("at", ts).addValue("details", c.details)
             }.toTypedArray()
         )
-        // The JPA entities loaded above are now stale; drop them so nothing reads them.
+        // The JPA entities loaded while planning are now stale.
         em.clear()
-        val cleared = todo.size
-        val reopened = todo.values.count { it.wasClosed }
-        return RemoveCloseDatesResult(cleared, reopened)
     }
 
     // ---------- internal helpers ----------

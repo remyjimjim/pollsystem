@@ -656,7 +656,18 @@
       "errorRemoveCloseDates": "Enddaten konnten nicht entfernt werden",
       "editNothingChanged": "Keine Änderungen, nichts gespeichert.",
       "editNothingChangedReason": "Nichts wurde geändert, also gibt es nichts zu speichern. Für eine Notiz ohne Änderung nutze Notizen.",
-      "removeCloseDatesWorking": "Wird entfernt…"
+      "removeCloseDatesWorking": "Wird entfernt…",
+      "setCloseDate": "Enddatum setzen ({n})",
+      "setCloseDateTitle": "Enddatum setzen",
+      "setCloseDateLabel": "Neues Enddatum (deine Zeit)",
+      "setCloseDateBody": "Das Enddatum der {n} gelisteten Umfragen auf {date} setzen?",
+      "setCloseDateReopens": "{m} davon sind geschlossen und werden wieder geöffnet.",
+      "setCloseDateCloses": "Dieses Datum ist vorbei: {m} offene Umfragen schließen jetzt.",
+      "setCloseDateNote": "Der Verlauf jeder Umfrage hält altes und neues Datum fest. Die Vorlagen einer Wahl folgen ihr. Umfragen mit genau diesem Datum bleiben unverändert.",
+      "setCloseDateConfirm": "Enddatum setzen",
+      "setCloseDateWorking": "Wird gesetzt…",
+      "setCloseDateDone": "{updated} Enddaten gesetzt; {reopened} wieder geöffnet, {closed} geschlossen.",
+      "errorSetCloseDate": "Enddaten konnten nicht gesetzt werden"
     }
   },
   "super": {

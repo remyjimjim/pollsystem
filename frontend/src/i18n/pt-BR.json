@@ -656,7 +656,18 @@
       "errorRemoveCloseDates": "Não foi possível remover as datas de encerramento",
       "editNothingChanged": "Sem alterações: nada foi salvo.",
       "editNothingChangedReason": "Nada mudou, então não há o que salvar. Para deixar uma nota sem alteração, use Notas.",
-      "removeCloseDatesWorking": "Removendo…"
+      "removeCloseDatesWorking": "Removendo…",
+      "setCloseDate": "Definir data de encerramento ({n})",
+      "setCloseDateTitle": "Definir data de encerramento",
+      "setCloseDateLabel": "Nova data de encerramento (seu horário)",
+      "setCloseDateBody": "Definir a data de encerramento das {n} enquetes listadas para {date}?",
+      "setCloseDateReopens": "{m} delas já encerraram e serão reabertas para votação.",
+      "setCloseDateCloses": "Esta data já passou: {m} enquetes abertas serão encerradas agora.",
+      "setCloseDateNote": "O Histórico de cada enquete registra a data antiga e a nova. As medidas de uma eleição a acompanham. As que já têm esta data não mudam.",
+      "setCloseDateConfirm": "Definir data de encerramento",
+      "setCloseDateWorking": "Definindo…",
+      "setCloseDateDone": "{updated} datas definidas; {reopened} reabertas, {closed} encerradas.",
+      "errorSetCloseDate": "Não foi possível definir as datas de encerramento"
     }
   },
   "super": {

@@ -656,7 +656,18 @@
       "errorRemoveCloseDates": "无法移除截止日期",
       "editNothingChanged": "没有更改，未保存任何内容。",
       "editNothingChangedReason": "没有任何更改，因此无需保存。如需在不更改的情况下留言，请使用“备注”。",
-      "removeCloseDatesWorking": "正在移除…"
+      "removeCloseDatesWorking": "正在移除…",
+      "setCloseDate": "设置截止日期（{n}）",
+      "setCloseDateTitle": "设置截止日期",
+      "setCloseDateLabel": "新的截止日期（你的时间）",
+      "setCloseDateBody": "要将所列 {n} 个投票的截止日期设为 {date} 吗？",
+      "setCloseDateReopens": "其中 {m} 个已截止，将重新开放投票。",
+      "setCloseDateCloses": "此日期已过：{m} 个开放中的投票将立即截止。",
+      "setCloseDateNote": "每个投票的历史记录会记下原日期和新日期。选举的投票提案随选举一起更改。已是此日期的投票不变。",
+      "setCloseDateConfirm": "设置截止日期",
+      "setCloseDateWorking": "正在设置…",
+      "setCloseDateDone": "已设置 {updated} 个截止日期；{reopened} 个重新开放，{closed} 个已截止。",
+      "errorSetCloseDate": "无法设置截止日期"
     }
   },
   "super": {

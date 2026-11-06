@@ -343,6 +343,49 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `setCloseDate gives every listed poll the date, reopens closed ones, records History, and is super-only`() {
+        val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "scd-super")
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "scd-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "scd-creator")
+        val past = Instant.parse("2026-11-03T20:00:00Z")
+        val newDate = Instant.parse("2099-12-01T05:00:00Z")
+        val closed = elections.save(newElection(creator, zipcode = "90001", title = "Closed one").copy(closeDate = past))
+        val noDate = elections.save(newElection(creator, zipcode = "90001", title = "No date").copy(closeDate = null))
+        val already = elections.save(newElection(creator, zipcode = "90001", title = "Already").copy(closeDate = newDate))
+        val measureType = pollTypes.findAll().first { it.name == "Referendum/Ballot Measure" }
+        val m = ballotMeasures.save(org.kodewerks.pollsystem.model.BallotMeasure(creator = creator, pollType = measureType,
+            title = "Prop D", summary = "s", election = closed, effectiveDate = LocalDate.now(), status = PollStatus.PUBLISHED, closeDate = past))
+        val refs = listOf(PollRef("ELECTION", closed.id), PollRef("ELECTION", noDate.id), PollRef("ELECTION", already.id))
+
+        assertThatThrownBy { controller.setCloseDate(SetCloseDateRequest(refs, newDate), principalFor(admin)) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) { assertThat(it.statusCode.value()).isEqualTo(403) }
+
+        val result = controller.setCloseDate(SetCloseDateRequest(refs, newDate), principalFor(sup))
+
+        assertThat(result.updated).isEqualTo(3) // closed, noDate, and the measure; "already" is unchanged
+        assertThat(result.reopened).isEqualTo(2)
+        assertThat(result.closed).isEqualTo(0)
+        for (id in listOf(closed.id, noDate.id, already.id)) assertThat(elections.findById(id).get().closeDate).isEqualTo(newDate)
+        assertThat(ballotMeasures.findById(m.id).get().closeDate).isEqualTo(newDate)
+        val ev = pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.ELECTION, closed.id).first()
+        assertThat(ev.event).isEqualTo(org.kodewerks.pollsystem.model.PollEventType.REOPENED)
+        assertThat(ev.details).isEqualTo("Close date: 2026-11-03 20:00 UTC → 2099-12-01 05:00 UTC")
+        assertThat(pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.ELECTION, noDate.id).first().details)
+            .isEqualTo("Close date: none → 2099-12-01 05:00 UTC")
+        assertThat(pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.ELECTION, already.id)
+            .none { it.details?.startsWith("Close date:") == true }).isTrue()
+        assertThat(pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.BALLOT_MEASURE, m.id).first().details)
+            .isEqualTo("Close date: 2026-11-03 20:00 UTC → 2099-12-01 05:00 UTC, with its election")
+
+        // A date already passed closes open polls.
+        val passed = Instant.parse("2026-11-05T00:00:00Z")
+        val closing = controller.setCloseDate(SetCloseDateRequest(listOf(PollRef("ELECTION", noDate.id)), passed), principalFor(sup))
+        assertThat(closing.closed).isEqualTo(1)
+        assertThat(elections.findById(noDate.id).get().closeDate).isEqualTo(passed)
+    }
+
+    @Test
     fun `removeCloseDates reopens closed polls with their measures, records History, and is super-only`() {
         val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "rcd-super")
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "rcd-admin")

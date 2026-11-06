@@ -701,7 +701,18 @@
       "errorRemoveCloseDates": "Kunne ikke fjerne sluttdatoene",
       "editNothingChanged": "Ingen endringer, så ingenting ble lagret.",
       "editNothingChangedReason": "Ingenting er endret, så det er ingenting å lagre. Bruk Notater for å legge igjen et notat uten endring.",
-      "removeCloseDatesWorking": "Fjerner…"
+      "removeCloseDatesWorking": "Fjerner…",
+      "setCloseDate": "Sett sluttdato ({n})",
+      "setCloseDateTitle": "Sett sluttdato",
+      "setCloseDateLabel": "Ny sluttdato (din tid)",
+      "setCloseDateBody": "Sette sluttdatoen for de {n} listede avstemningene til {date}?",
+      "setCloseDateReopens": "{m} av dem er stengt og åpnes igjen.",
+      "setCloseDateCloses": "Denne datoen har passert: {m} åpne avstemninger stenges nå.",
+      "setCloseDateNote": "Historikken til hver avstemning registrerer gammel og ny dato. Et valgs saker følger valget. De som allerede har denne datoen, endres ikke.",
+      "setCloseDateConfirm": "Sett sluttdato",
+      "setCloseDateWorking": "Setter…",
+      "setCloseDateDone": "Satte {updated} sluttdatoer; {reopened} gjenåpnet, {closed} stengt.",
+      "errorSetCloseDate": "Kunne ikke sette sluttdatoene"
     }
   },
   "super": {

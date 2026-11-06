@@ -656,7 +656,18 @@
       "errorRemoveCloseDates": "Impossibile rimuovere le date di chiusura",
       "editNothingChanged": "Nessuna modifica: non è stato salvato nulla.",
       "editNothingChangedReason": "Non è cambiato nulla, quindi non c'è niente da salvare. Per lasciare una nota senza modifiche, usa Note.",
-      "removeCloseDatesWorking": "Rimozione…"
+      "removeCloseDatesWorking": "Rimozione…",
+      "setCloseDate": "Imposta data di chiusura ({n})",
+      "setCloseDateTitle": "Imposta data di chiusura",
+      "setCloseDateLabel": "Nuova data di chiusura (tua ora)",
+      "setCloseDateBody": "Impostare la data di chiusura dei {n} sondaggi elencati a {date}?",
+      "setCloseDateReopens": "{m} sono chiusi e verranno riaperti al voto.",
+      "setCloseDateCloses": "Questa data è passata: {m} sondaggi aperti si chiuderanno ora.",
+      "setCloseDateNote": "La Cronologia di ogni sondaggio registra la vecchia e la nuova data. I quesiti di un'elezione la seguono. Quelli che hanno già questa data restano invariati.",
+      "setCloseDateConfirm": "Imposta data di chiusura",
+      "setCloseDateWorking": "Impostazione…",
+      "setCloseDateDone": "Impostate {updated} date; {reopened} riaperti, {closed} chiusi.",
+      "errorSetCloseDate": "Impossibile impostare le date di chiusura"
     }
   },
   "super": {
