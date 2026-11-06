@@ -61,6 +61,37 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: the Purview column sorts again
+
+**Requested:**
+
+> let's take care of a few UI issues with ballotbox, the first one being on
+> this page http://localhost:3000/admin/manage-polls the sorting on the
+> purview column doesn't appear to work.
+
+**Cause:**
+- The Purview header sorted by the poll's **first zipcode**.
+- The cell shows the **area** (`regionLabel`, e.g. "Washington",
+  "Nationwide") whenever a poll has no zipcodes, which is nearly every poll
+  since the midterm ballots, all state-wide.
+- So every row compared as equal, and clicking left the order unchanged.
+
+**Changed:**
+- A `purview` sort key that uses what the column shows: the area, or else
+  the first zipcode, case-insensitive.
+- The header and its ▲/▼ arrow use it.
+- An older `?sort=zipcode` link maps to it.
+
+**Verified:**
+- vue-tsc clean; admin view tests 23 pass.
+- Headless Chrome on local, demo-super, 671 polls:
+  - ▲ runs Alabama → Wyoming;
+  - ▼ runs Wyoming → Alabama.
+
+**Commit:** `615e425`
+
+---
+
 ## 2026-11-06 — Old Cloudflare Pages project deleted
 
 **Requested:**
