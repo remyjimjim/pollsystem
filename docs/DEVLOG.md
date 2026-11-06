@@ -61,6 +61,52 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: the list loads in bulk (seconds → 0.1 s)
+
+**Requested:**
+
+> Staging's https://staging.ballotbox.pages.dev/admin/manage-polls is
+> searching very slowly. For instance, if I edit "2026 Midterm Alabama
+> District 2" and type "abc" into the "Reason" textarea and click 'Save' it
+> takes 10 seconds for the screen to go back to the admin/manage-polls and
+> going back to that page kicks another search to get results whichy takes
+> another 5 to 10 seconds...
+
+**Cause:**
+
+- One list request ran **about 2,040 queries**, three per poll: its area,
+  its blocks, and its area's names.
+- Locally that's 0.4 s. On staging every query crosses from Fly to Neon,
+  so 5–10 s.
+- The State/County/Zipcode filter was far worse: per poll, it looked up
+  **each zipcode** of the chosen area. Locally, State = Alabama took
+  **61 s**, and Alabama + California + "midterm" took **99 s**.
+- The edit itself is fast (16 ms locally). The wait after Save is the
+  reload of this list.
+
+**Changed:**
+
+- The list loads all purviews, all blocks, all counties (id, name, state)
+  and the zipcodes it needs in a few bulk queries: **30 per list**.
+- The area filter becomes a set of zipcodes, counties and states, matched
+  in memory. It gives the same answer as `includesZip` zip by zip.
+- Area labels come from the loaded names, through a new
+  `PollPurviewService.regionLabel` overload with the same text.
+
+**Verified:**
+
+- Before and after, 35 list answers (demo-super, a statewide admin, and
+  the CA, CO and AK admins × 7 filters) are **identical**.
+- Times: 61 s → 0.15 s, 99 s → 0.12 s, 25 s → 0.09 s, and the plain list
+  0.40 s → 0.20 s.
+- Backend tests in the 6 affected classes: 58 pass.
+- The full backend suite couldn't finish locally: the test JVM was killed
+  for lack of memory (13 of 14 GB in use), so CI runs it on push.
+
+**Commit:** `c76004a`
+
+---
+
 ## 2026-11-06 — Manage Polls: "Remove close dates" (super only); optional edit reason
 
 **Requested:**
