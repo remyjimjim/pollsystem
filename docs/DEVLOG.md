@@ -61,6 +61,54 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: Edit with no change records nothing
+
+**Requested:**
+
+> Is there a way we can check if anything was changed on the 'Edit' modal
+> window when the user clicked 'Save' and if not can we not add another
+> event to history? This in for /admin/manage-polls.
+
+**Cause:**
+
+- The modal always sent the status, and the close date when there was one.
+- The server listed every value it was sent as a change. So every Save
+  made a note and an "Edited" History entry ("Status → PUBLISHED"), even
+  with nothing changed.
+
+**Changed:**
+
+- **The page** sends only the fields that differ from what the modal
+  opened with: title, summary, status, close date.
+  - With none, it sends nothing, closes, and says "No changes, so nothing
+    was saved."
+  - A reason with no change keeps the modal open: "Nothing has changed,
+    so there's nothing to save. To leave a note without a change, use
+    Notes."
+- **The server** ignores values equal to the stored ones.
+  - When nothing really changes, it saves nothing and returns no note (no
+    note, no History, no email).
+  - Otherwise the note and History list only the real changes.
+- Messages in 9 languages.
+
+**Verified:**
+
+- Backend: AdminPollsControllerTest 18 pass. A new test covers the
+  unchanged save (no note, no History) and one real change among unchanged
+  values recording only "Status → ARCHIVED". CreatorEditedAtTest 2 and
+  PollHistoryTest 7 pass.
+- Frontend: vue-tsc clean; admin tests 30 pass, 3 of them new.
+- Headless Chrome on local, "2026 Midterm Alabama District 2":
+  - unchanged Save → no request, 0 new entries;
+  - "abc" as the reason only → no request, the Notes hint shown;
+  - Status → Archived with "abc" → 1 entry, "Status → ARCHIVED / Reason:
+    abc".
+- The test change was undone afterwards.
+
+**Commit:** `1fcfb9d`
+
+---
+
 ## 2026-11-06 — Links in a tab opened before a deploy work again
 
 **Requested:**
