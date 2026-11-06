@@ -61,6 +61,42 @@ logged.
 
 ---
 
+## 2026-11-06 — Local poll 761 re-closed by my test; fixed
+
+**Requested:**
+
+> The history for 'Alabama District 2 (Election)' aka
+> http://localhost:3000/history?type=election&id=761 shows that most recent
+> event as being 11/3 when it should be 11/5, also, it's shown as 'closed'
+> but should have been re-opened by the mass close update
+
+> I'm talking local
+
+**Cause (my test, not the app):**
+
+1. At 04:07 UTC the user's "Remove close dates" reopened 761 correctly
+   (entry 2985, "Close date removed (was 2026-11-04 01:00 UTC)").
+2. While timing the slow list, I sent a test edit to 761 with close date
+   2026-11-04 01:00 UTC.
+3. My cleanup deleted that edit's History entry and note, but **left the
+   close date**.
+4. The closing job then saw a passed date and recorded "Closed" (entry
+   3608), dated at the close date: 11/3 in the user's time zone.
+
+**Fixed (local data only):**
+
+- 761's close date is null again, so the poll is open.
+- Entry 3608 is deleted.
+- 761 has no ballot measures, so nothing carried over.
+- I checked every History entry and note since the user's reopen: apart
+  from 3608, all are the user's own reopen of 624 polls.
+- A feedback memory now says to snapshot and verify every row a local test
+  touches.
+
+**Commit:** none — local data fix
+
+---
+
 ## 2026-11-06 — Manage Polls: an All checkbox on Status
 
 **Requested:**
