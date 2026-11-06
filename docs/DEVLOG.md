@@ -61,6 +61,27 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: the zipcode filter is labelled "Purview"
+
+**Requested:**
+
+> And can we change 'Zipcode' to 'Purview' as the label on
+> admin/manage-polls headings?
+
+**Changed:**
+
+- The filter above the zipcode picker now reads **Purview**. It uses the
+  same text as the table's Purview column, already in 9 languages.
+- The now-unused "Zipcode" string is removed.
+- The table column was already "Purview", and nothing else on the page
+  said "Zipcode".
+
+**Verified:** vue-tsc clean; admin tests 33 pass.
+
+**Commit:** `0d88470`
+
+---
+
 ## 2026-11-06 — Manage Polls: "Status" label above; both filters in full columns
 
 **Requested:**
