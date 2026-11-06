@@ -61,6 +61,46 @@ logged.
 
 ---
 
+## 2026-11-06 — Old Cloudflare Pages project deleted
+
+**Requested:**
+
+> Before I click the 'delete' button I thought I'd show you the modal in
+> case anything looks 'off'..
+
+> Your project has too many deployments to be deleted, follow this guide to
+> delete them: https://cfl.re/3CXesln
+
+> Both are done.
+
+**Verified and done:**
+
+- **The project:** the old Pages project `pollsystem` was confirmed as the
+  old one: still linked to `remyjimjim/pollsystem`, compatibility date
+  2026-08-03, and the live domains already on `ballotbox`.
+- **The refusal:** the dashboard refused to delete it ("too many
+  deployments").
+- **The tokens:**
+  - A **user** API token (`cfut…`) with Cloudflare Pages: Edit verified
+    as active, but every account-level call refused it ("Authentication
+    error" / "Invalid access token"), even after its permissions were
+    saved.
+  - An **Account API Token** (Pages Read + Edit, 7-day expiry) worked.
+    Both were kept in a git-ignored `.secrets.env` file and never printed.
+- **The deployments:** a one-off script checked first that the project
+  was `pollsystem`, linked to `remyjimjim/pollsystem`, with no custom
+  domains (only `pollsystem.pages.dev`). It ran a dry run, then **deleted
+  273 deployments** (0 failed), keeping the current production one, as
+  Cloudflare requires.
+- **The project:** the user deleted it in the dashboard and revoked both
+  tokens. The token file and the script were deleted.
+- **After:** `pollsystem.pages.dev` no longer answers. ballotbox.us.com,
+  www and `staging.ballotbox.pages.dev` all return 200.
+
+**Commit:** none — verification only
+
+---
+
 ## 2026-11-05 — PROXY_SECRET rotated; per-IP check unreliable with two machines
 
 **Requested:**
