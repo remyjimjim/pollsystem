@@ -47,11 +47,12 @@ onBeforeUnmount(() => { document.removeEventListener('click', onDocClick); docum
 </script>
 
 <template>
-  <div ref="root" class="relative inline-block text-sm" :class="labelAbove ? 'flex flex-col gap-1' : ''" :data-test="testId">
-    <span v-if="labelAbove" :id="labelId" class="font-semibold text-slate-700">{{ label }}</span>
+  <div ref="root" class="relative text-sm leading-5" :class="labelAbove ? 'flex flex-col gap-1' : 'inline-block'" :data-test="testId">
+    <span v-if="labelAbove" :id="labelId" class="block font-semibold text-slate-700">{{ label }}</span>
     <button
       type="button"
-      class="flex w-full items-center justify-between gap-2 rounded border border-slate-300 bg-white px-3 py-1.5 text-left font-normal text-slate-800 hover:bg-slate-50"
+      class="flex w-full items-center justify-between gap-2 rounded border border-slate-300 bg-white text-left font-normal text-slate-800 hover:bg-slate-50"
+      :class="labelAbove ? 'p-2' : 'px-3 py-1.5'"
       :aria-expanded="open"
       :aria-labelledby="labelAbove ? labelId : undefined"
       :data-test="testId ? `${testId}-button` : undefined"

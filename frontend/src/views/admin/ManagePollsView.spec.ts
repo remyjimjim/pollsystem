@@ -384,6 +384,9 @@ describe('ManagePollsView: Poll type label and All (2026-11-06)', () => {
     expect(box.find('span').text()).toBe('Poll type')
     const button = w.find('[data-test="type-filter-button"]')
     expect(button.text()).toBe('All▾')
+    // Status the same way (label above, the button shows only the summary).
+    expect(w.find('[data-test="status-filter"] span').text()).toBe('Status')
+    expect(w.find('[data-test="status-filter-button"]').text()).toBe('3 selected▾')
     const all = w.find('[data-test="type-filter-all"]')
     expect((all.element as HTMLInputElement).checked).toBe(true)
     await all.setValue(false)
