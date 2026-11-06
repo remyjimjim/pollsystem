@@ -700,7 +700,8 @@
       "removeCloseDatesDone": "{cleared}件の締切日を削除し、{reopened}件の投票を再開しました。",
       "errorRemoveCloseDates": "締切日を削除できませんでした",
       "editNothingChanged": "変更がないため、保存されませんでした。",
-      "editNothingChangedReason": "変更がないため保存するものはありません。変更なしでメモを残すには「メモ」を使ってください。"
+      "editNothingChangedReason": "変更がないため保存するものはありません。変更なしでメモを残すには「メモ」を使ってください。",
+      "removeCloseDatesWorking": "削除中…"
     }
   },
   "super": {

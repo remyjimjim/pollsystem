@@ -655,7 +655,8 @@
       "removeCloseDatesDone": "{cleared} datas removidas; {reopened} enquetes reabertas.",
       "errorRemoveCloseDates": "Não foi possível remover as datas de encerramento",
       "editNothingChanged": "Sem alterações: nada foi salvo.",
-      "editNothingChangedReason": "Nada mudou, então não há o que salvar. Para deixar uma nota sem alteração, use Notas."
+      "editNothingChangedReason": "Nada mudou, então não há o que salvar. Para deixar uma nota sem alteração, use Notas.",
+      "removeCloseDatesWorking": "Removendo…"
     }
   },
   "super": {

@@ -655,7 +655,8 @@
       "removeCloseDatesDone": "{cleared} Enddaten entfernt; {reopened} Umfragen wieder geöffnet.",
       "errorRemoveCloseDates": "Enddaten konnten nicht entfernt werden",
       "editNothingChanged": "Keine Änderungen, nichts gespeichert.",
-      "editNothingChangedReason": "Nichts wurde geändert, also gibt es nichts zu speichern. Für eine Notiz ohne Änderung nutze Notizen."
+      "editNothingChangedReason": "Nichts wurde geändert, also gibt es nichts zu speichern. Für eine Notiz ohne Änderung nutze Notizen.",
+      "removeCloseDatesWorking": "Wird entfernt…"
     }
   },
   "super": {

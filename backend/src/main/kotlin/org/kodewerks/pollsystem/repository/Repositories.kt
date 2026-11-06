@@ -241,6 +241,7 @@ interface CandidateResponseRepository : JpaRepository<CandidateResponse, Long> {
 interface BallotMeasureRepository : JpaRepository<BallotMeasure, Long> {
     fun findByCreatorId(creatorId: Long): List<BallotMeasure>
     fun findByElectionId(electionId: Long): List<BallotMeasure>
+    fun findByElectionIdIn(electionIds: Collection<Long>): List<BallotMeasure>
     fun findByTitleContainingIgnoreCase(title: String): List<BallotMeasure>
     fun findByStatus(status: PollStatus): List<BallotMeasure>
 

@@ -1190,7 +1190,7 @@ function historySlug(kind: Kind): string {
           <button type="button" data-test="remove-close-dates-confirm" @click="confirmRemoveCloseDates"
             :disabled="removeSaving || removeTyped.trim() !== String(closeDateTargets.length)"
             class="rounded bg-red-700 px-4 py-1.5 text-sm text-white hover:bg-red-800 disabled:opacity-50">
-            {{ $t('admin.managePolls.removeCloseDatesConfirm') }}
+            {{ removeSaving ? $t('admin.managePolls.removeCloseDatesWorking') : $t('admin.managePolls.removeCloseDatesConfirm') }}
           </button>
         </div>
       </div>

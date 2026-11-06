@@ -700,7 +700,8 @@
       "removeCloseDatesDone": "Fjernet {cleared} sluttdatoer; {reopened} avstemninger gjenåpnet.",
       "errorRemoveCloseDates": "Kunne ikke fjerne sluttdatoene",
       "editNothingChanged": "Ingen endringer, så ingenting ble lagret.",
-      "editNothingChangedReason": "Ingenting er endret, så det er ingenting å lagre. Bruk Notater for å legge igjen et notat uten endring."
+      "editNothingChangedReason": "Ingenting er endret, så det er ingenting å lagre. Bruk Notater for å legge igjen et notat uten endring.",
+      "removeCloseDatesWorking": "Fjerner…"
     }
   },
   "super": {

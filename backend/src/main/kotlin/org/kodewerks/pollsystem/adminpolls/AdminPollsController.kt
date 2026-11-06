@@ -136,7 +136,8 @@ class AdminPollsController(
     private val regions: org.kodewerks.pollsystem.geography.RegionService,
     private val history: org.kodewerks.pollsystem.poll.PollHistoryService,
     private val pollPurviews: org.kodewerks.pollsystem.repository.PollPurviewRepository,
-    private val em: jakarta.persistence.EntityManager
+    private val em: jakarta.persistence.EntityManager,
+    private val jdbc: org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 ) {
 
     @GetMapping("/purview")
@@ -601,42 +602,61 @@ class AdminPollsController(
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "Only a super can remove close dates")
         }
         if (body.polls.size > 10_000) throw bad("Too many polls at once")
+        // In bulk (2026-11-06): one poll at a time took 20+ s for 624 polls on
+        // staging (~2,400 round trips to Neon). Now a few reads, one UPDATE per
+        // poll type, and one batch of History rows.
         val now = Instant.now()
         val stamp = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm 'UTC'").withZone(java.time.ZoneOffset.UTC)
-        val done = mutableSetOf<Pair<PollKind, Long>>()
-        var cleared = 0
-        var reopened = 0
-        /** Records one cleared date; returns whether the poll was clear-able. */
-        fun clear(kind: PollKind, id: Long, status: PollStatus, old: Instant?, save: (PollStatus) -> Unit, why: String? = null) {
-            if (!done.add(kind to id)) return
+        val byKind = body.polls.groupBy({ parseKind(it.type) }, { it.id })
+        val qs = questionnaires.findAllById(byKind[PollKind.QUESTIONNAIRE].orEmpty().distinct())
+        val es = elections.findAllById(byKind[PollKind.ELECTION].orEmpty().distinct())
+        val listedMeasures = ballotMeasures.findAllById(byKind[PollKind.BALLOT_MEASURE].orEmpty().distinct())
+        // An election's measures follow it, as with an edited close date.
+        val electionIds = es.map { it.id }.toSet()
+        val followers = if (electionIds.isEmpty()) emptyList() else ballotMeasures.findByElectionIdIn(electionIds)
+
+        data class Clear(val kind: PollKind, val id: Long, val wasClosed: Boolean, val details: String)
+        val todo = LinkedHashMap<Pair<PollKind, Long>, Clear>()
+        fun consider(kind: PollKind, id: Long, status: PollStatus, old: Instant?, why: String? = null) {
+            if ((kind to id) in todo) return
             if (status != PollStatus.PUBLISHED && status != PollStatus.CLOSED) return
             if (old == null && status != PollStatus.CLOSED) return
-            val wasClosed = status == PollStatus.CLOSED || (old != null && !old.isAfter(now))
-            save(PollStatus.PUBLISHED)
-            cleared++
-            if (wasClosed) reopened++
-            val details = "Close date removed (was ${old?.let { stamp.format(it) } ?: "none"})" + (why?.let { ", $it" } ?: "")
-            history.record(kind, id,
-                if (wasClosed) org.kodewerks.pollsystem.model.PollEventType.REOPENED else org.kodewerks.pollsystem.model.PollEventType.EDITED,
-                principal.user, details)
+            val wasClosed = status == PollStatus.CLOSED || !old!!.isAfter(now)
+            todo[kind to id] = Clear(kind, id, wasClosed,
+                "Close date removed (was ${old?.let { stamp.format(it) } ?: "none"})" + (why?.let { ", $it" } ?: ""))
         }
-        fun clearMeasure(m: org.kodewerks.pollsystem.model.BallotMeasure, why: String? = null) =
-            clear(PollKind.BALLOT_MEASURE, m.id, m.status, m.closeDate, { st ->
-                ballotMeasures.save(m.copy(status = st, closeDate = null, lastUpdated = now))
-            }, why)
+        qs.forEach { consider(PollKind.QUESTIONNAIRE, it.id, it.status, it.closeDate) }
+        es.forEach { consider(PollKind.ELECTION, it.id, it.status, it.closeDate) }
+        listedMeasures.forEach { consider(PollKind.BALLOT_MEASURE, it.id, it.status, it.closeDate) }
+        followers.forEach { consider(PollKind.BALLOT_MEASURE, it.id, it.status, it.closeDate, "with its election") }
 
-        for (ref in body.polls) {
-            when (parseKind(ref.type)) {
-                PollKind.QUESTIONNAIRE -> questionnaires.findById(ref.id).orElse(null)?.let { q ->
-                    clear(PollKind.QUESTIONNAIRE, q.id, q.status, q.closeDate, { st -> questionnaires.save(q.copy(status = st, closeDate = null)) })
-                }
-                PollKind.ELECTION -> elections.findById(ref.id).orElse(null)?.let { e ->
-                    clear(PollKind.ELECTION, e.id, e.status, e.closeDate, { st -> elections.save(e.copy(status = st, closeDate = null)) })
-                    for (m in ballotMeasures.findByElectionId(e.id)) clearMeasure(m, "with its election")
-                }
-                PollKind.BALLOT_MEASURE -> ballotMeasures.findById(ref.id).orElse(null)?.let { clearMeasure(it) }
+        val tables = mapOf(
+            PollKind.QUESTIONNAIRE to "questionnaires",
+            PollKind.ELECTION to "elections",
+            PollKind.BALLOT_MEASURE to "ballot_measures"
+        )
+        for ((kind, table) in tables) {
+            val ids = todo.values.filter { it.kind == kind }.map { it.id }
+            val extra = if (kind == PollKind.BALLOT_MEASURE) ", last_updated = :now" else ""
+            ids.chunked(5000).forEach { chunk ->
+                jdbc.update("UPDATE $table SET close_date = NULL, status = 'PUBLISHED'$extra WHERE id IN (:ids)",
+                    mapOf("ids" to chunk, "now" to java.sql.Timestamp.from(now)))
             }
         }
+        jdbc.batchUpdate(
+            "INSERT INTO poll_events (poll_type, poll_id, event, actor_id, at, details) VALUES (:type, :id, :event, :actor, :at, :details)",
+            todo.values.map { c ->
+                org.springframework.jdbc.core.namedparam.MapSqlParameterSource()
+                    .addValue("type", c.kind.name).addValue("id", c.id)
+                    .addValue("event", if (c.wasClosed) "REOPENED" else "EDITED")
+                    .addValue("actor", principal.user.id).addValue("at", java.sql.Timestamp.from(now))
+                    .addValue("details", c.details)
+            }.toTypedArray()
+        )
+        // The JPA entities loaded above are now stale; drop them so nothing reads them.
+        em.clear()
+        val cleared = todo.size
+        val reopened = todo.values.count { it.wasClosed }
         return RemoveCloseDatesResult(cleared, reopened)
     }
 
