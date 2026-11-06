@@ -61,6 +61,36 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: "Status" label above; both filters in full columns
+
+**Requested:**
+
+> And can we have 'Status' as the label above the 'Status: 3 selected'
+> widget and make the first option '3 Selected'?
+
+Read as: a label above, with the button showing only the summary ("3
+selected"), like Poll type. No All checkbox was added to Status.
+
+**Changed:**
+
+- Status uses `labelAbove`.
+- Poll type and Status each take their own grid column, like Title
+  contains, State and County, instead of sharing one cramped cell.
+- Their buttons line up exactly with those fields:
+  - the label box is now 20px like the other labels (it was 16px);
+  - the dropdown is no longer both inline and a column at once.
+
+**Verified:**
+
+- Measured on local at 1300 px: the Poll type button's top is at 232 px,
+  the same as Title contains and State. It was 228 px.
+- Screenshots at 1300 px and 390 px.
+- vue-tsc clean; all frontend tests pass.
+
+**Commit:** `448eb3b`
+
+---
+
 ## 2026-11-06 — Manage Polls: "Poll type" label above, and an All option
 
 **Requested:**
