@@ -61,6 +61,53 @@ logged.
 
 ---
 
+## 2026-11-06 — Links in a tab opened before a deploy work again
+
+**Requested:**
+
+> The "History" link under 'Actions' for admin/manage-polls isn't doing
+> anything or else maybe there's no history...
+
+**Cause:**
+
+- On local the link works: History for "2026 Midterm Alabama District 1"
+  shows its Reopened, Closed and Published entries. The History lookup
+  takes 9 ms.
+- On staging, each page of the app is a separate built file whose name
+  changes with every build. A tab opened before a deploy asks for the old
+  name.
+- Cloudflare Pages answers a missing file with `index.html`; checked on
+  staging: `200 text/html`.
+- So the import fails, and the router stays where it is with no message.
+  Staging was deployed twice today.
+- Not confirmed on the user's own tab: I can't sign in to staging. It was
+  reproduced as below.
+
+**Changed:**
+
+- `router.onError` recognises a failed page-file load and does a full page
+  load of the address being opened, which gets the current build.
+- At most once a minute, so an outage can't cause a reload loop.
+- A first version also listened for Vite's preload error, but that
+  reloaded the **current** page (it doesn't know the destination).
+  Removed.
+
+**Verified:**
+
+- A production build served the way Pages serves it (missing file →
+  index.html), with a new build swapped in under an open Manage Polls tab:
+  - **before**, clicking History stayed on Manage Polls, and the console
+    said the History file came back as `text/html`;
+  - **after**, it reloads to `/history?type=election&id=760` and shows
+    its 3 entries.
+- A unit test for the error check covers the Chrome, Firefox and Safari
+  messages and ignores other errors.
+- vue-tsc clean; 210 frontend tests pass.
+
+**Commit:** `eed479e`
+
+---
+
 ## 2026-11-06 — Manage Polls: the list loads in bulk (seconds → 0.1 s)
 
 **Requested:**
