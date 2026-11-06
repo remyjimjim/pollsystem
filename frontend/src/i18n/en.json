@@ -757,7 +757,6 @@
       "countyAny": "Any County",
       "countyNSelected": "{n} counties",
       "countyEmpty": "Pick a state first",
-      "zipcode": "Zipcode",
       "zipcodeNone": "No zipcodes in your purview",
       "zipcodeNSelected": "{n} zipcodes",
       "notesFilter": "Notes",

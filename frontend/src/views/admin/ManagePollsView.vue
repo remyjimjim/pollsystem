@@ -924,9 +924,9 @@ function historySlug(kind: Kind): string {
         </div>
       </label>
 
-      <!-- Zipcode picker -->
+      <!-- Zipcode picker, labelled "Purview" (2026-11-06) -->
       <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
-        {{ $t('admin.managePolls.zipcode') }}
+        {{ $t('admin.managePolls.colPurview') }}
         <div v-if="displayedZipcodes.length === 0" class="rounded border border-slate-300 bg-slate-50 p-2 text-xs font-normal text-slate-500">
           {{ $t('admin.managePolls.zipcodeNone') }}
         </div>
