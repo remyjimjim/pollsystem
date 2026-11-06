@@ -833,7 +833,9 @@
       "removeCloseDatesType": "Type {n} to confirm",
       "removeCloseDatesConfirm": "Remove close dates",
       "removeCloseDatesDone": "Removed {cleared} close dates; {reopened} polls reopened for voting.",
-      "errorRemoveCloseDates": "Couldn't remove the close dates"
+      "errorRemoveCloseDates": "Couldn't remove the close dates",
+      "editNothingChanged": "No changes, so nothing was saved.",
+      "editNothingChangedReason": "Nothing has changed, so there's nothing to save. To leave a note without a change, use Notes."
     }
   },
   "super": {

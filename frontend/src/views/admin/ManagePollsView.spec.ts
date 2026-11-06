@@ -295,3 +295,44 @@ describe('ManagePollsView: out-of-order searches (2026-11-06)', () => {
     w.unmount()
   })
 })
+
+describe('ManagePollsView: Edit saves only what changed (2026-11-06)', () => {
+  const row = { id: 4, type: 'ELECTION', title: 'District 2', blocked: false, status: 'PUBLISHED', closeDate: '2026-11-04T01:00:00Z' }
+  async function openEdit() {
+    serverRows = [row]
+    const w = await mountView()
+    await w.find('[data-test="card-edit"]').trigger('click')
+    return w
+  }
+  const save = (w: ReturnType<typeof mount>) => w.findAll('[role="dialog"] button').find(b => b.text() === 'Save')!.trigger('click')
+
+  it('saves nothing when nothing changed, and says so', async () => {
+    const w = await openEdit()
+    await save(w); await flushPromises()
+    expect(vi.mocked(axios.put)).not.toHaveBeenCalled()
+    expect(w.text()).toContain('No changes, so nothing was saved.')
+    expect(w.find('[role="dialog"]').exists()).toBe(false)
+    w.unmount()
+  })
+
+  it('a reason alone is not a change: the modal stays open and points to Notes', async () => {
+    const w = await openEdit()
+    await w.find('#edit-reason').setValue('abc')
+    await save(w); await flushPromises()
+    expect(vi.mocked(axios.put)).not.toHaveBeenCalled()
+    expect(w.find('[role="dialog"]').text()).toContain('use Notes')
+    w.unmount()
+  })
+
+  it('sends only the changed field', async () => {
+    const w = await openEdit()
+    vi.mocked(axios.post).mockResolvedValue({ data: { found: [[], [], []] } })
+    vi.mocked(axios.put).mockResolvedValue({ data: { id: 1, body: '[status → ARCHIVED]' } })
+    await w.find('[role="dialog"] select').setValue('ARCHIVED')
+    await save(w); await flushPromises()
+    expect(vi.mocked(axios.put)).toHaveBeenCalledWith('/api/admin/polls/ELECTION/4',
+      { title: null, summary: null, status: 'ARCHIVED', closeDate: null, reason: null, notifyCreator: false })
+    w.unmount()
+  })
+})
+

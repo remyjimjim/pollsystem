@@ -653,7 +653,9 @@
       "removeCloseDatesType": "Zur Bestätigung {n} eingeben",
       "removeCloseDatesConfirm": "Enddaten entfernen",
       "removeCloseDatesDone": "{cleared} Enddaten entfernt; {reopened} Umfragen wieder geöffnet.",
-      "errorRemoveCloseDates": "Enddaten konnten nicht entfernt werden"
+      "errorRemoveCloseDates": "Enddaten konnten nicht entfernt werden",
+      "editNothingChanged": "Keine Änderungen, nichts gespeichert.",
+      "editNothingChangedReason": "Nichts wurde geändert, also gibt es nichts zu speichern. Für eine Notiz ohne Änderung nutze Notizen."
     }
   },
   "super": {

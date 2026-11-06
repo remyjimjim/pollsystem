@@ -698,7 +698,9 @@
       "removeCloseDatesType": "Tapez {n} pour confirmer",
       "removeCloseDatesConfirm": "Supprimer les dates de clôture",
       "removeCloseDatesDone": "{cleared} dates de clôture supprimées ; {reopened} sondages rouverts.",
-      "errorRemoveCloseDates": "Impossible de supprimer les dates de clôture"
+      "errorRemoveCloseDates": "Impossible de supprimer les dates de clôture",
+      "editNothingChanged": "Aucune modification : rien n'a été enregistré.",
+      "editNothingChangedReason": "Rien n'a changé, il n'y a donc rien à enregistrer. Pour laisser une note sans modification, utilisez Notes."
     }
   },
   "super": {

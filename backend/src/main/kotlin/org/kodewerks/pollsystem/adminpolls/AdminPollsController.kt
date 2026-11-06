@@ -473,9 +473,11 @@ class AdminPollsController(
     }
 
     /**
-     * Moderation edit of a poll's status and/or close date, with a required
-     * reason recorded as a note (and optionally emailed to the creator). Only
-     * admins whose purview covers the poll (SUPER always) may edit it.
+     * Moderation edit of a poll's title, summary, status and/or close date,
+     * with an optional reason recorded as a note (and optionally emailed to the
+     * creator). Only admins whose purview covers the poll (SUPER always) may
+     * edit it. Returns null (no note, no History entry) when every value sent
+     * equals the stored one.
      */
     @PutMapping("/{type}/{id}")
     @Transactional
@@ -484,7 +486,7 @@ class AdminPollsController(
         @PathVariable id: Long,
         @RequestBody body: AdminPollEditRequest,
         @AuthenticationPrincipal principal: AppUserDetails
-    ): NoteDto {
+    ): NoteDto? {
         val (kind, _) = locatePoll(type, id)
         if (!matchesAdminGeo(kind, id, resolvePurview(principal), null)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "This poll is outside your purview")
@@ -507,51 +509,61 @@ class AdminPollsController(
             throw bad("Nothing to change: provide a title, summary, status and/or close date")
         }
 
+        // What actually changes (2026-11-06): a value equal to the stored one
+        // isn't a change. Nothing changed → nothing saved, no note, no History.
+        data class Current(val title: String, val summary: String?, val status: PollStatus, val close: Instant?)
+        val cur = when (kind) {
+            PollKind.QUESTIONNAIRE -> questionnaires.findById(id).orElseThrow { bad("Questionnaire not found") }
+                .let { Current(it.title, it.summary, it.status, it.closeDate) }
+            PollKind.ELECTION -> elections.findById(id).orElseThrow { bad("Election not found") }
+                .let { Current(it.title, null, it.status, it.closeDate) }
+            PollKind.BALLOT_MEASURE -> ballotMeasures.findById(id).orElseThrow { bad("Ballot measure not found") }
+                .let { Current(it.title, it.summary, it.status, it.closeDate) }
+        }
+        val setTitle = newTitle?.takeIf { it != cur.title }
+        val setSummary = newSummary?.takeIf { it != cur.summary }
+        val setStatus = body.status?.takeIf { it != cur.status }
+        val setClose = body.closeDate?.takeIf { it != cur.close }
+        if (setTitle == null && setSummary == null && setStatus == null && setClose == null) return null
+
         // Apply the change (null = leave unchanged; Phase 1 doesn't clear closeDate).
-        var oldTitle = ""
-        var oldSummary: String? = null
-        var oldClose: Instant? = null
         when (kind) {
             PollKind.QUESTIONNAIRE -> {
-                val q = questionnaires.findById(id).orElseThrow { bad("Questionnaire not found") }
-                oldTitle = q.title; oldSummary = q.summary; oldClose = q.closeDate
-                questionnaires.save(q.copy(title = newTitle ?: q.title, summary = newSummary ?: q.summary, status = body.status ?: q.status, closeDate = body.closeDate ?: q.closeDate))
+                val q = questionnaires.findById(id).get()
+                questionnaires.save(q.copy(title = setTitle ?: q.title, summary = setSummary ?: q.summary, status = setStatus ?: q.status, closeDate = setClose ?: q.closeDate))
             }
             PollKind.ELECTION -> {
-                val e = elections.findById(id).orElseThrow { bad("Election not found") }
-                oldTitle = e.title; oldClose = e.closeDate
-                elections.save(e.copy(title = newTitle ?: e.title, status = body.status ?: e.status, closeDate = body.closeDate ?: e.closeDate))
+                val e = elections.findById(id).get()
+                elections.save(e.copy(title = setTitle ?: e.title, status = setStatus ?: e.status, closeDate = setClose ?: e.closeDate))
             }
             PollKind.BALLOT_MEASURE -> {
-                val bm = ballotMeasures.findById(id).orElseThrow { bad("Ballot measure not found") }
-                oldTitle = bm.title; oldSummary = bm.summary; oldClose = bm.closeDate
+                val bm = ballotMeasures.findById(id).get()
                 ballotMeasures.save(bm.copy(
-                    title = newTitle ?: bm.title,
-                    summary = newSummary ?: bm.summary,
-                    status = body.status ?: bm.status,
-                    closeDate = body.closeDate ?: bm.closeDate,
+                    title = setTitle ?: bm.title,
+                    summary = setSummary ?: bm.summary,
+                    status = setStatus ?: bm.status,
+                    closeDate = setClose ?: bm.closeDate,
                     lastUpdated = Instant.now()
                 ))
             }
         }
         // An election's new close date carries to its ballot measures
         // (decided 2026-10-28): they close with it.
-        val closeChanged = body.closeDate != null && body.closeDate != oldClose
-        if (kind == PollKind.ELECTION && closeChanged) {
-            for (m in ballotMeasures.findByElectionId(id).filter { it.closeDate != body.closeDate }) {
-                ballotMeasures.save(m.copy(closeDate = body.closeDate, lastUpdated = Instant.now()))
+        if (kind == PollKind.ELECTION && setClose != null) {
+            for (m in ballotMeasures.findByElectionId(id).filter { it.closeDate != setClose }) {
+                ballotMeasures.save(m.copy(closeDate = setClose, lastUpdated = Instant.now()))
                 history.record(PollKind.BALLOT_MEASURE, m.id, org.kodewerks.pollsystem.model.PollEventType.EDITED, principal.user,
-                    "Close date → ${body.closeDate} (from its election)")
+                    "Close date → $setClose (from its election)")
             }
         }
 
         // Record the reason as a note (audit trail) — prefixed with what changed
         // so the creator sees the context — and optionally email the creator.
         val changes = buildList {
-            if (newTitle != null && newTitle != oldTitle) add("title → \"$newTitle\"")
-            if (newSummary != null && newSummary != oldSummary) add("summary changed")
-            body.status?.let { add("status → $it") }
-            body.closeDate?.let { add("close date → $it") }
+            setTitle?.let { add("title → \"$it\"") }
+            if (setSummary != null) add("summary changed")
+            setStatus?.let { add("status → $it") }
+            setClose?.let { add("close date → $it") }
         }
         val noteBody = "[${changes.joinToString(", ")}]" + if (reason.isEmpty()) "" else " $reason"
         var emailed = false

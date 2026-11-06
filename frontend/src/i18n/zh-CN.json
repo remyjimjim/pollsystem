@@ -653,7 +653,9 @@
       "removeCloseDatesType": "输入 {n} 以确认",
       "removeCloseDatesConfirm": "移除截止日期",
       "removeCloseDatesDone": "已移除 {cleared} 个截止日期；{reopened} 个投票已重新开放。",
-      "errorRemoveCloseDates": "无法移除截止日期"
+      "errorRemoveCloseDates": "无法移除截止日期",
+      "editNothingChanged": "没有更改，未保存任何内容。",
+      "editNothingChangedReason": "没有任何更改，因此无需保存。如需在不更改的情况下留言，请使用“备注”。"
     }
   },
   "super": {

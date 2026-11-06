@@ -662,6 +662,8 @@ const editModalRow = ref<PollRow | null>(null)
 const editTitle = ref('')
 const editSummary = ref('')
 const editStatus = ref<string>('PUBLISHED')
+/** The status the modal opened with: only a different choice is sent (2026-11-06). */
+const editStatusInitial = ref<string>('PUBLISHED')
 const editCloseDate = ref('')
 const editReason = ref('')
 const editNotify = ref(false)
@@ -681,6 +683,7 @@ function openEditModal(row: PollRow) {
   editTitle.value = row.title
   editSummary.value = row.summary ?? ''
   editStatus.value = (EDITABLE_STATUSES as readonly string[]).includes(row.status) ? row.status : 'PUBLISHED'
+  editStatusInitial.value = editStatus.value
   editCloseDate.value = toLocalInput(row.closeDate)
   editReason.value = ''
   editNotify.value = false
@@ -698,6 +701,22 @@ async function saveEdit() {
   if (reason.length > 2000) {
     editError.value = t('admin.managePolls.errorReasonLength'); return
   }
+  // Only what changed is sent; with no change nothing is saved and the poll's
+  // History gets no entry (2026-11-06).
+  const row = editModalRow.value
+  const hasSummary = row.type !== 'ELECTION'
+  const changed = {
+    title: editTitle.value.trim() !== row.title,
+    summary: hasSummary && editSummary.value.trim() !== (row.summary ?? '').trim(),
+    status: editStatus.value !== editStatusInitial.value,
+    closeDate: editCloseDate.value !== toLocalInput(row.closeDate),
+  }
+  if (!Object.values(changed).some(Boolean)) {
+    if (reason) { editError.value = t('admin.managePolls.editNothingChangedReason'); return }
+    message.value = t('admin.managePolls.editNothingChanged')
+    closeEditModal()
+    return
+  }
   // Listed words; a ballot measure's summary is often official ballot language, so No keeps it.
   const reword = await reviewText([
     { inputId: 'edit-title', get: () => editTitle.value, set: (x: string) => { editTitle.value = x } },
@@ -710,19 +729,20 @@ async function saveEdit() {
   try {
     // A pre-filled close date is sent back unchanged so it isn't cleared;
     // an empty input leaves the (already-null) close date unchanged.
-    const closeDate = editCloseDate.value ? new Date(editCloseDate.value).toISOString() : null
+    const closeDate = changed.closeDate && editCloseDate.value ? new Date(editCloseDate.value).toISOString() : null
     const title = editTitle.value.trim()
     if (!title) { editError.value = t('admin.managePolls.errorTitle'); return }
-    const hasSummary = editModalRow.value.type !== 'ELECTION'
     const summary = editSummary.value.trim()
     if (hasSummary && !summary) { editError.value = t('admin.managePolls.errorSummary'); return }
-    await axios.put<NoteDto>(
-      `/api/admin/polls/${editModalRow.value.type}/${editModalRow.value.id}`,
-      { title: title !== editModalRow.value.title ? title : null,
-        summary: hasSummary && summary !== (editModalRow.value.summary ?? '').trim() ? summary : null,
-        status: editStatus.value, closeDate, reason: reason || null, notifyCreator: editNotify.value }
+    const res = await axios.put<NoteDto | null>(
+      `/api/admin/polls/${row.type}/${row.id}`,
+      { title: changed.title ? title : null,
+        summary: changed.summary ? summary : null,
+        status: changed.status ? editStatus.value : null,
+        closeDate, reason: reason || null, notifyCreator: editNotify.value }
     )
-    message.value = t('admin.managePolls.editSaved')
+    // The server also skips values equal to what's stored (null = nothing saved).
+    message.value = res?.data ? t('admin.managePolls.editSaved') : t('admin.managePolls.editNothingChanged')
     closeEditModal()
     // Reload: an election's new close date also changes its ballot measures' rows.
     await fetchPolls()

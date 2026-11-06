@@ -653,7 +653,9 @@
       "removeCloseDatesType": "Escribe {n} para confirmar",
       "removeCloseDatesConfirm": "Quitar fechas de cierre",
       "removeCloseDatesDone": "Se quitaron {cleared} fechas de cierre; {reopened} encuestas reabiertas.",
-      "errorRemoveCloseDates": "No se pudieron quitar las fechas de cierre"
+      "errorRemoveCloseDates": "No se pudieron quitar las fechas de cierre",
+      "editNothingChanged": "Sin cambios: no se guardó nada.",
+      "editNothingChangedReason": "No ha cambiado nada, así que no hay nada que guardar. Para dejar una nota sin cambios, usa Notas."
     }
   },
   "super": {

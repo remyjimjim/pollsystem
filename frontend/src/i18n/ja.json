@@ -698,7 +698,9 @@
       "removeCloseDatesType": "確認のため {n} と入力",
       "removeCloseDatesConfirm": "締切日を削除",
       "removeCloseDatesDone": "{cleared}件の締切日を削除し、{reopened}件の投票を再開しました。",
-      "errorRemoveCloseDates": "締切日を削除できませんでした"
+      "errorRemoveCloseDates": "締切日を削除できませんでした",
+      "editNothingChanged": "変更がないため、保存されませんでした。",
+      "editNothingChangedReason": "変更がないため保存するものはありません。変更なしでメモを残すには「メモ」を使ってください。"
     }
   },
   "super": {

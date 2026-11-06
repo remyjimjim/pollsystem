@@ -653,7 +653,9 @@
       "removeCloseDatesType": "Digita {n} per confermare",
       "removeCloseDatesConfirm": "Rimuovi date di chiusura",
       "removeCloseDatesDone": "Rimosse {cleared} date di chiusura; {reopened} sondaggi riaperti.",
-      "errorRemoveCloseDates": "Impossibile rimuovere le date di chiusura"
+      "errorRemoveCloseDates": "Impossibile rimuovere le date di chiusura",
+      "editNothingChanged": "Nessuna modifica: non è stato salvato nulla.",
+      "editNothingChangedReason": "Non è cambiato nulla, quindi non c'è niente da salvare. Per lasciare una nota senza modifiche, usa Note."
     }
   },
   "super": {

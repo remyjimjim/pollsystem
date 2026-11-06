@@ -272,8 +272,8 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         )
 
         assertThat(elections.findById(e.id).get().status).isEqualTo(PollStatus.CLOSED)
-        assertThat(note.body).contains("status → CLOSED").contains("Closing early for review")
-        assertThat(note.emailed).isTrue()
+        assertThat(note!!.body).contains("status → CLOSED").contains("Closing early for review")
+        assertThat(note!!.emailed).isTrue()
         assertThat(recordedEmails.sent).hasSize(1)
         assertThat(recordedEmails.sent[0].to).isEqualTo(creator.email)
     }
@@ -297,7 +297,7 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         val saved = elections.findById(e.id).get()
         assertThat(saved.title).isEqualTo("New name")
         assertThat(saved.closeDate).isEqualTo(newClose)
-        assertThat(note.body).contains("title → \"New name\"").contains("Typo and extension")
+        assertThat(note!!.body).contains("title → \"New name\"").contains("Typo and extension")
         assertThat(ballotMeasures.findById(m1.id).get().closeDate).isEqualTo(newClose)
         assertThat(ballotMeasures.findById(m2.id).get().closeDate).isEqualTo(newClose)
 
@@ -315,8 +315,31 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "noreason-creator")
         val e = newElection(creator, zipcode = "90001", title = "No reason")
         val note = controller.editPoll("ELECTION", e.id, AdminPollEditRequest(title = "Renamed"), principalFor(admin))
-        assertThat(note.body).isEqualTo("[title → \"Renamed\"]")
+        assertThat(note!!.body).isEqualTo("[title → \"Renamed\"]")
         assertThat(elections.findById(e.id).get().title).isEqualTo("Renamed")
+    }
+
+    @Test
+    fun `editPoll with nothing really changed saves nothing and records no note or History`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "nochange-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "nochange-creator")
+        val e = newElection(creator, zipcode = "90001", title = "Same")
+        val before = pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.ELECTION, e.id).size
+
+        val result = controller.editPoll("ELECTION", e.id,
+            AdminPollEditRequest(title = "Same", status = PollStatus.PUBLISHED, closeDate = e.closeDate, reason = "just looking"),
+            principalFor(admin))
+
+        assertThat(result).isNull()
+        assertThat(controller.listNotes("ELECTION", e.id)).isEmpty()
+        assertThat(pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.ELECTION, e.id)).hasSize(before)
+
+        // One real change among unchanged values records only that change.
+        val note = controller.editPoll("ELECTION", e.id,
+            AdminPollEditRequest(title = "Same", status = PollStatus.ARCHIVED, closeDate = e.closeDate), principalFor(admin))
+        assertThat(note!!.body).isEqualTo("[status → ARCHIVED]")
+        assertThat(pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.ELECTION, e.id).first().details).isEqualTo("Status → ARCHIVED")
     }
 
     @Test
@@ -371,7 +394,7 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         val note = controller.editPoll("BALLOT_MEASURE", m.id,
             AdminPollEditRequest(summary = " New text ", reason = "Fixed the wording"), principalFor(admin))
         assertThat(ballotMeasures.findById(m.id).get().summary).isEqualTo("New text")
-        assertThat(note.body).contains("summary changed")
+        assertThat(note!!.body).contains("summary changed")
         assertThat(controller.list(principalFor(admin), listOf("BALLOT_MEASURE"), "Prop S", null, null, null, null, true)
             .single { it.id == m.id }.summary).isEqualTo("New text")
 
