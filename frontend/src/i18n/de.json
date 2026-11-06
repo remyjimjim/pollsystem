@@ -645,7 +645,15 @@
       "statusDraft": "Entwurf",
       "statusNationwide": "Landesweit",
       "statusGroupStage": "Umfragen anzeigen, die sind:",
-      "statusGroupAlso": "Auch anzeigen:"
+      "statusGroupAlso": "Auch anzeigen:",
+      "removeCloseDates": "Enddaten entfernen ({n})",
+      "removeCloseDatesTitle": "Enddaten entfernen",
+      "removeCloseDatesBody": "Das Enddatum der {n} gelisteten Umfragen entfernen? {m} davon sind geschlossen und werden wieder zur Abstimmung geöffnet.",
+      "removeCloseDatesNote": "Der Verlauf jeder Umfrage hält die Änderung und das alte Datum fest. Die Abstimmungsvorlagen einer Wahl folgen ihr. Entwürfe und Archiviertes bleiben unverändert.",
+      "removeCloseDatesType": "Zur Bestätigung {n} eingeben",
+      "removeCloseDatesConfirm": "Enddaten entfernen",
+      "removeCloseDatesDone": "{cleared} Enddaten entfernt; {reopened} Umfragen wieder geöffnet.",
+      "errorRemoveCloseDates": "Enddaten konnten nicht entfernt werden"
     }
   },
   "super": {

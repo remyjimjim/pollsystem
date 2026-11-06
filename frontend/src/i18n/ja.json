@@ -690,7 +690,15 @@
       "statusDraft": "下書き",
       "statusNationwide": "全国",
       "statusGroupStage": "表示する投票：",
-      "statusGroupAlso": "あわせて表示："
+      "statusGroupAlso": "あわせて表示：",
+      "removeCloseDates": "締切日を削除（{n}）",
+      "removeCloseDatesTitle": "締切日を削除",
+      "removeCloseDatesBody": "一覧の{n}件の投票から締切日を削除しますか？うち{m}件は締切済みで、投票が再開されます。",
+      "removeCloseDatesNote": "各投票の履歴に変更と以前の締切日が記録されます。選挙の住民投票項目も選挙に従います。下書きとアーカイブは変更されません。",
+      "removeCloseDatesType": "確認のため {n} と入力",
+      "removeCloseDatesConfirm": "締切日を削除",
+      "removeCloseDatesDone": "{cleared}件の締切日を削除し、{reopened}件の投票を再開しました。",
+      "errorRemoveCloseDates": "締切日を削除できませんでした"
     }
   },
   "super": {

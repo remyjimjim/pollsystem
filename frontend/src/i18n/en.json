@@ -812,9 +812,9 @@
       "statusClosed": "Closed",
       "statusArchived": "Archived",
       "editCloseDate": "Close date",
-      "editReason": "Reason (recorded as a note)",
+      "editReason": "Reason (optional, recorded as a note)",
       "editSaved": "Poll updated.",
-      "errorReasonLength": "Reason must be 1–2000 characters.",
+      "errorReasonLength": "A reason can be at most 2000 characters.",
       "errorSaveEdit": "Failed to update poll",
       "creatorFilter": "Creator: {email}",
       "clearCreator": "Clear creator filter",
@@ -825,7 +825,15 @@
       "statusDraft": "Draft",
       "statusNationwide": "Nationwide",
       "statusGroupStage": "Show polls that are:",
-      "statusGroupAlso": "Also show:"
+      "statusGroupAlso": "Also show:",
+      "removeCloseDates": "Remove close dates ({n})",
+      "removeCloseDatesTitle": "Remove close dates",
+      "removeCloseDatesBody": "Remove the close date from the {n} listed polls? {m} of them have closed and will reopen for voting.",
+      "removeCloseDatesNote": "Each poll's History records the change and its old close date. An election's ballot measures follow it. Drafts and archived polls are left alone.",
+      "removeCloseDatesType": "Type {n} to confirm",
+      "removeCloseDatesConfirm": "Remove close dates",
+      "removeCloseDatesDone": "Removed {cleared} close dates; {reopened} polls reopened for voting.",
+      "errorRemoveCloseDates": "Couldn't remove the close dates"
     }
   },
   "super": {

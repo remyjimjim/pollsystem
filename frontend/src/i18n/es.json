@@ -645,7 +645,15 @@
       "statusDraft": "Borrador",
       "statusNationwide": "Nacional",
       "statusGroupStage": "Mostrar encuestas que estén:",
-      "statusGroupAlso": "Mostrar también:"
+      "statusGroupAlso": "Mostrar también:",
+      "removeCloseDates": "Quitar fechas de cierre ({n})",
+      "removeCloseDatesTitle": "Quitar fechas de cierre",
+      "removeCloseDatesBody": "¿Quitar la fecha de cierre de las {n} encuestas listadas? {m} de ellas ya cerraron y se reabrirán para votar.",
+      "removeCloseDatesNote": "El Historial de cada encuesta registra el cambio y su fecha anterior. Las medidas de una elección la siguen. Los borradores y las archivadas no cambian.",
+      "removeCloseDatesType": "Escribe {n} para confirmar",
+      "removeCloseDatesConfirm": "Quitar fechas de cierre",
+      "removeCloseDatesDone": "Se quitaron {cleared} fechas de cierre; {reopened} encuestas reabiertas.",
+      "errorRemoveCloseDates": "No se pudieron quitar las fechas de cierre"
     }
   },
   "super": {

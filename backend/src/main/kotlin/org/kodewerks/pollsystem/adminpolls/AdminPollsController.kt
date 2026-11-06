@@ -83,8 +83,9 @@ data class EditNoteRequest(val body: String)
 
 /**
  * Admin moderation edit. A null field is left unchanged (Phase 1 does not clear
- * closeDate). `reason` is required and recorded as a poll note (the audit
- * trail); `notifyCreator` emails the creator a copy of that note.
+ * closeDate). `reason` is optional (since 2026-11-06) and recorded with what
+ * changed as a poll note (the audit trail); `notifyCreator` emails the creator
+ * a copy of that note.
  */
 data class AdminPollEditRequest(
     val title: String? = null,
@@ -92,9 +93,18 @@ data class AdminPollEditRequest(
     val summary: String? = null,
     val status: PollStatus? = null,
     val closeDate: Instant? = null,
-    val reason: String,
+    val reason: String? = null,
     val notifyCreator: Boolean = false
 )
+
+/** One poll, by type (ELECTION / QUESTIONNAIRE / BALLOT_MEASURE) and id. */
+data class PollRef(val type: String, val id: Long)
+
+/** The polls listed on Manage Polls when the super pressed "Remove close dates". */
+data class RemoveCloseDatesRequest(val polls: List<PollRef>)
+
+/** How many close dates were removed; how many of those polls had closed and are open again. */
+data class RemoveCloseDatesResult(val cleared: Int, val reopened: Int)
 
 data class BlockDto(
     val id: Long,
@@ -460,8 +470,9 @@ class AdminPollsController(
         if (!matchesAdminGeo(kind, id, resolvePurview(principal), null)) {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "This poll is outside your purview")
         }
-        val reason = body.reason.trim()
-        if (reason.isEmpty() || reason.length > 2000) throw bad("A reason (1–2000 chars) is required")
+        // The reason is optional (2026-11-06); when given it's kept with the change.
+        val reason = body.reason?.trim().orEmpty()
+        if (reason.length > 2000) throw bad("A reason can be at most 2000 characters")
         val newTitle = body.title?.trim()
         if (newTitle != null && (newTitle.isEmpty() || newTitle.length > 500)) throw bad("A title must be 1–500 characters")
         val newSummary = body.summary?.trim()
@@ -471,7 +482,7 @@ class AdminPollsController(
         badWords.requireClean(
             "the title" to newTitle,
             "the summary" to newSummary?.takeIf { kind != PollKind.BALLOT_MEASURE },
-            "the reason" to reason
+            "the reason" to reason.takeIf { it.isNotEmpty() }
         )
         if (newTitle == null && newSummary == null && body.status == null && body.closeDate == null) {
             throw bad("Nothing to change: provide a title, summary, status and/or close date")
@@ -523,7 +534,7 @@ class AdminPollsController(
             body.status?.let { add("status → $it") }
             body.closeDate?.let { add("close date → $it") }
         }
-        val noteBody = "[${changes.joinToString(", ")}] $reason"
+        val noteBody = "[${changes.joinToString(", ")}]" + if (reason.isEmpty()) "" else " $reason"
         var emailed = false
         if (body.notifyCreator) {
             emailService.send(creatorEmailFor(kind, id), "A change to your poll", noteBody)
@@ -534,8 +545,68 @@ class AdminPollsController(
             authorId = principal.user.id, emailed = emailed
         ))
         history.record(kind, id, org.kodewerks.pollsystem.model.PollEventType.EDITED, principal.user,
-            (changes.map { it.replaceFirstChar(Char::uppercase) } + "Reason: $reason").joinToString("\n"))
+            (changes.map { it.replaceFirstChar(Char::uppercase) } + listOfNotNull(reason.takeIf { it.isNotEmpty() }?.let { "Reason: $it" }))
+                .joinToString("\n"))
         return toDto(saved)
+    }
+
+    /**
+     * "Remove close dates" (2026-11-06, SUPER only): clear the close date of each
+     * poll the super has listed on Manage Polls, i.e. exactly the polls their
+     * filters show. A poll whose date had passed (or whose status is CLOSED) is
+     * open for voting again and its History gets a "Reopened" entry; one that
+     * hadn't closed yet gets an "Edited" entry. Both say what the date was, so
+     * the History keeps every poll's past close dates. An election's ballot
+     * measures follow it, as with an edited close date (decided 2026-10-28).
+     * Drafts and archived polls are left alone.
+     */
+    @PostMapping("/remove-close-dates")
+    @Transactional
+    fun removeCloseDates(
+        @RequestBody body: RemoveCloseDatesRequest,
+        @AuthenticationPrincipal principal: AppUserDetails
+    ): RemoveCloseDatesResult {
+        if (principal.user.access < AccessLevel.SUPER) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Only a super can remove close dates")
+        }
+        if (body.polls.size > 10_000) throw bad("Too many polls at once")
+        val now = Instant.now()
+        val stamp = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm 'UTC'").withZone(java.time.ZoneOffset.UTC)
+        val done = mutableSetOf<Pair<PollKind, Long>>()
+        var cleared = 0
+        var reopened = 0
+        /** Records one cleared date; returns whether the poll was clear-able. */
+        fun clear(kind: PollKind, id: Long, status: PollStatus, old: Instant?, save: (PollStatus) -> Unit, why: String? = null) {
+            if (!done.add(kind to id)) return
+            if (status != PollStatus.PUBLISHED && status != PollStatus.CLOSED) return
+            if (old == null && status != PollStatus.CLOSED) return
+            val wasClosed = status == PollStatus.CLOSED || (old != null && !old.isAfter(now))
+            save(PollStatus.PUBLISHED)
+            cleared++
+            if (wasClosed) reopened++
+            val details = "Close date removed (was ${old?.let { stamp.format(it) } ?: "none"})" + (why?.let { ", $it" } ?: "")
+            history.record(kind, id,
+                if (wasClosed) org.kodewerks.pollsystem.model.PollEventType.REOPENED else org.kodewerks.pollsystem.model.PollEventType.EDITED,
+                principal.user, details)
+        }
+        fun clearMeasure(m: org.kodewerks.pollsystem.model.BallotMeasure, why: String? = null) =
+            clear(PollKind.BALLOT_MEASURE, m.id, m.status, m.closeDate, { st ->
+                ballotMeasures.save(m.copy(status = st, closeDate = null, lastUpdated = now))
+            }, why)
+
+        for (ref in body.polls) {
+            when (parseKind(ref.type)) {
+                PollKind.QUESTIONNAIRE -> questionnaires.findById(ref.id).orElse(null)?.let { q ->
+                    clear(PollKind.QUESTIONNAIRE, q.id, q.status, q.closeDate, { st -> questionnaires.save(q.copy(status = st, closeDate = null)) })
+                }
+                PollKind.ELECTION -> elections.findById(ref.id).orElse(null)?.let { e ->
+                    clear(PollKind.ELECTION, e.id, e.status, e.closeDate, { st -> elections.save(e.copy(status = st, closeDate = null)) })
+                    for (m in ballotMeasures.findByElectionId(e.id)) clearMeasure(m, "with its election")
+                }
+                PollKind.BALLOT_MEASURE -> ballotMeasures.findById(ref.id).orElse(null)?.let { clearMeasure(it) }
+            }
+        }
+        return RemoveCloseDatesResult(cleared, reopened)
     }
 
     // ---------- internal helpers ----------

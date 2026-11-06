@@ -645,7 +645,15 @@
       "statusDraft": "Rascunho",
       "statusNationwide": "Nacional",
       "statusGroupStage": "Mostrar enquetes que estejam:",
-      "statusGroupAlso": "Mostrar também:"
+      "statusGroupAlso": "Mostrar também:",
+      "removeCloseDates": "Remover datas de encerramento ({n})",
+      "removeCloseDatesTitle": "Remover datas de encerramento",
+      "removeCloseDatesBody": "Remover a data de encerramento das {n} enquetes listadas? {m} delas já encerraram e serão reabertas para votação.",
+      "removeCloseDatesNote": "O Histórico de cada enquete registra a mudança e a data anterior. As medidas de uma eleição a acompanham. Rascunhos e arquivadas não mudam.",
+      "removeCloseDatesType": "Digite {n} para confirmar",
+      "removeCloseDatesConfirm": "Remover datas de encerramento",
+      "removeCloseDatesDone": "{cleared} datas removidas; {reopened} enquetes reabertas.",
+      "errorRemoveCloseDates": "Não foi possível remover as datas de encerramento"
     }
   },
   "super": {

@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import axios from 'axios'
+import { createPinia, setActivePinia } from 'pinia'
 import ManagePollsView from './ManagePollsView.vue'
+import { useAuthStore } from '@/stores/auth'
 
 vi.mock('axios')
 
@@ -14,7 +16,7 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ replace: replaceMock })
 }))
 
-interface Row { id: number; type: string; title: string; blocked: boolean; nationwide?: boolean; latestNote?: unknown }
+interface Row { id: number; type: string; title: string; blocked: boolean; nationwide?: boolean; latestNote?: unknown; status?: string; closeDate?: string | null }
 function pollRow(r: Row) {
   return {
     ...r, status: 'PUBLISHED', creatorEmail: 'c@test.local', closeDate: null,
@@ -29,6 +31,7 @@ let serverRows: Row[] = []
 let lastListParams: Record<string, string> | undefined
 
 beforeEach(() => {
+  setActivePinia(createPinia())
   routeQuery.value = {}
   vi.useFakeTimers()
   serverRows = [
@@ -233,5 +236,62 @@ describe('ManagePollsView: cards on phones (2026-10-28)', () => {
     await cards[0].find('[data-test="card-notes"]').trigger('click')
     await flushPromises()
     expect(w.find('[data-test="notes-modal"]').exists()).toBe(true)
+  })
+})
+
+describe('ManagePollsView: Remove close dates (2026-11-06)', () => {
+  const rows = [
+    { id: 1, type: 'ELECTION', title: 'Past', blocked: false, status: 'PUBLISHED', closeDate: '2026-11-03T20:00:00Z' },
+    { id: 2, type: 'QUESTIONNAIRE', title: 'Future', blocked: false, status: 'PUBLISHED', closeDate: '2099-01-01T00:00:00Z' },
+    { id: 3, type: 'QUESTIONNAIRE', title: 'Open', blocked: false, status: 'PUBLISHED', closeDate: null },
+  ]
+
+  it('is hidden from an admin', async () => {
+    useAuthStore().user = { access: 'ADMIN' } as any
+    serverRows = rows
+    const w = await mountView()
+    expect(w.find('[data-test="remove-close-dates"]').exists()).toBe(false)
+    w.unmount()
+  })
+
+  it('a super clears the listed close dates after typing the count, and only the listed polls are sent', async () => {
+    useAuthStore().user = { access: 'SUPER' } as any
+    serverRows = rows
+    const w = await mountView()
+    const button = w.find('[data-test="remove-close-dates"]')
+    expect(button.text()).toContain('(2)')
+    await button.trigger('click')
+    const modal = w.find('[data-test="remove-close-dates-modal"]')
+    expect(modal.text()).toContain('1 of them have closed')
+    const confirm = w.find('[data-test="remove-close-dates-confirm"]')
+    expect((confirm.element as HTMLButtonElement).disabled).toBe(true)
+    await w.find('[data-test="remove-close-dates-typed"]').setValue('2')
+    vi.mocked(axios.post).mockResolvedValue({ data: { cleared: 2, reopened: 1 } })
+    await confirm.trigger('click')
+    await flushPromises()
+    expect(vi.mocked(axios.post)).toHaveBeenCalledWith('/api/admin/polls/remove-close-dates',
+      { polls: [{ type: 'ELECTION', id: 1 }, { type: 'QUESTIONNAIRE', id: 2 }] })
+    expect(w.text()).toContain('Removed 2 close dates; 1 polls reopened for voting.')
+    w.unmount()
+  })
+})
+
+describe('ManagePollsView: out-of-order searches (2026-11-06)', () => {
+  it('keeps the newest search\'s rows when an older one answers last', async () => {
+    const w = await mountView()
+    const pending: Array<(v: unknown) => void> = []
+    vi.mocked(axios.get).mockImplementation((url: string) => url === '/api/admin/polls'
+      ? new Promise(res => pending.push(res)) as any
+      : Promise.resolve({ data: [] }) as any)
+    const box = w.find('[data-test="type-filter-election"]')
+    await box.setValue(false); vi.advanceTimersByTime(500); await flushPromises()
+    await box.setValue(true); vi.advanceTimersByTime(500); await flushPromises()
+    expect(pending.length).toBe(2)
+    pending[1]({ data: [pollRow({ id: 7, type: 'QUESTIONNAIRE', title: 'Newer', blocked: false })] })
+    await flushPromises()
+    pending[0]({ data: [pollRow({ id: 8, type: 'QUESTIONNAIRE', title: 'Older', blocked: false })] })
+    await flushPromises()
+    expect(titles(w)).toEqual(['Newer'])
+    w.unmount()
   })
 })

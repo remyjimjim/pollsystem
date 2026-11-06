@@ -70,8 +70,11 @@ class PollHistoryService(
     @Transactional
     fun closedIfNew(kind: PollKind, pollId: Long, closeDate: Instant) {
         val history = events.findByPollTypeAndPollIdOrderByIdDesc(kind, pollId)
+        // A Reopened entry also starts a new live stretch: "Remove close dates"
+        // (2026-11-06) reopens a closed poll without publishing it again.
         val sincePublish = history.takeWhile {
-            it.event != PollEventType.PUBLISHED && it.event != PollEventType.PUBLISHED_BEFORE_HISTORY
+            it.event != PollEventType.PUBLISHED && it.event != PollEventType.PUBLISHED_BEFORE_HISTORY &&
+                it.event != PollEventType.REOPENED
         }
         if (sincePublish.any { it.event == PollEventType.CLOSED }) return
         val publishedAt = history.firstOrNull {

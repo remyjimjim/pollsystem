@@ -690,7 +690,15 @@
       "statusDraft": "Brouillon",
       "statusNationwide": "National",
       "statusGroupStage": "Afficher les sondages :",
-      "statusGroupAlso": "Afficher aussi :"
+      "statusGroupAlso": "Afficher aussi :",
+      "removeCloseDates": "Supprimer les dates de clôture ({n})",
+      "removeCloseDatesTitle": "Supprimer les dates de clôture",
+      "removeCloseDatesBody": "Supprimer la date de clôture des {n} sondages listés ? {m} d'entre eux sont clos et rouvriront au vote.",
+      "removeCloseDatesNote": "L'historique de chaque sondage note le changement et l'ancienne date. Les mesures d'une élection la suivent. Brouillons et archives ne changent pas.",
+      "removeCloseDatesType": "Tapez {n} pour confirmer",
+      "removeCloseDatesConfirm": "Supprimer les dates de clôture",
+      "removeCloseDatesDone": "{cleared} dates de clôture supprimées ; {reopened} sondages rouverts.",
+      "errorRemoveCloseDates": "Impossible de supprimer les dates de clôture"
     }
   },
   "super": {

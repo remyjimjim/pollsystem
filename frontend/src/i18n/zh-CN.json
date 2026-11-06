@@ -645,7 +645,15 @@
       "statusDraft": "草稿",
       "statusNationwide": "全国",
       "statusGroupStage": "显示以下状态的投票：",
-      "statusGroupAlso": "同时显示："
+      "statusGroupAlso": "同时显示：",
+      "removeCloseDates": "移除截止日期（{n}）",
+      "removeCloseDatesTitle": "移除截止日期",
+      "removeCloseDatesBody": "要移除所列 {n} 个投票的截止日期吗？其中 {m} 个已截止，将重新开放投票。",
+      "removeCloseDatesNote": "每个投票的历史记录会记下此更改及原截止日期。选举的投票提案随选举一起更改。草稿和已归档的投票不变。",
+      "removeCloseDatesType": "输入 {n} 以确认",
+      "removeCloseDatesConfirm": "移除截止日期",
+      "removeCloseDatesDone": "已移除 {cleared} 个截止日期；{reopened} 个投票已重新开放。",
+      "errorRemoveCloseDates": "无法移除截止日期"
     }
   },
   "super": {

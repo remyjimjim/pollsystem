@@ -645,7 +645,15 @@
       "statusDraft": "Bozza",
       "statusNationwide": "Nazionale",
       "statusGroupStage": "Mostra sondaggi:",
-      "statusGroupAlso": "Mostra anche:"
+      "statusGroupAlso": "Mostra anche:",
+      "removeCloseDates": "Rimuovi date di chiusura ({n})",
+      "removeCloseDatesTitle": "Rimuovi date di chiusura",
+      "removeCloseDatesBody": "Rimuovere la data di chiusura dai {n} sondaggi elencati? {m} sono chiusi e verranno riaperti al voto.",
+      "removeCloseDatesNote": "La Cronologia di ogni sondaggio registra la modifica e la vecchia data. I quesiti di un'elezione la seguono. Bozze e archiviati restano invariati.",
+      "removeCloseDatesType": "Digita {n} per confermare",
+      "removeCloseDatesConfirm": "Rimuovi date di chiusura",
+      "removeCloseDatesDone": "Rimosse {cleared} date di chiusura; {reopened} sondaggi riaperti.",
+      "errorRemoveCloseDates": "Impossibile rimuovere le date di chiusura"
     }
   },
   "super": {

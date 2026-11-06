@@ -306,6 +306,56 @@ class AdminPollsControllerTest : AbstractIntegrationTest() {
         }.isInstanceOf(ResponseStatusException::class.java)
     }
 
+    @Autowired private lateinit var pollEvents: org.kodewerks.pollsystem.repository.PollEventRepository
+
+    @Test
+    fun `editPoll takes no reason and leaves it out of the note`() {
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "noreason-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "noreason-creator")
+        val e = newElection(creator, zipcode = "90001", title = "No reason")
+        val note = controller.editPoll("ELECTION", e.id, AdminPollEditRequest(title = "Renamed"), principalFor(admin))
+        assertThat(note.body).isEqualTo("[title → \"Renamed\"]")
+        assertThat(elections.findById(e.id).get().title).isEqualTo("Renamed")
+    }
+
+    @Test
+    fun `removeCloseDates reopens closed polls with their measures, records History, and is super-only`() {
+        val sup = fixtures.createUser(access = AccessLevel.SUPER, emailPrefix = "rcd-super")
+        val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "rcd-admin")
+        fixtures.assignAdmin(admin, "CA", "Los Angeles", "90001")
+        val creator = fixtures.createUser(access = AccessLevel.CREATOR, emailPrefix = "rcd-creator")
+        val past = Instant.parse("2026-11-03T20:00:00Z")
+        val closed = elections.save(newElection(creator, zipcode = "90001", title = "Past election").copy(closeDate = past))
+        val open = newElection(creator, zipcode = "90001", title = "Future election")
+        val measureType = pollTypes.findAll().first { it.name == "Referendum/Ballot Measure" }
+        val m = ballotMeasures.save(org.kodewerks.pollsystem.model.BallotMeasure(creator = creator, pollType = measureType,
+            title = "Prop C", summary = "s", election = closed, effectiveDate = LocalDate.now(), status = PollStatus.PUBLISHED, closeDate = past))
+        val refs = listOf(PollRef("ELECTION", closed.id), PollRef("ELECTION", open.id))
+
+        assertThatThrownBy { controller.removeCloseDates(RemoveCloseDatesRequest(refs), principalFor(admin)) }
+            .isInstanceOfSatisfying(ResponseStatusException::class.java) { assertThat(it.statusCode.value()).isEqualTo(403) }
+        assertThat(elections.findById(closed.id).get().closeDate).isEqualTo(past)
+
+        val result = controller.removeCloseDates(RemoveCloseDatesRequest(refs), principalFor(sup))
+
+        assertThat(result.cleared).isEqualTo(3)
+        assertThat(result.reopened).isEqualTo(2)
+        assertThat(elections.findById(closed.id).get().closeDate).isNull()
+        assertThat(elections.findById(open.id).get().closeDate).isNull()
+        assertThat(ballotMeasures.findById(m.id).get().closeDate).isNull()
+        val closedEvent = pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.ELECTION, closed.id).first()
+        assertThat(closedEvent.event).isEqualTo(org.kodewerks.pollsystem.model.PollEventType.REOPENED)
+        assertThat(closedEvent.details).isEqualTo("Close date removed (was 2026-11-03 20:00 UTC)")
+        assertThat(pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.ELECTION, open.id).first().event)
+            .isEqualTo(org.kodewerks.pollsystem.model.PollEventType.EDITED)
+        assertThat(pollEvents.findByPollTypeAndPollIdOrderByIdDesc(PollKind.BALLOT_MEASURE, m.id).first().details)
+            .isEqualTo("Close date removed (was 2026-11-03 20:00 UTC), with its election")
+
+        // Run again: nothing left to clear.
+        assertThat(controller.removeCloseDates(RemoveCloseDatesRequest(refs), principalFor(sup)).cleared).isEqualTo(0)
+    }
+
     @Test
     fun `editPoll changes a ballot measure's summary, and refuses one for an election or a blank one`() {
         val admin = fixtures.createUser(access = AccessLevel.ADMIN, emailPrefix = "sum-admin")

@@ -690,7 +690,15 @@
       "statusDraft": "Utkast",
       "statusNationwide": "Landsdekkende",
       "statusGroupStage": "Vis avstemninger som er:",
-      "statusGroupAlso": "Vis også:"
+      "statusGroupAlso": "Vis også:",
+      "removeCloseDates": "Fjern sluttdatoer ({n})",
+      "removeCloseDatesTitle": "Fjern sluttdatoer",
+      "removeCloseDatesBody": "Fjerne sluttdatoen fra de {n} listede avstemningene? {m} av dem er stengt og åpnes for stemmegivning igjen.",
+      "removeCloseDatesNote": "Historikken til hver avstemning registrerer endringen og den gamle datoen. Et valgs saker følger valget. Utkast og arkiverte endres ikke.",
+      "removeCloseDatesType": "Skriv {n} for å bekrefte",
+      "removeCloseDatesConfirm": "Fjern sluttdatoer",
+      "removeCloseDatesDone": "Fjernet {cleared} sluttdatoer; {reopened} avstemninger gjenåpnet.",
+      "errorRemoveCloseDates": "Kunne ikke fjerne sluttdatoene"
     }
   },
   "super": {

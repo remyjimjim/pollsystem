@@ -8,6 +8,8 @@ import ColumnChooser from '@/components/ColumnChooser.vue'
 import ScrollEnds from '@/components/ScrollEnds.vue'
 import { useColumns } from '@/composables/useColumns'
 import MultiSelectDropdown from '@/components/MultiSelectDropdown.vue'
+import { useAuthStore } from '@/stores/auth'
+import { AccessLevel } from '@/types'
 
 const { t } = useI18n()
 
@@ -247,7 +249,15 @@ function searchNow() {
   if (notesTimer) { clearTimeout(notesTimer); notesTimer = null }
   fetchPolls()
 }
+/**
+ * Each fetch's number: only the newest one's answer is used (2026-11-06). An
+ * older, slower search used to land last and replace newer rows, so the list
+ * didn't match the filters, and a reload after "Remove close dates" could be
+ * overwritten with the old dates.
+ */
+let fetchSeq = 0
 async function fetchPolls() {
+  const seq = ++fetchSeq
   loading.value = true
   error.value = null
   try {
@@ -263,11 +273,12 @@ async function fetchPolls() {
     if (selectedZipcodes.value.length > 0) params.zipcode = selectedZipcodes.value.join(',')
     else if (selectedCountyIds.value.length > 0) params.countyId = selectedCountyIds.value.join(',')
     else if (selectedStateIds.value.length > 0) params.stateId = selectedStateIds.value.join(',')
-    results.value = (await axios.get<PollRow[]>('/api/admin/polls', { params })).data
+    const rows = (await axios.get<PollRow[]>('/api/admin/polls', { params })).data
+    if (seq === fetchSeq) results.value = rows
   } catch (e: any) {
-    error.value = e?.response?.data?.message ?? t('admin.managePolls.errorLoad')
+    if (seq === fetchSeq) error.value = e?.response?.data?.message ?? t('admin.managePolls.errorLoad')
   } finally {
-    loading.value = false
+    if (seq === fetchSeq) loading.value = false
   }
 }
 
@@ -607,7 +618,45 @@ async function saveNote() {
 }
 
 // ---------- edit modal (status / close date + reason + notify) ----------
-const EDITABLE_STATUSES = ['PUBLISHED', 'CLOSED', 'ARCHIVED'] as const
+// ---------- Remove close dates (2026-11-06, SUPER only) ----------
+// Clears the close date of every listed poll, i.e. exactly what the filters
+// show. A poll that had closed is open for voting again; each poll's History
+// records it ("Reopened", with the old date). An election's measures follow it.
+const auth = useAuthStore()
+const isSuper = computed(() => auth.hasAccess(AccessLevel.SUPER))
+const isPast = (r: PollRow) => !!r.closeDate && new Date(r.closeDate).getTime() <= Date.now()
+/** Listed polls that have a close date to remove (drafts and archived polls are left alone). */
+const closeDateTargets = computed(() => visibleResults.value.filter(r =>
+  (r.status === 'PUBLISHED' || r.status === 'CLOSED') && (r.closeDate || r.status === 'CLOSED')))
+const closeDateReopens = computed(() => closeDateTargets.value.filter(r => r.status === 'CLOSED' || isPast(r)).length)
+const removeOpen = ref(false)
+const removeTyped = ref('')
+const removeSaving = ref(false)
+const removeError = ref<string | null>(null)
+function openRemoveCloseDates() { removeTyped.value = ''; removeError.value = null; removeOpen.value = true }
+async function confirmRemoveCloseDates() {
+  if (removeTyped.value.trim() !== String(closeDateTargets.value.length)) return
+  removeSaving.value = true
+  removeError.value = null
+  try {
+    const res = await axios.post<{ cleared: number; reopened: number }>('/api/admin/polls/remove-close-dates',
+      { polls: closeDateTargets.value.map(r => ({ type: r.type, id: r.id })) })
+    message.value = t('admin.managePolls.removeCloseDatesDone', { cleared: res.data.cleared, reopened: res.data.reopened })
+    removeOpen.value = false
+    // Update the listed rows now: the full reload takes a few seconds, and an
+    // Edit opened meanwhile must not see (and save back) the old close date.
+    const cleared = new Set(closeDateTargets.value.map(rowKey))
+    results.value = results.value.map(r => cleared.has(rowKey(r)) ? { ...r, closeDate: null, status: 'PUBLISHED' } : r)
+    await fetchPolls()
+  } catch (e: any) {
+    removeError.value = e?.response?.data?.message ?? t('admin.managePolls.errorRemoveCloseDates')
+  } finally {
+    removeSaving.value = false
+  }
+}
+
+// Closed is no longer offered (2026-11-06): a poll closes by its close date.
+const EDITABLE_STATUSES = ['PUBLISHED', 'ARCHIVED'] as const
 const editModalOpen = ref(false)
 const editModalRow = ref<PollRow | null>(null)
 const editTitle = ref('')
@@ -644,8 +693,9 @@ function closeEditModal() {
 }
 async function saveEdit() {
   if (!editModalRow.value) return
+  // The reason is optional (2026-11-06).
   const reason = editReason.value.trim()
-  if (reason.length === 0 || reason.length > 2000) {
+  if (reason.length > 2000) {
     editError.value = t('admin.managePolls.errorReasonLength'); return
   }
   // Listed words; a ballot measure's summary is often official ballot language, so No keeps it.
@@ -670,7 +720,7 @@ async function saveEdit() {
       `/api/admin/polls/${editModalRow.value.type}/${editModalRow.value.id}`,
       { title: title !== editModalRow.value.title ? title : null,
         summary: hasSummary && summary !== (editModalRow.value.summary ?? '').trim() ? summary : null,
-        status: editStatus.value, closeDate, reason, notifyCreator: editNotify.value }
+        status: editStatus.value, closeDate, reason: reason || null, notifyCreator: editNotify.value }
     )
     message.value = t('admin.managePolls.editSaved')
     closeEditModal()
@@ -858,6 +908,12 @@ function historySlug(kind: Kind): string {
 
     <p v-if="error" class="mb-2 text-sm text-red-700">{{ error }}</p>
     <p v-if="message" class="mb-2 text-sm text-green-700">{{ message }}</p>
+    <div v-if="isSuper" class="mb-2 flex justify-end">
+      <button type="button" data-test="remove-close-dates" :disabled="loading || closeDateTargets.length === 0" @click="openRemoveCloseDates"
+        class="rounded border border-red-300 px-3 py-1 text-sm text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50">
+        {{ $t('admin.managePolls.removeCloseDates', { n: closeDateTargets.length }) }}
+      </button>
+    </div>
     <p v-if="loading" class="mb-2 text-xs text-slate-500">{{ $t('common.loading') }}</p>
     <p v-if="!loading && visibleResults.length === 0" class="text-sm text-slate-500">{{ $t('admin.managePolls.none') }}</p>
 
@@ -1096,6 +1152,30 @@ function historySlug(kind: Kind): string {
     </div>
 
     <!-- Edit modal -->
+    <div v-if="removeOpen" role="dialog" aria-modal="true" data-test="remove-close-dates-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" @click.self="removeOpen = false">
+      <div class="w-full max-w-lg rounded-md bg-white p-4 shadow-lg">
+        <strong class="mb-2 block text-sm text-slate-800">{{ $t('admin.managePolls.removeCloseDatesTitle') }}</strong>
+        <p class="mb-2 text-sm text-slate-700">{{ $t('admin.managePolls.removeCloseDatesBody', { n: closeDateTargets.length, m: closeDateReopens }) }}</p>
+        <p class="mb-2 text-xs text-slate-500">{{ $t('admin.managePolls.removeCloseDatesNote') }}</p>
+        <label class="mb-2 flex flex-col gap-1 text-sm font-semibold text-slate-700">
+          {{ $t('admin.managePolls.removeCloseDatesType', { n: closeDateTargets.length }) }}
+          <input v-model="removeTyped" type="text" inputmode="numeric" data-test="remove-close-dates-typed"
+            class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none" />
+        </label>
+        <p v-if="removeError" class="mb-2 text-xs text-red-700">{{ removeError }}</p>
+        <div class="flex justify-end gap-2">
+          <button type="button" @click="removeOpen = false"
+            class="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50">{{ $t('common.cancel') }}</button>
+          <button type="button" data-test="remove-close-dates-confirm" @click="confirmRemoveCloseDates"
+            :disabled="removeSaving || removeTyped.trim() !== String(closeDateTargets.length)"
+            class="rounded bg-red-700 px-4 py-1.5 text-sm text-white hover:bg-red-800 disabled:opacity-50">
+            {{ $t('admin.managePolls.removeCloseDatesConfirm') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div v-if="editModalOpen" role="dialog" aria-modal="true"
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" @click.self="closeEditModal">
       <div class="w-full max-w-lg rounded-md bg-white p-4 shadow-lg">
@@ -1122,7 +1202,6 @@ function historySlug(kind: Kind): string {
           {{ $t('admin.managePolls.editStatus') }}
           <select v-model="editStatus" class="rounded border border-slate-300 p-2 text-sm font-normal text-slate-900 focus:border-slate-500 focus:outline-none">
             <option value="PUBLISHED">{{ $t('admin.managePolls.statusPublished') }}</option>
-            <option value="CLOSED">{{ $t('admin.managePolls.statusClosed') }}</option>
             <option value="ARCHIVED">{{ $t('admin.managePolls.statusArchived') }}</option>
           </select>
         </label>
