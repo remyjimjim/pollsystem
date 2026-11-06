@@ -867,7 +867,7 @@ function historySlug(kind: Kind): string {
     >
       <!-- Poll type and Status (2026-11-06: dropdowns of checkboxes) -->
       <MultiSelectDropdown v-model="selectedKinds" :label="$t('admin.managePolls.pollType')" :groups="kindGroups" test-id="type-filter" label-above all-option class="w-full" />
-      <MultiSelectDropdown v-model="statusFilter" :label="$t('admin.managePolls.statusFilter')" :groups="statusGroups" test-id="status-filter" label-above class="w-full" />
+      <MultiSelectDropdown v-model="statusFilter" :label="$t('admin.managePolls.statusFilter')" :groups="statusGroups" test-id="status-filter" label-above all-option class="w-full" />
 
       <!-- Title contains -->
       <label class="flex flex-col gap-1 text-sm font-semibold text-slate-700">

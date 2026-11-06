@@ -400,3 +400,23 @@ describe('ManagePollsView: Poll type label and All (2026-11-06)', () => {
   })
 })
 
+describe('ManagePollsView: Status All (2026-11-06)', () => {
+  it('All ticks every Status option, including Disabled and Nationwide, and shows those polls', async () => {
+    serverRows = [
+      { id: 1, type: 'QUESTIONNAIRE', title: 'Plain', blocked: false },
+      { id: 2, type: 'QUESTIONNAIRE', title: 'Switched off', blocked: true },
+      { id: 3, type: 'ELECTION', title: 'Everywhere', blocked: false, nationwide: true },
+    ]
+    const w = await mountView()
+    const all = w.find('[data-test="status-filter-all"]')
+    expect((all.element as HTMLInputElement).indeterminate).toBe(true) // 3 of 5 by default
+    expect(titles(w)).toEqual(['Plain'])
+    await all.setValue(true)
+    expect(w.find('[data-test="status-filter-button"]').text()).toBe('All▾')
+    expect(titles(w).sort()).toEqual(['Everywhere', 'Plain', 'Switched off'])
+    await all.setValue(false)
+    expect(titles(w)).toEqual([])
+    w.unmount()
+  })
+})
+
