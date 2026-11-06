@@ -61,6 +61,31 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: an All checkbox on Status
+
+**Requested:**
+
+> add an "All" checkbox to Status
+
+**Changed:**
+
+- Status gets the same **All** checkbox as Poll type.
+- It ticks every option, Disabled and Nationwide included, or clears them
+  all.
+- It's half-ticked by default: 3 of the 5 options are ticked.
+- With everything ticked, the button reads "All".
+
+**Verified:**
+
+- vue-tsc clean; admin and component tests 66 pass. A new test covers
+  half-ticked by default, All showing disabled and nationwide polls, and
+  clearing.
+- A screenshot on local shows the open list.
+
+**Commit:** `6b6eaf3`
+
+---
+
 ## 2026-11-06 — Manage Polls: the zipcode filter is labelled "Purview"
 
 **Requested:**
