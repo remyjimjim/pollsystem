@@ -61,6 +61,56 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: Poll type and Status dropdowns
+
+**Requested:**
+
+> For the admin/manage-polls screen, only the SUPER should see a checkbox
+> below 'Show nationwide' named 'Remove all close dates'. Or maybe combine
+> the 'Show disabled', 'Show nationwide' and 'Remove close date' checkboxes
+> into a dropdown of multi-select checkboxes. Same with the 'Election,
+> Questionnaire and Ballot Measure' checkboxes. …
+
+then
+
+> Let's try this, keep the poll type dropdown but let's add a filter labeled
+> 'Status' with options 'Published, Draft, Closed, Disabled, Nationwide' and
+> get rid of the 'Show disabled' and 'Show nationwide' checkboxes?
+
+**Changed:**
+
+- **`MultiSelectDropdown.vue`:** a button reading "Label: summary" (All /
+  None / the names / "3 selected") that opens grouped checkboxes. It
+  closes on an outside click or Escape.
+- **Poll type** is a dropdown: Election, Questionnaire, Ballot Measure.
+- **Status** replaces "Show disabled" and "Show nationwide":
+  - **Show polls that are:** Published, Draft, Closed. A poll whose close
+    date has passed counts as Closed: every midterm ballot since Nov 3.
+  - **Also show:** Disabled, Nationwide. Off by default, as the old
+    checkboxes were.
+  - Archived polls have no option, so they aren't listed.
+- Old `?showDisabled=1` and `?showNationwide=1` links tick those options.
+- Labels in 9 languages.
+
+**Not built yet:** the super-only "Remove close dates" action. On local,
+480 elections and 144 measures have passed close dates, so removing them
+would reopen voting. My proposal (a confirmed button, logged in each
+poll's History, optionally with a "Restore" button) is waiting for the
+user's answers.
+
+**Verified:**
+
+- Unit tests 56 pass. A new test covers the stages: a passed date counts
+  as Closed, and unticking a stage hides it.
+- The e2e test `admin-manages-polls` passes against local (18.6 s), using
+  Status → Disabled.
+- Headless Chrome on local: 670 polls by default, and 46 after unticking
+  Closed; the button then reads "Status: Published, Draft".
+
+**Commit:** `29cd81d`
+
+---
+
 ## 2026-11-06 — Manage Polls: the Purview column sorts again
 
 **Requested:**
