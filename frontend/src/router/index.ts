@@ -227,6 +227,33 @@ const router = createRouter({
   routes
 })
 
+/**
+ * A tab opened before a deploy asks for page files by their old names. The
+ * host answers a missing file with the home page, so the import fails and the
+ * click used to do nothing (2026-11-06, Manage Polls' History link on
+ * staging). Instead, load the address afresh, which gets the current build.
+ * At most once a minute, so a real outage can't cause a reload loop.
+ */
+const STALE_KEY = 'staleBuildReloadAt'
+export function isStaleBuildError(err: unknown): boolean {
+  const msg = String((err as { message?: string })?.message ?? err)
+  return /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed|Unable to preload CSS|is not a valid JavaScript MIME type/i.test(msg)
+}
+function reloadOnce(path: string): boolean {
+  try {
+    const last = Number(sessionStorage.getItem(STALE_KEY) ?? 0)
+    if (Date.now() - last < 60_000) return false
+    sessionStorage.setItem(STALE_KEY, String(Date.now()))
+  } catch { /* storage blocked: reload anyway, once per page load */ }
+  window.location.assign(path)
+  return true
+}
+// The router knows where the click was going, so the reload lands there (Vite's
+// own preload-error event only knows the current page).
+router.onError((err, to) => {
+  if (isStaleBuildError(err)) reloadOnce(to.fullPath)
+})
+
 // Access level hierarchy for comparison
 const accessHierarchy: Record<AccessLevel, number> = {
   [AccessLevel.VIEWER]: 0,
