@@ -377,3 +377,23 @@ describe('ManagePollsView: Set close date (2026-11-06)', () => {
   })
 })
 
+describe('ManagePollsView: Poll type label and All (2026-11-06)', () => {
+  it('shows "Poll type" above the button, and All ticks or clears every type', async () => {
+    const w = await mountView()
+    const box = w.find('[data-test="type-filter"]')
+    expect(box.find('span').text()).toBe('Poll type')
+    const button = w.find('[data-test="type-filter-button"]')
+    expect(button.text()).toBe('All▾')
+    const all = w.find('[data-test="type-filter-all"]')
+    expect((all.element as HTMLInputElement).checked).toBe(true)
+    await all.setValue(false)
+    expect(button.text()).toBe('None▾')
+    expect((w.find('[data-test="type-filter-election"]').element as HTMLInputElement).checked).toBe(false)
+    await w.find('[data-test="type-filter-election"]').setValue(true)
+    expect((all.element as HTMLInputElement).indeterminate).toBe(true)
+    await all.setValue(true)
+    expect(button.text()).toBe('All▾')
+    w.unmount()
+  })
+})
+

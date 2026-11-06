@@ -866,8 +866,8 @@ function historySlug(kind: Kind): string {
       class="mb-4 grid grid-cols-1 items-start gap-3 rounded-md bg-slate-50 p-4 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]"
     >
       <!-- Poll type and Status (2026-11-06: dropdowns of checkboxes) -->
-      <div class="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:flex-wrap">
-        <MultiSelectDropdown v-model="selectedKinds" :label="$t('admin.managePolls.pollType')" :groups="kindGroups" test-id="type-filter" />
+      <div class="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:flex-wrap sm:items-end">
+        <MultiSelectDropdown v-model="selectedKinds" :label="$t('admin.managePolls.pollType')" :groups="kindGroups" test-id="type-filter" label-above all-option />
         <MultiSelectDropdown v-model="statusFilter" :label="$t('admin.managePolls.statusFilter')" :groups="statusGroups" test-id="status-filter" />
       </div>
 
