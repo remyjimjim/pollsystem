@@ -30,7 +30,7 @@ const q = (k: string): string => {
 
 type Kind = 'ELECTION' | 'QUESTIONNAIRE' | 'BALLOT_MEASURE'
 type Scope = 'ZIPCODE' | 'COUNTY' | 'STATE' | 'EVERYWHERE'
-type SortKey = 'title' | 'type' | 'creatorEmail' | 'stateInitial' | 'countyName' | 'zipcode' | 'closeDate' | 'blocked' | 'note'
+type SortKey = 'title' | 'type' | 'creatorEmail' | 'stateInitial' | 'countyName' | 'zipcode' | 'purview' | 'closeDate' | 'blocked' | 'note'
 
 interface NoteDto { id: number; body: string; emailed: boolean; createdAt: string; updatedAt: string }
 interface PollRow {
@@ -342,8 +342,9 @@ const zipPickerSummary = computed<string>(() => {
 })
 
 // ---------- sorting ----------
-const SORT_KEYS: SortKey[] = ['title', 'type', 'creatorEmail', 'stateInitial', 'countyName', 'zipcode', 'closeDate', 'blocked', 'note']
-const sortKey = ref<SortKey>(SORT_KEYS.includes(q('sort') as SortKey) ? (q('sort') as SortKey) : 'title')
+const SORT_KEYS: SortKey[] = ['title', 'type', 'creatorEmail', 'stateInitial', 'countyName', 'zipcode', 'purview', 'closeDate', 'blocked', 'note']
+// An older link's ?sort=zipcode means the Purview column (it used to sort by the first zipcode).
+const sortKey = ref<SortKey>(q('sort') === 'zipcode' ? 'purview' : SORT_KEYS.includes(q('sort') as SortKey) ? (q('sort') as SortKey) : 'title')
 const sortDir = ref<'asc' | 'desc'>(q('dir') === 'desc' ? 'desc' : 'asc')
 function toggleSort(k: SortKey) {
   if (sortKey.value === k) sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
@@ -357,6 +358,9 @@ function sortValue(r: PollRow, k: SortKey): string {
     case 'stateInitial': return (r.stateInitial ?? '').toLowerCase()
     case 'countyName': return (r.countyName ?? '').toLowerCase()
     case 'zipcode': return r.zipcodes[0] ?? ''
+    // What the Purview column shows: the area ("Washington", "Nationwide") when
+    // there are no zipcodes, which is most polls, else the first zipcode.
+    case 'purview': return (r.zipcodes.length === 0 ? (r.regionLabel || '') : r.zipcodes[0]).toLowerCase()
     // ISO timestamps are lex-sortable. Null close-date = "never closes",
     // sorts after every real date in ascending order.
     case 'closeDate': return r.closeDate ?? '￿'
@@ -904,7 +908,7 @@ function historySlug(kind: Kind): string {
           <th v-if="columns.title" @click="toggleSort('title')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colTitle') }}{{ sortIndicator('title') }}</th>
           <th v-if="columns.type" @click="toggleSort('type')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colType') }}{{ sortIndicator('type') }}</th>
           <th v-if="columns.creator" @click="toggleSort('creatorEmail')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCreator') }}{{ sortIndicator('creatorEmail') }}</th>
-          <th v-if="columns.purview" @click="toggleSort('zipcode')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colPurview') }}{{ sortIndicator('zipcode') }}</th>
+          <th v-if="columns.purview" @click="toggleSort('purview')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colPurview') }}{{ sortIndicator('purview') }}</th>
           <th v-if="columns.closes" @click="toggleSort('closeDate')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colCloses') }}{{ sortIndicator('closeDate') }}</th>
           <th v-if="columns.enabled" @click="toggleSort('blocked')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colEnable') }}{{ sortIndicator('blocked') }}</th>
           <th @click="toggleSort('note')" class="cursor-pointer select-none border-b border-slate-200 p-2 font-semibold text-slate-700 hover:bg-slate-100">{{ $t('admin.managePolls.colNote') }}{{ sortIndicator('note') }}</th>
