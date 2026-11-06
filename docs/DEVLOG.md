@@ -61,6 +61,34 @@ logged.
 
 ---
 
+## 2026-11-06 — Manage Polls: "Poll type" label above, and an All option
+
+**Requested:**
+
+> on https://ballotbox.us.com/admin/manage-polls can we have 'Poll Type'
+> as a label above the 'Poll Type: All' select and make the first option
+> 'All'?
+
+**Changed:**
+
+- `MultiSelectDropdown` gains two options:
+  - **`labelAbove`:** the label sits above the button, like Title
+    contains, State and County. The button shows only the summary: "All",
+    "Election", "2 selected".
+  - **`allOption`:** a first **All** checkbox that ticks or clears every
+    option. It's half-ticked when only some are.
+- Poll type uses both. Status is unchanged.
+
+**Verified:**
+
+- vue-tsc clean; admin and component tests 65 pass, including a new one
+  for the label and All (tick, clear, half-ticked).
+- Screenshots on local at 1300 px and 390 px.
+
+**Commit:** `fc91462`
+
+---
+
 ## 2026-11-06 — Manage Polls: "Set close date" (super only)
 
 **Requested:**
